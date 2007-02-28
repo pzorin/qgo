@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>ressources/pics/Bowl.png</file>
+        <file>ressources/pics/connect_no2.png</file>
+        <file>ressources/pics/connected.png</file>
+        <file>ressources/pics/toolbar_1.png</file>
+        <file>ressources/pics/toolbar_2.png</file>
+        <file>ressources/pics/toolbar_3.png</file>
+        <file>ressources/pics/toolbar_4.png</file>
+        <file>ressources/pics/toolbar_5.png</file>
+    </qresource>
+</RCC>
