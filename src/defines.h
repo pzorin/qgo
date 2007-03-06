@@ -49,8 +49,8 @@
 * Enum definitions
 */
 enum StoneColor { stoneNone, stoneWhite, stoneBlack, stoneErase };
-enum GameMode { modeNormal, modeEdit, modeObserve, modeMatch, modeTeach, modeComputer, modeReview };
-enum GamePhase { phaseInit, phaseOngoing, phaseCounting, phaseEnded};
+enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, modeReview };
+enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseScore, phaseEnded};
 enum MarkType { markNone, markSquare, markCircle, markTriangle, markCross, markText, markNumber, markTerrBlack, markTerrWhite };
 enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
 enum player_type {HUMAN=0,COMPUTER} ;

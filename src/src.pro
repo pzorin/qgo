@@ -31,7 +31,9 @@ board/stone.h \
 board/gatter.h \
 board/boardhandler.h \
 board/interfacehandler.h \
-board/mark.h
+board/mark.h \
+gtp/qgtp.h \
+game_proxies/qgoboard.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -46,7 +48,8 @@ SOURCES += main.cpp \
            board/gatter.cpp \
            board/boardhandler.cpp \
            board/interfacehandler.cpp \
-           board/mark.cpp
+           board/mark.cpp \
+           gtp/qgtp.cpp
 QT -= qt3support
 DEPENDPATH += board sgf game_tree
 INCLUDEPATH += game_tree \

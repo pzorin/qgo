@@ -138,7 +138,7 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 
 void MainWindow::slot_fileNewBoard()
 {
-	BoardWindow *b = new BoardWindow(this,0,19);
+	BoardWindow *b = new BoardWindow(this,0,9);
 	b->show();
 }
 
