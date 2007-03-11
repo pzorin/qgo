@@ -39,6 +39,8 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 		shadow->setZValue(4);
 	}
 	
+//	setOffset(QPoint::QPoint(-pixmap().width ()/2,-pixmap().height()/2));
+
 	setZValue(5);
 	show();
 	
@@ -103,4 +105,22 @@ void Stone::show()
 	QGraphicsPixmapItem::show();
 	if (shadow) 	 shadow->show();
 	
+}
+
+/* 
+ * This allocates a new pixmap list to the stone (used for toggling dead stones when counting)
+ */
+void Stone::togglePixmap(QList<QPixmap> *a, bool showShadow)
+{
+	if (a->count() <= 2)
+		setPixmap(a->at( color == stoneBlack ? 0 : 1));
+	else	
+		setPixmap(a->at( color == stoneBlack ? 0 : (rand() % (a->count() -2) ) + 1));
+
+	if (shadow)
+		if (showShadow)
+			shadow->show();
+		else 
+			shadow->hide();
+		
 }

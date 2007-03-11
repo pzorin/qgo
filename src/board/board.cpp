@@ -25,6 +25,8 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 
 void Board::init(int size)
 {
+//	setRenderHints(QPainter::SmoothPixmapTransform);
+//	gamePhase = phaseInit;
 
 	viewport()->setMouseTracking(TRUE);
 
@@ -77,18 +79,17 @@ void Board::init(int size)
 #endif
 	curX = curY = -1;
 	showCursor = setting->readBoolEntry("CURSOR");
-	
-	isLocalGame = true;
+*/	
+//	isLocalGame = true;
 	
 	// Init the ghost cursor stone
 	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
-	curStone->setZ(4);
+	curStone->setZValue(4);
 	curStone->hide();                       
-
+/*
 	lockResize = false;
 	navIntersectionStatus = false;
-  
-	updateCaption();
+
 */
 
 	//Init the stones
@@ -99,8 +100,12 @@ Board::~Board()
 {
 	qDeleteAll(*stones);
 	qDeleteAll(*ghosts);
+	qDeleteAll(*marks);
 }
 
+/*
+ * cleans up the board
+ */
 void Board::clearData()
 {
 
@@ -404,9 +409,10 @@ void Board::resizeBoard(int w, int h)
 		else if (item->type() == RTTI_STONE)
 		{
 			Stone *s = (Stone*)item;
-			s->setPos(offsetX + square_size * (s->posX() - 1) - s->boundingRect().width()/2, 
-				offsetY + square_size * (s->posY() - 1) - s->boundingRect().height()/2 );
 			s->setColor(s->getColor());
+			s->setPos(offsetX + square_size * (s->posX() - 1) - s->pixmap().width()/2, 
+				offsetY + square_size * (s->posY() - 1) - s->pixmap().height()/2 );
+			
 		}
 		else if (item->type() >= RTTI_MARK_SQUARE &&
 			item->type() <= RTTI_MARK_TERR)
@@ -424,8 +430,8 @@ void Board::resizeBoard(int w, int h)
 			default: continue;
 			}
 			m->setSize(square_size, square_size);
-			m->setPos(offsetX + square_size * (m->posX() - 1.0) - m->getSizeX()/2.0,
-				offsetY + square_size * (m->posY() - 1.0) - m->getSizeY()/2.0);
+			m->setPos(offsetX + square_size * (m->posX() - 1) - m->getSizeX()/2.0,
+				offsetY + square_size * (m->posY() - 1) - m->getSizeY()/2.0);
 		 }
 	}
 
@@ -442,6 +448,66 @@ void Board::resizeBoard(int w, int h)
   
 	canvas->update();
 }
+
+/*
+ * sets the cursor shape over the goban,
+ * this is called by boardhandler and qgoboard proxy depending on the game mode and phase
+ */
+void Board::setCursorType(CursorType cur)
+{
+	if (cursor == cur)
+		return;
+
+	switch (cur)
+	{
+		case cursorIdle :
+		{
+			if (cursor == cursorNavTo || cursor == cursorWait)
+				setCursor(Qt::ArrowCursor);
+			
+			showCursor = FALSE;
+			break;
+		}
+
+		case cursorGhostBlack :
+		{
+			if (cursor == cursorNavTo || cursor == cursorWait)
+				setCursor(Qt::ArrowCursor);
+
+			curStone->setColor(stoneBlack);
+			showCursor = TRUE;
+			break;
+		}
+
+		case cursorGhostWhite :
+		{
+			if (cursor == cursorNavTo || cursor == cursorWait)
+				setCursor(Qt::ArrowCursor);
+
+			curStone->setColor(stoneWhite);
+			showCursor = TRUE;
+			break;
+		}	
+	
+		case cursorNavTo :
+		{
+			setCursor(Qt::PointingHandCursor);		
+			showCursor = FALSE;
+			break;
+		}
+
+		case cursorWait :
+		{
+			setCursor(Qt::WaitCursor);
+			showCursor = FALSE;
+			break;
+		}			
+	}
+	
+	cursor = cur;
+	
+}
+
 
 
  /*
@@ -463,6 +529,23 @@ int Board::hasStone(int x, int y)
 	return -1;
 }
 
+ /* 
+  * Used for setting the mark color in case a mark is set over the var mark
+  */
+bool Board::hasVarGhost(StoneColor c, int x, int y)
+{
+	Stone *s;
+
+	for (int i=0; i<ghosts->count(); i++)
+	{
+		s=ghosts->at(i);
+		if (s->posX() == x && s->posY() == y && s->getColor() == c)
+			return TRUE;
+	}
+		
+	return FALSE;
+
+}
 
 
 /*
@@ -679,7 +762,7 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 	QColor col = Qt::black;
 	
 	// Black stone or black ghost underlying? Then we need a white mark.
-	if ( hasStone(x, y) == 1 && getStoneAt(x, y)->getColor() == stoneBlack) //||
+	if (( hasStone(x, y) == 1 && getStoneAt(x, y)->getColor() == stoneBlack) || hasVarGhost(stoneBlack, x, y))//||
 //TODO	(settings->readIntEntry("VAR_GHOSTS") && hasVarGhost(stoneBlack, x, y)))
 		col = Qt::white;
     
@@ -751,31 +834,31 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 		setMarkText(x, y, txt);
 		gatter->hide(x,y);
 		break;
-/*		
+		
 	case markTerrBlack:
 		m = new MarkTerr(x, y, square_size, stoneBlack, canvas);
-		if (boardHandler->hasStone(x, y) == 1)
+		if (hasStone(x, y) == 1)
 		{
-			boardHandler->getStoneHandler()->getStoneAt(x, y)->setDead(true);
-			boardHandler->getStoneHandler()->getStoneAt(x, y)->setSequence(imageHandler->getGhostPixmaps());
-			boardHandler->getStoneHandler()->getStoneAt(x, y)->shadow->hide();
-			boardHandler->markedDead = true;
+			getStoneAt(x, y)->setDead(true);
+			getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+//			getStoneAt(x, y)->shadow->hide();
+//			boardHandler->markedDead = true;
 		}
-		boardHandler->getTree()->getCurrent()->setScored(true);
+//		boardHandler->getTree()->getCurrent()->setScored(true);
 		break;
 		
 	case markTerrWhite:
 		m = new MarkTerr(x, y, square_size, stoneWhite, canvas);
-		if (boardHandler->hasStone(x, y) == 1)
+		if (hasStone(x, y) == 1)
 		{
-			boardHandler->getStoneHandler()->getStoneAt(x, y)->setDead(true);
-			boardHandler->getStoneHandler()->getStoneAt(x, y)->setSequence(imageHandler->getGhostPixmaps());
-			boardHandler->getStoneHandler()->getStoneAt(x, y)->shadow->hide();
-			boardHandler->markedDead = true;
+			getStoneAt(x, y)->setDead(true);
+			getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+//			boardHandler->getStoneHandler()->getStoneAt(x, y)->shadow->hide();
+//			boardHandler->markedDead = true;
 		}
-		boardHandler->getTree()->getCurrent()->setScored(true);
+//		boardHandler->getTree()->getCurrent()->setScored(true);
 		break;
-*/		
+		
 	default:
 		qWarning("   *** Board::setMark() - Bad mark type! ***");
 		return;
@@ -791,6 +874,41 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 //		boardHandler->editMark(x, y, t, txt);
 }
 
+/*
+ * restores the stones that were marked dead or seki
+ */
+void Board::removeDeadMarks()
+{
+/*	QIntDictIterator<Stone> it(*stones);
+	Stone *s;
+	
+	while (it.current())
+	{
+		s = it.current();
+		CHECK_PTR(s);
+		if (s->isDead() || s->isSeki())
+		{
+			s->setDead(false);
+			s->setSeki(false);
+			s->setSequence(boardHandler->board->getImageHandler()->getStonePixmaps());
+			s->shadow->show();
+		}
+		++it;
+	}
+*/
+	QHashIterator<int, Stone*> i(*stones);
+	while (i.hasNext()) 
+	{
+		i.next();
+		if (i.value()->isDead() || i.value()->isSeki())
+		{
+			i.value()->setDead(false);
+			i.value()->setSeki(false);
+			i.value()->togglePixmap(imageHandler->getStonePixmaps(), TRUE);
+		}
+	}
+
+}
 
 /*
  * Sets a text in 'text' mark at positon 'x,y'.
@@ -872,8 +990,115 @@ void Board::removeLastMoveMark()
 {
 	if (lastMoveMark != NULL)
 	{
-		lastMoveMark->hide();
+//		lastMoveMark->hide();
 		delete lastMoveMark;
 		lastMoveMark = NULL;
 	}
+}
+
+
+/*
+ * Updates the mark on the last stone played
+ */
+void Board::updateLastMove(StoneColor c, int x, int y)
+{
+
+	delete lastMoveMark;
+	lastMoveMark = NULL;
+
+	if (x == 20 && y == 20)  // Passing
+		removeLastMoveMark();
+
+	else if (c != stoneNone && x != -1 && y != -1 && x <= board_size && y <= board_size)
+	{
+//		lastMoveMark = new MarkText(imageHandler, x, y, square_size, "+", canvas,
+		// true = plus sign
+		lastMoveMark = new MarkCross(x, y, square_size, canvas,
+			c == stoneBlack ? Qt::white : Qt::black, true);
+		Q_ASSERT(lastMoveMark);
+//		lastMoveMark = new MarkCircle(x, y, square_size, canvas,
+//			c == stoneBlack ? white : black, setting->readBoolEntry("SMALL_STONES"));
+		lastMoveMark->setPos(offsetX + square_size * (x-1) - lastMoveMark->getSizeX()/2,
+					offsetY + square_size * (y-1) - lastMoveMark->getSizeY()/2);
+		lastMoveMark->show();
+	}
+
+//	setCurStoneColor();
+}
+
+/*
+ * Used to know where the mouse is over the goban
+ */
+int Board::convertCoordsToPoint(int c, int o)
+{
+	int p = c - o + square_size/2;
+	if (p >= 0)
+		return p / square_size + 1;
+	else
+		return -1;
+}
+
+/*
+ * Called when the mouse pointer leaves the goban
+ */
+void Board::leaveEvent(QEvent*)
+{
+	curStone->hide();
+	canvas->update();
+}
+
+void Board::mouseMoveEvent ( QMouseEvent * e )
+{
+	int x = convertCoordsToPoint(e->x(), offsetX),
+		y = convertCoordsToPoint(e->y(), offsetY);
+
+	// Outside the valid board?
+	if ((x < 1) || x > board_size || y < 1 || y > board_size)
+	{
+		curStone->hide();
+		canvas->update();
+		curX = curY = -1;
+		return;
+	}
+	
+	// Nothing changed
+	if (curX == (short)x && curY == (short)y)
+		return;
+	
+	// Update the statusbar coords tip
+//	emit coordsChanged(x, y, board_size,showSGFCoords);
+	
+	// Remember if the cursor was hidden meanwhile.
+	// If yes, we need to repaint it at the old position.
+	bool flag = curX == -1;
+	
+	curX = (short)x;
+	curY = (short)y;
+
+//	if (// !showCursor || setting->readBoolEntry("CURSOR") ||
+//		(gamePhase == phaseEdit /*&& boardHandler->getMarkType() != markNone*/) ||
+//		gamePhase == phaseScore ||
+//		(curStone->posX() == x && curStone->posY() == y && !flag))
+//		return;
+    
+	curStone->setPos(offsetX + square_size * (x - 1) - curStone->pixmap().width()/2, 
+				offsetY + square_size * (y - 1) - curStone->pixmap().height()/2 );
+//	curStone->setX(offsetX + square_size * (x-1));
+//	curStone->setY(offsetY + square_size * (y-1));
+	curStone->setCoord(x, y);
+/*
+	bool notMyTurn = 	(curStone->getColor() == stoneBlack && !myColorIsBlack ||
+			 curStone->getColor() == stoneWhite && myColorIsBlack);
+    
+	if (navIntersectionStatus ||              
+        boardHandler->getGameMode() == modeObserve ||
+	( boardHandler->getGameMode() == modeMatch && notMyTurn) ||
+	( boardHandler->getGameMode() == modeComputer && notMyTurn))
+	
+		curStone->hide();
+	else
+*/
+	curStone->show();
+    
+	canvas->update();
 }

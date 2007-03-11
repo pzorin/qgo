@@ -47,7 +47,7 @@ public:
 	virtual MarkType getType() const { return markSquare; }
 	virtual void setPos(double x, double y) { QGraphicsRectItem::setPos((qreal)x, (qreal)y); }
 //	virtual void setY(double y) { QGraphicsRectItem::setY(y); }
-	virtual void setSize(double x, double y) { setRect(myX, myY, x*0.55, y*0.55); }
+	virtual void setSize(double x, double y) { setRect(rect().x()/*myX*/,rect().y()/* myY*/, x*0.5, y*0.5); }
 	virtual int getSizeX() const { return (int) rect().width(); }
 	virtual int getSizeY() const { return (int) rect().height(); }
 	virtual void show() { QGraphicsRectItem::show(); }
@@ -63,7 +63,7 @@ public:
 	virtual ~MarkCircle() { /*hide();*/ }
 	virtual int type() const { return RTTI_MARK_CIRCLE; }
 	virtual MarkType getType() const { return markCircle; }
-	virtual void setPos(double x, double y) { QGraphicsEllipseItem::setPos((qreal)x - rect().width()/2.0, (qreal)y - rect().height()/2.0); }
+	virtual void setPos(double x, double y) { QGraphicsEllipseItem::setPos((qreal)x /*- rect().width()/2.0*/, (qreal)y /*- rect().height()*/); }
 //	virtual void setX(double x) { QGraphicsEllipseItem::setX(x + width()/2.0); }
 //	virtual void setY(double y) { QGraphicsEllipseItem::setY(y + width()/2.0); }
 	virtual void setSize(double x, double y);
@@ -77,6 +77,7 @@ public:
 	
 protected:
 //	virtual void drawShape(QPainter & p);
+	void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) { painter->setRenderHints(QPainter::Antialiasing); QGraphicsEllipseItem::paint(painter, option, widget);}
 	bool small;
 };
 
@@ -100,7 +101,7 @@ public:
 	
 protected:
 //	virtual void drawShape(QPainter & p);
-	
+	void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) { painter->setRenderHints(QPainter::Antialiasing); QGraphicsPolygonItem::paint(painter, option, widget);}
 private:
 	int size;
 	QPolygon pa;
@@ -164,6 +165,8 @@ public:
 
 	static int maxLength;
 
+protected:
+	void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) { painter->setRenderHints(0); QGraphicsSimpleTextItem::paint(painter, option, widget);}
 
 private:
 //	QGraphicsRectItem *rect;

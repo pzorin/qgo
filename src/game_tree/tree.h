@@ -64,7 +64,7 @@ public:
  * Those functions are used when adding a stone, and check all Go issues : libertes, death, ...
  */
 
-	bool checkPosition(MatrixStone *s,Matrix *m, bool koStone = false);
+	int checkPosition(MatrixStone *s,Matrix *m, bool koStone = false);
 	Group* assembleGroup(MatrixStone *stone, Matrix *m);
 	Group* checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m);
 	bool removeStone(int x, int y, bool hide=false);

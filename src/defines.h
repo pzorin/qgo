@@ -12,6 +12,7 @@
 */
 
 #define PACKAGE "qgo2"
+#define VERSION "0.1"
 
 #define DEFAULT_BOARD_SIZE 19
 #define BOARD_X 500
@@ -50,7 +51,7 @@
 */
 enum StoneColor { stoneNone, stoneWhite, stoneBlack, stoneErase };
 enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, modeReview };
-enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseScore, phaseEnded};
+enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseNavTo, phaseScore, phaseEnded};
 enum MarkType { markNone, markSquare, markCircle, markTriangle, markCross, markText, markNumber, markTerrBlack, markTerrWhite };
 enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
 enum player_type {HUMAN=0,COMPUTER} ;
@@ -59,6 +60,8 @@ enum assessType { noREQ, FREE, RATED, TEACHING };
 enum State { stateVarBegin, stateNode, stateVarEnd };
 enum Property { moveBlack, moveWhite, editBlack, editWhite, editErase, comment, editMark, unknownProp, nodeName, timeLeft, openMoves, nextMove};
 enum TimeSystem { none, absolute, byoyomi, canadian };
+
+enum CursorType { cursorIdle, cursorGhostBlack , cursorGhostWhite , cursorWait , cursorNavTo };
 
 /*
 * Global structs

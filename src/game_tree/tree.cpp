@@ -460,11 +460,11 @@ void Tree::createMoveSGF( bool brother, bool fastLoad)
 	if (! fastLoad)
 	{
 		Matrix *mat = current->getMatrix();
-		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, modeNormal, *mat);
+		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing, *mat);
 	}
 	else
 	{
-		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, modeNormal);
+		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing);
 	}
 	
 	if (!brother && hasSon(m))
@@ -486,7 +486,7 @@ void Tree::createMoveSGF( bool brother, bool fastLoad)
 
 /*
  * This is the code from boardhandler (as opposed to stonehandler::removestone)
- * It has been renamer to 'removeStoneSGF' because both boardhandler and stonehandler are here
+ * It has been renamed to 'removeStoneSGF' because both boardhandler and stonehandler are here
  */
 void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 {
@@ -495,7 +495,7 @@ void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 	
 	if (res)
 	{
-		if ((current->getGameMode() == modeNormal) && (current->getMoveNumber() > 0))//	currentMove > 0)
+		if ((current->getGamePhase() == phaseOngoing) && (current->getMoveNumber() > 0))//	currentMove > 0)
 		{
 			if (new_node)  // false, when reading sgf
 				addMove(stoneNone, x, y);
@@ -543,7 +543,7 @@ void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
  	Matrix *mat = current->getMatrix();
 	Q_CHECK_PTR(mat);
 	
-	Move *m = new Move(c, x, y, current->getMoveNumber(), modeNormal, *mat);       
+	Move *m = new Move(c, x, y, current->getMoveNumber(), phaseOngoing, *mat);
 	Q_CHECK_PTR(m);
 	
 	if (hasSon(m))
@@ -725,8 +725,12 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
  * therefore, we needed to updtae the matrix before the check position
  */	
 	updateCurrentMatrix(c, x, y);
-	checkPosition(s, current->getMatrix());
+	int captures = checkPosition(s, current->getMatrix());
 
+	if (c == stoneWhite)
+		capturesBlack += captures;
+	else if (c == stoneBlack)
+		capturesWhite += captures;
 //	stoneHandler->toggleWorking(false);
 //	updateCurrentMatrix(c, x, y);
 	// Update captures
@@ -734,8 +738,13 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 //	lastValidMove = tree->getCurrent();
 }
 
-
-bool Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
+/*
+ * This functions does 2 things :
+ * - It calculates the validity of a new stone inserted into a matrix
+ * - It recalculates all the groups resulting in the stone being inserted
+ * It returns -1 (invalid move) or the number of stones taken if the move is valid
+ */
+int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 {
  
 //	if (!stone->visible())
@@ -811,7 +820,7 @@ bool Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 	// so if this one is out of liberties, we beep and abort the operation.
 	// This prevents suicide moves.
 	groups->append(groups->takeAt(groups->indexOf(active)));
-	
+	int stoneCounter = 0;
 	// Check the liberties of every group. If a group has zero liberties, remove it.
 	for ( int i=0; i<groups->count(); i++)
 	{
@@ -837,7 +846,7 @@ bool Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 					//groups->remove(i);
 					removeStone(stone->x, stone->y, false);
 				}
-				return false;
+				return -1;
 			}
 			
 			//was it a forbidden ko move ?
@@ -847,10 +856,10 @@ bool Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 				delete groups->takeAt(groups->indexOf(active));
 				//groups->remove(groups->indexOf(active));
 				removeStone(stone->x, stone->y, false);
-				return false ;
+				return -1 ;
 			}
 
-			int stoneCounter = 0;
+//			int stoneCounter = 0;
 			
 			// Erase the stones of this group from the stones table.
 //			QListIterator<Stone> it(*tmp);
@@ -882,7 +891,7 @@ bool Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 		}
 	}
 	
-	return true;
+	return stoneCounter;
 }
 
 Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
@@ -1132,7 +1141,6 @@ bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 
 	/*
 	* Recalculates all the groups according to the matrix
-	* This is usually called when navigating through the tree.
 	*/
 
 	// First we remove verything from the group list

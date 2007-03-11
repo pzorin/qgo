@@ -138,13 +138,13 @@ void Matrix::debug() const
 }
 #endif
 
-void Matrix::insertStone(int x, int y, StoneColor c, GameMode mode)
+void Matrix::insertStone(int x, int y, StoneColor c, GamePhase phase)
 {
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] = abs(matrix[x-1][y-1] / 10 * 10) + c;
-	if (mode == modeEdit)
+	if (phase == phaseEdit)
 		matrix[x-1][y-1] *= -1;
 }
 

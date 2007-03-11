@@ -5,8 +5,8 @@
 #ifndef INTERFACEHANDLER_H
 #define INTERFACEHANDLER_H
 
-#include "../defines.h"
-//#include "boardwindow.h"
+#include "defines.h"
+#include "globals.h"
 //#include "boardhandler.h"
 
 
@@ -24,11 +24,13 @@ public:
 //	void setMarkType(int m);
 	void setMoveData(int n, bool black, int brothers, int sons, bool hasParent,
 		bool hasPrev, bool hasNext, int lastX=-1, int lastY=-1);
-/*	void setCaptures(float black, float white, bool scored=false);
-	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
+	void updateCaption(GameData *gd);
+	void displayComment(const QString &c);
+	void setSliderMax(int n);
+	void setCaptures(float black, float white);
+/*	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
 	void setTimes(bool, float, int);
 	void clearComment();
-	void displayComment(const QString &c);
 	QString getComment();
 	QString getComment2();
 	void toggleSidebar(bool toggle);
@@ -40,7 +42,7 @@ public:
 	void restoreToolbarButtons();
 	void setScore(int terrB, int capB, int terrW, int capW, float komi=0);
 	void setClipboard(bool b);
-	void setSliderMax(int n);
+	
 
 	QLabel *moveNumLabel, *turnLabel, *varLabel, *capturesBlack, *capturesWhite;
 	QAction *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11

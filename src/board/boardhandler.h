@@ -13,8 +13,9 @@
 
 class BoardWindow;
 
-class BoardHandler
+class BoardHandler : public QObject
 {
+	Q_OBJECT
 public:
 	BoardHandler(BoardWindow *bw, Tree *tree =NULL, int size=19);
 	~BoardHandler();
@@ -22,7 +23,7 @@ public:
 	void clearData();
 	bool markedDead;
 	
-	// Navigation
+/*	// Navigation
 	bool nextMove(bool autoplay=false);
 	void previousMove();
 	void gotoFirstMove();
@@ -35,23 +36,41 @@ public:
 	void gotoMainBranch();
 	void gotoNextBranch();
 	void navIntersection();
-
+	void gotoNthMoveInVar(int n);
+*/
 	void updateMove(Move *m=0, bool ignore_update = false);
 	bool updateAll(Matrix *m, bool toDraw=true);
-	bool loadSGF(const QString &fileName, const QString &filter=0, bool fastLoad=false);
+	CursorType updateCursor(StoneColor c);
+	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
+
+public slots:
+	void slotNavBackward();
+	void slotNavForward();
+	void slotNavFirst();
+	void slotNavLast();
+	void slotNavPrevComment();
+	void slotNavNextComment();
+	void slotNavPrevVar();
+	void slotNavNextVar();	
+	void slotNavStartVar();
+	void slotNavMainBranch();
+	void slotNavNextBranch();
+	void slotNavIntersection();
+	void slotNthMove(int n);
 
 private:
 	Board *board;
 	Tree *tree;
 	BoardWindow * boardwindow;
 
-	int currentMove, capturesBlack, capturesWhite, caps_black, caps_white;
+	int capturesBlack, capturesWhite, caps_black, caps_white;
 	Move *lastValidMove;
-	GameMode gameMode;
+//	GameMode gameMode;
 	int boardSize;
-
+	
+	void gotoMove(Move *m);
 	void updateVariationGhosts(Move *m);
-
+	bool navIntersectionStatus;
 };
 
 #endif

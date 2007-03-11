@@ -63,8 +63,73 @@ void InterfaceHandler::clearData()
 	scored_flag = false;
 }
 
+/*
+ * displays the informations relative to a game on the board window
+ * TODO : decide wether this is here or at boardwindow level
+ */
+void InterfaceHandler::updateCaption(GameData *gd)
+{
+    // Print caption
+    // example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
+    // or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
+	boardwindow->setWindowTitle( /* QString(isModified ? "* " : "") + */
+		(gd->gameNumber != 0 ?
+		"(" + QString::number(gd->gameNumber) + ") " : QString()) +
+		(gd->gameName.isEmpty() ?
+		gd->playerWhite +
+		(!gd->rankWhite.isEmpty() ?
+		" " + gd->rankWhite : QString())
+		+ " " + QObject::tr("vs.") + " "+
+		gd->playerBlack +
+		(!gd->rankBlack.isEmpty() ?
+		" " + gd->rankBlack : QString()) :
+		gd->gameName) +
+		"   " + QString(PACKAGE   " "  VERSION));
 
-void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bool /*hasParent*/, bool /*hasPrev*/, bool /*hasNext*/, int lastX, int lastY)
+
+	bool simple = gd->rankWhite.length() == 0 && gd->rankBlack.length() == 0;
+	QGroupBox *gb = boardwindow->getUi().whiteFrame;
+
+	QString player = gd->playerWhite;
+	if (simple && player == QObject::tr("White"))
+		gb->setTitle(QObject::tr("White"));	
+	else
+	{
+		// truncate to 12 characters max
+		player.truncate(12);
+
+		if (gd->rankWhite.length() != 0)
+			player = QObject::tr("W") + ": " + player + " " + gd->rankWhite;
+		else
+			player = QObject::tr("W") + ": " + player;
+		
+		gb->setTitle(player);
+	}
+
+	gb = boardwindow->getUi().blackFrame;
+
+	player = gd->playerBlack;
+	if (simple && player == QObject::tr("Black"))
+		gb->setTitle(QObject::tr("Black"));	
+	else
+	{
+		// truncate to 12 characters max
+		player.truncate(12);
+
+		if (gd->rankBlack.length() != 0)
+			player = QObject::tr("B") + ": " + player + " " + gd->rankBlack;
+		else
+			player = QObject::tr("B") + ": " + player;
+		
+		gb->setTitle(player);
+	}
+	
+}
+
+/*
+ * displays the informations relative to a move on the board window
+ */
+void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bool hasParent, bool hasPrev, bool hasNext, int lastX, int lastY)
 {
 	QString s(QObject::tr("Move") + " ");
 	s.append(QString::number(n));
@@ -104,26 +169,26 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 	else
 		s.append(" " + QObject::tr("sons"));
 	boardwindow->getUi().varLabel->setText(s);
-/*	
-	if (board->getGameMode() == modeNormal || board->getGameMode() == modeEdit)
-	{
+	
+//	if (board->getGameMode() == modeNormal || board->getGameMode() == modeEdit)
+//	{
 		// Update the toolbar buttons
-		navPrevVar->setEnabled(hasPrev);
-		navNextVar->setEnabled(hasNext);
-		navBackward->setEnabled(hasParent);
-		navForward->setEnabled(sons);
-		navFirst->setEnabled(hasParent);
-		navStartVar->setEnabled(hasParent);
-		navMainBranch->setEnabled(hasParent);
-		navLast->setEnabled(sons);
-		navNextBranch->setEnabled(sons);
-		navSwapVariations->setEnabled(hasPrev);
-		navPrevComment->setEnabled(hasParent);
-		navNextComment->setEnabled(sons);
-    		navIntersection->setEnabled(true);
+		boardwindow->getUi().navPrevVar->setEnabled(hasPrev);
+		boardwindow->getUi().navNextVar->setEnabled(hasNext);
+		boardwindow->getUi().navBackward->setEnabled(hasParent);
+		boardwindow->getUi().navForward->setEnabled(sons);
+		boardwindow->getUi().navFirst->setEnabled(hasParent);
+		boardwindow->getUi().navStartVar->setEnabled(hasParent);
+		boardwindow->getUi().navMainBranch->setEnabled(hasParent);
+		boardwindow->getUi().navLast->setEnabled(sons);
+		boardwindow->getUi().navNextBranch->setEnabled(sons);
+		boardwindow->getUi().swapVarButton->setEnabled(hasPrev);
+		boardwindow->getUi().navPrevComment->setEnabled(hasParent);
+		boardwindow->getUi().navNextComment->setEnabled(sons);
+    		boardwindow->getUi().navIntersection->setEnabled(true);
 		
-		slider->setEnabled(true);
-	}
+		boardwindow->getUi().slider->setEnabled(true);
+/*	}
 	else  if (board->getGameMode() == modeObserve)
 	{
 		// Update the toolbar buttons
@@ -142,27 +207,63 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 	}
 	else
 		slider->setDisabled(true);
-	
+*/	
 	// Update slider
-	mainWidget->toggleSliderSignal(false);
+	boardwindow->getUi().slider->blockSignals (TRUE);
 
-	int mv = boardwindow->slider->maxValue();
-	int v = boardwindow->slider->value();
+//	int mv = boardwindow->getUi().slider->maximum();
+//	int v = boardwindow->getUi().slider->value();
 
-	if (boardwindow->slider->maxValue() < n)
+	if (boardwindow->getUi().slider->maximum() < n)
 		  setSliderMax(n);
 
 	// we need to be carefull with the slider :
 	// normal case, slider is moved
-	if (board->getGameMode() != modeObserve ||
+//	if (board->getGameMode() != modeObserve ||
 	// observing, but browsing (no incoming move)
-	(board->getGameMode() == modeObserve && mv >= n) ||
+//	(board->getGameMode() == modeObserve && mv >= n) ||
 	// observing, but at the last move, and an incoming move occurs 
-	(board->getGameMode() == modeObserve && mv < n && v==n-1))
-		slider->setValue(n);
+//	(board->getGameMode() == modeObserve && mv < n && v==n-1))
+		boardwindow->getUi().slider->setValue(n);
 
-	mainWidget->toggleSliderSignal(true);
-*/
+	boardwindow->getUi().slider->blockSignals (TRUE);
 }
 
 
+/*
+ * display text in the comment area
+ */
+void InterfaceHandler::displayComment(const QString &c)
+{
+//	if (board->get_isLocalGame())
+//	{
+		if (c.isEmpty())
+			boardwindow->getUi().commentEdit->clear();
+		else
+			boardwindow->getUi().commentEdit->setText(c);
+//	}
+//	else if (!c.isEmpty())
+//			commentEdit->append(c);
+}
+
+/*
+ * modifies the maximum value of the slider (used when a move is added)
+ */
+void InterfaceHandler::setSliderMax(int n)
+{
+	if (n < 0)
+		n = 0;
+
+	boardwindow->getUi().slider->setMaximum(n);
+    	boardwindow->getUi().sliderRightLabel->setText(QString::number(n));
+}
+
+/*
+ * Sets the number of prisonners on the UI
+ */
+void InterfaceHandler::setCaptures(float black, float white)
+{
+
+	boardwindow->getUi().capturesBlack->setText(QString::number(black));
+	boardwindow->getUi().capturesWhite->setText(QString::number(white));
+}

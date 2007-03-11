@@ -15,8 +15,8 @@ class Move
 {
 public:
 	Move(int board_size);
-	Move(StoneColor c, int mx, int my, int n, GameMode mode, const Matrix &mat, const QString &s=NULL);
-	Move(StoneColor c, int mx, int my, int n, GameMode mode, const QString &s=NULL);
+	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const Matrix &mat, const QString &s=NULL);
+	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const QString &s=NULL);
 	~Move();
 	
 	bool equals(Move *m);
@@ -33,8 +33,8 @@ public:
 	void setMatrix(Matrix *m) { matrix = m; }
 	void setMoveNumber(int n) { moveNum = n; }
 	int getMoveNumber() const { return moveNum; }
-	GameMode getGameMode() const { return gameMode; }
-	void setGameMode(GameMode m) { gameMode = m; }
+	GamePhase getGamePhase() const { return gamePhase; }
+	void setGamePhase(GamePhase p) { gamePhase = p; }
 	QString &getNodeName() { return nodeName; }
 	void setNodeName(const QString &s) { nodeName = s; }
 	QString &getComment() { return comment; }
@@ -82,7 +82,7 @@ private:
 	float scoreBlack, scoreWhite;
 	float timeLeft;
 	Matrix *matrix;
-	GameMode gameMode;
+	GamePhase gamePhase;
 	QString comment;
 	QString unknownProperty;
 	QString nodeName;

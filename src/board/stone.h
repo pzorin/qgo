@@ -21,6 +21,8 @@ public:
 	int type() const { return RTTI_STONE; }
 	int posX() const { return myX; }
 	int posY() const { return myY; }
+	void setCoord(int x, int y) { myX = x; myY = y; }
+	void togglePixmap(QList<QPixmap> *a, bool showShadow = TRUE);
 
 	bool isDead() const { return dead; }
 	void setDead(bool b=true) { dead = b; seki = false;}

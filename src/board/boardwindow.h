@@ -25,7 +25,7 @@
 #include "boardhandler.h"
 #include "interfacehandler.h"
 #include "tree.h"
-//#include "matrix.h"
+//#include "define.h"
 //#include "move.h"
 
 //#include <QtGui>
@@ -38,15 +38,21 @@ class BoardWindow : public QMainWindow, public Ui::BoardWindow
 
 public:
 	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 , int size =19);
+	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE);
 	~BoardWindow();
 
-	bool loadSGF(const QString &fileName, const QString &filter=0, bool fastLoad = false); //TODO get rid of fastload
+	bool loadSGF(const QString fileName, const QString SGFLoaded, bool fastLoad = false); //TODO get rid of fastload
 
 	int getBoardSize() 			{return boardSize;}
 	Board *getBoard() 			{return ui.board;}
 	Tree *getTree() 			{return tree;}
-	InterfaceHandler *getInterfaceHandler() {return interfacehandler;}
+	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
 	Ui::BoardWindow getUi() 		{return ui;}
+	GameMode getGameMode() 			{return gameMode; } 
+	GamePhase getGamePhase() 		{return gamePhase;}
+	void setGamePhase(GamePhase gp)		{gamePhase =gp;}
+	bool getMyColorIsBlack()		{return myColorIsBlack;}
+	bool getMyColorIsWhite()		{return myColorIsWhite;}
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -54,6 +60,8 @@ protected:
 	
 
 public slots:
+	void slotNthMove() ;
+/*
 	void slotNavBackward();
 	void slotNavForward();
 	void slotNavFirst();
@@ -66,13 +74,20 @@ public slots:
 	void slotNavMainBranch();
 	void slotNavNextBranch();
 	void slotNavIntersection();
-
+*/
 private:
+	void init();
+
 	Ui::BoardWindow ui;
 	Tree *tree;
 	int boardSize;
-	BoardHandler *boardhandler;
-	InterfaceHandler *interfacehandler;
+	BoardHandler *boardHandler;
+	InterfaceHandler *interfaceHandler;
+	GameData *gameData;
+	GameMode gameMode;
+	GamePhase gamePhase;
+	bool myColorIsBlack , myColorIsWhite ;
+	
 };
 
 #endif

@@ -16,7 +16,7 @@ public:
 	~Matrix();
 	int getSize() const { return size; }
 	void clear();
-	void insertStone(int x, int y, StoneColor c, GameMode mode = modeNormal);
+	void insertStone(int x, int y, StoneColor c, GamePhase phase = phaseOngoing);
 	void removeStone(int x, int y);
 	void eraseStone(int x, int y);
 	void insertMark(int x, int y, MarkType t);

@@ -8,7 +8,8 @@
 
 #include "ui_mainwindow.h"
 #include "globals.h"
-#include "sgf/sgfparser.h"
+#include "sgfparser.h"
+#include "boardwindow.h"
 
 #include <QtGui>
 
@@ -36,6 +37,9 @@ private:
 	SGFParser * MW_SGFparser;
 	QString SGFloaded, fileLoaded ;
 	GameData * GameLoaded ;
+
+	QList<BoardWindow *> boardList;
+	void createGame(GameMode gameMode, GameData * gameData, bool myColorIsBlack = FALSE, bool myColorIsWhite = FALSE, QString fileLoaded = "");
 };
 
 #endif

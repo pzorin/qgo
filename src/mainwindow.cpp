@@ -136,19 +136,45 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 
 }
 
+/*
+ * Creates a game board with all elements initialised from 
+ * Gamedata and an sgf file 
+ */
+void MainWindow::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite , QString _fileLoaded )
+{
+	BoardWindow *b = new BoardWindow(this,0,_gameData , _gameMode , _myColorIsBlack , _myColorIsWhite);
+	
+	
+	if ( ! _fileLoaded.isEmpty())
+		if(!b->loadSGF("", _fileLoaded))
+		{
+			delete b; //TODO make explicit message
+			return ;
+		}
+
+	b->show();
+}
+
+
 void MainWindow::slot_fileNewBoard()
 {
-	BoardWindow *b = new BoardWindow(this,0,9);
-	b->show();
+	
+	GameData *gd = new GameData();
+
+	gd->size = ui.newFile_Size->text().toInt();
+	gd->handicap = ui.newFile_Handicap->text().toInt();
+	gd->playerBlack = ui.newFile_BlackPlayer->text();
+	gd->playerWhite = ui.newFile_WhitePlayer->text();
+	gd->komi = ui.newFile_Komi->text().toFloat();
+
+	createGame(modeNormal, gd , TRUE, TRUE );
 }
 
 void MainWindow::slot_fileOpenBoard()
 {
-	BoardWindow *b = new BoardWindow(this,0,19);//TODO see how to pass the correct size to the board
-	b->show();
 
- 	if(!b->loadSGF(fileLoaded))
-		delete b;
+	createGame(modeNormal, GameLoaded , TRUE, TRUE , SGFloaded );
 
-	//TODO decide what to do with the game info ...
 }
+
+

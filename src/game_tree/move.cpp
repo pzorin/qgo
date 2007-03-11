@@ -13,7 +13,7 @@ Move::Move(int board_size)
 	marker = NULL;
 	stoneColor = stoneNone;
 	x = y = -1;
-	gameMode = modeNormal;
+	gamePhase = phaseOngoing;
 	moveNum = 0;
 	terrMarked = false;
 	capturesBlack = capturesWhite = 0;
@@ -26,8 +26,8 @@ Move::Move(int board_size)
 	matrix = new Matrix(board_size);
 }
 
-Move::Move(StoneColor c, int mx, int my, int n, GameMode mode, const Matrix &mat, const QString &s)
-: stoneColor(c), x(mx), y(my), moveNum(n), gameMode(mode), comment(s)
+Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &mat, const QString &s)
+: stoneColor(c), x(mx), y(my), moveNum(n), gamePhase(phase), comment(s)
 {
 	brother = NULL;
 	son = NULL;
@@ -46,8 +46,8 @@ Move::Move(StoneColor c, int mx, int my, int n, GameMode mode, const Matrix &mat
 	matrix->absMatrix();
 }
 
-Move::Move(StoneColor c, int mx, int my, int n, GameMode mode, const QString &s)
-: stoneColor(c), x(mx), y(my), moveNum(n), gameMode(mode), comment(s)
+Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &s)
+: stoneColor(c), x(mx), y(my), moveNum(n), gamePhase(phase), comment(s)
 {
 	brother = NULL;
 	son = NULL;
@@ -80,7 +80,7 @@ bool Move::equals(Move *m)
 	if (x == m->getX() && y == m->getY() &&
 		stoneColor == m->getColor() &&
 		moveNum == m->getMoveNumber() &&
-		gameMode == m->getGameMode())
+		gamePhase == m->getGamePhase())
 		return true;
 	
 	return false;
@@ -93,7 +93,7 @@ const QString Move::saveMove(bool isRoot)
 	if (!isRoot)
 		str += ";"; //"\n;";
 	
-	if (x != -1 && y != -1 && gameMode != modeEdit)
+	if (x != -1 && y != -1 && gamePhase != phaseEdit)
 	{
 		// Write something like 'B[aa]'
 		str += stoneColor == stoneBlack ? "B" : "W";

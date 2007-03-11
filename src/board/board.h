@@ -30,9 +30,12 @@ public:
 	void setMark(int x, int y, MarkType t, bool update=true, QString txt=0, bool overlay=true);
 	Mark* hasMark(int x, int y);
 	void removeMark(int x, int y, bool update = false);
+	void removeDeadMarks();
+	void updateLastMove(StoneColor c, int x, int y);
 
 	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
 	bool updateStone(StoneColor c, int x, int y);
+	void setCursorType(CursorType cur);
 
 
 protected:
@@ -47,9 +50,11 @@ protected:
 	void resizeEvent(QResizeEvent*);
 
 private:
+
 	QGraphicsScene *canvas;
 	Gatter *gatter;
 	ImageHandler *imageHandler;
+//	GamePhase gamePhase;
 
 	int board_size, offset, offsetX, offsetY, square_size, board_pixel_size;
 	bool showCoords;
@@ -64,6 +69,9 @@ private:
 	Mark *lastMoveMark;
 	bool numberPool[400];
 	bool letterPool[52];
+	Stone *curStone;
+	CursorType cursor;
+	short curX, curY;
 
 	static long coordsToKey(int x, int y)	
 		{ return x * 100 + y; }
@@ -73,8 +81,17 @@ private:
 	int hasStone(int x, int y);
 	Stone* getStoneAt(int x, int y) { return stones->find(coordsToKey(x, y)).value(); }
 
+	bool hasVarGhost(StoneColor c, int x, int y);
+
 	void removeLastMoveMark();
 	void setMarkText(int x, int y, const QString &txt);
+
+	void contentsMousePressEvent(QMouseEvent *e);
+	void contentsMouseReleaseEvent(QMouseEvent*);
+	void mouseMoveEvent ( QMouseEvent * e ) ;
+	void contentsWheelEvent(QWheelEvent *e);
+	void leaveEvent(QEvent*);
+
 };
 
 #endif

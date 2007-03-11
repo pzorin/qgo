@@ -17,35 +17,66 @@
 
 #include <QtGui>
 
+class BoardHandler;
 
 BoardWindow::BoardWindow(QWidget * parent, Qt::WindowFlags flags, int size)
 	: QMainWindow( parent,  flags )
 {
 	boardSize = size;
+	gameData = NULL;
+	init();
+}
 
+BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd , GameMode gm , bool iAmBlack , bool iAmWhite)
+	: QMainWindow( parent,  flags )
+{
+	if (gd)
+		gameData = new GameData (gd);
+	else
+		gameData = NULL;
+
+	gameMode = gm;
+	myColorIsBlack = iAmBlack;
+	myColorIsWhite = iAmWhite;
+
+	boardSize = gd->size;
+	init();
+
+}
+
+void BoardWindow::init()
+{
 	ui.setupUi(this);
-	ui.board->init(size);
+	ui.board->init(boardSize);
 
-	tree = new Tree(size);
+	interfaceHandler = new InterfaceHandler( this);
 
-	interfacehandler = new InterfaceHandler( this);
-	boardhandler = new BoardHandler(this, tree, size);
+	tree = new Tree(boardSize);
+	boardHandler = new BoardHandler(this, tree, boardSize);
+
+	interfaceHandler = new InterfaceHandler( this);
+	if (gameData)
+		interfaceHandler->updateCaption(gameData);
+
 	
 	/*
 	 * Connects the nav buttons to the slots
 	 */
-	connect(ui.navForward,SIGNAL(pressed()),SLOT(slotNavForward()));
-	connect(ui.navBackward,SIGNAL(pressed()),SLOT(slotNavBackward()));
-	connect(ui.navNextVar, SIGNAL(pressed()), this, SLOT(slotNavNextVar()));
-	connect(ui.navPrevVar, SIGNAL(pressed()), this, SLOT(slotNavPrevVar()));
-	connect(ui.navFirst, SIGNAL(pressed()), this, SLOT(slotNavFirst()));
-	connect(ui.navLast, SIGNAL(pressed()), this, SLOT(slotNavLast()));
-	connect(ui.navMainBranch, SIGNAL(pressed()), this, SLOT(slotNavMainBranch()));
-	connect(ui.navStartVar, SIGNAL(pressed()), this, SLOT(slotNavStartVar()));
-	connect(ui.navNextBranch, SIGNAL(pressed()), this, SLOT(slotNavNextBranch()));
-	connect(ui.navIntersection, SIGNAL(pressed()), this, SLOT(slotNavIntersection()));
-	connect(ui.navPrevComment, SIGNAL(pressed()), this, SLOT(slotNavPrevComment()));
-	connect(ui.navNextComment, SIGNAL(pressed()), this, SLOT(slotNavNextComment()));
+	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
+	connect(ui.navBackward,SIGNAL(pressed()), boardHandler, SLOT(slotNavBackward()));
+	connect(ui.navNextVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextVar()));
+	connect(ui.navPrevVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevVar()));
+	connect(ui.navFirst, SIGNAL(pressed()), boardHandler, SLOT(slotNavFirst()));
+	connect(ui.navLast, SIGNAL(pressed()), boardHandler, SLOT(slotNavLast()));
+	connect(ui.navMainBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavMainBranch()));
+	connect(ui.navStartVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavStartVar()));
+	connect(ui.navNextBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextBranch()));
+	connect(ui.navIntersection, SIGNAL(pressed()), boardHandler, SLOT(slotNavIntersection()));
+	connect(ui.navPrevComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevComment()));
+	connect(ui.navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
+	connect(ui.navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
+	if  ( connect(ui.slider, SIGNAL(sliderReleased ()), this , SLOT(slotNthMove())))
+		qDebug("could connect slider");
 }
 
 BoardWindow::~BoardWindow()
@@ -57,87 +88,86 @@ void BoardWindow::closeEvent(QCloseEvent *)
 }
 
 /*
- * Loads the SGF file into its 'tree'
- * We may need to put this in the Board Handler class
+ * Loads the SGF string
  */
-bool BoardWindow::loadSGF(const QString &fileName, const QString & /* filter*/, bool /* fastLoad */)
+bool BoardWindow::loadSGF(const QString /*&fileName*/, const QString SGFLoaded, bool /* fastLoad */)
 {
 
-	boardhandler->loadSGF(fileName);
-/*	
-	SGFParser *sgfParser = new SGFParser(tree);
-	
-	// Load the sgf file
-	QString SGFloaded = sgfParser->loadFile(fileName);
+	if (! boardHandler->loadSGF("", QString(SGFLoaded) ))
+		return FALSE ;
 
-	if (!sgfParser->doParse(SGFloaded))
-		return false ;	
-	
-	//prepareBoard();
-	ui.board->clearData();
-	tree->setToFirstMove();	
-*/
+	boardHandler->slotNavFirst(); //gotoFirstMove(); // TODO check wether this belongs here ... (copy board)
 
-	return true;
+	return TRUE ;
+
 }
-
+/*
 void BoardWindow::slotNavBackward()
 {
-	boardhandler->previousMove();
+	boardHandler->previousMove();
 }
 
 void BoardWindow::slotNavForward()
 {
-	boardhandler->nextMove();
+//	boardHandler->nextMove();
 }
 
 void BoardWindow::slotNavFirst()
 {
-	boardhandler->gotoFirstMove();
+	boardHandler->gotoFirstMove();
 }
 
 void BoardWindow::slotNavLast()
 {
-	boardhandler->gotoLastMove();
+	boardHandler->gotoLastMove();
 }
 
 void BoardWindow::slotNavNextComment()
 {
-	boardhandler->nextComment();
+	boardHandler->nextComment();
 }
 
 void BoardWindow::slotNavPrevComment()
 {
-	boardhandler->previousComment();
+	boardHandler->previousComment();
 }
 
 void BoardWindow::slotNavPrevVar()
 {
-	boardhandler->previousVariation();
+	boardHandler->previousVariation();
 }
 
 void BoardWindow::slotNavNextVar()
 {
-	boardhandler->nextVariation();
+	boardHandler->nextVariation();
 }
 
 
 void BoardWindow::slotNavStartVar()
 {
-	boardhandler->gotoVarStart();
+	boardHandler->gotoVarStart();
 }
 
 void BoardWindow::slotNavMainBranch()
 {
-	boardhandler->gotoMainBranch();
+	boardHandler->gotoMainBranch();
 }
 
 void BoardWindow::slotNavNextBranch()
 {
-	boardhandler->gotoNextBranch();
+	boardHandler->gotoNextBranch();
 }
 
 void BoardWindow::slotNavIntersection() 
 {
-	boardhandler->navIntersection();
+	boardHandler->navIntersection();
+}
+
+
+*/
+void BoardWindow::slotNthMove() 
+{
+	int n = 5;
+	qDebug("slider moved to pos %d", n);
+	boardHandler->slotNthMove(n);
 }

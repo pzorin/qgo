@@ -19,6 +19,7 @@
 
 
 BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int size)
+	:QObject(bw)
 {
 	boardSize = size;	
 
@@ -38,9 +39,9 @@ BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int size)
 		tree = new Tree(boardSize);
 	Q_CHECK_PTR(tree);
 	
-	currentMove = 0;
+//	currentMove = 0;
 	lastValidMove = NULL;
-	gameMode = modeNormal;
+//	gameMode = modeNormal;
 //	markType = markNone;
 	capturesBlack = capturesWhite = 0;
 	markedDead = false;
@@ -63,15 +64,15 @@ BoardHandler::~BoardHandler()
 }
 
 
-bool BoardHandler::loadSGF(const QString &fileName, const QString & /* filter*/, bool /* fastLoad */)
+ bool BoardHandler::loadSGF(const QString /*&fileName*/, const QString SGFLoaded, bool /* fastLoad */)
 {
 
 	SGFParser *sgfParser = new SGFParser(tree);
 	
 	// Load the sgf file
-	QString SGFloaded = sgfParser->loadFile(fileName);
+//	QString SGFloaded = sgfParser->loadFile(fileName);
 
-	if (!sgfParser->doParse(SGFloaded))
+	if (!sgfParser->doParse(SGFLoaded))
 		return false ;	
 	
 	board->clearData();
@@ -85,8 +86,8 @@ void BoardHandler::clearData()
 {
 	tree->init(boardSize);
 	lastValidMove = NULL;
-	currentMove = 0;
-	gameMode = modeNormal;
+//	currentMove = 0;
+//	gameMode = modeNormal;
 //	markType = markNone;
 
 	board->clearData();
@@ -97,7 +98,8 @@ void BoardHandler::clearData()
 }
 
 
-bool BoardHandler::nextMove(bool /*autoplay*/)
+//bool BoardHandler::nextMove(bool /*autoplay*/)
+/*
 {
 //	if (gameMode == modeScore)
 //		return false;
@@ -114,8 +116,23 @@ bool BoardHandler::nextMove(bool /*autoplay*/)
 	updateMove(m);
 	return true;
 }
+*/
 
-void BoardHandler::previousMove()
+void BoardHandler::slotNavForward()
+{
+//	if (gameMode == modeScore)
+//		return false;
+	
+	Q_CHECK_PTR(tree);
+	
+	Move *m = tree->nextMove();
+	if (m != NULL)
+		updateMove(m);
+	
+}
+
+
+void BoardHandler::slotNavBackward()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -127,7 +144,7 @@ void BoardHandler::previousMove()
 		updateMove(m);
 }
 
-void BoardHandler::gotoFirstMove()
+void BoardHandler::slotNavFirst()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -149,7 +166,7 @@ void BoardHandler::gotoFirstMove()
 
 }
 
-void BoardHandler::gotoLastMove()
+void BoardHandler::slotNavLast()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -167,7 +184,7 @@ void BoardHandler::gotoLastMove()
 		updateMove(m);
 }
 
-void BoardHandler::previousComment()
+void BoardHandler::slotNavPrevComment()
 {
 //	 if (gameMode == modeScore)
 //		return;
@@ -194,7 +211,7 @@ void BoardHandler::previousComment()
 	}
 }
 
-void BoardHandler::nextComment()
+void BoardHandler::slotNavNextComment()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -222,16 +239,18 @@ void BoardHandler::nextComment()
 	}
 }
 
-void BoardHandler::navIntersection()          
+void BoardHandler::slotNavIntersection()
 {
-	QApplication::setOverrideCursor( QCursor(Qt::PointingHandCursor) );
+//	QApplication::setOverrideCursor( QCursor(Qt::PointingHandCursor) );
 
 //	navIntersectionStatus = true;
+	boardwindow->setGamePhase ( phaseNavTo );
+	board->setCursorType(cursorNavTo);
 }
 
 
 
-void BoardHandler::nextVariation()
+void BoardHandler::slotNavNextVar()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -242,10 +261,10 @@ void BoardHandler::nextVariation()
 	if (m == NULL)
 		return;
 	
-updateMove(m);
+	updateMove(m);
 }
 
-void BoardHandler::previousVariation()
+void BoardHandler::slotNavPrevVar()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -260,7 +279,7 @@ void BoardHandler::previousVariation()
 }
 
 
-void BoardHandler::gotoVarStart()
+void BoardHandler::slotNavStartVar()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -297,7 +316,7 @@ void BoardHandler::gotoVarStart()
 	updateMove(tmp);
 }
 
-void BoardHandler::gotoNextBranch()
+void BoardHandler::slotNavNextBranch()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -330,7 +349,10 @@ void BoardHandler::gotoNextBranch()
 		tree->setCurrent(remember);
 }
 
-void BoardHandler::gotoMainBranch()
+/*
+ * This function resumes back to the first move in the main branch
+ */
+void BoardHandler::slotNavMainBranch()
 {
 //	if (gameMode == modeScore)
 //		return;
@@ -370,7 +392,54 @@ void BoardHandler::gotoMainBranch()
 }
 
 
+void BoardHandler::slotNthMove(int n)
+{
+//	if (gameMode == modeScore)
+//		return;
+	
+	Q_ASSERT(n >= 0);
+	Q_CHECK_PTR(tree);
+	
+	Move *m = tree->getCurrent(),
+		*old = m;
+	Q_CHECK_PTR(m);
+	
+	int currentMove = m->getMoveNumber();
 
+	while (m != NULL)
+	{
+		if (m->getMoveNumber() == n)
+			break;
+		if ((n >= currentMove && m->son == NULL && m->marker == NULL) ||
+			(n < currentMove && m->parent == NULL))
+			break;
+		if (n > currentMove)
+		{
+			if (m->marker == NULL)
+				m = m->son;
+			else
+				m = m->marker;
+			m->parent->marker = m;
+		}	    
+		else
+		{
+			m->parent->marker = m;
+			m = m->parent;
+		}
+	}
+	
+	if (m != NULL && m != old)
+		gotoMove(m);
+
+}
+
+
+void BoardHandler::gotoMove(Move *m)
+{
+	Q_CHECK_PTR(m);
+	tree->setCurrent(m);
+	updateMove(m);
+}
 
 
 /*
@@ -428,9 +497,12 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 	}
 */	
 	Q_CHECK_PTR(m);
-//	currentMove = m->getMoveNumber();
+//	int currentMove = m->getMoveNumber();
 //	int brothers = getNumBrothers();
-	
+
+	// Update slider branch length
+	boardwindow->getInterfaceHandler()->setSliderMax(m->getMoveNumber() + tree->getBranchLength());	
+
 	// Display move data and comment in the GUI
 //	if (m->getGameMode() == modeNormal)
 		boardwindow->getInterfaceHandler()->setMoveData(
@@ -447,8 +519,9 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //		board->getInterfaceHandler()->setMoveData(currentMove, getBlackTurn(), brothers, getNumSons(),
 //		hasParent(), hasPrevBrother(), hasNextBrother());
 //	if (board->get_isLocalGame())
-//		board->getInterfaceHandler()->displayComment(m->getComment());        // Update comment
-//	board->getInterfaceHandler()->setSliderMax(currentMove + tree->getBranchLength());  // Update slider branch length
+	// Update comment
+		boardwindow->getInterfaceHandler()->displayComment(m->getComment());
+
 
   
 	// Get rid of the varation ghosts
@@ -468,20 +541,23 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 	// Unshade dead stones
 //	if (markedDead)
 //	{
-//		stoneHandler->removeDeadMarks();
+		board->removeDeadMarks();
 //		markedDead = false;
 //	}
 	
 //	if (m->getGameMode() == modeNormal || m->getGameMode() == modeObserve )  //SL add eb 8
 		// If the node is in normal mode, show the circle to mark the last move
-//		    board->updateLastMove(m->getColor(), m->getX(), m->getY());
-//	else                                                                      
+		    board->updateLastMove(m->getColor(), m->getX(), m->getY());
+//	else
 		// ... if node is in edit mode, just delete that circle
 //	{
 //		board->removeLastMoveMark();
 //		board->setCurStoneColor();
 //	}
+	CursorType cur = updateCursor(m->getColor());
+	board->setCursorType(cur);
 	
+
 	// Update the ghosts indicating variations
 	if (m->getNumBrothers())// && setting->readIntEntry("VAR_GHOSTS")) TODO
 		updateVariationGhosts(m);
@@ -492,13 +568,13 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 	
 	// Synchronize the board with the current nodes matrix, provided we want to 
 //  if (!ignore_update)                //SL added eb 9 - this if we are browsing an observing game and an undo incomes
-  	updateAll(m->getMatrix());
+ 	updateAll(m->getMatrix()); //FIXME this should probably be above in the code
 	
 	// Display captures or score in the GUI
 //	if (m->isScored())  // This move has been scored
 //		board->getInterfaceHandler()->setCaptures(m->getScoreBlack(), m->getScoreWhite(), true);
 //	else
-//		board->getInterfaceHandler()->setCaptures(m->getCapturesBlack(), m->getCapturesWhite());
+		boardwindow->getInterfaceHandler()->setCaptures(m->getCapturesBlack(), m->getCapturesWhite());
 
 	// Display times
 //	if (currentMove == 0)
@@ -608,6 +684,34 @@ bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 
 	return modified;
 }
+
+/*
+ * Update the cursor for sending an order to the 'board'
+ */
+CursorType BoardHandler::updateCursor(StoneColor currentMoveColor)
+{
+	switch (boardwindow->getGameMode())
+	{
+	case modeNormal :
+	case modeTeach :
+	case modeReview :
+		return (currentMoveColor == stoneBlack ? cursorGhostWhite : cursorGhostBlack);
+
+	case modeObserve :
+		return cursorIdle;
+
+	case modeMatch :
+	case modeComputer :
+		if  (currentMoveColor == stoneBlack )
+			return ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
+		else
+			return ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+
+	}
+
+	return cursorIdle;
+}
+
 
 void BoardHandler::updateVariationGhosts(Move *move)
 {
