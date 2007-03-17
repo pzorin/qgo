@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 /*
 * settings example
 */
-	ui.comboBox_language->setCurrentIndex (settings.value("language").toInt());
+	loadSettings();
 
 /*
 * filling the file view
@@ -61,6 +61,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
 	connect(ui.button_loadGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
+	connect(ui.button_newComputerGame,SIGNAL(pressed()),SLOT(slot_computerNewBoard()));
+
 	connect(ui.dirView_1->selectionModel(),  
 		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
 		this,
@@ -77,11 +79,29 @@ MainWindow::~MainWindow()
 {
 }
 
+
 void MainWindow::closeEvent(QCloseEvent *)
 {
-	settings.setValue("language",ui.comboBox_language->currentIndex ());
+	saveSettings();
 }
 
+/*
+ * saves the parameters on the 2 lats tabs into the QSettings 
+ */
+void MainWindow::saveSettings()
+{
+	settings.setValue("language",ui.comboBox_language->currentIndex ());
+	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
+}
+
+/*
+ * loads the parameters from the QSettings into the 2 lats tabs
+ */
+void MainWindow::loadSettings()
+{
+	ui.comboBox_language->setCurrentIndex (settings.value("language").toInt());
+	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
+}
 
 /* 
  * Loads the file header data from the item selected in the directory display
@@ -122,16 +142,18 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 	
 	if (GameLoaded)
 	{
-		QString komi;
+		QString komi, hcp, sz;
 		komi.setNum(GameLoaded->komi);	
+		hcp.setNum(GameLoaded->handicap);
+		sz.setNum(GameLoaded->size);
 
 		ui.File_WhitePlayer->setText(GameLoaded->playerWhite);
 		ui.File_BlackPlayer->setText(GameLoaded->playerBlack);
 		ui.File_Date->setText(GameLoaded->date);
-		ui.File_Handicap->setText(QString::QString(GameLoaded->handicap));
+		ui.File_Handicap->setText(hcp);
 		ui.File_Result->setText(GameLoaded->result);
 		ui.File_Komi->setText(komi);
-		ui.File_Size->setText(QString::QString(GameLoaded->size));
+		ui.File_Size->setText(sz);
 	}	
 
 }
@@ -140,18 +162,19 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
  * Creates a game board with all elements initialised from 
  * Gamedata and an sgf file 
  */
-void MainWindow::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite , QString _fileLoaded )
+void MainWindow::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite , QString /*_fileLoaded*/ )
 {
 	BoardWindow *b = new BoardWindow(this,0,_gameData , _gameMode , _myColorIsBlack , _myColorIsWhite);
 	
-	
+/*	
+	TODO : we have put this into the boardwindow code. Is this the proper method ? (we did reload the file ...)
 	if ( ! _fileLoaded.isEmpty())
 		if(!b->loadSGF("", _fileLoaded))
 		{
-			delete b; //TODO make explicit message
+			delete b; 
 			return ;
 		}
-
+*/
 	b->show();
 }
 
@@ -177,4 +200,27 @@ void MainWindow::slot_fileOpenBoard()
 
 }
 
+
+void MainWindow::slot_computerNewBoard()
+{
+	
+	GameData *gd = new GameData();
+
+	gd->size = ui.newComputer_Size->text().toInt();
+	gd->handicap = ui.newComputer_Handicap->text().toInt();
+	gd->playerBlack = ui.newComputer_BlackPlayer->text();
+	gd->playerWhite = ui.newComputer_WhitePlayer->text();
+	gd->komi = ui.newComputer_Komi->text().toFloat();
+
+	bool imBlack = (ui.cb_ComputerBlackPlayer->currentIndex() != 0);
+	bool imWhite = (ui.cb_ComputerWhitePlayer->currentIndex() != 0);
+
+	if (imBlack && imWhite)
+	{
+		QMessageBox::warning(this, PACKAGE, tr("*** Both players are Human ! ***"));
+		return ;
+	}
+
+	createGame(modeComputer, gd , imBlack, imWhite );
+}
 

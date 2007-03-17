@@ -536,6 +536,10 @@ void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
 		current->getMatrix()->insertStone(x, y, c);//, gameMode);
 }
 
+
+/*
+ * This function is called by the SGF parser for adding pass moves or a 'StoneNone'
+ */
 void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
 {
 	// qDebug("BoardHandler::addMove - clearMarks = %d", clearMarks);

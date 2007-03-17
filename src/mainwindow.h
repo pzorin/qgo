@@ -24,6 +24,7 @@ public:
 public slots:
 	void slot_fileNewBoard();
 	void slot_fileOpenBoard();
+	void slot_computerNewBoard();
 	void slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & bottomRight );
 
 protected:

@@ -33,7 +33,7 @@ board/boardhandler.h \
 board/interfacehandler.h \
 board/mark.h \
 gtp/qgtp.h \
-game_proxies/qgoboard.h
+game_interfaces/qgoboard.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -49,9 +49,13 @@ SOURCES += main.cpp \
            board/boardhandler.cpp \
            board/interfacehandler.cpp \
            board/mark.cpp \
-           gtp/qgtp.cpp
+           gtp/qgtp.cpp \
+           game_interfaces/qgoboard.cpp \
+           game_interfaces/qgoboard_computer.cpp
 QT -= qt3support
-DEPENDPATH += board sgf game_tree
-INCLUDEPATH += game_tree \
+DEPENDPATH += "board sgf game_tree game_interfaces gtp"
+INCLUDEPATH += gtp \
+game_interfaces \
+game_tree \
 board \
 sgf

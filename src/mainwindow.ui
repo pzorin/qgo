@@ -618,6 +618,9 @@
            </property>
            <item row="0" column="3" >
             <widget class="QPushButton" name="button_loadGame" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
              <property name="text" >
               <string>Open game</string>
              </property>
@@ -907,7 +910,7 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="QLineEdit" name="lineEdit" />
+            <widget class="QLineEdit" name="LineEdit_computer" />
            </item>
            <item>
             <spacer>
@@ -1002,7 +1005,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_14" >
+                 <widget class="QLineEdit" name="newComputer_BlackPlayer" >
                   <property name="text" >
                    <string/>
                   </property>
@@ -1011,7 +1014,7 @@
                </layout>
               </item>
               <item row="0" column="0" >
-               <widget class="QComboBox" name="comboBox_9" >
+               <widget class="QComboBox" name="cb_ComputerBlackPlayer" >
                 <item>
                  <property name="text" >
                   <string>Computer</string>
@@ -1085,7 +1088,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_13" >
+                 <widget class="QLineEdit" name="newComputer_WhitePlayer" >
                   <property name="text" >
                    <string/>
                   </property>
@@ -1094,7 +1097,7 @@
                </layout>
               </item>
               <item row="0" column="0" >
-               <widget class="QComboBox" name="comboBox_8" >
+               <widget class="QComboBox" name="cb_ComputerWhitePlayer" >
                 <item>
                  <property name="text" >
                   <string>Computer</string>
@@ -1147,7 +1150,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_3" >
+                <widget class="QSpinBox" name="newComputer_Size" >
                  <property name="minimum" >
                   <number>2</number>
                  </property>
@@ -1174,7 +1177,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox_4" >
+                <widget class="QSpinBox" name="newComputer_Handicap" >
                  <property name="maximum" >
                   <number>9</number>
                  </property>
@@ -1204,7 +1207,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_2" >
+                <widget class="QLineEdit" name="newComputer_Komi" >
                  <property name="text" >
                   <string>6,5</string>
                  </property>
@@ -1232,7 +1235,7 @@
             </widget>
            </item>
            <item row="0" column="4" >
-            <widget class="QPushButton" name="pushButton_6" >
+            <widget class="QPushButton" name="button_newComputerGame" >
              <property name="text" >
               <string>Start game</string>
              </property>
