@@ -1,37 +1,31 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="10" >
+ <DocsAndViews NumberOfDocuments="8" >
   <Doc0 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardwindow.h" >
-   <View0 Encoding="" Type="Source" />
+   <View0 Encoding="" line="43" Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardwindow.cpp" >
-   <View0 Encoding="" Type="Source" />
+   <View0 Encoding="" line="31" Type="Source" />
   </Doc1>
   <Doc2 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardhandler.cpp" >
-   <View0 Encoding="" Type="Source" />
+   <View0 Encoding="" line="65" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardhandler.h" >
+  <Doc3 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_proxies/qgoboard.h" >
    <View0 Encoding="" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/board.h" >
-   <View0 Encoding="" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/board.cpp" >
+   <View0 Encoding="" line="102" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/defines.h" >
-   <View0 Encoding="" Type="Source" />
+  <Doc5 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/mainwindow.cpp" >
+   <View0 Encoding="" line="173" Type="Source" />
   </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/mainwindow.cpp" >
-   <View0 Encoding="" Type="Source" />
+  <Doc6 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/interfacehandler.cpp" >
+   <View0 Encoding="" line="74" Type="Source" />
   </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/board.cpp" >
-   <View0 Encoding="" Type="Source" />
+  <Doc7 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardhandler.h" >
+   <View0 Encoding="" line="40" Type="Source" />
   </Doc7>
-  <Doc8 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/interfacehandler.cpp" >
-   <View0 Encoding="" Type="Source" />
-  </Doc8>
-  <Doc9 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/sgf/sgfparser.cpp" >
-   <View0 Encoding="" line="834" Type="Source" />
-  </Doc9>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
@@ -45,12 +39,9 @@
     <breakpoint2 location="toParse.Str" type="2" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="0" >
      <tracedExpressions/>
     </breakpoint2>
-    <breakpoint3 location="/home/eb/Packages/qgo2/src/mainwindow.cpp:145" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+    <breakpoint3 location="/home/eb/Packages/qgo2/src/sgf/sgfparser.cpp:657" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
      <tracedExpressions/>
     </breakpoint3>
-    <breakpoint4 location="/home/eb/Packages/qgo2/src/board/boardwindow.cpp:32" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
-     <tracedExpressions/>
-    </breakpoint4>
    </breakpointList>
    <showInternalCommands value="0" />
   </kdevdebugger>
@@ -61,7 +52,7 @@
   <kdevbookmarks>
    <bookmarks>
     <bookmark url="/home/eb/Packages/qgo2/src/board/board.cpp" >
-     <mark line="182" />
+     <mark line="190" />
     </bookmark>
     <bookmark url="/home/eb/Packages/qgo2/src/sgf/sgfparser.cpp" >
      <mark line="362" />

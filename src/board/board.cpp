@@ -1047,8 +1047,15 @@ void Board::leaveEvent(QEvent*)
 	canvas->update();
 }
 
+/*
+ * Sets the ghost cursor depending on the arrow position
+ */
 void Board::mouseMoveEvent ( QMouseEvent * e )
 {
+
+	if (!showCursor)
+		return;
+
 	int x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
 
@@ -1070,7 +1077,7 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 	
 	// Remember if the cursor was hidden meanwhile.
 	// If yes, we need to repaint it at the old position.
-	bool flag = curX == -1;
+//	bool flag = curX == -1;
 	
 	curX = (short)x;
 	curY = (short)y;
@@ -1102,3 +1109,52 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
     
 	canvas->update();
 }
+
+/*
+ * starts the counter for anticlivko moves
+ */
+void Board::mousePressEvent(QMouseEvent *)
+{
+	wheelTime = QTime::currentTime();
+	wheelTime = wheelTime.addMSecs(250);
+}
+
+void Board::mouseReleaseEvent(QMouseEvent* e)
+{
+	mouseState = e->button();
+
+	int 	x = convertCoordsToPoint(e->x(), offsetX),
+		y = convertCoordsToPoint(e->y(), offsetY);
+
+	// Button gesture outside the board?
+	if (x < 1 || x > board_size || y < 1 || y > board_size)
+/*	{
+		if (e->button() == LeftButton &&
+			e->state() == RightButton)
+			previousMove();
+		else if (e->button() == RightButton &&
+			e->state() == LeftButton)
+			nextMove();
+		else if (e->button() == LeftButton &&
+			e->state() == MidButton)
+			gotoVarStart();
+		else if (e->button() == RightButton &&
+			e->state() == MidButton)
+			gotoNextBranch();
+*/		
+		return;
+//	}
+/*
+	// Lock accidental gesture over board
+	if ((e->button() == Qt::LeftButton && e->state() == Qt::RightButton) ||
+		(e->button() == Qt::RightButton && e->state() == Qt::LeftButton) ||
+		(e->button() == Qt::LeftButton && e->state() == Qt::MidButton) ||
+		(e->button() == Qt::RightButton && e->state() == Qt::MidButton))
+		return;
+*/
+	    // Check delay
+    	bool delay = (QTime::currentTime() > wheelTime);
+
+	emit signalClicked(delay, x , y , mouseState);
+}
+

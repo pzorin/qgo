@@ -63,8 +63,8 @@ BoardHandler::~BoardHandler()
 
 }
 
-
- bool BoardHandler::loadSGF(const QString /*&fileName*/, const QString SGFLoaded, bool /* fastLoad */)
+/*
+ bool BoardHandler::loadSGF(const QString &fileName, const QString SGFLoaded, bool  fastLoad )
 {
 
 	SGFParser *sgfParser = new SGFParser(tree);
@@ -80,7 +80,7 @@ BoardHandler::~BoardHandler()
 
 	return true;
 }
-
+*/
 
 void BoardHandler::clearData()
 {
@@ -239,16 +239,39 @@ void BoardHandler::slotNavNextComment()
 	}
 }
 
+/*
+ * Called when the 'nav to' button is pressed
+ */
 void BoardHandler::slotNavIntersection()
 {
-//	QApplication::setOverrideCursor( QCursor(Qt::PointingHandCursor) );
+	//should not happen
+	if (boardwindow->getGameMode() != modeNormal)
+		return;
 
-//	navIntersectionStatus = true;
 	boardwindow->setGamePhase ( phaseNavTo );
 	board->setCursorType(cursorNavTo);
 }
 
+/*
+ * Called after the preceding (slot nav Intersection)
+ * When the intersection 'x/y' has been clicked on
+ */
+void BoardHandler::findMoveByPos(int x, int y)
+{
+	Move *m = tree->findMoveInBranch(x, y);
+	
+	//if (boardwindow->getGamePhase() == phaseNavTo)
+	boardwindow->setGamePhase ( phaseOngoing );
 
+	if (m != NULL)
+	{
+		tree->setCurrent(m);
+		updateMove(m);
+	}
+	else
+		QApplication::beep();
+
+}
 
 void BoardHandler::slotNavNextVar()
 {
@@ -701,11 +724,16 @@ CursorType BoardHandler::updateCursor(StoneColor currentMoveColor)
 		return cursorIdle;
 
 	case modeMatch :
-	case modeComputer :
 		if  (currentMoveColor == stoneBlack )
 			return ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
 		else
 			return ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+
+	case modeComputer :
+		if  (currentMoveColor == stoneBlack )
+			return ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
+		else
+			return ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
 
 	}
 

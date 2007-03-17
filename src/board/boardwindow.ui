@@ -63,66 +63,7 @@
            <property name="spacing" >
             <number>0</number>
            </property>
-           <item row="1" column="1" >
-            <widget class="QSlider" name="slider" >
-             <property name="maximumSize" >
-              <size>
-               <width>32767</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="focusPolicy" >
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="toolTip" >
-              <string>Navigate through the game</string>
-             </property>
-             <property name="whatsThis" >
-              <string>Navigate to move
-
-Use the slider to quickly navigate through the current branch of the game.</string>
-             </property>
-             <property name="maximum" >
-              <number>10</number>
-             </property>
-             <property name="pageStep" >
-              <number>1</number>
-             </property>
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" >
-            <widget class="QLabel" name="sliderLeftLabel" >
-             <property name="font" >
-              <font>
-               <family>Sans Serif</family>
-               <pointsize>9</pointsize>
-               <weight>50</weight>
-               <italic>false</italic>
-               <bold>false</bold>
-               <underline>false</underline>
-               <strikeout>false</strikeout>
-              </font>
-             </property>
-             <property name="whatsThis" >
-              <string>Slider min value
-
-Minimum game move the slider can currently show.</string>
-             </property>
-             <property name="text" >
-              <string>0</string>
-             </property>
-             <property name="alignment" >
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="margin" >
-              <number>2</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2" >
+           <item row="3" column="2" >
             <widget class="QLabel" name="sliderRightLabel" >
              <property name="font" >
               <font>
@@ -155,8 +96,8 @@ Maximum game move the slider can currently show.</string>
             <widget class="Board" native="1" name="board" >
              <property name="minimumSize" >
               <size>
-               <width>250</width>
-               <height>250</height>
+               <width>300</width>
+               <height>300</height>
               </size>
              </property>
              <property name="whatsThis" >
@@ -168,6 +109,65 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1" >
+            <widget class="QSlider" name="slider" >
+             <property name="maximumSize" >
+              <size>
+               <width>32767</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="focusPolicy" >
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="toolTip" >
+              <string>Navigate through the game</string>
+             </property>
+             <property name="whatsThis" >
+              <string>Navigate to move
+
+Use the slider to quickly navigate through the current branch of the game.</string>
+             </property>
+             <property name="maximum" >
+              <number>10</number>
+             </property>
+             <property name="pageStep" >
+              <number>1</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" >
+            <widget class="QLabel" name="sliderLeftLabel" >
+             <property name="font" >
+              <font>
+               <family>Sans Serif</family>
+               <pointsize>9</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+               <underline>false</underline>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="whatsThis" >
+              <string>Slider min value
+
+Minimum game move the slider can currently show.</string>
+             </property>
+             <property name="text" >
+              <string>0</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="margin" >
+              <number>2</number>
              </property>
             </widget>
            </item>

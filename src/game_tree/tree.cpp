@@ -435,21 +435,21 @@ int Tree::mainBranchSize()
 
 Move *Tree::findLastMoveInMainBranch()
 {
-  Move *m = root;
-  Q_CHECK_PTR(m);
+	Move *m = root;
+	Q_CHECK_PTR(m);
 
-  if (m==NULL)
-    return NULL;
+	if (m==NULL)
+	return NULL;
   
 	// Descend tree until root reached
 	while (m->son != NULL)
 		m = m->son;
 
-  return m;
+	return m;
 }
 
 /*
- * This creates a move in the tree, from reading sgf
+ * This creates an empty move in the tree
  */
 void Tree::createMoveSGF( bool brother, bool fastLoad)
 {
@@ -545,14 +545,14 @@ void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
 	
 	Move *m = new Move(c, x, y, current->getMoveNumber(), phaseOngoing, *mat);
 	Q_CHECK_PTR(m);
-	
+/*	
 	if (hasSon(m))
 	{
 		// qDebug("*** HAVE THIS SON ALREADY! ***");
 		delete m;
 		return;
 	}
-	
+*/	
 	// Remove all marks from this new move. We dont do that when creating
 	// a new variation in edit mode.
 	if (clearMarks)
@@ -682,10 +682,17 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	else
 		capturesBlack = capturesWhite = 0;
 
-	if (current->parent == root)
-		current->setMoveNumber(1);
+	if (current->parent == root && ! new_node)
+	{
+		current->setMoveNumber(0); //TODO : make sure this is the proper way
+		current->setX(-1);
+		current->setY(-1);
+	}
+	else
+		editMove(c, x, y);
+
 /*	
- * This code is replaced by the above line.
+ * This code is replaced by the above line. 
 
 	if (gameMode == modeNormal || gameMode == modeObserve || gameMode == modeTeach)
 	{
@@ -696,7 +703,7 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	}
 	else if(gameMode == modeEdit)
 		tree->getCurrent()->setMoveNumber(0);
-*/
+
 	
 
 	if (new_node)

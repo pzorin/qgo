@@ -45,6 +45,11 @@
 #define MARK_TERRITORY_DONE_BLACK 997
 #define MARK_TERRITORY_DONE_WHITE 998
 
+/*
+* GNUgo default level
+*/
+#define GNUGO_LEVEL 10
+
 
 /*
 * Enum definitions

@@ -38,7 +38,7 @@ void InterfaceHandler::clearData()
 {
     // qDebug("void InterfaceHandler::clearData()");
 	
-//	clearComment();
+	clearComment();
 //	setMoveData(0, true, 0, 0, false, false, false);
 //    modeButton->setOn(false);
 //	  mainWidget->setToolsTabWidget(tabNormalScore);
@@ -59,7 +59,7 @@ void InterfaceHandler::clearData()
 //	editPaste->setEnabled(false);
 //	editPasteBrother->setEnabled(false);
 	boardwindow->slider->setValue(0);
-//	setSliderMax(SLIDER_INIT);
+	boardwindow->slider->setMaximum(SLIDER_INIT);
 	scored_flag = false;
 }
 
@@ -124,6 +124,7 @@ void InterfaceHandler::updateCaption(GameData *gd)
 		gb->setTitle(player);
 	}
 	
+	//TODO set handicap, komi and clock
 }
 
 /*
@@ -226,7 +227,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 //	(board->getGameMode() == modeObserve && mv < n && v==n-1))
 		boardwindow->getUi().slider->setValue(n);
 
-	boardwindow->getUi().slider->blockSignals (TRUE);
+	boardwindow->getUi().slider->blockSignals (FALSE);
 }
 
 
@@ -245,6 +246,16 @@ void InterfaceHandler::displayComment(const QString &c)
 //	else if (!c.isEmpty())
 //			commentEdit->append(c);
 }
+
+
+/*
+ * clear the big field (offline)
+ */
+void InterfaceHandler::clearComment()
+{
+	boardwindow->commentEdit->clear();
+}
+
 
 /*
  * modifies the maximum value of the slider (used when a move is added)

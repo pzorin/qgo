@@ -25,12 +25,14 @@
 #include "boardhandler.h"
 #include "interfacehandler.h"
 #include "tree.h"
+#include "qgoboard.h"
 //#include "define.h"
 //#include "move.h"
 
 //#include <QtGui>
 
 class BoardHandler;
+class qGoBoard;
 
 class BoardWindow : public QMainWindow, public Ui::BoardWindow
 {
@@ -41,12 +43,13 @@ public:
 	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE);
 	~BoardWindow();
 
-	bool loadSGF(const QString fileName, const QString SGFLoaded, bool fastLoad = false); //TODO get rid of fastload
+	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad = false); //TODO get rid of fastload
 
 	int getBoardSize() 			{return boardSize;}
 	Board *getBoard() 			{return ui.board;}
 	Tree *getTree() 			{return tree;}
 	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
+	BoardHandler *getBoardHandler() 	{return boardHandler;}
 	Ui::BoardWindow getUi() 		{return ui;}
 	GameMode getGameMode() 			{return gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
@@ -58,10 +61,9 @@ protected:
 	void closeEvent(QCloseEvent *e);
 
 	
-
-public slots:
-	void slotNthMove() ;
 /*
+public slots:
+	void slotNthMove(int n) ;
 	void slotNavBackward();
 	void slotNavForward();
 	void slotNavFirst();
@@ -83,6 +85,8 @@ private:
 	int boardSize;
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
+	qGoBoard *qgoboard;
+
 	GameData *gameData;
 	GameMode gameMode;
 	GamePhase gamePhase;

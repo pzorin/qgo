@@ -41,7 +41,9 @@ public:
 	void updateMove(Move *m=0, bool ignore_update = false);
 	bool updateAll(Matrix *m, bool toDraw=true);
 	CursorType updateCursor(StoneColor c);
-	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
+//	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
+
+	void findMoveByPos(int x,int  y);
 
 public slots:
 	void slotNavBackward();

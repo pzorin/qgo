@@ -2,7 +2,7 @@
 <kdevelop>
   <general>
     <author>EB</author>
-    <email></email>
+    <email/>
     <version>0.1</version>
     <projectmanagement>KDevTrollProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
@@ -13,8 +13,8 @@
     <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
-    <defaultencoding></defaultencoding>
+    <description/>
+    <defaultencoding/>
     <projectname>qgo2</projectname>
   </general>
   <kdevfileview>
@@ -29,6 +29,7 @@
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>
   <kdevdoctreeview>
@@ -71,16 +72,16 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell></dbgshell>
+      <dbgshell/>
       <breakpoints/>
       <programargs/>
-      <gdbpath></gdbpath>
+      <gdbpath/>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
     </general>
     <display>
       <staticmembers>false</staticmembers>
@@ -92,7 +93,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>/home/eb/Packages/qgo2/bin/qgo2</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -109,7 +110,7 @@
       <debugarguments>
         <qgo2/>
       </debugarguments>
-      <globaldebugarguments></globaldebugarguments>
+      <globaldebugarguments/>
       <globalcwd>/home/eb/Packages/qgo2</globalcwd>
       <useglobalprogram>false</useglobalprogram>
     </run>
@@ -121,7 +122,7 @@
       <runmultiplejobs>false</runmultiplejobs>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
       <prio>0</prio>
       <envvars/>
     </make>
@@ -136,6 +137,7 @@
     <openfiles/>
   </workspace>
   <kdevfilecreate>
+    <filetypes/>
     <useglobaltypes>
       <type ext="ui" />
       <type ext="cpp" />
@@ -145,8 +147,9 @@
   </kdevfilecreate>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem>Doxygen Documentation Collection</docsystem>
+      <docsystem>Collection de documentation Doxygen</docsystem>
       <docurl>qgo2.tag</docurl>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <substmap>
@@ -173,7 +176,7 @@
       <used>true</used>
       <version>4</version>
       <root>/usr/bin</root>
-      <includestyle>3</includestyle>
+      <includestyle>4</includestyle>
       <designerintegration>ExternalDesigner</designerintegration>
       <qmake>/usr/bin/qmake</qmake>
       <designer>/usr/bin/designer</designer>
@@ -207,7 +210,7 @@
       <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
-      <prefixGet></prefixGet>
+      <prefixGet/>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
@@ -245,4 +248,11 @@
     <appskde>false</appskde>
     <url/>
   </dist>
+  <kdevcvsservice>
+    <recursivewhenupdate>true</recursivewhenupdate>
+    <prunedirswhenupdate>true</prunedirswhenupdate>
+    <createdirswhenupdate>true</createdirswhenupdate>
+    <recursivewhencommitremove>true</recursivewhencommitremove>
+    <revertoptions>-C</revertoptions>
+  </kdevcvsservice>
 </kdevelop>

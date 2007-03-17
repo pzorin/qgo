@@ -37,6 +37,8 @@ public:
 	bool updateStone(StoneColor c, int x, int y);
 	void setCursorType(CursorType cur);
 
+signals:
+	void signalClicked(bool , int, int, Qt::MouseButton );
 
 protected:
 	void calculateSize();
@@ -86,12 +88,14 @@ private:
 	void removeLastMoveMark();
 	void setMarkText(int x, int y, const QString &txt);
 
-	void contentsMousePressEvent(QMouseEvent *e);
-	void contentsMouseReleaseEvent(QMouseEvent*);
+	void mousePressEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent ( QMouseEvent * e ) ;
 	void contentsWheelEvent(QWheelEvent *e);
 	void leaveEvent(QEvent*);
 
+	QTime wheelTime;
+	Qt::MouseButton mouseState;
 };
 
 #endif

@@ -28,6 +28,7 @@ public:
 	void displayComment(const QString &c);
 	void setSliderMax(int n);
 	void setCaptures(float black, float white);
+	void clearComment();
 /*	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
 	void setTimes(bool, float, int);
 	void clearComment();
