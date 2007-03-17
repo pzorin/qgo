@@ -23,8 +23,8 @@ Tree::Tree(int board_size)
  * This initialisation is from stonehandler
  * It might not be needed
  */
-	groups = new QList<Group*>::QList();
-	stones = new QHash<int,MatrixStone *>::QHash();
+	groups = new QList<Group*>();//::QList();
+	stones = new QHash<int,MatrixStone *>();//::QHash();
 }
 
 void Tree::init(int board_size)

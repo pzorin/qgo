@@ -53,7 +53,7 @@ ImageHandler::ImageHandler()
     // Init the alternate ghost pixmaps
 	if (altGhostPixmaps == NULL)
 	{
-	altGhostPixmaps = new QList<QPixmap>::QList();
+	altGhostPixmaps = new QList<QPixmap>();//::QList();
 
 		QPixmap alt1 = QPixmap::QPixmap(":/new/prefix1/ressources/pics/alt_ghost_black.png");
 		QPixmap alt2 = QPixmap:: QPixmap(":/new/prefix1/ressources/pics/alt_ghost_white.png");
@@ -183,7 +183,7 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 	// these are the images
 	int *pb=new int[d*d];
 	int i, j, g,g1,g2, k;
-	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3);
+	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
 	double x, y, z, xr,xr1, xr2, xg1,xg2,hh;
 		
 	k=0;
@@ -308,7 +308,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 	// these are the images
 	int *pw=new int[d*d];
 	int i, j, g, g1,g2,k;
-	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3);
+	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
 	double x, y, z, xr, xr1, xr2, xg1,xg2, hh;
 	
 	k=0;
@@ -457,7 +457,7 @@ void ImageHandler::init(int size)
 	//bool stripes = setting->readBoolEntry("STONES_SHELLS");
 	int stone_look = 3;//TODO setting->readIntEntry("STONES_LOOK");
 
-	stonePixmaps = new QList<QPixmap>::QList();
+	stonePixmaps = new QList<QPixmap>();//::QList();
 
 	QList<QPixmap> list, ghostlist;
 	QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
