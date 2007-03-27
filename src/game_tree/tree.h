@@ -57,7 +57,8 @@ public:
  	void addMove(StoneColor c, int x, int y, bool clearMarks = true);
 	void doPass(bool sgf, bool fastLoad = false);
 	void editMove(StoneColor c, int x, int y);
-	void addStoneSGF(StoneColor c, int x, int y, bool new_node);
+	int addStoneSGF(StoneColor c, int x, int y, bool new_node);
+	void deleteNode();
 
 /*
  * Former Stonehandler functions called by addStoneSGF

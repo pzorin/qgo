@@ -3381,7 +3381,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_3" >
+            <widget class="QFrame" name="navButtonsFrame" >
              <property name="sizePolicy" >
               <sizepolicy>
                <hsizetype>5</hsizetype>
@@ -3684,7 +3684,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
             </widget>
            </item>
            <item>
-            <widget class="QTabWidget" name="tabWidget" >
+            <widget class="QTabWidget" name="tabTools" >
              <property name="tabPosition" >
               <enum>QTabWidget::South</enum>
              </property>
@@ -3770,7 +3770,7 @@ Pass your turn.</string>
                     <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="toolTip" >
-                    <string>Request adjournment</string>
+                    <string>Switch to score mode</string>
                    </property>
                    <property name="whatsThis" >
                     <string>Adjourn.
@@ -5363,7 +5363,7 @@ Pass your turn.</string>
                     <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="toolTip" >
-                    <string>Request adjournment</string>
+                    <string>switch to score mode</string>
                    </property>
                    <property name="whatsThis" >
                     <string>Adjourn.
@@ -5392,6 +5392,19 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                   </size>
                  </property>
                 </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="refreshButton_2" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16777215</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="text" >
+                  <string>Refresh</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>

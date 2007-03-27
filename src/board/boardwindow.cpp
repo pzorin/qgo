@@ -57,6 +57,8 @@ void BoardWindow::init()
 
 	//creates the interface handler
 	interfaceHandler = new InterfaceHandler( this);
+	interfaceHandler->toggleMode(gameMode);
+
 	if (gameData)
 		interfaceHandler->updateCaption(gameData);
 
@@ -101,6 +103,11 @@ void BoardWindow::init()
 	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
 		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
 
+	//Connects the game buttons to the slots
+	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+	connect(ui.passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+	
+
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
 		loadSGF(gameData->fileName);
@@ -108,6 +115,9 @@ void BoardWindow::init()
 	
 	qgoboard->init();		
 	gamePhase = phaseOngoing;
+
+	// This is only needed with a computer game, when the computer has to make the first move
+	qgoboard->startGame();
 }
 
 BoardWindow::~BoardWindow()

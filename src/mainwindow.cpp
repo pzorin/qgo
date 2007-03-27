@@ -37,14 +37,15 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.setupUi(this);
 
 	SGFloaded = "";
+	SGFloaded2 = "";
 /*
-* settings example
-*/
+ * settings example
+ */
 	loadSettings();
 
 /*
-* filling the file view
-*/
+ * filling the file view
+ */
 	QStringList filters = (QStringList() << "*.sgf" << "*.SGF");
 	model = new QDirModel(filters,  QDir::AllEntries | QDir::AllDirs , QDir::Name,0);
 
@@ -55,18 +56,32 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.dirView_1->setColumnWidth(0,250); 
 	ui.dirView_1->setCurrentIndex(model->index( QDir::homePath () ));
 
+	ui.dirView_2->setModel(model);
+
+	ui.dirView_2->hideColumn(1);
+	ui.dirView_2->hideColumn(2);
+	ui.dirView_2->setColumnWidth(0,250); 
+	ui.dirView_2->setCurrentIndex(model->index( QDir::homePath () ));
+
 /*
-* connecting the new game button
-*/
+ * connecting the new game button
+ */
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
 	connect(ui.button_loadGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
 	connect(ui.button_newComputerGame,SIGNAL(pressed()),SLOT(slot_computerNewBoard()));
+	connect(ui.button_loadComputerGame,SIGNAL(pressed()),SLOT(slot_computerOpenBoard()));
 
 	connect(ui.dirView_1->selectionModel(),  
 		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
 		this,
 		SLOT(slot_displayFileHeader(const QModelIndex & , const QModelIndex &  )));
+
+	connect(ui.dirView_2->selectionModel(),  
+		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
+		this,
+		SLOT(slot_loadComputerFile(const QModelIndex & , const QModelIndex &  )));
+
 
 /*
  * Creates the SGF parser for displaying the file infos
@@ -158,6 +173,36 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 
 }
 
+
+/* 
+ * Loads file from the item selected in the directory display
+ */
+void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
+{
+	QVariant v = topLeft.data(QDirModel::FilePathRole);
+
+	if (model->isDir(topLeft))
+	{
+		ui.button_loadComputerGame->setDisabled(true);
+		return ;
+	}
+
+	fileLoaded2 = model->filePath(topLeft).toLatin1().constData();
+	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
+	
+	if (SGFloaded2 == NULL)
+	{
+		ui.button_loadComputerGame->setDisabled(true);
+		return ;
+	}
+
+	ui.button_loadComputerGame->setEnabled(true);
+	
+	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
+}
+
+
+
 /*
  * Creates a game board with all elements initialised from 
  * Gamedata and an sgf file 
@@ -200,7 +245,9 @@ void MainWindow::slot_fileOpenBoard()
 
 }
 
-
+/*
+ * The 'New Game' button in 'Go Engine' tab has been pressed.
+ */
 void MainWindow::slot_computerNewBoard()
 {
 	
@@ -217,10 +264,17 @@ void MainWindow::slot_computerNewBoard()
 
 	if (imBlack && imWhite)
 	{
-		QMessageBox::warning(this, PACKAGE, tr("*** Both players are Human ! ***"));
+		QMessageBox::warning(this, PACKAGE, tr("** * Both players are Human ! ***"));
 		return ;
 	}
 
 	createGame(modeComputer, gd , imBlack, imWhite );
 }
 
+/*
+ * The 'New Game' button in 'Go Engine' tab has been pressed.
+ */
+void MainWindow::slot_computerOpenBoard()
+{
+	createGame(modeComputer, GameLoaded2 , TRUE, TRUE , SGFloaded2 );
+}

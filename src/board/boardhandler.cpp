@@ -258,7 +258,7 @@ void BoardHandler::slotNavIntersection()
  */
 void BoardHandler::findMoveByPos(int x, int y)
 {
-	Move *m = tree->findMoveInBranch(x, y);
+	Move *m = tree->findMoveInMainBranch(x, y);
 	
 	//if (boardwindow->getGamePhase() == phaseNavTo)
 	boardwindow->setGamePhase ( phaseOngoing );
@@ -624,6 +624,8 @@ bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 	Q_CHECK_PTR(m);
 	
 	// m->debug();
+
+	tree->updateAll(m);	
 	
 //	Stone *stone;
 	bool modified = false;//, fake = false;

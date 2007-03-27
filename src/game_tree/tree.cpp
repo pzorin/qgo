@@ -546,17 +546,17 @@ void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
 	
  	Matrix *mat = current->getMatrix();
 	Q_CHECK_PTR(mat);
-	
-	Move *m = new Move(c, x, y, current->getMoveNumber(), phaseOngoing, *mat);
+	 
+	Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat);
 	Q_CHECK_PTR(m);
-/*	
+	
 	if (hasSon(m))
 	{
 		// qDebug("*** HAVE THIS SON ALREADY! ***");
 		delete m;
 		return;
 	}
-*/	
+	
 	// Remove all marks from this new move. We dont do that when creating
 	// a new variation in edit mode.
 	if (clearMarks)
@@ -634,7 +634,12 @@ void Tree::editMove(StoneColor c, int x, int y)
 
 }
 
-void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
+/*
+ * This function updates the matrix and the informations in a given move that was just added with addMove
+ * Since the addMove reproduces the matrix of the previous move, it is updated here
+ * It returns the same result as checkPosition (-1 for invalid move, else the number of stones taken)
+ */
+int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 {
 //	bool shown = false;
 	
@@ -695,6 +700,11 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	else
 		editMove(c, x, y);
 
+	bool koStone;
+	if (current->getMoveNumber() > 1)
+		koStone = (current->parent->parent->getMatrix()->at(x-1, y-1) == c);
+
+
 /*	
  * This code is replaced by the above line. 
 
@@ -723,20 +733,24 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	// If we are in edit mode, dont check for captures (sgf defines)
 //	stoneHandler->toggleWorking(true);
 //	stoneHandler->addStone(s, !shown, gameMode == modeNormal, NULL);
-/*
- * the code in the line above uses only the following
- */
+*/
+	/*
+	* the code in the line above uses only the following
+	*/
 	MatrixStone *s = new MatrixStone ;
 	s->x = x;
 	s->y = y;
 	s->c = c;
-/*
- * The update on the matrix has been moved up because int qGo code, 
- * the check Position is against the stones, white here its against the matrix
- * therefore, we needed to updtae the matrix before the check position
- */	
+	/*
+	* The update on the matrix has been moved up because int qGo code, 
+	* the check Position is against the stones, white here its against the matrix
+	* therefore, we needed to update the matrix before the check position
+	*/	
 	updateCurrentMatrix(c, x, y);
-	int captures = checkPosition(s, current->getMatrix());
+	int captures = checkPosition(s, current->getMatrix(), koStone);
+
+	if (captures < 0)
+		return -1;
 
 	if (c == stoneWhite)
 		capturesBlack += captures;
@@ -747,6 +761,7 @@ void Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	// Update captures
 	current->setCaptures(capturesBlack, capturesWhite);
 //	lastValidMove = tree->getCurrent();
+	return captures;
 }
 
 /*
@@ -824,9 +839,9 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 		}
 	}
 	
-	// active->debug();
-//	qDebug("Tree :: Check Position for stone %d %d %d",stone->c, stone->x, stone->y);
-//	m->debug();
+	//active->debug();
+	//qDebug("Tree :: Check Position for stone %d %d %d",stone->c, stone->x, stone->y);
+	//m->debug();
 	// Now we have to sort the active group as last in the groups QPtrList,
 	// so if this one is out of liberties, we beep and abort the operation.
 	// This prevents suicide moves.
@@ -842,8 +857,8 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
  		tmp->setLiberties(countLiberties(tmp, m));
 
     
-//		qDebug("Group #%d with %d liberties:", i, tmp->getLiberties());
-//		tmp->debug();
+		//qDebug("Group #%d with %d liberties:", i, tmp->getLiberties());
+		//tmp->debug();
 		
 		// Oops, zero liberties.
  		if (tmp->getLiberties() == 0)
@@ -888,7 +903,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 
 
 			// Remove the group from the groups list.
-			// qDebug("Oops, a group got killed. Removing killed group #%d", i);
+			//qDebug("Oops, a group got killed. Removing killed group #%d", i);
 			if (tmp == active)
 				active = NULL;
 			delete groups->takeAt(i);
@@ -1134,7 +1149,10 @@ void Tree::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &libe
 //  }
 }
 
-
+/*
+ * This is used by the sgfparser when reverting to the previous node after the end of a branch
+ * It is only used to recalculates all the groups according to the matrix
+ */
 bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 {
 	// qDebug("StoneHandler::updateAll(Matrix *m) - toDraw = %d", toDraw);
@@ -1298,10 +1316,90 @@ bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 				}
 			}
 */
+		}
 	}
-    }
-    
-    return modified;
+
+	return modified;
+}
+
+/*
+ * this deletes the current node an all its sons
+ */
+void Tree::deleteNode()
+{
+	Move *m = getCurrent(),
+		*remember = NULL,
+		*remSon = NULL;
+	Q_CHECK_PTR(m);
+	
+	if (m->parent != NULL)
+	{
+		remember = m->parent;
+		
+		// Remember son of parent if its not the move to be deleted.
+		// Then check for the brothers and fix the pointer connections, if we
+		// delete a node with brothers. (It gets ugly now...)
+		// YUCK! I hope this works.
+		if (remember->son == m)                  // This son is our move to be deleted?
+		{
+			if (remember->son->brother != NULL)  // This son has a brother?
+				remSon = remember->son->brother; // Reset pointer
+		}
+		else                                     // No, the son is not our move
+		{
+			remSon = remember->son;
+			Move *tmp = remSon, *oldTmp = tmp;
+			
+			do {   // Loop through all brothers until we find our move
+				if (tmp == m)
+				{
+					if (m->brother != NULL)            // Our move has a brother?
+						oldTmp->brother = m->brother;  // Then set the previous move brother
+					else                               // to brother of our move
+						oldTmp->brother = NULL;        // No brother found.
+					break;
+				}
+				oldTmp = tmp;
+			} while ((tmp = tmp->brother) != NULL);
+		}
+	}
+	else if (hasPrevBrother())
+	{
+		remember = previousVariation();
+		if (m->brother != NULL)
+			remember->brother = m->brother;
+		else
+			remember->brother = NULL;
+	}
+	else if (hasNextBrother())
+	{
+		remember = nextVariation();
+		// Urgs, remember is now root.
+		setRoot(remember);
+	}
+	else
+	{
+		// Oops, first and only move. We delete everything
+		init(boardSize);
+//		board->hideAllStones();
+//		board->hideAllMarks();
+//		board->updateCanvas();
+//		lastValidMove = NULL;
+//		stoneHandler->clearData();
+//		updateMove(tree->getCurrent());
+		return;
+	}
+	
+	if (m->son != NULL)
+		traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
+	delete m;                         // Delete our move
+	setCurrent(remember);       // Set current move to previous move
+	remember->son = remSon;           // Reset son pointer
+	remember->marker = NULL;          // Forget marker
+	
+//	updateMove(tree->getCurrent(), !display_incoming_move);
+	
+//	board->setModified();
 }
 
 

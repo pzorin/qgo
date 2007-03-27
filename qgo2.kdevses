@@ -1,47 +1,77 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="8" >
-  <Doc0 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardwindow.h" >
-   <View0 Encoding="" line="43" Type="Source" />
+ <DocsAndViews NumberOfDocuments="16" >
+  <Doc0 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/board.cpp" >
+   <View0 Encoding="" line="490" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardwindow.cpp" >
-   <View0 Encoding="" line="31" Type="Source" />
+  <Doc1 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardhandler.cpp" >
+   <View0 Encoding="" line="473" Type="Source" />
   </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardhandler.cpp" >
-   <View0 Encoding="" line="65" Type="Source" />
+  <Doc2 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_interfaces/qgoboard.cpp" >
+   <View0 Encoding="" line="213" Type="Source" />
   </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_proxies/qgoboard.h" >
-   <View0 Encoding="" Type="Source" />
+  <Doc3 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_interfaces/qgoboard_computer.cpp" >
+   <View0 Encoding="" line="59" Type="Source" />
   </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/board.cpp" >
-   <View0 Encoding="" line="102" Type="Source" />
+  <Doc4 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_interfaces/qgoboard.h" >
+   <View0 Encoding="" line="201" Type="Source" />
   </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/mainwindow.cpp" >
-   <View0 Encoding="" line="173" Type="Source" />
+  <Doc5 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardwindow.cpp" >
+   <View0 Encoding="" line="106" Type="Source" />
   </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/interfacehandler.cpp" >
-   <View0 Encoding="" line="74" Type="Source" />
+  <Doc6 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/sgf/sgfparser.cpp" >
+   <View0 Encoding="" line="807" Type="Source" />
   </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardhandler.h" >
-   <View0 Encoding="" line="40" Type="Source" />
+  <Doc7 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/interfacehandler.cpp" >
+   <View0 Encoding="" line="129" Type="Source" />
   </Doc7>
+  <Doc8 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/gtp/qgtp.cpp" >
+   <View0 Encoding="" line="478" Type="Source" />
+  </Doc8>
+  <Doc9 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/board/boardwindow.h" >
+   <View0 Encoding="" line="59" Type="Source" />
+  </Doc9>
+  <Doc10 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/mainwindow.cpp" >
+   <View0 Encoding="" line="266" Type="Source" />
+  </Doc10>
+  <Doc11 NumberOfViews="1" URL="file:///usr/include/qt4/QtCore/qstring.h" >
+   <View0 Encoding="" line="341" Type="Source" />
+  </Doc11>
+  <Doc12 NumberOfViews="1" URL="file:///usr/include/qt4/QtCore/qglobal.h" >
+   <View0 Encoding="" line="1636" Type="Source" />
+  </Doc12>
+  <Doc13 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_tree/tree.cpp" >
+   <View0 Encoding="" line="1399" Type="Source" />
+  </Doc13>
+  <Doc14 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/game_tree/tree.h" >
+   <View0 Encoding="" line="17" Type="Source" />
+  </Doc14>
+  <Doc15 NumberOfViews="1" URL="file:///home/eb/Packages/qgo2/src/mainwindow.h" >
+   <View0 Encoding="" line="25" Type="Source" />
+  </Doc15>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
    <breakpointList>
-    <breakpoint0 location="this.Str" type="2" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="0" >
+    <breakpoint0 location="/home/eb/Packages/qgo2/src/game_tree/tree.cpp:750" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="0" >
      <tracedExpressions/>
     </breakpoint0>
-    <breakpoint1 location="*this.Str" type="2" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="0" >
+    <breakpoint1 location="/home/eb/Packages/qgo2/src/board/boardhandler.cpp:261" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
      <tracedExpressions/>
     </breakpoint1>
-    <breakpoint2 location="toParse.Str" type="2" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="0" >
+    <breakpoint2 location="/home/eb/Packages/qgo2/src/game_tree/tree.cpp:582" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
      <tracedExpressions/>
     </breakpoint2>
-    <breakpoint3 location="/home/eb/Packages/qgo2/src/sgf/sgfparser.cpp:657" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+    <breakpoint3 location="/home/eb/Packages/qgo2/src/game_interfaces/qgoboard_computer.cpp:113" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
      <tracedExpressions/>
     </breakpoint3>
+    <breakpoint4 location="/home/eb/Packages/qgo2/src/mainwindow.cpp:254" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint4>
+    <breakpoint5 location="/home/eb/Packages/qgo2/src/board/boardhandler.cpp:594" type="1" tracingFormatString="" traceFormatStringEnabled="0" condition="" tracingEnabled="0" enabled="1" >
+     <tracedExpressions/>
+    </breakpoint5>
    </breakpointList>
    <showInternalCommands value="0" />
   </kdevdebugger>
@@ -51,8 +81,12 @@
   </kdevastyle>
   <kdevbookmarks>
    <bookmarks>
+    <bookmark url="/home/eb/Packages/qgo2/src/board/boardhandler.cpp" >
+     <mark line="720" />
+    </bookmark>
     <bookmark url="/home/eb/Packages/qgo2/src/board/board.cpp" >
-     <mark line="190" />
+     <mark line="191" />
+     <mark line="841" />
     </bookmark>
     <bookmark url="/home/eb/Packages/qgo2/src/sgf/sgfparser.cpp" >
      <mark line="362" />

@@ -19,7 +19,7 @@ public:
 	InterfaceHandler( BoardWindow * bw);
 	~InterfaceHandler();
 	void clearData();
-//	GameMode toggleMode();
+	void toggleMode(GameMode gameMode);
 //	void setEditMode();
 //	void setMarkType(int m);
 	void setMoveData(int n, bool black, int brothers, int sons, bool hasParent,
@@ -68,6 +68,9 @@ public:
 //	MainWidget *mainWidget;
 	BoardWindow *boardwindow;
 	bool scored_flag;
+
+private :
+	QWidget *tabPlay, *tabEdit;
 
 };
 

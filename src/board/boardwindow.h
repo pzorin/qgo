@@ -53,9 +53,11 @@ public:
 	Ui::BoardWindow getUi() 		{return ui;}
 	GameMode getGameMode() 			{return gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
-	void setGamePhase(GamePhase gp)		{gamePhase =gp;}
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
 	bool getMyColorIsWhite()		{return myColorIsWhite;}
+	GameData *getGameData() 		{return gameData;}
+
+	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
 
 protected:
 	void closeEvent(QCloseEvent *e);

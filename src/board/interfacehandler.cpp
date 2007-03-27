@@ -26,6 +26,9 @@ InterfaceHandler::InterfaceHandler(BoardWindow *bw)
 	boardwindow = bw;
 //    buttonState = new ButtonState;
 	scored_flag = false;
+
+	tabPlay  = boardwindow->getUi().tabTools->widget(0); 
+	tabEdit = boardwindow->getUi().tabTools->widget(1) ;
 }
 
 InterfaceHandler::~InterfaceHandler()
@@ -124,7 +127,10 @@ void InterfaceHandler::updateCaption(GameData *gd)
 		gb->setTitle(player);
 	}
 	
-	//TODO set handicap, komi and clock
+	//TODO set  clock
+
+	boardwindow->getUi().komi->setText(QString().setNum(gd->komi));
+	boardwindow->getUi().handicap->setText(QString().setNum(gd->handicap));
 }
 
 /*
@@ -171,8 +177,8 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(" " + QObject::tr("sons"));
 	boardwindow->getUi().varLabel->setText(s);
 	
-//	if (board->getGameMode() == modeNormal || board->getGameMode() == modeEdit)
-//	{
+	if (boardwindow->getGameMode() == modeNormal || boardwindow->getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
+	{
 		// Update the toolbar buttons
 		boardwindow->getUi().navPrevVar->setEnabled(hasPrev);
 		boardwindow->getUi().navNextVar->setEnabled(hasNext);
@@ -189,8 +195,8 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
     		boardwindow->getUi().navIntersection->setEnabled(true);
 		
 		boardwindow->getUi().slider->setEnabled(true);
-/*	}
-	else  if (board->getGameMode() == modeObserve)
+	}
+/*	else  if (board->getGameMode() == modeObserve)
 	{
 		// Update the toolbar buttons
 		navBackward->setEnabled(hasParent);
@@ -277,4 +283,156 @@ void InterfaceHandler::setCaptures(float black, float white)
 
 	boardwindow->getUi().capturesBlack->setText(QString::number(black));
 	boardwindow->getUi().capturesWhite->setText(QString::number(white));
+}
+
+/*
+ * This updates the UI with the correct layout depending on the game mode
+ */
+void InterfaceHandler::toggleMode(GameMode mode)
+{
+	
+	switch (mode)
+	{
+		
+	case modeNormal:
+//		modeButton->setEnabled(true);
+//		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
+		boardwindow->getUi().tabTools->removeTab(0) ;//setVisible(false);
+		boardwindow->getUi().scoreButton_2->setDisabled(true);
+//		scoreButton->setText(QObject::tr("Score", "button label"));
+		boardwindow->getUi().passButton_2->setEnabled(true);
+		boardwindow->getUi().refreshButton_2->setDisabled(true);
+//		undoButton->setDisabled(true);
+//		resignButton->setDisabled(true);
+//		adjournButton->setDisabled(true);
+//		refreshButton->setDisabled(true);
+		boardwindow->getUi().commentEdit->setReadOnly(false);
+		//commentEdit2->setReadOnly(true);
+//		commentEdit2->setDisabled(true);
+//		statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
+//		statusMark->setText(getStatusMarkText(board->getMarkType()));
+		return;
+		
+	case modeObserve:
+//		modeButton->setDisabled(true);
+//		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().tabTools->removeTab(0) ;
+		boardwindow->getUi().scoreButton_2->setDisabled(true);
+//		scoreButton->setText(QObject::tr("Edit", "button label"));
+		boardwindow->getUi().passButton_2->setDisabled(true);
+//		boardwindow->getUi().undoButton->setDisabled(true);
+//		boardwindow->getUi().resignButton->setDisabled(true);
+//		boardwindow->getUi().adjournButton->setDisabled(true);
+		boardwindow->getUi().refreshButton_2->setEnabled(true);
+		boardwindow->getUi().commentEdit->setReadOnly(true);
+//		commentEdit2->setReadOnly(false);
+//		commentEdit2->setDisabled(false);
+//		editCut->setEnabled(false);
+//		editDelete->setEnabled(false);
+//		fileNew->setEnabled(false);
+//		fileNewBoard->setEnabled(false);
+//		fileOpen->setEnabled(false);
+//		statusMode->setText(" " + QObject::tr("O", "Board status line: observe mode") + " ");
+//		statusMark->setText(getStatusMarkText(board->getMarkType()));
+		return ;
+		
+	case modeMatch : 
+//		modeButton->setDisabled(true);
+//		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().tabTools->removeTab(1) ;
+		boardwindow->getUi().scoreButton->setDisabled(true);
+//		scoreButton->setText(QObject::tr("Edit", "button label"));
+		boardwindow->getUi().passButton->setEnabled(true);
+//		passButton->setText(QObject::tr("Pass", "button label"));
+		boardwindow->getUi().undoButton->setEnabled(true);
+		boardwindow->getUi().resignButton->setEnabled(true);
+		boardwindow->getUi().adjournButton->setEnabled(true);
+		boardwindow->getUi().refreshButton->setEnabled(true);
+		boardwindow->getUi().doneButton->setEnabled(false);
+		boardwindow->getUi().commentEdit->setReadOnly(true);
+		boardwindow->getUi().navButtonsFrame->setEnabled(false);
+//		commentEdit2->setReadOnly(false);
+//		commentEdit2->setDisabled(false);
+//		fileNew->setEnabled(false);
+//		fileNewBoard->setEnabled(false);
+//		fileOpen->setEnabled(false);
+//		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
+//		statusMark->setText(getStatusMarkText(board->getMarkType()));
+		return ;
+
+	case   modeComputer :
+//		modeButton->setDisabled(true);
+//		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().tabTools->removeTab(1) ;
+		boardwindow->getUi().scoreButton->setDisabled(true);
+//		scoreButton->setText(QObject::tr("Edit", "button label"));
+		boardwindow->getUi().passButton->setEnabled(true);
+//		passButton->setText(QObject::tr("Pass", "button label"));
+		boardwindow->getUi().undoButton->setEnabled(true);
+		boardwindow->getUi().resignButton->setEnabled(true);
+		boardwindow->getUi().adjournButton->setEnabled(false);
+		boardwindow->getUi().refreshButton->setEnabled(false);
+		boardwindow->getUi().doneButton->setEnabled(false);
+		boardwindow->getUi().commentEdit->setReadOnly(true);
+		boardwindow->getUi().navButtonsFrame->setEnabled(false);
+//		commentEdit2->setReadOnly(false);
+//		commentEdit2->setDisabled(false);
+//		fileNew->setEnabled(false);
+//		fileNewBoard->setEnabled(false);
+//		fileOpen->setEnabled(false);
+//		statusMode->setText(" " + QObject::tr("P", "Board status line: play mode") + " ");
+//		statusMark->setText(getStatusMarkText(board->getMarkType()));
+		return ;
+      		
+	case modeTeach:
+//		board->setMode(modeTeach);
+//		modeButton->setDisabled(true);
+		boardwindow->getUi().tabTools->removeTab(1) ;
+//		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().scoreButton->setDisabled(true);
+//		scoreButton->setText(QObject::tr("Edit", "button label"));
+		boardwindow->getUi().passButton->setEnabled(true);
+//		passButton->setText(QObject::tr("Pass", "button label"));
+		boardwindow->getUi().undoButton->setEnabled(true);
+		boardwindow->getUi().resignButton->setEnabled(true);
+		boardwindow->getUi().adjournButton->setEnabled(true);
+		boardwindow->getUi().refreshButton->setEnabled(true);
+		boardwindow->getUi().doneButton->setEnabled(false);
+		boardwindow->getUi().commentEdit->setReadOnly(true);
+		boardwindow->getUi().navButtonsFrame->setEnabled(false);
+//		commentEdit2->setReadOnly(false);
+//		commentEdit2->setDisabled(false);
+//		fileNew->setEnabled(false);
+//		fileNewBoard->setEnabled(false);
+//		fileOpen->setEnabled(false);
+//		statusMode->setText(" " + QObject::tr("T", "Board status line: teach mode") + " ");
+//		statusMark->setText(getStatusMarkText(board->getMarkType()));
+		return ;
+	
+	case modeReview :
+//		board->setMode(modeTeach);
+//		modeButton->setDisabled(true);
+		boardwindow->getUi().tabTools->removeTab(1) ;
+//		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().scoreButton->setDisabled(true);
+//		scoreButton->setText(QObject::tr("Edit", "button label"));
+		boardwindow->getUi().passButton->setEnabled(true);
+//		passButton->setText(QObject::tr("Pass", "button label"));
+		boardwindow->getUi().undoButton->setEnabled(true);
+		boardwindow->getUi().resignButton->setEnabled(true);
+		boardwindow->getUi().adjournButton->setEnabled(true);
+		boardwindow->getUi().refreshButton->setEnabled(true);
+		boardwindow->getUi().doneButton->setEnabled(false);
+		boardwindow->getUi().commentEdit->setReadOnly(true);
+//		commentEdit2->setReadOnly(false);
+//		commentEdit2->setDisabled(false);
+//		fileNew->setEnabled(false);
+//		fileNewBoard->setEnabled(false);
+//		fileOpen->setEnabled(false);
+//		statusMode->setText(" " + QObject::tr("T", "Board status line: teach mode") + " ");
+//		statusMark->setText(getStatusMarkText(board->getMarkType()));
+		return ;		
+//	default:
+//		return modeNormal;
+	}
 }

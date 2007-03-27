@@ -25,7 +25,9 @@ public slots:
 	void slot_fileNewBoard();
 	void slot_fileOpenBoard();
 	void slot_computerNewBoard();
+	void slot_computerOpenBoard();
 	void slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & bottomRight );
+	void slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & bottomRight );
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -36,8 +38,8 @@ private:
 	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
-	QString SGFloaded, fileLoaded ;
-	GameData * GameLoaded ;
+	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
+	GameData * GameLoaded , * GameLoaded2 ;
 
 	QList<BoardWindow *> boardList;
 	void createGame(GameMode gameMode, GameData * gameData, bool myColorIsBlack = FALSE, bool myColorIsWhite = FALSE, QString fileLoaded = "");

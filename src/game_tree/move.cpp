@@ -66,7 +66,9 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 Move::~Move()
 {
 	delete matrix;
-	fastLoadMarkDict->clear();
+	if (fastLoadMarkDict) //TODO make sure this is the proper way 
+//		qDeleteAll(*fastLoadMarkDict);
+		fastLoadMarkDict->clear();
 	delete fastLoadMarkDict;
 }
 

@@ -888,7 +888,10 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_8" >
+            <widget class="QPushButton" name="button_loadComputerGame" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
              <property name="text" >
               <string>Open game</string>
              </property>

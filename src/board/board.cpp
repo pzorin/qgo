@@ -85,7 +85,8 @@ void Board::init(int size)
 	// Init the ghost cursor stone
 	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
 	curStone->setZValue(4);
-	curStone->hide();                       
+	curStone->hide();
+	showCursor = FALSE;
 /*
 	lockResize = false;
 	navIntersectionStatus = false;
@@ -466,6 +467,7 @@ void Board::setCursorType(CursorType cur)
 				setCursor(Qt::ArrowCursor);
 			
 			showCursor = FALSE;
+			curStone->hide();
 			break;
 		}
 
@@ -493,6 +495,7 @@ void Board::setCursorType(CursorType cur)
 		{
 			setCursor(Qt::PointingHandCursor);		
 			showCursor = FALSE;
+			curStone->hide();
 			break;
 		}
 
@@ -500,6 +503,7 @@ void Board::setCursorType(CursorType cur)
 		{
 			setCursor(Qt::WaitCursor);
 			showCursor = FALSE;
+			curStone->hide();
 			break;
 		}			
 	}
@@ -553,7 +557,7 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
  */
 Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool /*shown*/)
 {
-	if (x < 1 || x > board_size || y < 1 || y > board_size)
+	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 	{
 		qWarning("Board::addStoneSprite() - Invalid stone: %d %d", x, y);
 		return NULL;
@@ -1127,7 +1131,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 		y = convertCoordsToPoint(e->y(), offsetY);
 
 	// Button gesture outside the board?
-	if (x < 1 || x > board_size || y < 1 || y > board_size)
+	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 /*	{
 		if (e->button() == LeftButton &&
 			e->state() == RightButton)
