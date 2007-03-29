@@ -1114,13 +1114,23 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 	canvas->update();
 }
 
+
+/*
+ * mouse wheel has been turned
+ */
+void Board::wheelEvent(QWheelEvent *e)
+{
+	emit signalWheelEvent( e);
+}
+
+
 /*
  * starts the counter for anticlivko moves
  */
 void Board::mousePressEvent(QMouseEvent *)
 {
-	wheelTime = QTime::currentTime();
-	wheelTime = wheelTime.addMSecs(250);
+	clickTime = QTime::currentTime();
+	clickTime = clickTime.addMSecs(250);
 }
 
 void Board::mouseReleaseEvent(QMouseEvent* e)
@@ -1157,7 +1167,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 		return;
 */
 	    // Check delay
-    	bool delay = (QTime::currentTime() > wheelTime);
+    	bool delay = (QTime::currentTime() > clickTime);
 
 	emit signalClicked(delay, x , y , mouseState);
 }

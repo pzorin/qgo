@@ -60,6 +60,8 @@ public slots:
 	void slotNavIntersection();
 	void slotNthMove(int n);
 
+	void slotWheelEvent(QWheelEvent *e);
+
 private:
 	Board *board;
 	Tree *tree;
@@ -73,6 +75,9 @@ private:
 	void gotoMove(Move *m);
 	void updateVariationGhosts(Move *m);
 	bool navIntersectionStatus;
+
+	QTime wheelTime;
+
 };
 
 #endif

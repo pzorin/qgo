@@ -97,9 +97,13 @@ void BoardWindow::init()
 	connect(ui.navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
 	connect(ui.slider, SIGNAL(sliderMoved ( int)), boardHandler , SLOT(slotNthMove(int)));
 
-	//Connects the board to the interface
+	//Connects the board to the interface and boardhandler
 	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
 		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
+
+	connect(ui.board, SIGNAL(signalWheelEvent(QWheelEvent*)),
+		boardHandler, SLOT(slotWheelEvent(QWheelEvent*)));
+
 
 	//Connects the game buttons to the slots
 	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));

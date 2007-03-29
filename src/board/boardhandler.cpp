@@ -46,6 +46,9 @@ BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int size)
 	capturesBlack = capturesWhite = 0;
 	markedDead = false;
 	
+	// initialises the timer
+	wheelTime = QTime::currentTime();
+
 	// Set game data to default
 //	gameData = new GameData();
 	
@@ -742,7 +745,9 @@ CursorType BoardHandler::updateCursor(StoneColor currentMoveColor)
 	return cursorIdle;
 }
 
-
+/*
+ * Update the variation marks on the board if any
+ */
 void BoardHandler::updateVariationGhosts(Move *move)
 {
 	// qDebug("BoardHandler::updateVariationGhosts()");
@@ -757,3 +762,41 @@ void BoardHandler::updateVariationGhosts(Move *move)
 		board->setVarGhost(m->getColor(), m->getX(), m->getY());
 	} while ((m = m->brother) != NULL);
 }
+
+
+void BoardHandler::slotWheelEvent(QWheelEvent *e)
+{
+	// leave if not editing
+	if (boardwindow->getGameMode() != modeNormal)
+		return;
+
+	if (boardwindow->getGamePhase() != phaseOngoing)
+		return;
+
+	// Check delay
+	if (QTime::currentTime() < wheelTime)
+		return;
+	
+	// Needs an extra check on variable mouseState as state() does not work on Windows.
+	if (e->delta() == 120)
+	{
+		if (e->buttons() == Qt::RightButton || e-> modifiers() ==  Qt::ShiftModifier)
+			slotNavNextVar();
+		else
+			slotNavForward();
+	}
+	else
+	{
+		if (e->buttons() == Qt::RightButton || e-> modifiers() ==  Qt::ShiftModifier)//|| mouseState == RightButton)
+			slotNavPrevVar();
+		else
+			slotNavBackward();
+	}
+
+	// Delay of 100 msecs to avoid too fast scrolling
+	wheelTime = QTime::currentTime();
+	wheelTime = wheelTime.addMSecs(50);
+
+	e->accept();
+}
+

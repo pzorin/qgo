@@ -39,6 +39,7 @@ public:
 
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
+	void signalWheelEvent(QWheelEvent *);
 
 protected:
 	void calculateSize();
@@ -91,10 +92,10 @@ private:
 	void mousePressEvent(QMouseEvent *e);
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent ( QMouseEvent * e ) ;
-	void contentsWheelEvent(QWheelEvent *e);
+	void wheelEvent(QWheelEvent *e);
 	void leaveEvent(QEvent*);
 
-	QTime wheelTime;
+	QTime clickTime;
 	Qt::MouseButton mouseState;
 };
 
