@@ -34,14 +34,20 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	qDebug( "Home Path : %s" ,QDir::homePath().toLatin1().constData());	
 	qDebug( "Current Path : %s" ,QDir::currentPath ().toLatin1().constData());
 
+
+/*
+ * sound example
+ */
+//	clickSound = QAlsaSound( "/usr/share/qGo/sounds/stone.wav" );
+
 	ui.setupUi(this);
 
 	SGFloaded = "";
 	SGFloaded2 = "";
-/*
- * settings example
- */
+
+	// loads the settings
 	loadSettings();
+
 
 /*
  * filling the file view
@@ -223,7 +229,9 @@ void MainWindow::createGame(GameMode _gameMode, GameData * _gameData, bool _myCo
 	b->show();
 }
 
-
+/*
+ * The 'New Game' button in 'sgf editor' tab has been pressed.
+ */
 void MainWindow::slot_fileNewBoard()
 {
 	

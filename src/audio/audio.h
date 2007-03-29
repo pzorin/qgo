@@ -1,6 +1,4 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Emmanuel Béranger   *
- *   yfh2@hotmail.com   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,24 +16,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef _AUDIO_H_
+#define _AUDIO_H_
 
-#include <QApplication>
-#include <QtGui>
+#include <QSound>
 
-#include "mainwindow.h"
-#include "globals.h"
+//#ifdef Q_OS_LINUX
+#include <alsa/asoundlib.h>
+//#endif
 
-int main(int argc, char *argv[])
+typedef  struct
+{	u_int32_t  dwSize ;
+	u_int16_t  wFormatTag ;
+	u_int16_t  wChannels ;
+	u_int32_t  dwSamplesPerSec ;
+	u_int32_t  dwAvgBytesPerSec ;
+	u_int16_t  wBlockAlign ;
+	u_int16_t  wBitsPerSample ;
+} WAVEFORMAT ;
+
+
+class QAlsaSound : public QSound
 {
-	Q_INIT_RESOURCE(application);
-	QApplication app(argc, argv);
+Q_OBJECT
+public :
+	QAlsaSound( const QString& filename, QObject* parent=0) ;
+	~QAlsaSound() {};
 
-	QCoreApplication::setApplicationName("qgo2");
-//	QSettings  *settings = new QSettings();
+	QString Path ;
+	bool initialise() ; 
+	bool isAvailable() { return is_available ; }
+	bool is_available;
+	void play();	
 
-	MainWindow * mw = new MainWindow(0,0);
-	mw->show();
+private:
+	/* ALSA parameters */
+        snd_pcm_t 		*handle;
+        snd_pcm_sframes_t 	frames;
+	char 			*device ;                        /* playback device */
+	snd_pcm_uframes_t chunk_size, buffer_size;
+	size_t bits_per_sample, bits_per_frame, chunk_bytes;
 
-	return app.exec();
-}
+	/* File parser */
+	int	fd;				/* Open file descriptor or -1 */
+	char* findchunk(char* pstart, char* fourcc, size_t n);
+	WAVEFORMAT waveformat ;
+	u_long samples, datastart;
 
+};
+
+#endif // _AUDIO_H_

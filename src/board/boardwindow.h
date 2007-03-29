@@ -93,6 +93,7 @@ private:
 	GameMode gameMode;
 	GamePhase gamePhase;
 	bool myColorIsBlack , myColorIsWhite ;
+	bool localStoneSound ;
 	
 };
 

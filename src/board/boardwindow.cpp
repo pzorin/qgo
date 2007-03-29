@@ -12,9 +12,6 @@
 #include "interfacehandler.h"
 #include "qgoboard.h"
 
-//#include "sgfparser.h"
-//#include "matrix.h"
-//#include "move.h"
 
 #include <QtGui>
 
@@ -48,6 +45,7 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 
 void BoardWindow::init()
 {
+
 	gamePhase = phaseInit;
 
 	ui.setupUi(this);

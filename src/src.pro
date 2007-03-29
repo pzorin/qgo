@@ -33,7 +33,8 @@ board/boardhandler.h \
 board/interfacehandler.h \
 board/mark.h \
 gtp/qgtp.h \
-game_interfaces/qgoboard.h
+game_interfaces/qgoboard.h \
+audio/audio.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -51,11 +52,15 @@ SOURCES += main.cpp \
            board/mark.cpp \
            gtp/qgtp.cpp \
            game_interfaces/qgoboard.cpp \
-           game_interfaces/qgoboard_computer.cpp
+           game_interfaces/qgoboard_computer.cpp \
+           audio/audio.cpp
 QT -= qt3support
-DEPENDPATH += "board sgf game_tree game_interfaces gtp"
-INCLUDEPATH += gtp \
+DEPENDPATH += """board sgf game_tree game_interfaces gtp"""
+INCLUDEPATH += audio \
+gtp \
 game_interfaces \
 game_tree \
 board \
 sgf
+LIBS += -lasound
+

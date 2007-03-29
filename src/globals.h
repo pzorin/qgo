@@ -6,6 +6,7 @@
 #define GLOBALS_H
 
 #include "defines.h"
+#include "audio.h"
 
 #include <QtCore>
 
@@ -104,7 +105,6 @@ public:
 	bool oneColorGo;
 };
 
-
 /*
 * Global variables declarations
 */
@@ -114,6 +114,5 @@ extern QString applicationPath;
 #endif
 
 	static QSettings  settings;//("qgo2");
-
 
 #endif
