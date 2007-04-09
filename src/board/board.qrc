@@ -2,8 +2,8 @@
     <qresource prefix="/new/prefix1" >
         <file>ressources/pics/2leftarrow.png</file>
         <file>ressources/pics/2rightarrow.png</file>
-	<file>ressources/pics/alt_ghost_black.png</file>
-	<file>ressources/pics/alt_ghost_white.png</file>
+        <file>ressources/pics/alt_ghost_black.png</file>
+        <file>ressources/pics/alt_ghost_white.png</file>
         <file>ressources/pics/bottom.png</file>
         <file>ressources/pics/contexthelp.png</file>
         <file>ressources/pics/coord.png</file>
@@ -33,18 +33,19 @@
         <file>ressources/pics/sound_off.png</file>
         <file>ressources/pics/sound_on.png</file>
         <file>ressources/pics/stone_add.png</file>
+        <file>ressources/pics/stone_black.png</file>
         <file>ressources/pics/stone_circle.png</file>
         <file>ressources/pics/stone_color.png</file>
         <file>ressources/pics/stone_cross.png</file>
         <file>ressources/pics/stone_letter.png</file>
         <file>ressources/pics/stone_number.png</file>
-        <file>ressources/pics/stone_plain.png</file>
         <file>ressources/pics/stone_square.png</file>
         <file>ressources/pics/stone_triangle.png</file>
+        <file>ressources/pics/stone_white.png</file>
         <file>ressources/pics/swap_variations.png</file>
         <file>ressources/pics/table.png</file>
         <file>ressources/pics/top.png</file>
         <file>ressources/pics/up.png</file>
-	<file>ressources/pics/wood.png</file>
+        <file>ressources/pics/wood.png</file>
     </qresource>
 </RCC>

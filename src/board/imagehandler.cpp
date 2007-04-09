@@ -7,7 +7,8 @@
 */
 
 
-#include "../defines.h"
+#include "defines.h"
+#include "globals.h"
 #include "imagehandler.h"
 
 #include <QtGui>
@@ -95,7 +96,7 @@ ImageHandler::~ImageHandler()
 		altGhostPixmaps = NULL;
 	}
 	
-//	delete stonePixmaps;
+//	TODO delete stonePixmaps;
 //	delete ghostPixmaps;
 
 }
@@ -356,7 +357,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					g1min = g1max - (g1max-g1min)*(1-exp(-1*(theta-ALPHA)/(M_PI-ALPHA)));
 					g2min = g2max - (g2max-g2min)*(1-exp(-1*(theta-ALPHA)/(M_PI-ALPHA)));
 				
-					if (hh < STRIPE && hh > pixel && stripeband) 
+					if ((hh < STRIPE) && hh > pixel && stripeband) 
 					{
 					
 						if (hh > stripe) g1 = (int)g1max;
@@ -452,10 +453,7 @@ void ImageHandler::init(int size)
 	// Scale the images
 	size = size * 9 / 10;
 	
-	//*******
-	//bool shadow = setting->readBoolEntry("STONES_SHADOW");
-	//bool stripes = setting->readBoolEntry("STONES_SHELLS");
-	int stone_look = 3;//TODO setting->readIntEntry("STONES_LOOK");
+	int stone_look = settings.value("STONES_LOOK").toInt();
 
 	stonePixmaps = new QList<QPixmap>();//::QList();
 
@@ -469,12 +467,6 @@ void ImageHandler::init(int size)
 
 	paintBlackStone(ib, size, stone_look);
 
-//	QPixmap ibp = QPixmap::QPixmap();
-//	ibp.fromImage(ib, 
-//		Qt::PreferDither | 
-//		Qt::DiffuseAlphaDither | 
-//		Qt::DiffuseDither);
-
 	stonePixmaps->append(QPixmap::fromImage(ib, 
 			Qt::PreferDither | 
 			Qt::DiffuseAlphaDither | 
@@ -483,8 +475,7 @@ void ImageHandler::init(int size)
 
 	QImage gb(ib);
 	ghostImage(&gb);
-//	QPixmap gbp =  QPixmap::fromImage(gb);//QPixmap();
-	//gbp.fromImage(gb);
+
 	ghostlist.append( QPixmap::fromImage(gb));
 	ghotspots.append(point);
 
@@ -493,7 +484,7 @@ void ImageHandler::init(int size)
 	{
 		iw1 = QImage(size, size, QImage::Format_ARGB32);
 //		iw1.setAlphaBuffer(TRUE);
-		paintWhiteStone(iw1, size, stone_look);//stripes);
+		paintWhiteStone(iw1, size, stone_look);
 		stonePixmaps->append(QPixmap::fromImage(iw1, 
 			Qt::PreferDither | 
 			Qt::DiffuseAlphaDither | 
@@ -520,11 +511,8 @@ void ImageHandler::init(int size)
 			Qt::DiffuseDither)  );
 	hotspots.append(point);
 
-	// Assemble the data in the QCanvasPixmapArray
-	
-	ghostPixmaps =  new QList<QPixmap>::QList(ghostlist);//, ghotspots);	
-
-//	qDebug("ImageHandler : Nb of stone images : %d",stonePixmaps->count());
+	// Assemble the data in a list
+	ghostPixmaps =  new QList<QPixmap>::QList(ghostlist);
 }
 
 void ImageHandler::rescale(int size)//, bool smallerStones)
@@ -535,7 +523,7 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 
 	size = size + 1;
 
-	int stone_look = 3;//TODO setting->readIntEntry("STONES_LOOK");
+	int stone_look =  settings.value("STONES_LOOK").toInt();
 
 	stonePixmaps->clear();
 	ghostPixmaps->clear();
@@ -553,54 +541,33 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	QImage gb(ib);
 	ghostImage(&gb);
 	ghostPixmaps->append(QPixmap::fromImage(gb));
-//		Qt::PreferDither | 
-//		Qt::DiffuseAlphaDither | 
-//		Qt::DiffuseDither) );//->setImage(0, new QCanvasPixmap(gb));
-//	ghostPixmaps->image(0)->setOffset(size/2, size/2);
 
 	// white stones	
 	QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
 
 	for (int i=1 ;	i<=WHITE_STONES_NB;	i++)
 	{
-		paintWhiteStone(iw1, size, stone_look);//stripes);
+		paintWhiteStone(iw1, size, stone_look);
 		stonePixmaps->append(QPixmap::fromImage(iw1));
-//			Qt::PreferDither | 
-//			Qt::DiffuseAlphaDither | 
-//			Qt::DiffuseDither));//->setImage(i, new QCanvasPixmap(iw1));
-//		stonePixmaps->image(i)->setOffset(size/2, size/2);
 
 		QImage gw1(iw1);
 		ghostImage(&gw1);
 		ghostPixmaps->append(QPixmap::fromImage(gw1));
-//			Qt::PreferDither | 
-//			Qt::DiffuseAlphaDither | 
-//			Qt::DiffuseDither));//->setImage(i, new QCanvasPixmap(gw1));
-//		ghostPixmaps->image(i)->setOffset(size/2, size/2);
 	}
 	
 	// shadow
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
-//	is.setAlphaBuffer(TRUE);
-	if (stone_look == 3)//shadow) 
+
+	if (stone_look == 3)
 		paintShadowStone(is, size);
 	else
 		is.fill(0);
 
 	stonePixmaps->append(QPixmap::fromImage(is));
-//		Qt::PreferDither | 
-//		Qt::DiffuseAlphaDither | 
-//		Qt::DiffuseDither));//->setImage(WHITE_STONES_NB +1, new QCanvasPixmap(is));
-//	stonePixmaps->image(WHITE_STONES_NB +1)->setOffset(size/2, size/2);
-
 }
 
 void ImageHandler::ghostImage(QImage *img)
 {
-//    img->setAlphaBuffer(true);
-//    img->convertDepth(32);
-//	img->convertToFormat(QImage::Format_ARGB32);
-
        
     int w = img->width(),
 		h = img->height(),

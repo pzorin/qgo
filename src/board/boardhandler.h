@@ -22,25 +22,11 @@ public:
 
 	void clearData();
 	bool markedDead;
-	
-/*	// Navigation
-	bool nextMove(bool autoplay=false);
-	void previousMove();
-	void gotoFirstMove();
-	void gotoLastMove();
-	void nextComment();
-	void previousComment();
-	void nextVariation();
-	void previousVariation();
-	void gotoVarStart();
-	void gotoMainBranch();
-	void gotoNextBranch();
-	void navIntersection();
-	void gotoNthMoveInVar(int n);
-*/
+	void countScore();
+	void exitScore();
 	void updateMove(Move *m=0, bool ignore_update = false);
 	bool updateAll(Matrix *m, bool toDraw=true);
-	CursorType updateCursor(StoneColor c);
+	void updateCursor(StoneColor c=stoneNone);
 //	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
 
 	void findMoveByPos(int x,int  y);

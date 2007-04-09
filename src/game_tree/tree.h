@@ -67,11 +67,11 @@ public:
 
 	int checkPosition(MatrixStone *s,Matrix *m, bool koStone = false);
 	Group* assembleGroup(MatrixStone *stone, Matrix *m);
-	Group* checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m);
+	Group* checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m);// TODO remove
 	bool removeStone(int x, int y, bool hide=false);
 	int hasMatrixStone(int x, int y);
-	int countLiberties(Group *group, Matrix *m);
-	void checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties, Matrix *m);
+	int countLiberties(Group *group, Matrix *m); // TODO remove
+	void checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties, Matrix *m);// TODO remove
 	bool updateAll(Matrix *m, bool toDraw=true);
 
 protected:

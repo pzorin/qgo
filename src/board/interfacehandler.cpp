@@ -298,7 +298,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		modeButton->setEnabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
 		boardwindow->getUi().tabTools->removeTab(0) ;//setVisible(false);
-		boardwindow->getUi().scoreButton_2->setDisabled(true);
+		boardwindow->getUi().scoreButton->setEnabled(true);
 //		scoreButton->setText(QObject::tr("Score", "button label"));
 		boardwindow->getUi().passButton_2->setEnabled(true);
 		boardwindow->getUi().refreshButton_2->setDisabled(true);
@@ -436,3 +436,64 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		return modeNormal;
 	}
 }
+
+
+void InterfaceHandler::toggleToolbarButtons(bool state)
+{
+//    CHECK_PTR(buttonState);
+	
+//    buttonState->navPrevVar = navPrevVar->isEnabled();
+	boardwindow->getUi().navPrevVar->setEnabled(state);
+	
+//    buttonState->navNextVar = navNextVar->isEnabled();
+	boardwindow->getUi().navNextVar->setEnabled(state);
+	
+//    buttonState->navBackward = navBackward->isEnabled();
+	boardwindow->getUi().navBackward->setEnabled(state);
+    
+//    buttonState->navForward = navForward->isEnabled();
+	boardwindow->getUi().navForward->setEnabled(state);
+	
+//    buttonState->navFirst = navFirst->isEnabled();
+	boardwindow->getUi().navFirst->setEnabled(state);
+	
+//    buttonState->navStartVar = navStartVar->isEnabled();
+	boardwindow->getUi().navStartVar->setEnabled(state);
+	
+//    buttonState->navMainBranch = navMainBranch->isEnabled();
+	boardwindow->getUi().navMainBranch->setEnabled(state);
+	
+//    buttonState->navLast = navLast->isEnabled();
+	boardwindow->getUi().navLast->setEnabled(state);
+/*	
+    buttonState->navNextBranch = navNextBranch->isEnabled();
+    navNextBranch->setEnabled(false);
+	
+    buttonState->navPrevComment = navPrevComment->isEnabled();
+	  navPrevComment->setEnabled(false);
+
+    buttonState->navNextComment = navNextComment->isEnabled();
+	  navNextComment->setEnabled(false);
+
+    buttonState->navIntersection = navIntersection->isEnabled(); // added eb 111
+	  navIntersection->setEnabled(false);                          // end add eb 11
+
+    buttonState->editPaste = editPaste->isEnabled();
+    editPaste->setEnabled(false);
+	
+    buttonState->editPasteBrother = editPasteBrother->isEnabled();
+    editPasteBrother->setEnabled(false);
+    
+    navNthMove->setEnabled(false);
+    navAutoplay->setEnabled(false);
+    editCut->setEnabled(false);
+    editDelete->setEnabled(false);
+    navEmptyBranch->setEnabled(false);
+    navCloneNode->setEnabled(false);
+    navSwapVariations->setEnabled(false);
+    fileImportASCII->setEnabled(false);
+    fileImportASCIIClipB->setEnabled(false);
+    fileImportSgfClipB->setEnabled(false);
+*/
+}
+

@@ -24,6 +24,7 @@ public:
 	void clearData();
 	void changeSize();
 	void init(int size);
+	void setShowCoords(bool b);
 
 	void removeGhosts();
 	void setVarGhost(StoneColor c, int x, int y);
@@ -36,6 +37,7 @@ public:
 	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
 	bool updateStone(StoneColor c, int x, int y);
 	void setCursorType(CursorType cur);
+	void updateDeadMarks(int &black, int &white);
 
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );

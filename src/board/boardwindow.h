@@ -63,22 +63,11 @@ protected:
 	void closeEvent(QCloseEvent *e);
 
 	
-/*
+
 public slots:
-	void slotNthMove(int n) ;
-	void slotNavBackward();
-	void slotNavForward();
-	void slotNavFirst();
-	void slotNavLast();
-	void slotNavPrevComment();
-	void slotNavNextComment();
-	void slotNavPrevVar();
-	void slotNavNextVar();	
-	void slotNavStartVar();
-	void slotNavMainBranch();
-	void slotNavNextBranch();
-	void slotNavIntersection();
-*/
+	void slotEditButtonPressed( int id );
+	void slotViewCoords(bool toggle);
+
 private:
 	void init();
 
@@ -95,6 +84,7 @@ private:
 	bool myColorIsBlack , myColorIsWhite ;
 	bool localStoneSound ;
 	
+	QButtonGroup *editButtons;
 };
 
 #endif

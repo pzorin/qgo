@@ -169,6 +169,17 @@ void qGoBoard::slotPassPressed()
 	localPassRequest();
 }
 
+/*
+ * 'Score' button toggled
+ */
+void qGoBoard::slotScoreToggled(bool pressed)
+//was slot_doPass()
+{
+	if (pressed)
+		enterScoreMode();
+	else 
+		leaveScoreMode();
+}
 
 /*
  * This handles the main envent with qGo : something has been clicked on the board
@@ -191,9 +202,14 @@ void qGoBoard::slotBoardClicked(bool delay , int x, int y , Qt::MouseButton mous
 
 		case phaseEdit:
 		case phaseEnded:
-		case phaseScore:
 			return;
-	
+
+		case phaseScore:
+		{
+			markDeadStone(x,y);
+			return;
+		}
+
 		case phaseOngoing:
 			if (blackToPlay && boardwindow->getMyColorIsBlack())
 				localMoveRequest(stoneBlack,x,y);
@@ -212,9 +228,7 @@ void qGoBoard::localPassRequest()
 {
 	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 
-	tree->doPass(FALSE);
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-
+	doPass();
 	sendPassToInterface(c);
 }
 
@@ -231,11 +245,31 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 }
 
 /*
+ * This function adds a pass move to a game. there is no need to return anything
+ */
+void qGoBoard::doPass()
+
+{
+//	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
+
+	tree->doPass(FALSE);
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+
+}
+
+
+
+
+/*
  * This functions adds a move to a game. returns 1 if move was valid, 0 if not)
  */
 bool qGoBoard::doMove(StoneColor c, int x, int y)
 {
 	bool validMove = TRUE;
+
+	// does the matrix have already a stone there ?
+	if (tree->getCurrent()->getMatrix()->getStoneAt(x-1,y-1) != stoneNone)
+		return FALSE;
 
 	//The move is added to the tree. if it exists already, it becomes the current move
 	tree->addMove(c,  x, y, TRUE);
@@ -246,8 +280,8 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 		tree->deleteNode(); 
 		validMove = FALSE;
 	}
-
-	clickSound->play();
+	else
+		clickSound->play();
 
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
@@ -396,15 +430,17 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 			qDebug("corrected Handicap");
 		}
 	}
-	else if (pt.contains("Pass",false))
+*/
+	/*else*/ if (pt.contains("Pass",Qt::CaseInsensitive))
 	{
 //		win->getBoard()->doSinglePass();
 //		if (win->getBoard()->getBoardHandler()->local_stone_sound)
 //			qgo->playPassSound();
+		doPass();
 	}
 	else
 	{
-		if ((gameMode == modeMatch) && (mv_counter < 2) && !(myColorIsBlack))
+/*		if ((gameMode == modeMatch) && (mv_counter < 2) && !(myColorIsBlack))
 		{
 			// if black has not already done - maybe too late here???
 			if (requests_set)
@@ -466,11 +502,35 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 				m->parent->parent->setTimeinfo(false);
 			}
 		}
-	
+*/	
 	}
-*/
+
 }
 
+
+/*
+ * This functions initialises the scoring mode
+ */
+void qGoBoard::enterScoreMode()
+{
+	boardwindow->setGamePhase ( phaseScore );
+	boardwindow->getBoardHandler()->updateCursor();
+	boardwindow->getBoardHandler()->countScore();
+}
+
+
+/*
+ * This functions is called in scoring phase when clicking on a dead group
+ */
+void qGoBoard::markDeadStone(int x, int y)
+{
+	// is the click on a stone ?
+	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
+		return ;
+
+	tree->getCurrent()->getMatrix()->toggleGroupAt(x, y);
+	boardwindow->getBoardHandler()->countScore();
+}
 
 
 
@@ -498,6 +558,13 @@ bool qGoBoardNormalInterface::init()
 }
 
 
-
+/*
+ * This functions leaves the scoring mode
+ */
+void qGoBoardNormalInterface::leaveScoreMode()
+{
+	boardwindow->setGamePhase ( phaseOngoing );
+	boardwindow->getBoardHandler()->exitScore();
+}
 
 

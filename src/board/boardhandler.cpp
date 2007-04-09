@@ -16,7 +16,7 @@
 #include "matrix.h"
 #include "tree.h"
 
-
+#include <iostream>
 
 BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int size)
 	:QObject(bw)
@@ -580,8 +580,8 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //		board->removeLastMoveMark();
 //		board->setCurStoneColor();
 //	}
-	CursorType cur = updateCursor(m->getColor());
-	board->setCursorType(cur);
+	updateCursor(m->getColor());
+//	board->setCursorType(cur);
 	
 
 	// Update the ghosts indicating variations
@@ -622,14 +622,13 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 
 bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 {
-	// qDebug("StoneHandler::updateAll(Matrix *m) - toDraw = %d", toDraw);
 	
 	Q_CHECK_PTR(m);
 	
-	// m->debug();
-
 	tree->updateAll(m);	
 	
+	m->debug();
+
 //	Stone *stone;
 	bool modified = false;//, fake = false;
 	short data;
@@ -716,33 +715,41 @@ bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 /*
  * Update the cursor for sending an order to the 'board'
  */
-CursorType BoardHandler::updateCursor(StoneColor currentMoveColor)
+void BoardHandler::updateCursor(StoneColor currentMoveColor)
 {
+	CursorType cur = cursorIdle;
+	
 	switch (boardwindow->getGameMode())
 	{
 	case modeNormal :
 	case modeTeach :
 	case modeReview :
-		return (currentMoveColor == stoneBlack ? cursorGhostWhite : cursorGhostBlack);
+		if (boardwindow->getGamePhase() == phaseScore)
+			cur = cursorIdle;
+		else
+			cur = (currentMoveColor == stoneBlack ? cursorGhostWhite : cursorGhostBlack);
+		break; 
 
 	case modeObserve :
-		return cursorIdle;
+		break;//cur = cursorIdle;
 
 	case modeMatch :
 		if  (currentMoveColor == stoneBlack )
-			return ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
+			cur =  ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
 		else
-			return ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+			cur = ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+		break;
 
 	case modeComputer :
 		if  (currentMoveColor == stoneBlack )
-			return ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
+			cur = ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
 		else
-			return ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
-
+			cur = ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
+		break;
 	}
 
-	return cursorIdle;
+	board->setCursorType(cur);
+//	return cursorIdle;
 }
 
 /*
@@ -800,3 +807,151 @@ void BoardHandler::slotWheelEvent(QWheelEvent *e)
 	e->accept();
 }
 
+/*
+ * Performs all operations on the matrix of current move to display score marks
+ * and score informaton on the uI
+ */
+void BoardHandler::countScore()
+{
+	tree->getCurrent()->getMatrix()->clearTerritoryMarks();
+
+	// capturesBlack -= caps_black;
+	// capturesWhite -= caps_white;
+	capturesBlack = tree->getCurrent()->getCapturesBlack();
+	capturesWhite = tree->getCurrent()->getCapturesWhite();
+//	caps_black = 0;
+//	caps_white = 0;
+	tree->getCurrent()->setScored(true);
+
+	// Copy the current matrix
+	Matrix *m = new Matrix(*(tree->getCurrent()->getMatrix()));
+	Q_CHECK_PTR(m);
+
+	m->debug();
+	// Do some cleanups, we only need stones
+	//m->absMatrix();
+	m->clearAllMarks();
+	
+	// Mark all dead stones in the matrix with negative number
+	int i=0, j=0;
+/*	for (i=0; i<board->getBoardSize(); i++)
+		for (j=0; j<board->getBoardSize(); j++)
+			if (stoneHandler->hasStone(i+1, j+1) == 1)
+				if (stoneHandler->getStoneAt(i+1, j+1)->isDead())
+					m->set(i, j, m->at(i, j) * -1);
+				else if (stoneHandler->getStoneAt(i+1, j+1)->isSeki())
+					m->set(i, j, m->at(i, j) * MARK_SEKI);
+*/				
+	int terrWhite = 0, terrBlack = 0;
+
+	while (m != NULL)
+	{
+		bool found = false;
+		
+		for (i=0; i< boardSize; i++)
+		{
+			for (j=0; j< boardSize; j++)
+			{
+				if (m->at(i, j) <= 0)
+				{
+					found = true;
+					break;
+				}
+			}
+			if (found)
+				break;
+		}
+		
+		if (!found)
+			break;
+		
+		// Traverse the enclosed territory. Resulting color is in col afterwards
+		StoneColor col = stoneNone;
+		m->traverseTerritory( i, j, col);
+		
+		// Now turn the result into real territory or dame points
+		for (i=0; i<boardSize; i++)
+		{
+			for (j=0; j<boardSize; j++)
+			{
+				if (m->at(i, j) == MARK_TERRITORY_VISITED)
+				{
+					// Black territory
+					if (col == stoneBlack)
+					{
+						tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
+						tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrBlack);
+						terrBlack ++;
+						m->set(i, j, MARK_TERRITORY_DONE_BLACK);
+					}
+					// White territory
+					else if (col == stoneWhite)
+					{
+						tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
+						tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrWhite);
+						terrWhite ++;
+						m->set(i, j, MARK_TERRITORY_DONE_WHITE);
+					}
+					// Dame
+					else
+						m->set(i, j, MARK_TERRITORY_DAME);
+				}
+			}
+		}
+	}
+
+	// Finally, remove all false eyes that have been marked as territory. This
+	// has to be here, as in the above loop we did not find all dame points yet.
+	for (i = 0; i < boardSize; i++) 
+	{
+		for (j = 0; j < boardSize; j++) 
+		{
+			if (	m->at(i, j) == MARK_TERRITORY_DONE_BLACK ||
+				m->at(i, j) == MARK_TERRITORY_DONE_WHITE) 
+			{
+				StoneColor col = (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ? stoneBlack : stoneWhite);
+				if (m->checkFalseEye(i, j, col)) 
+				{
+					tree->getCurrent()->getMatrix()->removeMark(i + 1, j + 1);
+					if (col == stoneBlack)
+						terrBlack--;
+					else
+						terrWhite--;
+				}
+			}
+		}
+	}
+
+	// Mark the move having territory marks
+	tree->getCurrent()->setTerritoryMarked(true);
+	// Paint the territory on the board
+	updateAll(tree->getCurrent()->getMatrix());
+//	board->updateCanvas();
+	
+	// Update Interface
+/*	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack + caps_black,
+		terrWhite, capturesWhite+ caps_white,
+		boardwindow->getGameData()->komi);
+*/	
+	delete m;
+}
+
+/*
+ * Called by qgoboard when score button is pressed up, leaving score mode
+ */
+void BoardHandler::exitScore()
+{
+	// Remove territory marks
+	if (tree->getCurrent()->isTerritoryMarked())
+	{
+		tree->getCurrent()->getMatrix()->clearTerritoryMarks();
+		tree->getCurrent()->setTerritoryMarked(false);
+		tree->getCurrent()->setScored(false);
+	}
+	
+	// Unshade dead stones
+//	board->removeDeadMarks();
+	markedDead = false;
+	
+	updateMove(tree->getCurrent());
+}

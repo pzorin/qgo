@@ -88,19 +88,19 @@ bool QAlsaSound::initialise()
 	read (fd, buffer, BUFFERSIZE) ;
 
 	if (findchunk (buffer, "RIFF", BUFFERSIZE) != buffer) {
-		fprintf(stdout,"Bad format: Cannot find RIFF file marker\n");	/* wwg: Report error */
+		qDebug("Bad format: Cannot find RIFF file marker\n");	/* wwg: Report error */
 		return  FALSE ;
 	}
 
 	if (! findchunk (buffer, "WAVE", BUFFERSIZE)) {
-		fprintf(stdout,"Bad format: Cannot find WAVE file marker\n");	/* wwg: report error */
+		qDebug("Bad format: Cannot find WAVE file marker\n");	/* wwg: report error */
 		return  FALSE ;
 	}
 
 	ptr = findchunk (buffer, "fmt ", BUFFERSIZE) ;
 
 	if (! ptr) {
-		fprintf(stdout,"Bad format: Cannot find 'fmt' file marker\n");	/* wwg: report error */
+		qDebug("Bad format: Cannot find 'fmt' file marker\n");	/* wwg: report error */
 		return  FALSE ;
 	}
 
@@ -118,7 +118,7 @@ bool QAlsaSound::initialise()
 	ptr = findchunk (buffer, "data", BUFFERSIZE) ;
 
 	if (! ptr) {
-		fprintf(stdout,"Bad format: unable to find 'data' file marker\n");	/* wwg: report error */
+		qDebug("Bad format: unable to find 'data' file marker\n");	/* wwg: report error */
 		return  FALSE ;
 	}
 
@@ -140,7 +140,7 @@ bool QAlsaSound::initialise()
 			format = SND_PCM_FORMAT_S32_LE;
 			break;
 		default :
-			fprintf(stdout,"Bad format: %i bits per seconds\n",waveformat.wBitsPerSample );	/* wwg: report error */
+			qDebug("Bad format: %i bits per seconds\n",waveformat.wBitsPerSample );	/* wwg: report error */
 			return  FALSE ;
 			break;
 	}
@@ -154,46 +154,46 @@ bool QAlsaSound::initialise()
   	
 
 	if ((err = snd_pcm_open (&handle, device, SND_PCM_STREAM_PLAYBACK,SND_PCM_ASYNC)) < 0) {
-                        fprintf (stdout, "cannot open audio device %s (%s)\n", 
+                        qDebug("cannot open audio device %s (%s)\n", 
                                  device,
                                  snd_strerror (err));
                         return FALSE;
                 }
 
 	if ((err = snd_pcm_nonblock(handle, 1))< 0) {
-			fprintf (stdout,"nonblock setting error: %s", snd_strerror(err));
+			qDebug("Audio : nonblock setting error: %s", snd_strerror(err));
 			return FALSE;
 		}
 	
 
-    /* Init hwparams with full configuration space */
+	/* Init hwparams with full configuration space */
 	if (snd_pcm_hw_params_any(handle, params) < 0) {
-		fprintf(stdout, "Can not configure this PCM device.\n");
+		qDebug("Audio : Can not configure this PCM device.\n");
 		return FALSE;
 		}
 
 
 	err = snd_pcm_hw_params_set_access(handle, params, SND_PCM_ACCESS_RW_INTERLEAVED);
 	if (err < 0) {
-		fprintf(stdout,"Access type not available");
+		qDebug("Audio : Access type RW_INTERLEAVED not available");
 		return FALSE;
 	}
 
 	err = snd_pcm_hw_params_set_format(handle, params, format);
 	if (err < 0) {
-		fprintf(stdout,"Sample format non available");
+		qDebug("Sample format non available");
 		return FALSE;
 	}
 
 	err = snd_pcm_hw_params_set_channels(handle, params, waveformat.wChannels);
 	if (err < 0) {
-		fprintf(stdout,"Channels count non available");
+		qDebug("Channels count %i non available", waveformat.wChannels);
 		return FALSE;
 	}
 
 	err = snd_pcm_hw_params_set_rate_near(handle, params, &waveformat.dwSamplesPerSec, 0);
 	if (err < 0) {
-		fprintf(stdout,"Unable to set rate : %d", waveformat.dwSamplesPerSec);
+		qDebug("Unable to set rate : %d", waveformat.dwSamplesPerSec);
 		return FALSE;
 	}
 
@@ -201,7 +201,7 @@ bool QAlsaSound::initialise()
 
 	err = snd_pcm_hw_params(handle, params);
 	if (err < 0) {
-		fprintf(stdout,"Unable to install hw params:");
+		qDebug("Unable to install hw params:");
 		return FALSE;
 	}
 

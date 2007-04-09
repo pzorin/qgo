@@ -88,7 +88,7 @@ void Matrix::debug() const
 		std::cout << (i+1)%10 << " ";
 		for (j=0; j<size; j++)
 		{
-#if 1
+#if 0
 			switch (abs(matrix[j][i]))
 			{
 			case stoneNone:
@@ -171,6 +171,26 @@ short Matrix::at(int x, int y) const
 	
 	return matrix[x][y];
 }
+
+StoneColor Matrix::getStoneAt(int x, int y)
+{	
+	Q_ASSERT(x > 0 && x <= size &&
+		y > 0 && y <= size);
+	
+	return ( (StoneColor) (abs(matrix[x - 1][y -1])%10) );
+}
+
+MarkType Matrix::getMarkAt(int x, int y)
+{	
+	Q_ASSERT(x > 0 && x <= size &&
+		y > 0 && y <= size);
+	
+	return ( (MarkType) (abs(matrix[x -1][y-1])/ 10 * 10) );
+}
+
+
+
+
 
 void Matrix::set(int x, int y, int n)
 {
@@ -535,3 +555,351 @@ const QString Matrix::printMe(ASCII_Import *charset)
 	
 	return str;
 }
+
+/*
+ * Checks if x,y is empty. The case being, increases the liberties counter, 
+ * and stores x,y as visited
+ */
+void Matrix::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties)
+{
+	if (!x || !y)
+		return;
+	
+
+	if (	x <= size && y <= size && x >= 0 && y >= 0 &&
+	    	!libCounted.contains(100*x + y) &&
+	    	(at(x - 1, y - 1)%10 == stoneNone ))  // ?? check stoneErase ?
+	{
+		  libCounted.append(100*x + y);
+		  liberties ++;
+	}
+}
+
+/*
+ * Checks if x,y is already marked. The case being, increases the liberties counter, 
+ * and stores x,y as visited
+ */
+void Matrix::checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties)
+{
+	if (!x || !y)
+		return;
+	
+//	Stone *s;
+	
+	if (	x <= size && y <= size && x >= 0 && y >= 0 &&
+		!libCounted.contains(100*x + y) &&
+		(at(x - 1, y - 1) == MARK_TERRITORY_DONE_BLACK ||
+		at(x - 1, y - 1) == MARK_TERRITORY_DONE_WHITE))
+	{
+		libCounted.append(100*x + y);
+		liberties ++;
+	}
+}
+
+/*
+ * checks wether the positions x,y holds a stone 'color'.
+ * if yes, appends the stone and returns the group
+ */
+Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group) 
+{
+//	if (!m)
+//		qDebug("Oops : null matrix in Tree::checkNeighbour");
+
+	// Are we into the board, and is the tentative stone present in the matrix ?
+	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (at(x - 1, y - 1) != color))
+		return group;
+
+	MatrixStone *tmp= new MatrixStone ;
+	tmp->x = x;
+	tmp->y = y;	
+	tmp->c =  color;
+
+	int mark = 0;
+	bool found = FALSE;
+
+	while ( mark < group->count() && !found )
+	{
+		//Do we find the same stone in the group ?
+		if (! group->compareItems(tmp, group->at(mark)))
+			found = TRUE ;
+
+		mark ++;
+	}
+	
+	// if not, we add it to the group
+	if (!found)
+		group->append(tmp);
+
+	return group;
+}
+
+/*
+ * Counts and returns the number of liberties of a group of adjacetn stones
+ */
+int Matrix::countLiberties(Group *group) 
+{
+//	CHECK_PTR(group);
+//	CHECK_PTR(m); 
+  
+	int liberties = 0;
+	QList<int> libCounted;
+	
+	// Walk through the horizontal and vertial directions, counting the
+	// liberties of this group.
+	for (int i=0; i<group->count(); i++)
+	{
+		MatrixStone *tmp = group->at(i);
+		//CHECK_PTR(tmp);
+		
+		int 	x = tmp->x,
+			y = tmp->y;
+		
+		// North
+//		checkNeighbourLiberty(x, y-1, libCounted, liberties,m);
+		checkNeighbourLiberty(x, y-1, libCounted, liberties);
+		// West
+		//checkNeighbourLiberty(x-1, y, libCounted, liberties,m);
+		checkNeighbourLiberty(x-1, y, libCounted, liberties);
+		// South
+		//checkNeighbourLiberty(x, y+1, libCounted, liberties,m);
+		checkNeighbourLiberty(x, y+1, libCounted, liberties);
+		// East
+		//checkNeighbourLiberty(x+1, y, libCounted, liberties,m);
+		checkNeighbourLiberty(x+1, y, libCounted, liberties);
+	}
+	return liberties;
+}
+
+/*
+ * Same as above, but used for the scoring phase
+ */
+int Matrix::countScoredLiberties(Group *group)
+{
+//	CHECK_PTR(group);
+//	CHECK_PTR(m);
+	
+	int liberties = 0;
+	QList<int> libCounted;
+	
+	// Walk through the horizontal and vertial directions, counting the
+	// liberties of this group.
+	for ( int i=0; i<group->count(); i++)
+	{
+		MatrixStone *tmp = group->at(i);
+//		CHECK_PTR(tmp);
+		
+		int x = tmp->x,
+			y = tmp->y;
+		
+		// North
+		checkScoredNeighbourLiberty(x, y-1, libCounted, liberties);
+		
+		// West
+		checkScoredNeighbourLiberty(x-1, y, libCounted, liberties);
+		
+		// South
+		checkScoredNeighbourLiberty(x, y+1, libCounted, liberties);
+		
+		// East
+		checkScoredNeighbourLiberty(x+1, y, libCounted, liberties);
+	}
+	return liberties;
+}
+
+
+
+/*
+ * Explores a territorry for marking all of its enclosure
+ */
+void Matrix::traverseTerritory( int x, int y, StoneColor &col)
+{
+	// Mark visited
+	set(x, y, MARK_TERRITORY_VISITED);
+	
+	// North
+	if (checkNeighbourTerritory( x, y-1, col))
+		traverseTerritory( x, y-1, col);
+	
+	// East
+	if (checkNeighbourTerritory( x+1, y, col))
+		traverseTerritory( x+1, y, col);
+	
+	// South
+	if (checkNeighbourTerritory(x, y+1, col))
+		traverseTerritory(x, y+1, col);
+	
+	// West
+	if (checkNeighbourTerritory(x-1, y, col))
+		traverseTerritory( x-1, y, col);
+}
+
+/*
+ * Returns true if the territory at x,y is empty, false else
+ * In this case, 'col' is modified depending on the stone status found
+ */
+bool Matrix::checkNeighbourTerritory(const int &x, const int &y, StoneColor &col)
+{
+	// Off the board ? Dont continue
+	if (x < 0 || x >= size || y < 0 || y >= size)
+		return false;
+	
+	// No stone ? Continue
+	if (at(x, y) <= 0)
+		return true;
+	
+	// A stone, but no color found yet? Then set this color and dont continue
+	// The stone must not be marked as alive in seki.
+	if (col == stoneNone && at(x, y) > 0 && at(x, y) < MARK_SEKI)
+	{
+		col = (StoneColor)at(x, y);
+		return false;
+	}
+	
+	// A stone, but wrong color? Set abort flag but continue to mark the rest of the dame points
+	StoneColor tmpCol = stoneNone;
+	if (col == stoneBlack)
+		tmpCol = stoneWhite;
+	else if (col == stoneWhite)
+		tmpCol = stoneBlack;
+	if ((tmpCol == stoneBlack || tmpCol == stoneWhite) && at(x, y) == tmpCol)
+	{
+		col = stoneErase;
+		return false;
+	}
+	
+	// A stone, correct color, or already visited, or seki. Dont continue
+	return false;
+}
+
+/*
+ * Returns the group (QList) of matrix stones adjacent to the 'stone'
+ */
+Group* Matrix::assembleGroup(MatrixStone *stone)
+{
+//	if (stones->isEmpty())
+//		qFatal("StoneHandler::assembleGroup(Stone *stone): No stones on the board!");
+	
+	Group *group = new Group();
+	Q_CHECK_PTR(group);
+	
+
+	group->append(stone);
+	
+	int mark = 0;
+	
+	// Walk through the horizontal and vertical directions and assemble the
+	// attached stones to this group.
+	while (mark < group->count())
+	{
+		stone = group->at(mark);
+		
+		if (at(stone->x - 1, stone->y - 1) != stoneNone )
+		{
+			int 	stoneX = stone->x,
+				stoneY = stone->y;
+			StoneColor col = stone->c;
+			
+			// North
+			//group = checkNeighbour(stoneX, stoneY-1, col, group,m);
+			group = checkNeighbour(stoneX, stoneY-1, col, group);
+			// West
+			//group = checkNeighbour(stoneX-1, stoneY, col, group,m);
+			group = checkNeighbour(stoneX-1, stoneY, col, group);
+			// South
+			//group = checkNeighbour(stoneX, stoneY+1, col, group,m);
+			group = checkNeighbour(stoneX, stoneY+1, col, group);
+			// East
+			//group = checkNeighbour(stoneX+1, stoneY, col, group,m);
+			group = checkNeighbour(stoneX+1, stoneY, col, group);
+		}
+		mark ++;
+	}
+	
+	return group;
+}
+
+/*
+ * Returns true if the stone at x,y belongs to a groups with only 1 liberty
+ */
+bool Matrix::checkFalseEye( int x, int y, StoneColor col)
+{
+//	int bsize = m->getSize();
+
+	MatrixStone *tmp= new MatrixStone ;
+//	tmp->x = x;
+//	tmp->y = y;	
+	tmp->c =  col;
+
+	// Stone to the North?
+	if (y - 1 >= 0 && at(x, y - 1) == col)
+	{
+		tmp->x = x +1 ;
+		tmp->y = y ;
+		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+			return true;
+	}
+
+	// Stone to the west?
+	if (x - 1 >= 0 && at(x - 1, y) == col)
+//		if (countLibertiesOnMatrix(assembleGroup(getStoneAt(x, y + 1),NULL), m) == 1)
+//			return true;
+	{
+		tmp->x = x  ;
+		tmp->y = y + 1 ;
+		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+			return true;
+	}
+
+	// Stone to the south?
+	if (y + 1 < size && at(x, y + 1) == col)
+//		if (countLibertiesOnMatrix(assembleGroup(getStoneAt(x + 1, y + 2),NULL), m) == 1)
+//			return true;
+	{
+		tmp->x = x + 1 ;
+		tmp->y = y + 2 ;
+		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+			return true;
+	}
+ 
+	// Stone to the east?
+	if (x + 1 < size && at(x + 1, y) == col)
+//		if (countLibertiesOnMatrix(assembleGroup(getStoneAt(x + 2, y + 1),NULL), m) == 1)
+//			return true;
+	{
+		tmp->x = x + 2 ;
+		tmp->y = y + 1 ;
+		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+			return true;
+	}
+
+	return false;
+}
+
+/*
+ * This function marks all the stones of a group as dead (or alive if they were dead)
+ */
+void Matrix::toggleGroupAt( int x, int y)
+{
+	StoneColor col = getStoneAt(x, y);
+
+	if ( col != stoneWhite && col != stoneBlack )
+		return ;
+
+	MatrixStone *s = new MatrixStone;
+	s->x = x;
+	s->y = y;
+	s->c = col;
+
+	Group *g = assembleGroup(s);
+
+	for (int i=0; i<g->count(); i++)
+	{
+		s = g->at(i);
+		//CHECK_PTR(tmp);
+		matrix[s->x -1][s->y -1] *= -1;
+
+	}
+
+}
+
+

@@ -337,6 +337,17 @@ void Board::drawCoordinates()
 }
 
 /*
+* called by 'boardwindow' when the toolbar button is toggled
+*/
+void Board::setShowCoords(bool b)
+{
+	bool old = showCoords;
+	showCoords = b;
+	if (old != showCoords)
+		changeSize();  // Redraw the board if the value changed.
+}
+
+/*
 * the viewport is resized
 */
 void Board::resizeEvent(QResizeEvent*)
@@ -393,12 +404,13 @@ void Board::resizeBoard(int w, int h)
 	// Delete gatter lines and update stones positions
 	QList<QGraphicsItem *> list = canvas->items();
 	QGraphicsItem *item;
-	QList<QGraphicsItem *>::iterator it;
 
-	for(it = list.begin(); it != list.end(); ++it)
+	QListIterator<QGraphicsItem *> it( list );
+
+
+	for (; it.hasNext();)
 	{
-		item = *it;
-
+		item = it.next();
 		/*
 		 * Coordinates : type = 9
 		 */
@@ -675,6 +687,10 @@ bool Board::updateStone(StoneColor c, int x, int y)
 			modified = true;
 		}
 		
+		// We need to check wether the stones have been toggled dead or seki before (scoring mode)
+		if (stone->isDead() || stone->isSeki())
+			stone->togglePixmap(imageHandler->getStonePixmaps(), TRUE);
+
 		break;
 		
 		
@@ -913,6 +929,31 @@ void Board::removeDeadMarks()
 	}
 
 }
+
+
+void Board::updateDeadMarks(int &black, int &white)
+{
+//	QIntDictIterator<Stone> it(*stones);
+	Stone *s;
+	
+//	while (it.current())
+
+	QHashIterator<int, Stone*> it(*stones);
+	while (it.hasNext()) 	
+	{
+		s = it.next().value();
+//		CHECK_PTR(s);
+		if (s->isDead())
+		{
+			if (s->getColor() == stoneBlack)
+				white ++;
+			else
+				black ++;
+		}
+//		++it;
+	}
+}
+
 
 /*
  * Sets a text in 'text' mark at positon 'x,y'.

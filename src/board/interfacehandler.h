@@ -29,6 +29,7 @@ public:
 	void setSliderMax(int n);
 	void setCaptures(float black, float white);
 	void clearComment();
+	void toggleToolbarButtons(bool state);
 /*	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
 	void setTimes(bool, float, int);
 	void clearComment();
@@ -39,7 +40,6 @@ public:
 	void showEditGroup();
 	void toggleMarks();
 	const QString getStatusMarkText(MarkType t);
-	void disableToolbarButtons();
 	void restoreToolbarButtons();
 	void setScore(int terrB, int capB, int terrW, int capW, float komi=0);
 	void setClipboard(bool b);

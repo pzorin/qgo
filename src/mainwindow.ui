@@ -1525,21 +1525,21 @@ Delay between the moves in autoplay mode in seconds.</string>
             <number>6</number>
            </property>
            <item>
-            <widget class="QRadioButton" name="radioButton_4" >
+            <widget class="QRadioButton" name="radioButtonStones_2D" >
              <property name="text" >
               <string>Ugly 2D</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton_5" >
+            <widget class="QRadioButton" name="radioButtonStones_3D" >
              <property name="text" >
               <string>Plain 3D</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton_6" >
+            <widget class="QRadioButton" name="radioButtonStones_real" >
              <property name="text" >
               <string>Realistic</string>
              </property>

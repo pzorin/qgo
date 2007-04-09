@@ -88,6 +88,7 @@ void qGoBoardComputerInterface::startGame()
 
 /*
  * This processes a 'Pass' button pressed
+ * If the preceding move was also a pass request, we enter the score mode
  */
 void qGoBoardComputerInterface::localPassRequest()
 //was slot_doPass()
@@ -99,7 +100,10 @@ void qGoBoardComputerInterface::localPassRequest()
 
 	sendPassToInterface(c);
 
-	playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
+	if (tree->getCurrent()->parent->isPassMove())
+		enterScoreMode();	
+	else
+		playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
 }
 
 
@@ -226,10 +230,10 @@ void qGoBoardComputerInterface::playComputer(StoneColor c)
 	//the computer just played. Are we after 2 passes moves ?
  
 	if ((tree->getCurrent()->isPassMove())&&(tree->getCurrent()->parent->isPassMove()))
-	{
-//		emit signal_2passes(0,0);
-		return;
-	}
+//	{
+		enterScoreMode();
+//		return;
+//	}
 
 	// trick : if we have the computer play against himself, we recurse ...
 //	if (win->blackPlayerType ==   win->whitePlayerType)

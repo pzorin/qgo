@@ -5,7 +5,7 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-#include "../defines.h"
+#include "defines.h"
 
 //class Stone;
 

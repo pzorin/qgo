@@ -11,7 +11,7 @@
 #include "board.h"
 #include "interfacehandler.h"
 #include "qgoboard.h"
-
+#include "move.h"
 
 #include <QtGui>
 
@@ -51,6 +51,35 @@ void BoardWindow::init()
 	ui.setupUi(this);
 	ui.board->init(boardSize);
 
+	ui.actionWhatsThis = QWhatsThis::createAction ();
+
+
+	// Initialises the buttons and else
+	editButtons = new QButtonGroup(this);
+	editButtons->addButton(ui.stoneButton, 0);
+	editButtons->addButton(ui.squareButton, 1);
+	editButtons->addButton(ui.circleButton, 2);
+	editButtons->addButton(ui.triangleButton, 3);
+	editButtons->addButton(ui.crossButton, 4);
+	editButtons->addButton(ui.labelLetterButton, 5);
+	editButtons->addButton(ui.labelNumberButton, 6);
+	editButtons->addButton(ui.colorButton, 7);
+
+	QMenu *menu = new QMenu();
+	menu->insertAction(0,ui.fileExportASCII);
+	menu->insertAction(0,ui.fileExportSgfClipB);
+	menu->insertAction(0,ui.fileExportPic);
+	menu->insertAction(0,ui.fileExportPicClipB);
+
+	ui.actionExport->setMenu(menu);
+
+	QToolButton *exportButton = new QToolButton();
+	exportButton->setDefaultAction(ui.actionExport);
+	
+	exportButton->setPopupMode( QToolButton::InstantPopup);
+	ui.toolBar->insertWidget ( ui.actionImport, exportButton );
+
+	//Creates the game tree
 	tree = new Tree(boardSize);
 
 	//creates the interface handler
@@ -81,6 +110,8 @@ void BoardWindow::init()
 	boardHandler = new BoardHandler(this, tree, boardSize);
 
 
+	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), this, SLOT(slotViewCoords(bool)));
+
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
 	connect(ui.navBackward,SIGNAL(pressed()), boardHandler, SLOT(slotNavBackward()));
@@ -108,7 +139,11 @@ void BoardWindow::init()
 	//Connects the game buttons to the slots
 	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
 	connect(ui.passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-	
+	connect(ui.scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+//connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+	//Connects the 'edit' buttons to the slots
+	connect(editButtons, SIGNAL(buttonPressed ( int )), 
+		this, SLOT(slotEditButtonPressed( int )));
 
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
@@ -132,7 +167,7 @@ void BoardWindow::closeEvent(QCloseEvent *)
 
 
 /*
- * Loads the SGF string
+ * Loads the SGF string. returns true if the file was sucessfully parsed
  */
 bool BoardWindow::loadSGF(const QString fileName, const QString /*SGFLoaded*/, bool /* fastLoad */)
 {
@@ -152,7 +187,91 @@ bool BoardWindow::loadSGF(const QString fileName, const QString /*SGFLoaded*/, b
 	return true;
 }
 
+/*
+ * One of the buttons in the 'Edit Tools' frame has been pressed
+ */
+void BoardWindow::slotEditButtonPressed( int m )
+{
+	MarkType t;
+	QString txt;
+	
+	switch(m)
+	{
+	case 0:
+		t = markNone;
+		break;
+		
+	case 1:
+		t = markSquare;
+		break;
+		
+	case 2:
+		t = markCircle;
+		break;
+		
+	case 3:
+		t = markTriangle;
+		break;
+		
+	case 4:
+		t = markCross;
+		break;
+		
+	case 5:
+		t = markText;
+		break;
+		
+	case 6:
+		t = markNumber;
+		break;
 
+	case 7:
+	{
+		Move *current = tree->getCurrent();
+		// set next move's color
+		if (qgoboard->getBlackTurn())
+		{
+			current->setPLinfo(stoneWhite);
+//#ifndef USE_XPM
+//			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
+//#else
+			ui.colorButton->setIcon(QIcon(":/new/prefix1/ressources/pics/stone_white.png"));
+//#endif
+		}
+		else
+		{
+			current->setPLinfo(stoneBlack);
+//#ifndef USE_XPM
+//			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
+//#else
+			ui.colorButton->setIcon(QIcon(":/new/prefix1/ressources/pics/stone_black.png"));
+//#endif
+		}
 
+		// check if set color is natural color:
+		if (current->getMoveNumber() == 0 && current->getPLnextMove() == stoneBlack ||
+			current->getMoveNumber() > 0 && current->getColor() != current->getPLnextMove())
+			current->clearPLinfo();
 
+//		board->setCurStoneColor();
+		return;
+	}
+		
+	default:
+		return;
+	}
+	
+//	statusMark->setText(getStatusMarkText(t));
+//	board->setMarkType(t);
+}
+
+void BoardWindow::slotViewCoords(bool toggle)
+{
+	if (toggle)
+		ui.board->setShowCoords(false);
+	else
+		ui.board->setShowCoords(true);
+	
+//	statusBar()->message(tr("Ready."));
+}
 

@@ -113,6 +113,14 @@ void MainWindow::saveSettings()
 {
 	settings.setValue("language",ui.comboBox_language->currentIndex ());
 	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
+
+	int i = 3;
+	if ( ui.radioButtonStones_2D->isChecked())
+		i=1;
+	else if ( ui.radioButtonStones_3D->isChecked())
+		i=2;
+	settings.setValue("STONES_LOOK", i);
+
 }
 
 /*
@@ -122,6 +130,10 @@ void MainWindow::loadSettings()
 {
 	ui.comboBox_language->setCurrentIndex (settings.value("language").toInt());
 	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
+
+	ui.radioButtonStones_real->setChecked(TRUE);
+	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
+	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
 }
 
 /* 

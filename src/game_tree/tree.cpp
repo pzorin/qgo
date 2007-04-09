@@ -775,13 +775,13 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
  
 //	if (!stone->visible())
 //		return true;
-	
+	Q_CHECK_PTR(m);
 	Group *active = NULL;
 	
 	// No groups existing? Create one.
 	if (groups->isEmpty())
 	{
-		Group *g = assembleGroup(stone,m);
+		Group *g = m->assembleGroup(stone);
 		Q_CHECK_PTR(g);
 		groups->append(g);
 		active = g;
@@ -811,7 +811,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 //					if (!groups->remove(i))
 //						qFatal("StoneHandler::checkPosition(Stone *stone):"
 //						"Oops, removing an attached group failed.");
-					active = assembleGroup(stone,m);
+					active = m->assembleGroup(stone);
 					groups->insert(i, active);
 					flag = true;
 				}
@@ -832,7 +832,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 		// The added stone isnt attached to an existing group. Create a new group.
 		if (!flag)
 		{
-			Group *g = assembleGroup(stone,m);
+			Group *g = m->assembleGroup(stone);
 			Q_CHECK_PTR(g);
 			groups->append(g);
 			active = g;
@@ -854,7 +854,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 		//CHECK_PTR(tmp);
 
 
- 		tmp->setLiberties(countLiberties(tmp, m));
+ 		tmp->setLiberties(m->countLiberties(tmp));
 
     
 		//qDebug("Group #%d with %d liberties:", i, tmp->getLiberties());
@@ -876,7 +876,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 			}
 			
 			//was it a forbidden ko move ?
-			if ((tmp->count() == 1) && koStone && ((countLiberties(active, m) == 0)))
+			if ((tmp->count() == 1) && koStone && ((m->countLiberties(active) == 0)))
 			{
 				//active->debug();
 				delete groups->takeAt(groups->indexOf(active));
@@ -920,6 +920,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 	return stoneCounter;
 }
 
+//TODO : wipe out , moved to matrix
 Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
 {
 //	if (stones->isEmpty())
@@ -946,16 +947,17 @@ Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
 			StoneColor col = stone->c;
 			
 			// North
-			group = checkNeighbour(stoneX, stoneY-1, col, group,m);
-			
+			//group = checkNeighbour(stoneX, stoneY-1, col, group,m);
+			group = m->checkNeighbour(stoneX, stoneY-1, col, group);
 			// West
-			group = checkNeighbour(stoneX-1, stoneY, col, group,m);
-			
+			//group = checkNeighbour(stoneX-1, stoneY, col, group,m);
+			group = m->checkNeighbour(stoneX-1, stoneY, col, group);
 			// South
-			group = checkNeighbour(stoneX, stoneY+1, col, group,m);
-			
+			//group = checkNeighbour(stoneX, stoneY+1, col, group,m);
+			group = m->checkNeighbour(stoneX, stoneY+1, col, group);
 			// East
-			group = checkNeighbour(stoneX+1, stoneY, col, group,m);
+			//group = checkNeighbour(stoneX+1, stoneY, col, group,m);
+			group = m->checkNeighbour(stoneX+1, stoneY, col, group);
 		}
 		mark ++;
 	}
@@ -963,7 +965,7 @@ Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
 	return group;
 }
 
-
+//TODO wipe this out : replaced in Matrix
 Group* Tree::checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m) 
 {
 /*
@@ -1080,7 +1082,7 @@ int Tree::hasMatrixStone(int x, int y)
 	return -1;
 }
 
-
+//TODO wipe this function out : replaced in Matrix code
 int Tree::countLiberties(Group *group, Matrix *m) 
 {
 //	CHECK_PTR(group);
@@ -1100,20 +1102,22 @@ int Tree::countLiberties(Group *group, Matrix *m)
 			y = tmp->y;
 		
 		// North
-		checkNeighbourLiberty(x, y-1, libCounted, liberties,m);
-		
+//		checkNeighbourLiberty(x, y-1, libCounted, liberties,m);
+		m->checkNeighbourLiberty(x, y-1, libCounted, liberties);
 		// West
-		checkNeighbourLiberty(x-1, y, libCounted, liberties,m);
-		
+		//checkNeighbourLiberty(x-1, y, libCounted, liberties,m);
+		m->checkNeighbourLiberty(x-1, y, libCounted, liberties);
 		// South
-		checkNeighbourLiberty(x, y+1, libCounted, liberties,m);
-		
+		//checkNeighbourLiberty(x, y+1, libCounted, liberties,m);
+		m->checkNeighbourLiberty(x, y+1, libCounted, liberties);
 		// East
-		checkNeighbourLiberty(x+1, y, libCounted, liberties,m);
+		//checkNeighbourLiberty(x+1, y, libCounted, liberties,m);
+		m->checkNeighbourLiberty(x+1, y, libCounted, liberties);
 	}
 	return liberties;
 }
 
+//TODO wipe this function out : replaced in Matrix code
 void Tree::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties, Matrix *m)
 {
 	if (!x || !y)
@@ -1159,7 +1163,7 @@ bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 	
 	Q_CHECK_PTR(m);
 	
-	// m->debug();
+//	m->debug();
 	
 //	Stone *stone;
 	bool modified = false;

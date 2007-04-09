@@ -105,6 +105,7 @@ public slots:
 	// Board
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
 	virtual void slotPassPressed();
+	virtual void slotScoreToggled(bool);
 /*	void slot_stoneComputer(enum StoneColor, int, int);    
 	void slot_PassComputer(StoneColor c) ;                 
 	void slot_UndoComputer(StoneColor c) ;                 
@@ -165,9 +166,14 @@ protected:
 	virtual void localMoveRequest(StoneColor c, int x, int y);
 	virtual void sendMoveToInterface(StoneColor c,int x, int y) =0;
 	virtual bool doMove(StoneColor c, int x, int y);
+	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
 	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
 	virtual void sendPassToInterface(StoneColor c)=0;
 	virtual void localPassRequest();
+	virtual void enterScoreMode() ;
+	virtual void leaveScoreMode() = 0;
+
+	virtual void markDeadStone(int x, int y);
 };
 
 
@@ -184,6 +190,8 @@ public:
 private:
 	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
 	void sendPassToInterface(StoneColor /*c*/) {}
+//	void enterScoreMode();
+	void leaveScoreMode() ;
 };
 
 class qGoBoardComputerInterface : public qGoBoard 
@@ -203,7 +211,9 @@ private:
 	void localMoveRequest(StoneColor c, int x, int y);
 	void localPassRequest();
 	void startGame();
-	
+//	void enterScoreMode() {}
+	void leaveScoreMode() {}
+
 	QGtp *gtp;
 };
 

@@ -3759,7 +3759,10 @@ Pass your turn.</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="scoreButton" >
+                  <widget class="QPushButton" name="scoreButton_2" >
+                   <property name="enabled" >
+                    <bool>false</bool>
+                   </property>
                    <property name="maximumSize" >
                     <size>
                      <width>16777215</width>
@@ -4583,13 +4586,19 @@ Set the color of next move. If left untouched, default color is chosen.</string>
                        <string/>
                       </property>
                       <property name="icon" >
-                       <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_color.png</iconset>
+                       <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_black.png</iconset>
                       </property>
                       <property name="iconSize" >
                        <size>
                         <width>22</width>
                         <height>22</height>
                        </size>
+                      </property>
+                      <property name="checkable" >
+                       <bool>false</bool>
+                      </property>
+                      <property name="checked" >
+                       <bool>false</bool>
                       </property>
                       <property name="flat" >
                        <bool>true</bool>
@@ -5352,7 +5361,7 @@ Pass your turn.</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="scoreButton_2" >
+                  <widget class="QPushButton" name="scoreButton" >
                    <property name="maximumSize" >
                     <size>
                      <width>16777215</width>
@@ -5470,7 +5479,6 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    <addaction name="actionFileSave" />
    <addaction name="actionFileSaveAs" />
    <addaction name="separator" />
-   <addaction name="actionExport" />
    <addaction name="actionImport" />
    <addaction name="actionDuplicate" />
    <addaction name="separator" />
@@ -5507,6 +5515,9 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    <property name="text" >
     <string>fileSaveAs</string>
    </property>
+   <property name="toolTip" >
+    <string>Save\n File</string>
+   </property>
   </action>
   <action name="actionQuit" >
    <property name="icon" >
@@ -5517,11 +5528,20 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    </property>
   </action>
   <action name="actionExport" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
    <property name="icon" >
     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/export2.png</iconset>
    </property>
    <property name="text" >
     <string>export</string>
+   </property>
+   <property name="whatsThis" >
+    <string>export  export to several formats</string>
    </property>
   </action>
   <action name="actionImport" >
@@ -5541,6 +5561,9 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    </property>
   </action>
   <action name="actionSound" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
    <property name="icon" >
     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/sound_on.png</iconset>
    </property>
@@ -5565,6 +5588,9 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    </property>
   </action>
   <action name="actionCoordinates" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
    <property name="icon" >
     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/coord2.png</iconset>
    </property>
@@ -5573,11 +5599,39 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    </property>
   </action>
   <action name="actionPlay" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
    <property name="icon" >
     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/player_play.png</iconset>
    </property>
    <property name="text" >
     <string>play</string>
+   </property>
+  </action>
+  <action name="fileExportASCII" >
+   <property name="text" >
+    <string>Export &amp;ASCII</string>
+   </property>
+   <property name="whatsThis" >
+    <string>Export ASCII
+
+Export current board to ASCII.</string>
+   </property>
+  </action>
+  <action name="fileExportSgfClipB" >
+   <property name="text" >
+    <string>Export SGF &amp;to clipboard</string>
+   </property>
+  </action>
+  <action name="fileExportPic" >
+   <property name="text" >
+    <string>Export &amp;Image</string>
+   </property>
+  </action>
+  <action name="fileExportPicClipB" >
+   <property name="text" >
+    <string>E&amp;xport Image to clipboard</string>
    </property>
   </action>
  </widget>
