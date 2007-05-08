@@ -26,10 +26,7 @@
 #include "interfacehandler.h"
 #include "tree.h"
 #include "qgoboard.h"
-//#include "define.h"
-//#include "move.h"
 
-//#include <QtGui>
 
 class BoardHandler;
 class qGoBoard;
@@ -44,6 +41,7 @@ public:
 	~BoardWindow();
 
 	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad = false); //TODO get rid of fastload
+	bool doSave(QString fileName, bool force);
 
 	int getBoardSize() 			{return boardSize;}
 	Board *getBoard() 			{return ui.board;}
@@ -56,6 +54,8 @@ public:
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
 	bool getMyColorIsWhite()		{return myColorIsWhite;}
 	GameData *getGameData() 		{return gameData;}
+	int getId()				{return gameData->gameNumber;}
+	MarkType getEditMark()			{return editMark;}
 
 	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
 
@@ -67,6 +67,8 @@ protected:
 public slots:
 	void slotEditButtonPressed( int id );
 	void slotViewCoords(bool toggle);
+	bool slotFileSave();
+	bool slotFileSaveAs();
 
 private:
 	void init();
@@ -85,6 +87,9 @@ private:
 	bool localStoneSound ;
 	
 	QButtonGroup *editButtons;
+	MarkType editMark;
+
+	QString getCandidateFileName();
 };
 
 #endif

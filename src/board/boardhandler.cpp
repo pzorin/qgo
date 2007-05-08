@@ -28,10 +28,6 @@ BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int size)
 	board = bw->getBoard();
 	Q_CHECK_PTR(board);
 	
-	// Create a SGFParser instance
-	//sgfParser = new SGFParser(this);
-	//CHECK_PTR(sgfParser);
-	
 	// Create a variation tree
 	if(t)
 		tree = t;
@@ -41,8 +37,7 @@ BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int size)
 	
 //	currentMove = 0;
 	lastValidMove = NULL;
-//	gameMode = modeNormal;
-//	markType = markNone;
+
 	capturesBlack = capturesWhite = 0;
 	markedDead = false;
 	
@@ -66,24 +61,6 @@ BoardHandler::~BoardHandler()
 
 }
 
-/*
- bool BoardHandler::loadSGF(const QString &fileName, const QString SGFLoaded, bool  fastLoad )
-{
-
-	SGFParser *sgfParser = new SGFParser(tree);
-	
-	// Load the sgf file
-//	QString SGFloaded = sgfParser->loadFile(fileName);
-
-	if (!sgfParser->doParse(SGFLoaded))
-		return false ;	
-	
-	board->clearData();
-	tree->setToFirstMove();	
-
-	return true;
-}
-*/
 
 void BoardHandler::clearData()
 {
@@ -100,26 +77,6 @@ void BoardHandler::clearData()
 //		nodeResults->clear();
 }
 
-
-//bool BoardHandler::nextMove(bool /*autoplay*/)
-/*
-{
-//	if (gameMode == modeScore)
-//		return false;
-	
-	Q_CHECK_PTR(tree);
-	
-	Move *m = tree->nextMove();
-	if (m == NULL)
-		return false;
-	
-//	if (autoplay)
-//		setting->qgo->playAutoPlayClick();
-	
-	updateMove(m);
-	return true;
-}
-*/
 
 void BoardHandler::slotNavForward()
 {
@@ -533,7 +490,7 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //	if (m->getGameMode() == modeNormal)
 		boardwindow->getInterfaceHandler()->setMoveData(
 			m->getMoveNumber(), 
-			(m->getColor() == stoneWhite), 
+			(m->getColor() != stoneBlack), 
 			m->getNumBrothers(), 
 			m->getNumSons(),
 			m->hasParent(), 
@@ -627,7 +584,7 @@ bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 	
 	tree->updateAll(m);	
 	
-	m->debug();
+//	m->debug();
 
 //	Stone *stone;
 	bool modified = false;//, fake = false;
@@ -724,7 +681,7 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 	case modeNormal :
 	case modeTeach :
 	case modeReview :
-		if (boardwindow->getGamePhase() == phaseScore)
+		if (boardwindow->getGamePhase() == phaseScore ||boardwindow->getGamePhase() == phaseEdit )
 			cur = cursorIdle;
 		else
 			cur = (currentMoveColor == stoneBlack ? cursorGhostWhite : cursorGhostBlack);
@@ -827,7 +784,7 @@ void BoardHandler::countScore()
 	Matrix *m = new Matrix(*(tree->getCurrent()->getMatrix()));
 	Q_CHECK_PTR(m);
 
-	m->debug();
+//	m->debug();
 	// Do some cleanups, we only need stones
 	//m->absMatrix();
 	m->clearAllMarks();

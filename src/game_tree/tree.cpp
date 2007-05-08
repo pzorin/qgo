@@ -635,7 +635,7 @@ void Tree::editMove(StoneColor c, int x, int y)
 }
 
 /*
- * This function updates the matrix and the informations in a given move that was just added with addMove
+ * This function updates the matrix with a stones at coords x,y and color c
  * Since the addMove reproduces the matrix of the previous move, it is updated here
  * It returns the same result as checkPosition (-1 for invalid move, else the number of stones taken)
  */
@@ -697,7 +697,7 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 		current->setX(-1);
 		current->setY(-1);
 	}
-	else
+	else if (new_node)
 		editMove(c, x, y);
 
 	bool koStone;
@@ -1033,7 +1033,7 @@ Group* Tree::checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix
 
 bool Tree::removeStone(int x, int y, bool hide)
 {
-	if (!hasMatrixStone(x, y))
+ 	if (!hasMatrixStone(x, y))
 		return false;
 	
 	if (!hide)
@@ -1201,125 +1201,6 @@ bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 
 				checkPosition(s,m);
 			}
-/*
- * Old code sent to Board::updateAll()
- *
-			switch (data)
-			{
-			case stoneBlack:
-				if ((stone = stones->find(Matrix::coordsToKey(x, y))) == NULL)
-				{
-					//addStone(boardHandler->board->addStoneSprite(stoneBlack, x, y, fake), true, false);
-					
-					modified = true;
-					break;
-				}
-				else if (!stone->visible())
-				{
-					stone->show();
-					modified = true;
-				}
-				
-				if (stone->getColor() == stoneWhite)
-				{
-					stone->setColor(stoneBlack);
-					modified = true;
-				}
-				
-				break;
-				
-			case stoneWhite:
-				if ((stone = stones->find(Matrix::coordsToKey(x, y))) == NULL)
-				{
-					addStone(boardHandler->board->addStoneSprite(stoneWhite, x, y, fake), true, false);
-					modified = true;
-					break;
-				}
-				else if (!stone->visible())
-				{
-					stone->show();
-					modified = true;
-				}
-				
-				if (stone->getColor() == stoneBlack)
-				{
-					stone->setColor(stoneWhite);
-					modified = true;
-				}
-				
-				break;
-				
-			case stoneNone:
-			case stoneErase:
-				if ((stone = stones->find(Matrix::coordsToKey(x, y))) != NULL &&
-					stone->visible())
-				{
-					stone->hide();
-					modified = true;
-				}
-				break;
-				
-			default:
-				qWarning("Bad matrix data <%d> at %d/%d in StoneHandler::updateAll(Matrix *m) !",
-					data, x, y);
-			}
-
-			// Skip mark drawing when reading sgf
-			if (!toDraw)
-				continue;
-			
-			// Extract the mark data from the matrix
-			data = abs(m->at(x-1, y-1) / 10);
-			switch (data)
-			{
-			case markSquare:
-				modified = true;
-				boardHandler->board->setMark(x, y, markSquare, false);
-				break;
-				
-			case markCircle:
-				modified = true;
-				boardHandler->board->setMark(x, y, markCircle, false);
-				break;
-				
-			case markTriangle:
-				modified = true;
-				boardHandler->board->setMark(x, y, markTriangle, false);
-				break;
-				
-			case markCross:
-				modified = true;
-				boardHandler->board->setMark(x, y, markCross, false);
-				break;
-				
-			case markText:
-				modified = true;
-				boardHandler->board->setMark(x, y, markText, false, m->getMarkText(x, y));
-				break;
-				
-			case markNumber:
-				modified = true;
-				boardHandler->board->setMark(x, y, markNumber, false, m->getMarkText(x, y));
-				break;
-				
-			case markTerrBlack:
-				modified = true;
-				boardHandler->board->setMark(x, y, markTerrBlack, false);
-				break;
-				
-			case markTerrWhite:
-				modified = true;
-				boardHandler->board->setMark(x, y, markTerrWhite, false);
-				break;
-				
-			case markNone:
-				if (boardHandler->board->hasMark(x, y))
-				{
-					modified = true;
-					boardHandler->board->removeMark(x, y, false);
-				}
-			}
-*/
 		}
 	}
 

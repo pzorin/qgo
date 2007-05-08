@@ -361,10 +361,10 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					{
 					
 						if (hh > stripe) g1 = (int)g1max;
-						else g1 = int(g1min + (g1max-g1min)*(hh/stripe));
+						else g1 = int(g1min + (g1max-g1min)*sqrt(hh/stripe));
 					
 						if (hh > stripe) g2 = (int)g2max;
-						else g2 = int(g2min + (g2max-g2min)*(hh/stripe));
+						else g2 = int(g2min + (g2max-g2min)*sqrt(hh/stripe));
 					
 						g=(g1 > g2 ? g1 : g2);
 					
@@ -450,6 +450,8 @@ QPixmap* ImageHandler::getTablePixmap(QString filename)
 
 void ImageHandler::init(int size)
 {
+	QSettings settings;
+
 	// Scale the images
 	size = size * 9 / 10;
 	
@@ -517,6 +519,7 @@ void ImageHandler::init(int size)
 
 void ImageHandler::rescale(int size)//, bool smallerStones)
 {
+	QSettings settings;
 
 	Q_CHECK_PTR(stonePixmaps);
 	Q_CHECK_PTR(ghostPixmaps);

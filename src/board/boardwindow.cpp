@@ -64,6 +64,8 @@ void BoardWindow::init()
 	editButtons->addButton(ui.labelLetterButton, 5);
 	editButtons->addButton(ui.labelNumberButton, 6);
 	editButtons->addButton(ui.colorButton, 7);
+	editButtons->setExclusive(FALSE);
+
 
 	QMenu *menu = new QMenu();
 	menu->insertAction(0,ui.fileExportASCII);
@@ -110,7 +112,9 @@ void BoardWindow::init()
 	boardHandler = new BoardHandler(this, tree, boardSize);
 
 
-	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), this, SLOT(slotViewCoords(bool)));
+	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
+	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
+	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
 
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
@@ -192,37 +196,57 @@ bool BoardWindow::loadSGF(const QString fileName, const QString /*SGFLoaded*/, b
  */
 void BoardWindow::slotEditButtonPressed( int m )
 {
-	MarkType t;
 	QString txt;
 	
+	//we have to emulate exclusive buttons, while raise the button if it was down
+	if (m >= 0 && m < 7 )
+		if ( m== editButtons->checkedId())
+		{
+//			editButtons->button (m)->setChecked( FALSE );
+			gamePhase = phaseOngoing;
+			boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneBlack : stoneWhite);
+			editButtons->button (7)->setDisabled( FALSE );
+		}
+		else
+		{
+			gamePhase = phaseEdit;
+			boardHandler->updateCursor( );
+			editButtons->button (7)->setDisabled( TRUE );
+
+			for (int i= 0;i<7;i++)
+				if (i!=m)
+					editButtons->button (i)->setChecked( FALSE );
+
+		}
+
 	switch(m)
 	{
 	case 0:
-		t = markNone;
+		editMark = markNone;
 		break;
 		
 	case 1:
-		t = markSquare;
+		editMark = markSquare;
 		break;
 		
 	case 2:
-		t = markCircle;
+		editMark = markCircle;
 		break;
 		
 	case 3:
-		t = markTriangle;
+		editMark = markTriangle;
 		break;
 		
 	case 4:
-		t = markCross;
+		editMark = markCross;
 		break;
 		
 	case 5:
-		t = markText;
+		editMark = markText;
 		break;
 		
 	case 6:
-		t = markNumber;
+		editMark = markNumber;
 		break;
 
 	case 7:
@@ -236,6 +260,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
 //#else
 			ui.colorButton->setIcon(QIcon(":/new/prefix1/ressources/pics/stone_white.png"));
+			boardHandler->updateCursor(stoneBlack);
 //#endif
 		}
 		else
@@ -245,6 +270,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
 //#else
 			ui.colorButton->setIcon(QIcon(":/new/prefix1/ressources/pics/stone_black.png"));
+			boardHandler->updateCursor(stoneWhite);
 //#endif
 		}
 
@@ -275,3 +301,105 @@ void BoardWindow::slotViewCoords(bool toggle)
 //	statusBar()->message(tr("Ready."));
 }
 
+/* 
+ * Saves the game tree under file 'filename'
+ */
+bool BoardWindow::doSave(QString fileName, bool force)
+{
+	if (!force)
+  	{
+     		if  (fileName == NULL ||
+			fileName.isNull() ||
+          		fileName.isEmpty() ||
+          		QDir(fileName).exists())
+            	{
+              		QString base = getCandidateFileName();
+              		if (fileName == NULL || fileName.isNull() || fileName.isEmpty())
+                		fileName = base;
+              		else
+                		fileName.append(base);
+
+		}
+		fileName = QFileDialog::getSaveFileName(this,tr("Save File"), fileName, tr("SGF Files (*.sgf);;All Files (*)") );
+	}
+	
+	if (fileName.isEmpty())
+		return false;
+	
+//	if (getFileExtension(fileName, false).isEmpty())
+
+	if (fileName.right(4).toLower() != ".sgf")
+		fileName.append(".sgf");
+	
+	// Confirm overwriting file.
+	if (!force && QFile(fileName).exists())
+		if (QMessageBox::information(this, PACKAGE,
+			tr("This file already exists. Do you want to overwrite it?"),
+			tr("Yes"), tr("No"), 0, 0, 1) == 1)
+			return false;
+		
+	gameData->fileName = fileName;
+		
+//	if (setting->readBoolEntry("REM_DIR"))
+//		rememberLastDir(fileName);
+
+	SGFParser *p = new SGFParser( tree); //FIXME : we may need to have a class SGFParser
+	if (!p->doWrite(fileName, tree, gameData))
+	{
+		QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
+		return false;
+	}
+		
+//	statusBar()->message(fileName + " " + tr("saved."));
+//	board->setModified(false);
+	return true;
+}
+
+/*
+ * Generate a candidate for the filename for this game
+ */
+QString BoardWindow::getCandidateFileName()
+{
+	
+	QString base = QDate::currentDate().toString("yyyy-MM-dd") + "-" + gameData->playerWhite + "-" + gameData->playerBlack    ;
+	QString result = base ;
+	QString dir= "" ;
+
+//	if (setting->readBoolEntry("REM_DIR"))
+//			dir = setting->readEntry("LAST_DIR");
+	int i = 1;
+	while (QFile(dir + result+".sgf").exists())
+	{
+		//number = Q.number(i++);
+		result = base + "-"+ QString::number(i++);
+		//fileName = fileName + ".sgf";
+	} 
+	return dir + result + ".sgf";
+}
+
+/*
+ * The 'save' icon has been pressed
+ */
+bool BoardWindow::slotFileSave()
+{
+	QString fileName= gameData->fileName;
+	if (fileName.isEmpty())
+	{
+//		if (setting->readBoolEntry("REM_DIR"))
+//			fileName = setting->readEntry("LAST_DIR");
+//		else
+//			fileName = QString::null;
+		return doSave(fileName, FALSE);
+	}
+	else
+		return doSave(fileName, TRUE);
+}
+
+
+/*
+ * The 'save as' icon has been pressed
+ */
+bool BoardWindow::slotFileSaveAs()
+{
+	return doSave(0, FALSE);
+}

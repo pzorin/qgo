@@ -272,6 +272,8 @@ QString SGFParser::loadFile(const QString &fileName)
 
 bool SGFParser::initStream(QTextStream *stream)
 {
+	QSettings settings;
+
 	QTextCodec *codec = NULL;
 
 	// TODO : make sure we are getting the proper codec value from settings
@@ -1472,16 +1474,19 @@ bool SGFParser::exportSGFtoClipB(QString *str, Tree *tree)
 	stream = NULL;
 	return res;
 }
-
-bool SGFParser::doWrite(const QString &fileName, Tree *tree)
+*/
+/*
+ * Opens a file for saving SGF
+ */
+bool SGFParser::doWrite(const QString &fileName, Tree *tree, GameData *gameData)
 {
-	CHECK_PTR(tree);
+	Q_CHECK_PTR(tree);
 	
 	QFile file(fileName);
 	
-	if (!file.open(IO_WriteOnly))
+	if (!file.open(QIODevice::WriteOnly))
 	{
-		QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
+		QMessageBox::warning(0, PACKAGE, QObject::tr("Could not open file:") + " " + fileName);
 		return false;
 	}
 	
@@ -1489,7 +1494,7 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree)
 		delete stream;
 	stream = new QTextStream(&file);
 	
-	bool res = writeStream(tree);
+	bool res = writeStream(tree, gameData );
 	
 	file.flush();
 	file.close();
@@ -1498,12 +1503,16 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree)
 	return res;
 }
 
-bool SGFParser::writeStream(Tree *tree)
+
+/*
+ * Writes the SGF code for whot 'tree' into the 'stream'
+ */
+bool SGFParser::writeStream(Tree *tree, GameData *gameData)
 {
-	CHECK_PTR(stream);
+	Q_CHECK_PTR(stream);
 	if (!initStream(stream))
 	{
-		QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
+		QMessageBox::critical(0, PACKAGE, QObject::tr("Invalid text encoding given. Please check preferences!"));
 		delete stream;
 		return false;
 	}
@@ -1512,7 +1521,7 @@ bool SGFParser::writeStream(Tree *tree)
 	if (root == NULL)
 		return false;
 	
-	GameData *gameData = boardHandler->getGameData();
+//	GameData *gameData = boardHandler->getGameData();
 	
 	// Traverse the tree recursive in pre-order
 	isRoot = true;
@@ -1521,6 +1530,10 @@ bool SGFParser::writeStream(Tree *tree)
 	return true;
 }
 
+
+/*
+ * Writes the SGF header data from gameData into the 'stream'
+ */
 void SGFParser::writeGameHeader(GameData *gameData)
 {
 	// Assemble data for root node
@@ -1573,6 +1586,10 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	*stream << endl;
 }
 
+
+/*
+ * traverses the tree from move 't', and stores SGF code into 'stream'
+ */
 void SGFParser::traverse(Move *t, GameData *gameData)
 {
 	*stream << "(";
@@ -1615,6 +1632,7 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 	*stream << endl << ")";
 }
 
+/*
 bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool isFilename)
 {
 	QTextStream *txt = NULL;

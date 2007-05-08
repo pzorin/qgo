@@ -5516,7 +5516,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
     <string>fileSaveAs</string>
    </property>
    <property name="toolTip" >
-    <string>Save\n File</string>
+    <string>Save file as ...</string>
    </property>
   </action>
   <action name="actionQuit" >

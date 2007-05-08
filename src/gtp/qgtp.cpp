@@ -19,6 +19,7 @@ email                :
 //#include <unistd.h>
 #include <stdlib.h>
 //#include <qprocess.h>
+#include "defines.h"
 #include "qgtp.h"
 
 #ifdef Q_WS_WIN
@@ -59,20 +60,14 @@ QString QGtp::getLastMessage()
 
 int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, int level)
 {
-	_cpt = 1;
+	_cpt = 1000;
 	
 	programProcess = new QProcess();
 	QStringList arguments;
 
-//	programProcess->clearArguments();
-//	programProcess->addArgument(filename);
-//	programProcess->addArgument("--mode");
-//	programProcess->addArgument("gtp");
-//	programProcess->addArgument("--quiet");  
-
 	arguments << "--mode" << "gtp" << "--quiet" ;
 	
-	connect(programProcess, SIGNAL(readyReadStandardOutput()),
+	connect(programProcess, SIGNAL(readyRead()),
 		this, SLOT(slot_readFromStdout()) );
 	connect(programProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
 		this, SLOT(slot_processExited()) );
@@ -148,18 +143,49 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 // Read from stdout
 void QGtp::slot_readFromStdout()
 {
-//	QString buff;
-	
-//	while (programProcess->canReadLineStdout())
-//	{
-		QString buff(programProcess->readAll());
-		buff=buff.trimmed();
-		if (buff.length() != 0)
-		{
-			_response = buff;
-			qDebug("** QGtp::slot_readFromStdout():  %s" , _response.toLatin1().constData());
-		}
-//	}
+
+	int number;
+	int pos;
+	responseReceived = TRUE;
+	QString answer="";
+
+	QString s;
+	do 
+	{
+		programProcess->waitForReadyRead ( 10 ) ; 
+		s = programProcess->readAllStandardOutput();
+		answer.append(s); 
+	} while (!s.isEmpty());
+		
+
+	answer=answer.trimmed();
+	if (answer.length() != 0)
+		_response = answer;
+
+	buff = _response[0];
+
+	// do we have any answer after the command number ?
+	pos = _response.indexOf(" ");
+	number = _response.mid(1,pos).toInt();
+
+	if (pos < 1)
+		_response = "";
+	else
+		_response = _response.right(_response.length() - pos - 1);
+
+
+	qDebug("** QGtp::slot_read():  \'%s\'" , _response.toLatin1().constData());
+
+
+	switch (number)
+	{
+		case GENMOVE:
+			emit signal_computerPlayed( (buff != "?") , _response );
+			responseReceived = FALSE;
+		default:
+			;
+	}
+
 }
 
 // exit
@@ -180,11 +206,11 @@ void QGtp::slot_processExited()
 int
 QGtp::waitResponse()
 {
-	QString buff = _response;
+	QString buf = _response;
 	//	QTextStream * inFile;
 	//	char symbole;
-	int number;
-	int pos;
+	//int number;
+	//int pos;
 	
 	do //FIXME : we don't nned this, since the process sends the readyRead signal
 	{
@@ -195,7 +221,7 @@ QGtp::waitResponse()
 		usleep(100000);
 #endif
 */
-	} while (_response.length() == 0 || _response == buff);
+	} while (!responseReceived/*_response.length() == 0 || _response == buf*/);
 	
 	/*
 	inFile=new QTextStream(programProcess->readStdout(),IO_ReadOnly);
@@ -208,7 +234,7 @@ QGtp::waitResponse()
 	*/
 	
 	//	_response=buff.stripWhiteSpace();
-	qDebug("** QGtp::waitResponse():  %s" , _response.toLatin1().constData());
+	
 	/*	
 	buff=programProcess->readLineStdout();
 	while(!buff.isEmpty())
@@ -217,12 +243,15 @@ QGtp::waitResponse()
 	buff=programProcess->readLineStdout();
 	}
 	*/
-
+	/*
 	buff = _response[0];
 	if ((pos = _response.indexOf(" ")) < 1)
 		pos = 1;
 	number = _response.mid(1,pos).toInt();
 	_response = _response.right(_response.length() - pos - 1);
+	*/
+	qDebug("** QGtp::waitResponse():  \'%s\'" , _response.toLatin1().constData());
+	responseReceived = FALSE;
 
 	if (buff == "?") //symbole=='?')
 	{
@@ -261,7 +290,7 @@ int
 QGtp::protocolVersion ()
 {
 	qDebug("%d protocol_version",_cpt);
-	sprintf (outFile, "%d protocol_version\n", _cpt);
+	sprintf (outFile, "%d protocol_version\n", /*_cpt*/ PROTOCOL);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -328,7 +357,7 @@ QGtp::version ()
 int
 QGtp::setBoardsize (int size)
 {
-	sprintf (outFile, "%d boardsize %d\n", _cpt, size);
+	sprintf (outFile, "%d boardsize %d\n", BOARDSIZE /*_cpt*/, size);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -377,7 +406,7 @@ QGtp::clearBoard ()
 int
 QGtp::setKomi(float f)
 {
-	sprintf (outFile, "%d komi %.2f\n", _cpt,f);
+	sprintf (outFile, "%d komi %.2f\n", KOMI /*_cpt*/,f);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -407,7 +436,7 @@ int
 QGtp::playblack (char c , int i)
 {
 	//  sprintf (outFile, "%d play black %c%d\n", _cpt,c,i);
-	sprintf (outFile, "%d play black %c%d\n", _cpt,c,i);
+	sprintf (outFile, "%d play black %c%d\n", PLAY_BLACK/*_cpt*/,c,i);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -421,7 +450,7 @@ int
 QGtp::playblackPass ()
 {
 	//  sprintf (outFile, "%d play black pass\n", _cpt);
-	sprintf (outFile, "%d play black pass\n", _cpt);
+	sprintf (outFile, "%d play black pass\n", PLAY_BLACK /*_cpt*/);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -435,7 +464,7 @@ int
 QGtp::playwhite (char c, int i)
 {
 	//  sprintf (outFile, "%d play white %c%d\n", _cpt,c,i);
-	sprintf (outFile, "%d play white %c%d\n", _cpt,c,i);
+	sprintf (outFile, "%d play white %c%d\n", PLAY_WHITE /*_cpt*/,c,i);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -449,7 +478,7 @@ int
 QGtp::playwhitePass ()
 {
 	//  sprintf (outFile, "%d play white pass\n", _cpt);
-	sprintf (outFile, "%d play white pass\n", _cpt);
+	sprintf (outFile, "%d play white pass\n",PLAY_WHITE /*_cpt*/);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -479,6 +508,7 @@ QGtp::fixedHandicap (int handicap)
 int QGtp::loadsgf (QString filename,int /*movNumber*/,char /*c*/,int /*i*/)
 {
 	//sprintf (outFile, "%d loadsgf %s %d %c%d\n", _cpt,(const char *) filename,movNumber,c,i);
+	qDebug("**QGtp::loadsgf : loading file %s", filename.toLatin1().constData());
 	sprintf (outFile, "%d loadsgf %s\n", _cpt,filename.toLatin1().constData());
 	fflush(outFile);
 	return waitResponse();
@@ -800,9 +830,10 @@ QGtp::combinationAttack (QString color)
 int
 QGtp::genmoveBlack ()
 {
-	sprintf (outFile, "%d genmove black\n", _cpt);
+	sprintf (outFile, "%d genmove black\n", GENMOVE);
 	fflush(outFile);
-	return waitResponse();
+//	return waitResponse();
+	return OK;
 }
 
 /* Function:  Generate and play the supposedly best white move.
@@ -813,9 +844,10 @@ QGtp::genmoveBlack ()
 int
 QGtp::genmoveWhite ()
 {
-	sprintf (outFile, "%d genmove white\n", _cpt);
+	sprintf (outFile, "%d genmove white\n", GENMOVE);
 	fflush(outFile);
-	return waitResponse();
+//	return waitResponse();
+	return OK;
 }
 
 /* Function:  Generate the supposedly best move for either color.

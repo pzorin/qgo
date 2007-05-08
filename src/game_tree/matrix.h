@@ -21,6 +21,7 @@ public:
 	void eraseStone(int x, int y);
 	StoneColor getStoneAt(int x, int y);
 	MarkType getMarkAt(int x, int y);
+	QString getFirstTextAvailable(MarkType t);
 
 	void insertMark(int x, int y, MarkType t);
 	void removeMark(int x, int y);
@@ -53,6 +54,9 @@ public:
 	static const QString coordsToString(int x, int y)
 	{ return (QString(QChar(static_cast<const char>('a' + x))) +
 	QString(QChar(static_cast<const char>('a' + y)))); }
+
+	
+
 #ifndef NO_DEBUG
 	void debug() const;
 #endif

@@ -36,7 +36,12 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
  */
 bool qGoBoardComputerInterface::init()
 {
+	QSettings settings;
+
 	gtp = new QGtp() ;
+
+	connect (gtp, SIGNAL(signal_computerPlayed(bool, const QString&)), SLOT(slot_playComputer(bool, const QString&)));
+
 	if (gtp->openGtpSession(settings.value("COMPUTER_PATH").toString(),
 				gameData->size,
 				gameData->komi,
@@ -57,7 +62,25 @@ bool qGoBoardComputerInterface::init()
 
 
 	if (!(gameData->fileName.isNull() || gameData->fileName.isEmpty()))
-			gtp->loadsgf(gameData->fileName);
+	{
+//		QTemporaryFile tempFile("GNUgo_file") ;
+//		tempFile.createLocalFile(gameData->fileName);//= QTemporaryFile::createLocalFile(gameData->fileName);
+//		QFileInfo fi(tempFile);
+//		gtp->loadsgf(fi.absoluteFilePath());
+		if (gtp->loadsgf(gameData->fileName))
+		{
+			// if gnugo fails
+	//		QString mesg = QString(QObject::tr("Error opening program: %1\n")).arg(gtp->getLastMessage());
+			QMessageBox msg(QObject::tr("Error"), //mesg,
+				QString(QObject::tr("Error GNUgo loading file %1 : %2")).arg(gameData->fileName).arg(gtp->getLastMessage()),
+				QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
+	//		msg.setActiveWindow();
+			msg.raise();
+			msg.exec();
+	
+			return FALSE ;
+		}	
+	}
 	//FIXME : GNU go will not want whitespaces in the name. Either feed it with the moves, or get through a temporary file.
 	
 //	prepareComputerBoard();  
@@ -114,10 +137,11 @@ void qGoBoardComputerInterface::localPassRequest()
  */
 void qGoBoardComputerInterface::localMoveRequest(StoneColor c, int x, int y)
 {
-	if (doMove(c,x,y))
-		// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
-		sendMoveToInterface(c,x,y);
-
+	if (!doMove(c,x,y))
+		return;
+	
+	sendMoveToInterface(c,x,y);
+	// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
 	playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
 }
 
@@ -170,6 +194,9 @@ void qGoBoardComputerInterface::sendMoveToInterface(StoneColor c,int x, int y)
 	}
 }
 
+/*
+ * This asks the computer to make a move
+ */
 void qGoBoardComputerInterface::playComputer(StoneColor c)
 // was void qGoBoard::playComputer(StoneColor c) in qGo1
 {
@@ -201,31 +228,37 @@ void qGoBoardComputerInterface::playComputer(StoneColor c)
 		; 	
 	
 	}
+}
 
-	QString computer_answer = gtp->getLastMessage();
 
-   /* Normal procedure would be
-   GameInfo *gi
-
-   gi ....
-   emit signal || parse move(0,qi)
-   */
-//	QString mv_nr;
-//	mv_nr.setNum(mv_counter+1);
+/*
+ * This slot is triggeres by the signal emitted by 'gtp' when getting a move
+ */
+void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &computer_answer)
+{
+	if (!ok)
+	{
+		QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to have the program play its stone\n") + gtp->getLastMessage());
+		return;
+	}
+//	qDebug("Computer interface - computer answer = %s",  computer_answer.toLatin1().constData());
 
 //	win->getBoard()->unsetCursor();
 //	get_win()->getInterfaceHandler()->passButton->setEnabled(true);
 //	get_win()->getInterfaceHandler()->undoButton->setEnabled(true);
+	bool b = getBlackTurn();
 
 	if (computer_answer == "resign")
    	{
-		boardwindow->getInterfaceHandler()->displayComment((c == stoneWhite ? "White resigned" : "Black resigned"));
-		boardwindow->getGameData()->result = (c == stoneWhite ? "B+R" : "W+R");
+		boardwindow->getInterfaceHandler()->displayComment((!b ? "White resigned" : "Black resigned"));
+		boardwindow->getGameData()->result = (!b ? "B+R" : "W+R");
 //		slot_DoneComputer();
 		return ;
 	}	
 
-	set_move(c==stoneBlack ? stoneBlack : stoneWhite , computer_answer, "" /*mv_nr*/);
+	set_move(b ? stoneBlack : stoneWhite , computer_answer, "" /*mv_nr*/);
+
+//	qDebug ("computer move played");
 
 	//the computer just played. Are we after 2 passes moves ?
  

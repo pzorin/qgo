@@ -345,6 +345,9 @@ const QString Matrix::getMarkText(int x, int y)
 	return s;
 }
 
+/*
+ * returns a string representing the marks in the matrix, in SGF format
+ */
 const QString Matrix::saveMarks()
 {
 	Q_ASSERT(size > 0 && size <= 36);
@@ -419,6 +422,9 @@ const QString Matrix::saveMarks()
 	return sSQ + sCR + sTR + sMA + sLB + sTB + sTW;
 }
 
+/*
+ * returns a string representing the edited stones in the matrix, in SGF format
+ */
 const QString Matrix::saveEditedMoves(Matrix *parent)
 {
 	Q_ASSERT(size > 0 && size <= 36);
@@ -602,9 +608,6 @@ void Matrix::checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, i
  */
 Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group) 
 {
-//	if (!m)
-//		qDebug("Oops : null matrix in Tree::checkNeighbour");
-
 	// Are we into the board, and is the tentative stone present in the matrix ?
 	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (at(x - 1, y - 1) != color))
 		return group;
@@ -638,9 +641,6 @@ Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group)
  */
 int Matrix::countLiberties(Group *group) 
 {
-//	CHECK_PTR(group);
-//	CHECK_PTR(m); 
-  
 	int liberties = 0;
 	QList<int> libCounted;
 	
@@ -655,16 +655,12 @@ int Matrix::countLiberties(Group *group)
 			y = tmp->y;
 		
 		// North
-//		checkNeighbourLiberty(x, y-1, libCounted, liberties,m);
 		checkNeighbourLiberty(x, y-1, libCounted, liberties);
 		// West
-		//checkNeighbourLiberty(x-1, y, libCounted, liberties,m);
 		checkNeighbourLiberty(x-1, y, libCounted, liberties);
 		// South
-		//checkNeighbourLiberty(x, y+1, libCounted, liberties,m);
 		checkNeighbourLiberty(x, y+1, libCounted, liberties);
 		// East
-		//checkNeighbourLiberty(x+1, y, libCounted, liberties,m);
 		checkNeighbourLiberty(x+1, y, libCounted, liberties);
 	}
 	return liberties;
@@ -675,9 +671,6 @@ int Matrix::countLiberties(Group *group)
  */
 int Matrix::countScoredLiberties(Group *group)
 {
-//	CHECK_PTR(group);
-//	CHECK_PTR(m);
-	
 	int liberties = 0;
 	QList<int> libCounted;
 	
@@ -776,9 +769,6 @@ bool Matrix::checkNeighbourTerritory(const int &x, const int &y, StoneColor &col
  */
 Group* Matrix::assembleGroup(MatrixStone *stone)
 {
-//	if (stones->isEmpty())
-//		qFatal("StoneHandler::assembleGroup(Stone *stone): No stones on the board!");
-	
 	Group *group = new Group();
 	Q_CHECK_PTR(group);
 	
@@ -800,16 +790,12 @@ Group* Matrix::assembleGroup(MatrixStone *stone)
 			StoneColor col = stone->c;
 			
 			// North
-			//group = checkNeighbour(stoneX, stoneY-1, col, group,m);
 			group = checkNeighbour(stoneX, stoneY-1, col, group);
 			// West
-			//group = checkNeighbour(stoneX-1, stoneY, col, group,m);
 			group = checkNeighbour(stoneX-1, stoneY, col, group);
 			// South
-			//group = checkNeighbour(stoneX, stoneY+1, col, group,m);
 			group = checkNeighbour(stoneX, stoneY+1, col, group);
 			// East
-			//group = checkNeighbour(stoneX+1, stoneY, col, group,m);
 			group = checkNeighbour(stoneX+1, stoneY, col, group);
 		}
 		mark ++;
@@ -823,11 +809,8 @@ Group* Matrix::assembleGroup(MatrixStone *stone)
  */
 bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 {
-//	int bsize = m->getSize();
-
 	MatrixStone *tmp= new MatrixStone ;
-//	tmp->x = x;
-//	tmp->y = y;	
+
 	tmp->c =  col;
 
 	// Stone to the North?
@@ -841,8 +824,6 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 
 	// Stone to the west?
 	if (x - 1 >= 0 && at(x - 1, y) == col)
-//		if (countLibertiesOnMatrix(assembleGroup(getStoneAt(x, y + 1),NULL), m) == 1)
-//			return true;
 	{
 		tmp->x = x  ;
 		tmp->y = y + 1 ;
@@ -852,8 +833,6 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 
 	// Stone to the south?
 	if (y + 1 < size && at(x, y + 1) == col)
-//		if (countLibertiesOnMatrix(assembleGroup(getStoneAt(x + 1, y + 2),NULL), m) == 1)
-//			return true;
 	{
 		tmp->x = x + 1 ;
 		tmp->y = y + 2 ;
@@ -863,8 +842,6 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
  
 	// Stone to the east?
 	if (x + 1 < size && at(x + 1, y) == col)
-//		if (countLibertiesOnMatrix(assembleGroup(getStoneAt(x + 2, y + 1),NULL), m) == 1)
-//			return true;
 	{
 		tmp->x = x + 2 ;
 		tmp->y = y + 1 ;
@@ -895,11 +872,58 @@ void Matrix::toggleGroupAt( int x, int y)
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
-		//CHECK_PTR(tmp);
 		matrix[s->x -1][s->y -1] *= -1;
 
 	}
 
+}
+
+/*
+ * This function returns the first letter or number available in the letter marks
+ */
+QString Matrix::getFirstTextAvailable(MarkType t)
+{
+	if (markTexts == NULL || markTexts->count() == 0)
+		return (t == markText ? "A" : "1");
+
+	QString mark, rxm;
+
+	switch (t)
+	{
+		case markText :
+		{
+			for (int n = 0 ; n < 51 ; n++)
+			{
+				mark = QString(QChar(static_cast<const char>('A' + (n>=26 ? n+6 : n))));
+				rxm = mark;
+				rxm.prepend("*#");
+				QRegExp rx(rxm,Qt::CaseSensitive, QRegExp::Wildcard );
+				if (markTexts->indexOf(rx) == -1)
+					break;
+			}
+			break;
+		}
+
+		case markNumber :
+		{
+			for (int n = 1 ; n < 400 ; n++)
+			{
+				mark = QString::number(n);
+				rxm = mark;
+				rxm.prepend("*#");
+				QRegExp rx(rxm,Qt::CaseSensitive, QRegExp::Wildcard );
+				if (markTexts->indexOf(rx) == -1)
+					break;
+			}
+			break;
+		}
+		//should not happen
+		default:
+			break;
+	}
+
+	return mark;
+	
 }
 
 

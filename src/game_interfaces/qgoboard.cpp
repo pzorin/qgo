@@ -19,10 +19,11 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 	boardwindow = bw;
 
 	if (gd)
-		gameData = new GameData (gd);
+		gameData = new GameData (gd);//FIXME This is not safe to duplicate the gameData. Should stay single in boardHandler
 	else
 		gameData = NULL;
 
+//TODO get the sound from correct path
 	clickSound = new QAlsaSound( "/usr/share/qGo/sounds/stone.wav" );
 }
 
@@ -62,13 +63,13 @@ void qGoBoard::setHandicap(int handicap)
 		switch (handicap)
 		{
 		case 13:  // Hehe, this is nuts... :)
-			addStone(stoneBlack, 17, 17);
+			tree->addStoneSGF(stoneBlack, 17, 17,FALSE);
 		case 12:
-			addStone(stoneBlack, 3, 3);
+			tree->addStoneSGF(stoneBlack, 3, 3,FALSE);
 		case 11:
-			addStone(stoneBlack, 3, 17);
+			tree->addStoneSGF(stoneBlack, 3, 17,FALSE);
 		case 10:
-			addStone(stoneBlack, 17, 3);
+			tree->addStoneSGF(stoneBlack, 17, 3,FALSE);
 			
 		default:
 			handicap = 9;
@@ -82,32 +83,32 @@ void qGoBoard::setHandicap(int handicap)
 		switch (handicap)
 		{
 		case 9:
-			addStone(stoneBlack, middle, middle);
+			tree->addStoneSGF(stoneBlack, middle, middle,FALSE);
 		case 8:
 		case 7:
 			if (handicap >= 8)
 			{
-				addStone(stoneBlack, middle, low);
-				addStone(stoneBlack, middle, high);
+				tree->addStoneSGF(stoneBlack, middle, low,FALSE);
+				tree->addStoneSGF(stoneBlack, middle, high,FALSE);
 			}
 			else
-				addStone(stoneBlack, middle, middle);
+				tree->addStoneSGF(stoneBlack, middle, middle,FALSE);
 		case 6:
 		case 5:
 			if (handicap >= 6)
 			{
-				addStone(stoneBlack, low, middle);
-				addStone(stoneBlack, high, middle);
+				tree->addStoneSGF(stoneBlack, low, middle,FALSE);
+				tree->addStoneSGF(stoneBlack, high, middle,FALSE);
 			}
 			else
-				addStone(stoneBlack, middle, middle);
+				tree->addStoneSGF(stoneBlack, middle, middle,FALSE);
 		case 4:
-			addStone(stoneBlack, high, high);
+			tree->addStoneSGF(stoneBlack, high, high,FALSE);
 		case 3:
-			addStone(stoneBlack, low, low);
+			tree->addStoneSGF(stoneBlack, low, low,FALSE);
 		case 2:
-			addStone(stoneBlack, high, low);
-			addStone(stoneBlack, low, high);
+			tree->addStoneSGF(stoneBlack, high, low,FALSE);
+			tree->addStoneSGF(stoneBlack, low, high,FALSE);
 		case 1:
 //			if (store != modeObserve && store != modeMatch &&  store != modeTeach)
 //				gameData->komi = 0.5;
@@ -123,12 +124,12 @@ void qGoBoard::setHandicap(int handicap)
 		switch (handicap)
 		{
 		case 4:
-			addStone(stoneBlack, high, high);
+			tree->addStoneSGF(stoneBlack, high, high,FALSE);
 		case 3:
-			addStone(stoneBlack, low, low);
+			tree->addStoneSGF(stoneBlack, low, low,FALSE);
 		case 2:
-			addStone(stoneBlack, high, low);
-			addStone(stoneBlack, low, high);
+			tree->addStoneSGF(stoneBlack, high, low,FALSE);
+			tree->addStoneSGF(stoneBlack, low, high,FALSE);
 		case 1:
 //			if (store != modeObserve && store != modeMatch &&  store != modeTeach)
 //				gameData->komi = 0.5;
@@ -152,13 +153,61 @@ void qGoBoard::setHandicap(int handicap)
 }
 
 /*
+ * adds a mark to the current move's matrix
+ * This is used in edit phase to add mark on the board
+ */
+void qGoBoard::addMark( int x, int y, MarkType t )
+{
+	if (tree->getCurrent()->getMatrix()->getMarkAt(x,y) != markNone)
+		tree->getCurrent()->getMatrix()->removeMark(x,y);
+
+	if (t == markText || t == markNumber)
+	{
+		QString txt = tree->getCurrent()->getMatrix()->getFirstTextAvailable(t);
+		tree->getCurrent()->getMatrix()->setMarkText(x,y,txt);
+	}
+
+	tree->getCurrent()->getMatrix()->insertMark(x,y,t);
+
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+}
+
+/*
+ * removes a mark to the current move's matrix
+ * This is used in edit phase to remove a mark on the board
+ */
+void qGoBoard::removeMark( int x, int y)
+{
+	if (tree->getCurrent()->getMatrix()->getMarkAt(x,y) != markNone)
+		tree->getCurrent()->getMatrix()->removeMark(x,y);
+		
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+}
+
+/*
  * adds a stone to the current move's matrix
  * This is used in edit phase to add stones (and not moves) on the board
  */
 void qGoBoard::addStone(StoneColor c, int x, int y)
 {
 	tree->addStoneSGF(c,x,y,FALSE);
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 }
+
+
+/*
+ * removes a stone to the current move's matrix
+ * This is used in edit phase to remove stones (and not moves) on the board
+ */
+void qGoBoard::removeStone( int x, int y)
+{
+	//TODO make sure this is the correct way
+	tree->updateCurrentMatrix(stoneNone,  x,  y);
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+}
+
+
+
 
 /*
  * 'Pass' button pressed
@@ -201,6 +250,31 @@ void qGoBoard::slotBoardClicked(bool delay , int x, int y , Qt::MouseButton mous
 		}
 
 		case phaseEdit:
+		{
+			switch (boardwindow->getEditMark())
+			{
+				//adds a stone (or remove if present)
+				case markNone:
+				{
+					if(tree->getCurrent()->getMatrix()->getStoneAt(x,y) == stoneNone)
+						addStone(mouseState == Qt::LeftButton ? stoneBlack : stoneWhite, x, y);
+					else
+						removeStone(x,y);
+					return;
+				}
+				default:
+				{
+					if (mouseState == Qt::LeftButton)
+						addMark(x,y, boardwindow->getEditMark());
+					else
+						removeMark(x,y);
+					return;
+				}
+					
+			}
+			return;
+		}
+
 		case phaseEnded:
 			return;
 
@@ -268,8 +342,11 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 	bool validMove = TRUE;
 
 	// does the matrix have already a stone there ?
-	if (tree->getCurrent()->getMatrix()->getStoneAt(x-1,y-1) != stoneNone)
+	if (tree->getCurrent()->getMatrix()->getStoneAt(x,y) != stoneNone)
+	{
+		qDebug ("QGoboard:doMove - We seem to have already a stone at this place : %d %d",x,y);
 		return FALSE;
+	}
 
 	//The move is added to the tree. if it exists already, it becomes the current move
 	tree->addMove(c,  x, y, TRUE);
@@ -277,6 +354,7 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 	// Is the move valid ?
 	if ( tree->addStoneSGF(c,x,y,TRUE) < 0)
 	{
+		qDebug ("QGoboard:doMove - This move does not seem to be valid : %d %d",x,y);
 		tree->deleteNode(); 
 		validMove = FALSE;
 	}
@@ -471,7 +549,9 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 */
 //		win->getBoard()->addStone(sc, i, j, sound);
 
-		doMove(sc, i, j);
+		if (!doMove(sc, i, j))
+			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 seems to be invalid").arg(pt.toLatin1().constData()));
+//		qDebug ("QGoboard:setMove - move %d %d done",i,j);
 /*
 		Move *m = tree->getCurrent();
 		if (stated_mv_count > mv_counter ||
@@ -550,10 +630,14 @@ bool qGoBoardNormalInterface::init()
 
 	// If we have handicap, but not from a loaded file, we have to set the handicap move
 	if (gameData->handicap && gameData->fileName.isEmpty())
+	{
 		setHandicap(gameData->handicap);
+		boardwindow->getBoardHandler()->slotNavLast();
+	}
+	else
+//	tree->setToFirstMove();	
+		boardwindow->getBoardHandler()->slotNavFirst();
 
-	tree->setToFirstMove();	
-	boardwindow->getBoardHandler()->slotNavFirst();
 	return TRUE;
 }
 

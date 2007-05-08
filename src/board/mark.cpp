@@ -243,11 +243,15 @@ void MarkText::setSize(double x, double)
 		x /= (double)(maxLength);// * 0.6;
 
 //	QFont f = setting->fontMarks;
-	QFont f = QFont::QFont();
+	QFont f("",(int) x);// = QFont::QFont();
 //	if (setting->readBoolEntry("VAR_FONT"))
-	f.setPointSize((int)x);
-//	f.setBold(FALSE);
-//	f.setStyleStrategy(QFont::NoAntialias);
+	
+//	font().setPointSize((int)x);
+
+//	f.setPointSize((int)x);
+	f.setBold(FALSE);
+	f.setStyleStrategy(QFont::NoAntialias);
+//	f.setWeight(10);
 	setFont(f);
 
 	width = (int)boundingRect().width();

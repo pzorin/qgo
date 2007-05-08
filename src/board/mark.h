@@ -166,7 +166,7 @@ public:
 	static int maxLength;
 
 protected:
-	void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) { painter->setRenderHints(0); QGraphicsSimpleTextItem::paint(painter, option, widget);}
+	void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 ) { painter->setRenderHints(QPainter::SmoothPixmapTransform); QGraphicsSimpleTextItem::paint(painter, option, widget);}
 
 private:
 //	QGraphicsRectItem *rect;

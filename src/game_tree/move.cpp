@@ -88,6 +88,9 @@ bool Move::equals(Move *m)
 	return false;
 }
 
+/*
+ * returns a string representing the move in SGF format
+ */
 const QString Move::saveMove(bool isRoot)
 {
 	QString str;

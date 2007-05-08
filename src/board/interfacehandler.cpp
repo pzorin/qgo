@@ -138,9 +138,11 @@ void InterfaceHandler::updateCaption(GameData *gd)
  */
 void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bool hasParent, bool hasPrev, bool hasNext, int lastX, int lastY)
 {
+	// move number
 	QString s(QObject::tr("Move") + " ");
 	s.append(QString::number(n));
 
+	// color and coordinates
 	if (lastX >= 1 && lastX <= boardwindow->getBoardSize() && lastY >= 1 && lastY <= boardwindow->getBoardSize())
 	{
 		s.append(" (");
@@ -149,7 +151,8 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 			QString::number(boardwindow->getBoardSize()-lastY+1) + ")");
 	}
 
-	else if (lastX == 20 && lastY == 20)  // Pass
+	//pass move
+	else if (lastX == 20 && lastY == 20)
 	{
 		s.append(" (");
 		s.append(black ? QObject::tr("W")+" " : QObject::tr("B")+" ");
@@ -160,9 +163,14 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 //	statusTurn->setText(" " + s.right(s.length() - 5) + " ");  // Without 'Move '
 	
 //	statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
+
+	// set turn information (and color on the edit button)
 	s = black ? QObject::tr("Black to play") : QObject::tr("White to play");
 	boardwindow->getUi().turnLabel->setText(s);
 	
+	boardwindow->getUi().colorButton->setIcon(black ? QIcon(":/new/prefix1/ressources/pics/stone_black.png") : QIcon(":/new/prefix1/ressources/pics/stone_white.png") );
+
+	// sons and variatons display
 	s = "";
 	s.append(QString::number(brothers));
 	if (brothers == 1)

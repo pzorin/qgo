@@ -26,13 +26,16 @@
 #define OK 0
 #define FAIL -1
 
-
+ 
 /**
   *@author PALM Thomas , DINTILHAC Florian, HIVERT Anthony, PIOC Sebastien
   */
 
 class QGtp : public QObject{
 	Q_OBJECT
+
+signals:
+	void signal_computerPlayed( bool , const QString& );
 
 public slots:
 	void slot_readFromStdout();
@@ -194,10 +197,12 @@ public:
 	char *_outFile;
 	char *outFile;
 	FILE *_inFile;
-	QString _response;
+	QString buff, _response;
 
 	int waitResponse();
 	int waitResponseOld();
+
+	bool responseReceived;
 };
 
 
