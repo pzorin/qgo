@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Emmanuel Béranger   *
- *   yfh2@hotmail.com   *
+ *   Copyright (C) 2006 by EB   *
+ *      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,24 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "qgoboard.h"
+#include "qgtp.h"
+#include "tree.h"
+#include "move.h"
 
-#include <QApplication>
-#include <QtGui>
 
-#include "mainwindow.h"
-#include "globals.h"
-
-int main(int argc, char *argv[])
+qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {
-	Q_INIT_RESOURCE(application);
-	QApplication app(argc, argv);
-
-	QCoreApplication::setOrganizationName("qgo2");
-
-	MainWindow * mw = new MainWindow(0,0);
-
-	mw->show();
-
-	return app.exec();
+	game_Id = QString::number(gd->gameNumber);
 }
+
+
+
+/*
+ * This functions initialises the board for observing a game
+ */
+bool qGoBoardObserveInterface::init()
+{
+	boardwindow->getUi().board->clearData();
+
+	emit signal_sendCommandFromBoard("games " + game_Id, FALSE);
+	emit signal_sendCommandFromBoard("moves " +  game_Id, FALSE);
+	emit signal_sendCommandFromBoard("all " +  game_Id, FALSE);
+
+	return TRUE;
+
+}
+
+
 

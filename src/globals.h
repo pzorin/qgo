@@ -105,6 +105,20 @@ public:
 	bool oneColorGo;
 };
 
+class sendBuf
+{
+public:
+	sendBuf(QString text, bool echo=true) { txt = text; localecho = echo; }
+	~sendBuf() {}
+	QString get_txt() { return txt; }
+	bool get_localecho() { return localecho; }
+	QString txt;
+    
+private:
+	bool localecho;
+};
+
+
 /*
 * Global variables declarations
 */
@@ -113,6 +127,6 @@ public:
 extern QString applicationPath;
 #endif
 
-	static QSettings  settings;//("qgo2");
+//	static QSettings  settings;//("qgo2");
 
 #endif

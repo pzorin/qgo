@@ -104,6 +104,14 @@ void BoardWindow::init()
 			qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
 			break;	
 		}
+		case modeObserve :
+		{
+			qgoboard = new 	qGoBoardObserveInterface(this, tree,gameData);
+			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
+
+			break;	
+		}
+
 		default:
 			break;
 	}
@@ -163,13 +171,20 @@ void BoardWindow::init()
 
 BoardWindow::~BoardWindow()
 {
+
 }
 
 void BoardWindow::closeEvent(QCloseEvent *)
 {
+	emit signal_boardClosed(getId());
+
 }
 
-
+void BoardWindow::setGameData(GameData *gd)
+{
+	gameData = new GameData(gd); 
+	interfaceHandler->updateCaption(gd);
+}
 /*
  * Loads the SGF string. returns true if the file was sucessfully parsed
  */

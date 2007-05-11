@@ -25,6 +25,7 @@
 #include "boardwindow.h"
 #include "sgfparser.h"
 #include "tree.h"
+#include "parser.h"
 
 #include <QtGui>
 
@@ -34,13 +35,48 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	qDebug( "Home Path : %s" ,QDir::homePath().toLatin1().constData());	
 	qDebug( "Current Path : %s" ,QDir::currentPath ().toLatin1().constData());
 
-
-/*
- * sound example
- */
-//	clickSound = QAlsaSound( "/usr/share/qGo/sounds/stone.wav" );
-
 	ui.setupUi(this);
+	ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
+	ui.ListView_games->hideColumn(12);
+	ui.ListView_games->hideColumn(13);
+	ui.ListView_games->setColumnWidth ( 0, 35 );
+	ui.ListView_games->setColumnWidth ( 1, 100 );
+	ui.ListView_games->setColumnWidth ( 2, 35 );
+	ui.ListView_games->setColumnWidth ( 3, 100 );
+	ui.ListView_games->setColumnWidth ( 4, 35 );
+	ui.ListView_games->setColumnWidth ( 5, 30 );
+	ui.ListView_games->setColumnWidth ( 6, 25 );
+	ui.ListView_games->setColumnWidth ( 7, 20 );
+	ui.ListView_games->setColumnWidth ( 8, 30 );
+	ui.ListView_games->setColumnWidth ( 9, 25 );
+	ui.ListView_games->setColumnWidth ( 10, 20 );
+	ui.ListView_games->setColumnWidth ( 11, 25 );
+	
+	ui.ListView_players->header()->setSortIndicatorShown ( FALSE );
+	ui.ListView_players->hideColumn(6);
+	ui.ListView_players->hideColumn(7);
+	ui.ListView_players->hideColumn(8);
+	ui.ListView_players->hideColumn(9);
+	ui.ListView_players->hideColumn(12);
+	ui.ListView_players->setColumnWidth ( 0, 30 );
+	ui.ListView_players->setColumnWidth ( 1, 100 );
+	ui.ListView_players->setColumnWidth ( 2, 30 );
+	ui.ListView_players->setColumnWidth ( 3, 30 );
+	ui.ListView_players->setColumnWidth ( 4, 30);
+	ui.ListView_players->setColumnWidth ( 5, 30 );
+//	ui.ListView_players->setColumnWidth ( 6, 80 );
+	ui.ListView_players->setColumnWidth ( 7, 80 );
+//	ui.ListView_players->setColumnWidth ( 8, 30 );
+//	ui.ListView_players->setColumnWidth ( 9, 25 );
+	ui.ListView_players->setColumnWidth ( 10, 50 );
+//	ui.ListView_players->setColumnWidth ( 11, 25 );
+
+
+
+	connect(ui.ListView_games->header(),SIGNAL( sectionClicked ( int ) ), SLOT(slot_sortGames (int)));
+	connect(ui.ListView_players->header(),SIGNAL( sectionClicked ( int ) ), SLOT(slot_sortPlayers (int)));
+	// doubleclick
+	connect(ui.ListView_games, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), SLOT(slot_gamesDoubleClicked(QTreeWidgetItem*)));
 
 	SGFloaded = "";
 	SGFloaded2 = "";
@@ -48,10 +84,17 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// loads the settings
 	loadSettings();
 
+	//creates the connection code
+	myAccount = new Account(this);
+	igsConnection = new IGSConnection();
+	parser = new Parser();
+	seekMenu = new QMenu();
+	ui.toolSeek->setMenu(seekMenu);
+		
+	// create qGo Interface for board handling
+	qgoif = new qGoIF(this);
 
-/*
- * filling the file view
- */
+	// filling the file view
 	QStringList filters = (QStringList() << "*.sgf" << "*.SGF");
 	model = new QDirModel(filters,  QDir::AllEntries | QDir::AllDirs , QDir::Name,0);
 
@@ -69,9 +112,12 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.dirView_2->setColumnWidth(0,250); 
 	ui.dirView_2->setCurrentIndex(model->index( QDir::homePath () ));
 
-/*
- * connecting the new game button
- */
+
+	// connecting the Go server tab buttons and signals
+	connect( ui.pb_connect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
+	connect (igsConnection, SIGNAL(signal_textReceived (const QString&)), SLOT(slot_textReceived (const QString&)));
+
+	// connecting the new game button
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
 	connect(ui.button_loadGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
@@ -89,9 +135,37 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		SLOT(slot_loadComputerFile(const QModelIndex & , const QModelIndex &  )));
 
 
-/*
- * Creates the SGF parser for displaying the file infos
- */
+	
+	// connecting the server tab buttons
+	connect(ui.pb_add,SIGNAL(pressed()),SLOT(slot_addServer()));
+	connect(ui.ListView_hosts, SIGNAL(itemClicked ( QTreeWidgetItem * , int )),SLOT(slot_clickedListView(QTreeWidgetItem * ,  int)));
+	connect(ui.pb_new,SIGNAL(pressed()),SLOT(slot_new()));	
+	connect(ui.comboBox_server,SIGNAL(currentIndexChanged ( const QString &)),
+		SLOT(slot_serverChanged( const QString &)));
+	
+	// connects the parser signals to the main window (lists, rooms, ...)
+	connect(parser, SIGNAL(signal_svname(GSName&)), SLOT(slot_svname(GSName&)));
+	connect(parser, SIGNAL(signal_accname(QString&)), SLOT(slot_accname(QString&)));
+	connect(parser, SIGNAL(signal_addSeekCondition(const QString&,const QString&, const QString&, const QString&, const QString&)),this,
+			SLOT(slot_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_room(const QString&, bool)),SLOT(slot_room(const QString&, bool)));
+	connect(parser, SIGNAL(signal_game(Game*)), SLOT(slot_game(Game*)));
+	connect(parser, SIGNAL(signal_player(Player*, bool)), SLOT(slot_player(Player*, bool)));
+	connect(parser, SIGNAL(signal_message(QString)), SLOT(slot_message(QString)));
+
+
+	// connects the parser signals to the interface (game moves, all board and games infos, ...)
+	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
+	connect(parser, SIGNAL(signal_gameInfo(Game*)), qgoif, SLOT(slot_gameInfo(Game*)));
+	connect(parser, SIGNAL(signal_observedGameClosed(int)), qgoif, SLOT(slot_boardClosed(int)));
+
+	//Connects the interface signals
+	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));
+	
+
+	currentCommand = new sendBuf("",0);
+
+	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
 
 }
@@ -106,35 +180,6 @@ void MainWindow::closeEvent(QCloseEvent *)
 	saveSettings();
 }
 
-/*
- * saves the parameters on the 2 lats tabs into the QSettings 
- */
-void MainWindow::saveSettings()
-{
-	settings.setValue("language",ui.comboBox_language->currentIndex ());
-	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
-
-	int i = 3;
-	if ( ui.radioButtonStones_2D->isChecked())
-		i=1;
-	else if ( ui.radioButtonStones_3D->isChecked())
-		i=2;
-	settings.setValue("STONES_LOOK", i);
-
-}
-
-/*
- * loads the parameters from the QSettings into the 2 lats tabs
- */
-void MainWindow::loadSettings()
-{
-	ui.comboBox_language->setCurrentIndex (settings.value("language").toInt());
-	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
-
-	ui.radioButtonStones_real->setChecked(TRUE);
-	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
-	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
-}
 
 /* 
  * Loads the file header data from the item selected in the directory display
@@ -255,13 +300,14 @@ void MainWindow::slot_fileNewBoard()
 	gd->playerWhite = ui.newFile_WhitePlayer->text();
 	gd->komi = ui.newFile_Komi->text().toFloat();
 
-	createGame(modeNormal, gd , TRUE, TRUE );
+//	createGame(modeNormal, gd , TRUE, TRUE );
+	qgoif->createGame(modeNormal, gd , TRUE, TRUE );
 }
 
 void MainWindow::slot_fileOpenBoard()
 {
 
-	createGame(modeNormal, GameLoaded , TRUE, TRUE , SGFloaded );
+	qgoif->createGame(modeNormal, GameLoaded , TRUE, TRUE);// , SGFloaded );
 
 }
 
@@ -288,7 +334,7 @@ void MainWindow::slot_computerNewBoard()
 		return ;
 	}
 
-	createGame(modeComputer, gd , imBlack, imWhite );
+	qgoif->createGame(modeComputer, gd , imBlack, imWhite );
 }
 
 /*
@@ -296,5 +342,62 @@ void MainWindow::slot_computerNewBoard()
  */
 void MainWindow::slot_computerOpenBoard()
 {
-	createGame(modeComputer, GameLoaded2 , TRUE, TRUE , SGFloaded2 );
+//	createGame(modeComputer, GameLoaded2 , TRUE, TRUE , SGFloaded2 );
+	qgoif->createGame(modeComputer, GameLoaded2 , TRUE, TRUE );
 }
+
+/*
+ * A column header of the game list has been clicked
+ */
+void MainWindow::slot_sortGames (int i)
+{
+	static Qt::SortOrder sortOrder;
+
+	int j = ui.ListView_games->sortColumn();
+
+	//sorts by the key stored in the hidden columns
+	if (i==2)
+		i = 12;
+	if (i==4)
+		i = 13;
+
+	//If we sort the same column, reverse the sorting order
+	if (i==j)
+		sortOrder = (sortOrder == Qt::AscendingOrder ? Qt::DescendingOrder : Qt::AscendingOrder);
+	else 
+		sortOrder = Qt::AscendingOrder;
+
+	ui.ListView_games->sortItems(i,sortOrder);
+}
+
+
+/*
+ * A column header of the players list has been clicked
+ */
+void MainWindow::slot_sortPlayers (int i)
+{
+	static Qt::SortOrder sortOrder;
+
+	int j = ui.ListView_players->sortColumn();
+
+	//sorts by the key stored in the hidden columns
+	if (i==2)
+		i = 12;
+
+	//If we sort the same column, reverse the sorting order
+	if (i==j)
+		sortOrder = (sortOrder == Qt::AscendingOrder ? Qt::DescendingOrder : Qt::AscendingOrder);
+	else 
+		sortOrder = Qt::AscendingOrder;
+
+	ui.ListView_players->sortItems(i,sortOrder);
+}
+
+/*
+ * games list has been double clicked
+ */
+void MainWindow::slot_gamesDoubleClicked(QTreeWidgetItem* lv)
+{
+	sendcommand ("observe " + lv->text(0));
+}
+

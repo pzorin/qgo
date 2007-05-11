@@ -5,7 +5,8 @@
 
 RESOURCES = application.qrc  \
 board/board.qrc
-QT = core gui
+QT = core gui \
+network
 TARGET = ../bin/qgo2 
 CONFIG += warn_on \
           qt \
@@ -34,7 +35,11 @@ board/interfacehandler.h \
 board/mark.h \
 gtp/qgtp.h \
 game_interfaces/qgoboard.h \
-audio/audio.h
+audio/audio.h \
+mainwindow_settings.h \
+server/igsconnection.h \
+server/parser.h \
+game_interfaces/qgo_interface.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -53,10 +58,17 @@ SOURCES += main.cpp \
            gtp/qgtp.cpp \
            game_interfaces/qgoboard.cpp \
            game_interfaces/qgoboard_computer.cpp \
-           audio/audio.cpp
+           audio/audio.cpp \
+           mainwindow_settings.cpp \
+           server/igsconnection.cpp \
+           server/parser.cpp \
+           mainwindow_server.cpp \
+           game_interfaces/qgo_interface.cpp \
+           game_interfaces/qgoboard_observe.cpp
 QT -= qt3support
-DEPENDPATH += """board sgf game_tree game_interfaces gtp"""
-INCLUDEPATH += audio \
+DEPENDPATH += """""board sgf game_tree game_interfaces gtp"""""
+INCLUDEPATH += server \
+audio \
 gtp \
 game_interfaces \
 game_tree \

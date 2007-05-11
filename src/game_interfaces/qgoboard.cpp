@@ -14,9 +14,12 @@
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {
-		
+	isModified = FALSE;	
 	tree = t;
 	boardwindow = bw;
+	
+	//data used for observing games, when getting the already played moves
+	stated_mv_count = -1;	
 
 	if (gd)
 		gameData = new GameData (gd);//FIXME This is not safe to duplicate the gameData. Should stay single in boardHandler
@@ -359,7 +362,8 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 		validMove = FALSE;
 	}
 	else
-		clickSound->play();
+		if (tree->getCurrent()->getMoveNumber() > stated_mv_count)
+			clickSound->play();
 
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
@@ -425,13 +429,13 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 		mv_nr_int = mv_counter - 1;
 	else
 		mv_nr_int = mv_nr.toInt();
-/*
+
 	if (mv_nr_int > mv_counter)
 	{
-		if (mv_nr_int != mv_counter + 1 && mv_counter != -1)
+		if (mv_nr_int != mv_counter + 1 && mv_counter != 0)
 			// case: move has done but "moves" cmd not executed yet
 			qWarning("**** LOST MOVE !!!! ****");
-		else if (mv_counter == -1 && mv_nr_int != 0)
+		else if (mv_counter == 0 && mv_nr_int != 0)
 		{
 			qDebug("move skipped");
 			// skip moves until "moves" cmd executed
@@ -440,7 +444,7 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 		else
 			mv_counter++;
 	}
-	else if (mv_nr_int + 1 == mv_counter)
+/*	else if (mv_nr_int + 1 == mv_counter)
 	{
 		// scoring mode? (NNGS)
 		if (gameMode == modeScore)
@@ -493,23 +497,23 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 	else
 		// move already done...
 		return;
-
+*/
 	if (pt.contains("Handicap"))
 	{
-		QString handi = pt.simplifyWhiteSpace();
-		int h = element(handi, 1, " ").toInt();
+		QString handi = pt.simplified();
+		int h = handi.section(" ",-1).toInt();//element(handi, 1, " ").toInt();
 
 		// check if handicap is set with initGame() - game data from server do not
 		// contain correct handicap in early stage, because handicap is first move!
-		if ( boardwindow->getGameData().handicap != h)
+		if ( boardwindow->getGameData()->handicap != h)
 		{
-			boardwindow->getGameData().handicap = h;
+			boardwindow->getGameData()->handicap = h;
 			setHandicap(h);
 			qDebug("corrected Handicap");
 		}
 	}
-*/
-	/*else*/ if (pt.contains("Pass",Qt::CaseInsensitive))
+
+	else if (pt.contains("Pass",Qt::CaseInsensitive))
 	{
 //		win->getBoard()->doSinglePass();
 //		if (win->getBoard()->getBoardHandler()->local_stone_sound)

@@ -16,7 +16,7 @@
 #include "globals.h"
 #include "qgtp.h"
 
-//#include <QtCore>
+
 
 class qGoBoard : public QObject //, public Misc<QString>
 {
@@ -37,6 +37,11 @@ public:
 //	virtual void localMoveRequest(int x, int y)=0;
 	virtual bool getBlackTurn();
 	virtual void startGame() {}
+	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
+	virtual void set_statedMoveCount(int n) 	{stated_mv_count = n;}
+	virtual void set_havegd(bool b) 		{ have_gameData = b; }
+	virtual bool modified()				{return isModified;}
+	virtual void setModified(bool b= true)		{isModified = b;}
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -140,7 +145,8 @@ protected:
 
 //	bool        timer_running;
 //	bool        game_paused;
-	bool        have_gameData;
+	bool	have_gameData;
+	bool	isModified;
 //	bool        sent_movescmd;
 //	bool        adjourned;
 //	bool        myColorIsBlack;
@@ -152,7 +158,7 @@ protected:
 //	MainWindow  *win;
 //	qGo         *qgo;
 //	int         mv_counter;
-//	int	        stated_mv_count ;
+	int        stated_mv_count ;
 //	bool		    sound;
 //	int         bt_i, wt_i;
 //	QString     bt, wt;
@@ -173,7 +179,7 @@ protected:
 	virtual void sendMoveToInterface(StoneColor c,int x, int y) =0;
 	virtual bool doMove(StoneColor c, int x, int y);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
-	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
+//	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
 	virtual void sendPassToInterface(StoneColor c)=0;
 	virtual void localPassRequest();
 	virtual void enterScoreMode() ;
@@ -226,5 +232,31 @@ private:
 	QGtp *gtp;
 };
 
+class qGoBoardObserveInterface : public qGoBoard 
+{
+	Q_OBJECT
+
+public:
+	qGoBoardObserveInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
+	~qGoBoardObserveInterface() {}
+
+	bool init();
+	void setModified(bool)	{} //we don't modify an observed game	
+
+public slots:
+
+signals:
+	void signal_sendCommandFromBoard(const QString&, bool);
+
+private:
+	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
+	void sendPassToInterface(StoneColor /*c*/) {}
+	
+//	void enterScoreMode() {}
+	void leaveScoreMode() {}
+
+	QString game_Id;
+
+};
 
 #endif

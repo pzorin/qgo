@@ -39,7 +39,8 @@ public:
 	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 , int size =19);
 	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE);
 	~BoardWindow();
-
+	
+	void init();
 	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad = false); //TODO get rid of fastload
 	bool doSave(QString fileName, bool force);
 
@@ -56,13 +57,16 @@ public:
 	GameData *getGameData() 		{return gameData;}
 	int getId()				{return gameData->gameNumber;}
 	MarkType getEditMark()			{return editMark;}
-
 	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
+	void setGameData(GameData *gd);	
+
+	qGoBoard *qgoboard;
 
 protected:
 	void closeEvent(QCloseEvent *e);
 
-	
+signals:
+	void signal_boardClosed(int);
 
 public slots:
 	void slotEditButtonPressed( int id );
@@ -71,14 +75,13 @@ public slots:
 	bool slotFileSaveAs();
 
 private:
-	void init();
 
 	Ui::BoardWindow ui;
 	Tree *tree;
 	int boardSize;
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
-	qGoBoard *qgoboard;
+//	qGoBoard *qgoboard;
 
 	GameData *gameData;
 	GameMode gameMode;

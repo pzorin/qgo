@@ -76,18 +76,18 @@ void InterfaceHandler::updateCaption(GameData *gd)
     // example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
     // or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
 	boardwindow->setWindowTitle( /* QString(isModified ? "* " : "") + */
-		(gd->gameNumber != 0 ?
-		"(" + QString::number(gd->gameNumber) + ") " : QString()) +
-		(gd->gameName.isEmpty() ?
-		gd->playerWhite +
-		(!gd->rankWhite.isEmpty() ?
-		" " + gd->rankWhite : QString())
-		+ " " + QObject::tr("vs.") + " "+
-		gd->playerBlack +
-		(!gd->rankBlack.isEmpty() ?
-		" " + gd->rankBlack : QString()) :
-		gd->gameName) +
-		"   " + QString(PACKAGE   " "  VERSION));
+		( (gd->gameNumber != 0 && gd->gameNumber < 10000) ?
+			"(" + QString::number(gd->gameNumber) + ") " : 
+			QString()) + (gd->gameName.isEmpty() ?
+				gd->playerWhite 
+				+ (!gd->rankWhite.isEmpty() ?
+					" " + gd->rankWhite : 
+					QString()) 
+				+ " " + QObject::tr("vs.") + " " + gd->playerBlack 
+				+ (!gd->rankBlack.isEmpty() ?
+					" " + gd->rankBlack : 
+					QString()) :
+				gd->gameName) +	"   " + QString(PACKAGE   " "  VERSION));
 
 
 	bool simple = gd->rankWhite.length() == 0 && gd->rankBlack.length() == 0;

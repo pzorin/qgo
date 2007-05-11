@@ -430,8 +430,10 @@ InfoType Parser::put_line(const QString &txt)
 			aGame->running = true;
       			aGame->oneColorGo = false ;
 
+			//sends signal to main windows (for lists)
 			emit signal_game(aGame);
-//			emit signal_move(aGame);
+			//sends signal to interface (for updating game infos)
+			emit signal_gameInfo(aGame);
 			
 			return GAME7;
 			break;
@@ -828,18 +830,17 @@ InfoType Parser::put_line(const QString &txt)
 				aGame->Sz = "has adjourned.";
 
 				emit signal_game(aGame);
-				emit signal_move(aGame);
+//				emit signal_move(aGame);
 			}
 			// 9 Removing game 30 from observation list.
 			else if (line.contains("from observation list"))
 			{
 				// is done from qGoIF
 				// emit signal_addToObservationList(-1);
-				aGame->nr = element(line, 2, " ");
-				aGame->Sz = "-";
-				aGame->running = false;
-
-				emit signal_move(aGame);
+//				aGame->nr = element(line, 2, " ").toInt();
+//				aGame->Sz = "-";
+//				aGame->running = false;
+				emit signal_observedGameClosed(element(line, 2, " ").toInt());
 				return IT_OTHER;
 			}
 			// 9 Adding game to observation list.
@@ -995,7 +996,7 @@ InfoType Parser::put_line(const QString &txt)
 			
 				aGame->Sz = line ;
 			
-				emit signal_move(aGame);
+//				emit signal_move(aGame);
 				break;
 				// make better check
 				//if (element(line, 0, " ", "EOL") != QString("has resigned the game."))
@@ -1327,7 +1328,7 @@ InfoType Parser::put_line(const QString &txt)
 				aGameInfo->mv_col = element(line, 0, "(", ")");
 			}
 
-			emit signal_set_observe(aGameInfo->nr);
+//			emit signal_set_observe(aGameInfo->nr);
 			emit signal_move(aGameInfo);
 			return MOVE;
 			break;
@@ -1409,7 +1410,7 @@ InfoType Parser::put_line(const QString &txt)
 					aGame->running = true;
 					
 					emit signal_game(aGame);
-					emit signal_move(aGame);
+//					emit signal_move(aGame);
 					return GAME;
 				}
 
@@ -1439,7 +1440,7 @@ InfoType Parser::put_line(const QString &txt)
 						aGame->Sz.remove(0,2);
 
 					emit signal_game(aGame);
-					emit signal_move(aGame);
+//					emit signal_move(aGame);
 					return GAME;
 				}
 			}
