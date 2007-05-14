@@ -942,7 +942,7 @@ InfoType Parser::put_line(const QString &txt)
 				{
 					memory_str = "observe";
 					// send as kibitz from "0" -> init
-					emit signal_kibitz(memory, "0", "0"); 
+//					emit signal_kibitz(memory, "0", "0"); 
 
 					return KIBITZ;
 				}
@@ -950,7 +950,7 @@ InfoType Parser::put_line(const QString &txt)
 			else if (!memory_str.isEmpty() && memory_str == "observe" && line.contains("."))
 			{
 //				QString cnt = element(line, 1, " ");
-				emit signal_kibitz(memory, "00", "");
+//				emit signal_kibitz(memory, "00", "");
 
 				memory = 0;
 				memory_str = QString();
@@ -966,7 +966,7 @@ InfoType Parser::put_line(const QString &txt)
 				{
 					rank = element(line, i, " ");
 					// send as kibitz from "0"
-					emit signal_kibitz(memory, "0", name + " " + rank);
+//					emit signal_kibitz(memory, "0", name + " " + rank);
 					name =  element(line, ++i , " ");
 				}
 
@@ -998,19 +998,9 @@ InfoType Parser::put_line(const QString &txt)
 			
 //				emit signal_move(aGame);
 				break;
-				// make better check
-				//if (element(line, 0, " ", "EOL") != QString("has resigned the game."))
-				//{
-				//	qDebug("'has resigned the game.' ... but pattern wrong");
-				//}
-				//else
-				//	emit signal_kibitz(0, element(line, 0, " "), line);
+
 			}
-			//eb5 has run out of time.
-			//else if (line.contains("has run out of time"))
-			//{
-			//	emit signal_kibitz(0, element(line, 0, " "), line);
-			//}
+
 
 
 		//9 Player:      yfh2
@@ -1248,6 +1238,7 @@ InfoType Parser::put_line(const QString &txt)
 		// MOVE
 		// 15 Game 43 I: xxxx (4 223 16) vs yyyy (5 59 13)
 		// 15 TIME:21:lowlow(W): 1 0/60 479/600 14/25 0/0 0/0 0/0
+		// 15 TIME:442:MIYASAN(W): 1 0/60 18/30 0/1 10/10 0/60 0/0
 		// 15 144(B): B12
 		// IGS: teaching game:
 		// 15 Game 167 I: qGoDev (0 0 -1) vs qGoDev (0 0 -1)
@@ -1293,6 +1284,7 @@ InfoType Parser::put_line(const QString &txt)
 			}
 			else if (line.contains("TIME"))
 			{	
+				
 				aGameInfo->mv_col = "T";
 				aGameInfo->nr = element(line, 0, ":",":");
 				QString time1 = element(line, 1, " ","/");
@@ -1338,10 +1330,10 @@ InfoType Parser::put_line(const QString &txt)
 		// NNGS - new:
 		//  19 --> frosla hallo
 		case 19:
-			if (line.contains("-->"))
-				emit signal_kibitz(0, 0, element(line, 1, " ", "EOL"));
-			else
-				emit signal_kibitz(0, 0, element(line, 0, ":", "EOL"));
+//			if (line.contains("-->"))
+//				emit signal_kibitz(0, 0, element(line, 1, " ", "EOL"));
+//			else
+//				emit signal_kibitz(0, 0, element(line, 0, ":", "EOL"));
 			break;
 			
 				
@@ -1433,13 +1425,13 @@ InfoType Parser::put_line(const QString &txt)
 					aGame->running = false;
 
 					// for information
-					aGame->Sz = element(line, 4, " ", "}");
-					if (aGame->Sz.isEmpty())
-						aGame->Sz = "-";
-					else if (aGame->Sz.indexOf(":") != -1)
-						aGame->Sz.remove(0,2);
+					aGame->res = element(line, 4, " ", "}");
+					if (aGame->res.isEmpty())
+						aGame->res = "-";
+					else if (aGame->res.indexOf(":") != -1)
+						aGame->res.remove(0,2);
 
-					emit signal_game(aGame);
+					emit signal_result(aGame);
 //					emit signal_move(aGame);
 					return GAME;
 				}
@@ -1511,13 +1503,13 @@ InfoType Parser::put_line(const QString &txt)
 				QString player = element(line, 0, " ");
 				QString cap = element(line, 2, " ");
 				QString komi = element(line, 6, " ");
-				emit signal_result(player, cap, true, komi);
+				emit signal_score(player, cap, true, komi);
 			}
 			else
 			{
 				QString row = element(line, 0, ":");
 				QString results = element(line, 1, " ");
-				emit signal_result(row, results, false, 0);
+				emit signal_score(row, results, false, 0);
 			}
 
 //			emit signal_message(line);

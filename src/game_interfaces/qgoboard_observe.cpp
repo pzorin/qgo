@@ -46,5 +46,32 @@ bool qGoBoardObserveInterface::init()
 
 }
 
+/*
+ * Result has been sent byu the server.
+ */
+void qGoBoardObserveInterface::setResult(QString res, QString xt_res)
+{
+	if (tree->getCurrent() == NULL)
+		return;
+	
+	tree->getCurrent()->setComment(res);
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
+	QMessageBox::information(boardwindow , tr("Game n° ") + QString::number(boardwindow->getId()), xt_res);
+
+	QSettings settings;
+	if( settings.value("AUTOSAVE").toBool())
+		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
+
+	boardwindow->setGamePhase(phaseEnded);
+}
+
+
+/*
+ * Comment line - return sent
+ */
+void qGoBoardObserveInterface::slotSendComment()
+{
+	emit signal_sendCommandFromBoard("kibitz " + game_Id + boardwindow->getUi().commentEdit2->text() , FALSE);
+}
 

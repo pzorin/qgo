@@ -64,18 +64,10 @@ void qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIs
  */
 void qGoIF::slot_boardClosed(int n)
 {
-/*	for (int i = 0; i < boardlist->size(); ++i) 
-	{
-		if (boardlist->at(i)->getId() == n)
-		{
-			boardlist->removeAt(i);
-			break;
-		}
-	}
-*/
+
 	BoardWindow *bw = getBoardWindow(n);
 
-	if (boardlist->remove(n) == 0)
+	if (boardlist->remove(n) == 0) 
 		qDebug("Problem removing the board with Id :%d from the list - Id not found",n);
 
 	// if this was an observed game, we have to replace by a null pointer in the 
@@ -1086,13 +1078,16 @@ void qGoIF::slot_closeevent()
 	delete qb;
 //	delete win;
 }
+*/
 
-// kibitz strings
+/*
+ * kibitz strings received from parser
+ */
 void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 {
 	qGoBoard *qb;
 	QString name;
-
+/*
 	// own game if num == NULL
 	if (!num)
 	{
@@ -1118,27 +1113,33 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 	}
 	else
 	{
+
 		// seek board to send kibitz
 		qb = boardlist->first();
 		while (qb && qb->get_id() != num)
 			qb = boardlist->next();
-
+*/
 		name = who;
-	}
+//	}
 
-	if (!qb)
+
+	
+	BoardWindow *bw = getBoardWindow(num);
+
+	if (!bw)
 		qDebug("Board to send kibitz string not in list...");
-	else if (!num && who)
+/*	else if (!num && who)
 	{
 		// special case: opponent has resigned - interesting in quiet mode
 		qb->send_kibitz(msg);
 		//qgo->playGameEndSound();
 		wrapupMatchGame(qb, true);
 	}
+*/
 	else
-		qb->send_kibitz(name + ": " + msg);
+		bw->qgoboard->kibitzReceived(name + ": " + msg);
 }
-
+/*
 void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QString & id, const QString &opponent)
 {
 	QString opp;
@@ -1312,21 +1313,33 @@ qDebug("slot_removestones(): game_id");
 	qb->get_win()->getBoard()->getBoardHandler()->markDeadStone(i, j);
 	qb->send_kibitz("removing @ " + pt);
 }
+*/
 
-// game status received
-void qGoIF::slot_result(const QString &txt, const QString &line, bool isplayer, 
-const QString &komi)
+/*
+ * game status received from parser
+ */
+void qGoIF::slot_score(const QString &txt, const QString &line, bool isplayer, const QString &komi)
 {
-	static qGoBoard *qb;
+	static BoardWindow *qb = 0;
 	static float wcount, bcount;
 	static int column;
+	bool found  = FALSE;	
 
 	if (isplayer)
 	{
-		qb = boardlist->first();
+		qb = 0;//boardlist->first();
 		// find right board - slow, but just once a game
-		while (qb != NULL && qb->get_wplayer() != txt && qb->get_bplayer() != txt)
-			qb = boardlist->next();
+//		while (qb != NULL && qb->get_wplayer() != txt && qb->get_bplayer() != txt)
+//			qb = boardlist->next();
+
+		QHashIterator<int, BoardWindow*> i(*boardlist);
+ 		while (i.hasNext() && !found) 
+		{
+     			i.next();
+     			qb = i.value();
+			found = ((qb->get_wplayer() == txt) || (qb->get_bplayer() == txt));
+		}
+
 
 		if (qb && qb->get_wplayer() == txt)
 		{
@@ -1361,13 +1374,13 @@ const QString &komi)
 				case 4:
 					// add white territory
 					wcount++;
-					qb->get_win()->getBoard()->setMark(column, i+1, markTerrWhite, true);
+					qb->qgoboard->addMark(column, i+1, markTerrWhite);//, true);
 					break;
 
 				case 5:
 					// add black territory
 					bcount++;
-					qb->get_win()->getBoard()->setMark(column, i+1, markTerrBlack, true);
+					qb->qgoboard->addMark(column, i+1, markTerrBlack);//, true);
 					break;
 
 				default:
@@ -1377,13 +1390,103 @@ const QString &komi)
 		// send kibitz string after counting
 		if (txt.toInt() == (int) line.length() - 1)
 			//send_kibitz
-			 qDebug(tr("Game Status: W:") + QString::number(wcount) + " " + tr("B:") + QString::number(bcount));
+			 qDebug("Game Status: W: %f B: %f", wcount, bcount);
 
 		// show territory
-		qb->get_win()->getBoard()->updateCanvas();
+//		qb->get_win()->getBoard()->updateCanvas();
 	}
 }
 
+/*
+ * game end result received from parser
+ */
+void qGoIF::slot_result(Game *g)
+{
+	
+	BoardWindow *bw = getBoardWindow(g->nr.toInt());
+	
+	if(!bw)
+		return;
+	
+
+//	bw->send_kibitz(g->Sz);
+
+	// set correct result entry
+	QString rs = QString();
+	QString extended_rs = g->res;
+
+	if (g->res.contains("White forfeits"))
+		rs = "B+T";
+	else if (g->res.contains("Black forfeits"))
+		rs = "W+T";
+	else if (g->res.contains("has run out of time"))
+			rs = ((( g->res.contains(myName) && bw->getMyColorIsBlack() ) ||
+			( !g->res.contains(myName) && !bw->getMyColorIsBlack() )) ?
+			"W+T" : "B+T");
+
+	else if (g->res.contains("W ", Qt::CaseSensitive) && g->res.contains("B ", Qt::CaseSensitive))
+	{
+		// NNGS: White resigns. W 59.5 B 66.0
+		// IGS: W 62.5 B 93.0
+		// calculate result first
+		int posw, posb;
+		float re1, re2;
+		posw = g->res.indexOf("W ");
+		posb = g->res.indexOf("B ");
+		bool wfirst = posw < posb;
+
+		if (!wfirst)
+		{
+			int h = posw;
+			posw = posb;
+			posb = h;
+		}
+
+		QString t1 = g->res.mid(posw+1, posb-posw-2);
+		QString t2 = g->res.right(g->Sz.length()-posb-1);
+		re1 = t1.toFloat();
+		re2 = t2.toFloat();
+
+		re1 = re2-re1;
+		if (re1 < 0)
+		{
+			re1 = -re1;
+			wfirst = !wfirst;
+		}
+		
+		if (re1 < 0.2)
+		{
+			rs = "Jigo";
+//			extended_rs = "        Jigo         ";
+		}
+		else if (wfirst)
+		{
+			rs = "B+" + QString::number(re1);
+			extended_rs = "Black won by " + QString::number(re1) + " points";
+		}
+		else
+		{
+			rs = "W+" + QString::number(re1);
+			extended_rs = "White won by " + QString::number(re1) + " points";
+		}
+	}
+	else if (g->res.contains("White resigns"))
+		rs = "B+R";
+	else if (g->res.contains("Black resigns"))
+		rs = "W+R";
+	else if (g->res.contains("has resigned the game"))
+			rs = ((( g->res.contains(myName) && bw->getMyColorIsBlack() ) ||
+			( !g->res.contains(myName) && !bw->getMyColorIsBlack() )) ?
+			"W+R" : "B+R");
+	if (!rs.isEmpty())
+	{
+		bw->getGameData()->result = rs;
+		bw->qgoboard->setResult(g->res + "\n" + rs,extended_rs );
+		qDebug("Result: %s", rs.toLatin1().constData());
+	}
+}
+
+/*
 // undo a move
 void qGoIF::slot_undo(const QString &player, const QString &move)
 {

@@ -1,0 +1,101 @@
+/***************************************************************************
+ *   Copyright (C) 2006 by EB   *
+ *      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#ifndef MAINWINDOW_SETTINGS_H
+#define MAINWINDOW_SETTINGS_H
+
+#include "defines.h"
+#include "globals.h"
+
+class Host
+{
+public:
+	Host(const QString&, const QString&, const QString&, const unsigned int, const QString&, const QString&, const QString&);
+	~Host() {};
+	QString title() const { return t; };
+	QString host() const { return h; };
+	unsigned int port() const { return pt; };
+	QString loginName() const { return lg; };
+	QString password() const { return pw; };
+	QString codec() const { return cdc; };
+	QString address() const { return ad; };
+	// operators <, ==
+	int operator== (Host h)
+		{ return (this->title() == h.title()); };
+	int operator== (Host *h)
+		{ return (this->title() == h->title()); };
+	bool operator< (Host h)
+		{ return (this->title() < h.title()); };
+	bool operator< (Host *h)
+		{ return (this->title() < h->title()); };
+
+private:
+	QString t;
+	QString h;
+	QString ad;
+	QString lg;
+	QString pw;
+	unsigned int pt;
+	QString cdc;
+};
+
+class HostList : public QList<Host*>
+{
+public:
+	HostList() {};
+	virtual ~HostList() {};
+	
+	virtual int compareItems(Host * d1, Host * d2);
+};
+
+class Account
+{
+public:
+	Account(QWidget*);
+	~Account();
+	void set_caption();
+	void set_gsname(GSName);
+	void set_offline();
+	void set_accname(QString&);
+	void set_status(Status);
+	void set_rank(QString &rk) { rank = rk; }
+	QString get_rank() { return rank; }
+	Status  get_status();
+	GSName  get_gsname();
+
+	GSName  gsName;
+	QString svname;
+	QString acc_name;
+	Status  status;
+	int     num_players;
+	int     num_games;
+	int     num_watchedplayers;
+	int     num_observedgames;
+
+private:
+	QString rank;
+	QString line;
+	QString standard;
+	QWidget *parent;
+};
+
+
+
+#endif

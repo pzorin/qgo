@@ -116,6 +116,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// connecting the Go server tab buttons and signals
 	connect( ui.pb_connect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
 	connect (igsConnection, SIGNAL(signal_textReceived (const QString&)), SLOT(slot_textReceived (const QString&)));
+	connect( ui.cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
+//	connect( ui.cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
 
 	// connecting the new game button
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
@@ -158,6 +160,10 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
 	connect(parser, SIGNAL(signal_gameInfo(Game*)), qgoif, SLOT(slot_gameInfo(Game*)));
 	connect(parser, SIGNAL(signal_observedGameClosed(int)), qgoif, SLOT(slot_boardClosed(int)));
+	connect(parser, SIGNAL(signal_score(const QString&, const QString&, bool, const QString&)), 
+		qgoif, SLOT(slot_score(const QString&, const QString&, bool, const QString&)));
+	connect(parser, SIGNAL(signal_result(Game*)), qgoif, SLOT(slot_result(Game*)));
+	connect(parser, SIGNAL(signal_kibitz(int, const QString&, const QString&)), qgoif, SLOT(slot_kibitz(int, const QString&, const QString&)));
 
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));

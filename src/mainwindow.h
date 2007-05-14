@@ -56,6 +56,8 @@ public slots:
 //	void slot_message(QString txt);
 	void set_tn_ready();
 	void slot_sendCommand(const QString &, bool);
+//	void slot_cmdactivated_int(int);
+	void slot_cmdactivated(const QString&);
 
 	// parser slots
 	void slot_refresh(int i);

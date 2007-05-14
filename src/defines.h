@@ -138,7 +138,7 @@ struct Game
 	QString	wrank;
 	QString	bname;
 	QString	brank;
-//	QString status;
+	QString res;
 	QString	mv;
 	QString Sz;
 	QString H;

@@ -1,0 +1,7 @@
+qmake instructions
+__________________
+
+
+
+> > qmake -o Makefile qgo2.pro
+> > gmake -f Makefile

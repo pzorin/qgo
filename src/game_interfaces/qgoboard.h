@@ -42,6 +42,9 @@ public:
 	virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual bool modified()				{return isModified;}
 	virtual void setModified(bool b= true)		{isModified = b;}
+
+	virtual void setResult(QString , QString ) {}
+	virtual void kibitzReceived(const QString& txt);
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -116,6 +119,7 @@ public slots:
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
 	virtual void slotPassPressed();
 	virtual void slotScoreToggled(bool);
+	virtual void slotUpdateComment();
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 /*	void slot_stoneComputer(enum StoneColor, int, int);    
 	void slot_PassComputer(StoneColor c) ;                 
@@ -184,7 +188,7 @@ protected:
 	virtual void localPassRequest();
 	virtual void enterScoreMode() ;
 	virtual void leaveScoreMode() = 0;
-
+	
 	virtual void markDeadStone(int x, int y);
 };
 
@@ -241,9 +245,12 @@ public:
 	~qGoBoardObserveInterface() {}
 
 	bool init();
-	void setModified(bool)	{} //we don't modify an observed game	
+	void setModified(bool)	{} //we don't modify an observed game
+	void setResult(QString res, QString xt_res);
 
 public slots:
+	void slotUpdateComment() {}
+	void slotSendComment();
 
 signals:
 	void signal_sendCommandFromBoard(const QString&, bool);

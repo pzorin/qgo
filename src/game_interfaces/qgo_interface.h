@@ -46,16 +46,18 @@ public slots:
 	void slot_move(GameInfo*);
 	void slot_sendCommandFromInterface(const QString&, bool b = FALSE);
 	void slot_gameInfo(Game *);
+	void slot_score(const QString&, const QString&, bool, const QString&);
+	void slot_result(Game *);
+	void slot_kibitz(int, const QString&, const QString&);
 /*	void slot_move(Game*);
 	void slot_computer_game(QNewGameDlg*);
-	void slot_kibitz(int, const QString&, const QString&);
 	void slot_title(const QString&);
 	void slot_komi(const QString&, const QString&, bool);
 	void slot_freegame(bool);
 	void slot_matchcreate(const QString&, const QString&);
 	void slot_removestones(const QString&, const QString&);
 	void slot_undo(const QString&, const QString&);
-	void slot_result(const QString&, const QString&, bool, const QString&);
+	
 	void slot_matchsettings(const QString&, const QString&, const QString&, assessType);
 	void slot_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void slot_timeAdded(int, bool);

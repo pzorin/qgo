@@ -33,7 +33,7 @@ signals:
 	//new signals
 	void signal_gameRestored(Game*);
 	void signal_gameResult(QString);
-
+	void signal_result(Game*);
 	// emit if info is found
 	void signal_player(Player*, bool);
   	void signal_statsPlayer(Player*);
@@ -62,7 +62,7 @@ signals:
 	void signal_removestones(const QString&, const QString&);
 	void signal_komirequest(const QString&, int, int, bool);
 	void signal_opponentopen(const QString&);
-	void signal_result(const QString&, const QString&, bool, const QString&);
+	void signal_score(const QString&, const QString&, bool, const QString&);
 	void signal_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void signal_undo(const QString&, const QString&);
 	void signal_addToObservationList(int);

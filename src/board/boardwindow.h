@@ -43,6 +43,7 @@ public:
 	void init();
 	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad = false); //TODO get rid of fastload
 	bool doSave(QString fileName, bool force);
+	QString getCandidateFileName();
 
 	int getBoardSize() 			{return boardSize;}
 	Board *getBoard() 			{return ui.board;}
@@ -59,6 +60,8 @@ public:
 	MarkType getEditMark()			{return editMark;}
 	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
 	void setGameData(GameData *gd);	
+	QString get_wplayer()			{return gameData->playerWhite;}
+	QString get_bplayer()			{return gameData->playerBlack;}
 
 	qGoBoard *qgoboard;
 
@@ -92,7 +95,6 @@ private:
 	QButtonGroup *editButtons;
 	MarkType editMark;
 
-	QString getCandidateFileName();
 };
 
 #endif

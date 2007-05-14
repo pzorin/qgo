@@ -59,6 +59,7 @@ void qGoBoard::setHandicap(int handicap)
 		 * of handicap stones won't change that */
 		//currentMove++;
 		tree->getCurrent()->setMoveNumber(0);
+		tree->getCurrent()->setHandicapMove(TRUE);
 //	}
 
 	// extra:
@@ -422,6 +423,7 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 {
 	int mv_nr_int;
 	int mv_counter = tree->getCurrent()->getMoveNumber();
+	bool hcp_move = tree->getCurrent()->isHandicapMove();
 	// IGS: case undo with 'mark': no following command
 	// -> from qgoIF::slot_undo(): set_move(stoneNone, 0, 0)
 	if (mv_nr.isEmpty())
@@ -430,12 +432,16 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 	else
 		mv_nr_int = mv_nr.toInt();
 
+	// We are observing a game, and we take the game in the middle
 	if (mv_nr_int > mv_counter)
 	{
 		if (mv_nr_int != mv_counter + 1 && mv_counter != 0)
 			// case: move has done but "moves" cmd not executed yet
 			qWarning("**** LOST MOVE !!!! ****");
-		else if (mv_counter == 0 && mv_nr_int != 0)
+		// if the move number given by the server is over current, we skip 
+		// (means the 'move' command moves have not yet come in)
+		// exception : the fist move, if a handicap, has number 0 and next incoming IGS move has number 1 (instead of 0)
+		else if (mv_counter == 0 && mv_nr_int != 0 && !hcp_move)
 		{
 			qDebug("move skipped");
 			// skip moves until "moves" cmd executed
@@ -502,13 +508,13 @@ void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
 	{
 		QString handi = pt.simplified();
 		int h = handi.section(" ",-1).toInt();//element(handi, 1, " ").toInt();
-
+		
+		setHandicap(h);
 		// check if handicap is set with initGame() - game data from server do not
 		// contain correct handicap in early stage, because handicap is first move!
 		if ( boardwindow->getGameData()->handicap != h)
 		{
 			boardwindow->getGameData()->handicap = h;
-			setHandicap(h);
 			qDebug("corrected Handicap");
 		}
 	}
@@ -615,6 +621,46 @@ void qGoBoard::markDeadStone(int x, int y)
 	tree->getCurrent()->getMatrix()->toggleGroupAt(x, y);
 	boardwindow->getBoardHandler()->countScore();
 }
+
+/*
+ * The text in the comment zone has been changed
+ */
+void qGoBoard::slotUpdateComment()
+{
+	tree->getCurrent()->setComment(boardwindow->getUi().commentEdit->toPlainText());
+}
+
+
+/*
+ * kibitz was received. Tranfer it to move and comment window
+ */
+void qGoBoard::kibitzReceived(const QString& text)
+{
+
+	QString k = text;
+	k.prepend( "(" + QString(tree->getCurrent()->getMoveNumber()) + ") ");
+	
+	QString txt = tree->getCurrent()->getComment();
+
+	if (!txt.isEmpty())
+		txt.append('\n');
+
+	txt.append(k);
+	tree->getCurrent()->setComment(txt);
+
+	if (!boardwindow->getUi().commentEdit->toPlainText().isEmpty())
+		boardwindow->getUi().commentEdit->append("\n");
+
+	
+	boardwindow->getUi().commentEdit->append(k);
+
+}
+
+/***************************************************************************
+ *
+ * Normal Interface
+ *
+ ****************************************************************************/
 
 
 

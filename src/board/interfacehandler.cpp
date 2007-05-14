@@ -29,6 +29,15 @@ InterfaceHandler::InterfaceHandler(BoardWindow *bw)
 
 	tabPlay  = boardwindow->getUi().tabTools->widget(0); 
 	tabEdit = boardwindow->getUi().tabTools->widget(1) ;
+
+	GameMode mode = boardwindow->getGameMode();
+
+	if (mode == modeObserve || mode == modeMatch)
+		boardwindow->getUi().commentEdit->setReadOnly( true );
+
+	if (mode == modeNormal || mode == modeComputer)
+		boardwindow->getUi().commentEdit2->setDisabled(true);
+
 }
 
 InterfaceHandler::~InterfaceHandler()

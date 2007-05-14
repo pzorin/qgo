@@ -502,7 +502,8 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //		board->getInterfaceHandler()->setMoveData(currentMove, getBlackTurn(), brothers, getNumSons(),
 //		hasParent(), hasPrevBrother(), hasNextBrother());
 //	if (board->get_isLocalGame())
-	// Update comment
+	// Update comment if normal game (if observe or match, the comment zone is kept as is)
+	if (boardwindow->getGameMode() == modeNormal)
 		boardwindow->getInterfaceHandler()->displayComment(m->getComment());
 
 

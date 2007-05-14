@@ -20,32 +20,32 @@ public:
 	~Move();
 	
 	bool equals(Move *m);
-	int getX() const { return x; }
-	int getY() const { return y; }
-	void setX(int n) { x = n; }
-	void setY(int n) { y = n; }
-	StoneColor getColor() const { return stoneColor; }
-	void setColor(StoneColor c) { stoneColor = c; }
-	int getCapturesBlack() const { return capturesBlack; }
-	int getCapturesWhite() const { return capturesWhite; }
+	int getX() const 		{ return x; }
+	int getY() const 		{ return y; }
+	void setX(int n)		 { x = n; }
+	void setY(int n) 		{ y = n; }
+	StoneColor getColor() const 	{ return stoneColor; }
+	void setColor(StoneColor c) 	{ stoneColor = c; }
+	int getCapturesBlack() const 	{ return capturesBlack; }
+	int getCapturesWhite() const 	{ return capturesWhite; }
 	void setCaptures(int cb, int cw) { capturesBlack = cb; capturesWhite = cw; }
-	Matrix* getMatrix() { return matrix; }
-	void setMatrix(Matrix *m) { matrix = m; }
-	void setMoveNumber(int n) { moveNum = n; }
-	int getMoveNumber() const { return moveNum; }
-	GamePhase getGamePhase() const { return gamePhase; }
-	void setGamePhase(GamePhase p) { gamePhase = p; }
-	QString &getNodeName() { return nodeName; }
+	Matrix* getMatrix() 		{ return matrix; }
+	void setMatrix(Matrix *m) 	{ matrix = m; }
+	void setMoveNumber(int n) 	{ moveNum = n; }
+	int getMoveNumber() const 	{ return moveNum; }
+	GamePhase getGamePhase() const 	{ return gamePhase; }
+	void setGamePhase(GamePhase p) 	{ gamePhase = p; }
+	QString &getNodeName() 		{ return nodeName; }
 	void setNodeName(const QString &s) { nodeName = s; }
-	QString &getComment() { return comment; }
+	QString &getComment() 		{ return comment; }
 	void setComment(const QString &s) {
 		comment = s;
 		comment.squeeze();
 	}
-	QString &getUnknownProperty() { return unknownProperty; }
+	QString &getUnknownProperty() 	{ return unknownProperty; }
 	void setUnknownProperty(const QString &s) { unknownProperty = s; }
 	const QString saveMove(bool isRoot);
-	bool isTerritoryMarked() const { return terrMarked; }
+	bool isTerritoryMarked() const 	{ return terrMarked; }
 	void setTerritoryMarked(bool b=true) { terrMarked = b; }
 	void insertFastLoadMark(int x, int y, MarkType markType, const QString &txt=0);
 	bool isScored() const { return scored; }
@@ -64,6 +64,8 @@ public:
 	void setPLinfo(StoneColor sc) { PLinfo = true; PLnextMove = sc; }
 	bool getPLinfo() { return PLinfo; }
 	StoneColor getPLnextMove() { return PLnextMove; }
+	void setHandicapMove(bool b)		{ handicapMove = b; }
+	bool isHandicapMove()			{return handicapMove ;}
 	
 	Move *brother, *son, *parent, *marker;
 	bool checked;
@@ -87,6 +89,7 @@ private:
 	QString unknownProperty;
 	QString nodeName;
 	bool terrMarked, scored, timeinfo, PLinfo;
+	bool handicapMove;
 };
 
 #endif

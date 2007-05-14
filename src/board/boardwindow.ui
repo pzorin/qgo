@@ -5440,7 +5440,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
           <widget class="QTextEdit" name="commentEdit" />
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit" />
+          <widget class="QLineEdit" name="commentEdit2" />
          </item>
         </layout>
        </widget>
