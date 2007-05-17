@@ -1,5 +1,4 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Emmanuel Béranger   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,18 +16,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef _ALSA_H_
+#define _ALSA_H_
 
-#include "audio/audio.h"
+#include <alsa/asoundlib.h>
 
-#ifdef Q_OS_LINUX
-#include "audio/alsa.h"
-#endif
+typedef  struct
+{	u_int32_t  dwSize ;
+	u_int16_t  wFormatTag ;
+	u_int16_t  wChannels ;
+	u_int32_t  dwSamplesPerSec ;
+	u_int32_t  dwAvgBytesPerSec ;
+	u_int16_t  wBlockAlign ;
+	u_int16_t  wBitsPerSample ;
+} WAVEFORMAT ;
 
-QSound *SoundFactory::newSound(const QString &filename, QObject *parent)
+
+class QAlsaSound : public QSound
 {
-#ifdef Q_OS_LINUX
-	return new QAlsaSound(filename, parent);
-#else
-	return new QSound(filename, parent);
+Q_OBJECT
+public :
+	QAlsaSound( const QString& filename, QObject* parent=0) ;
+	~QAlsaSound() {};
+
+	QString Path ;
+	bool initialise() ; 
+	bool isAvailable() { return is_available ; }
+	bool is_available;
+	void play();	
+
+private:
+	/* ALSA parameters */
+        snd_pcm_t 		*handle;
+        snd_pcm_sframes_t 	frames;
+	char 			*device ;                        /* playback device */
+	snd_pcm_uframes_t chunk_size, buffer_size;
+	size_t bits_per_sample, bits_per_frame, chunk_bytes;
+
+	/* File parser */
+	int	fd;				/* Open file descriptor or -1 */
+	char* findchunk(char* pstart, char* fourcc, size_t n);
+	WAVEFORMAT waveformat ;
+	u_long samples, datastart;
+
+};
+
 #endif
-}

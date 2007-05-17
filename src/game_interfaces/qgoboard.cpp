@@ -27,7 +27,7 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 		gameData = NULL;
 
 //TODO get the sound from correct path
-	clickSound = new QAlsaSound( "/usr/share/qGo/sounds/stone.wav" );
+	clickSound = SoundFactory::newSound( "/usr/share/qGo/sounds/stone.wav" );
 }
 
 

@@ -7,12 +7,11 @@ RESOURCES = application.qrc  \
 board/board.qrc
 QT = core gui \
 network
-TARGET = ../bin/qgo2 
+TARGET = ../bin/qgo2
 CONFIG += warn_on \
           qt \
           thread \
           qtestlib \
-          debug \
           stl
 TEMPLATE = app 
 FORMS += mainwindow.ui \
@@ -74,5 +73,15 @@ game_interfaces \
 game_tree \
 board \
 sgf
-LIBS += -lasound
 
+
+macx {
+CONFIG += x86 ppc
+QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
+}
+
+linux-g++ {
+SOURCES += audio/alsa.cpp
+LIBS += -lasound
+CONFIG += debug
+}

@@ -145,7 +145,7 @@ protected:
 	BoardWindow *boardwindow;
 	Tree *tree;
 	GameData *gameData;
-	QAlsaSound *clickSound;
+	QSound *clickSound;
 
 //	bool        timer_running;
 //	bool        game_paused;

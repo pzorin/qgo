@@ -21,48 +21,10 @@
 
 #include <QSound>
 
-//#ifdef Q_OS_LINUX
-#include <alsa/asoundlib.h>
-//#endif
-
-typedef  struct
-{	u_int32_t  dwSize ;
-	u_int16_t  wFormatTag ;
-	u_int16_t  wChannels ;
-	u_int32_t  dwSamplesPerSec ;
-	u_int32_t  dwAvgBytesPerSec ;
-	u_int16_t  wBlockAlign ;
-	u_int16_t  wBitsPerSample ;
-} WAVEFORMAT ;
-
-
-class QAlsaSound : public QSound
+class SoundFactory
 {
-Q_OBJECT
-public :
-	QAlsaSound( const QString& filename, QObject* parent=0) ;
-	~QAlsaSound() {};
-
-	QString Path ;
-	bool initialise() ; 
-	bool isAvailable() { return is_available ; }
-	bool is_available;
-	void play();	
-
-private:
-	/* ALSA parameters */
-        snd_pcm_t 		*handle;
-        snd_pcm_sframes_t 	frames;
-	char 			*device ;                        /* playback device */
-	snd_pcm_uframes_t chunk_size, buffer_size;
-	size_t bits_per_sample, bits_per_frame, chunk_bytes;
-
-	/* File parser */
-	int	fd;				/* Open file descriptor or -1 */
-	char* findchunk(char* pstart, char* fourcc, size_t n);
-	WAVEFORMAT waveformat ;
-	u_long samples, datastart;
-
+public:
+	static QSound *newSound(const QString &filename, QObject *parent = 0);
 };
 
 #endif // _AUDIO_H_
