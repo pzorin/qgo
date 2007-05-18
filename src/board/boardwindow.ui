@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>877</width>
-    <height>799</height>
+    <width>746</width>
+    <height>737</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -28,6 +28,14 @@
     </property>
     <item row="0" column="0" >
      <widget class="QSplitter" name="splitter_2" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>5</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
@@ -41,6 +49,14 @@
         </property>
         <item>
          <widget class="QFrame" name="boardFrame" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize" >
            <size>
             <width>250</width>
@@ -94,6 +110,14 @@ Maximum game move the slider can currently show.</string>
            </item>
            <item row="0" column="0" colspan="3" >
             <widget class="Board" native="1" name="board" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>13</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize" >
               <size>
                <width>300</width>
@@ -175,7 +199,7 @@ Minimum game move the slider can currently show.</string>
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame" >
+         <widget class="QFrame" name="toolFrame" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>0</hsizetype>
@@ -187,7 +211,7 @@ Minimum game move the slider can currently show.</string>
           <property name="minimumSize" >
            <size>
             <width>130</width>
-            <height>16</height>
+            <height>600</height>
            </size>
           </property>
           <property name="maximumSize" >
@@ -3684,7 +3708,26 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
             </widget>
            </item>
            <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QTabWidget" name="tabTools" >
+             <property name="minimumSize" >
+              <size>
+               <width>0</width>
+               <height>310</height>
+              </size>
+             </property>
              <property name="tabPosition" >
               <enum>QTabWidget::South</enum>
              </property>
@@ -4478,6 +4521,12 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="minimumSize" >
+                  <size>
+                   <width>0</width>
+                   <height>100</height>
+                  </size>
+                 </property>
                  <property name="title" >
                   <string>Stones tools</string>
                  </property>
@@ -4922,15 +4971,21 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                </item>
                <item>
                 <widget class="QGroupBox" name="groupBox_2" >
+                 <property name="minimumSize" >
+                  <size>
+                   <width>0</width>
+                   <height>70</height>
+                  </size>
+                 </property>
                  <property name="title" >
                   <string>Game Tree tools</string>
                  </property>
                  <layout class="QGridLayout" >
                   <property name="margin" >
-                   <number>2</number>
+                   <number>1</number>
                   </property>
                   <property name="spacing" >
-                   <number>2</number>
+                   <number>1</number>
                   </property>
                   <item row="0" column="2" >
                    <widget class="QPushButton" name="swapVarButton" >
@@ -5425,6 +5480,14 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
        </layout>
       </widget>
       <widget class="QSplitter" name="splitter" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>7</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
        </property>
@@ -5437,14 +5500,41 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
           <number>6</number>
          </property>
          <item>
-          <widget class="QTextEdit" name="commentEdit" />
+          <widget class="QTextEdit" name="commentEdit" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>5</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="commentEdit2" />
+          <widget class="QLineEdit" name="commentEdit2" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>5</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
-       <widget class="QTableView" name="tableView" />
+       <widget class="QTableView" name="tableView" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>7</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -5495,7 +5585,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>877</width>
+     <width>746</width>
      <height>28</height>
     </rect>
    </property>

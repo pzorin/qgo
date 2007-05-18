@@ -767,12 +767,12 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 	// We already have a mark on this spot? If it is of the same type,
 	// do nothing, else overwrite with the new mark.
 	if ((m = hasMark(x, y)) != NULL)
-	{
-		if (m->getType() == t && m->getType() != markText)  // Text labels are overwritten
-			return;
+//	{
+//		if (m->getType() == t && m->getType() != markText)  // Text labels are overwritten
+//			return;
 		
 		removeMark(x, y);
-	}
+//	}
 
 	if (lastMoveMark != NULL &&
 		lastMoveMark->posX() == x &&

@@ -30,9 +30,8 @@ public:
 	void setCaptures(float black, float white);
 	void clearComment();
 	void toggleToolbarButtons(bool state);
-/*	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
-	void setTimes(bool, float, int);
-	void clearComment();
+	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
+/*	void setTimes(bool, float, int);
 	QString getComment();
 	QString getComment2();
 	void toggleSidebar(bool toggle);
@@ -45,27 +44,7 @@ public:
 	void setClipboard(bool b);
 	
 
-	QLabel *moveNumLabel, *turnLabel, *varLabel, *capturesBlack, *capturesWhite;
-	QAction *navBackward,  *navForward, *navFirst, *navLast, *navNextVar, *navIntersection, //SL added eb 11
-		*navPrevVar, *navStartVar, *navNextBranch, *navMainBranch, *navNthMove, *navAutoplay,
-		*editCut, *editPaste, *editPasteBrother, *editDelete,
-		*navEmptyBranch, *navCloneNode, *navSwapVariations, *navPrevComment, *navNextComment,
- 		*fileImportASCII, *fileImportASCIIClipB, *fileImportSgfClipB, *fileNew, *fileNewBoard, *fileOpen ;
-	QTextEdit *commentEdit;
-	QLineEdit *commentEdit2;
-//	EditTools *editTools;
-	NormalTools *normalTools;
-//	TeachTools *teachTools;
-	ScoreTools *scoreTools;
-	QFrame *toolsFrame;
-	Board *board;
-	QLabel *statusMode, *statusTurn, *statusMark, *statusNav;
-	QPushButton  *scoreButton, *passButton, *undoButton, *resignButton, 
-		*adjournButton, *refreshButton;
-	ButtonState *buttonState;
-	QSlider *slider;
 */
-//	MainWidget *mainWidget;
 	BoardWindow *boardwindow;
 	bool scored_flag;
 

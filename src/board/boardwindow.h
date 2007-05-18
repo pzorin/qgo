@@ -26,10 +26,11 @@
 #include "interfacehandler.h"
 #include "tree.h"
 #include "qgoboard.h"
-
+#include "clockdisplay.h"
 
 class BoardHandler;
 class qGoBoard;
+class ClockDisplay;
 
 class BoardWindow : public QMainWindow, public Ui::BoardWindow
 {
@@ -62,6 +63,7 @@ public:
 	void setGameData(GameData *gd);	
 	QString get_wplayer()			{return gameData->playerWhite;}
 	QString get_bplayer()			{return gameData->playerBlack;}
+	ClockDisplay *getClockDisplay()		{return clockDisplay;}
 
 	qGoBoard *qgoboard;
 
@@ -76,6 +78,7 @@ public slots:
 	void slotViewCoords(bool toggle);
 	bool slotFileSave();
 	bool slotFileSaveAs();
+	void slotEditDelete();
 
 private:
 
@@ -94,7 +97,7 @@ private:
 	
 	QButtonGroup *editButtons;
 	MarkType editMark;
-
+	ClockDisplay *clockDisplay;
 };
 
 #endif

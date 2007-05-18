@@ -91,6 +91,8 @@ void BoardWindow::init()
 	if (gameData)
 		interfaceHandler->updateCaption(gameData);
 
+	clockDisplay = new ClockDisplay(this);
+
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameMode)
 	{
@@ -161,6 +163,7 @@ void BoardWindow::init()
 	//Connects the 'edit' buttons to the slots
 	connect(editButtons, SIGNAL(buttonPressed ( int )), 
 		this, SLOT(slotEditButtonPressed( int )));
+	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
@@ -422,4 +425,12 @@ bool BoardWindow::slotFileSave()
 bool BoardWindow::slotFileSaveAs()
 {
 	return doSave(0, FALSE);
+}
+
+/*
+ * The 'delete node' button has been pressed
+ */
+void BoardWindow::slotEditDelete()
+{
+	qgoboard->deleteNode();
 }
