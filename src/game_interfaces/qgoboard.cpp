@@ -319,7 +319,11 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 {
 	if (doMove(c,x,y))
 		// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
+	{
+		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 		sendMoveToInterface(c,x,y);
+	}
+	
 }
 
 /*
@@ -364,9 +368,12 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 	}
 	else
 		if (tree->getCurrent()->getMoveNumber() > stated_mv_count)
+		{
+			qDebug("playing sound");
+			
 			clickSound->play();
-
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+		}
+//	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
 	return validMove;
 }
@@ -416,187 +423,7 @@ bool qGoBoard::getBlackTurn()
 	return TRUE;
 }
 
-/*
- * A move string is incoming from the interface (computer or server)
- */
-void qGoBoard::set_move(StoneColor sc, QString pt, QString mv_nr)
-{
-	int mv_nr_int;
-	int mv_counter = tree->getCurrent()->getMoveNumber();
-	bool hcp_move = tree->getCurrent()->isHandicapMove();
-	// IGS: case undo with 'mark': no following command
-	// -> from qgoIF::slot_undo(): set_move(stoneNone, 0, 0)
-	if (mv_nr.isEmpty())
-		// undo one move
-		mv_nr_int = mv_counter - 1;
-	else
-		mv_nr_int = mv_nr.toInt();
-
-	// We are observing a game, and we take the game in the middle
-	if (mv_nr_int > mv_counter)
-	{
-		if (mv_nr_int != mv_counter + 1 && mv_counter != 0)
-			// case: move has done but "moves" cmd not executed yet
-			qWarning("**** LOST MOVE !!!! ****");
-		// if the move number given by the server is over current, we skip 
-		// (means the 'move' command moves have not yet come in)
-		// exception : the fist move, if a handicap, has number 0 and next incoming IGS move has number 1 (instead of 0)
-		else if (mv_counter == 0 && mv_nr_int != 0 && !hcp_move)
-		{
-			qDebug("move skipped");
-			// skip moves until "moves" cmd executed
-			return;
-		}
-		else
-			mv_counter++;
-	}
-/*	else if (mv_nr_int + 1 == mv_counter)
-	{
-		// scoring mode? (NNGS)
-		if (gameMode == modeScore)
-		{
-			// back to matchMode
-			win->doRealScore(false);
-			win->getBoard()->setMode(modeMatch);
-		}
-
-		// special case: undo handicap
-		if (mv_counter <= 0 && gd.handicap)
-		{
-			gd.handicap = 0;
-			win->getBoard()->getBoardHandler()->setHandicap(0);
-			qDebug("set Handicap to 0");
-		}
-
-		if (!pt)
-		{
-			// case: undo
-			qDebug("set_move(): UNDO in game " + QString::number(id));
-			qDebug("...mv_nr = " + mv_nr);
-
-			                                                                       //added eb 9
-			Move *m=win->getBoard()->getBoardHandler()->getTree()->getCurrent();
-			Move *last=win->getBoard()->getBoardHandler()->lastValidMove ; //win->getBoard()->getBoardHandler()->getTree()->findLastMoveInMainBranch();
-
-			if (m!=last)                          // equivalent to display_incoming_move = false
-				win->getBoard()->getBoardHandler()->getTree()->setCurrent(last) ;
-			else
-				m = m->parent ;                   //we are going to delete the node. We will bactrack to m
-
-			win->getBoard()->deleteNode();
-			win->getBoard()->getBoardHandler()->lastValidMove = win->getBoard()->getBoardHandler()->getTree()->getCurrent();
-			win->getBoard()->getBoardHandler()->getTree()->getCurrent()->marker = NULL ; //(just in case)
-			win->getBoard()->getBoardHandler()->getStoneHandler()->checkAllPositions();
-                             
-			win->getBoard()->getBoardHandler()->getTree()->setCurrent(m) ;   //we return where we were observing the game
-			// this is not very nice, but it ensures things stay clean
-			win->getBoard()->getBoardHandler()->updateMove(m);                      // end add eb 9
-
-			mv_counter--;
-
-			// ok for sound - no moves cmd in execution
-			sound = true;
-		}
-
-		return;
-	}
-	else
-		// move already done...
-		return;
-*/
-	if (pt.contains("Handicap"))
-	{
-		QString handi = pt.simplified();
-		int h = handi.section(" ",-1).toInt();//element(handi, 1, " ").toInt();
-		
-		setHandicap(h);
-		// check if handicap is set with initGame() - game data from server do not
-		// contain correct handicap in early stage, because handicap is first move!
-		if ( boardwindow->getGameData()->handicap != h)
-		{
-			boardwindow->getGameData()->handicap = h;
-			qDebug("corrected Handicap");
-		}
-	}
-
-	else if (pt.contains("Pass",Qt::CaseInsensitive))
-	{
-//		win->getBoard()->doSinglePass();
-//		if (win->getBoard()->getBoardHandler()->local_stone_sound)
-//			qgo->playPassSound();
-		doPass();
-	}
-	else
-	{
-/*		if ((gameMode == modeMatch) && (mv_counter < 2) && !(myColorIsBlack))
-		{
-			// if black has not already done - maybe too late here???
-			if (requests_set)
-			{
-				qDebug(QString("qGoBoard::set_move() : check_requests at move %1").arg(mv_counter));
-				check_requests();
-			}
-		}
-*/
-		int i = pt[0].unicode() - QChar::fromAscii('A').unicode() + 1;
-		// skip j
-		if (i > 8)
-			i--;
-
-		int j;
-
-		if (pt[2] >= '0' && pt[2] <= '9')
-			j = boardwindow->getGameData()->size + 1 - pt.mid(1,2).toInt();
-		else
-			j = boardwindow->getGameData()->size + 1 - pt[1].digitValue();
-
-		// avoid sound problem during execution of "moves" cmd
-/*		if (stated_mv_count > mv_counter)
-			sound = false;
-
-		else if (gameMode == modeComputer)
-			sound = true;
-*/
-//		win->getBoard()->addStone(sc, i, j, sound);
-
-		if (!doMove(sc, i, j))
-			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 seems to be invalid").arg(pt.toLatin1().constData()));
-//		qDebug ("QGoboard:setMove - move %d %d done",i,j);
-/*
-		Move *m = tree->getCurrent();
-		if (stated_mv_count > mv_counter ||
-			//gameMode == modeTeach ||
-			//ExtendedTeachingGame ||
-			wt_i < 0 || bt_i < 0)
-		{
-			m->setTimeinfo(false);
-		}
-		else
-		{
-			m->setTimeLeft(sc == stoneBlack ? bt_i : wt_i);
-			int stones = -1;
-			if (sc == stoneBlack)
-				stones = b_stones.toInt();
-			else
-				stones = w_stones.toInt();
-			m->setOpenMoves(stones);
-			m->setTimeinfo(true);
-
-			// check for a common error -> times and open moves identical
-			if (m->parent &&
-				m->parent->parent &&
-				m->parent->parent->getTimeinfo() &&
-				m->parent->parent->getTimeLeft() == m->getTimeLeft() &&
-				m->parent->parent->getOpenMoves() == m->getOpenMoves())
-			{
-				m->parent->parent->setTimeinfo(false);
-			}
-		}
-*/	
-	}
-
-}
-
+ 
 
 /*
  * This functions initialises the scoring mode
@@ -638,7 +465,7 @@ void qGoBoard::kibitzReceived(const QString& text)
 {
 
 	QString k = text;
-	k.prepend( "(" + QString(tree->getCurrent()->getMoveNumber()) + ") ");
+	k.prepend( "(" + QString::number(tree->getCurrent()->getMoveNumber()) + ") ");
 	
 	QString txt = tree->getCurrent()->getComment();
 
@@ -648,13 +475,162 @@ void qGoBoard::kibitzReceived(const QString& text)
 	txt.append(k);
 	tree->getCurrent()->setComment(txt);
 
-	if (!boardwindow->getUi().commentEdit->toPlainText().isEmpty())
-		boardwindow->getUi().commentEdit->append("\n");
+//	if (!boardwindow->getUi().commentEdit->toPlainText().isEmpty())
+//		boardwindow->getUi().commentEdit->append("\n");
 
 	
 	boardwindow->getUi().commentEdit->append(k);
 
 }
+
+// send regular time Info
+void qGoBoard::timerEvent(QTimerEvent*)
+{
+	// wait until first move
+//	if (mv_counter < 0 || id < 0 || game_paused)
+	if (boardwindow->getGamePhase() != phaseOngoing)
+		return;
+/*
+	if (getBlackTurn())
+	{
+		// B's turn
+//		bt_i--;
+
+		win->getInterfaceHandler()->setTimes(secToTime(bt_i), b_stones, wt, w_stones);
+
+	}
+	else	
+	{
+		// W's turn
+//		wt_i--;
+
+		win->getInterfaceHandler()->setTimes(bt, b_stones, secToTime(wt_i), w_stones);
+
+	}
+*/
+	boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
+/*
+	// warn if I am within the last 10 seconds
+	if (gameMode == modeMatch)
+	{
+		if (myColorIsBlack && bt_i <= BY_timer && bt_i > -1 && mv_counter % 2) // ||
+		{
+			// each second we alternate button background color
+			if (bt_i %2)
+				win->getInterfaceHandler()->normalTools->pb_timeBlack->setPaletteBackgroundColor(Qt::red);
+			else 
+				win->getInterfaceHandler()->normalTools->pb_timeBlack->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;//setPaletteBackgroundColor(Qt::PaletteBase);
+			qgo->playTimeSound();
+		}		
+	
+		else if ( !myColorIsBlack && wt_i <= BY_timer && wt_i > -1 && (mv_counter % 2) == 0)
+		{
+			if (wt_i %2)
+				win->getInterfaceHandler()->normalTools->pb_timeWhite->setPaletteBackgroundColor(Qt::red);
+			else 
+				win->getInterfaceHandler()->normalTools->pb_timeWhite->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;//setPaletteBackgroundColor(Qt::PaletteBase);
+			qgo->playTimeSound();
+		}
+		
+		//we have to reset the color when not anymore in warning period)
+		else if (win->getInterfaceHandler()->normalTools->pb_timeBlack->paletteBackgroundColor() == Qt::red)
+			win->getInterfaceHandler()->normalTools->pb_timeBlack->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;
+
+		
+		else if (win->getInterfaceHandler()->normalTools->pb_timeWhite->paletteBackgroundColor() == Qt::red)
+			win->getInterfaceHandler()->normalTools->pb_timeWhite->setPaletteBackgroundColor(win->getInterfaceHandler()->normalTools->palette().color(QPalette::Active,QColorGroup::Button)) ;
+
+		
+
+	}
+*/
+}
+
+/*
+ * Deletes the current move, and all the following
+ */
+void qGoBoard::deleteNode()
+{
+//	CHECK_PTR(tree);
+	
+	Move 	*m = tree->getCurrent(),
+		*remember = NULL,
+		*remSon = NULL;
+	Q_CHECK_PTR(m);
+	
+	if (m->parent != NULL)
+	{
+		remember = m->parent;
+		
+		// Remember son of parent if its not the move to be deleted.
+		// Then check for the brothers and fix the pointer connections, if we
+		// delete a node with brothers. (It gets ugly now...)
+		// YUCK! I hope this works.
+		if (remember->son == m)                  // This son is our move to be deleted?
+		{
+			if (remember->son->brother != NULL)  // This son has a brother?
+				remSon = remember->son->brother; // Reset pointer
+		}
+		else                                     // No, the son is not our move
+		{
+			remSon = remember->son;
+			Move *tmp = remSon, *oldTmp = tmp;
+			
+			do {   // Loop through all brothers until we find our move
+				if (tmp == m)
+				{
+					if (m->brother != NULL)            // Our move has a brother?
+						oldTmp->brother = m->brother;  // Then set the previous move brother
+					else                               // to brother of our move
+						oldTmp->brother = NULL;        // No brother found.
+					break;
+				}
+				oldTmp = tmp;
+			} while ((tmp = tmp->brother) != NULL);
+		}
+	}
+	else if (tree->hasPrevBrother())
+	{
+		remember = tree->previousVariation();
+		if (m->brother != NULL)
+			remember->brother = m->brother;
+		else
+			remember->brother = NULL;
+	}
+	else if (tree->hasNextBrother())
+	{
+		remember = tree->nextVariation();
+		// Urgs, remember is now root.
+		tree->setRoot(remember);
+	}
+	else
+	{
+		// Oops, first and only move. We delete everything
+		tree->init(boardwindow->getBoardSize());
+//		board->hideAllStones();
+//		board->hideAllMarks();
+//		board->updateCanvas();
+		boardwindow->getBoard()->clearData();
+
+//		lastValidMove = NULL;
+//		stoneHandler->clearData();
+		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+		return;
+	}
+	
+	if (m->son != NULL)
+		Tree::traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
+	delete m;                         // Delete our move
+	tree->setCurrent(remember);       // Set current move to previous move
+	remember->son = remSon;           // Reset son pointer
+	remember->marker = NULL;          // Forget marker
+	
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+	
+//	board->setModified();
+}
+
+
 
 /***************************************************************************
  *
@@ -700,5 +676,4 @@ void qGoBoardNormalInterface::leaveScoreMode()
 	boardwindow->setGamePhase ( phaseOngoing );
 	boardwindow->getBoardHandler()->exitScore();
 }
-
 

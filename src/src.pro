@@ -7,11 +7,12 @@ RESOURCES = application.qrc  \
 board/board.qrc
 QT = core gui \
 network
-TARGET = ../bin/qgo2
+TARGET = ../bin/qgo2 
 CONFIG += warn_on \
           qt \
           thread \
           qtestlib \
+          debug \
           stl
 TEMPLATE = app 
 FORMS += mainwindow.ui \
@@ -38,7 +39,8 @@ audio/audio.h \
 mainwindow_settings.h \
 server/igsconnection.h \
 server/parser.h \
-game_interfaces/qgo_interface.h
+game_interfaces/qgo_interface.h \
+board/clockdisplay.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -63,9 +65,10 @@ SOURCES += main.cpp \
            server/parser.cpp \
            mainwindow_server.cpp \
            game_interfaces/qgo_interface.cpp \
-           game_interfaces/qgoboard_observe.cpp
+           game_interfaces/qgoboard_observe.cpp \
+           board/clockdisplay.cpp
 QT -= qt3support
-DEPENDPATH += """""board sgf game_tree game_interfaces gtp"""""
+DEPENDPATH += "board sgf game_tree game_interfaces gtp"
 INCLUDEPATH += server \
 audio \
 gtp \
@@ -75,13 +78,13 @@ board \
 sgf
 
 
-macx {
-CONFIG += x86 ppc
-QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
+macx{
+    CONFIG += x86 ppc
+    QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
 }
 
-linux-g++ {
-SOURCES += audio/alsa.cpp
-LIBS += -lasound
-CONFIG += debug
+linux-g++{
+    SOURCES += audio/alsa.cpp
+    LIBS += -lasound
+    CONFIG += debug
 }
