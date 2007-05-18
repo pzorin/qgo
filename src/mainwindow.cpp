@@ -36,6 +36,10 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	qDebug( "Current Path : %s" ,QDir::currentPath ().toLatin1().constData());
 
 	ui.setupUi(this);
+
+	initStatusBar();
+
+	//setting the lists layout on the server tab
 	ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
 	ui.ListView_games->hideColumn(12);
 	ui.ListView_games->hideColumn(13);
@@ -72,11 +76,16 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 //	ui.ListView_players->setColumnWidth ( 11, 25 );
 
 
-
+	//connectig the slots on the lists and else on the server tab
 	connect(ui.ListView_games->header(),SIGNAL( sectionClicked ( int ) ), SLOT(slot_sortGames (int)));
 	connect(ui.ListView_players->header(),SIGNAL( sectionClicked ( int ) ), SLOT(slot_sortPlayers (int)));
 	// doubleclick
 	connect(ui.ListView_games, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), SLOT(slot_gamesDoubleClicked(QTreeWidgetItem*)));
+
+	
+	connect(ui.pbRefreshPlayers,SIGNAL(pressed()),SLOT(slot_RefreshPlayers()));
+	connect(ui.pbRefreshGames,SIGNAL(pressed()),SLOT(slot_RefreshGames()));
+	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_RoomListClicked(const QString &)));
 
 	SGFloaded = "";
 	SGFloaded2 = "";
@@ -185,6 +194,72 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
 	saveSettings();
 }
+
+
+
+void MainWindow::initStatusBar()
+{
+//	statusBar = new QStatusBar(parent);
+//	statusBar->resize(-1, 20);
+	statusBar()->show();
+//	statusBar()->setSizeGripEnabled(false);
+	statusBar()->showMessage(tr("Ready."));  // Normal indicator
+
+	// Standard Text instead of "message" cause WhatsThisButten overlaps
+	statusMessage = new QLabel(statusBar());
+	statusMessage->setAlignment(Qt::AlignCenter /*| SingleLine*/);
+	statusMessage->setText("");
+	statusBar()->addPermanentWidget(statusMessage/*, 0, true*/);  // Permanent indicator
+/*
+	// What's this
+	statusWhatsThis = new QLabel(statusBar);
+	statusWhatsThis->setAlignment(AlignCenter | SingleLine);
+	statusWhatsThis->setText("WHATSTHIS");
+	statusBar->addWidget(statusWhatsThis, 0, true);  // Permanent indicator
+	QWhatsThis::whatsThisButton(statusWhatsThis);
+*/
+	// The users widget
+	statusUsers = new QLabel(statusBar());
+	statusUsers->setAlignment(Qt::AlignCenter /* | SingleLine*/);
+	statusUsers->setText(" P: 0");// / 0 ");
+	statusBar()->addPermanentWidget(statusUsers /*, 0, true*/);  // Permanent indicator
+	statusUsers->setToolTip( tr("Current online players / watched players"));
+	statusUsers->setWhatsThis( tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
+
+	// The games widget
+	statusGames = new QLabel(statusBar());
+	statusGames->setAlignment(Qt::AlignCenter /*| SingleLine*/);
+	statusGames->setText(" G: 0");// / 0 ");
+	statusBar()->addPermanentWidget(statusGames /*, 0, true*/);  // Permanent indicator
+	statusGames->setToolTip( tr("Current online games / observed games + matches"));
+	statusGames->setWhatsThis( tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
+
+	// The server widget
+	statusServer = new QLabel(statusBar());
+	statusServer->setAlignment(Qt::AlignCenter /*| SingleLine*/);
+	statusServer->setText(" OFFLINE ");
+	statusBar()->addPermanentWidget(statusServer /*, 0, true*/);  // Permanent indicator
+	statusServer->setToolTip( tr("Current server"));
+	statusServer->setWhatsThis( tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
+/*
+	// The channel widget
+	statusChannel = new QLabel(statusBar());
+	statusChannel->setAlignment(Qt::AlignCenter | SingleLine);
+	statusChannel->setText("");
+	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
+	QToolTip::add(statusChannel, tr("Current channels and users"));
+	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
+
+	// Online Time
+	statusOnlineTime = new QLabel(statusBar());
+	statusOnlineTime->setAlignment(Qt::AlignCenter | SingleLine);
+	statusOnlineTime->setText(" 00:00 ");
+	statusBar()->addWidget(statusOnlineTime, 0, true);  // Permanent indicator
+	QToolTip::add(statusOnlineTime, tr("Online Time"));
+	QWhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
+*/
+}
+
 
 
 /* 
@@ -406,4 +481,6 @@ void MainWindow::slot_gamesDoubleClicked(QTreeWidgetItem* lv)
 {
 	sendcommand ("observe " + lv->text(0));
 }
+
+
 

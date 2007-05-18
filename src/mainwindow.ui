@@ -26,7 +26,7 @@
   <widget class="QWidget" name="centralwidget" >
    <layout class="QHBoxLayout" >
     <property name="margin" >
-     <number>9</number>
+     <number>6</number>
     </property>
     <property name="spacing" >
      <number>6</number>
@@ -144,10 +144,10 @@
       <widget class="QWidget" name="Server" >
        <layout class="QGridLayout" >
         <property name="margin" >
-         <number>9</number>
+         <number>0</number>
         </property>
         <property name="spacing" >
-         <number>6</number>
+         <number>3</number>
         </property>
         <item rowspan="2" row="0" column="1" >
          <widget class="QTabWidget" name="tabWidget" >
@@ -168,7 +168,7 @@
            </attribute>
            <layout class="QGridLayout" >
             <property name="margin" >
-             <number>9</number>
+             <number>3</number>
             </property>
             <property name="spacing" >
              <number>6</number>
@@ -279,19 +279,279 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="QComboBox" name="comboBox_2" >
+                   <widget class="QComboBox" name="whoBox1" >
+                    <item>
+                     <property name="text" >
+                      <string/>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>9p-1p</string>
+                     </property>
+                    </item>
                     <item>
                      <property name="text" >
                       <string>9d</string>
                      </property>
                     </item>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="comboBox_3" >
+                    <item>
+                     <property name="text" >
+                      <string>8d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>7d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>6d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>5d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>4d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>3d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>2d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>1d</string>
+                     </property>
+                    </item>
                     <item>
                      <property name="text" >
                       <string>1k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>2k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>3k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>4k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>5k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>6k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>7k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>8k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>9k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>10k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>11k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>12k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>13k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>15k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>16k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string/>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="whoBox2" >
+                    <item>
+                     <property name="text" >
+                      <string/>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>9p-1p</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>9d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>8d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>7d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>6d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>5d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>4d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>3d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>2d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>1d</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>1k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>2k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>3k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>4k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>5k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>6k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>7k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>8k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>9k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>10k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>11k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>12k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>13k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>14k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>15k</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text" >
+                      <string>16k</string>
                      </property>
                     </item>
                    </widget>
@@ -300,6 +560,39 @@
                    <widget class="QCheckBox" name="whoOpenCheck" >
                     <property name="text" >
                      <string>Open</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="pbRefreshPlayers" >
+                    <property name="text" >
+                     <string>...</string>
+                    </property>
+                    <property name="icon" >
+                     <iconset resource="application.qrc" >:/ressources/pics/refresh_players.png</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer>
+                    <property name="orientation" >
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" >
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="pbRefreshGames" >
+                    <property name="text" >
+                     <string>...</string>
+                    </property>
+                    <property name="icon" >
+                     <iconset resource="application.qrc" >:/ressources/pics/refresh_games.png</iconset>
                     </property>
                    </widget>
                   </item>
@@ -480,6 +773,9 @@
            </property>
            <item row="6" column="1" >
             <widget class="QComboBox" name="comboBox_5" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
              <item>
               <property name="text" >
                <string/>
@@ -640,22 +936,6 @@
           <property name="currentIndex" >
            <number>0</number>
           </property>
-          <widget class="QWidget" name="tab_5" >
-           <attribute name="title" >
-            <string>Messages</string>
-           </attribute>
-           <layout class="QGridLayout" >
-            <property name="margin" >
-             <number>9</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item row="0" column="0" >
-             <widget class="QTextEdit" name="textEdit" />
-            </item>
-           </layout>
-          </widget>
           <widget class="QWidget" name="tab_6" >
            <attribute name="title" >
             <string>Shouts</string>
@@ -669,6 +949,22 @@
             </property>
             <item row="0" column="0" >
              <widget class="QTextEdit" name="textEdit_2" />
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_5" >
+           <attribute name="title" >
+            <string>Messages</string>
+           </attribute>
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>9</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="0" column="0" >
+             <widget class="QTextEdit" name="textEdit" />
             </item>
            </layout>
           </widget>

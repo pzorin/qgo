@@ -58,6 +58,9 @@ public slots:
 	void slot_sendCommand(const QString &, bool);
 //	void slot_cmdactivated_int(int);
 	void slot_cmdactivated(const QString&);
+	void slot_RefreshGames();
+	void slot_RefreshPlayers();
+	void slot_RoomListClicked(const QString &);
 
 	// parser slots
 	void slot_refresh(int i);
@@ -84,6 +87,9 @@ private:
 	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
 	GameData * GameLoaded , * GameLoaded2 ;
 	qGoIF * qgoif;
+
+	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer;
+	void initStatusBar();
 
 //	QList<BoardWindow *> boardList;
 	void createGame(GameMode gameMode, GameData * gameData, bool myColorIsBlack = FALSE, bool myColorIsWhite = FALSE, QString fileLoaded = "");

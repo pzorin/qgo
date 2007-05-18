@@ -283,7 +283,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 			// let qgo know which server
 //TODO			qgoif->set_gsName(myAccount->get_gsname());
 			// show current Server name in status bar
-//			statusServer->setText(" " + myAccount->svname + " ");
+			statusServer->setText(" " + myAccount->svname + " ");
 
 			// start timer: event every second
 			onlineCount = 0;
@@ -560,8 +560,67 @@ void MainWindow::showOpen(bool show)
 
 }
 
+/*
+ * room list clicked
+ */
+void MainWindow::slot_RoomListClicked(const QString& text)
+{
+	QString room;
 
-// refresh button clicked
+	if (text == QObject::tr("Lobby"))
+		room = "0";
+	else
+		room = text.section(":",0,0);
+
+	sendcommand("join " + room);	
+	
+/*	if (room == "0")
+		statusBar()->message(tr("rooms left"));
+	else
+		statusBar()->message(tr("Room ")+ room);
+*/	
+	//refresh the players table
+	slot_refresh(0);	
+}
+
+
+
+
+
+/*
+ * refresh games button clicked
+ */
+void MainWindow::slot_RefreshGames()
+{
+//	if (gamesListSteadyUpdate)
+//		slot_refresh(1);
+//	else
+//	{
+		// clear table in case of quiet mode
+		slot_refresh(11);
+//		gamesListSteadyUpdate = !setQuietMode->isOn(); 
+//	}
+}
+
+/*
+ * refresh players button clicked
+ */
+void MainWindow::slot_RefreshPlayers()
+{
+//	if (playerListSteadyUpdate)
+//		slot_refresh(0);
+//	else
+//	{
+		// clear table in case of quiet mode
+		slot_refresh(10);
+//		playerListSteadyUpdate = !setQuietMode->isOn(); 
+//	}
+}
+
+
+/*
+ * refresh lists
+ */
 void MainWindow::slot_refresh(int i)
 {
 
@@ -572,25 +631,25 @@ void MainWindow::slot_refresh(int i)
 		case 10:
 			prepareTables(WHO);
 		case 0:
-/* TODO			// send "WHO" command
+			// send "WHO" command
       			//set the params of "who command"
-			if ((whoBox1->currentItem() >1)  || (whoBox2->currentItem() >1))
+			if ((ui.whoBox1->currentIndex() >1)  || (ui.whoBox2->currentIndex() >1))
         		{
-				wparam.append(whoBox1->currentItem()==1 ? "9p" : whoBox1->currentText());
-				if ((whoBox1->currentItem())  && (whoBox2->currentItem()))
+				wparam.append(ui.whoBox1->currentIndex()==1 ? "9p" : ui.whoBox1->currentText());
+				if ((ui.whoBox1->currentIndex())  && (ui.whoBox2->currentIndex()))
 					wparam.append("-");
 
-				wparam.append(whoBox2->currentItem()==1 ? "9p" : whoBox2->currentText());
+				wparam.append(ui.whoBox2->currentIndex()==1 ? "9p" : ui.whoBox2->currentText());
          		} 
-			else if ((whoBox1->currentItem())  || (whoBox2->currentItem()))
+			else if ((ui.whoBox1->currentIndex())  || (ui.whoBox2->currentIndex()))
         			wparam.append("1p-9p");
 			else
 				wparam.append(((myAccount->get_gsname() == IGS) ? "9p-BC" : " "));
 				
 
-			if (whoOpenCheck->isChecked())
+			if (ui.whoOpenCheck->isChecked())
 				wparam.append(((myAccount->get_gsname() == WING) ? "O" : "o"));//wparam.append(" o");
-*/
+
 			if (myAccount->get_gsname() == IGS )//&& extUserInfo)
 				sendcommand(wparam.prepend("userlist "));
 			else
@@ -636,7 +695,7 @@ void MainWindow::prepareTables(InfoType cmd)
 			myAccount->num_watchedplayers = 0;
 			// use this for fast filling
 			playerListEmpty = true;
-//			statusUsers->setText(" P: 0 / 0 ");
+			statusUsers->setText(" P: 0");// / 0 ");
 			break;
 		}
 
@@ -652,7 +711,7 @@ void MainWindow::prepareTables(InfoType cmd)
 
 			// set number of games to 0
 			myAccount->num_games = 0;
-//			statusGames->setText(" G: 0 / 0 ");
+			statusGames->setText(" G: 0");         //(" G: 0 / 0 ");
 			break;
 		}
 
@@ -920,7 +979,7 @@ void MainWindow::slot_game(Game* g)
 
 			// increase number of games
 			myAccount->num_games++;
-//			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
+			statusGames->setText(" G: " + QString::number(ui.ListView_games->topLevelItemCount()));//myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 		}
 /*
 		// update player info if this is not a 'who'-result or if it's me
@@ -1031,6 +1090,7 @@ void MainWindow::slot_game(Game* g)
 		{
 			// decrease number of games
 			myAccount->num_games--;
+			statusGames->setText(" G: " + QString::number(ui.ListView_games->topLevelItemCount()));
 //			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 /*
 			QTreeWidgetItemIterator lvp(ListView_players);
@@ -1246,6 +1306,7 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 
 		// increase number of players
 		myAccount->num_players++;
+		statusUsers->setText(" P: " + QString::number(ui.ListView_players->topLevelItemCount()));
 //		statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
 		
 
@@ -1280,6 +1341,7 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 
 				// decrease number of players
 				myAccount->num_players--;
+				statusUsers->setText(" P: " + QString::number(ui.ListView_players->topLevelItemCount()));
 //				statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
 			}
 		}
