@@ -432,5 +432,5 @@ bool BoardWindow::slotFileSaveAs()
  */
 void BoardWindow::slotEditDelete()
 {
-	qgoboard->deleteNode();
+	tree->deleteNode();
 }
