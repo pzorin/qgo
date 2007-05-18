@@ -24,11 +24,22 @@
 #include "audio/alsa.h"
 #endif
 
-QSound *SoundFactory::newSound(const QString &filename, QObject *parent)
+QSoundSound::QSoundSound(const QString &filename, QObject *parent)
+	: Sound(filename, parent)
+{
+	qSound = new QSound(filename, this);
+}
+
+void QSoundSound::play(void)
+{
+	qSound->play();
+}
+
+Sound *SoundFactory::newSound(const QString &filename, QObject *parent)
 {
 #ifdef Q_OS_LINUX
 	return new QAlsaSound(filename, parent);
 #else
-	return new QSound(filename, parent);
+	return new QSoundSound(filename, parent);
 #endif
 }

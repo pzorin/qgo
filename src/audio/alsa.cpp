@@ -18,10 +18,7 @@
  ***************************************************************************/
 
 
-#include "audio/audio.h"
-
-#include <alsa/asoundlib.h>
-#include <QSound>
+#include "audio/alsa.h"
 
 #if WORDS_BIGENDIAN
 #define SwapLE16(x) ((((u_int16_t)x)<<8)|(((u_int16_t)x)>>8))
@@ -44,7 +41,7 @@
 
 
 QAlsaSound::QAlsaSound( const QString& filename, QObject* parent):
-	QSound(filename,parent) 
+	QObject(filename,parent) 
 {
 
 	Path = filename;
@@ -56,10 +53,6 @@ QAlsaSound::QAlsaSound( const QString& filename, QObject* parent):
 
 bool QAlsaSound::initialise()
 {
-
-	if (QSound::isAvailable())
-		return TRUE ; 
-
 #ifdef Q_OS_LINUX
 	char   buffer [ BUFFERSIZE ] ;
 	
@@ -268,12 +261,6 @@ void QAlsaSound::play()
 	*/
         }
 	snd_pcm_drain(handle);
-
-#else
-
-	QSound::play();
-#endif
-
 }
 
 char* QAlsaSound::findchunk  (char* pstart, char* fourcc, size_t n)

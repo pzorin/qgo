@@ -237,7 +237,7 @@ void qGoBoard::slotScoreToggled(bool pressed)
 /*
  * This handles the main envent with qGo : something has been clicked on the board
  */
-void qGoBoard::slotBoardClicked(bool delay , int x, int y , Qt::MouseButton mouseState)
+void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState)
 {
 	bool blackToPlay = getBlackTurn();
 

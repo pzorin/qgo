@@ -21,10 +21,34 @@
 
 #include <QSound>
 
+class Sound : public QObject
+{
+Q_OBJECT
+
+public:
+	Sound( const QString &, QObject *parent = 0) : QObject(parent) {};
+	virtual ~Sound() {};
+
+	virtual void play();
+};
+
+
+class QSoundSound : public Sound
+{
+Q_OBJECT
+
+public:
+	QSoundSound( const QString& filename, QObject* parent=0);
+
+	virtual void play();
+private:
+	QSound *qSound;
+};
+
 class SoundFactory
 {
 public:
-	static QSound *newSound(const QString &filename, QObject *parent = 0);
+	static Sound *newSound(const QString &filename, QObject *parent = 0);
 };
 
 #endif // _AUDIO_H_

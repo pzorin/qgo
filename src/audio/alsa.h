@@ -19,6 +19,7 @@
 #ifndef _ALSA_H_
 #define _ALSA_H_
 
+#include "audio/audio.h"
 #include <alsa/asoundlib.h>
 
 typedef  struct
@@ -32,7 +33,7 @@ typedef  struct
 } WAVEFORMAT ;
 
 
-class QAlsaSound : public QSound
+class QAlsaSound : public Sound
 {
 Q_OBJECT
 public :
@@ -43,7 +44,7 @@ public :
 	bool initialise() ; 
 	bool isAvailable() { return is_available ; }
 	bool is_available;
-	void play();	
+	virtual void play();
 
 private:
 	/* ALSA parameters */

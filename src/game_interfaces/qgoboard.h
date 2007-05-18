@@ -71,7 +71,7 @@ public:
 //	void setGameData() {win->getBoard()->setGameData(&gd); }
 //	void setMode() { win->getBoard()->setMode(gameMode); }
 //	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-//	void timerEvent(QTimerEvent*);
+	void timerEvent(QTimerEvent*);
 //	QString secToTime(int);
 /*	void set_stopTimer();
 	void set_runTimer();
@@ -120,6 +120,7 @@ public slots:
 	virtual void slotPassPressed();
 	virtual void slotScoreToggled(bool);
 	virtual void slotUpdateComment();
+	virtual void deleteNode();
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 /*	void slot_stoneComputer(enum StoneColor, int, int);    
 	void slot_PassComputer(StoneColor c) ;                 
@@ -145,7 +146,7 @@ protected:
 	BoardWindow *boardwindow;
 	Tree *tree;
 	GameData *gameData;
-	QSound *clickSound;
+	Sound *clickSound;
 
 //	bool        timer_running;
 //	bool        game_paused;
