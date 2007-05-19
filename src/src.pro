@@ -8,11 +8,9 @@ board/board.qrc
 QT = core gui \
 network
 TARGET = ../bin/qgo2 
-CONFIG += warn_on \
-          qt \
+CONFIG += qt \
           thread \
           qtestlib \
-          debug \
           stl
 TEMPLATE = app 
 FORMS += mainwindow.ui \
@@ -86,5 +84,5 @@ macx{
 linux-g++{
     SOURCES += audio/alsa.cpp
     LIBS += -lasound
-    CONFIG += debug
+    CONFIG += debug warn_on
 }
