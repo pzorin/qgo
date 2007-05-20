@@ -51,6 +51,8 @@ signals:
 	void signal_checkbox(int, bool);
 	void signal_channelinfo(int, const QString&);
 	void signal_kibitz(int, const QString&, const QString&);
+	void signal_observers(int , const QString&, const QString&);
+	void signal_clearObservers(int); 
 	void signal_title(const QString&);
 	void signal_komi(const QString&, const QString&, bool);
 	void signal_freegame(bool);

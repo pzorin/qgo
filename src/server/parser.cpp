@@ -941,8 +941,7 @@ InfoType Parser::put_line(const QString &txt)
 				if (ok)
 				{
 					memory_str = "observe";
-					// send as kibitz from "0" -> init
-//					emit signal_kibitz(memory, "0", "0"); 
+					emit signal_clearObservers(memory); 
 
 					return KIBITZ;
 				}
@@ -966,7 +965,7 @@ InfoType Parser::put_line(const QString &txt)
 				{
 					rank = element(line, i, " ");
 					// send as kibitz from "0"
-//					emit signal_kibitz(memory, "0", name + " " + rank);
+					emit signal_observers(memory , name , rank);
 					name =  element(line, ++i , " ");
 				}
 
