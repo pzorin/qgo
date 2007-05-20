@@ -29,7 +29,7 @@ public:
 	Sound( const QString &, QObject *parent = 0) : QObject(parent) {};
 	virtual ~Sound() {};
 
-	virtual void play();
+	virtual void play() {}
 };
 
 

@@ -41,7 +41,7 @@
 
 
 QAlsaSound::QAlsaSound( const QString& filename, QObject* parent):
-	QObject(filename,parent) 
+	Sound(filename,parent) 
 {
 
 	Path = filename;
@@ -220,7 +220,7 @@ void QAlsaSound::play()
 	if (!is_available)
 		return;
 
-#ifdef Q_OS_LINUX
+//#ifdef Q_OS_LINUX
 
 	int err;
 	/* 

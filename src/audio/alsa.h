@@ -35,7 +35,7 @@ typedef  struct
 
 class QAlsaSound : public Sound
 {
-Q_OBJECT
+//Q_OBJECT
 public :
 	QAlsaSound( const QString& filename, QObject* parent=0) ;
 	~QAlsaSound() {};
