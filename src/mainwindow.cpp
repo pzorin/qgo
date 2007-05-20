@@ -173,6 +173,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		qgoif, SLOT(slot_score(const QString&, const QString&, bool, const QString&)));
 	connect(parser, SIGNAL(signal_result(Game*)), qgoif, SLOT(slot_result(Game*)));
 	connect(parser, SIGNAL(signal_kibitz(int, const QString&, const QString&)), qgoif, SLOT(slot_kibitz(int, const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_observers(int, const QString&, const QString&)), qgoif, SLOT(slot_observers(int, const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_clearObservers(int)), qgoif, SLOT(slot_observers(int)));
 
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));
