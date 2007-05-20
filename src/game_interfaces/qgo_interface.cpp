@@ -72,7 +72,7 @@ void qGoIF::slot_boardClosed(int n)
 
 	// if this was an observed game, we have to replace by a null pointer in the 
 	// list so that any incoming move is ignored before the server cancels sending moves
-	if ( bw && bw->getGameMode()==modeObserve)
+	if ( bw && bw->getGameMode()==modeObserve && bw->getGamePhase() != phaseEnded )
 	{
 		emit signal_sendCommandFromInterface("observe " + QString::number(n), FALSE);
 		boardlist->insert(n, NULL);
@@ -123,10 +123,16 @@ void qGoIF::slot_move(GameInfo* gi)
 	
 
 	if (gi->mv_col == "T")
-	{
+//	{
 		// set times
-//		qgobrd->setTimerInfo(gi->btime, gi->bstones, gi->wtime, gi->wstones);
-	}
+//		bw->qgoboard->setTimerInfo(gi->btime, gi->bstones, gi->wtime, gi->wstones);
+		bw->getClockDisplay()->setTimeInfo(gi->btime.toInt(),
+						gi->bstones.toInt(),
+						0,
+						gi->wtime.toInt(),
+						gi->wstones.toInt(),
+						0);
+//	}
 	else if (gi->mv_col == "B" || gi->mv_col == "W")
 	{
 //		// set move if game is initialized
@@ -1085,7 +1091,7 @@ void qGoIF::slot_closeevent()
  */
 void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 {
-	qGoBoard *qb;
+//	qGoBoard *qb;
 	QString name;
 /*
 	// own game if num == NULL
@@ -1316,6 +1322,39 @@ qDebug("slot_removestones(): game_id");
 */
 
 /*
+ * observers list header received from parser, clear the list
+ */
+void qGoIF::slot_clearObservers(int n)
+{
+	BoardWindow *bw = getBoardWindow(n);
+	
+	if(!bw)
+		return;
+
+	bw->getUi().observerList->clear();
+}
+
+
+
+/*
+ * observers list received from parser, which sends them one by one
+ */
+void qGoIF::slot_observers(int n, const QString &name, const QString& rk)
+{
+	BoardWindow *bw = getBoardWindow(n);
+	
+	if(!bw)
+		return;
+
+	QStringList sl;
+	sl	<<	name	<<	rk ;
+
+	new QTreeWidgetItem(bw->getUi().observerList, sl);
+}
+
+
+
+/*
  * game status received from parser
  */
 void qGoIF::slot_score(const QString &txt, const QString &line, bool isplayer, const QString &komi)
@@ -1443,7 +1482,7 @@ void qGoIF::slot_result(Game *g)
 		}
 
 		QString t1 = g->res.mid(posw+1, posb-posw-2);
-		QString t2 = g->res.right(g->Sz.length()-posb-1);
+		QString t2 = g->res.right(g->res.length()-posb-1);
 		re1 = t1.toFloat();
 		re2 = t2.toFloat();
 

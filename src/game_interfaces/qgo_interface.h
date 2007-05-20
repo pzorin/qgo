@@ -49,6 +49,8 @@ public slots:
 	void slot_score(const QString&, const QString&, bool, const QString&);
 	void slot_result(Game *);
 	void slot_kibitz(int, const QString&, const QString&);
+	void slot_observers(int , const QString &, const QString&);
+	void slot_clearObservers(int);
 /*	void slot_move(Game*);
 	void slot_computer_game(QNewGameDlg*);
 	void slot_title(const QString&);

@@ -137,10 +137,12 @@ void qGoBoardComputerInterface::localPassRequest()
  */
 void qGoBoardComputerInterface::localMoveRequest(StoneColor c, int x, int y)
 {
-	if (!doMove(c,x,y))
-		return;
+//	if (!doMove(c,x,y))
+//		return;
 	
-	sendMoveToInterface(c,x,y);
+//	sendMoveToInterface(c,x,y);
+
+	qGoBoard::localMoveRequest(c,  x,  y);
 	// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
 	playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
 }
@@ -317,6 +319,39 @@ void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 		default :
 		;
 	}
+
+}
+
+
+/*
+ * A move string is incoming from the interface (computer)
+ */
+void qGoBoardComputerInterface::set_move(StoneColor sc, QString pt, QString/* mv_nr*/)
+{
+
+	if (pt.contains("Pass",Qt::CaseInsensitive))
+		doPass();
+	
+	else
+	{
+		int i = pt[0].unicode() - QChar::fromAscii('A').unicode() + 1;
+		// skip j
+		if (i > 8)
+			i--;
+
+		int j;
+
+		if (pt[2] >= '0' && pt[2] <= '9')
+			j = boardwindow->getGameData()->size + 1 - pt.mid(1,2).toInt();
+		else
+			j = boardwindow->getGameData()->size + 1 - pt[1].digitValue();
+
+
+		if (!doMove(sc, i, j))
+			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 seems to be invalid").arg(pt.toLatin1().constData()));
+	}
+
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
 }
 

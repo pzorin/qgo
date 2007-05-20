@@ -37,7 +37,7 @@ public:
 //	virtual void localMoveRequest(int x, int y)=0;
 	virtual bool getBlackTurn();
 	virtual void startGame() {}
-	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
+	virtual void set_move(StoneColor , QString , QString ) {}
 	virtual void set_statedMoveCount(int n) 	{stated_mv_count = n;}
 	virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual bool modified()				{return isModified;}
@@ -45,6 +45,9 @@ public:
 
 	virtual void setResult(QString , QString ) {}
 	virtual void kibitzReceived(const QString& txt);
+	virtual void setTimerInfo(const QString&, const QString&, const QString&, const QString&) {}
+	virtual void timerEvent(QTimerEvent*);
+	virtual void deleteNode();
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -70,8 +73,7 @@ public:
 //	void initGame() { win->getBoard()->initGame(&gd); }
 //	void setGameData() {win->getBoard()->setGameData(&gd); }
 //	void setMode() { win->getBoard()->setMode(gameMode); }
-//	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-	void timerEvent(QTimerEvent*);
+
 //	QString secToTime(int);
 /*	void set_stopTimer();
 	void set_runTimer();
@@ -120,7 +122,6 @@ public slots:
 	virtual void slotPassPressed();
 	virtual void slotScoreToggled(bool);
 	virtual void slotUpdateComment();
-	virtual void deleteNode();
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 /*	void slot_stoneComputer(enum StoneColor, int, int);    
 	void slot_PassComputer(StoneColor c) ;                 
@@ -207,6 +208,7 @@ public:
 private:
 	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
 	void sendPassToInterface(StoneColor /*c*/) {}
+//	bool doMove(StoneColor c, int x, int y);
 //	void enterScoreMode();
 	void leaveScoreMode() ;
 };
@@ -218,6 +220,7 @@ class qGoBoardComputerInterface : public qGoBoard
 public:
 	qGoBoardComputerInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	~qGoBoardComputerInterface() {}
+	void set_move(StoneColor sc, QString pt, QString mv_nr);
 
 	bool init();
 
@@ -227,6 +230,8 @@ public slots:
 private:
 	void sendMoveToInterface(StoneColor c,int x, int y) ;
 	void sendPassToInterface(StoneColor c);
+//	bool doMove(StoneColor c, int x, int y);
+
 	void playComputer(StoneColor c);
 	void localMoveRequest(StoneColor c, int x, int y);
 	void localPassRequest();
@@ -248,6 +253,8 @@ public:
 	bool init();
 	void setModified(bool)	{} //we don't modify an observed game
 	void setResult(QString res, QString xt_res);
+	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
+	void set_move(StoneColor sc, QString pt, QString mv_nr);
 
 public slots:
 	void slotUpdateComment() {}
@@ -259,7 +266,7 @@ signals:
 private:
 	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
 	void sendPassToInterface(StoneColor /*c*/) {}
-	
+//	bool doMove(StoneColor c, int x, int y);
 //	void enterScoreMode() {}
 	void leaveScoreMode() {}
 
