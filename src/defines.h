@@ -146,7 +146,8 @@ struct Game
 	QString By;
 	QString FR;
 	QString ob;
-	bool    running;
+	QString player;
+	bool running;
   	bool oneColorGo ;
 };
 

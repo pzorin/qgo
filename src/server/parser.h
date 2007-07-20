@@ -25,15 +25,18 @@ public:
 
 	void       set_gsname(const GSName);
 	GSName     get_gsname();
-	void       set_myname(const QString &n) { myname = n; }
+	void       set_myName(const QString &n) { myname = n; }
 	QString    get_buffer();
 	InfoType   cmdsent(const QString&);
 
 signals:
 	//new signals
 	void signal_gameRestored(Game*);
-	void signal_gameResult(QString);
+//	void signal_matchResult(int,QString&,QString&);
 	void signal_result(Game*);
+	void signal_playerConnected(Player*);
+	void signal_connexionClosed();
+//	void signal_gameFinished(Game*);
 	// emit if info is found
 	void signal_player(Player*, bool);
   	void signal_statsPlayer(Player*);
@@ -46,7 +49,6 @@ signals:
 	void signal_svname(GSName&);
 	void signal_accname(QString&);
 	void signal_status(Status);
-	void signal_connclosed();
 	void signal_talk(const QString&, const QString&, bool);
 	void signal_checkbox(int, bool);
 	void signal_channelinfo(int, const QString&);
@@ -57,10 +59,10 @@ signals:
 	void signal_komi(const QString&, const QString&, bool);
 	void signal_freegame(bool);
 	void signal_suggest(const QString&, const QString&, const QString&, const QString&, int);
-	void signal_matchrequest(const QString&, bool);
+	void signal_matchRequest(const QString&, bool);
 	void signal_matchCanceled(const QString&);
-	void signal_matchcreate(const QString&, const QString&);
-	void signal_notopen(const QString&);
+	void signal_matchCreate(const QString&);//, const QString&);
+	void signal_notOpen(const QString&, int);
 	void signal_removestones(const QString&, const QString&);
 	void signal_komirequest(const QString&, int, int, bool);
 	void signal_opponentopen(const QString&);

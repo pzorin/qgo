@@ -274,4 +274,35 @@ private:
 
 };
 
+class qGoBoardMatchInterface : public qGoBoard 
+{
+	Q_OBJECT
+
+public:
+	qGoBoardMatchInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
+	~qGoBoardMatchInterface() {}
+
+	bool init();
+	void setModified(bool)	{} //we don't modify an observed game
+	void setResult(QString res, QString xt_res);
+	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
+	void set_move(StoneColor sc, QString pt, QString mv_nr);
+
+public slots:
+	void slotUpdateComment() {}
+	void slotSendComment();
+
+signals:
+	void signal_sendCommandFromBoard(const QString&, bool);
+
+private:
+	void sendMoveToInterface(StoneColor c,int x, int y );
+	void sendPassToInterface(StoneColor c);
+	void leaveScoreMode() {}
+	void localMoveRequest(StoneColor c, int x, int y);
+	QString game_Id;
+
+};
+
+
 #endif

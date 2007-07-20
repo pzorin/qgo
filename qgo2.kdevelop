@@ -230,12 +230,12 @@
     <archname/>
     <appname>qgo2.kdevelop</appname>
     <version>0.1</version>
-    <release/>
-    <vendor/>
-    <licence/>
-    <summary/>
-    <group/>
-    <packager/>
+    <release>alpha</release>
+    <vendor>-</vendor>
+    <licence>GPL</licence>
+    <summary>-</summary>
+    <group>-</group>
+    <packager>-</packager>
     <description/>
     <changelog/>
     <devpackage>false</devpackage>

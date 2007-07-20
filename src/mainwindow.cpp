@@ -81,11 +81,11 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.ListView_players->header(),SIGNAL( sectionClicked ( int ) ), SLOT(slot_sortPlayers (int)));
 	// doubleclick
 	connect(ui.ListView_games, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), SLOT(slot_gamesDoubleClicked(QTreeWidgetItem*)));
-
+	connect(ui.ListView_players, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), SLOT(slot_playersDoubleClicked(QTreeWidgetItem*)));
 	
 	connect(ui.pbRefreshPlayers,SIGNAL(pressed()),SLOT(slot_RefreshPlayers()));
 	connect(ui.pbRefreshGames,SIGNAL(pressed()),SLOT(slot_RefreshGames()));
-	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_RoomListClicked(const QString &)));
+	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
 
 	SGFloaded = "";
 	SGFloaded2 = "";
@@ -153,6 +153,12 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.pb_new,SIGNAL(pressed()),SLOT(slot_new()));	
 	connect(ui.comboBox_server,SIGNAL(currentIndexChanged ( const QString &)),
 		SLOT(slot_serverChanged( const QString &)));
+	connect( ui.setQuietMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
+	connect( ui.setOpenMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
+	connect( ui.setLookingMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
+	connect( ui.whoBox1,  SIGNAL(  currentIndexChanged ( int )), this, SLOT(slot_setRankSpread()));
+	connect( ui.whoBox2,  SIGNAL(  currentIndexChanged ( int )), this, SLOT(slot_setRankSpread()));
+
 	
 	// connects the parser signals to the main window (lists, rooms, ...)
 	connect(parser, SIGNAL(signal_svname(GSName&)), SLOT(slot_svname(GSName&)));
@@ -161,9 +167,17 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 			SLOT(slot_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_room(const QString&, bool)),SLOT(slot_room(const QString&, bool)));
 	connect(parser, SIGNAL(signal_game(Game*)), SLOT(slot_game(Game*)));
+//	connect(parser, SIGNAL(signal_gameFinished(Game*)), SLOT(slot_gameFinished(Game*)));
 	connect(parser, SIGNAL(signal_player(Player*, bool)), SLOT(slot_player(Player*, bool)));
 	connect(parser, SIGNAL(signal_message(QString)), SLOT(slot_message(QString)));
-
+	connect(parser, SIGNAL(signal_statsPlayer(Player*)), SLOT(slot_statsPlayer(Player*)));
+	connect(parser, SIGNAL(signal_talk(const QString&, const QString&, bool)), SLOT(slot_talk(const QString&, const QString&, bool)));
+	connect(parser, SIGNAL(signal_checkbox(int, bool)), SLOT(slot_checkbox(int, bool)));
+	connect(parser, SIGNAL(signal_connexionClosed()), SLOT(slot_connexionClosed()));
+	connect(parser, SIGNAL(signal_playerConnected(Player*)), SLOT (slot_playerConnected(Player*)));
+	connect(parser, SIGNAL(signal_matchRequest(const QString&, bool)), this, SLOT(slot_matchRequest(const QString&, bool)));
+	connect(parser, SIGNAL(signal_matchCanceled(const QString&)), this, SLOT(slot_matchCanceled(const QString&)));
+	connect(parser, SIGNAL(signal_refresh(int)),this, SLOT(slot_refresh(int)));
 
 	// connects the parser signals to the interface (game moves, all board and games infos, ...)
 	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
@@ -176,6 +190,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_observers(int, const QString&, const QString&)), qgoif, SLOT(slot_observers(int, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_clearObservers(int)), qgoif, SLOT(slot_observers(int)));
 
+
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));
 	
@@ -184,6 +199,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
+
 
 }
 
@@ -350,26 +366,6 @@ void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModel
 
 
 /*
- * Creates a game board with all elements initialised from 
- * Gamedata and an sgf file 
- */
-void MainWindow::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite , QString /*_fileLoaded*/ )
-{
-	BoardWindow *b = new BoardWindow(this,0,_gameData , _gameMode , _myColorIsBlack , _myColorIsWhite);
-	
-/*	
-	TODO : we have put this into the boardwindow code. Is this the proper method ? (we did reload the file ...)
-	if ( ! _fileLoaded.isEmpty())
-		if(!b->loadSGF("", _fileLoaded))
-		{
-			delete b; 
-			return ;
-		}
-*/
-	b->show();
-}
-
-/*
  * The 'New Game' button in 'sgf editor' tab has been pressed.
  */
 void MainWindow::slot_fileNewBoard()
@@ -484,5 +480,78 @@ void MainWindow::slot_gamesDoubleClicked(QTreeWidgetItem* lv)
 	sendcommand ("observe " + lv->text(0));
 }
 
+/*
+ * players list has been double clicked
+ */
+void MainWindow::slot_playersDoubleClicked(QTreeWidgetItem* lv)
+{
+	sendcommand ("stats " + lv->text(1));
+}
+
+/*
+ * rank list has been changed.
+ */
+void MainWindow::slot_setRankSpread()
+{
+	QString r1,r2;
+
+	if ((ui.whoBox1->currentIndex() == 0) && (ui.whoBox2->currentIndex() == 0))
+	{
+		rkMin = "NR";
+		rkMax = "9p";
+//		return;
+	}
+
+	else if ( 	((ui.whoBox1->currentIndex() == 0) && (ui.whoBox2->currentIndex() == 1)) ||
+		((ui.whoBox1->currentIndex() == 1) && (ui.whoBox2->currentIndex() == 0))  ||
+		((ui.whoBox1->currentIndex() == 1) && (ui.whoBox2->currentIndex() ==1)) )
+	{
+		rkMin = "1p";
+		rkMax = "9p";
+//		return;
+	}	
+
+	else if ((ui.whoBox1->currentIndex() == 0) && (ui.whoBox2->currentIndex() > 1))
+	{
+		rkMin = ui.whoBox2->currentText();
+		rkMax = ui.whoBox2->currentText();
+//		return;
+	}	
 
 
+	else if ((ui.whoBox1->currentIndex() > 1) && (ui.whoBox2->currentIndex() == 0))
+	{
+		rkMin = ui.whoBox1->currentText();
+		rkMax = ui.whoBox1->currentText();
+//		return;
+	}	
+
+	else if ((ui.whoBox1->currentIndex() > 1) && (ui.whoBox2->currentIndex() == 1))
+	{
+		rkMin = ui.whoBox1->currentText();
+		rkMax = "9p";
+//		return;
+	}	
+
+	else if ((ui.whoBox1->currentIndex() == 1) && (ui.whoBox2->currentIndex() > 1))
+	{
+		rkMin = ui.whoBox2->currentText();
+		rkMax = "9p";
+//		return;
+	}
+
+
+	else if ((ui.whoBox2->currentIndex() >= ui.whoBox1->currentIndex() ))
+	{
+		rkMin = ui.whoBox2->currentText();
+		rkMax = ui.whoBox1->currentText();
+	} 
+	else 
+	{
+		rkMin = ui.whoBox1->currentText();
+		rkMax = ui.whoBox2->currentText();
+	} 
+
+
+	qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
+}

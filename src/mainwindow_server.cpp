@@ -22,7 +22,8 @@
 #include "globals.h"
 #include "mainwindow.h"
 #include "parser.h"
-
+#include "talk.h"
+#include "gamedialog.h"
 
 /*
  * return pressed in edit line -> command to send
@@ -120,6 +121,65 @@ void MainWindow::slot_connect(bool b)
 		igsConnection->closeConnection();
 	}
 }
+
+
+
+/*
+ * connection closed - triggered by parser signal
+ */
+void MainWindow::slot_connexionClosed()
+{
+	// no Timers in offline mode!
+	killTimer(timer);
+
+	// set to offline:
+	myAccount->set_offline();
+	//pb_connect->setOn(FALSE);
+	ui.pb_connect->setChecked(FALSE);
+	seekMenu->clear();
+	slot_cancelSeek();	
+
+	// clear channel
+	prepareTables(CHANNELS);
+
+	prepareTables(WHO);
+	prepareTables(GAMES);
+	// remove boards
+//	qgoif->set_initIF();
+
+//	qDebug("slot_connclosed()");
+//	qDebug(QString("%1 -> slot_connclosed()").arg(statusOnlineTime->text()));
+
+//	qgoif->get_qgo()->playConnectSound();
+
+	// show current Server name in status bar
+	statusServer->setText(" OFFLINE ");
+
+	// set menu
+//	Connect->setEnabled(true);
+//	Disconnect->setEnabled(false);
+//	toolConnect->setOn(false);
+	ui.pb_connect->setIcon(QIcon(":/ressources/pics/connect_no2.png"));
+//	toolConnect->setPixmap(disconnectedIcon);
+//	QToolTip::remove(toolConnect);
+	ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+}
+
+/* 
+ * seek request is being canceled
+ */
+void MainWindow::slot_cancelSeek()
+{
+/*
+	ui.toolSeek->setOn(false);
+	ui.toolSeek->setPopup(seekMenu);
+	ui.toolSeek->setPopupDelay(1);
+	ui.toolSeek->setIconSet(QIconSet::QIconSet(NotSeekingIcon));
+	killTimer(seekButtonTimer);
+	seekButtonTimer = 0;
+*/
+}
+
 
 // used for singleShot actions
 void MainWindow::set_tn_ready()
@@ -287,7 +347,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 
 			// start timer: event every second
 			onlineCount = 0;
-			startTimer(1000);
+			timer = startTimer(1000);
 			// init shouts
 //TODO			slot_talk("Shouts*", 0, true);
 			
@@ -336,8 +396,8 @@ void MainWindow::slot_textReceived(const QString &txt)
 
 		case ACCOUNT:
 			// let qgo and parser know which account in case of setting something for own games
-//			qgoif->set_myName(myAccount->acc_name);
-//TODO			parser->set_myname(myAccount->acc_name);
+			qgoif->set_myName(myAccount->acc_name);
+			parser->set_myName(myAccount->acc_name);
 			break;
 
 
@@ -346,7 +406,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 			currentCommand->txt="stats";
 		
 		// if (!talklist.current())
-//TODO			slot_talk( parser->get_statsPlayer()->name,0,true);
+			slot_talk( parser->get_statsPlayer()->name,0,true);
 		
 			//else if (parser->get_statsPlayer()->name != talklist.current()->get_name())
 			//    slot_talk( parser->get_statsPlayer()->name,0,true);
@@ -563,7 +623,7 @@ void MainWindow::showOpen(bool show)
 /*
  * room list clicked
  */
-void MainWindow::slot_RoomListClicked(const QString& text)
+void MainWindow::slot_roomListClicked(const QString& text)
 {
 	QString room;
 
@@ -624,7 +684,9 @@ void MainWindow::slot_RefreshPlayers()
 void MainWindow::slot_refresh(int i)
 {
 
-	QString wparam = "" ;
+	slot_setRankSpread();
+
+	QString wparam =  rkMax + "-" + rkMin ;
 	// refresh depends on selected page
 	switch (i)
 	{
@@ -633,7 +695,7 @@ void MainWindow::slot_refresh(int i)
 		case 0:
 			// send "WHO" command
       			//set the params of "who command"
-			if ((ui.whoBox1->currentIndex() >1)  || (ui.whoBox2->currentIndex() >1))
+/*			if ((ui.whoBox1->currentIndex() >1)  || (ui.whoBox2->currentIndex() >1))
         		{
 				wparam.append(ui.whoBox1->currentIndex()==1 ? "9p" : ui.whoBox1->currentText());
 				if ((ui.whoBox1->currentIndex())  && (ui.whoBox2->currentIndex()))
@@ -645,10 +707,10 @@ void MainWindow::slot_refresh(int i)
         			wparam.append("1p-9p");
 			else
 				wparam.append(((myAccount->get_gsname() == IGS) ? "9p-BC" : " "));
-				
+*/				
 
 			if (ui.whoOpenCheck->isChecked())
-				wparam.append(((myAccount->get_gsname() == WING) ? "O" : "o"));//wparam.append(" o");
+				wparam.append(((myAccount->get_gsname() == WING) ? " O" : " o"));//wparam.append(" o");
 
 			if (myAccount->get_gsname() == IGS )//&& extUserInfo)
 				sendcommand(wparam.prepend("userlist "));
@@ -724,6 +786,11 @@ void MainWindow::prepareTables(InfoType cmd)
 			// delete tooltips too
 //			QToolTip::remove(statusChannel);
 //			QToolTip::add(statusChannel, tr("Current channels and users"));
+
+			//We prepare the rooms list as well here
+			while (ui.RoomList->count() > 1)
+     				ui.RoomList->removeItem(1);
+
 			break;
 		}
 
@@ -867,10 +934,10 @@ void MainWindow::slot_game(Game* g)
 			qDebug("game skipped because no init table");
 			return;
 		}
-
+/*
 		QString excludeMark = "";
 		QString myMark = "B";
-/*		
+		
 		// check if exclude entry is done later
 		if (g->H) //g->status.length() > 1)
 		{
@@ -916,7 +983,8 @@ void MainWindow::slot_game(Game* g)
 			lvi_mem->setText(10, g->FR);
 			lvi_mem->setText(11, g->ob);
 //			lvi_mem->setText(6, g->status + " (" + g->ob + ")");
-			lvi_mem->setText(12, myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark);
+			lvi_mem->setText(12, /*myMark +*/ rkToKey(g->wrank) + g->wname.toLower()  /*+ ":" + excludeMark */);
+			lvi_mem->setText(13,  rkToKey(g->brank) + g->bname.toLower()  /*+ ":" + excludeMark */);
 
 //			lvi_mem->ownRepaint();
 		}
@@ -925,8 +993,8 @@ void MainWindow::slot_game(Game* g)
 			// from GAMES command or game info{...}
 			QStringList sl;	
 
-			if (!g->H.isEmpty())
-			{
+//			if (!g->H.isEmpty())
+//			{
 //				lv = new QTreeWidgetItem(ListView_games,
 				sl 	<< g->nr
 					<< " " + g->wname
@@ -943,21 +1011,21 @@ void MainWindow::slot_game(Game* g)
 					<< rkToKey(g->wrank) + g->wname.toLower() 
 					<< rkToKey(g->brank) + g->bname.toLower();
 
-			}
-			else
-			{
+//			}
+//			else
+//			{
 //				lv = new QTreeWidgetItem(ListView_games,
-				sl 	<< g->nr
-					<< " " + g->wname
-					<< g->wrank
-					<< " " + g->bname
-					<< g->brank
-					<< g->mv
-					<< g->Sz;
+//				sl 	<< g->nr
+//					<< " " + g->wname
+//					<< g->wrank
+//					<< " " + g->bname
+//					<< g->brank
+//					<< g->mv
+//					<< g->Sz;
 
 
 
-			}
+//			}
 			QTreeWidgetItem *lvi = new QTreeWidgetItem(ui.ListView_games, sl);
 
 //			lvi->setText(12, myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark);
@@ -1125,9 +1193,12 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
   	QTreeWidgetItemIterator lv(ui.ListView_players);  
 
 	QPoint pp(0,0);
-	QTreeWidgetItem *topViewItem = ui.ListView_players->itemAt(pp);
+//	QTreeWidgetItem *topViewItem = ui.ListView_players->itemAt(pp);
+	PlayerTableItem *topViewItem = (PlayerTableItem *)ui.ListView_players->itemAt(pp);
+
   	bool deleted_topViewItem = false;
-  	QTreeWidgetItem *lvi;
+//  	QTreeWidgetItem *lvi;
+	PlayerTableItem *lvi;
 
 	if (p->online)
 	{
@@ -1137,7 +1208,7 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 			for (; (*lv); lv++)
 			{
 //				lv++;
-				lvi = *lv;
+				lvi = (PlayerTableItem *)*lv;
 				// compare names
 				if (lvi->text(1) == p->name)
 				{
@@ -1162,13 +1233,13 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 							lvi->setText(10, p->country);
 							lvi->setText(11, p->nmatch_settings);
 						}
-//						lvi->set_nmatchSettings(p);					
+						lvi->set_nmatchSettings(p);					
 						//lvi->nmatch = p->nmatch;
 
 //						lvi->ownRepaint();
 					}
 
-/*					if (p->name == myAccount->acc_name)
+					if (p->name == myAccount->acc_name)
 					{
 						qDebug("updating my account info... (1)");
 						// checkbox open
@@ -1191,8 +1262,12 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 
 						// get rank to calc handicap when matching
 						myAccount->set_rank(p->rank);
+
+						for (int i = 0; i < lvi->columnCount(); i++)
+							lvi->setForeground(i, QBrush::QBrush(Qt::blue));
+
 					}
-*/
+
 					return;
 				}
 			}
@@ -1229,6 +1304,56 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 		{
 			mark = "X";
 		}
+*/
+
+		QStringList sl;
+		// from WHO command or {... has connected}
+//		if (/*extUserInfo && */myAccount->get_gsname() == IGS)
+//		{
+			
+			
+//			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
+			sl	<<	p->info
+				<<	p->name
+				<<	p->rank
+				<<	p->play_str
+				<<	p->obs_str
+				<<	p->idle
+				<<	mark
+				<<	p->extInfo
+				<<	p->won
+				<<	p->lost
+				<<	p->country
+				<<	p->nmatch_settings
+				<<	rkToKey(p->rank) + p->name.toLower();
+//			lv1->set_nmatchSettings(p);
+//		}
+//		else
+//		{
+//			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
+//			sl	<<	p->info
+//				<<	p->name
+//				<<	p->rank
+//				<<	p->play_str
+//				<<	p->obs_str
+//				<<	p->idle
+//				<<	mark << "" << "" << "" << "" << "" << rkToKey(p->rank) + p->name.toLower();;
+//			lv1->setText(12, rkToKey(p->rank) + p->name.lower());
+//			lv1->set_nmatchSettings(p);
+//		}
+		
+//		lvi = new QTreeWidgetItem(ui.ListView_players, sl);
+		lvi = new PlayerTableItem(ui.ListView_players, sl);
+		lvi->set_nmatchSettings(p);
+
+		lvi->setTextAlignment(0,Qt::AlignRight);
+		lvi->setTextAlignment(3,Qt::AlignRight);
+		lvi->setTextAlignment(4,Qt::AlignRight);
+		lvi->setTextAlignment(5,Qt::AlignRight);
+		lvi->setTextAlignment(6,Qt::AlignRight);
+		lvi->setTextAlignment(7,Qt::AlignRight);
+		lvi->setTextAlignment(8,Qt::AlignRight);
+		lvi->setTextAlignment(9,Qt::AlignRight);
 
 		// check for open/looking state
 		if (cmdplayers)
@@ -1253,56 +1378,13 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 				// get rank to calc handicap when matching
 				myAccount->set_rank(p->rank);
 				mark = "M";
+
+				for (int i = 0; i < lvi->columnCount(); i++)
+					lvi->setForeground(i, QBrush::QBrush(Qt::blue));
+
+
 			}
 		}
-*/
-		QStringList sl;
-		// from WHO command or {... has connected}
-		if (/*extUserInfo && */myAccount->get_gsname() == IGS)
-		{
-			
-			
-//			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
-			sl	<<	p->info
-				<<	p->name
-				<<	p->rank
-				<<	p->play_str
-				<<	p->obs_str
-				<<	p->idle
-				<<	mark
-				<<	p->extInfo
-				<<	p->won
-				<<	p->lost
-				<<	p->country
-				<<	p->nmatch_settings
-				<<	rkToKey(p->rank) + p->name.toLower();
-//			lv1->set_nmatchSettings(p);
-		}
-		else
-		{
-//			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
-			sl	<<	p->info
-				<<	p->name
-				<<	p->rank
-				<<	p->play_str
-				<<	p->obs_str
-				<<	p->idle
-				<<	mark;
-//			lv1->setText(12, rkToKey(p->rank) + p->name.lower());
-//			lv1->set_nmatchSettings(p);
-		}
-		
-		lvi = new QTreeWidgetItem(ui.ListView_players, sl);
-
-		lvi->setTextAlignment(0,Qt::AlignRight);
-		lvi->setTextAlignment(3,Qt::AlignRight);
-		lvi->setTextAlignment(4,Qt::AlignRight);
-		lvi->setTextAlignment(5,Qt::AlignRight);
-		lvi->setTextAlignment(6,Qt::AlignRight);
-		lvi->setTextAlignment(7,Qt::AlignRight);
-		lvi->setTextAlignment(8,Qt::AlignRight);
-		lvi->setTextAlignment(9,Qt::AlignRight);
-
 
 		// increase number of players
 		myAccount->num_players++;
@@ -1322,7 +1404,7 @@ void MainWindow::slot_player(Player *p, bool cmdplayers)
 		for (; (*lv); lv++)
 		{
 //			lv++;
-			lvi = *lv;
+			lvi = (PlayerTableItem *)*lv;
 			// compare names
 			if (lvi->text(1) == p->name)
 			{
@@ -1424,7 +1506,7 @@ QString MainWindow::rkToKey(QString txt, bool integer)
 	else
 	{
 		// NR
-		if (rk == "NR")
+		if (rk == "NR" || rk == "BC")
 			return "nr";
 		
 		// check for k,d,p
@@ -1456,3 +1538,669 @@ QString MainWindow::rkToKey(QString txt, bool integer)
 		return keyStr + buffer;
 	}
 }
+
+
+ // handle chat boxes in a list
+void MainWindow::slot_talk(const QString &name, const QString &text, bool isplayer)
+{
+	static Talk *dlg;
+	QString txt;
+//	bool bonus = false;
+//	bool autoAnswer = true;
+
+//	if (text && text != "@@@")
+		// text given or player logged in
+		txt = text;
+//	else if (text == "@@@" && isplayer)
+//	{
+		// player logged out -> iplayer == false
+//		txt = tr("USER NOT LOGGED IN.");
+//		autoAnswer = false;
+//	}
+//	else
+//	{
+//		txt = "";
+//		autoAnswer = false;
+//	}
+
+	// dialog recently used?
+	if (dlg && dlg->get_name() == name)
+		dlg->write(txt);
+	else if (!name.isEmpty() && name != tr("msg*"))
+	{
+		// seek dialog
+		dlg = 0;
+//		dlg = talkList.first();
+//		while (dlg != NULL && dlg->get_name() != name)
+//			dlg = talkList.next();
+		for (int i=0; i<talkList.count(); i++)
+		{
+//			dlg = talkList.at(i);
+			if (talkList.at(i)->get_name() == name)
+				dlg = talkList.at(i);
+//				break;
+		}
+		// not found -> create new dialog
+		if (!dlg)
+		{
+			dlg = new Talk(name, 0, isplayer);
+			talkList.insert(0, dlg);     
+//			dlg = talkList.current();
+			connect(dlg, SIGNAL(signal_talkTo(QString&, QString&)), this, SLOT(slot_talkTo(QString&, QString&)));
+			connect(dlg, SIGNAL(signal_matchRequest(const QString&,bool)), this, SLOT(slot_matchRequest(const QString&,bool)));
+      
+			// make new multiline field
+			ui.talkTabs->addTab(dlg->get_tabWidget(), dlg->get_name());
+			
+			if (name != tr("Shouts*"))
+				ui.talkTabs->setCurrentWidget(dlg->get_tabWidget());
+				
+			dlg->pageActive = true;
+			connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
+			connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
+
+//			QPalette pal = dlg->get_mle()->palette();
+//			pal.setColor(QColorGroup::Base, setting->colorBackground);
+//			dlg->get_mle()->setPalette(pal);
+//			dlg->get_le()->setPalette(pal);
+			
+			//if (!name.isEmpty() && name != tr("Shouts*") && currentCommand->get_txt() !="stats")
+			if (!name.isEmpty() && isplayer)
+				slot_sendCommand("stats " + name, false);    // automatically request stats
+      
+		}
+
+		Q_CHECK_PTR(dlg);
+		dlg->write(txt);
+
+		// play sound on new created dialog
+//		bonus = true;
+	}
+/*
+	// check if it was a channel message
+	if (autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && text[0] == '>'))
+	{
+		// send when qGo is NOT the active application - TO DO
+		sendcommand("tell " + name + " [I'm away right now]");
+	}
+*/
+	if (!dlg->pageActive)
+	{
+		ui.talkTabs->addTab(dlg->get_tabWidget(), dlg->get_name());
+		dlg->pageActive = true;
+		ui.talkTabs->setCurrentWidget(dlg->get_tabWidget());
+	}
+/*
+	// play a sound - not for shouts
+	if ((text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
+	{
+		qgoif->get_qgo()->playTalkSound();
+
+		// set cursor to last line
+		//dlg->get_mle()->setCursorPosition(dlg->get_mle()->lines(), 999); //eb16
+		dlg->get_mle()->append("");                                        //eb16
+		//dlg->get_mle()->removeParagraph(dlg->get_mle()->paragraphs()-2);   //eb16
+
+		// write time stamp
+		MultiLineEdit3->append(statusOnlineTime->text() + " " + name + (autoAnswer ? " (A)" : ""));
+	}
+	else if (name == tr("msg*"))
+	{
+		qgoif->get_qgo()->playTalkSound();
+
+		// set cursor to last line
+//		dlg->get_mle()->setCursorPosition(dlg->get_mle()->numLines(), 999); //eb16
+		dlg->get_mle()->append(""); //eb16
+//		dlg->get_mle()->removeParagraph(dlg->get_mle()->paragraphs()-2);   //eb16
+
+		// write time stamp
+		MultiLineEdit3->append(tr("Message") + ": " + text);
+	}
+*/
+}
+
+/*
+ * close button pressed on talk tab
+ */
+void MainWindow::slot_pbRelOneTab(QWidget *w)
+{
+	// seek dialog
+	Talk *dlg = talkList.at(0);
+	int i= talkList.indexOf((Talk*)w);
+
+	if ( i != -1)
+	{
+		if (w != ui.talkTabs->currentWidget())
+			//we have a problem !
+			return;
+		
+//		dlg = talkList.takeAt(i);
+		ui.talkTabs->removeTab(ui.talkTabs->currentIndex()) ;
+		dlg->pageActive = false;
+	}
+
+}
+
+
+
+/*
+ * 'stats' information has been received by the parser
+ */
+void MainWindow::slot_statsPlayer(Player *p)
+{
+	 Talk *dlg = 0;
+  
+	if (!p->name.isEmpty())
+	{
+		// seek dialog
+		for (int i=0; i<talkList.count(); i++)
+		{
+			if (talkList.at(i)->get_name() == p->name)
+				dlg = talkList.at(i);
+		}
+	  	//  found 
+	  	if (dlg)
+		{
+			dlg->getUi().stats_rating->setText(p->rank);
+			dlg->getUi().stats_info->setText(p->info);
+			dlg->getUi().stats_default->setText(p->extInfo);
+			dlg->getUi().stats_wins->setText(p->won + " /");
+			dlg->getUi().stats_loss->setText(p->lost );
+			dlg->getUi().stats_country->setText(p->country);
+			dlg->getUi().stats_playing->setText(p->play_str);
+//			dlg->getUi().stats_rated->setText(p->rated);
+			dlg->getUi().stats_address->setText(p->address);
+			
+			// stored either idle time or last access	 
+			dlg->getUi().stats_idle->setText(p->idle);
+			if (!p->idle.isEmpty())
+				dlg->getUi().Label_Idle->setText(p->idle.at(0).isDigit() ? "Idle :": "Last log :");
+	
+		
+		}   
+	}
+}
+
+/*
+ * set checkbox status because of server info or because menu / checkbok toggled
+ */
+void MainWindow::slot_checkbox(int nr, bool val)
+{
+//	QCheckBox::ToggleState v = (val ? 
+
+	// set checkbox (nr) to val
+	switch (nr)
+	{
+		// open
+		case 0:
+			//toolOpen->setOn(val); 
+			ui.setOpenMode->setChecked(val);
+			break;
+
+		// looking
+		case 1:
+			//toolLooking->setOn(val); 
+			ui.setLookingMode->setChecked(val);
+			break;
+
+		// quiet
+		case 2:
+			//toolQuiet->setOn(val); 
+			ui.setQuietMode->setChecked(val);
+			break;
+
+		default:
+			qWarning("checkbox doesn't exist");
+			break;
+	}
+}
+
+
+/*
+ * checkbox looking cklicked
+ */
+void MainWindow::slot_cblooking()
+{
+	bool val = ui.setLookingMode->isChecked(); 
+	set_sessionparameter("looking", val);
+
+	if (val)
+		// if looking then set open
+		set_sessionparameter("open", true);
+}
+
+
+/*
+ * checkbox open clicked
+ */
+void MainWindow::slot_cbopen()
+{
+	bool val = ui.setOpenMode->isChecked(); 
+	set_sessionparameter("open", val);
+
+	if (!val)
+		// if not open then set close
+		set_sessionparameter("looking", false);
+}
+
+/*
+ * checkbox quiet clicked
+ */
+void MainWindow::slot_cbquiet()
+{
+	bool val = ui.setQuietMode->isChecked(); 
+	set_sessionparameter("quiet", val);
+
+	if (val)
+	{
+		// if 'quiet' button is once set to true the list is not reliable any longer
+//		gamesListSteadyUpdate = false;
+//		playerListSteadyUpdate = false;
+	}
+}
+
+/*
+ * A player has connected
+ */
+void MainWindow::slot_playerConnected(Player *p)
+{
+	//don't do anything if we are in a room (otherwise, it cripples the room players list)
+	if (ui.RoomList->currentIndex())
+		return;
+
+	switch(myAccount->get_gsname())
+	{
+		case IGS:
+		{
+			// we send the informaton request only if the players rank is within our rank selection
+			if ((rkToKey(p->rank) <= rkToKey(rkMin)) && (rkToKey(p->rank) >= rkToKey(rkMax)))
+				sendcommand("userlist " + p->name, false);
+			break;
+		}	
+		default:
+		{
+			slot_player(p,false);
+		}			
+	}
+}
+
+
+/*
+ * A match has been requested
+ * 
+ */
+void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
+{
+	// set up match dialog
+	GameDialog *dlg = NULL;
+	QString opponent;
+
+	// seek dialog
+	if (!myrequest)
+	{
+		// match xxxx B 19 1 10
+//		opponent = element(line, 1, " ");
+		opponent = line.section(" ",1,1);
+
+		// play sound
+//		qgoif->get_qgo()->playMatchSound();
+	}
+	else
+	{
+		// xxxxx 4k*
+//		opponent = element(line, 0, " ");
+		opponent = line.section(" ",0,0);
+	}
+
+	// look for same opponent
+//	dlg = matchlist.first();
+//	while (dlg && dlg->getUi().playerOpponentEdit->text() != opponent)// && dlg->getUi().playerBlackEdit->text() != opponent)
+//		dlg = matchlist.next();
+
+	for (int i=0; i < matchList.count(); i++)
+	{
+		if (matchList.at(i)->getUi().playerOpponentEdit->text() == opponent)
+			dlg = matchList.at(i);
+	}
+
+
+	if (!dlg)
+	{
+		dlg = new GameDialog();
+
+		matchList.insert(0, dlg);//new GameDialog(/* tr("New Game")*/);
+//		dlg = matchlist.current();
+		
+/*		if (myAccount->get_gsname() == NNGS ||
+			myAccount->get_gsname() == LGS)
+		{
+			// now connect suggest signal
+			connect(parser,
+				SIGNAL(signal_suggest(const QString&, const QString&, const QString&, const QString&, int)),
+				dlg,
+				SLOT(slot_suggest(const QString&, const QString&, const QString&, const QString&, int)));
+		}
+*/		
+		connect(dlg,
+			SIGNAL(signal_removeDialog(GameDialog *)), 
+			this, 
+			SLOT(slot_removeDialog(GameDialog *)));
+
+		connect(dlg,
+			SIGNAL(signal_sendCommand(const QString&, bool)),
+			this,
+			SLOT(slot_sendCommand(const QString&, bool)));
+
+		connect(parser,
+			SIGNAL(signal_matchCreate(const QString&)),
+			this,
+			SLOT(slot_removeDialog(const QString&)));
+
+// CAUTION : this is used in qGo1 for sending parameters (handicap, komi) to the server. We won't use this for now
+//		connect(parser,
+//			SIGNAL(signal_matchCreate(const QString&, const QString&)),
+//			dlg,
+//			SLOT(slot_matchCreate(const QString&, const QString&)));
+		connect(parser,
+			SIGNAL(signal_notOpen(const QString&, int)),
+			dlg,
+			SLOT(slot_notOpen(const QString&, int)));
+		connect(parser,
+			SIGNAL(signal_komiRequest(const QString&, int, int, bool)),
+			dlg,
+			SLOT(slot_komiRequest(const QString&, int, int, bool)));
+		connect(parser,
+			SIGNAL(signal_opponentOpen(const QString&)),
+			dlg,
+			SLOT(slot_opponentOpen(const QString&)));
+		connect(parser,
+			SIGNAL(signal_dispute(const QString&, const QString&)),
+			dlg,
+			SLOT(slot_dispute(const QString&, const QString&)));
+
+		connect(dlg,
+			SIGNAL(signal_matchSettings(const QString&, const QString&, const QString&, assessType)),
+			qgoif,
+			SLOT(slot_matchSettings(const QString&, const QString&, const QString&, assessType)));
+	}
+
+	if (myrequest)
+	{
+//		QString rk = element(line, 1, " ");
+		QString rk = line.section(" ",1,1);
+		// set values
+
+		dlg->getUi().playerOpponentEdit->setText(opponent);		
+//		dlg->getUi().playerOpponentEdit->setReadOnly(true);
+		dlg->set_myName( myAccount->acc_name);
+
+		// set my and opponent's rank for suggestion
+		dlg->set_oppRk(rk);
+		dlg->getUi().playerOpponentRkEdit->setText(rk);
+		rk = myAccount->get_rank();
+		dlg->set_myRk(rk);
+
+		dlg->set_gsName(myAccount->get_gsname());
+		dlg->getUi().handicapSpin->setEnabled(false);
+
+		dlg->getUi().buttonDecline->setDisabled(true);
+		
+
+		// teaching game:
+		if (dlg->getUi().playerOpponentEdit->text() == myAccount->acc_name)
+			dlg->getUi().buttonOffer->setText(tr("Teaching"));
+
+		//nmatch settings from opponent 
+		bool is_nmatch = false;
+
+		// we want to make sure the player is selected, because the match request may come from an other command (match button on the tab dialog)
+		QString lv_popup_name ;
+		PlayerTableItem* lv_popupPlayer = (PlayerTableItem*)ui.ListView_players->currentItem();
+
+		if (lv_popupPlayer )
+		{
+			lv_popup_name = (lv_popupPlayer->text(1).right(1) == "*" ? lv_popupPlayer->text(1).left( lv_popupPlayer->text(1).length() -1 ):lv_popupPlayer->text(1));
+		
+
+			is_nmatch = ((lv_popupPlayer->nmatch ) &&  (lv_popup_name == opponent));// && setting->readBoolEntry("USE_NMATCH");
+		}
+
+		dlg->set_is_nmatch(is_nmatch);
+
+		if ( (is_nmatch) && (lv_popupPlayer->nmatch_settings ))
+		{
+			//FIXME make sure we can set this with canadian when the opponent is set to japanese
+			dlg->getUi().timeSpin->setRange((int)(lv_popupPlayer->nmatch_timeMin/60), (int)(lv_popupPlayer->nmatch_timeMax/60));
+			dlg->getUi().byoTimeSpin->setRange((int)(lv_popupPlayer->nmatch_BYMin/60), (int)(lv_popupPlayer->nmatch_BYMax/60));
+			
+			dlg->getUi().handicapSpin->setRange( (lv_popupPlayer->nmatch_handicapMin == 0 ? 1 : lv_popupPlayer->nmatch_handicapMin), lv_popupPlayer->nmatch_handicapMax);
+		}
+		else
+		{
+			dlg->getUi().timeSpin->setRange(0,60);
+			dlg->getUi().byoTimeSpin->setRange(0,60);
+//			dlg->getUi().handicapSpin->setRange(0,9);
+		}
+		//no handicap , nigiri,  Jap. Byo yomi - with usual game requests
+		dlg->getUi().handicapSpin->setEnabled(is_nmatch);
+		dlg->getUi().play_nigiri_button->setEnabled(is_nmatch);
+		if (!is_nmatch)
+			dlg->getUi().timeTab->removeTab(1);		
+
+		//default settings
+
+		QSettings settings;
+
+		dlg->getUi().boardSizeSpin->setValue(settings.value("DEFAULT_SIZE").toInt());
+		dlg->getUi().timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
+		dlg->getUi().byoTimeSpin->setValue(settings.value("DEFAULT_BY").toInt());
+		dlg->getUi().komiSpin->setValue(settings.value("DEFAULT_KOMI").toInt() );  // *10+5);
+
+//		dlg->getUi().slot_pbsuggest();
+	}
+	else
+	{
+		// match xxxx B 19 1 10 - using this line means: I am black!
+		bool opp_plays_white = (line.section(" ",2,2) == "B");//QString(tr("B")));
+		bool opp_plays_nigiri = (line.section(" ",2,2) == "N");
+
+		QString handicap, size, time,byotime, byostones ;
+
+		if (line.contains("nmatch"))
+		{
+			//specific behavior here : IGS nmatch not totally supported
+			// disputes are hardly supported
+			dlg->set_is_nmatch(true);
+			handicap = line.section(" ",3,3);
+			size = line.section(" ",4,4);
+			time = line.section(" ",5,5);
+			byotime = line.section(" ",6,6);
+			byostones = line.section(" ",7,7);
+			dlg->getUi().timeSpin->setRange(0,100);
+			dlg->getUi().timeSpin->setValue(time.toInt()/60);
+			dlg->getUi().byoTimeSpin->setRange(0,100);
+			dlg->getUi().byoTimeSpin->setValue(byotime.toInt()/60);
+			dlg->getUi().BY_label->setText(tr(" Byo Time : (") + byostones+ tr(" stones)"));
+			dlg->getUi().handicapSpin->setRange(1,9);
+			dlg->getUi().handicapSpin->setValue(handicap.toInt());
+			dlg->getUi().boardSizeSpin->setRange(1,19);
+			dlg->getUi().boardSizeSpin->setValue(size.toInt());
+		}
+		else
+		{
+			dlg->set_is_nmatch(false);
+			size = line.section(" ",3,3);//element(line, 3, " ");
+			time = line.section(" ",4,4);//element(line, 4, " ");
+			byotime = line.section(" ",5,5);//element(line, 5, " ");
+			dlg->getUi().timeSpin->setRange(0,1000);
+			dlg->getUi().timeSpin->setValue(time.toInt());
+			dlg->getUi().byoTimeSpin->setRange(0,100);
+			dlg->getUi().byoTimeSpin->setValue(byotime.toInt());
+			dlg->getUi().handicapSpin->setEnabled(false);
+			dlg->getUi().play_nigiri_button->setEnabled(false);
+			dlg->getUi().boardSizeSpin->setRange(1,19);
+			dlg->getUi().boardSizeSpin->setValue(size.toInt());
+
+			dlg->getUi().timeTab->removeTab(1);
+		}
+		
+
+//		QString rk = getPlayerRk(opponent);
+		// look for players in playerlist
+		QTreeWidgetItemIterator lv(ui.ListView_players);
+		QTreeWidgetItem *lvi;
+		for (; (*lv); lv++)
+		{
+			lvi = *lv;
+			// compare names
+			if (lvi->text(1) == opponent)
+			dlg->set_oppRk(lvi->text(2));
+			break;
+		}
+
+
+//		dlg->set_oppRk(rk);
+		QString myrk = myAccount->get_rank();
+		dlg->set_myRk(myrk);
+
+		dlg->getUi().playerOpponentEdit->setText(opponent);		
+		dlg->getUi().playerOpponentEdit->setReadOnly(true);		
+//		dlg->getUi().playerOpponentRkEdit->setText(rk);
+		dlg->set_myName( myAccount->acc_name);
+
+		if (opp_plays_white)
+		{
+/*			dlg->getUi().playerBlackEdit->setText(myAccount->acc_name);
+			dlg->getUi().playerBlackEdit->setReadOnly(true);
+			dlg->getUi().playerBlackRkEdit->setText(myAccount->get_rank());
+			dlg->getUi().playerWhiteEdit->setText(opponent);
+			dlg->getUi().playerWhiteEdit->setReadOnly(false);
+			dlg->getUi().playerWhiteRkEdit->setText(rk);
+*/
+			dlg->getUi().play_black_button->setChecked(true);
+
+
+		}
+		else if (opp_plays_nigiri)
+		{
+/*			dlg->getUi().playerWhiteEdit->setText(myAccount->acc_name);
+			dlg->getUi().playerWhiteEdit->setReadOnly(true);
+			dlg->getUi().playerWhiteRkEdit->setText(myAccount->get_rank());
+			dlg->getUi().playerBlackEdit->setText(opponent);
+			dlg->getUi().playerBlackEdit->setReadOnly(false);
+			dlg->getUi().playerBlackRkEdit->setText(rk);
+*/
+			dlg->getUi().play_nigiri_button->setChecked(true);
+		}
+		else
+			dlg->getUi().play_white_button->setChecked(true);		
+
+		dlg->getUi().buttonDecline->setEnabled(true);
+//		dlg->getUi().buttonOffer->setText(tr("Accept"));
+		dlg->getUi().buttonCancel->setDisabled(true);
+
+	}
+
+	dlg->slot_changed();
+	dlg->show();
+	dlg->setWindowState(Qt::WindowActive);
+	dlg->raise();
+}
+
+/*
+ * talk dialog -> return pressed
+ */
+void MainWindow::slot_talkTo(QString &receiver, QString &txt)
+{
+	// echo
+	if (txt.length())
+	{
+		switch (myAccount->get_gsname())
+		{
+			case IGS:
+			{
+				bool ok;
+				// test if it's a number -> channel
+				/*int nr =*/ receiver.toInt(&ok);
+				if (ok)
+					// yes, channel talk
+					sendcommand("yell " + txt, false);
+//				else if (receiver.contains('*'))
+//					sendcommand("shout " + txt, false);
+				else
+					sendcommand("tell " + receiver + " " + txt, false);
+			}
+				break;
+
+			default:
+				// send tell command w/o echo
+				if (receiver.contains('*'))
+					sendcommand("shout " + txt, false);
+				else
+					sendcommand("tell " + receiver + " " + txt, false);
+				break;
+		}
+
+		// lokal echo in talk window
+		slot_talk(receiver, "-> " + txt, true);
+	}
+}
+
+
+/*
+ * A game dialog has sent a 'remove' signal
+ */
+void MainWindow::slot_removeDialog(GameDialog *dlg)
+{
+
+	int i = matchList.indexOf(dlg);
+
+	if (i == -1)
+	{
+		qDebug("match dialog not found in List !!!");
+		delete dlg;
+		return;
+	}
+	
+	delete matchList.takeAt(i); 
+
+}
+
+/*
+ * The parser has sent 'match create' signal because a game has started
+ */
+void MainWindow::slot_removeDialog(const QString &opp)
+{
+	int i;
+	for ( i=0; i < matchList.count(); i++)
+	{
+		if (matchList.at(i)->getUi().playerOpponentEdit->text() == opp)
+		{
+			delete matchList.takeAt(i); 
+			return ;
+		}
+	}
+}
+
+
+
+
+/*
+ * The parser has sent a signal that opponent canceled the match request
+ */
+void MainWindow::slot_matchCanceled(const QString& opp)
+{
+	GameDialog *dlg=NULL;
+	
+	for (int i=0; i < matchList.count(); i++)
+	{
+		if (matchList.at(i)->getUi().playerOpponentEdit->text() == opp)
+			dlg = matchList.at(i);
+	}
+
+
+	if (dlg)
+		dlg->slot_notOpen(opp, 2);
+
+}
+

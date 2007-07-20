@@ -276,7 +276,9 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &comput
    
 }
 
-
+/*
+ * sends a "pass" move to GTP
+ */
 void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 {
 //	if (id < 0)

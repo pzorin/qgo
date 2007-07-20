@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/" >
         <file>ressources/pics/Bowl.png</file>
+        <file>ressources/pics/close.png</file>
         <file>ressources/pics/connect_no2.png</file>
         <file>ressources/pics/connected.png</file>
         <file>ressources/pics/refresh_games.png</file>

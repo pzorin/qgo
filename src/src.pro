@@ -8,13 +8,17 @@ board/board.qrc
 QT = core gui \
 network
 TARGET = ../bin/qgo2 
-CONFIG += qt \
+CONFIG += warn_on \
+          qt \
           thread \
           qtestlib \
+          debug \
           stl
 TEMPLATE = app 
 FORMS += mainwindow.ui \
-board/boardwindow.ui
+board/boardwindow.ui \
+talk_gui.ui \
+server/gamedialog.ui
 HEADERS += mainwindow.h \
 board/boardwindow.h \
 board/board.h \
@@ -38,7 +42,9 @@ mainwindow_settings.h \
 server/igsconnection.h \
 server/parser.h \
 game_interfaces/qgo_interface.h \
-board/clockdisplay.h
+board/clockdisplay.h \
+talk.h \
+server/gamedialog.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -64,7 +70,10 @@ SOURCES += main.cpp \
            mainwindow_server.cpp \
            game_interfaces/qgo_interface.cpp \
            game_interfaces/qgoboard_observe.cpp \
-           board/clockdisplay.cpp
+           board/clockdisplay.cpp \
+           talk.cpp \
+           server/gamedialog.cpp \
+           game_interfaces/qgoboard_match.cpp
 QT -= qt3support
 DEPENDPATH += "board sgf game_tree game_interfaces gtp"
 INCLUDEPATH += server \
@@ -84,5 +93,5 @@ macx{
 linux-g++{
     SOURCES += audio/alsa.cpp
     LIBS += -lasound
-    CONFIG += debug warn_on
+    CONFIG += debug
 }

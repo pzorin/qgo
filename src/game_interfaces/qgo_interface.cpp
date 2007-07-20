@@ -5,7 +5,7 @@
 
 #include "mainwindow.h"
 #include "qgo_interface.h"
-
+#include "boardwindow.h"
 
 /*
  *	Playing or Observing
@@ -43,7 +43,10 @@ void qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIs
 
 	BoardWindow *b = new BoardWindow(parent, 0 , _gameData , _gameMode , _myColorIsBlack , _myColorIsWhite);
 	
-	b->show();
+	// if we passed a size, we can initialise, otherwise, we have to do it later
+	//(i.e : we are creating something else than an observed game from a move info)
+	if (_gameData->size)
+		b->init();
 	
 	//just in case. This should not happen but one never knows
 	boardlist->remove(_gameData->gameNumber);
@@ -52,8 +55,6 @@ void qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIs
 
 	connect (b , SIGNAL(signal_boardClosed(int)) , SLOT(slot_boardClosed(int)));
 
-//	if (_gameMode == modeObserve || _gameMode == modeMatch || _gameMode == modeTeach || _gameMode == modeReview)
-//		connect(b->qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), SLOT(slot_sendCommandFromInterface(const QString&, bool)));
 
 }
 
@@ -98,13 +99,28 @@ void qGoIF::slot_move(GameInfo* gi)
 		gd->gameNumber = gi->nr.toInt();
 		gd->playerBlack = gi->bname;
 		gd->playerWhite = gi->wname;
-				
-		createGame(modeObserve, gd, FALSE, FALSE );
+		// we set the size to 0 since 
+		gd->size = 0;	
+
+		GameMode mode;
+		bool imWhite = (gi->wname == myName);
+		bool imBlack = (gi->bname == myName);		
+
+		if ( imWhite && imBlack )
+			mode = modeTeach;
+		else if ( imWhite || imBlack)
+			mode = modeMatch;
+		else
+			mode = modeObserve;
+	
+		createGame(mode, gd, imBlack,imWhite );
+
+		emit signal_sendCommandFromInterface("games " + gi->nr, FALSE);
 
 		return ;
 	}
 
-		//if the initials commands (getting all moves) has not been sent, discard
+	//if the initials commands (getting all moves) has not been sent, discard
 	if (bw->getGamePhase() == phaseInit)
 		return;
 
@@ -167,7 +183,7 @@ void qGoIF::slot_gameInfo(Game *g)
 	if (!bw)
 		return;
 
-	GameData *gd = new GameData();
+ 	GameData *gd = new GameData();
 
 	gd->playerBlack = g->bname;
 	gd->playerWhite = g->wname;
@@ -236,11 +252,21 @@ void qGoIF::slot_gameInfo(Game *g)
 //	setMode();
 //	win->getInterfaceHandler()->toggleMode();
 //	have_gameData = true;
-	bw->qgoboard->set_havegd(TRUE);
-	// needed for correct sound
-	bw->qgoboard->set_statedMoveCount(g->mv.toInt());
+
 	bw->setGameData(gd);
 //	sound = false;
+
+	// did we have a board size ?
+	if (!bw->getBoardSize())
+	{
+		bw->setBoardSize(gd->size);
+		bw->init();
+	}	
+
+	bw->qgoboard->set_havegd(TRUE);
+
+	// needed for correct sound
+	bw->qgoboard->set_statedMoveCount(g->mv.toInt());
 }
 
 
@@ -1362,23 +1388,23 @@ void qGoIF::slot_score(const QString &txt, const QString &line, bool isplayer, c
 	static BoardWindow *qb = 0;
 	static float wcount, bcount;
 	static int column;
-	bool found  = FALSE;	
+//	bool found  = FALSE;	
+	QString player = txt;
 
 	if (isplayer)
 	{
-		qb = 0;//boardlist->first();
+//		qb = 0;//boardlist->first();
 		// find right board - slow, but just once a game
 //		while (qb != NULL && qb->get_wplayer() != txt && qb->get_bplayer() != txt)
 //			qb = boardlist->next();
 
-		QHashIterator<int, BoardWindow*> i(*boardlist);
- 		while (i.hasNext() && !found) 
-		{
-     			i.next();
-     			qb = i.value();
-			found = ((qb->get_wplayer() == txt) || (qb->get_bplayer() == txt));
-		}
-
+//		QHashIterator<int, BoardWindow*> i(*boardlist);
+//		while (i.hasNext() && !found) 
+//		{//   			i.next();
+// 			qb = i.value();
+//			found = ((qb->get_wplayer() == txt) || (qb->get_bplayer() == txt));
+//		}
+		qb = getBoardWindow(player);
 
 		if (qb && qb->get_wplayer() == txt)
 		{
@@ -1436,14 +1462,40 @@ void qGoIF::slot_score(const QString &txt, const QString &line, bool isplayer, c
 	}
 }
 
+BoardWindow *qGoIF::getBoardWindow(QString &player)
+{
+	bool found  = FALSE;
+	BoardWindow * qb = NULL; 
+
+	QHashIterator<int, BoardWindow*> i(*boardlist);
+	while (i.hasNext() && !found) 
+	{
+		i.next();
+		qb = i.value();
+		found = ((qb->get_wplayer() == player) || (qb->get_bplayer() == player));
+	}
+
+	return qb;
+}
+
+
+
+
+
 /*
  * game end result received from parser
  */
 void qGoIF::slot_result(Game *g)
-{
+{	
+	BoardWindow *bw = NULL;
 	
-	BoardWindow *bw = getBoardWindow(g->nr.toInt());
-	
+	// I the result comes from an observed game, we have a game number
+	// Otherwise, we rely on the name passed by the server
+	if (!g->nr.isEmpty())
+		bw = getBoardWindow(g->nr.toInt());
+	else	
+		bw = getBoardWindow(g->player);
+
 	if(!bw)
 		return;
 	

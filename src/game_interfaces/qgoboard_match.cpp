@@ -19,12 +19,10 @@
  ***************************************************************************/
 
 #include "qgoboard.h"
-#include "qgtp.h"
 #include "tree.h"
 #include "move.h"
 
-
-qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
+qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {
 	game_Id = QString::number(gd->gameNumber);
 }
@@ -32,100 +30,45 @@ qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, Ga
 
 
 /*
- * This functions initialises the board for observing a game
+ * This functions initialises the board for a match game
  */
-bool qGoBoardObserveInterface::init()
+bool qGoBoardMatchInterface::init()
 {
 	boardwindow->getUi().board->clearData();
-
-//	emit signal_sendCommandFromBoard("games " + game_Id, FALSE);
 	emit signal_sendCommandFromBoard("moves " +  game_Id, FALSE);
 	emit signal_sendCommandFromBoard("all " +  game_Id, FALSE);
 
 	startTimer(1000);
 
+	boardwindow->getBoardHandler()->slotNavLast();
+
 	return TRUE;
-
-}
-
-/*
- * Result has been sent byu the server.
- */
-void qGoBoardObserveInterface::setResult(QString res, QString xt_res)
-{
-	if (tree->getCurrent() == NULL)
-		return;
-	
-//	tree->getCurrent()->setComment(res);
-//	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-
-	kibitzReceived("\n" + res);
-
-	QMessageBox::information(boardwindow , tr("Game n° ") + QString::number(boardwindow->getId()), xt_res);
-
-	QSettings settings;
-	if( settings.value("AUTOSAVE").toBool())
-		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
-
-	boardwindow->setGamePhase(phaseEnded);
 }
 
 
 /*
- * Comment line - return sent
+ * We subclass this function, because the server will send the move back
+ * so there is no need to have it displayed
  */
-void qGoBoardObserveInterface::slotSendComment()
+void qGoBoardMatchInterface::localMoveRequest(StoneColor c, int x, int y)
 {
-	emit signal_sendCommandFromBoard("kibitz " + game_Id + " " + boardwindow->getUi().commentEdit2->text() , FALSE);
-
-	boardwindow->getUi().commentEdit2->clear();
+//	if (doMove(c,x,y))
+		// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
+//	{
+//		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+		sendMoveToInterface(c,x,y);
+//	}
 	
 }
 
 
-/*
- *  time info has been send by parser
- *  TODO : make sure we won't need this in qgoboard (code duplicate)
- */
-void qGoBoardObserveInterface::setTimerInfo(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
-{
-	int bt_i = btime.toInt();
-	int wt_i = wtime.toInt();
-//	b_stones = bstones;
-//	w_stones = wstones;
-/*
-#ifdef SHOW_INTERNAL_TIME
-	if (chk_b < 0)
-	{
-		chk_b = bt_i;
-		chk_w = wt_i;
-	}
-#endif
-*/
-	// set string in any case
-//	bt = secToTime(bt_i);
-//	wt = secToTime(wt_i);
-	QTime t0 = QTime::QTime(0,0);
-//	t0.addSecs(bt_i).toString("m:ss");
-	QTime t1 = t0;
-
-	// set initial timer until game is initialized
-//	if (!have_gameData)
-//		win->getInterfaceHandler()->setTimes(bt, bstones, wt, wstones);
-
-	if (boardwindow->getGamePhase() != phaseInit)
-		boardwindow->getInterfaceHandler()->setTimes(t0.addSecs(bt_i).toString("m:ss"), bstones, t0.addSecs(wt_i).toString("m:ss"), wstones);
-
-	// if time info available, sound can be played
-	// cause no moves cmd in execution
-//	sound = true;
-}
 
 
 /*
  * A move string is incoming from the interface (server)
+ * TODO : code duplicate : make sure we can't send this to qgoboard
  */
-void qGoBoardObserveInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
+void qGoBoardMatchInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
 {
 	//if we are observing a game, we might not be at the last move
 	Move *remember = tree->getCurrent();
@@ -306,3 +249,106 @@ void qGoBoardObserveInterface::set_move(StoneColor sc, QString pt, QString mv_nr
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 }
 
+/*
+ * Result has been sent byu the server.
+ */
+void qGoBoardMatchInterface::setResult(QString res, QString xt_res)
+{
+	if (tree->getCurrent() == NULL)
+		return;
+	
+//	tree->getCurrent()->setComment(res);
+//	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+
+	kibitzReceived("\n" + res);
+
+	QMessageBox::information(boardwindow , tr("Game n° ") + QString::number(boardwindow->getId()), xt_res);
+
+	QSettings settings;
+	if( settings.value("AUTOSAVE_PLAYED").toBool())
+		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
+
+	boardwindow->setGamePhase(phaseEnded);
+}
+
+/*
+ * sends a "pass" move to the server
+ */
+void qGoBoardMatchInterface::sendPassToInterface(StoneColor /*c*/)
+{
+	emit signal_sendCommandFromBoard("pass", FALSE);
+}
+
+/*
+ * sends a move to the server
+ */
+void qGoBoardMatchInterface::sendMoveToInterface(StoneColor /*c*/, int x, int y)
+{
+
+	if (x > 8)
+		x++;
+
+	char c1 = x - 1 + 'A';
+	//int c2 = gd.size + 1 - y;
+	int c2 = boardwindow->getBoardSize()  + 1 - y;
+
+//	if (ExtendedTeachingGame && IamPupil)
+//		emit signal_sendcommand("kibitz " + QString::number(id) + " " + QString(c1) + QString::number(c2), false);
+	QString id = "";
+
+//	if (gsName == IGS)
+		id = game_Id;
+
+	emit signal_sendCommandFromBoard(QString(c1) + QString::number(c2) + " " + id, FALSE);
+
+}
+
+
+/*
+ *  time info has been send by parser
+ *  TODO : make sure we won't need this in qgoboard (code duplicate)
+ */
+void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
+{
+	int bt_i = btime.toInt();
+	int wt_i = wtime.toInt();
+//	b_stones = bstones;
+//	w_stones = wstones;
+/*
+#ifdef SHOW_INTERNAL_TIME
+	if (chk_b < 0)
+	{
+		chk_b = bt_i;
+		chk_w = wt_i;
+	}
+#endif
+*/
+	// set string in any case
+//	bt = secToTime(bt_i);
+//	wt = secToTime(wt_i);
+	QTime t0 = QTime::QTime(0,0);
+//	t0.addSecs(bt_i).toString("m:ss");
+	QTime t1 = t0;
+
+	// set initial timer until game is initialized
+//	if (!have_gameData)
+//		win->getInterfaceHandler()->setTimes(bt, bstones, wt, wstones);
+
+	if (boardwindow->getGamePhase() != phaseInit)
+		boardwindow->getInterfaceHandler()->setTimes(t0.addSecs(bt_i).toString("m:ss"), bstones, t0.addSecs(wt_i).toString("m:ss"), wstones);
+
+	// if time info available, sound can be played
+	// cause no moves cmd in execution
+//	sound = true;
+}
+
+
+/*
+ * Comment line - return sent
+ */
+void qGoBoardMatchInterface::slotSendComment()
+{
+	emit signal_sendCommandFromBoard("say " + boardwindow->getUi().commentEdit2->text() , FALSE);
+
+	boardwindow->getUi().commentEdit2->clear();
+}

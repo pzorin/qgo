@@ -14,6 +14,8 @@
 #include "igsconnection.h"
 #include "parser.h"
 #include "qgo_interface.h"
+#include "talk.h"
+#include "gamedialog.h"
 
 #include <QtGui>
 
@@ -49,7 +51,7 @@ public slots:
 	void slot_new();
 	void slot_serverChanged( const QString &server);
 
-	// server slots
+	// client slots
 	void slot_connect(bool b);
 	void slot_textReceived(const QString &txt);
 	void slot_message(QString, QColor = Qt::black);
@@ -60,7 +62,18 @@ public slots:
 	void slot_cmdactivated(const QString&);
 	void slot_RefreshGames();
 	void slot_RefreshPlayers();
-	void slot_RoomListClicked(const QString &);
+	void slot_roomListClicked(const QString &);
+	void slot_talk(const QString& , const QString &, bool );
+	void slot_pbRelOneTab(QWidget *w);
+	void slot_cblooking();
+	void slot_cbopen();
+	void slot_cbquiet();
+	void slot_cancelSeek();
+	void slot_setRankSpread();
+	void slot_matchRequest(const QString &, bool);
+	void slot_talkTo(QString &, QString &);
+	void slot_removeDialog(GameDialog *);
+	void slot_matchCanceled(const QString&);
 
 	// parser slots
 	void slot_refresh(int i);
@@ -70,10 +83,15 @@ public slots:
 	void slot_room(const QString& room, bool b);
 	void slot_game(Game* g);
 	void slot_player(Player *p, bool cmdplayers);
-
+	void slot_statsPlayer(Player*);
 	void slot_sortGames (int);
 	void slot_sortPlayers (int);
-	void slot_gamesDoubleClicked(QTreeWidgetItem* lv);
+	void slot_gamesDoubleClicked(QTreeWidgetItem* );
+	void slot_playersDoubleClicked(QTreeWidgetItem*);
+	void slot_checkbox(int , bool );
+	void slot_playerConnected(Player*);
+	void slot_connexionClosed();
+	void slot_removeDialog(const QString &);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -91,27 +109,24 @@ private:
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer;
 	void initStatusBar();
 
-//	QList<BoardWindow *> boardList;
-	void createGame(GameMode gameMode, GameData * gameData, bool myColorIsBlack = FALSE, bool myColorIsWhite = FALSE, QString fileLoaded = "");
-
 
 	// online time
-	int                onlineCount;
-	bool               youhavemsg;
-	bool               playerListEmpty;
-	bool               playerListSteadyUpdate;
-	bool               gamesListSteadyUpdate;
-//	bool               gamesListEmpty;
-	bool               autoAwayMessage;
-
+	int	onlineCount;
+	bool	youhavemsg;
+	bool	playerListEmpty;
+	bool	playerListSteadyUpdate;
+	bool	gamesListSteadyUpdate;
+//	bool    gamesListEmpty;
+	bool	autoAwayMessage;
+	int 	timer;
 	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
 	//    else cmd is from history list
-	int		cmd_count;
-	bool		cmd_valid;
+	int	cmd_count;
+	bool	cmd_valid;
 	// telnet ready
-	bool		tn_ready;
-	bool		tn_wait_for_tn_ready;
-	HostList 	hostlist;
+	bool	tn_ready;
+	bool	tn_wait_for_tn_ready;
+	HostList hostlist;
 	IGSConnection 	*igsConnection;
 
 	QList<sendBuf*>  sendBuffer;
@@ -119,12 +134,15 @@ private:
 	Account		*myAccount;
 	Parser		*parser;
 	QMenu 		*seekMenu;
+	QList<Talk*>	talkList;
+	QList<GameDialog*> matchList;
 
 	//players table
 	void showOpen(bool show);
 	void prepareTables(InfoType cmd);
 	void setColumnsForExtUserInfo();
 	QString rkToKey(QString txt, bool integer=FALSE);
+	QString rkMax, rkMin;
 };
 
 #endif

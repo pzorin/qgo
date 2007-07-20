@@ -157,7 +157,7 @@ InfoType Parser::put_line(const QString &txt)
 	// check for connection status
 	if (line.indexOf("Connection closed",0,Qt::CaseInsensitive) != -1)
 	{
-		emit signal_connclosed();
+		emit signal_connexionClosed();
 		emit signal_message(txt);
 		gsName = GS_UNKNOWN;
 		return IT_OTHER;
@@ -340,17 +340,17 @@ InfoType Parser::put_line(const QString &txt)
 			if (line.contains("No user named"))
 			{
 				QString name = element(line, 1, "\"");
-				emit signal_talk(name, "@@@", true);
+//				emit signal_talk(name, "@@@", true);
 			}
 			else if (line.contains("is not open to match requests"))
 			{
 				QString opp = element(line, 0, "\"", "\"");
-				emit signal_notopen(opp);
+				emit signal_notOpen(opp, 0);
 			}
 			else if (line.contains("player is currently not accepting matches"))
 			{
 				// IGS: 5 That player is currently not accepting matches.
-				emit signal_notopen(0);
+				emit signal_notOpen(0, 0);
 			}
 
 			else if (line.contains("You cannot undo") || line.contains("client does not support undoplease")) 
@@ -360,9 +360,14 @@ InfoType Parser::put_line(const QString &txt)
 				return KIBITZ;
 			}
 
-		// Debug: 5 There is a dispute regarding your match(nmatch):
-		// Debug: 5 yfh2test request: B 3 19 420 900 25 0 0 0
-		// Debug: 5 yfh22 request: W 3 19 600 900 25 0 0 0
+		// 5 There is a dispute regarding your nmatch:
+		// 5 yfh2test request: B 3 19 420 900 25 0 0 0
+		// 5 yfh22 request: W 3 19 600 900 25 0 0 0
+		//
+		// 5 There is a dispute regarding your match:
+		// 5   yfh2test wants White on a 19x19 in 10 mins (10 byoyomi).
+		// 5   eb5 wants Black on a 19x19 in 10 mins (12 byoyomi).
+
 
 			else if (line.contains("request:"))// && (element(line, 0, " ") != myname))
 			{
@@ -726,7 +731,7 @@ InfoType Parser::put_line(const QString &txt)
 			else if (line.contains("<decline") && line.contains("match"))
 			{
 				// false -> not my request: used in mainwin.cpp
-				emit signal_matchrequest(element(line, 0, "<", ">"), false);
+				emit signal_matchRequest(element(line, 0, "<", ">"), false);
 			}
 			// 9 Match [5] with guest17 in 1 accepted.
 			// 9 Creating match [5] with guest17.
@@ -737,7 +742,7 @@ InfoType Parser::put_line(const QString &txt)
 				QString dummy = element(line, 0, "]", ".").trimmed();
 				QString opp = element(dummy, 1, " ");
 
-				emit signal_matchcreate(nr, opp);
+				emit signal_matchCreate(/*nr,*/ opp);
         			// automatic opening of a dialog tab for further conversation
         			emit signal_talk(opp, "", true);
 			}
@@ -745,7 +750,7 @@ InfoType Parser::put_line(const QString &txt)
 			{
 				QString nr = element(line, 0, "[", "]");
 				QString opp = element(line, 3, " ");
-				emit signal_matchcreate(nr, opp);
+				emit signal_matchCreate(/*nr,*/ opp);
         
 			}
 			// 9 frosla withdraws the match offer.
@@ -754,7 +759,7 @@ InfoType Parser::put_line(const QString &txt)
 				 line.contains("withdraws the match offer"))
 			{
 				QString opp = element(line, 0, " ");
-				emit signal_notopen(opp);
+				emit signal_notOpen(opp, 1);
 			}
 			//9 yfh2test declines undo
 			else if (line.contains("declines undo"))
@@ -990,12 +995,12 @@ InfoType Parser::put_line(const QString &txt)
 			else if ((line.contains("has resigned the game"))||
 				(line.contains("has run out of time")))
 			{
-				aGame->nr = "@";
+				aGame->nr = "";
 				aGame->running = false;
 			
-				aGame->Sz = line ;
-			
-//				emit signal_move(aGame);
+				aGame->res = line ;
+				aGame->player = element(line,0," ");
+				emit signal_result(aGame);
 				break;
 
 			}
@@ -1338,22 +1343,30 @@ InfoType Parser::put_line(const QString &txt)
 				
 		//20 yfh2 (W:O): 4.5 to NaiWei (B:#): 4.0
 		case 20:
+		{
 //			aGame->nr = "@";
 //			aGame->running = false;
+			QString res;
+			QString player = element(line, 0, " ");
+			if (player == myname)
+				player = element(line, 4, " ");
+			aGame->player = player;
+			aGame->nr="";
+
 			if ( line.indexOf("W:") < line.indexOf("B:"))
 			{	//aGame->Sz 
-				QString res = "W " + element(line, 2, " ") + " B " + element(line, 6, " ");
-				emit signal_gameResult(res);
+				aGame->res = "W " + element(line, 2, " ") + " B " + element(line, 6, " ");
+//				emit signal_matchResult(res);
 			}
 			else 
 			{	//aGame->Sz 
-				QString res = "B " + element(line, 2, " ") + " W " + element(line, 6, " ");			
-				emit signal_gameResult(res);
+				aGame->res = "B " + element(line, 2, " ") + " W " + element(line, 6, " ");			
+//				emit signal_matchResult(res);
 			}
-			
-//			emit signal_gameResult(res);
+
+			emit signal_result(aGame);
 			break;
-			
+		}	
 			
 			
 		// SHOUT - a info from the server
@@ -1372,7 +1385,7 @@ InfoType Parser::put_line(const QString &txt)
 				aPlayer->online = true;
 				
 				// false -> no "players" cmd preceded
-				emit signal_player(aPlayer, false);
+				emit signal_playerConnected(aPlayer);//, false);
 				return PLAYER;
 			}
 			else if (line.contains("has disconnected"))
@@ -1431,7 +1444,7 @@ InfoType Parser::put_line(const QString &txt)
 						aGame->res.remove(0,2);
 
 					emit signal_result(aGame);
-//					emit signal_move(aGame);
+					emit signal_game(aGame);
 					return GAME;
 				}
 			}
@@ -1457,7 +1470,7 @@ InfoType Parser::put_line(const QString &txt)
 				
 				if (gsName == WING && aGame->wname == aGame->bname)
 					// WING doesn't send 'create match' msg in case of teaching game
-					emit signal_matchcreate(aGame->nr, aGame->bname);
+					emit signal_matchCreate(/*aGame->nr,*/ aGame->bname);
 
 				emit signal_game(aGame);
 				return GAME;
@@ -1862,7 +1875,7 @@ InfoType Parser::put_line(const QString &txt)
 				e1 = element(line, 2, " ",".");
 				int nr = e1.toInt();//element(line, 3, " ").toInt();
 				emit signal_channelinfo(nr, QString("*on*"));
-				emit signal_talk(e1, "", false);
+//				emit signal_talk(e1, "", false);
 				//emit signal_message(line);
 				
 				break;
@@ -1900,7 +1913,7 @@ InfoType Parser::put_line(const QString &txt)
 					break;
 			}
 
-			emit signal_talk(e1, e2, false);
+//			emit signal_talk(e1, e2, false);
 			break;
 		}
 

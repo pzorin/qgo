@@ -3447,6 +3447,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3465,6 +3468,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <width>20</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="text" >
                    <string/>
@@ -3485,6 +3491,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3503,6 +3512,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <width>20</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="text" >
                    <string/>
@@ -3533,6 +3545,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3552,6 +3567,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3570,6 +3588,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <width>20</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="text" >
                    <string/>
@@ -3607,6 +3628,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>28</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3625,6 +3649,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <width>20</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="text" >
                    <string/>
@@ -3645,6 +3672,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3664,6 +3694,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="text" >
                    <string/>
                   </property>
@@ -3682,6 +3715,9 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <width>20</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="focusPolicy" >
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="text" >
                    <string/>
@@ -5457,6 +5493,9 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                    <height>20</height>
                   </size>
                  </property>
+                 <property name="focusPolicy" >
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text" >
                   <string>Refresh</string>
                  </property>
@@ -5475,7 +5514,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QWidget" name="" >
+       <widget class="QWidget" name="layoutWidget" >
         <layout class="QVBoxLayout" >
          <property name="margin" >
           <number>0</number>
@@ -5494,6 +5533,9 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
             </sizepolicy>
            </property>
            <property name="verticalScrollBarPolicy" >
+            <enum>Qt::ScrollBarAsNeeded</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy" >
             <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
           </widget>

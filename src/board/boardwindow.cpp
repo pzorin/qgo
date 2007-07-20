@@ -25,7 +25,8 @@ BoardWindow::BoardWindow(QWidget * parent, Qt::WindowFlags flags, int size)
 	gameMode = modeNormal;
 	myColorIsBlack = TRUE;
 	myColorIsWhite = TRUE;
-	init();
+	interfaceHandler = new InterfaceHandler( this);
+//	init();
 }
 
 BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd , GameMode gm , bool iAmBlack , bool iAmWhite)
@@ -33,26 +34,9 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 {
 
 	gameData = new GameData(gd);
-
-	gameMode = gm;
-	myColorIsBlack = iAmBlack;
-	myColorIsWhite = iAmWhite;
-
-	boardSize = gd->size;
-	init();
-
-}
-
-void BoardWindow::init()
-{
-
-	gamePhase = phaseInit;
-
+	
 	ui.setupUi(this);
-	ui.board->init(boardSize);
-
 	ui.actionWhatsThis = QWhatsThis::createAction ();
-
 
 	// Initialises the buttons and else
 	editButtons = new QButtonGroup(this);
@@ -81,17 +65,37 @@ void BoardWindow::init()
 	exportButton->setPopupMode( QToolButton::InstantPopup);
 	ui.toolBar->insertWidget ( ui.actionImport, exportButton );
 
+	clockDisplay = new ClockDisplay(this);
+
+	interfaceHandler = new InterfaceHandler( this);
+
+	gameMode = gm;
+	myColorIsBlack = iAmBlack;
+	myColorIsWhite = iAmWhite;
+
+	gamePhase = phaseInit;
+	boardSize = gd->size;
+//	init();
+
+}
+
+void BoardWindow::init()
+{
+
+//	gamePhase = phaseInit;
+
+	
+	ui.board->init(boardSize);
+
 	//Creates the game tree
 	tree = new Tree(boardSize);
 
 	//creates the interface handler
-	interfaceHandler = new InterfaceHandler( this);
+//	interfaceHandler = new InterfaceHandler( this);
 	interfaceHandler->toggleMode(gameMode);
 
 	if (gameData)
 		interfaceHandler->updateCaption(gameData);
-
-	clockDisplay = new ClockDisplay(this);
 
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameMode)
@@ -113,6 +117,14 @@ void BoardWindow::init()
 
 			break;	
 		}
+		case modeMatch :
+		{
+			qgoboard = new 	qGoBoardMatchInterface(this, tree,gameData);
+			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
+
+			break;	
+		}	
+
 
 		default:
 			break;
@@ -169,12 +181,14 @@ void BoardWindow::init()
 	if (! gameData->fileName.isEmpty())
 		loadSGF(gameData->fileName);
 
-	
+//	ui.board->init(boardSize);
 	qgoboard->init();		
 	gamePhase = phaseOngoing;
+	show();
 
 	// This is only needed with a computer game, when the computer has to make the first move
 	qgoboard->startGame();
+	
 }
 
 BoardWindow::~BoardWindow()

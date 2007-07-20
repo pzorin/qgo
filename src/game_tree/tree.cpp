@@ -752,9 +752,9 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	if (captures < 0)
 		return -1;
 
-	if (c == stoneWhite)
+	if (c == stoneBlack)
 		capturesBlack += captures;
-	else if (c == stoneBlack)
+	else if (c == stoneWhite)
 		capturesWhite += captures;
 //	stoneHandler->toggleWorking(false);
 //	updateCurrentMatrix(c, x, y);
@@ -921,6 +921,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 }
 
 //TODO : wipe out , moved to matrix
+/*
 Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
 {
 //	if (stones->isEmpty())
@@ -940,7 +941,7 @@ Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
 	{
 		stone = group->at(mark);
 		// we use preferably the matrix
-		if ((m==NULL /*&& stone->visible()*/)|| (m!= NULL || m->at(stone->x - 1, stone->y - 1) != stoneNone ))
+		if ((m==NULL )|| (m!= NULL || m->at(stone->x - 1, stone->y - 1) != stoneNone ))
 		{
 			int 	stoneX = stone->x,
 				stoneY = stone->y;
@@ -997,7 +998,7 @@ Group* Tree::checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix
 		}
 	}
 */
-
+/*
 	if (!m)
 		qDebug("Oops : null matrix in Tree::checkNeighbour");
 
@@ -1028,7 +1029,7 @@ Group* Tree::checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix
 
 	return group;
 }
-
+*/
 
 
 bool Tree::removeStone(int x, int y, bool hide)
@@ -1082,6 +1083,7 @@ int Tree::hasMatrixStone(int x, int y)
 	return -1;
 }
 
+/*
 //TODO wipe this function out : replaced in Matrix code
 int Tree::countLiberties(Group *group, Matrix *m) 
 {
@@ -1142,6 +1144,7 @@ void Tree::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &libe
   else                                      
   {
 */    
+/*
 	if (	x <= boardSize && 
 		y <= boardSize && x >= 0 && y >= 0 &&
 	    	!libCounted.contains(100*x + y) &&
@@ -1152,6 +1155,7 @@ void Tree::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &libe
 	}
 //  }
 }
+*/
 
 /*
  * This is used by the sgfparser when reverting to the previous node after the end of a branch

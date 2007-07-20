@@ -22,10 +22,11 @@ public:
 	qGoIF(QWidget*);
 	~qGoIF();
 	void set_gsName(GSName n) { gsName = n; }
+	void set_myName(const QString &n) { myName = n; }
 	void createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite );
 
 	BoardWindow * getBoardWindow(int n)	{return (boardlist->contains(n) ? boardlist->value(n) : NULL) ;}
-
+	BoardWindow * getBoardWindow(QString &player);
 /*	bool set_observe(QString);
 	void set_initIF();
 	void set_myName(const QString &n) { myName = n; }

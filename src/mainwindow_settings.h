@@ -24,6 +24,8 @@
 #include "defines.h"
 #include "globals.h"
 
+#include <QtGui>
+
 class Host
 {
 public:
@@ -96,6 +98,51 @@ private:
 	QWidget *parent;
 };
 
+class PlayerTableItem : public QTreeWidgetItem
+{ 
+public:
+ 
+	PlayerTableItem(QTreeWidget *parent, int Type = 0) : QTreeWidgetItem( parent,  Type) {};
+	PlayerTableItem(QTreeWidget *parent, QStringList s) : QTreeWidgetItem( parent,  s) {};
+	PlayerTableItem(QTreeWidgetItem *parent,  int Type = 0): QTreeWidgetItem( parent,  Type) {};
+/*	PlayerTableItem(PlayerTable *parent, QString label1, QString label2 = QString::null,
+		QString label3 = QString::null, QString label4 = QString::null,
+		QString label5 = QString::null, QString label6 = QString::null,
+		QString label7 = QString::null, QString label8 = QString::null,
+		QString label9 = QString::null, QString label10 = QString::null,
+		QString label11 = QString::null, QString label12 = QString::null,
+		QString label13 = QString::null);
+*/
+	~PlayerTableItem() {};
+
+//	void ownRepaint();
+//	void replace() ;
+	void set_nmatchSettings(Player *p);
+
+	bool nmatch;
+
+	// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
+	bool nmatch_black, nmatch_white, nmatch_nigiri, nmatch_settings;
+	int 	nmatch_handicapMin, nmatch_handicapMax, 
+		nmatch_timeMin, nmatch_timeMax, 
+		nmatch_BYMin, nmatch_BYMax, 
+		nmatch_stonesMin, nmatch_stonesMax,
+		nmatch_KoryoMin, nmatch_KoryoMax;
+
+	//bool isOpen() {return open;}
+
+protected:
+//	virtual QString key(int, bool) const;
+//	virtual int compare( QListViewItem *p, int col, bool ascending ) const;
+//	virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int alignment);
+
+	bool open;
+	bool watched;
+	bool exclude;
+	bool its_me;
+	bool seeking;
+
+};
 
 
 #endif

@@ -80,9 +80,9 @@ void InterfaceHandler::clearData()
  */
 void InterfaceHandler::updateCaption(GameData *gd)
 {
-    // Print caption
-    // example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
-    // or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
+	// Print caption
+	// example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
+	// or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
 	boardwindow->setWindowTitle( /* QString(isModified ? "* " : "") + */
 		( (gd->gameNumber != 0 && gd->gameNumber < 10000) ?
 			"(" + QString::number(gd->gameNumber) + ") " : 

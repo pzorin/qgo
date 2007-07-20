@@ -175,6 +175,28 @@ GSName Account::get_gsname()
 	return gsName;
 }
 
+void PlayerTableItem::set_nmatchSettings(Player *p)
+{
+	nmatch = p->nmatch;
+
+	nmatch_black = 		p->nmatch_black ;
+	nmatch_white = 		p->nmatch_white;
+	nmatch_nigiri = 	p->nmatch_nigiri ;
+	nmatch_handicapMin = 	p->nmatch_handicapMin;
+	nmatch_handicapMax  = 	p->nmatch_handicapMax;
+	nmatch_timeMin = 	p->nmatch_timeMin;
+	nmatch_timeMax  = 	p->nmatch_timeMax;
+	nmatch_BYMin = 		p->nmatch_BYMin;
+	nmatch_BYMax = 		p->nmatch_BYMax;
+	nmatch_stonesMin = 	p->nmatch_stonesMin;
+	nmatch_stonesMax = 	p->nmatch_stonesMax;
+	nmatch_KoryoMin = 	p->nmatch_KoryoMin;
+	nmatch_KoryoMax = 	p->nmatch_KoryoMax ;
+
+	nmatch_settings =  !(p->nmatch_settings == "No match conditions");
+
+}
+
 /*
  * saves the parameters on the 2 lats tabs into the QSettings 
  */
@@ -206,6 +228,14 @@ void MainWindow::saveSettings()
 		settings.setValue("codec", hostlist.at(i)->codec());
 	}
 	settings.endArray();
+
+	settings.setValue("ACCOUNT",ui.cb_connect->currentIndex ());
+
+	//server games default values
+	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
+	settings.setValue("DEFAULT_SIZE",ui.boardSizeSpin->value() );
+	settings.setValue("DEFAULT_TIME",ui.timeSpin->value() );
+	settings.setValue("DEFAULT_BY",ui.BYSpin->value() );
 }
 
 
@@ -224,6 +254,8 @@ void MainWindow::loadSettings()
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
 	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
 
+
+	//server list
 	hostlist.clear();
 	Host *h;
 	int size = settings.beginReadArray("HOSTS");
@@ -252,6 +284,15 @@ void MainWindow::loadSettings()
 
 	}
  	settings.endArray();
+
+	ui.cb_connect->setCurrentIndex(settings.value("ACCOUNT").toInt());
+
+
+	//server games default values
+	ui.komiSpinDefault->setValue(settings.value("DEFAULT_KOMI").toInt());
+	ui.boardSizeSpin->setValue(settings.value("DEFAULT_SIZE").toInt());
+	ui.timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
+	ui.BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
 
 }
 

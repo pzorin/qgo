@@ -59,6 +59,7 @@ public:
 	GameData *getGameData() 		{return gameData;}
 	int getId()				{return gameData->gameNumber;}
 	MarkType getEditMark()			{return editMark;}
+	void setBoardSize(int sz)		{boardSize=sz;}
 	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
 	void setGameData(GameData *gd);	
 	QString get_wplayer()			{return gameData->playerWhite;}

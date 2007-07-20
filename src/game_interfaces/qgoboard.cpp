@@ -368,11 +368,11 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 	}
 	else
 		if (tree->getCurrent()->getMoveNumber() > stated_mv_count)
-		{
-			qDebug("playing sound");
+//		{
+//			qDebug("playing sound");
 			
 			clickSound->play();
-		}
+//		}
 //	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
 	return validMove;
