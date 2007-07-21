@@ -52,6 +52,8 @@ public slots:
 	void slot_kibitz(int, const QString&, const QString&);
 	void slot_observers(int , const QString &, const QString&);
 	void slot_clearObservers(int);
+	void slot_enterScoreMode();
+	void slot_removeStones(const QString&, const QString&);
 /*	void slot_move(Game*);
 	void slot_computer_game(QNewGameDlg*);
 	void slot_title(const QString&);

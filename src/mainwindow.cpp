@@ -189,7 +189,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_kibitz(int, const QString&, const QString&)), qgoif, SLOT(slot_kibitz(int, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_observers(int, const QString&, const QString&)), qgoif, SLOT(slot_observers(int, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_clearObservers(int)), qgoif, SLOT(slot_observers(int)));
-
+	connect(parser, SIGNAL(signal_enterScoreMode()), qgoif, SLOT(slot_enterScoreMode()));
+	connect(parser, SIGNAL(signal_removeStones( const QString&, const QString&)), qgoif, SLOT(slot_removeStones( const QString&, const QString&)));
 
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));

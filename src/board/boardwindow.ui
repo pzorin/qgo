@@ -75,7 +75,7 @@
             <widget class="QLabel" name="sliderRightLabel" >
              <property name="font" >
               <font>
-               <family>Sans Serif</family>
+               <family>Helvetica</family>
                <pointsize>9</pointsize>
                <weight>50</weight>
                <italic>false</italic>
@@ -133,7 +133,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
              <property name="maximumSize" >
               <size>
                <width>32767</width>
-               <height>20</height>
+               <height>15</height>
               </size>
              </property>
              <property name="focusPolicy" >
@@ -162,7 +162,7 @@ Use the slider to quickly navigate through the current branch of the game.</stri
             <widget class="QLabel" name="sliderLeftLabel" >
              <property name="font" >
               <font>
-               <family>Sans Serif</family>
+               <family>Helvetica</family>
                <pointsize>9</pointsize>
                <weight>50</weight>
                <italic>false</italic>
@@ -3763,7 +3763,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               <enum>QTabWidget::Rounded</enum>
              </property>
              <property name="currentIndex" >
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="Tab_play" >
               <attribute name="title" >
@@ -4523,6 +4523,19 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
                     </size>
                    </property>
                   </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="reviewButton" >
+                   <property name="maximumSize" >
+                    <size>
+                     <width>16777215</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="text" >
+                    <string>Review</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </item>

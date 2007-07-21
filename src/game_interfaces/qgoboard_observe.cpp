@@ -255,7 +255,7 @@ void qGoBoardObserveInterface::set_move(StoneColor sc, QString pt, QString mv_nr
 		if (i > 8)
 			i--;
 
-		int j;
+		int j ;//= boardwindow->getGameData()->size + 1 - pt.mid(1).toInt();
 
 		if (pt[2] >= '0' && pt[2] <= '9')
 			j = boardwindow->getGameData()->size + 1 - pt.mid(1,2).toInt();

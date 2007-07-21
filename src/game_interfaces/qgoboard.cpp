@@ -211,8 +211,6 @@ void qGoBoard::removeStone( int x, int y)
 }
 
 
-
-
 /*
  * 'Pass' button pressed
  */
@@ -284,7 +282,8 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 
 		case phaseScore:
 		{
-			markDeadStone(x,y);
+//			markDeadStone(x,y);
+			localMarkDeadRequest(x,y);
 			return;
 		}
 
@@ -325,6 +324,17 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 	}
 	
 }
+
+
+/*
+ * This functions gets the request (from a board click)
+ * to mark a stone as dead/undead (score mode). All local but 'match'
+ */
+void qGoBoard::localMarkDeadRequest(int x, int y)
+{
+	markDeadStone(x,y);
+}
+
 
 /*
  * This function adds a pass move to a game. there is no need to return anything

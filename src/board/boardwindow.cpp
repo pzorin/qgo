@@ -166,6 +166,9 @@ void BoardWindow::init()
 	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
 	connect(ui.passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
 	connect(ui.scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
+	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
+	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
 
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));

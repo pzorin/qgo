@@ -289,7 +289,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 					set_sessionparameter("nmatch",true);
 
 					//temporaary settings to prevent use of Koryo BY on IGS (as opposed to canadian)
-					sendcommand("nmatchrange BWN 0-9 19-19 60-60 60-3600 25-25 0 0 0-0",false);
+					sendcommand("nmatchrange BWN 0-9 2-19 60-60 60-3600 25-25 0 0 0-0",false);
 //					send_nmatch_range_parameters();
 //					}
 					sendcommand("toggle newundo",true);

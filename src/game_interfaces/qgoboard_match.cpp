@@ -61,7 +61,14 @@ void qGoBoardMatchInterface::localMoveRequest(StoneColor c, int x, int y)
 	
 }
 
-
+/*
+ * This functions gets the request (from a board click)
+ * to mark a stone as dead/undead (score mode). this sends the click coords to server
+ */
+void qGoBoardMatchInterface::localMarkDeadRequest(int x,  int y)
+{
+	sendMoveToInterface(stoneBlack,x,y);
+}
 
 
 /*
@@ -278,6 +285,16 @@ void qGoBoardMatchInterface::sendPassToInterface(StoneColor /*c*/)
 {
 	emit signal_sendCommandFromBoard("pass", FALSE);
 }
+
+/*
+ * sends a "done" command to the server
+ */
+void qGoBoardMatchInterface::slotDonePressed()
+{
+	emit signal_sendCommandFromBoard("done", FALSE);
+}
+
+
 
 /*
  * sends a move to the server

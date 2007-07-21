@@ -388,12 +388,13 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		passButton->setText(QObject::tr("Pass", "button label"));
 		boardwindow->getUi().undoButton->setEnabled(TRUE);
 		boardwindow->getUi().resignButton->setEnabled(TRUE);
-		boardwindow->getUi().adjournButton->setEnabled(false);
-		boardwindow->getUi().refreshButton->setEnabled(false);
-		boardwindow->getUi().doneButton->setEnabled(false);
+		boardwindow->getUi().adjournButton->setEnabled(FALSE);
+		boardwindow->getUi().refreshButton->setEnabled(FALSE);
+		boardwindow->getUi().doneButton->setEnabled(FALSE);
 		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi().navButtonsFrame->setEnabled(false);
+		boardwindow->getUi().navButtonsFrame->setEnabled(FALSE);
 		boardwindow->getUi().commentEdit2->setDisabled(TRUE);
+		boardwindow->getUi().reviewButton->setDisabled(TRUE);
 //		fileNew->setEnabled(false);
 //		fileNewBoard->setEnabled(false);
 //		fileOpen->setEnabled(false);

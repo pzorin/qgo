@@ -1235,8 +1235,13 @@ void qGoIF::slot_sendCommandFromInterface(const QString &text, bool show)
 
 
 /*
-void qGoIF::slot_removestones(const QString &pt, const QString &game_id)
+ * a stone has been sent by the parser for removal
+ */
+void qGoIF::slot_removeStones(const QString &pt, const QString &game_id)
 {
+
+	BoardWindow *bw = NULL;
+/*
 	qGoBoard *qb = boardlist->first();
 
 	if (!pt && !game_id)
@@ -1300,52 +1305,46 @@ qWarning("slot_removestones(): NON IGS no match");
 
 		return;
 	}
-
-	if (pt && !game_id)
+*/
+	if (!pt.isEmpty() && game_id.isEmpty())
 	{
-qDebug("slot_removestones(): pt !game_id");
+		qDebug("slot_removestones(): pt !game_id");
 		// stone coords but no game number:
-		// single match mode, e.g. NNGS
-		while (qb && qb->get_Mode() != modeMatch && qb->get_Mode() != modeTeach)
-			qb = boardlist->next();
+		// single match mode, 
+//		while (qb && qb->get_Mode() != modeMatch && qb->get_Mode() != modeTeach)
+//			qb = boardlist->next();
+		bw = getBoardWindow(myName);
 	}
-	else
+	else if (!pt.isEmpty())
 	{
-qDebug("slot_removestones(): game_id");
-		// multi match mode, e.g. IGS
-		while (qb && qb->get_id() != game_id.toInt())
-			qb = boardlist->next();
-
-		if (qb && qb->get_win()->getInterfaceHandler()->passButton->text() != QString(tr("Done")))
-		{
-			// set to count mode
-			qb->get_win()->doRealScore(true);
-			qb->send_kibitz(tr("SCORE MODE: click on a stone to mark as dead..."));
-		}
+		bw = getBoardWindow(game_id.toInt());
 	}
 		
-	if (!qb)
+	if (!bw)
 	{
 		qWarning("*** No Match found !!! ***");
 		return;
 	}
 
-	int i = (QChar) pt[0] - 'A' + 1;
+	QString point(pt); // we do this because the constant string seems to be segfaulting if not long enough
+
+	int i =  point[0].unicode() - QChar::fromAscii('A').unicode() + 1;
 	// skip j
 	if (i > 8)
 		i--;
 	
 	int j;
-	if (pt[2] >= '0' && pt[2] <= '9')
-		j = qb->get_boardsize() + 1 - pt.mid(1,2).toInt();
+	if (point[2] >= '0' && point[2] <= '9')
+		j = bw->getBoardSize() + 1 - point.mid(1,2).toInt();
 	else
-		j = qb->get_boardsize() + 1 - pt[1].digitValue();
+		j = bw->getBoardSize() + 1 - point[1].digitValue();
 
 	// mark dead stone
-	qb->get_win()->getBoard()->getBoardHandler()->markDeadStone(i, j);
-	qb->send_kibitz("removing @ " + pt);
+	bw->qgoboard->markDeadStone(i, j);
+
+	bw->qgoboard->kibitzReceived("removing @ " + pt);
 }
-*/
+
 
 /*
  * observers list header received from parser, clear the list
@@ -1462,6 +1461,30 @@ void qGoIF::slot_score(const QString &txt, const QString &line, bool isplayer, c
 	}
 }
 
+void qGoIF::slot_enterScoreMode()
+{
+	BoardWindow *bw = getBoardWindow(myName);
+
+	//Sanity check
+	if (bw->getGameMode()!=modeMatch)
+	{
+		qDebug("*** qGoIF::slot_enterScoreMode() - OOPS : game found with my name, but not a match game");
+		return;
+	}
+
+	bw->qgoboard->enterScoreMode();
+	//FIXME This is dirty and should not be here
+	bw->getUi().doneButton->setEnabled(true);
+
+	bw->qgoboard->kibitzReceived(tr("SCORE MODE: click on a stone to mark as dead..."));
+
+}
+
+
+/*
+ * gets the first board in which the players name appears
+ * this is used to get the played games whan we don't have the game number
+ */
 BoardWindow *qGoIF::getBoardWindow(QString &player)
 {
 	bool found  = FALSE;

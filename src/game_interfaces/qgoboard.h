@@ -48,6 +48,8 @@ public:
 	virtual void setTimerInfo(const QString&, const QString&, const QString&, const QString&) {}
 	virtual void timerEvent(QTimerEvent*);
 	virtual void deleteNode();
+	virtual void enterScoreMode() ;
+	virtual void markDeadStone(int x, int y);
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -120,6 +122,9 @@ public slots:
 	// Board
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
 	virtual void slotPassPressed();
+	virtual void slotDonePressed() {}
+	virtual void slotReviewPressed() {}
+	virtual void slotUndoPressed() {}
 	virtual void slotScoreToggled(bool);
 	virtual void slotUpdateComment();
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
@@ -182,16 +187,16 @@ protected:
 #endif
 */
 	virtual void localMoveRequest(StoneColor c, int x, int y);
+	virtual void localMarkDeadRequest(int x, int y);
 	virtual void sendMoveToInterface(StoneColor c,int x, int y) =0;
 	virtual bool doMove(StoneColor c, int x, int y);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
 //	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
 	virtual void sendPassToInterface(StoneColor c)=0;
 	virtual void localPassRequest();
-	virtual void enterScoreMode() ;
+//	virtual void enterScoreMode() ;
 	virtual void leaveScoreMode() = 0;
 	
-	virtual void markDeadStone(int x, int y);
 };
 
 
@@ -291,6 +296,9 @@ public:
 public slots:
 	void slotUpdateComment() {}
 	void slotSendComment();
+	void slotDonePressed();
+	void slotReviewPressed() {}
+	void slotUndoPressed() {}
 
 signals:
 	void signal_sendCommandFromBoard(const QString&, bool);
@@ -300,6 +308,7 @@ private:
 	void sendPassToInterface(StoneColor c);
 	void leaveScoreMode() {}
 	void localMoveRequest(StoneColor c, int x, int y);
+	void localMarkDeadRequest(int x, int y);
 	QString game_Id;
 
 };

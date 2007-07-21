@@ -788,7 +788,7 @@ InfoType Parser::put_line(const QString &txt)
 				if (gsName != IGS)
 				{
 					QString pt = element(line, 2, " ");
-					emit signal_removestones(pt, 0);
+					emit signal_removeStones(pt, 0);
 				}
 			}
 			// 9 You can check your score with the score command, type 'done' when finished.
@@ -798,12 +798,13 @@ InfoType Parser::put_line(const QString &txt)
 					// IGS: store and wait until game number is known
 //					memory_str = QString("rmv@"); // -> continuation see 15
 //				else
-					emit signal_removestones(0, 0);
+					//emit signal_removestones(0, 0);
+					emit signal_enterScoreMode();
 			}
 			// IGS: 9 Board is restored to what it was when you started scoring
 			else if (line.contains("what it was when you"))
 			{
-				emit signal_removestones(0, 0);
+				emit signal_removeStones(0, 0);
 			}
 			// WING: 9 Use <adjourn> to adjourn, or <decline adjourn> to decline.
 			else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
@@ -1264,7 +1265,7 @@ InfoType Parser::put_line(const QString &txt)
 				if (memory_str == QString("rmv@"))
 				{
 					// contiue removing
-					emit signal_removestones(0, aGameInfo->nr);
+					emit signal_removeStones(0, aGameInfo->nr);
 					memory_str = QString();
 				}
 				else if ((!memory_str.isEmpty() || gsName == IGS || gsName == WING ) && (aGameInfo->bname == myname || aGameInfo->wname == myname))
@@ -2092,7 +2093,7 @@ InfoType Parser::put_line(const QString &txt)
 				QString pt = element(line, 6, " ");
 				QString game = element(line, 1, " ");
 				QString who = element(line, 2, " ");
-				emit signal_removestones(pt, game);
+				emit signal_removeStones(pt, game);
 				if (!game.isEmpty())
 				{
 					pt = "removing @ " + pt;
