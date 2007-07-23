@@ -1278,36 +1278,6 @@
              </item>
             </layout>
            </item>
-           <item row="0" column="1" >
-            <widget class="QPushButton" name="pushButton_11" >
-             <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>1</vsizetype>
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize" >
-              <size>
-               <width>140</width>
-               <height>140</height>
-              </size>
-             </property>
-             <property name="text" >
-              <string/>
-             </property>
-             <property name="icon" >
-              <iconset>../qgo.new/src/pics/images qgo/images qgo2/goban.GIF</iconset>
-             </property>
-             <property name="iconSize" >
-              <size>
-               <width>140</width>
-               <height>140</height>
-              </size>
-             </property>
-            </widget>
-           </item>
            <item rowspan="2" row="0" column="0" >
             <widget class="QTreeView" name="dirView_1" >
              <property name="minimumSize" >
@@ -1318,6 +1288,40 @@
              </property>
              <property name="selectionBehavior" >
               <enum>QAbstractItemView::SelectItems</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" >
+            <widget class="DisplayBoard" native="1" name="displayBoard" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>0</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>150</width>
+               <height>150</height>
+              </size>
+             </property>
+             <property name="whatsThis" >
+              <string>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
              </property>
             </widget>
            </item>
@@ -3732,6 +3736,13 @@ others:		guest</string>
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DisplayBoard</class>
+   <extends>QWidget</extends>
+   <header>displayboard.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="application.qrc" />
  </resources>

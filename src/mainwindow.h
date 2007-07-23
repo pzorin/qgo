@@ -108,7 +108,7 @@ private:
 
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer;
 	void initStatusBar();
-
+	void displayGame();
 
 	// online time
 	int	onlineCount;

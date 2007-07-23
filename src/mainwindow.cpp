@@ -121,6 +121,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.dirView_2->setColumnWidth(0,250); 
 	ui.dirView_2->setCurrentIndex(model->index( QDir::homePath () ));
 
+	//init the small board display
+	ui.displayBoard->init(19);
+//	ui.displayBoard->setShowCoords(FALSE);
 
 	// connecting the Go server tab buttons and signals
 	connect( ui.pb_connect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
@@ -287,6 +290,8 @@ void MainWindow::initStatusBar()
 void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
 
+	ui.displayBoard->clearData();
+
 	ui.File_WhitePlayer->setText("");
 	ui.File_BlackPlayer->setText("");
 	ui.File_Date->setText("");
@@ -332,10 +337,59 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 		ui.File_Result->setText(GameLoaded->result);
 		ui.File_Komi->setText(komi);
 		ui.File_Size->setText(sz);
+
+		displayGame();
 	}	
 
 }
 
+
+/*
+ *
+ */
+void MainWindow::displayGame()
+{
+	
+	if (ui.displayBoard->getSize() != GameLoaded->size)
+		ui.displayBoard->init(GameLoaded->size);
+		
+	ui.displayBoard->displayHandicap(GameLoaded->handicap);
+
+	QString s = SGFloaded.trimmed();
+	int end_main = s.indexOf(")(");
+	if (end_main == -1)
+		end_main = s.size();
+	int a_offset = QChar::fromAscii('a').unicode() - 1 ;
+	int cursor = 0;
+	int x,y;
+	int nb_displayed = 20;
+	QString coords;
+
+	cursor = s.indexOf(";B[");
+
+	while ((cursor >0) && (cursor < end_main) && (nb_displayed--) )
+	{
+		x = s.at(cursor+3).unicode() - a_offset;
+		y = s.at(cursor+4).unicode() - a_offset;
+		ui.displayBoard->updateStone(stoneBlack,x,y);
+		cursor = s.indexOf(";B[",cursor +1);
+
+	}
+
+	cursor = s.indexOf(";W[");
+	nb_displayed = 20;
+
+	while ( (cursor >0) &&  (cursor < end_main) && (nb_displayed--) )
+	{
+		x = s.at(cursor+3).unicode() - a_offset;
+		y = s.at(cursor+4).unicode() - a_offset;
+		ui.displayBoard->updateStone(stoneWhite,x,y);
+		cursor = s.indexOf(";W[",cursor +1);
+
+	}
+
+
+}
 
 /* 
  * Loads file from the item selected in the directory display

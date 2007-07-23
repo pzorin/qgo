@@ -24,7 +24,7 @@ public:
 	ImageHandler();
 	~ImageHandler();
 	
-	void init(int size);
+	void init(int size, bool isDisplay = FALSE);
 	void rescale(int size);
 	static QPixmap* getBoardPixmap(QString );
 	static QPixmap* getTablePixmap(QString );
@@ -43,7 +43,8 @@ public:
 protected:
 	void scaleBoardPixmap(QPixmap *pix, int size);
 	
-private:    
+private:
+	bool isDisplayBoard;
 	QList<QPixmap> *stonePixmaps, *ghostPixmaps;
 	static QList<QPixmap> *altGhostPixmaps;
 	static QPixmap *tablePixmap;

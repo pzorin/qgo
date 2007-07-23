@@ -448,14 +448,16 @@ QPixmap* ImageHandler::getTablePixmap(QString filename)
 
 }
 
-void ImageHandler::init(int size)
+void ImageHandler::init(int size, bool isDisplay)
 {
 	QSettings settings;
+	isDisplayBoard = isDisplay;
 
 	// Scale the images
-	size = size * 9 / 10;
+	if (!isDisplayBoard)
+		size = size * 9 / 10;
 	
-	int stone_look = settings.value("STONES_LOOK").toInt();
+	int stone_look = ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
 
 	stonePixmaps = new QList<QPixmap>();//::QList();
 
@@ -526,7 +528,7 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 
 	size = size + 1;
 
-	int stone_look =  settings.value("STONES_LOOK").toInt();
+	int stone_look =  ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
 
 	stonePixmaps->clear();
 	ghostPixmaps->clear();

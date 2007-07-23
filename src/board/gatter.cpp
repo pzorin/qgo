@@ -128,8 +128,10 @@ void Gatter::resize(int offsetX, int offsetY, int square_size)
 	// Round size top be odd (hoshis)
 	if (size % 2 == 0)
 		size--;
-	if (size < 7)
+	if ((size < 7) && (size>2))
 		size = 7;
+	else 
+		size = 3;
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)
@@ -151,8 +153,8 @@ void Gatter::resize(int offsetX, int offsetY, int square_size)
 				e = hoshisList.value(board_size*(i+1)+j+1);
 				e->setRect(offsetX + square_size * i - size/2,
 					offsetY + square_size * j- size/2,
-					size, 
-					size);
+					size , 
+					size );
 			}
 		}
 

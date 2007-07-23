@@ -38,21 +38,26 @@ public:
 	bool updateStone(StoneColor c, int x, int y);
 	void setCursorType(CursorType cur);
 	void updateDeadMarks(int &black, int &white);
+	int getSize()	{return board_size;}
 
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
 	void signalWheelEvent(QWheelEvent *);
 
 protected:
+	bool isDisplayBoard;
 	void calculateSize();
 	void drawBackground();
 	void initGatter();
 	void drawGatter();
 	void drawCoordinates();
-	void drawStarPoint(int x, int y);
+//	void drawStarPoint(int x, int y);
 	void resizeBoard(int w, int h);
 	int convertCoordsToPoint(int c, int o);
 	void resizeEvent(QResizeEvent*);
+	QHash<int,Stone *> *stones;
+	QList<Mark*> *marks;
+	QList<Stone*> *ghosts;
 
 private:
 
@@ -68,9 +73,6 @@ private:
 	bool antiClicko;
 	bool lockResize ;
 
-	QHash<int,Stone *> *stones;
-	QList<Mark*> *marks;
-	QList<Stone*> *ghosts;
 	Mark *lastMoveMark;
 	bool numberPool[400];
 	bool letterPool[52];

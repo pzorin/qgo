@@ -44,7 +44,8 @@ server/parser.h \
 game_interfaces/qgo_interface.h \
 board/clockdisplay.h \
 talk.h \
-server/gamedialog.h
+server/gamedialog.h \
+displayboard.h
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -73,7 +74,8 @@ SOURCES += main.cpp \
            board/clockdisplay.cpp \
            talk.cpp \
            server/gamedialog.cpp \
-           game_interfaces/qgoboard_match.cpp
+           game_interfaces/qgoboard_match.cpp \
+           displayboard.cpp
 QT -= qt3support
 DEPENDPATH += "board sgf game_tree game_interfaces gtp"
 INCLUDEPATH += server \

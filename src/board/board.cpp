@@ -21,6 +21,7 @@
 Board::Board(QWidget *parent, QGraphicsScene *c)
 : QGraphicsView(c,parent)
 {
+	isDisplayBoard = FALSE;
 }
 
 void Board::init(int size)
@@ -29,10 +30,11 @@ void Board::init(int size)
 //	gamePhase = phaseInit;
 
 	viewport()->setMouseTracking(TRUE);
+	setUpdatesEnabled ( TRUE );
 
 	lockResize =  false ;
 	board_size = size;//DEFAULT_BOARD_SIZE;
-	showCoords = true;//TODO setting->readBoolEntry("BOARD_COORDS");
+	showCoords = !isDisplayBoard;//true;//TODO setting->readBoolEntry("BOARD_COORDS");
 	showSGFCoords = false;//TODO setting->readBoolEntry("SGF_BOARD_COORDS");
 /*	antiClicko = setting->readBoolEntry("ANTICLICKO");
 	
@@ -60,7 +62,7 @@ void Board::init(int size)
 	// Init the gatter size and the imagehandler pixmaps
 	calculateSize();
 
-	imageHandler->init(square_size);
+	imageHandler->init(square_size, isDisplayBoard);
 /*	
 	// Initialize some class variables
 	nodeResultsDlg = NULL;
@@ -130,6 +132,8 @@ void Board::clearData()
 	qDeleteAll(*ghosts);
 	ghosts->clear();
 
+	repaint();
+
 }
 
 /*
@@ -169,7 +173,7 @@ void Board::calculateSize()
 		  square_size = 1;
 
 	// grid size
-	board_pixel_size = square_size * (board_size-1);    
+	board_pixel_size = square_size * (board_size-1) + 1 ;    
 	offset =  (table_size - board_pixel_size)/2;   
 
 	// Center the board in canvas
@@ -453,7 +457,7 @@ void Board::resizeBoard(int w, int h)
 	// Redraw the board
 	drawBackground();
 	drawGatter();
-	if (showCoords)
+	if (showCoords && !isDisplayBoard)
 		drawCoordinates();
 
   // Redraw the mark on the last played stone                             
