@@ -198,7 +198,7 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 			hh=r-sqrt(di*di+dj*dj);
 			if (hh>=0) 
 			{
-				if (stone_render>1)
+				if (stone_render !=1)
 				{
 					z=r*r-di*di-dj*dj;
 					if (z>0) z=sqrt(z)*f;
@@ -323,7 +323,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 			hh=r-sqrt(di*di+dj*dj);
 			if (hh>=0) 
 			{
-				if (stone_render > 1)
+				if (stone_render != 1)
 				{
 					z=r*r-di*di-dj*dj;
 					if (z>0) z=sqrt(z)*f;
@@ -368,7 +368,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					
 						g=(g1 > g2 ? g1 : g2);
 					
-						if (stone_render == 3) //stripes)
+						if (stone_render == 0) //stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
 						pw[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
 					}
@@ -378,7 +378,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					
 						g=(int)(g1max > g2max ? g1max : g2max);
 					
-						if (stone_render == 3)//stripes)
+						if (stone_render == 0)//stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
 						pw[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
 					}
@@ -389,7 +389,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					
 						g=(g1 > g2 ? g1 : g2);
 					
-						if (stone_render == 3)//stripes)
+						if (stone_render == 0)//stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
 				
 						pw[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;				
@@ -504,7 +504,7 @@ void ImageHandler::init(int size, bool isDisplay)
 	//shadow under the stones
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
 
-	if (stone_look ==3) //shadow
+	if (stone_look == 0) //shadow
 		paintShadowStone(is, size);
 	else
 		is.fill(0);
@@ -563,7 +563,7 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	// shadow
 	QImage is = QImage(size, size, QImage::Format_ARGB32);
 
-	if (stone_look == 3)
+	if (stone_look == 0)
 		paintShadowStone(is, size);
 	else
 		is.fill(0);

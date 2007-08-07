@@ -35,10 +35,11 @@ public:
 	void updateLastMove(StoneColor c, int x, int y);
 
 	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
-	bool updateStone(StoneColor c, int x, int y);
+	bool updateStone(StoneColor c, int x, int y, bool dead = false);
 	void setCursorType(CursorType cur);
 	void updateDeadMarks(int &black, int &white);
 	int getSize()	{return board_size;}
+	void exportPicture(const QString &fileName,  QString *filter, bool toClipboard);
 
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
@@ -72,6 +73,7 @@ private:
 	bool showCursor;
 	bool antiClicko;
 	bool lockResize ;
+	bool localSound;
 
 	Mark *lastMoveMark;
 	bool numberPool[400];

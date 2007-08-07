@@ -35,7 +35,7 @@ qGoIF::~qGoIF()
  * Creates a game board with all elements initialised from 
  * Gamedata and an sgf file 
  */
-void qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite )
+BoardWindow * qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite )
 {
 	//local game ? set the game id accordingly
 	if (_gameMode == modeNormal || _gameMode == modeComputer)
@@ -46,7 +46,10 @@ void qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIs
 	// if we passed a size, we can initialise, otherwise, we have to do it later
 	//(i.e : we are creating something else than an observed game from a move info)
 	if (_gameData->size)
+	{
 		b->init();
+		b->qgoboard->set_gsName(gsName);
+	}
 	
 	//just in case. This should not happen but one never knows
 	boardlist->remove(_gameData->gameNumber);
@@ -54,10 +57,27 @@ void qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIs
 	boardlist->insert(_gameData->gameNumber, b);
 
 	connect (b , SIGNAL(signal_boardClosed(int)) , SLOT(slot_boardClosed(int)));
+	connect(b , SIGNAL(signal_duplicate( GameData *, const QString&, int)) , SLOT(slot_duplicateBoard(GameData *, const QString&, int)));
 
+//	if ((_gameMode == modeMatch || _gameMode == modeObserve))
+//		b->qgoboard->set_gsName(gsName);
 
+	return b;
 }
 
+
+/*
+ * a board has sent a signal for duplication
+ * it sends the game data, the tree, and the position in the tree
+ */
+void qGoIF::slot_duplicateBoard(GameData *gd, const QString& sgf, int mv)
+{
+	gd->fileName = "";
+	BoardWindow *b = createGame(modeNormal, gd, TRUE, TRUE);
+
+	b->loadSGF(0,sgf);
+	b->getBoardHandler()->slotNthMove(mv);
+}
 
 /*
  * The board with game number 'i' has been closed
@@ -261,6 +281,7 @@ void qGoIF::slot_gameInfo(Game *g)
 	{
 		bw->setBoardSize(gd->size);
 		bw->init();
+		bw->qgoboard->set_gsName(gsName);
 	}	
 
 	bw->qgoboard->set_havegd(TRUE);
@@ -1115,51 +1136,36 @@ void qGoIF::slot_closeevent()
 /*
  * kibitz strings received from parser
  */
-void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
+void qGoIF::slot_kibitz(int num, const QString& w, const QString& msg)
 {
 //	qGoBoard *qb;
-	QString name;
-/*
-	// own game if num == NULL
-	if (!num)
-	{
-		if (!myName)
-		{
-			// own name not set -> should never happen!
-			qWarning("*** qGoIF::slot_kibitz(): Don't know my online name ***");
-			return;
-		}
-
-		qb = boardlist->first();
-		while (qb != NULL && qb->get_wplayer() != myName && qb->get_bplayer() != myName)
-			qb = boardlist->next();
-
-		if (qb && qb->get_wplayer() == myName)
-			name = qb->get_bplayer();
-		else if (qb)
-			name = qb->get_wplayer();
-
-		if (qb)
-			// sound for "say" command
-			qgo->playSaySound();
-	}
-	else
-	{
-
-		// seek board to send kibitz
-		qb = boardlist->first();
-		while (qb && qb->get_id() != num)
-			qb = boardlist->next();
-*/
-		name = who;
-//	}
-
-
 	
-	BoardWindow *bw = getBoardWindow(num);
+	QString name , who=w;
+	BoardWindow *bw;
+	
+	// do we have a game number ?
+	if (num)
+		bw = getBoardWindow(num);
+	// if not, a players name ?
+	else if (!who.isEmpty())
+		bw = getBoardWindow(who);
+	// last recourse : own game
+	else if (!myName.isEmpty())
+		bw = getBoardWindow(myName);	
+	else	
+	{
+		// own name not set -> should never happen!
+		qWarning("*** qGoIF::slot_kibitz(): Don't know my online name ***");
+		return;
+	}
+		
 
 	if (!bw)
+	{
 		qDebug("Board to send kibitz string not in list...");
+		return;
+	}		
+
 /*	else if (!num && who)
 	{
 		// special case: opponent has resigned - interesting in quiet mode
@@ -1168,34 +1174,46 @@ void qGoIF::slot_kibitz(int num, const QString& who, const QString& msg)
 		wrapupMatchGame(qb, true);
 	}
 */
-	else
-		bw->qgoboard->kibitzReceived(name + ": " + msg);
+	if (!who.isEmpty())
+		name = who;
+	//FIXME we do this instead of displaying a nice dialog box. (refer to slot_kibitz in parser
+	else if ((num) && (bw->getGameData()->playerWhite == myName))
+		name = bw->getGameData()->playerBlack;
+	else if ((num))
+		name = bw->getGameData()->playerWhite;
+			
+
+	bw->qgoboard->kibitzReceived(name + ": " + msg);
 }
+
 /*
-void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QString & id, const QString &opponent)
+ * a request is incoming from parser that requires a yes/no answer
+ * the incoming /yes/no strings contain the commands that will be sent back to the server
+ */
+void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QString & /*id*/, const QString &opponent)
 {
 	QString opp;
-	if (opponent)
+	if (!opponent.isEmpty())
 		opp = opponent;
 	else
 		opp = tr("Opponent");
 
-	if (!no)
+	if (no.isEmpty())
 	{
 		QMessageBox mb(tr("Request of Opponent"),
 			QString(tr("%1 wants to %2\nYES = %3\nCANCEL = %4")).arg(opp).arg(yes).arg(yes).arg(tr("ignore request")),
-			QMessageBox::NoIcon,
+			QMessageBox::Question,
 			QMessageBox::Yes | QMessageBox::Default,
 			QMessageBox::Cancel | QMessageBox::Escape,
 			QMessageBox::NoButton);
-		mb.setActiveWindow();
+//		mb.setActiveWindow();
 		mb.raise();
-		qgo->playPassSound();
+//		qgo->playPassSound();
 
 		if (mb.exec() == QMessageBox::Yes)
 		{
-			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(yes)));
-			emit signal_sendcommand(yes, false);
+			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(yes)).toLatin1().constData());
+			emit signal_sendCommandFromInterface(yes, false);
 		}
 	}
 	else
@@ -1207,23 +1225,23 @@ void qGoIF::slot_requestDialog(const QString &yes, const QString &no, const QStr
 			QMessageBox::Yes | QMessageBox::Default,
 			QMessageBox::No | QMessageBox::Escape,
 			QMessageBox::NoButton);
-		mb.setActiveWindow();
+//		mb.setActiveWindow();
 		mb.raise();
-		qgo->playPassSound();
+//		qgo->playPassSound();
 
 		if (mb.exec() == QMessageBox::Yes)
 		{
-			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(yes)));
-			emit signal_sendcommand(yes, false);
+			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(yes)).toLatin1().constData());
+			emit signal_sendCommandFromInterface(yes, false);
 		}
 		else
 		{
-			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(no)));
-			emit signal_sendcommand(no, false);
+			qDebug(QString(QString("qGoIF::slot_requestDialog(): emit %1").arg(no)).toLatin1().constData());
+			emit signal_sendCommandFromInterface(no, false);
 		}
 	}
 }
-*/
+
 
 /*
  * sends a command to the server
@@ -1601,23 +1619,31 @@ void qGoIF::slot_result(Game *g)
 }
 
 /*
-// undo a move
-void qGoIF::slot_undo(const QString &player, const QString &move)
+ * an undo move has been issued from the parser
+ */
+void qGoIF::slot_undo(const QString &nr, const QString &player, const QString &move)
 {
 	qDebug("qGoIF::slot_undo()");
-	qGoBoard *qb = boardlist->first();
+	BoardWindow *bw = NULL;//boardlist->first();
+	QString p = player;
+
+	if (!nr.isEmpty())
+		bw = getBoardWindow(nr.toInt());
+	else	
+		bw = getBoardWindow(p);
+
 
 	// check if game number given
-	bool ok;
-	int nr = player.toInt(&ok);
-	if (ok)
-		while (qb != NULL && qb->get_id() != nr)
-			qb = boardlist->next();
-	else
-		while (qb != NULL && qb->get_wplayer() != player && qb->get_bplayer() != player)
-			qb = boardlist->next();
+//	bool ok;
+//	int nr = player.toInt(&ok);
+//	if (ok)
+//		while (qb != NULL && qb->get_id() != nr)
+//			qb = boardlist->next();
+//	else
+//		while (qb != NULL && qb->get_wplayer() != player && qb->get_bplayer() != player)
+//			qb = boardlist->next();
 
-	if (!qb)
+	if (!bw)
 	{
 		qWarning("*** board for undo not found!");
 		return;
@@ -1625,21 +1651,22 @@ void qGoIF::slot_undo(const QString &player, const QString &move)
 
 	if (move != "Pass")
 	{
-		// only the last '0' is necessary
-		qb->set_move(stoneNone, 0, 0);
+//		// only the last '0' is necessary
+//		qb->set_move(stoneNone, 0, 0);
+		bw->qgoboard->deleteNode();
 		return;
 	}
 
 	// back to matchMode
-	qb->get_win()->doRealScore(false);
-	qb->get_win()->getBoard()->setMode(modeMatch);
-	qb->get_win()->getBoard()->previousMove();
-	qb->dec_mv_counter();
-	qb->send_kibitz(tr("GAME MODE: place stones..."));
+//	qb->get_win()->doRealScore(false);
+//	qb->get_win()->getBoard()->setMode(modeMatch);
+//	qb->get_win()->getBoard()->previousMove();
+//	qb->dec_mv_counter();
+//	qb->send_kibitz(tr("GAME MODE: place stones..."));
 }
 
 
-
+/*
 // set independent local board
 void qGoIF::set_localboard(QString file)
 {

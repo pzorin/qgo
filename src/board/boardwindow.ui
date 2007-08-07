@@ -20,10 +20,22 @@
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QGridLayout" >
-    <property name="margin" >
+    <property name="leftMargin" >
      <number>2</number>
     </property>
-    <property name="spacing" >
+    <property name="topMargin" >
+     <number>2</number>
+    </property>
+    <property name="rightMargin" >
+     <number>2</number>
+    </property>
+    <property name="bottomMargin" >
+     <number>2</number>
+    </property>
+    <property name="horizontalSpacing" >
+     <number>6</number>
+    </property>
+    <property name="verticalSpacing" >
      <number>6</number>
     </property>
     <item row="0" column="0" >
@@ -33,18 +45,25 @@
       </property>
       <widget class="QWidget" name="widget" >
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>2</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QFrame" name="boardFrame" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -65,10 +84,22 @@
            <number>0</number>
           </property>
           <layout class="QGridLayout" >
-           <property name="margin" >
+           <property name="leftMargin" >
             <number>0</number>
            </property>
-           <property name="spacing" >
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
+           </property>
+           <property name="horizontalSpacing" >
+            <number>0</number>
+           </property>
+           <property name="verticalSpacing" >
             <number>0</number>
            </property>
            <item row="3" column="2" >
@@ -103,9 +134,7 @@ Maximum game move the slider can currently show.</string>
            <item row="0" column="0" colspan="3" >
             <widget class="Board" native="1" name="board" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>13</vsizetype>
+              <sizepolicy vsizetype="Ignored" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -193,9 +222,7 @@ Minimum game move the slider can currently show.</string>
         <item>
          <widget class="QFrame" name="toolFrame" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -219,11 +246,20 @@ Minimum game move the slider can currently show.</string>
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>2</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="moveNumLabel" >
@@ -1717,9 +1753,7 @@ Shows the number of sons and brothers within the current node.</string>
            <item>
             <widget class="QGroupBox" name="whiteFrame" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1734,18 +1768,25 @@ Shows the number of sons and brothers within the current node.</string>
               <string>White</string>
              </property>
              <layout class="QVBoxLayout" >
-              <property name="margin" >
-               <number>1</number>
-              </property>
               <property name="spacing" >
                <number>0</number>
+              </property>
+              <property name="leftMargin" >
+               <number>1</number>
+              </property>
+              <property name="topMargin" >
+               <number>1</number>
+              </property>
+              <property name="rightMargin" >
+               <number>1</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>1</number>
               </property>
               <item>
                <widget class="QPushButton" name="pb_timeWhite" >
                 <property name="sizePolicy" >
-                 <sizepolicy>
-                  <hsizetype>7</hsizetype>
-                  <vsizetype>1</vsizetype>
+                 <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -2258,11 +2299,20 @@ Click on
               </item>
               <item>
                <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QLabel" name="TextLabel2" >
@@ -2295,9 +2345,7 @@ Click on
            <item>
             <widget class="QGroupBox" name="blackFrame" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -2312,18 +2360,25 @@ Click on
               <string>Black</string>
              </property>
              <layout class="QVBoxLayout" >
-              <property name="margin" >
-               <number>1</number>
-              </property>
               <property name="spacing" >
                <number>0</number>
+              </property>
+              <property name="leftMargin" >
+               <number>1</number>
+              </property>
+              <property name="topMargin" >
+               <number>1</number>
+              </property>
+              <property name="rightMargin" >
+               <number>1</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>1</number>
               </property>
               <item>
                <widget class="QPushButton" name="pb_timeBlack" >
                 <property name="sizePolicy" >
-                 <sizepolicy>
-                  <hsizetype>7</hsizetype>
-                  <vsizetype>1</vsizetype>
+                 <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -2836,11 +2891,20 @@ Click on
               </item>
               <item>
                <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QLabel" name="TextLabel2_2" >
@@ -2873,9 +2937,7 @@ Click on
            <item>
             <widget class="QFrame" name="frame_2" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -3254,10 +3316,22 @@ Click on
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QGridLayout" >
-              <property name="margin" >
+              <property name="leftMargin" >
                <number>2</number>
               </property>
-              <property name="spacing" >
+              <property name="topMargin" >
+               <number>2</number>
+              </property>
+              <property name="rightMargin" >
+               <number>2</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>2</number>
+              </property>
+              <property name="horizontalSpacing" >
+               <number>1</number>
+              </property>
+              <property name="verticalSpacing" >
                <number>1</number>
               </property>
               <item row="1" column="1" >
@@ -3280,11 +3354,20 @@ use "free" command to make game rated or unrated (free)</string>
               </item>
               <item row="0" column="1" >
                <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QLabel" name="TextLabel_Handicap" >
@@ -3321,11 +3404,20 @@ Number of stones placed by black as his first move.</string>
               </item>
               <item row="0" column="0" >
                <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QLabel" name="TextLabel_komi" >
@@ -3354,11 +3446,20 @@ Use "komi x" to request a komi of x (number).</string>
               </item>
               <item row="1" column="0" >
                <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QLabel" name="TextLabel_Byo" >
@@ -3399,9 +3500,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
            <item>
             <widget class="QFrame" name="navButtonsFrame" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -3425,18 +3524,36 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QVBoxLayout" >
-              <property name="margin" >
+              <property name="spacing" >
                <number>2</number>
               </property>
-              <property name="spacing" >
+              <property name="leftMargin" >
+               <number>2</number>
+              </property>
+              <property name="topMargin" >
+               <number>2</number>
+              </property>
+              <property name="rightMargin" >
+               <number>2</number>
+              </property>
+              <property name="bottomMargin" >
                <number>2</number>
               </property>
               <item>
                <layout class="QHBoxLayout" >
-                <property name="margin" >
+                <property name="spacing" >
                  <number>0</number>
                 </property>
-                <property name="spacing" >
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -3531,11 +3648,20 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </item>
               <item>
                <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QPushButton" name="navPrevComment" >
@@ -3614,10 +3740,19 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </item>
               <item>
                <layout class="QHBoxLayout" >
-                <property name="margin" >
+                <property name="spacing" >
                  <number>0</number>
                 </property>
-                <property name="spacing" >
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -3770,11 +3905,20 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                <string>Play</string>
               </attribute>
               <layout class="QVBoxLayout" >
-               <property name="margin" >
-                <number>9</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
+               </property>
+               <property name="leftMargin" >
+                <number>9</number>
+               </property>
+               <property name="topMargin" >
+                <number>9</number>
+               </property>
+               <property name="rightMargin" >
+                <number>9</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>9</number>
                </property>
                <item>
                 <spacer>
@@ -3791,18 +3935,25 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                </item>
                <item>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
-                  <number>0</number>
-                 </property>
                  <property name="spacing" >
                   <number>1</number>
+                 </property>
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>0</number>
                  </property>
                  <item>
                   <widget class="QPushButton" name="passButton" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>0</vsizetype>
+                    <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -3829,52 +3980,29 @@ Pass your turn.</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <widget class="QPushButton" name="scoreButton_2" >
-                   <property name="enabled" >
-                    <bool>false</bool>
-                   </property>
-                   <property name="maximumSize" >
-                    <size>
-                     <width>16777215</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                   <property name="focusPolicy" >
-                    <enum>Qt::NoFocus</enum>
-                   </property>
-                   <property name="toolTip" >
-                    <string>Switch to score mode</string>
-                   </property>
-                   <property name="whatsThis" >
-                    <string>Adjourn.
-
-Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</string>
-                   </property>
-                   <property name="text" >
-                    <string>Score</string>
-                   </property>
-                   <property name="checkable" >
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </item>
                <item>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
-                  <number>0</number>
-                 </property>
                  <property name="spacing" >
                   <number>1</number>
+                 </property>
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>0</number>
                  </property>
                  <item>
                   <widget class="QPushButton" name="refreshButton" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>0</vsizetype>
+                    <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -3904,9 +4032,7 @@ Refresh board. Use this if you cannot see any stones on the board.</string>
                  <item>
                   <widget class="QPushButton" name="adjournButton" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>0</vsizetype>
+                    <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -3937,18 +4063,25 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                </item>
                <item>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
-                  <number>0</number>
-                 </property>
                  <property name="spacing" >
                   <number>1</number>
+                 </property>
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>0</number>
                  </property>
                  <item>
                   <widget class="QPushButton" name="undoButton" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>0</vsizetype>
+                    <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -3978,9 +4111,7 @@ Undo the opponent's last move.</string>
                  <item>
                   <widget class="QPushButton" name="doneButton" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>1</vsizetype>
+                    <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -4010,9 +4141,7 @@ Pass your turn.</string>
                  <item>
                   <widget class="QPushButton" name="resignButton" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>0</vsizetype>
+                    <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -4542,22 +4671,35 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
               </layout>
              </widget>
              <widget class="QWidget" name="Tab_edit" >
+              <property name="minimumSize" >
+               <size>
+                <width>0</width>
+                <height>300</height>
+               </size>
+              </property>
               <attribute name="title" >
                <string>Edit tools</string>
               </attribute>
               <layout class="QVBoxLayout" >
-               <property name="margin" >
+               <property name="spacing" >
                 <number>2</number>
                </property>
-               <property name="spacing" >
+               <property name="leftMargin" >
+                <number>2</number>
+               </property>
+               <property name="topMargin" >
+                <number>2</number>
+               </property>
+               <property name="rightMargin" >
+                <number>2</number>
+               </property>
+               <property name="bottomMargin" >
                 <number>2</number>
                </property>
                <item>
                 <widget class="QGroupBox" name="groupBox" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>7</hsizetype>
-                   <vsizetype>7</vsizetype>
+                  <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -4572,26 +4714,45 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
                   <string>Stones tools</string>
                  </property>
                  <layout class="QGridLayout" >
-                  <property name="margin" >
+                  <property name="leftMargin" >
                    <number>2</number>
                   </property>
-                  <property name="spacing" >
+                  <property name="topMargin" >
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin" >
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin" >
+                   <number>2</number>
+                  </property>
+                  <property name="horizontalSpacing" >
+                   <number>2</number>
+                  </property>
+                  <property name="verticalSpacing" >
                    <number>2</number>
                   </property>
                   <item row="0" column="0" colspan="3" >
                    <layout class="QHBoxLayout" >
-                    <property name="margin" >
-                     <number>0</number>
-                    </property>
                     <property name="spacing" >
                      <number>6</number>
+                    </property>
+                    <property name="leftMargin" >
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin" >
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin" >
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin" >
+                     <number>0</number>
                     </property>
                     <item>
                      <widget class="QPushButton" name="stoneButton" >
                       <property name="sizePolicy" >
-                       <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
+                       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -4642,9 +4803,7 @@ Edit stones on the board. Left click for a black, right click for a white stone.
                     <item>
                      <widget class="QPushButton" name="colorButton" >
                       <property name="sizePolicy" >
-                       <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
+                       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -4700,9 +4859,7 @@ Set the color of next move. If left untouched, default color is chosen.</string>
                   <item row="2" column="2" >
                    <widget class="QPushButton" name="labelNumberButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4753,9 +4910,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                   <item row="2" column="1" >
                    <widget class="QPushButton" name="labelLetterButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4806,9 +4961,7 @@ Edit letter marks on the board. Left click sets a mark, right click removes it. 
                   <item row="2" column="0" >
                    <widget class="QPushButton" name="crossButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4904,9 +5057,7 @@ Edit triangle marks on the board. Left click sets a mark, right click removes it
                   <item row="1" column="1" >
                    <widget class="QPushButton" name="circleButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -4957,9 +5108,7 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
                   <item row="1" column="0" >
                    <widget class="QPushButton" name="squareButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5022,18 +5171,28 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <string>Game Tree tools</string>
                  </property>
                  <layout class="QGridLayout" >
-                  <property name="margin" >
+                  <property name="leftMargin" >
                    <number>1</number>
                   </property>
-                  <property name="spacing" >
+                  <property name="topMargin" >
+                   <number>1</number>
+                  </property>
+                  <property name="rightMargin" >
+                   <number>1</number>
+                  </property>
+                  <property name="bottomMargin" >
+                   <number>1</number>
+                  </property>
+                  <property name="horizontalSpacing" >
+                   <number>1</number>
+                  </property>
+                  <property name="verticalSpacing" >
                    <number>1</number>
                   </property>
                   <item row="0" column="2" >
                    <widget class="QPushButton" name="swapVarButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5082,9 +5241,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <item row="1" column="1" >
                    <widget class="QPushButton" name="deleteButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5133,9 +5290,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <item row="0" column="1" >
                    <widget class="QPushButton" name="duplicateVarButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5184,9 +5339,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <item row="0" column="0" >
                    <widget class="QPushButton" name="emptyVarButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5241,18 +5394,28 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <string>Clipboard tools</string>
                  </property>
                  <layout class="QGridLayout" >
-                  <property name="margin" >
+                  <property name="leftMargin" >
                    <number>2</number>
                   </property>
-                  <property name="spacing" >
+                  <property name="topMargin" >
+                   <number>2</number>
+                  </property>
+                  <property name="rightMargin" >
+                   <number>2</number>
+                  </property>
+                  <property name="bottomMargin" >
+                   <number>2</number>
+                  </property>
+                  <property name="horizontalSpacing" >
+                   <number>2</number>
+                  </property>
+                  <property name="verticalSpacing" >
                    <number>2</number>
                   </property>
                   <item row="0" column="0" >
                    <widget class="QPushButton" name="cutButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5301,9 +5464,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <item row="0" column="1" >
                    <widget class="QPushButton" name="pasteButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5352,9 +5513,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <item row="0" column="2" >
                    <widget class="QPushButton" name="pasteAsVarButton" >
                     <property name="sizePolicy" >
-                     <sizepolicy>
-                      <hsizetype>0</hsizetype>
-                      <vsizetype>0</vsizetype>
+                     <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -5405,11 +5564,20 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                </item>
                <item>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
-                  <number>0</number>
-                 </property>
                  <property name="spacing" >
                   <number>1</number>
+                 </property>
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>0</number>
                  </property>
                  <item>
                   <spacer>
@@ -5427,9 +5595,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                  <item>
                   <widget class="QPushButton" name="passButton_2" >
                    <property name="sizePolicy" >
-                    <sizepolicy>
-                     <hsizetype>1</hsizetype>
-                     <vsizetype>0</vsizetype>
+                    <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
@@ -5529,18 +5695,25 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
        </property>
        <widget class="QWidget" name="layoutWidget" >
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QTextEdit" name="commentEdit" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>7</vsizetype>
+            <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -5556,9 +5729,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
          <item>
           <widget class="QLineEdit" name="commentEdit2" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -5609,8 +5780,8 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
   <widget class="QToolBar" name="toolBar" >
    <property name="minimumSize" >
     <size>
-     <width>49</width>
-     <height>37</height>
+     <width>0</width>
+     <height>0</height>
     </size>
    </property>
    <property name="maximumSize" >
@@ -5629,7 +5800,10 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
     </size>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="actionFileSave" />
    <addaction name="actionFileSaveAs" />
@@ -5700,6 +5874,9 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
    </property>
   </action>
   <action name="actionImport" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="icon" >
     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/import2.png</iconset>
    </property>
@@ -5764,7 +5941,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
     <string>play</string>
    </property>
   </action>
-  <action name="fileExportASCII" >
+  <action name="actionExportASCII" >
    <property name="text" >
     <string>Export &amp;ASCII</string>
    </property>
@@ -5774,17 +5951,17 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
 Export current board to ASCII.</string>
    </property>
   </action>
-  <action name="fileExportSgfClipB" >
+  <action name="actionExportSgfClipB" >
    <property name="text" >
     <string>Export SGF &amp;to clipboard</string>
    </property>
   </action>
-  <action name="fileExportPic" >
+  <action name="actionExportPic" >
    <property name="text" >
     <string>Export &amp;Image</string>
    </property>
   </action>
-  <action name="fileExportPicClipB" >
+  <action name="actionExportPicClipB" >
    <property name="text" >
     <string>E&amp;xport Image to clipboard</string>
    </property>

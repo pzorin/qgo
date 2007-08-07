@@ -38,6 +38,10 @@ bool qGoBoardMatchInterface::init()
 	emit signal_sendCommandFromBoard("moves " +  game_Id, FALSE);
 	emit signal_sendCommandFromBoard("all " +  game_Id, FALSE);
 
+	QSettings settings;
+	// value 1 = no sound, 0 all games, 2 my games
+	playSound = (settings.value("SOUND") != 1);
+
 	startTimer(1000);
 
 	boardwindow->getBoardHandler()->slotNavLast();
@@ -86,16 +90,24 @@ void qGoBoardMatchInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
 	int mv_nr_int;
 	int mv_counter = tree->getCurrent()->getMoveNumber();
 	bool hcp_move = tree->getCurrent()->isHandicapMove();
-	// IGS: case undo with 'mark': no following command
-	// -> from qgoIF::slot_undo(): set_move(stoneNone, 0, 0)
+//	// IGS: case undo with 'mark': no following command
+//	// -> from qgoIF::slot_undo(): set_move(stoneNone, 0, 0)
 	if (mv_nr.isEmpty())
 		// undo one move
 		mv_nr_int = mv_counter - 1;
 	else
 		mv_nr_int = mv_nr.toInt();
 
+	//special case : after an undo, IGS will give the last move before the undo move
+	// since we are already there, we skip
+	if (mv_nr_int < mv_counter)
+	{
+		qDebug("move given is before last move");
+		return;
+	}
+
 	// We are observing a game, and we take the game in the middle
-	if (mv_nr_int > mv_counter)
+/*	if (mv_nr_int > mv_counter)
 	{
 		if (mv_nr_int != mv_counter + 1 && mv_counter != 0)
 			// case: move has done but "moves" cmd not executed yet
@@ -112,7 +124,7 @@ void qGoBoardMatchInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
 		else
 			mv_counter++;
 	}
-/*	else if (mv_nr_int + 1 == mv_counter)
+	else if (mv_nr_int + 1 == mv_counter)
 	{
 		// scoring mode? (NNGS)
 		if (gameMode == modeScore)
@@ -366,6 +378,34 @@ void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &b
 void qGoBoardMatchInterface::slotSendComment()
 {
 	emit signal_sendCommandFromBoard("say " + boardwindow->getUi().commentEdit2->text() , FALSE);
+	boardwindow->getUi().commentEdit->append("-> " + boardwindow->getUi().commentEdit2->text());
 
 	boardwindow->getUi().commentEdit2->clear();
+}
+
+/*
+ * 'undo' button pressed
+ */
+void qGoBoardMatchInterface::slotUndoPressed() 
+{
+	if (gsName ==IGS)
+		emit signal_sendCommandFromBoard("undoplease", FALSE);
+	else
+		emit signal_sendCommandFromBoard("undo", FALSE); 
+}
+
+/*
+ * 'resign button pressed
+ */
+void qGoBoardMatchInterface::slotResignPressed()
+{
+	emit signal_sendCommandFromBoard("resign", FALSE); 
+}
+
+/*
+ * 'resign button pressed
+ */
+void qGoBoardMatchInterface::slotAdjournPressed()
+{
+	emit signal_sendCommandFromBoard("adjourn", false);
 }

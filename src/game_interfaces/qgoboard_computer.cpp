@@ -92,6 +92,9 @@ bool qGoBoardComputerInterface::init()
 	tree->setCurrent(m);
 	boardwindow->getBoardHandler()->updateMove(m);
 
+	// value 1 = no sound, 0 all games, 2 my games
+	playSound = (settings.value("SOUND") != 1);
+
 	return TRUE;
 
 }

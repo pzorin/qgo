@@ -41,6 +41,10 @@ bool qGoBoardObserveInterface::init()
 //	emit signal_sendCommandFromBoard("games " + game_Id, FALSE);
 	emit signal_sendCommandFromBoard("moves " +  game_Id, FALSE);
 	emit signal_sendCommandFromBoard("all " +  game_Id, FALSE);
+	
+	QSettings settings;
+	// value 1 = no sound, 0 all games, 2 my games
+	playSound = (settings.value("SOUND") == 0);
 
 	startTimer(1000);
 
@@ -78,8 +82,9 @@ void qGoBoardObserveInterface::slotSendComment()
 {
 	emit signal_sendCommandFromBoard("kibitz " + game_Id + " " + boardwindow->getUi().commentEdit2->text() , FALSE);
 
+	boardwindow->getUi().commentEdit->append("-> " + boardwindow->getUi().commentEdit2->text());
+
 	boardwindow->getUi().commentEdit2->clear();
-	
 }
 
 

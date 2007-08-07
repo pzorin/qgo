@@ -25,28 +25,20 @@
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QHBoxLayout" >
-    <property name="margin" >
-     <number>6</number>
+    <property name="leftMargin" >
+     <number>3</number>
     </property>
-    <property name="spacing" >
-     <number>6</number>
+    <property name="topMargin" >
+     <number>5</number>
+    </property>
+    <property name="rightMargin" >
+     <number>3</number>
+    </property>
+    <property name="bottomMargin" >
+     <number>3</number>
     </property>
     <item>
      <widget class="QListWidget" name="listWidget" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>90</width>
-        <height>0</height>
-       </size>
-      </property>
       <property name="maximumSize" >
        <size>
         <width>85</width>
@@ -55,14 +47,15 @@
       </property>
       <property name="font" >
        <font>
-        <family>Helvetica</family>
-        <pointsize>9</pointsize>
         <weight>75</weight>
-        <italic>false</italic>
         <bold>true</bold>
-        <underline>false</underline>
-        <strikeout>false</strikeout>
        </font>
+      </property>
+      <property name="verticalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="iconSize" >
        <size>
@@ -70,29 +63,14 @@
         <height>48</height>
        </size>
       </property>
-      <property name="movement" >
-       <enum>QListView::Static</enum>
-      </property>
-      <property name="flow" >
-       <enum>QListView::TopToBottom</enum>
-      </property>
-      <property name="isWrapping" stdset="0" >
-       <bool>false</bool>
-      </property>
-      <property name="spacing" >
-       <number>0</number>
-      </property>
       <property name="gridSize" >
        <size>
-        <width>0</width>
+        <width>80</width>
         <height>80</height>
        </size>
       </property>
       <property name="viewMode" >
        <enum>QListView::IconMode</enum>
-      </property>
-      <property name="uniformItemSizes" >
-       <bool>true</bool>
       </property>
       <item>
        <property name="text" >
@@ -104,7 +82,7 @@
       </item>
       <item>
        <property name="text" >
-        <string>sgf editor</string>
+        <string>SGF editor</string>
        </property>
        <property name="icon" >
         <iconset resource="application.qrc" >:/ressources/pics/toolbar_2.png</iconset>
@@ -123,7 +101,7 @@
         <string>Preferences</string>
        </property>
        <property name="icon" >
-        <iconset resource="application.qrc" >:/ressources/pics/toolbar_4.png</iconset>
+        <iconset resource="application.qrc" >:/ressources/pics/toolbar_5.png</iconset>
        </property>
       </item>
       <item>
@@ -131,7 +109,7 @@
         <string>Servers</string>
        </property>
        <property name="icon" >
-        <iconset resource="application.qrc" >:/ressources/pics/toolbar_5.png</iconset>
+        <iconset resource="application.qrc" >:/ressources/pics/toolbar_4.png</iconset>
        </property>
       </item>
      </widget>
@@ -143,18 +121,28 @@
       </property>
       <widget class="QWidget" name="Server" >
        <layout class="QGridLayout" >
-        <property name="margin" >
+        <property name="leftMargin" >
          <number>0</number>
         </property>
-        <property name="spacing" >
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
+        <property name="horizontalSpacing" >
+         <number>3</number>
+        </property>
+        <property name="verticalSpacing" >
          <number>3</number>
         </property>
         <item rowspan="2" row="0" column="1" >
          <widget class="QTabWidget" name="tabWidget" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>7</vsizetype>
+           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -167,10 +155,22 @@
             <string>Lists</string>
            </attribute>
            <layout class="QGridLayout" >
-            <property name="margin" >
+            <property name="leftMargin" >
              <number>3</number>
             </property>
-            <property name="spacing" >
+            <property name="topMargin" >
+             <number>3</number>
+            </property>
+            <property name="rightMargin" >
+             <number>3</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>3</number>
+            </property>
+            <property name="horizontalSpacing" >
+             <number>6</number>
+            </property>
+            <property name="verticalSpacing" >
              <number>6</number>
             </property>
             <item row="0" column="0" >
@@ -180,11 +180,20 @@
               </property>
               <widget class="QWidget" name="widget" >
                <layout class="QVBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
                 <property name="spacing" >
                  <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QTreeWidget" name="ListView_players" >
@@ -272,11 +281,20 @@
                 </item>
                 <item>
                  <layout class="QHBoxLayout" >
-                  <property name="margin" >
-                   <number>0</number>
-                  </property>
                   <property name="spacing" >
                    <number>6</number>
+                  </property>
+                  <property name="leftMargin" >
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin" >
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin" >
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin" >
+                   <number>0</number>
                   </property>
                   <item>
                    <widget class="QComboBox" name="whoBox1" >
@@ -708,11 +726,20 @@
             <string>Console</string>
            </attribute>
            <layout class="QVBoxLayout" >
-            <property name="margin" >
-             <number>9</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>9</number>
+            </property>
+            <property name="topMargin" >
+             <number>9</number>
+            </property>
+            <property name="rightMargin" >
+             <number>9</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>9</number>
             </property>
             <item>
              <widget class="QTextEdit" name="MultiLineEdit2" >
@@ -753,9 +780,7 @@
         <item row="0" column="0" >
          <widget class="QGroupBox" name="groupBox_3" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -770,10 +795,22 @@
            <string>Server status</string>
           </property>
           <layout class="QGridLayout" >
-           <property name="margin" >
+           <property name="leftMargin" >
             <number>9</number>
            </property>
-           <property name="spacing" >
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
+           <property name="horizontalSpacing" >
+            <number>6</number>
+           </property>
+           <property name="verticalSpacing" >
             <number>6</number>
            </property>
            <item row="6" column="1" >
@@ -798,7 +835,7 @@
             </widget>
            </item>
            <item row="4" column="1" >
-            <widget class="QComboBox" name="comboBox_6" >
+            <widget class="QComboBox" name="seekHandicapList" >
              <property name="toolTip" >
               <string>Set the handicap range you want for seeking games</string>
              </property>
@@ -861,7 +898,7 @@
               <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="application.qrc" >:/ressources/pics/seeking1.png</iconset>
+              <iconset resource="application.qrc" >:/ressources/pics/not_seeking.png</iconset>
              </property>
              <property name="iconSize" >
               <size>
@@ -919,9 +956,7 @@
         <item row="1" column="0" >
          <widget class="QTabWidget" name="talkTabs" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>7</vsizetype>
+           <sizepolicy vsizetype="Expanding" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -941,35 +976,86 @@
           <property name="currentIndex" >
            <number>0</number>
           </property>
-          <widget class="QWidget" name="tab_6" >
+          <widget class="QWidget" name="tabShouts" >
            <attribute name="title" >
             <string>Shouts</string>
            </attribute>
            <layout class="QGridLayout" >
-            <property name="margin" >
+            <property name="leftMargin" >
              <number>9</number>
             </property>
-            <property name="spacing" >
+            <property name="topMargin" >
+             <number>9</number>
+            </property>
+            <property name="rightMargin" >
+             <number>9</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>9</number>
+            </property>
+            <property name="horizontalSpacing" >
+             <number>6</number>
+            </property>
+            <property name="verticalSpacing" >
              <number>6</number>
             </property>
             <item row="0" column="0" >
-             <widget class="QTextEdit" name="textEdit_2" />
+             <widget class="QTextEdit" name="textEdit_2" >
+              <property name="font" >
+               <font>
+                <family>Fixed [Misc]</family>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="readOnly" >
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab_5" >
+          <widget class="QWidget" name="tabMessages" >
            <attribute name="title" >
             <string>Messages</string>
            </attribute>
            <layout class="QGridLayout" >
-            <property name="margin" >
+            <property name="leftMargin" >
              <number>9</number>
             </property>
-            <property name="spacing" >
+            <property name="topMargin" >
+             <number>9</number>
+            </property>
+            <property name="rightMargin" >
+             <number>9</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>9</number>
+            </property>
+            <property name="horizontalSpacing" >
+             <number>6</number>
+            </property>
+            <property name="verticalSpacing" >
              <number>6</number>
             </property>
             <item row="0" column="0" >
-             <widget class="QTextEdit" name="textEdit" />
+             <widget class="QTextEdit" name="msgTextEdit" >
+              <property name="font" >
+               <font>
+                <family>Fixed [Misc]</family>
+                <pointsize>8</pointsize>
+               </font>
+              </property>
+              <property name="readOnly" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QPushButton" name="buttonErase" >
+              <property name="text" >
+               <string>Erase messages</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -979,11 +1065,20 @@
       </widget>
       <widget class="QWidget" name="page" >
        <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>9</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>9</number>
+        </property>
+        <property name="topMargin" >
+         <number>9</number>
+        </property>
+        <property name="rightMargin" >
+         <number>9</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>9</number>
         </property>
         <item>
          <widget class="QGroupBox" name="groupBox_4" >
@@ -991,19 +1086,37 @@
            <string>New file</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
            </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
              </property>
              <item>
               <widget class="QLabel" name="label_9" >
@@ -1026,11 +1139,20 @@
            </item>
            <item>
             <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
              </property>
              <item>
               <widget class="QLabel" name="label_10" >
@@ -1047,11 +1169,11 @@
                <property name="specialValueText" >
                 <string>0</string>
                </property>
-               <property name="maximum" >
-                <number>9</number>
-               </property>
                <property name="minimum" >
                 <number>1</number>
+               </property>
+               <property name="maximum" >
+                <number>9</number>
                </property>
                <property name="value" >
                 <number>1</number>
@@ -1061,54 +1183,152 @@
             </layout>
            </item>
            <item>
-            <layout class="QGridLayout" >
-             <property name="margin" >
-              <number>0</number>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" >
              <property name="spacing" >
               <number>6</number>
              </property>
-             <item row="3" column="2" >
-              <widget class="QLineEdit" name="newFile_Komi" >
-               <property name="text" >
-                <string>6,5</string>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="spacing" >
+                <number>6</number>
                </property>
-              </widget>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_13" >
+                 <property name="text" >
+                  <string>White player</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="newFile_WhitePlayer" >
+                 <property name="text" >
+                  <string>White</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
-             <item rowspan="2" row="1" column="2" >
-              <widget class="QLineEdit" name="newFile_BlackPlayer" >
-               <property name="text" >
-                <string>Black</string>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="spacing" >
+                <number>6</number>
                </property>
-              </widget>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_11" >
+                 <property name="text" >
+                  <string>Black player</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="newFile_BlackPlayer" >
+                 <property name="text" >
+                  <string>Black</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
-             <item row="1" column="0" colspan="2" >
-              <widget class="QLabel" name="label_11" >
-               <property name="text" >
-                <string>Black player</string>
+             <item>
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Vertical</enum>
                </property>
-              </widget>
+               <property name="sizeHint" >
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
              </item>
-             <item rowspan="2" row="2" column="0" colspan="2" >
-              <widget class="QLabel" name="label_12" >
-               <property name="text" >
-                <string>komi</string>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="spacing" >
+                <number>6</number>
                </property>
-              </widget>
-             </item>
-             <item row="0" column="1" colspan="2" >
-              <widget class="QLineEdit" name="newFile_WhitePlayer" >
-               <property name="text" >
-                <string>White</string>
+               <property name="leftMargin" >
+                <number>0</number>
                </property>
-              </widget>
-             </item>
-             <item row="0" column="0" >
-              <widget class="QLabel" name="label_13" >
-               <property name="text" >
-                <string>White player</string>
+               <property name="topMargin" >
+                <number>0</number>
                </property>
-              </widget>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_12" >
+                 <property name="text" >
+                  <string>Komi</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="newFile_Komi" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text" >
+                  <string>6,5</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>
@@ -1141,10 +1361,22 @@
            <string>Open file</string>
           </property>
           <layout class="QGridLayout" >
-           <property name="margin" >
+           <property name="leftMargin" >
             <number>9</number>
            </property>
-           <property name="spacing" >
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
+           <property name="horizontalSpacing" >
+            <number>6</number>
+           </property>
+           <property name="verticalSpacing" >
             <number>6</number>
            </property>
            <item row="0" column="3" >
@@ -1172,10 +1404,22 @@
            </item>
            <item row="1" column="1" >
             <layout class="QGridLayout" >
-             <property name="margin" >
+             <property name="leftMargin" >
               <number>0</number>
              </property>
-             <property name="spacing" >
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
+             </property>
+             <property name="horizontalSpacing" >
+              <number>6</number>
+             </property>
+             <property name="verticalSpacing" >
               <number>6</number>
              </property>
              <item row="2" column="0" colspan="3" >
@@ -1201,6 +1445,12 @@
              </item>
              <item row="4" column="1" colspan="2" >
               <widget class="QLineEdit" name="File_Komi" >
+               <property name="maximumSize" >
+                <size>
+                 <width>30</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text" >
                 <string>6,5</string>
                </property>
@@ -1223,7 +1473,7 @@
              <item row="4" column="0" >
               <widget class="QLabel" name="label_19" >
                <property name="text" >
-                <string>komi</string>
+                <string>Komi</string>
                </property>
               </widget>
              </item>
@@ -1272,7 +1522,7 @@
              <item row="3" column="2" >
               <widget class="QLineEdit" name="File_Handicap" >
                <property name="text" >
-                <string>19</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -1294,9 +1544,7 @@
            <item row="0" column="1" >
             <widget class="DisplayBoard" native="1" name="displayBoard" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>0</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1331,37 +1579,322 @@ When in score mode, left click to mark a group as dead, right click to mark it a
        </layout>
       </widget>
       <widget class="QWidget" name="Go_engine" >
-       <layout class="QGridLayout" >
-        <property name="margin" >
-         <number>9</number>
-        </property>
+       <layout class="QVBoxLayout" >
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item row="2" column="0" >
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
+        <property name="leftMargin" >
+         <number>9</number>
+        </property>
+        <property name="topMargin" >
+         <number>9</number>
+        </property>
+        <property name="rightMargin" >
+         <number>9</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>9</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="groupBox" >
+          <property name="title" >
+           <string>New game</string>
           </property>
-          <property name="sizeHint" >
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
+          <layout class="QGridLayout" >
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
+           <property name="horizontalSpacing" >
+            <number>6</number>
+           </property>
+           <property name="verticalSpacing" >
+            <number>6</number>
+           </property>
+           <item rowspan="2" row="0" column="1" >
+            <widget class="QGroupBox" name="groupBox_7" >
+             <property name="title" >
+              <string>Computer engine plays as</string>
+             </property>
+             <layout class="QGridLayout" >
+              <property name="leftMargin" >
+               <number>9</number>
+              </property>
+              <property name="topMargin" >
+               <number>9</number>
+              </property>
+              <property name="rightMargin" >
+               <number>9</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>9</number>
+              </property>
+              <property name="horizontalSpacing" >
+               <number>6</number>
+              </property>
+              <property name="verticalSpacing" >
+               <number>6</number>
+              </property>
+              <item row="0" column="0" >
+               <widget class="QRadioButton" name="computerPlaysBlack" >
+                <property name="text" >
+                 <string>Black</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" >
+               <layout class="QHBoxLayout" >
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <property name="leftMargin" >
+                 <number>0</number>
+                </property>
+                <property name="topMargin" >
+                 <number>0</number>
+                </property>
+                <property name="rightMargin" >
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin" >
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_23" >
+                  <property name="text" >
+                   <string>Computer level</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_8" >
+                  <property name="minimum" >
+                   <number>1</number>
+                  </property>
+                  <property name="maximum" >
+                   <number>20</number>
+                  </property>
+                  <property name="value" >
+                   <number>10</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QRadioButton" name="computerPlaysWhite" >
+                <property name="text" >
+                 <string>White</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="3" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item rowspan="2" row="0" column="0" >
+            <layout class="QVBoxLayout" >
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_4" >
+                 <property name="text" >
+                  <string>Size</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="newComputer_Size" >
+                 <property name="minimum" >
+                  <number>2</number>
+                 </property>
+                 <property name="value" >
+                  <number>19</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_5" >
+                 <property name="text" >
+                  <string>Handicap</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="newComputer_Handicap" >
+                 <property name="specialValueText" >
+                  <string>0</string>
+                 </property>
+                 <property name="minimum" >
+                  <number>1</number>
+                 </property>
+                 <property name="maximum" >
+                  <number>9</number>
+                 </property>
+                 <property name="value" >
+                  <number>1</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_6" >
+                 <property name="text" >
+                  <string>komi</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="newComputer_Komi" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text" >
+                  <string>6,5</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="OneColorGoCheckBox" >
+               <property name="layoutDirection" >
+                <enum>Qt::RightToLeft</enum>
+               </property>
+               <property name="text" >
+                <string>One color Go</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="4" >
+            <widget class="QPushButton" name="pushButton_5" >
+             <property name="text" >
+              <string>Set defaults</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4" >
+            <widget class="QPushButton" name="button_newComputerGame" >
+             <property name="text" >
+              <string>Start game</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
-        <item row="1" column="0" >
+        <item>
          <widget class="QGroupBox" name="groupBox_2" >
           <property name="title" >
            <string>Open started game</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
            </property>
            <item>
             <widget class="QTreeView" name="dirView_2" >
@@ -1380,32 +1913,34 @@ When in score mode, left click to mark a group as dead, right click to mark it a
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_7" >
+            <widget class="DisplayBoard" native="1" name="displayBoard2" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize" >
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maximumSize" >
               <size>
-               <width>140</width>
-               <height>140</height>
+               <width>150</width>
+               <height>150</height>
               </size>
              </property>
-             <property name="text" >
-              <string/>
-             </property>
-             <property name="icon" >
-              <iconset>../qgo.new/src/pics/images qgo/images qgo2/goban.GIF</iconset>
-             </property>
-             <property name="iconSize" >
-              <size>
-               <width>140</width>
-               <height>140</height>
-              </size>
+             <property name="whatsThis" >
+              <string>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+Shift + left click moves to the first move in the main branch.
+Shift + right click moves to the next move in the current branch.
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
              </property>
             </widget>
            </item>
@@ -1435,17 +1970,39 @@ When in score mode, left click to mark a group as dead, right click to mark it a
           </layout>
          </widget>
         </item>
-        <item row="3" column="0" >
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_8" >
           <property name="title" >
            <string>Go engine path</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
            </property>
            <item>
             <widget class="QLineEdit" name="LineEdit_computer" />
@@ -1473,326 +2030,26 @@ When in score mode, left click to mark a group as dead, right click to mark it a
           </layout>
          </widget>
         </item>
-        <item row="0" column="0" >
-         <widget class="QGroupBox" name="groupBox" >
-          <property name="title" >
-           <string>New game</string>
-          </property>
-          <layout class="QGridLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <item rowspan="2" row="0" column="1" >
-            <widget class="QGroupBox" name="groupBox_7" >
-             <property name="title" >
-              <string>Black player</string>
-             </property>
-             <layout class="QGridLayout" >
-              <property name="margin" >
-               <number>9</number>
-              </property>
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <item row="2" column="0" >
-               <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
-                <property name="spacing" >
-                 <number>6</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_23" >
-                  <property name="text" >
-                   <string>Computer level</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBox_8" >
-                  <property name="maximum" >
-                   <number>20</number>
-                  </property>
-                  <property name="minimum" >
-                   <number>1</number>
-                  </property>
-                  <property name="value" >
-                   <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0" >
-               <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
-                <property name="spacing" >
-                 <number>6</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_24" >
-                  <property name="text" >
-                   <string>Name</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="newComputer_BlackPlayer" >
-                  <property name="text" >
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="0" >
-               <widget class="QComboBox" name="cb_ComputerBlackPlayer" >
-                <item>
-                 <property name="text" >
-                  <string>Computer</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Human</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item rowspan="2" row="0" column="2" >
-            <widget class="QGroupBox" name="groupBox_6" >
-             <property name="title" >
-              <string>White player</string>
-             </property>
-             <layout class="QGridLayout" >
-              <property name="margin" >
-               <number>9</number>
-              </property>
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <item row="2" column="0" >
-               <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
-                <property name="spacing" >
-                 <number>6</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_22" >
-                  <property name="text" >
-                   <string>Computer level</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBox_7" >
-                  <property name="maximum" >
-                   <number>20</number>
-                  </property>
-                  <property name="minimum" >
-                   <number>1</number>
-                  </property>
-                  <property name="value" >
-                   <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0" >
-               <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
-                <property name="spacing" >
-                 <number>6</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_21" >
-                  <property name="text" >
-                   <string>Name</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="newComputer_WhitePlayer" >
-                  <property name="text" >
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="0" >
-               <widget class="QComboBox" name="cb_ComputerWhitePlayer" >
-                <item>
-                 <property name="text" >
-                  <string>Computer</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>Human</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="0" column="3" >
-            <spacer>
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" >
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item rowspan="2" row="0" column="0" >
-            <layout class="QVBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item>
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_4" >
-                 <property name="text" >
-                  <string>Size</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="newComputer_Size" >
-                 <property name="minimum" >
-                  <number>2</number>
-                 </property>
-                 <property name="value" >
-                  <number>19</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_5" >
-                 <property name="text" >
-                  <string>Handicap</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="newComputer_Handicap" >
-                 <property name="specialValueText" >
-                  <string>0</string>
-                 </property>
-                 <property name="maximum" >
-                  <number>9</number>
-                 </property>
-                 <property name="minimum" >
-                  <number>1</number>
-                 </property>
-                 <property name="value" >
-                  <number>1</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_6" >
-                 <property name="text" >
-                  <string>komi</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="newComputer_Komi" >
-                 <property name="text" >
-                  <string>6,5</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBox_2" >
-               <property name="layoutDirection" >
-                <enum>Qt::RightToLeft</enum>
-               </property>
-               <property name="text" >
-                <string>One color Go</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="4" >
-            <widget class="QPushButton" name="pushButton_5" >
-             <property name="text" >
-              <string>Set defaults</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4" >
-            <widget class="QPushButton" name="button_newComputerGame" >
-             <property name="text" >
-              <string>Start game</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="Preferences" >
        <layout class="QGridLayout" >
-        <property name="margin" >
+        <property name="leftMargin" >
          <number>9</number>
         </property>
-        <property name="spacing" >
+        <property name="topMargin" >
+         <number>9</number>
+        </property>
+        <property name="rightMargin" >
+         <number>9</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>9</number>
+        </property>
+        <property name="horizontalSpacing" >
+         <number>6</number>
+        </property>
+        <property name="verticalSpacing" >
          <number>6</number>
         </property>
         <item row="4" column="0" colspan="2" >
@@ -1814,11 +2071,20 @@ When in score mode, left click to mark a group as dead, right click to mark it a
            <string>International</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
            </property>
            <item>
             <widget class="QLabel" name="label_26" >
@@ -1884,18 +2150,25 @@ When in score mode, left click to mark a group as dead, right click to mark it a
            <string>Misc</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
            </property>
            <item>
             <widget class="QLabel" name="fontLabel_standard" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1922,11 +2195,11 @@ When in score mode, left click to mark a group as dead, right click to mark it a
            </item>
            <item>
             <widget class="QSpinBox" name="spinBox" >
-             <property name="maximum" >
-              <number>24</number>
-             </property>
              <property name="minimum" >
               <number>6</number>
+             </property>
+             <property name="maximum" >
+              <number>24</number>
              </property>
              <property name="value" >
               <number>12</number>
@@ -1949,9 +2222,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
            <item>
             <widget class="QLabel" name="TextLabel2" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>5</hsizetype>
-               <vsizetype>1</vsizetype>
+              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -2020,28 +2291,37 @@ Delay between the moves in autoplay mode in seconds.</string>
            <string>Sound</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>5</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
            </property>
+           <property name="leftMargin" >
+            <number>5</number>
+           </property>
+           <property name="topMargin" >
+            <number>5</number>
+           </property>
+           <property name="rightMargin" >
+            <number>5</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>5</number>
+           </property>
            <item>
-            <widget class="QRadioButton" name="radioButton" >
+            <widget class="QRadioButton" name="radioButton_noSound" >
              <property name="text" >
               <string>Sound off</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton_2" >
+            <widget class="QRadioButton" name="radioButton_myGamesSound" >
              <property name="text" >
               <string>My games</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton_3" >
+            <widget class="QRadioButton" name="radioButton_allGameSound" >
              <property name="text" >
               <string>All games</string>
              </property>
@@ -2056,11 +2336,20 @@ Delay between the moves in autoplay mode in seconds.</string>
            <string>Stones</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>5</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>5</number>
+           </property>
+           <property name="topMargin" >
+            <number>5</number>
+           </property>
+           <property name="rightMargin" >
+            <number>5</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>5</number>
            </property>
            <item>
             <widget class="QRadioButton" name="radioButtonStones_2D" >
@@ -2089,9 +2378,7 @@ Delay between the moves in autoplay mode in seconds.</string>
         <item row="3" column="0" colspan="4" >
          <widget class="QGroupBox" name="groupBox_11" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -2100,10 +2387,22 @@ Delay between the moves in autoplay mode in seconds.</string>
            <string>Goban and table</string>
           </property>
           <layout class="QGridLayout" >
-           <property name="margin" >
+           <property name="leftMargin" >
             <number>9</number>
            </property>
-           <property name="spacing" >
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
+           <property name="horizontalSpacing" >
+            <number>6</number>
+           </property>
+           <property name="verticalSpacing" >
             <number>6</number>
            </property>
            <item row="1" column="0" >
@@ -2161,10 +2460,22 @@ Delay between the moves in autoplay mode in seconds.</string>
       </widget>
       <widget class="QWidget" name="page_2" >
        <layout class="QGridLayout" >
-        <property name="margin" >
+        <property name="leftMargin" >
          <number>9</number>
         </property>
-        <property name="spacing" >
+        <property name="topMargin" >
+         <number>9</number>
+        </property>
+        <property name="rightMargin" >
+         <number>9</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>9</number>
+        </property>
+        <property name="horizontalSpacing" >
+         <number>6</number>
+        </property>
+        <property name="verticalSpacing" >
          <number>6</number>
         </property>
         <item row="8" column="0" colspan="4" >
@@ -2173,11 +2484,20 @@ Delay between the moves in autoplay mode in seconds.</string>
            <string>Autosave</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
            </property>
            <item>
             <widget class="QCheckBox" name="checkBox" >
@@ -2245,11 +2565,20 @@ Delay between the moves in autoplay mode in seconds.</string>
         </item>
         <item row="4" column="0" >
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="TextLabel4_4" >
@@ -2286,18 +2615,25 @@ New users: leave blank!</string>
         </item>
         <item row="6" column="0" >
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QPushButton" name="pb_new" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -2317,11 +2653,20 @@ clear form; doesn't make any changes to the entries</string>
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QPushButton" name="pb_add" >
@@ -2363,11 +2708,20 @@ Note: 'Delete' concerns saved records.</string>
         </item>
         <item row="2" column="0" >
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="TextLabel1_8" >
@@ -2450,9 +2804,7 @@ Note: 'Delete' concerns saved records.</string>
         <item row="7" column="0" colspan="4" >
          <widget class="Line" name="Line4_3" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -2980,11 +3332,20 @@ Click to get a new, editable offline window.</string>
         </item>
         <item row="0" column="0" >
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="TextLabel1_title_4" >
@@ -3025,35 +3386,74 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
            <string>Games settings</string>
           </property>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>9</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
            </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
            <item>
             <layout class="QGridLayout" >
-             <property name="margin" >
+             <property name="leftMargin" >
               <number>0</number>
              </property>
-             <property name="spacing" >
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
+             </property>
+             <property name="horizontalSpacing" >
+              <number>6</number>
+             </property>
+             <property name="verticalSpacing" >
               <number>6</number>
              </property>
              <item rowspan="2" row="1" column="0" >
               <layout class="QVBoxLayout" >
-               <property name="margin" >
+               <property name="spacing" >
                 <number>0</number>
                </property>
-               <property name="spacing" >
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
                 <number>0</number>
                </property>
                <item>
                 <layout class="QHBoxLayout" >
-                 <property name="margin" >
-                  <number>0</number>
-                 </property>
                  <property name="spacing" >
                   <number>6</number>
+                 </property>
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>0</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="TextLabel3_3" >
@@ -3079,11 +3479,11 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
                    <property name="toolTip" >
                     <string>board size</string>
                    </property>
-                   <property name="maximum" >
-                    <number>36</number>
-                   </property>
                    <property name="minimum" >
                     <number>4</number>
+                   </property>
+                   <property name="maximum" >
+                    <number>36</number>
                    </property>
                    <property name="value" >
                     <number>19</number>
@@ -3094,11 +3494,20 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
                </item>
                <item>
                 <layout class="QHBoxLayout" >
-                 <property name="margin" >
-                  <number>0</number>
-                 </property>
                  <property name="spacing" >
                   <number>6</number>
+                 </property>
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>0</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="TextLabel3_3_2" >
@@ -3127,11 +3536,11 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
                    <property name="suffix" >
                     <string>,5</string>
                    </property>
-                   <property name="maximum" >
-                    <number>9</number>
-                   </property>
                    <property name="minimum" >
                     <number>1</number>
+                   </property>
+                   <property name="maximum" >
+                    <number>9</number>
                    </property>
                    <property name="value" >
                     <number>6</number>
@@ -3162,11 +3571,20 @@ negotiation</string>
              </item>
              <item row="2" column="2" >
               <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
+               </property>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
                </property>
                <item>
                 <widget class="QLabel" name="TextLabel7" >
@@ -3185,9 +3603,7 @@ time:</string>
                <item>
                 <widget class="QSpinBox" name="BYSpin" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>1</hsizetype>
-                   <vsizetype>1</vsizetype>
+                  <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -3213,11 +3629,20 @@ time:</string>
              </item>
              <item row="1" column="2" >
               <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
+               </property>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
                </property>
                <item>
                 <widget class="QLabel" name="TextLabel6" >
@@ -3236,9 +3661,7 @@ time :</string>
                <item>
                 <widget class="QSpinBox" name="timeSpin" >
                  <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>1</hsizetype>
-                   <vsizetype>1</vsizetype>
+                  <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -3255,11 +3678,11 @@ time :</string>
                  <property name="suffix" >
                   <string/>
                  </property>
-                 <property name="maximum" >
-                  <number>99</number>
-                 </property>
                  <property name="minimum" >
                   <number>0</number>
+                 </property>
+                 <property name="maximum" >
+                  <number>99</number>
                  </property>
                  <property name="value" >
                   <number>10</number>
@@ -3308,10 +3731,19 @@ time :</string>
            </item>
            <item>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
+             <property name="spacing" >
               <number>0</number>
              </property>
-             <property name="spacing" >
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
               <number>0</number>
              </property>
              <item>
@@ -3326,27 +3758,54 @@ time :</string>
              </item>
              <item>
               <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
                <property name="spacing" >
                 <number>6</number>
                </property>
+               <property name="leftMargin" >
+                <number>0</number>
+               </property>
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="rightMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
                <item>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
+                 <property name="spacing" >
                   <number>0</number>
                  </property>
-                 <property name="spacing" >
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
                   <number>0</number>
                  </property>
                  <item>
                   <layout class="QHBoxLayout" >
-                   <property name="margin" >
-                    <number>0</number>
-                   </property>
                    <property name="spacing" >
                     <number>6</number>
+                   </property>
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
                    </property>
                    <item>
                     <widget class="QLabel" name="TextLabel6_3" >
@@ -3376,11 +3835,11 @@ up to :</string>
                      <property name="suffix" >
                       <string/>
                      </property>
-                     <property name="maximum" >
-                      <number>99</number>
-                     </property>
                      <property name="minimum" >
                       <number>0</number>
+                     </property>
+                     <property name="maximum" >
+                      <number>99</number>
                      </property>
                      <property name="value" >
                       <number>10</number>
@@ -3391,11 +3850,20 @@ up to :</string>
                  </item>
                  <item>
                   <layout class="QHBoxLayout" >
-                   <property name="margin" >
-                    <number>0</number>
-                   </property>
                    <property name="spacing" >
                     <number>6</number>
+                   </property>
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
                    </property>
                    <item>
                     <widget class="QLabel" name="TextLabel7_2" >
@@ -3449,19 +3917,37 @@ up to :</string>
                </item>
                <item>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
+                 <property name="spacing" >
                   <number>0</number>
                  </property>
-                 <property name="spacing" >
+                 <property name="leftMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin" >
                   <number>0</number>
                  </property>
                  <item>
                   <layout class="QHBoxLayout" >
-                   <property name="margin" >
-                    <number>0</number>
-                   </property>
                    <property name="spacing" >
                     <number>6</number>
+                   </property>
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
                    </property>
                    <item>
                     <widget class="QLabel" name="textLabel2" >
@@ -3472,10 +3958,19 @@ up to :</string>
                    </item>
                    <item>
                     <layout class="QVBoxLayout" >
-                     <property name="margin" >
+                     <property name="spacing" >
                       <number>0</number>
                      </property>
-                     <property name="spacing" >
+                     <property name="leftMargin" >
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin" >
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin" >
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin" >
                       <number>0</number>
                      </property>
                      <item>
@@ -3505,11 +4000,20 @@ up to :</string>
                  </item>
                  <item>
                   <layout class="QHBoxLayout" >
-                   <property name="margin" >
-                    <number>0</number>
-                   </property>
                    <property name="spacing" >
                     <number>6</number>
+                   </property>
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
                    </property>
                    <item>
                     <widget class="QLabel" name="TextLabel3_3_4" >
@@ -3539,11 +4043,11 @@ up to :</string>
                      <property name="specialValueText" >
                       <string>0</string>
                      </property>
-                     <property name="maximum" >
-                      <number>9</number>
-                     </property>
                      <property name="minimum" >
                       <number>1</number>
+                     </property>
+                     <property name="maximum" >
+                      <number>9</number>
                      </property>
                      <property name="value" >
                       <number>9</number>
@@ -3563,18 +4067,25 @@ up to :</string>
         </item>
         <item row="5" column="0" >
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="textLabel1_6" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -3593,9 +4104,7 @@ up to :</string>
           <item>
            <widget class="QComboBox" name="ComboBox_codec" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>3</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -3612,11 +4121,20 @@ up to :</string>
         </item>
         <item row="3" column="0" >
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="TextLabel2_6" >
@@ -3666,11 +4184,20 @@ Port address is defined for each go server. It's a fixed number. See Host for pr
         </item>
         <item row="1" column="0" >
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="TextLabel3_5" >
@@ -3754,12 +4281,12 @@ others:		guest</string>
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>56</x>
-     <y>20</y>
+     <x>91</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>103</x>
-     <y>9</y>
+     <x>897</x>
+     <y>12</y>
     </hint>
    </hints>
   </connection>

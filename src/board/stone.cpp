@@ -21,10 +21,6 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 	// We use a trick here with the count of the pixmap list
 	// because the alternate ghosts list has only 2 images
 
-			
-//	int ii = (rand() % (pixmapList->count() -2) ) + 1;
-//	if (has_shadow)
-//		qDebug("nb of im : %d - index chosen %d", pixmapList->count(), ii);
 	
 	if (pixmapList->count() <= 2)
 		setPixmap(pixmapList->at( color == stoneBlack ? 0 : 1));
@@ -112,6 +108,7 @@ void Stone::show()
  */
 void Stone::togglePixmap(QList<QPixmap> *a, bool showShadow)
 {
+	//if the list is only B + W , or if the list is B + several white
 	if (a->count() <= 2)
 		setPixmap(a->at( color == stoneBlack ? 0 : 1));
 	else	

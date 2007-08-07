@@ -1459,22 +1459,25 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	return gameData ;
 }
+
 /*
-bool SGFParser::exportSGFtoClipB(QString *str, Tree *tree)
+ * takes a game tree, and puts it in SGF format
+ */
+bool SGFParser::exportSGFtoClipB(QString *str, Tree *tree, GameData *gd)
 {
-	CHECK_PTR(tree);
+	Q_CHECK_PTR(tree);
 	
 	if (stream != NULL)
 		delete stream;
-	stream = new QTextStream(str, IO_WriteOnly);
+	stream = new QTextStream(str, QIODevice::WriteOnly);
 	
-	bool res = writeStream(tree);
+	bool res = writeStream(tree,gd);
 	
 	delete stream;
 	stream = NULL;
 	return res;
 }
-*/
+
 /*
  * Opens a file for saving SGF
  */

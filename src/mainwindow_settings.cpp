@@ -207,12 +207,20 @@ void MainWindow::saveSettings()
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
 	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
 
-	int i = 3;
+	int i = 0;
 	if ( ui.radioButtonStones_2D->isChecked())
 		i=1;
 	else if ( ui.radioButtonStones_3D->isChecked())
 		i=2;
 	settings.setValue("STONES_LOOK", i);
+
+	i = 0;
+	if ( ui.radioButton_noSound->isChecked())
+		i=1;
+	else if ( ui.radioButton_myGamesSound->isChecked())
+		i=2;
+	settings.setValue("SOUND", i);
+
 
 	//saves hosts list
 	settings.beginWriteArray("HOSTS");
@@ -236,6 +244,15 @@ void MainWindow::saveSettings()
 	settings.setValue("DEFAULT_SIZE",ui.boardSizeSpin->value() );
 	settings.setValue("DEFAULT_TIME",ui.timeSpin->value() );
 	settings.setValue("DEFAULT_BY",ui.BYSpin->value() );
+
+	//SGF edition tab default values
+	settings.setValue("EDIT_SIZE",ui.newFile_Size->value());
+	settings.setValue("EDIT_HANDICAP",ui.newFile_Handicap->value());
+	settings.setValue("EDIT_KOMI",ui.newFile_Komi->text());
+
+	
+
+
 }
 
 
@@ -253,6 +270,10 @@ void MainWindow::loadSettings()
 	ui.radioButtonStones_real->setChecked(TRUE);
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
 	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
+
+	ui.radioButton_allGameSound->setChecked(TRUE);
+	ui.radioButton_noSound->setChecked((settings.value("SOUND")==1));
+	ui.radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
 
 
 	//server list
@@ -293,6 +314,12 @@ void MainWindow::loadSettings()
 	ui.boardSizeSpin->setValue(settings.value("DEFAULT_SIZE").toInt());
 	ui.timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
 	ui.BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
+	
+	//SGF edition tab default values
+	ui.newFile_Size->setValue(settings.value("EDIT_SIZE").toInt());
+	ui.newFile_Handicap->setValue(settings.value("EDIT_HANDICAP").toInt());
+	ui.newFile_Komi->setText(settings.value("EDIT_KOMI").toString());
+
 
 }
 

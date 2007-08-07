@@ -590,7 +590,7 @@ bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 //	Stone *stone;
 	bool modified = false;//, fake = false;
 	short data;
-
+	bool dead;
 	/*
 	* Synchronize the matrix with the stonehandler data and
 	* update the canvas.
@@ -602,9 +602,11 @@ bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
 		for (int x=1; x<=boardSize; x++)
 		{
 			// Extract the data for the stone from the matrix
-			data = abs(m->at(x-1, y-1) % 10);
+			data = (m->at(x-1, y-1) % 10);
+			dead = (data < 0);
+			data = abs(data);
 			
-			board->updateStone((StoneColor)data,x,y);
+			board->updateStone((StoneColor)data,x,y, dead);
 
 			
 			// Skip mark drawing when reading sgf

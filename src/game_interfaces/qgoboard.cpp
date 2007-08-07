@@ -27,7 +27,7 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 		gameData = NULL;
 
 //TODO get the sound from correct path
-	clickSound = SoundFactory::newSound( "/usr/share/qGo/sounds/stone.wav" );
+	clickSound = SoundFactory::newSound( "/usr/share/qgo2/sounds/stone.wav" );
 }
 
 
@@ -380,8 +380,8 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 		if (tree->getCurrent()->getMoveNumber() > stated_mv_count)
 //		{
 //			qDebug("playing sound");
-			
-			clickSound->play();
+			if (playSound)
+				clickSound->play();
 //		}
 //	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
@@ -673,6 +673,10 @@ bool qGoBoardNormalInterface::init()
 	else
 //	tree->setToFirstMove();	
 		boardwindow->getBoardHandler()->slotNavFirst();
+
+	QSettings settings;
+	// value 1 = no sound, 0 all games, 2 my games
+	playSound = (settings.value("SOUND") != 1);
 
 	return TRUE;
 }

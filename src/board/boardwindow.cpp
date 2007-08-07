@@ -52,10 +52,10 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 
 
 	QMenu *menu = new QMenu();
-	menu->insertAction(0,ui.fileExportASCII);
-	menu->insertAction(0,ui.fileExportSgfClipB);
-	menu->insertAction(0,ui.fileExportPic);
-	menu->insertAction(0,ui.fileExportPicClipB);
+//	menu->insertAction(0,ui.fileExportASCII);
+	menu->insertAction(0,ui.actionExportSgfClipB);
+	menu->insertAction(0,ui.actionExportPic);
+	menu->insertAction(0,ui.actionExportPicClipB);
 
 	ui.actionExport->setMenu(menu);
 
@@ -134,9 +134,6 @@ void BoardWindow::init()
 	boardHandler = new BoardHandler(this, tree, boardSize);
 
 
-	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
-	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
-	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
 
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
@@ -169,6 +166,7 @@ void BoardWindow::init()
 	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
 	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
 	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
+	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
@@ -188,6 +186,27 @@ void BoardWindow::init()
 	qgoboard->init();		
 	gamePhase = phaseOngoing;
 	show();
+
+	//make sure to set the sound button to the proper state before anything
+	if (qgoboard->getPlaySound())
+	{
+		ui.actionSound->setChecked(FALSE);
+		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_on.png"));
+	}
+	else
+	{
+		ui.actionSound->setChecked(TRUE);
+		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_off.png"));
+	}
+
+	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
+	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
+	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
+	connect(ui.actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
+	connect(ui.actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
+	connect(ui.actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
+	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
+	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
 
 	// This is only needed with a computer game, when the computer has to make the first move
 	qgoboard->startGame();
@@ -213,13 +232,17 @@ void BoardWindow::setGameData(GameData *gd)
 /*
  * Loads the SGF string. returns true if the file was sucessfully parsed
  */
-bool BoardWindow::loadSGF(const QString fileName, const QString /*SGFLoaded*/, bool /* fastLoad */)
+bool BoardWindow::loadSGF(const QString fileName, const QString SGF, bool /* fastLoad */)
 {
 
 	SGFParser *sgfParser = new SGFParser(tree);
 	
-	// Load the sgf file
-	QString SGFLoaded = sgfParser->loadFile(fileName);
+	QString SGFLoaded;
+	if (SGF.isEmpty())
+		// Load the sgf file
+		SGFLoaded = sgfParser->loadFile(fileName);
+	else 
+		SGFLoaded = SGF;
 
 	if (!sgfParser->doParse(SGFLoaded))
 		return false ;	
@@ -331,6 +354,93 @@ void BoardWindow::slotEditButtonPressed( int m )
 //	board->setMarkType(t);
 }
 
+
+/*
+ * button menu 'export to clipboard' activated
+ */
+void BoardWindow::slotExportSGFtoClipB()
+{
+	QString str = "";
+
+	SGFParser *p = new SGFParser( tree);
+
+	if (!p->exportSGFtoClipB(&str, tree, gameData))
+	{
+		QMessageBox::warning(this, tr("Export"), tr("Could not export  the game to clipboard"));
+//		qDebug ("QGoboard:setMove - move %d %d done",i,j);
+		return ;
+	}
+
+	QApplication::clipboard()->setText(str);
+
+}
+
+
+/*
+ * button menu 'export picture' activated
+ */
+void BoardWindow::slotExportPic()
+{
+	QString *filter = new QString();
+	QString fileName = QFileDialog::getSaveFileName(this,
+		tr("Export image as"),
+		QString(""),
+		QString("JPEG (*.jpeg);;PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;MNG (*.mng)"),
+		filter);
+
+
+	if (fileName.isEmpty())
+		return;
+
+
+		// Confirm overwriting file.
+//	if ( QFile::exists( fileName ) )
+//		if (QMessageBox::information(this, PACKAGE,
+//			tr("This file already exists. Do you want to overwrite it?"),
+//			tr("Yes"), tr("No"), 0, 0, 1) == 1)
+//			return;
+
+	QString ext = 	"." + filter->section(" ",0,0).toLower();
+	if (!fileName.endsWith(ext))
+		fileName.append(ext);
+
+	ui.board->exportPicture(fileName, new QString(filter->section(" ",0,0)), FALSE);//->left(3));
+}
+
+
+/*
+ * button menu 'export picture to clipboard' activated
+ */
+void BoardWindow::slotExportPicClipB()
+{
+	QString null = "";
+	ui.board->exportPicture(0, 0 , TRUE);	
+}
+
+
+
+/*
+ * button 'duplicate board' activated
+ */
+void BoardWindow::slotDuplicate()
+{
+	QString str = "";
+
+	SGFParser *p = new SGFParser( tree);
+
+	if (!p->exportSGFtoClipB(&str, tree, gameData))
+	{
+		QMessageBox::warning(this, tr("Export"), tr("Could not duplicate the game"));
+//		qDebug ("QGoboard:setMove - move %d %d done",i,j);
+		return ;
+	}
+	emit signal_duplicate(gameData, str, tree->getCurrent()->getMoveNumber());
+}
+
+
+/*
+ * button 'coordinates' has been toggled
+ */
 void BoardWindow::slotViewCoords(bool toggle)
 {
 	if (toggle)
@@ -340,6 +450,22 @@ void BoardWindow::slotViewCoords(bool toggle)
 	
 //	statusBar()->message(tr("Ready."));
 }
+
+
+/*
+ * button 'sound' has been toggled
+ */
+void BoardWindow::slotSound(bool toggle)
+{
+	qgoboard->setPlaySound(!toggle);
+	if (toggle)
+		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_off.png"));
+	else
+		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_on.png"));
+}
+
+
+
 
 /* 
  * Saves the game tree under file 'filename'
@@ -451,3 +577,6 @@ void BoardWindow::slotEditDelete()
 {
 	qgoboard->deleteNode();
 }
+
+
+

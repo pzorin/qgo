@@ -150,7 +150,7 @@ void MainWindow::slot_connexionClosed()
 //	qDebug("slot_connclosed()");
 //	qDebug(QString("%1 -> slot_connclosed()").arg(statusOnlineTime->text()));
 
-//	qgoif->get_qgo()->playConnectSound();
+	connectSound->play();
 
 	// show current Server name in status bar
 	statusServer->setText(" OFFLINE ");
@@ -163,21 +163,6 @@ void MainWindow::slot_connexionClosed()
 //	toolConnect->setPixmap(disconnectedIcon);
 //	QToolTip::remove(toolConnect);
 	ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
-}
-
-/* 
- * seek request is being canceled
- */
-void MainWindow::slot_cancelSeek()
-{
-/*
-	ui.toolSeek->setOn(false);
-	ui.toolSeek->setPopup(seekMenu);
-	ui.toolSeek->setPopupDelay(1);
-	ui.toolSeek->setIconSet(QIconSet::QIconSet(NotSeekingIcon));
-	killTimer(seekButtonTimer);
-	seekButtonTimer = 0;
-*/
 }
 
 
@@ -341,7 +326,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 				sendcommand("message", false);
 
 			// let qgo know which server
-//TODO			qgoif->set_gsName(myAccount->get_gsname());
+			qgoif->set_gsName(myAccount->get_gsname());
 			// show current Server name in status bar
 			statusServer->setText(" " + myAccount->svname + " ");
 
@@ -350,8 +335,8 @@ void MainWindow::slot_textReceived(const QString &txt)
 			timer = startTimer(1000);
 			// init shouts
 //TODO			slot_talk("Shouts*", 0, true);
-			
-//TODO				qgoif->get_qgo()->playConnectSound();
+			connectSound->play();
+
 			break;
 
 		// end of 'who'/'user' cmd
@@ -860,16 +845,135 @@ void MainWindow::slot_accname(QString &name)
 	myAccount->set_caption();
 }
 
+
 /*
- * seek string received after 'seek config_list' command
+ * 'seek' time condition was received from parser
  */
-void MainWindow::slot_addSeekCondition(const QString& /*a*/, const QString& b, const QString& c, const QString& d, const QString& )
+void MainWindow::slot_addSeekCondition(const QString& a, const QString& b, const QString& c, const QString& d, const QString& )
 {
 	QString time_condition ;
 	
 	time_condition = QString::number(int(b.toInt() / 60)) + " min + " + QString::number(int(c.toInt() / 60)) + " min / " + d + " stones";
 
-	seekMenu->addAction(time_condition);//, this, SLOT(slot_seek(int))), 0, a.toInt());
+	QAction *act = seekMenu->addAction(time_condition);// , this, SLOT(slot_seek(QAction*)));//, 0, a.toInt());
+	act->setData(a.toInt());
+}
+
+/*
+ * seek header received after 'seek config_list' command
+ */
+void MainWindow::slot_clearSeekCondition()
+{
+	seekMenu->clear();
+}
+
+/* 
+ * seek request is being canceled
+ */
+void MainWindow::slot_cancelSeek()
+{
+
+	ui.toolSeek->setChecked(FALSE);
+	ui.toolSeek->setMenu(seekMenu);
+//	ui.toolSeek->setPopupDelay(1);
+	ui.toolSeek->setIcon(QIcon(":/ressources/pics/not_seeking.png"));
+	killTimer(seekButtonTimer);
+	seekButtonTimer = 0;
+
+}
+
+
+/*
+ * the 'seek' button was pressed
+ */
+void MainWindow::slot_seek(bool b)
+{
+//qDebug("seek button pressed : status %i", (int)b);
+
+	//if the button was just pressed on, we have already used the popup menu : nothing to do
+	if (b)
+		return;
+
+	sendcommand("seek entry_cancel",false);
+}
+
+
+/*
+ * seek button : menu entry (time conditions) selected
+ */
+void MainWindow::slot_seek(QAction *act)
+{
+	int i = act->data().toInt();
+	ui.toolSeek->setChecked(true);
+	ui.toolSeek->setMenu(NULL);
+
+	//seek entry 1 19 5 3 0
+	QString send_seek = 	"seek entry " + 
+				QString::number(i) + 
+				" 19 " ;
+
+	//childish, but we want to have an animated icon there
+	seekButtonTimer = startTimer(200);
+
+	switch (ui.seekHandicapList->currentIndex())
+	{
+		case 0 :
+			send_seek.append("1 1 0");
+			break ;
+
+		case 1 :
+			send_seek.append("2 2 0");
+			break ;
+		
+		case 2 :
+			send_seek.append("5 5 0");
+			break ;
+
+		case 3 :
+			send_seek.append("9 9 0");
+			break ;
+
+		case 4 :
+			send_seek.append("0 9 0");
+			break ;	
+
+		case 5 :
+			send_seek.append("9 0 0");
+			break ;
+	}
+	
+	sendcommand(send_seek,false);
+	qDebug(send_seek.toLatin1().constData());
+}
+
+/*
+ * seek entry received from parser
+ */
+void MainWindow::slot_seekList(const QString& player, const QString& condition)
+{
+	QString Rk;
+
+	QTreeWidgetItemIterator lv(ui.ListView_players);
+	QTreeWidgetItem *lvi;
+	for (; (*lv); lv++)
+	{
+		lvi = *lv;
+		// compare names
+		if (lvi->text(1) == player)
+		{
+			Rk = lvi->text(2);
+			break;
+		}
+	}
+
+
+//	QString Rk = getPlayerRk(player);
+	QString hop = Rk.right(1);
+	if ((Rk.right(1) != "?") && (Rk.right(1) != "+"))
+		Rk.append(" ");
+
+	slot_message(player.leftJustified(15,' ',true) + Rk.rightJustified(5) +  " : " + condition, Qt::darkRed);
+
 }
 
 /*
@@ -2103,8 +2207,11 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 
 	dlg->slot_changed();
 	dlg->show();
-	dlg->setWindowState(Qt::WindowActive);
+//	dlg->setWindowState(Qt::WindowActive);
 	dlg->raise();
+
+	if (!myrequest)
+		gameSound->play();
 }
 
 /*
@@ -2202,5 +2309,149 @@ void MainWindow::slot_matchCanceled(const QString& opp)
 	if (dlg)
 		dlg->slot_notOpen(opp, 2);
 
+}
+
+/*
+ * 
+ */
+void MainWindow::timerEvent(QTimerEvent* e)
+{
+	// some variables for forcing send buffer and keep line established
+	static int counter = 899;
+	static int holdTheLine = true;
+	static int tnwait = 0;
+//	static int statusCnt = 0;
+	static QString statusTxt = QString();
+	static int imagecounter = 0;
+	
+	//qDebug( "timer event, id %d", e->timerId() );
+
+	if (e->timerId() == seekButtonTimer)
+	{	
+		imagecounter = (imagecounter+1) % 4;
+		QString ic = ":/ressources/pics/seeking" + QString::number(imagecounter + 1) +".png";
+		ui.toolSeek->setIcon(QIcon(ic));
+		return;
+	}
+
+	if (tn_ready)
+	{
+		// case: ready to send
+		tnwait = 0;
+	}
+	else if (tnwait < 2)
+	{
+		//qDebug(QString("%1: HoldTheLine SET: something has been sent").arg(statusOnlineTime->text()));
+		// case: not ready to send, but maybe waiting for READY message
+		tnwait++;
+		// something was sent, so reset counter
+		counter = 899;//resetCounter();
+		holdTheLine = true;
+		autoAwayMessage = false;
+	}
+
+	if (counter % 300 == 0)
+	{
+		// 5 mins away -> set auto answering
+		autoAwayMessage = true;
+		if (counter == 0)
+		{
+			// send "ayt" every half hour anyway
+			// new: reset timer after one hour of idle state
+			//      -> if not observing a game!
+			//qDebug(QString("%1 -> HoldTheLine: status = %2").arg(statusOnlineTime->text()).arg(holdTheLine));
+			if (holdTheLine)
+				sendcommand("ayt", false);
+
+			// 12*5 min
+			counter = 899;//	resetCounter();
+
+			if (myAccount->num_observedgames == 0)
+			{
+				// nothing observing
+				holdTheLine = false;
+//qDebug(QString("%1: HoldTheLine END!").arg(statusOnlineTime->text()));
+			}
+			else
+			{
+//qDebug(QString("%1: HoldTheLine LENGTHENED: observing game...").arg(statusOnlineTime->text()));
+			}
+		}
+		else if (myAccount->get_gsname() == IGS && holdTheLine)
+		{
+			sendcommand("ayt", false);
+			qDebug(QString("%1 -> ayt").arg(statusOnlineTime->text()).toLatin1().constData());
+		}
+	}
+
+	counter--;
+
+	// display online time
+	onlineCount++;
+	int hr = onlineCount/3600;
+	int min = (onlineCount % 3600)/60;
+	int sec = onlineCount % 60;
+	QString pre = " ";
+	QString min_;
+	QString sec_;
+
+	if (min < 10)
+		min_ = "0" + QString::number(min);
+	else
+		min_ = QString::number(min);
+
+	if (sec < 10)
+		sec_ = "0" + QString::number(sec);
+	else
+		sec_ = QString::number(sec);
+
+	if (hr)
+		pre += QString::number(hr) + "h ";
+
+	statusOnlineTime->setText(pre + min_ + ":" + sec_ + " ");
+
+	// some statistics
+//	QToolTip::remove(statusServer);
+//	QToolTip::add(statusServer, tr("Current server") + "\n" +
+//		tr("Bytes in:") + " " + QString::number(bytesIn) + "\n" +
+//		tr("Bytes out:") + " " + QString::number(bytesOut));
+//	LineEdit_bytesIn->setText(QString::number(bytesIn));
+//	LineEdit_bytesOut->setText(QString::number(bytesOut));
+
+// DEBUG ONLY BEGIN ****
+	// DEBUG display remaining time
+	hr = counter/3600;
+	min = (counter % 3600)/60;
+	sec = counter % 60;
+	if (autoAwayMessage)
+		pre = "(A) ";
+	else
+		pre = " ";
+
+	if (min < 10)
+		min_ = "0" + QString::number(min);
+	else
+		min_ = QString::number(min);
+
+	if (sec < 10)
+		sec_ = "0" + QString::number(sec);
+	else
+		sec_ = QString::number(sec);
+
+	if (hr)
+		pre += QString::number(hr) + "h ";
+
+	statusMessage->setText(pre + min_ + ":" + sec_ + (holdTheLine ? " Hold" : " "));
+// DEBUG ONLY END ****
+}
+
+
+/*
+ * The parser has sent a message to be put in the messages box
+ */
+void MainWindow::slot_msgBox(const QString& msg)
+{
+	ui.talkTabs->setCurrentIndex(1);
+	ui.msgTextEdit->append(msg);
 }
 

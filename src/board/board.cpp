@@ -429,6 +429,12 @@ void Board::resizeBoard(int w, int h)
 			s->setColor(s->getColor());
 			s->setPos(offsetX + square_size * (s->posX() - 1) - s->pixmap().width()/2, 
 				offsetY + square_size * (s->posY() - 1) - s->pixmap().height()/2 );
+
+			//TODO introduce a ghost list in the stone class so that this becomes redundant code
+			if (s->isDead())
+				s->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+
+
 			
 		}
 		else if (item->type() >= RTTI_MARK_SQUARE &&
@@ -651,7 +657,7 @@ Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool /*shown*/)
  * Synchronize the board with the given stone color and coordinates
  * This is usually called by boardhandler when scanning a matrix.
  */
-bool Board::updateStone(StoneColor c, int x, int y)
+bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 {
 
 	Stone *stone;
@@ -692,8 +698,15 @@ bool Board::updateStone(StoneColor c, int x, int y)
 		}
 		
 		// We need to check wether the stones have been toggled dead or seki before (scoring mode)
-		if (stone->isDead() || stone->isSeki())
+		if ((stone->isDead() || stone->isSeki()) && !dead)
 			stone->togglePixmap(imageHandler->getStonePixmaps(), TRUE);
+		
+		if ((!stone->isDead()) && dead)
+		{
+			stone->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+			stone->setDead();
+		}
+
 
 		break;
 		
@@ -1217,3 +1230,27 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 	emit signalClicked(delay, x , y , mouseState);
 }
 
+/*
+ * called when using a button menu 'export'
+ * saves the board image and puts it to clipboard or file
+ */
+void Board::exportPicture(const QString &fileName,  QString *filter, bool toClipboard)
+{
+
+	QPixmap pix = QPixmap::grabWidget(this, 
+		offsetX - offset + 2,
+		offsetY - offset + 2 ,
+		board_pixel_size + offset*2,
+		board_pixel_size + offset*2);
+
+
+	if (toClipboard)
+	{
+		QApplication::clipboard()->setPixmap(pix);
+		return;
+	}
+
+
+	if (!pix.save(fileName, filter->toAscii()))
+		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
+}

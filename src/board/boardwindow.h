@@ -61,6 +61,7 @@ public:
 	MarkType getEditMark()			{return editMark;}
 	void setBoardSize(int sz)		{boardSize=sz;}
 	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
+	void setTree(Tree *t)			{tree=t;}
 	void setGameData(GameData *gd);	
 	QString get_wplayer()			{return gameData->playerWhite;}
 	QString get_bplayer()			{return gameData->playerBlack;}
@@ -73,13 +74,19 @@ protected:
 
 signals:
 	void signal_boardClosed(int);
+	void signal_duplicate( GameData *, const QString&, int);
 
 public slots:
 	void slotEditButtonPressed( int id );
 	void slotViewCoords(bool toggle);
+	void slotSound(bool toggle);
 	bool slotFileSave();
 	bool slotFileSaveAs();
 	void slotEditDelete();
+	void slotExportSGFtoClipB();
+	void slotExportPicClipB();
+	void slotExportPic();
+	void slotDuplicate();
 
 private:
 

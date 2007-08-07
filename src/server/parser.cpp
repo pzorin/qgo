@@ -279,7 +279,7 @@ InfoType Parser::put_line(const QString &txt)
 
 		if (memory == 14)
 			// you have message
-			emit signal_shout(tr("msg*"), line);
+			emit signal_msgBox(line);
 		else
 			emit signal_message(txt);
 
@@ -336,17 +336,24 @@ InfoType Parser::put_line(const QString &txt)
 		//	5 You cannot observe a game that you are playing.
 		//	5 You cannot undo in this game
 		//	5 Opponent's client does not support undoplease
+		//	5 noldo is currently involved in a match against someone else.
 		case 5:
 			if (line.contains("No user named"))
 			{
 				QString name = element(line, 1, "\"");
 //				emit signal_talk(name, "@@@", true);
 			}
+			else if (line.contains("is currently involved in a match"))
+			{
+				QString opp = element(line, 0, " ");//, " ");
+				emit signal_notOpen(opp, 3);
+			}
 			else if (line.contains("is not open to match requests"))
 			{
 				QString opp = element(line, 0, "\"", "\"");
 				emit signal_notOpen(opp, 0);
 			}
+
 			else if (line.contains("player is currently not accepting matches"))
 			{
 				// IGS: 5 That player is currently not accepting matches.
@@ -810,7 +817,7 @@ InfoType Parser::put_line(const QString &txt)
 			else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
 			{
 				qDebug("parser->case 9: Use adjourn to");
-				emit signal_requestDialog("adjourn", 0, 0, 0);
+				emit signal_requestDialog("adjourn", "decline adjourn", 0, 0);
 			}
 			// 9 frosla requests to pause the game.
 			else if (line.contains("requests to pause"))
@@ -1829,14 +1836,14 @@ InfoType Parser::put_line(const QString &txt)
 				// but send undo-signal anyway: in case of undo while scoring it's necessary
 				QString player = element(line, 0, " ");
 				QString move = element(line, 0, "(", ")");
-				emit signal_undo(player, move);
+				emit signal_undo(0,player, move);
 			}
 			else if (line.contains("Undo in game"))
 			{
-				QString player = element(line, 3, " ");
-				player.truncate(player.length() - 1);
+				QString nr = element(line, 3, " ");
+				nr.truncate(nr.length() - 1);
 				QString move = element(line, 7, " ");
-				emit signal_undo(player, move);
+				emit signal_undo(nr,0, move);
 			}
 
 			// message anyway
@@ -2172,7 +2179,7 @@ InfoType Parser::put_line(const QString &txt)
 						" +" +
 						element(line, 9, " ");						
 				
-				emit signal_SeekList(player,condition);
+				emit signal_seekList(player,condition);
 				break;
 			}
 			//else

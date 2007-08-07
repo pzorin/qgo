@@ -31,11 +31,11 @@ public:
 
 	bool doParse(const QString &toParseStr, bool fastLoad=false);
 	bool doWrite(const QString &fileName, Tree *tree, GameData *gameData);
-
+	bool exportSGFtoClipB(QString *str, Tree *tree, GameData *gameData);
 /*
 	bool parseString(const QString &toParse);
 	bool doWrite(const QString &fileName, Tree *tree);
-	bool exportSGFtoClipB(QString *str, Tree *tree);
+
 	bool parseASCII(const QString &fileName, ASCII_Import *charset, bool isFilename=true);
 */
 protected:

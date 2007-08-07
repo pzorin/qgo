@@ -99,7 +99,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	parser = new Parser();
 	seekMenu = new QMenu();
 	ui.toolSeek->setMenu(seekMenu);
-		
+	connect(seekMenu,SIGNAL(triggered(QAction*)), SLOT(slot_seek(QAction*)));		
+	connect(ui.toolSeek, SIGNAL( toggled(bool) ), SLOT( slot_seek(bool) ) );
+
 	// create qGo Interface for board handling
 	qgoif = new qGoIF(this);
 
@@ -123,6 +125,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	//init the small board display
 	ui.displayBoard->init(19);
+	ui.displayBoard2->init(19);
 //	ui.displayBoard->setShowCoords(FALSE);
 
 	// connecting the Go server tab buttons and signals
@@ -168,6 +171,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_accname(QString&)), SLOT(slot_accname(QString&)));
 	connect(parser, SIGNAL(signal_addSeekCondition(const QString&,const QString&, const QString&, const QString&, const QString&)),this,
 			SLOT(slot_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_seekList(const QString&, const QString&)),this,SLOT(slot_seekList(const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_room(const QString&, bool)),SLOT(slot_room(const QString&, bool)));
 	connect(parser, SIGNAL(signal_game(Game*)), SLOT(slot_game(Game*)));
 //	connect(parser, SIGNAL(signal_gameFinished(Game*)), SLOT(slot_gameFinished(Game*)));
@@ -181,6 +185,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_matchRequest(const QString&, bool)), this, SLOT(slot_matchRequest(const QString&, bool)));
 	connect(parser, SIGNAL(signal_matchCanceled(const QString&)), this, SLOT(slot_matchCanceled(const QString&)));
 	connect(parser, SIGNAL(signal_refresh(int)),this, SLOT(slot_refresh(int)));
+	connect(parser, SIGNAL(signal_clearSeekCondition()),this,SLOT(slot_clearSeekCondition()));
+	connect(parser, SIGNAL(signal_cancelSeek()),this,SLOT(slot_cancelSeek()));
+	connect(parser, SIGNAL(signal_msgBox(const QString&)),this,SLOT(slot_msgBox(const QString&)));
 
 	// connects the parser signals to the interface (game moves, all board and games infos, ...)
 	connect(parser, SIGNAL(signal_move(GameInfo*)), qgoif, SLOT(slot_move(GameInfo*)));
@@ -194,6 +201,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_clearObservers(int)), qgoif, SLOT(slot_observers(int)));
 	connect(parser, SIGNAL(signal_enterScoreMode()), qgoif, SLOT(slot_enterScoreMode()));
 	connect(parser, SIGNAL(signal_removeStones( const QString&, const QString&)), qgoif, SLOT(slot_removeStones( const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_requestDialog(const QString&, const QString&, const QString&, const QString&)), 
+		qgoif, SLOT(slot_requestDialog(const QString&, const QString&, const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_undo(const QString&, const QString&, const QString&)), qgoif, SLOT(slot_undo(const QString&, const QString&, const QString&)));
 
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));
@@ -204,7 +214,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
 
-
+	//sound
+	connectSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/static.wav" );
+	gameSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/blip.wav" );
 }
 
 MainWindow::~MainWindow()
@@ -271,15 +283,15 @@ void MainWindow::initStatusBar()
 	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
 	QToolTip::add(statusChannel, tr("Current channels and users"));
 	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
-
+*/
 	// Online Time
 	statusOnlineTime = new QLabel(statusBar());
-	statusOnlineTime->setAlignment(Qt::AlignCenter | SingleLine);
+	statusOnlineTime->setAlignment(Qt::AlignCenter);
 	statusOnlineTime->setText(" 00:00 ");
-	statusBar()->addWidget(statusOnlineTime, 0, true);  // Permanent indicator
-	QToolTip::add(statusOnlineTime, tr("Online Time"));
-	QWhatsThis::add(statusOnlineTime, tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
-*/
+	statusBar()->addPermanentWidget(statusOnlineTime /*, 0, true*/);  // Permanent indicator
+	statusOnlineTime->setToolTip( tr("Online Time"));
+	statusOnlineTime->setWhatsThis( tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
+
 }
 
 
@@ -455,16 +467,17 @@ void MainWindow::slot_computerNewBoard()
 
 	gd->size = ui.newComputer_Size->text().toInt();
 	gd->handicap = ui.newComputer_Handicap->text().toInt();
-	gd->playerBlack = ui.newComputer_BlackPlayer->text();
-	gd->playerWhite = ui.newComputer_WhitePlayer->text();
+
 	gd->komi = ui.newComputer_Komi->text().toFloat();
 
-	bool imBlack = (ui.cb_ComputerBlackPlayer->currentIndex() != 0);
-	bool imWhite = (ui.cb_ComputerWhitePlayer->currentIndex() != 0);
+	bool imBlack = (ui.computerPlaysWhite->isChecked());//cb_ComputerBlackPlayer->currentIndex() != 0);
+	bool imWhite = (ui.computerPlaysBlack->isChecked());//cb_ComputerWhitePlayer->currentIndex() != 0);
+	gd->playerBlack = (imBlack ? "Human" : "Computer"); //ui.newComputer_BlackPlayer->text();
+	gd->playerWhite = (imWhite ? "Human" : "Computer"); //ui.newComputer_WhitePlayer->text();
 
-	if (imBlack && imWhite)
+	if (imBlack == imWhite)
 	{
-		QMessageBox::warning(this, PACKAGE, tr("** * Both players are Human ! ***"));
+		QMessageBox::warning(this, PACKAGE, tr("*** Both players are the same ! ***"));
 		return ;
 	}
 

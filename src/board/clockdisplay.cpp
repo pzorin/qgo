@@ -61,8 +61,13 @@ void ClockDisplay::setTimeStep(bool black, int secs)
 void ClockDisplay::updateTimers()
 {
 
-	QString bt = QTime::QTime(0,0).addSecs(b_time).toString("m:ss") ;
-	QString wt = QTime::QTime(0,0).addSecs(w_time).toString("m:ss") ;
+	QString bt = QTime::QTime(0,0).addSecs(abs(b_time)).toString("m:ss") ;
+	QString wt = QTime::QTime(0,0).addSecs(abs(w_time)).toString("m:ss") ;
+
+	if (b_time < 0)
+		bt.prepend("-");
+	if (w_time < 0)
+		wt.prepend("-");	
 
 	switch(timeSystem)
 	{

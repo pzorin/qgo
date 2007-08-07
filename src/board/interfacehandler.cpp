@@ -313,6 +313,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeNormal:
 //		modeButton->setEnabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
+		boardwindow->getUi().actionPlay->setEnabled(TRUE);
 		boardwindow->getUi().tabTools->removeTab(0) ;//setVisible(false);
 		boardwindow->getUi().scoreButton->setEnabled(TRUE);
 //		scoreButton->setText(QObject::tr("Score", "button label"));
@@ -332,9 +333,10 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 //		boardwindow->getUi().tabTools->removeTab(0) ;
+		boardwindow->getUi().actionPlay->setDisabled(TRUE);
 		boardwindow->getUi().tabTools->setVisible(FALSE) ;
 //		boardwindow->getUi().toolFrame->layout()->addItem(new QSpacerItem()) ;
-		boardwindow->getUi().scoreButton_2->setDisabled(TRUE);
+//		boardwindow->getUi().scoreButton_2->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
 		boardwindow->getUi().passButton_2->setDisabled(TRUE);
 //		boardwindow->getUi().undoButton->setDisabled(true);
@@ -356,6 +358,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeMatch : 
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().actionPlay->setDisabled(TRUE);
 		boardwindow->getUi().tabTools->removeTab(1) ;
 		boardwindow->getUi().scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
@@ -368,7 +371,6 @@ void InterfaceHandler::toggleMode(GameMode mode)
 		boardwindow->getUi().doneButton->setEnabled(false);
 		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
 		boardwindow->getUi().navButtonsFrame->setEnabled(false);
-		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		fileNew->setEnabled(false);
@@ -381,6 +383,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case   modeComputer :
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
+		boardwindow->getUi().actionPlay->setDisabled(TRUE);
 		boardwindow->getUi().tabTools->removeTab(1) ;
 		boardwindow->getUi().scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
@@ -405,6 +408,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeTeach:
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
+		boardwindow->getUi().actionPlay->setDisabled(TRUE);
 		boardwindow->getUi().tabTools->removeTab(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi().scoreButton->setDisabled(true);
@@ -430,6 +434,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeReview :
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
+		boardwindow->getUi().actionPlay->setDisabled(TRUE);
 		boardwindow->getUi().tabTools->removeTab(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi().scoreButton->setDisabled(true);

@@ -23,7 +23,7 @@ public:
 	~qGoIF();
 	void set_gsName(GSName n) { gsName = n; }
 	void set_myName(const QString &n) { myName = n; }
-	void createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite );
+	BoardWindow * createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite );
 
 	BoardWindow * getBoardWindow(int n)	{return (boardlist->contains(n) ? boardlist->value(n) : NULL) ;}
 	BoardWindow * getBoardWindow(QString &player);
@@ -54,23 +54,22 @@ public slots:
 	void slot_clearObservers(int);
 	void slot_enterScoreMode();
 	void slot_removeStones(const QString&, const QString&);
+	void slot_requestDialog(const QString&, const QString&, const QString&, const QString&);
+	void slot_undo(const QString&, const QString&, const QString&);
+	void slot_duplicateBoard(GameData *, const QString &, int);
 /*	void slot_move(Game*);
-	void slot_computer_game(QNewGameDlg*);
 	void slot_title(const QString&);
 	void slot_komi(const QString&, const QString&, bool);
 	void slot_freegame(bool);
 	void slot_matchcreate(const QString&, const QString&);
-	void slot_removestones(const QString&, const QString&);
-	void slot_undo(const QString&, const QString&);
+
 	
 	void slot_matchsettings(const QString&, const QString&, const QString&, assessType);
-	void slot_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void slot_timeAdded(int, bool);
 	//void slot_undoRequest(const QString &);
 
 //	void slot_closeevent(int) {};
 	void slot_closeevent();
-	void slot_sendcommand(const QString&, bool);
 	void set_observe(const QString&);
 
 protected:

@@ -38,11 +38,14 @@ public:
 	virtual bool getBlackTurn();
 	virtual void startGame() {}
 	virtual void set_move(StoneColor , QString , QString ) {}
-	virtual void set_statedMoveCount(int n) 	{stated_mv_count = n;}
+	virtual void set_statedMoveCount(int n) 	{ stated_mv_count = n;}
 	virtual void set_havegd(bool b) 		{ have_gameData = b; }
-	virtual bool modified()				{return isModified;}
-	virtual void setModified(bool b= true)		{isModified = b;}
-
+	virtual bool modified()				{ return isModified;}
+	virtual void setModified(bool b= true)		{ isModified = b;}
+	virtual bool getPlaySound()			{ return playSound;}
+	virtual void setPlaySound(bool b) 		{ playSound = b; }
+	virtual	void set_gsName(GSName g) 		{ gsName = g; }
+	
 	virtual void setResult(QString , QString ) {}
 	virtual void kibitzReceived(const QString& txt);
 	virtual void setTimerInfo(const QString&, const QString&, const QString&, const QString&) {}
@@ -169,23 +172,23 @@ protected:
 //	MainWindow  *win;
 //	qGo         *qgo;
 //	int         mv_counter;
-	int        stated_mv_count ;
-//	bool		    sound;
+	int	stated_mv_count ;
+	bool	playSound;
 //	int         bt_i, wt_i;
 //	QString     bt, wt;
 //	QString     b_stones, w_stones;
 //	QString     req_handicap;
-/*	QString     req_komi;
-	assessType  req_free;
-	bool		    requests_set;
+//	QString     req_komi;
+//	assessType  req_free;
+//	bool		    requests_set;
 	GSName      gsName;
-	QString     myName;
-  int         BY_timer;
+//	QString     myName;
+//	int         BY_timer;
 
-#ifdef SHOW_INTERNAL_TIME
-	int chk_b, chk_w;
-#endif
-*/
+//#ifdef SHOW_INTERNAL_TIME
+//	int chk_b, chk_w;
+//#endif
+
 	virtual void localMoveRequest(StoneColor c, int x, int y);
 	virtual void localMarkDeadRequest(int x, int y);
 	virtual void sendMoveToInterface(StoneColor c,int x, int y) =0;
@@ -298,7 +301,9 @@ public slots:
 	void slotSendComment();
 	void slotDonePressed();
 	void slotReviewPressed() {}
-	void slotUndoPressed() {}
+	void slotUndoPressed() ;
+	void slotResignPressed() ;
+	void slotAdjournPressed();
 
 signals:
 	void signal_sendCommandFromBoard(const QString&, bool);

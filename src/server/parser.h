@@ -45,6 +45,10 @@ signals:
 	void signal_game(Game*);
 	void signal_gameInfo(Game*);
 	void signal_observedGameClosed(int);
+	void signal_requestDialog(const QString&, const QString&, const QString&, const QString&);
+	void signal_undo(const QString&, const QString&, const QString&);
+	void signal_msgBox(const QString&);
+
 //	void signal_move(Game*);
 	void signal_move(GameInfo*);
 	void signal_message(QString);
@@ -68,8 +72,6 @@ signals:
 	void signal_komirequest(const QString&, int, int, bool);
 	void signal_opponentopen(const QString&);
 	void signal_score(const QString&, const QString&, bool, const QString&);
-	void signal_requestDialog(const QString&, const QString&, const QString&, const QString&);
-	void signal_undo(const QString&, const QString&);
 	void signal_addToObservationList(int);
 	void signal_shout(const QString&, const QString&);
 	void signal_timeAdded(int, bool);
@@ -77,7 +79,7 @@ signals:
 	void signal_addSeekCondition(const QString&, const QString&, const QString&, const QString&, const QString&);
 	void signal_clearSeekCondition();
 	void signal_cancelSeek();
-	void signal_SeekList(const QString&, const QString&);
+	void signal_seekList(const QString&, const QString&);
 	void signal_refresh(int);
 	void signal_dispute(const QString&, const QString&);
 	void signal_set_observe(const QString&);

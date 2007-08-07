@@ -16,6 +16,7 @@
 #include "qgo_interface.h"
 #include "talk.h"
 #include "gamedialog.h"
+#include "audio.h"
 
 #include <QtGui>
 
@@ -74,12 +75,13 @@ public slots:
 	void slot_talkTo(QString &, QString &);
 	void slot_removeDialog(GameDialog *);
 	void slot_matchCanceled(const QString&);
+	void slot_seek(QAction *);
+	void slot_seek(bool);
 
 	// parser slots
 	void slot_refresh(int i);
 	void slot_accname(QString &name);
 	void slot_svname(GSName &gs);
-	void slot_addSeekCondition(const QString& a, const QString& b, const QString& c, const QString& d, const QString& );
 	void slot_room(const QString& room, bool b);
 	void slot_game(Game* g);
 	void slot_player(Player *p, bool cmdplayers);
@@ -92,6 +94,10 @@ public slots:
 	void slot_playerConnected(Player*);
 	void slot_connexionClosed();
 	void slot_removeDialog(const QString &);
+	void slot_clearSeekCondition();
+	void slot_addSeekCondition(const QString& , const QString& , const QString& , const QString& , const QString& );
+	void slot_seekList(const QString& , const QString& );
+	void slot_msgBox(const QString&);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -105,8 +111,9 @@ private:
 	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
 	GameData * GameLoaded , * GameLoaded2 ;
 	qGoIF * qgoif;
+	Sound *connectSound, *gameSound;
 
-	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer;
+	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 	void initStatusBar();
 	void displayGame();
 
@@ -123,6 +130,7 @@ private:
 	//    else cmd is from history list
 	int	cmd_count;
 	bool	cmd_valid;
+
 	// telnet ready
 	bool	tn_ready;
 	bool	tn_wait_for_tn_ready;
@@ -136,6 +144,7 @@ private:
 	QMenu 		*seekMenu;
 	QList<Talk*>	talkList;
 	QList<GameDialog*> matchList;
+	int 	seekButtonTimer;
 
 	//players table
 	void showOpen(bool show);
@@ -143,6 +152,9 @@ private:
 	void setColumnsForExtUserInfo();
 	QString rkToKey(QString txt, bool integer=FALSE);
 	QString rkMax, rkMin;
+
+	// timing aids
+	void 		timerEvent(QTimerEvent*);
 };
 
 #endif

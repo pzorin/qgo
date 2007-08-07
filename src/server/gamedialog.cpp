@@ -263,7 +263,8 @@ void GameDialog::slot_notOpen(const QString &opponent, int motive)
 		ui.refusedLabel->setText(tr("%1 declined the match request").arg(opponent));
 	else if (motive == 2) 
 		ui.refusedLabel->setText(tr("%1 canceled the match request").arg(opponent));
-			
+	else if (motive == 3) 
+		ui.refusedLabel->setText(tr("%1 already playing a game").arg(opponent));		
 
 	qDebug("#### GameDialog::slot_notopen()");
 	if (opponent.isEmpty())
