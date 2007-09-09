@@ -811,7 +811,7 @@ InfoType Parser::put_line(const QString &txt)
 			// IGS: 9 Board is restored to what it was when you started scoring
 			else if (line.contains("what it was when you"))
 			{
-				emit signal_removeStones(0, 0);
+				emit signal_restoreScore();
 			}
 			// WING: 9 Use <adjourn> to adjourn, or <decline adjourn> to decline.
 			else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
@@ -2108,6 +2108,57 @@ InfoType Parser::put_line(const QString &txt)
 				}
 			}
 			break;
+
+		// IGS review protocol
+		// 56 CREATE 107
+		// 56 DATA 107
+		// 56 OWNER 107 eb5 3k
+		// 56 BOARDSIZE 107 19
+		// 56 OPEN 107 1
+		// 56 KIBITZ 107 1
+		// 56 KOMI 107 0.50
+		// 56 TITLE 107 yfh22-eb5(B) IGS
+		// 56 SGFNAME 107 yfh22-eb5-09-03-24
+		// 56 WHITENAME 107 yfh22
+		// 56 WHITERANK 107 1d?
+		// 56 BLACKNAME 107 eb5
+		// 56 BLACKRANK 107 3k
+		// 56 GAMERESULT 107 B+Resign
+		// 56 NODE 107 1 0 0 0
+		// 56 NODE 107 2 1 16 4
+		// 56 NODE 107 3 2 16 16
+		// 56 NODE 107 4 1 4 4
+		// 56 NODE 107 5 2 4 16
+		// 56 NODE 107 1 0 0 0
+		// 56 CONTROL 107 eb5
+		// 56 DATAEND 107
+		// 56 ERROR That user's client does not support review.
+		case 56:
+			if (line.contains("CREATE"))
+				aGame->nr = element(line, 1, " ");
+			if (line.contains("OWNER"))
+				aGame->player = element(line, 2, " ");
+			if (line.contains("BOARDSIZE"))
+				aGame->Sz = element(line, 2, " ");			
+			if (line.contains("KOMI"))
+				aGame->K = element(line, 2, " ");
+			if (line.contains("WHITENAME"))
+				aGame->wname = element(line, 2, " ");
+			if (line.contains("WHITERANK"))
+				aGame->wrank = element(line, 2, " ");
+			if (line.contains("BLACKNAME"))
+				aGame->bname = element(line, 2, " ");
+			if (line.contains("BLACKRANK"))
+				aGame->brank = element(line, 2, " ");
+			if (line.contains("GAMERESULT"))
+			{
+				aGame->res = element(line, 2, " ");
+				emit signal_gameReview(aGame);
+				break;
+			}
+
+			break;
+
 
 		// IGS : seek syntax, answer to 'seek config_list' command
 		// 63 CONFIG_LIST_START 4

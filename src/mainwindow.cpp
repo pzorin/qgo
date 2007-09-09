@@ -113,14 +113,14 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	ui.dirView_1->hideColumn(1);
 	ui.dirView_1->hideColumn(2);
-	ui.dirView_1->setColumnWidth(0,250); 
+	ui.dirView_1->setColumnWidth(0,300); 
 	ui.dirView_1->setCurrentIndex(model->index( QDir::homePath () ));
 
 	ui.dirView_2->setModel(model);
 
 	ui.dirView_2->hideColumn(1);
 	ui.dirView_2->hideColumn(2);
-	ui.dirView_2->setColumnWidth(0,250); 
+	ui.dirView_2->setColumnWidth(0,300); 
 	ui.dirView_2->setCurrentIndex(model->index( QDir::homePath () ));
 
 	//init the small board display
@@ -201,9 +201,12 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(parser, SIGNAL(signal_clearObservers(int)), qgoif, SLOT(slot_observers(int)));
 	connect(parser, SIGNAL(signal_enterScoreMode()), qgoif, SLOT(slot_enterScoreMode()));
 	connect(parser, SIGNAL(signal_removeStones( const QString&, const QString&)), qgoif, SLOT(slot_removeStones( const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_restoreScore()), qgoif, SLOT(slot_restoreScore()));
 	connect(parser, SIGNAL(signal_requestDialog(const QString&, const QString&, const QString&, const QString&)), 
 		qgoif, SLOT(slot_requestDialog(const QString&, const QString&, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_undo(const QString&, const QString&, const QString&)), qgoif, SLOT(slot_undo(const QString&, const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_gameReview(Game*)), qgoif, SLOT(slot_gameReview(Game*)));
+
 
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));
@@ -322,7 +325,7 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 	}
 	//qDebug( "Selected file : %s \n" ,model->filePath(topLeft).toLatin1().constData());
 
-	fileLoaded = model->filePath(topLeft).toLatin1().constData();
+	fileLoaded = model->filePath(topLeft);
 	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
 	
 	if (SGFloaded == NULL)

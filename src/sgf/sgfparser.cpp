@@ -233,7 +233,7 @@ bool SGFParser::parseString(const QString &toParse)
 
 QString SGFParser::loadFile(const QString &fileName)
 {
-	qDebug("Trying to load file <%s>", fileName.toLatin1().constData());
+	qDebug("Trying to load file <%s>", fileName.toUtf8().constData());
 	
 	QFile file(fileName);
 	

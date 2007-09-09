@@ -46,6 +46,7 @@ public:
 	Group* assembleGroup(MatrixStone *stone);
 	bool checkFalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
+	void updateDeadMarks(int &black, int &white);
 
 	static long coordsToKey(int x, int y)
 	{ return x * 100 + y; }

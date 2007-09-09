@@ -314,11 +314,11 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		modeButton->setEnabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
 		boardwindow->getUi().actionPlay->setEnabled(TRUE);
-		boardwindow->getUi().tabTools->removeTab(0) ;//setVisible(false);
+		boardwindow->getUi().tabTools->setCurrentIndex(0) ;//setVisible(false);
 		boardwindow->getUi().scoreButton->setEnabled(TRUE);
 //		scoreButton->setText(QObject::tr("Score", "button label"));
 		boardwindow->getUi().passButton_2->setEnabled(TRUE);
-		boardwindow->getUi().refreshButton_2->setDisabled(TRUE);
+//		boardwindow->getUi().refreshButton_2->setDisabled(TRUE);
 //		undoButton->setDisabled(true);
 //		resignButton->setDisabled(true);
 //		adjournButton->setDisabled(true);
@@ -342,8 +342,8 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		boardwindow->getUi().undoButton->setDisabled(true);
 //		boardwindow->getUi().resignButton->setDisabled(true);
 //		boardwindow->getUi().adjournButton->setDisabled(true);
-		boardwindow->getUi().refreshButton_2->setEnabled(TRUE);
-		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
+//		boardwindow->getUi().refreshButton_2->setEnabled(TRUE);
+//		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		editCut->setEnabled(false);
@@ -359,7 +359,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->removeTab(1) ;
+		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
 		boardwindow->getUi().scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
 		boardwindow->getUi().passButton->setEnabled(TRUE);
@@ -384,7 +384,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->removeTab(1) ;
+		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
 		boardwindow->getUi().scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
 		boardwindow->getUi().passButton->setEnabled(TRUE);
@@ -409,7 +409,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
 		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->removeTab(1) ;
+		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi().scoreButton->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
@@ -435,7 +435,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
 		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->removeTab(1) ;
+		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi().scoreButton->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
@@ -460,7 +460,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	}
 }
 
-
+/*
 void InterfaceHandler::toggleToolbarButtons(bool state)
 {
 //    CHECK_PTR(buttonState);
@@ -488,7 +488,7 @@ void InterfaceHandler::toggleToolbarButtons(bool state)
 	
 //    buttonState->navLast = navLast->isEnabled();
 	boardwindow->getUi().navLast->setEnabled(state);
-/*	
+	
     buttonState->navNextBranch = navNextBranch->isEnabled();
     navNextBranch->setEnabled(false);
 	
@@ -517,9 +517,9 @@ void InterfaceHandler::toggleToolbarButtons(bool state)
     fileImportASCII->setEnabled(false);
     fileImportASCIIClipB->setEnabled(false);
     fileImportSgfClipB->setEnabled(false);
-*/
-}
 
+}
+*/
 
 /*
  * displays the remaining time for playing
@@ -543,4 +543,16 @@ void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, co
 	}
 }
 
-
+/*
+ * displays the score in the score layout
+ */
+void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float komi)
+{
+	boardwindow->getUi().komiScore->setText(QString::number(komi));
+	boardwindow->getUi().terrWhite->setText(QString::number(terrW));
+	boardwindow->getUi().capturesWhiteScore->setText(QString::number(capW));
+	boardwindow->getUi().totalWhite->setText(QString::number((float)terrW + (float)capW + komi));
+	boardwindow->getUi().terrBlack->setText(QString::number(terrB));
+	boardwindow->getUi().capturesBlackScore->setText(QString::number(capB));
+	boardwindow->getUi().totalBlack->setText(QString::number(terrB + capB));
+}

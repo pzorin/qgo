@@ -609,7 +609,8 @@ void Matrix::checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, i
 Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group) 
 {
 	// Are we into the board, and is the tentative stone present in the matrix ?
-	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (at(x - 1, y - 1) != color))
+//	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (at(x - 1, y - 1) != color))
+	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (getStoneAt(x, y ) != color))
 		return group;
 
 	MatrixStone *tmp= new MatrixStone ;

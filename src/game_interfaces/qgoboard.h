@@ -291,16 +291,17 @@ public:
 	~qGoBoardMatchInterface() {}
 
 	bool init();
-	void setModified(bool)	{} //we don't modify an observed game
+	void setModified(bool)	{} //we don't modify a match game
 	void setResult(QString res, QString xt_res);
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	void set_move(StoneColor sc, QString pt, QString mv_nr);
+	void enterScoreMode();
 
 public slots:
 	void slotUpdateComment() {}
 	void slotSendComment();
 	void slotDonePressed();
-	void slotReviewPressed() {}
+	void slotReviewPressed();
 	void slotUndoPressed() ;
 	void slotResignPressed() ;
 	void slotAdjournPressed();
@@ -314,6 +315,39 @@ private:
 	void leaveScoreMode() {}
 	void localMoveRequest(StoneColor c, int x, int y);
 	void localMarkDeadRequest(int x, int y);
+	QString game_Id;
+
+};
+
+
+
+class qGoBoardReviewInterface : public qGoBoard 
+{
+	Q_OBJECT
+
+public:
+	qGoBoardReviewInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
+	~qGoBoardReviewInterface() {}
+
+	bool init();
+//	void setModified(bool)	{} //we don't modify an  game
+//	void setResult(QString res, QString xt_res);
+//	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
+	void set_move(StoneColor sc, QString pt, QString mv_nr);
+
+public slots:
+	void slotUpdateComment() {}
+	void slotSendComment();
+//	void slotDonePressed();
+	void slotUndoPressed() ;
+
+signals:
+	void signal_sendCommandFromBoard(const QString&, bool);
+
+private:
+	void sendMoveToInterface(StoneColor c,int x, int y );
+	void sendPassToInterface(StoneColor c);
+	void localMoveRequest(StoneColor c, int x, int y);
 	QString game_Id;
 
 };

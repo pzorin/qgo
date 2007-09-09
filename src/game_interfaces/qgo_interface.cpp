@@ -101,7 +101,6 @@ void qGoIF::slot_boardClosed(int n)
 }
 
 
-
 /*
  * a game information (move or time info) has been received and is sent by parser
  */
@@ -190,20 +189,12 @@ void qGoIF::slot_move(GameInfo* gi)
 	}
 }
 
-
-
 /*
- * a game info has been received from parser (games list format)
- * This happens when observing a game, when 'games ##' command is issued
+ * transform the game informations sent by a parsers signal into usable GameData class
  */
-void qGoIF::slot_gameInfo(Game *g)
+GameData *qGoIF::makeGameData( Game *g)
 {
-	BoardWindow *bw = getBoardWindow(g->nr.toInt());
-
-	if (!bw)
-		return;
-
- 	GameData *gd = new GameData();
+	GameData *gd = new GameData();
 
 	gd->playerBlack = g->bname;
 	gd->playerWhite = g->wname;
@@ -266,6 +257,23 @@ void qGoIF::slot_gameInfo(Game *g)
 	}
 
 	gd->date = QDate::currentDate().toString("dd MM yyyy") ;
+
+	return gd;
+}
+
+
+/*
+ * a game info has been received from parser (games list format)
+ * This happens when observing a game, when 'games ##' command is issued
+ */
+void qGoIF::slot_gameInfo(Game *g)
+{
+	BoardWindow *bw = getBoardWindow(g->nr.toInt());
+
+	if (!bw)
+		return;
+
+ 	GameData *gd = makeGameData(g);
 	
 //	setMode();
 //	initGame();
@@ -290,6 +298,17 @@ void qGoIF::slot_gameInfo(Game *g)
 	bw->qgoboard->set_statedMoveCount(g->mv.toInt());
 }
 
+/*
+ * a game info has been received from parser for review starting
+ */
+void qGoIF::slot_gameReview(Game *g)
+{
+	GameData *gd = makeGameData(g);
+
+	bool owner = (g->player == myName);
+
+	createGame(modeReview , gd, owner, owner);
+}
 
 /*
 // handle move info and distribute to different boards
@@ -1252,6 +1271,37 @@ void qGoIF::slot_sendCommandFromInterface(const QString &text, bool show)
 }
 
 
+
+/*
+ * signal sent by the parser for restoring the score phase
+ * this happens on IGS after an 'undo' was performed during score phase
+ */
+void qGoIF::slot_restoreScore()
+{
+	bool found  = FALSE;
+	BoardWindow * qb = NULL; 
+
+	QHashIterator<int, BoardWindow*> i(*boardlist);
+	while (i.hasNext() && !found) 
+	{
+		i.next();
+		qb = i.value();
+		found = ((qb->getGameMode() == modeMatch) && (qb->getGamePhase() == phaseScore));
+	}
+
+	if (!qb)
+	{
+		qDebug("Score undo : board not found !!");
+		return;
+	}
+
+	qb->getBoardHandler()->exitScore();
+
+}
+
+
+
+
 /*
  * a stone has been sent by the parser for removal
  */
@@ -1492,9 +1542,9 @@ void qGoIF::slot_enterScoreMode()
 
 	bw->qgoboard->enterScoreMode();
 	//FIXME This is dirty and should not be here
-	bw->getUi().doneButton->setEnabled(true);
+//	bw->getUi().doneButton->setEnabled(true);
 
-	bw->qgoboard->kibitzReceived(tr("SCORE MODE: click on a stone to mark as dead..."));
+//	bw->qgoboard->kibitzReceived(tr("SCORE MODE: click on a stone to mark as dead..."));
 
 }
 

@@ -89,7 +89,7 @@ void qGoBoardMatchInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
 
 	int mv_nr_int;
 	int mv_counter = tree->getCurrent()->getMoveNumber();
-	bool hcp_move = tree->getCurrent()->isHandicapMove();
+//	bool hcp_move = tree->getCurrent()->isHandicapMove();
 //	// IGS: case undo with 'mark': no following command
 //	// -> from qgoIF::slot_undo(): set_move(stoneNone, 0, 0)
 	if (mv_nr.isEmpty())
@@ -372,6 +372,27 @@ void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &b
 }
 
 
+
+/*
+ * initialises the scoring phase in match mode
+ */
+void qGoBoardMatchInterface::enterScoreMode()
+{
+//	boardwindow->setGamePhase ( phaseScore );
+//	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
+//	boardwindow->getBoardHandler()->updateCursor();
+//	boardwindow->getBoardHandler()->countScore();
+
+	qGoBoard::enterScoreMode();
+
+	boardwindow->getUi().doneButton->setEnabled(true);
+
+	kibitzReceived(tr("SCORE MODE: click on a stone to mark as dead..."));
+}
+
+
+
+
 /*
  * Comment line - return sent
  */
@@ -401,6 +422,16 @@ void qGoBoardMatchInterface::slotResignPressed()
 {
 	emit signal_sendCommandFromBoard("resign", FALSE); 
 }
+
+/*
+ * 'resign button pressed
+ */
+void qGoBoardMatchInterface::slotReviewPressed()
+{
+	emit signal_sendCommandFromBoard("review create_prevgame", FALSE); 
+}
+
+
 
 /*
  * 'resign button pressed

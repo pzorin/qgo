@@ -21,6 +21,7 @@ public:
 	int type() const { return RTTI_STONE; }
 	int posX() const { return myX; }
 	int posY() const { return myY; }
+	QGraphicsSimpleTextItem * getNum() {return moveNum;}
 	void setCoord(int x, int y) { myX = x; myY = y; }
 	void togglePixmap(QList<QPixmap> *a, bool showShadow = TRUE);
 
@@ -35,13 +36,15 @@ public:
 	
 	bool checked;
 	
-	QGraphicsPixmapItem *shadow;
+
 	
 private:
 	StoneColor color;
 	int myX, myY;
 	bool dead, seki;
 	QList<QPixmap> *pixmapList;
+	QGraphicsSimpleTextItem *moveNum;
+	QGraphicsPixmapItem *shadow;
 };
 
 #endif

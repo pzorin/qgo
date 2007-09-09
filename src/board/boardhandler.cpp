@@ -528,7 +528,7 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 		board->removeDeadMarks();
 //		markedDead = false;
 //	}
-	
+	updateAll(m->getMatrix());
 //	if (m->getGameMode() == modeNormal || m->getGameMode() == modeObserve )  //SL add eb 8
 		// If the node is in normal mode, show the circle to mark the last move
 		    board->updateLastMove(m->getColor(), m->getX(), m->getY());
@@ -552,7 +552,7 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 	
 	// Synchronize the board with the current nodes matrix, provided we want to 
 //  if (!ignore_update)                //SL added eb 9 - this if we are browsing an observing game and an undo incomes
- 	updateAll(m->getMatrix()); //FIXME this should probably be above in the code
+// 	updateAll(m->getMatrix()); //FIXME this should probably be above in the code
 	
 	// Display captures or score in the GUI
 //	if (m->isScored())  // This move has been scored
@@ -779,15 +779,15 @@ void BoardHandler::countScore()
 	// capturesWhite -= caps_white;
 	capturesBlack = tree->getCurrent()->getCapturesBlack();
 	capturesWhite = tree->getCurrent()->getCapturesWhite();
-//	caps_black = 0;
-//	caps_white = 0;
+	caps_black = 0;
+	caps_white = 0;
 	tree->getCurrent()->setScored(true);
 
 	// Copy the current matrix
 	Matrix *m = new Matrix(*(tree->getCurrent()->getMatrix()));
 	Q_CHECK_PTR(m);
 
-//	m->debug();
+	m->debug();
 	// Do some cleanups, we only need stones
 	//m->absMatrix();
 	m->clearAllMarks();
@@ -802,6 +802,20 @@ void BoardHandler::countScore()
 				else if (stoneHandler->getStoneAt(i+1, j+1)->isSeki())
 					m->set(i, j, m->at(i, j) * MARK_SEKI);
 */				
+
+	for (i=0; i< boardSize; i++)
+		for (j=0; j< boardSize; j++)
+		{
+			// we increase the temporary counter for dead stones removed at score phase
+			if (m->at(i, j) <= 0)
+			{
+				if (m->getStoneAt(i +1,j+1) == stoneBlack)
+					caps_white++;
+				else if (m->getStoneAt(i+1,j+1) == stoneWhite)
+					caps_black++;
+			}
+		}
+
 	int terrWhite = 0, terrBlack = 0;
 
 	while (m != NULL)
@@ -889,10 +903,10 @@ void BoardHandler::countScore()
 //	board->updateCanvas();
 	
 	// Update Interface
-/*	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack + caps_black,
-		terrWhite, capturesWhite+ caps_white,
+	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack  + caps_black,
+		terrWhite, capturesWhite + caps_white ,
 		boardwindow->getGameData()->komi);
-*/	
+	
 	delete m;
 }
 
@@ -910,7 +924,7 @@ void BoardHandler::exitScore()
 	}
 	
 	// Unshade dead stones
-//	board->removeDeadMarks();
+	board->removeDeadMarks();
 	markedDead = false;
 	
 	updateMove(tree->getCurrent());

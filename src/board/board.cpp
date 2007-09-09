@@ -947,7 +947,7 @@ void Board::removeDeadMarks()
 
 }
 
-
+/*
 void Board::updateDeadMarks(int &black, int &white)
 {
 //	QIntDictIterator<Stone> it(*stones);
@@ -970,7 +970,7 @@ void Board::updateDeadMarks(int &black, int &white)
 //		++it;
 	}
 }
-
+*/
 
 /*
  * Sets a text in 'text' mark at positon 'x,y'.

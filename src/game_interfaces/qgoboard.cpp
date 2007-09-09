@@ -317,7 +317,6 @@ void qGoBoard::localPassRequest()
 void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 {
 	if (doMove(c,x,y))
-		// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
 	{
 		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 		sendMoveToInterface(c,x,y);
@@ -441,6 +440,7 @@ bool qGoBoard::getBlackTurn()
 void qGoBoard::enterScoreMode()
 {
 	boardwindow->setGamePhase ( phaseScore );
+	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
 	boardwindow->getBoardHandler()->updateCursor();
 	boardwindow->getBoardHandler()->countScore();
 }
@@ -687,6 +687,7 @@ bool qGoBoardNormalInterface::init()
  */
 void qGoBoardNormalInterface::leaveScoreMode()
 {
+	boardwindow->getUi().tabDisplay->setCurrentIndex(0);
 	boardwindow->setGamePhase ( phaseOngoing );
 	boardwindow->getBoardHandler()->exitScore();
 }

@@ -66,6 +66,8 @@ public:
 	StoneColor getPLnextMove() { return PLnextMove; }
 	void setHandicapMove(bool b)		{ handicapMove = b; }
 	bool isHandicapMove()			{return handicapMove ;}
+	void setNodeIndex(int i)		{nodeIndex = i;}
+	int getNodeIndex()			{return nodeIndex;}
 	
 	Move *brother, *son, *parent, *marker;
 	bool checked;
@@ -80,7 +82,7 @@ public:
 
 private:
 	StoneColor stoneColor, PLnextMove;
-	int x, y, moveNum, capturesBlack, capturesWhite, openMoves;
+	int x, y, moveNum, capturesBlack, capturesWhite, openMoves , nodeIndex;
 	float scoreBlack, scoreWhite;
 	float timeLeft;
 	Matrix *matrix;

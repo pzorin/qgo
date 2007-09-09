@@ -54,9 +54,11 @@ public slots:
 	void slot_clearObservers(int);
 	void slot_enterScoreMode();
 	void slot_removeStones(const QString&, const QString&);
+	void slot_restoreScore();
 	void slot_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void slot_undo(const QString&, const QString&, const QString&);
 	void slot_duplicateBoard(GameData *, const QString &, int);
+	void slot_gameReview(Game *);
 /*	void slot_move(Game*);
 	void slot_title(const QString&);
 	void slot_komi(const QString&, const QString&, bool);
@@ -84,6 +86,7 @@ private:
 	QHash<int, BoardWindow*> *boardlist;
 	GSName   gsName;
 	int      localBoardCounter;
+	GameData * makeGameData(Game*);
 //	int      lockObserveCmd;
 };
 

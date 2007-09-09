@@ -69,8 +69,8 @@ bool IGSConnection::checkPrompt()
 			{
 				qsocket->waitForReadyRead(500);
 				b = qsocket->bytesAvailable();
-				if (!b)
-					return false;
+//				if (!b)
+//					return false;
 			}
 			char * c = new char[b +1];
 			qsocket->read(c, b);

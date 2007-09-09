@@ -75,7 +75,8 @@ SOURCES += main.cpp \
            talk.cpp \
            server/gamedialog.cpp \
            game_interfaces/qgoboard_match.cpp \
-           displayboard.cpp
+           displayboard.cpp \
+           game_interfaces/qgoboard_review.cpp
 QT -= qt3support
 DEPENDPATH += "board sgf game_tree game_interfaces gtp"
 INCLUDEPATH += server \

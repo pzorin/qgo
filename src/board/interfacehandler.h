@@ -29,8 +29,9 @@ public:
 	void setSliderMax(int n);
 	void setCaptures(float black, float white);
 	void clearComment();
-	void toggleToolbarButtons(bool state);
+//	void toggleToolbarButtons(bool state);
 	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
+	void setScore(int terrB, int capB, int terrW, int capW, float komi=0);
 /*	void setTimes(bool, float, int);
 	QString getComment();
 	QString getComment2();
@@ -40,7 +41,7 @@ public:
 	void toggleMarks();
 	const QString getStatusMarkText(MarkType t);
 	void restoreToolbarButtons();
-	void setScore(int terrB, int capB, int terrW, int capW, float komi=0);
+
 	void setClipboard(bool b);
 	
 

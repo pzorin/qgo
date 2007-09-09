@@ -273,11 +273,12 @@ void MainWindow::slot_textReceived(const QString &txt)
 					sendcommand("toggle newrating", true);
 					set_sessionparameter("nmatch",true);
 
-					//temporaary settings to prevent use of Koryo BY on IGS (as opposed to canadian)
+					//TODO temporary settings to prevent use of Koryo BY on IGS (as opposed to canadian)
 					sendcommand("nmatchrange BWN 0-9 2-19 60-60 60-3600 25-25 0 0 0-0",false);
 //					send_nmatch_range_parameters();
 //					}
 					sendcommand("toggle newundo",true);
+//					sendcommand("toggle review",true);
 					sendcommand("toggle seek",true);
 					sendcommand("seek config_list ",true);
 					sendcommand("room",true);

@@ -48,6 +48,7 @@ signals:
 	void signal_requestDialog(const QString&, const QString&, const QString&, const QString&);
 	void signal_undo(const QString&, const QString&, const QString&);
 	void signal_msgBox(const QString&);
+	void  signal_gameReview(Game*);
 
 //	void signal_move(Game*);
 	void signal_move(GameInfo*);
@@ -83,6 +84,7 @@ signals:
 	void signal_refresh(int);
 	void signal_dispute(const QString&, const QString&);
 	void signal_set_observe(const QString&);
+	void signal_restoreScore();
 	//void signal_undoRequest(const QString&);
 
 

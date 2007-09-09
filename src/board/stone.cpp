@@ -20,8 +20,6 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 
 	// We use a trick here with the count of the pixmap list
 	// because the alternate ghosts list has only 2 images
-
-	
 	if (pixmapList->count() <= 2)
 		setPixmap(pixmapList->at( color == stoneBlack ? 0 : 1));
 	else	
@@ -29,12 +27,18 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 
 	shadow = NULL;
 	
-	if (has_shadow) {
+	if (has_shadow) 
+	{
 		shadow = new QGraphicsPixmapItem(0, canvas);
 		shadow->setPixmap(pixmapList->last());
 		shadow->setZValue(4);
 	}
 	
+//	moveNum = new QGraphicsSimpleTextItem("x",this);
+//	QColor col = ( color == stoneBlack ? Qt::white : Qt::black);
+//	moveNum->setPen(QPen(( color == stoneBlack ? Qt::white : Qt::black), 1));
+//	moveNum->setFont(QFont("",pixmap().width()/2));
+//	moveNum->font().setPointSize(pixmap().width()/2);
 //	setOffset(QPoint::QPoint(-pixmap().width ()/2,-pixmap().height()/2));
 
 	setZValue(5);
@@ -61,6 +65,13 @@ void Stone::setColor(StoneColor c)
 	
 	if (shadow)
 		shadow->setPixmap(pixmapList->last());
+
+	int w= pixmap().width();
+
+//	QFont f("",w);
+//	QString xx = moveNum->text();
+//	if (num)
+//		num->font().setPointSize(12);
 }
 
 /*

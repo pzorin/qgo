@@ -1436,7 +1436,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="2" colspan="5" >
+             <item row="1" column="3" colspan="4" >
               <widget class="QLineEdit" name="File_BlackPlayer" >
                <property name="text" >
                 <string>Black</string>
@@ -1493,12 +1493,18 @@
              </item>
              <item row="4" column="5" >
               <widget class="QLineEdit" name="File_Size" >
+               <property name="minimumSize" >
+                <size>
+                 <width>20</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="text" >
                 <string>19</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="2" colspan="5" >
+             <item row="0" column="3" colspan="4" >
               <widget class="QLineEdit" name="File_WhitePlayer" >
                <property name="text" >
                 <string>White</string>
@@ -1532,7 +1538,7 @@
             <widget class="QTreeView" name="dirView_1" >
              <property name="minimumSize" >
               <size>
-               <width>400</width>
+               <width>450</width>
                <height>350</height>
               </size>
              </property>
@@ -1900,7 +1906,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
             <widget class="QTreeView" name="dirView_2" >
              <property name="minimumSize" >
               <size>
-               <width>400</width>
+               <width>450</width>
                <height>100</height>
               </size>
              </property>

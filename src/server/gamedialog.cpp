@@ -330,9 +330,9 @@ void GameDialog::slot_dispute(const QString &opponent, const QString &line)
 	{
 //		val = element(line,1," ");
 		val = line.section(" ",1,1);
-		if (ui.handicapSpin->value() != val.toInt())
+		if (ui.handicapSpin->text().toInt() != val.toInt())
 		{
-			ui.handicapSpin->setValue(val.toInt());
+			ui.handicapSpin->setValue((val.toInt() == 0 ? 1 : val.toInt()));
 //			ui.handicapSpin->setPaletteBackgroundColor(QColor::QColor("cyan"));
 			ui.handicapSpin->setPalette(p);
 		}
