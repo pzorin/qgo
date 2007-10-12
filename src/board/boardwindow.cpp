@@ -267,7 +267,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 		{
 //			editButtons->button (m)->setChecked( FALSE );
 			gamePhase = phaseOngoing;
-			boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneBlack : stoneWhite);
+			boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
 			editButtons->button (7)->setDisabled( FALSE );
 		}
 		else

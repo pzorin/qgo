@@ -99,13 +99,13 @@ bool QAlsaSound::initialise()
 
 	ptr += 4 ;	/* Move past "fmt ".*/
 	memcpy (&waveformat, ptr, sizeof (WAVEFORMAT)) ;
-	waveformat.dwSize = SwapLE32(waveformat.dwSize);
-	waveformat.wFormatTag = SwapLE16(waveformat.wFormatTag) ;
-	waveformat.wChannels = SwapLE16(waveformat.wChannels) ;
-	waveformat.dwSamplesPerSec = SwapLE32(waveformat.dwSamplesPerSec) ;
-	waveformat.dwAvgBytesPerSec = SwapLE32(waveformat.dwAvgBytesPerSec) ;
-	waveformat.wBlockAlign = SwapLE16(waveformat.wBlockAlign) ;
-	waveformat.wBitsPerSample = SwapLE16(waveformat.wBitsPerSample) ;
+//	waveformat.dwSize = SwapLE32(waveformat.dwSize);
+//	waveformat.wFormatTag = SwapLE16(waveformat.wFormatTag) ;
+//	waveformat.wChannels = SwapLE16(waveformat.wChannels) ;
+//	waveformat.dwSamplesPerSec = SwapLE32(waveformat.dwSamplesPerSec) ;
+//	waveformat.dwAvgBytesPerSec = SwapLE32(waveformat.dwAvgBytesPerSec) ;
+//	waveformat.wBlockAlign = SwapLE16(waveformat.wBlockAlign) ;
+//	waveformat.wBitsPerSample = SwapLE16(waveformat.wBitsPerSample) ;
 
 	
 	ptr = findchunk (buffer, "data", BUFFERSIZE) ;
@@ -120,6 +120,12 @@ bool QAlsaSound::initialise()
 
 	samples    = databytes / waveformat.wBlockAlign ;
 	datastart  = ((u_long) (ptr + 4)) - ((u_long) (&(buffer[0]))) ;
+
+//	qDebug("%s - format :%d, %i Hz, %i channels,  \n %i bps, %i dwSize, %i tag, %i blockAlign \n",
+//		Path.toLatin1().constData(),waveformat.wBitsPerSample, waveformat.dwSamplesPerSec, waveformat.wChannels,
+//		waveformat.dwAvgBytesPerSec,  waveformat.dwSize, waveformat.wFormatTag, waveformat.wBlockAlign);
+
+
 
 	switch (waveformat.wBitsPerSample)
 	{
@@ -138,8 +144,9 @@ bool QAlsaSound::initialise()
 			break;
 	}
 
-	//fprintf(stdout,"%s - format :%d, %i Hz, %i channels \n",Path.latin1(),waveformat.wBitsPerSample, waveformat.dwSamplesPerSec, waveformat.wChannels);
 
+//	fprintf(stdout,
+	
 	/*
 	 *	ALSA pain
 	 */
@@ -227,6 +234,8 @@ void QAlsaSound::play()
 	 * start playback
 	 */ 
 
+//	snd_pcm_drop(handle);
+
 	err=lseek(fd,datastart,SEEK_SET);
 
 	//int written;
@@ -236,21 +245,21 @@ void QAlsaSound::play()
         while ((count = read (fd, buffer2,buffer_size))) 
 	{
 		f=count*8/bits_per_frame;
-		while ((frames = snd_pcm_writei(handle, buffer2, f)) < 0) 
-        		snd_pcm_prepare(handle);
-/*		written=0;
+//		while ((frames = snd_pcm_writei(handle, buffer2, f)) < 0) 
+  //      		snd_pcm_prepare(handle);
+		int written=0;
 		while (f > 0) {
 
 			frames = snd_pcm_writei(handle, buffer2+written, f);
                 	if (frames == -EAGAIN || (frames >= 0 && frames < f)) 
-				snd_pcm_wait(handle, 1000);
+				snd_pcm_wait(handle, 100);
 			else if (frames < 0)//{
 				frames = snd_pcm_recover(handle, frames, 0);
 				//snd_pcm_prepare(handle);//}
-			if (frames < 0) {
-				printf("snd_pcm_writei failed: %s\n", snd_strerror(err));
-				break;
-			}
+//			if (frames < 0) {
+//				printf("snd_pcm_writei failed: %s\n", snd_strerror(err));
+				//break;
+//			}
 
 			if (frames > 0)
 			{
@@ -258,7 +267,7 @@ void QAlsaSound::play()
 				written += frames * bits_per_frame / 8;
 			}	
 		}
-	*/
+	
         }
 	snd_pcm_drain(handle);
 }

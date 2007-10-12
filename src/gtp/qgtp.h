@@ -39,7 +39,7 @@ signals:
 
 public slots:
 	void slot_readFromStdout();
-	void slot_processExited();
+	void slot_processExited(int , QProcess::ExitStatus );
 
 public:
 	QGtp();
@@ -200,9 +200,10 @@ public:
 	QString buff, _response;
 
 	int waitResponse();
-	int waitResponseOld();
+//	int waitResponseOld();
 
-	bool responseReceived;
+	bool responseReceived,issueCmdNb ;
+	
 };
 
 

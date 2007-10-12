@@ -1704,6 +1704,7 @@ void qGoIF::slot_undo(const QString &nr, const QString &player, const QString &m
 //		// only the last '0' is necessary
 //		qb->set_move(stoneNone, 0, 0);
 		bw->qgoboard->deleteNode();
+		bw->qgoboard->kibitzReceived("The last move was undone");
 		return;
 	}
 

@@ -165,7 +165,11 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect( ui.whoBox1,  SIGNAL(  currentIndexChanged ( int )), this, SLOT(slot_setRankSpread()));
 	connect( ui.whoBox2,  SIGNAL(  currentIndexChanged ( int )), this, SLOT(slot_setRankSpread()));
 
-	
+	connect(ui.cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
+	connect(ui.cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
+	connect(ui.stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
+
+
 	// connects the parser signals to the main window (lists, rooms, ...)
 	connect(parser, SIGNAL(signal_svname(GSName&)), SLOT(slot_svname(GSName&)));
 	connect(parser, SIGNAL(signal_accname(QString&)), SLOT(slot_accname(QString&)));
@@ -220,6 +224,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	//sound
 	connectSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/static.wav" );
 	gameSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/blip.wav" );
+
 }
 
 MainWindow::~MainWindow()

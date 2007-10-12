@@ -23,6 +23,7 @@
 #define CLOCK_H
 
 #include "boardwindow.h"
+#include "audio.h"
 
 class ClockDisplay : public QObject
 {
@@ -35,6 +36,7 @@ public:
 	void setTimeStep( bool black, int sec = -1);
 	void setTimeInfo(int btime, int bstones, int bperiods, int wtime, int wstones, int wperiods);
 	void updateTimers();
+	void warning(bool black);
 	
 private :
 	BoardWindow *boardwindow;
@@ -44,6 +46,9 @@ private :
 	int w_periods, b_periods;
 	
 	QPushButton *pb_timeBlack, * pb_timeWhite;
+	Sound *warningSound;
+	int warningSecs;
+	bool playWarningSound;
 };
 
 #endif

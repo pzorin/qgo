@@ -2172,47 +2172,6 @@ When in score mode, left click to mark a group as dead, right click to mark it a
             <number>9</number>
            </property>
            <item>
-            <widget class="QLabel" name="fontLabel_standard" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize" >
-              <size>
-               <width>50</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize" >
-              <size>
-               <width>90</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="toolTip" >
-              <string>Current font</string>
-             </property>
-             <property name="text" >
-              <string>font size</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="spinBox" >
-             <property name="minimum" >
-              <number>6</number>
-             </property>
-             <property name="maximum" >
-              <number>24</number>
-             </property>
-             <property name="value" >
-              <number>12</number>
-             </property>
-            </widget>
-           </item>
-           <item>
             <spacer>
              <property name="orientation" >
               <enum>Qt::Horizontal</enum>
@@ -2440,23 +2399,16 @@ Delay between the moves in autoplay mode in seconds.</string>
             </widget>
            </item>
            <item row="1" column="1" >
-            <widget class="QLineEdit" name="lineEdit_16" />
+            <widget class="QLineEdit" name="LineEdit_Table" />
            </item>
            <item row="0" column="1" >
-            <widget class="QLineEdit" name="lineEdit_15" />
+            <widget class="QLineEdit" name="LineEdit_goban" />
            </item>
           </layout>
          </widget>
         </item>
-        <item row="4" column="3" >
-         <widget class="QPushButton" name="pushButton" >
-          <property name="text" >
-           <string>Apply</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="2" >
-         <widget class="QPushButton" name="pushButton_2" >
+         <widget class="QPushButton" name="cancelButtonPrefs" >
           <property name="text" >
            <string>Cancel</string>
           </property>
@@ -2466,61 +2418,55 @@ Delay between the moves in autoplay mode in seconds.</string>
       </widget>
       <widget class="QWidget" name="page_2" >
        <layout class="QGridLayout" >
-        <property name="leftMargin" >
-         <number>9</number>
-        </property>
-        <property name="topMargin" >
-         <number>9</number>
-        </property>
-        <property name="rightMargin" >
-         <number>9</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>9</number>
-        </property>
-        <property name="horizontalSpacing" >
-         <number>6</number>
-        </property>
-        <property name="verticalSpacing" >
-         <number>6</number>
-        </property>
-        <item row="8" column="0" colspan="4" >
-         <widget class="QGroupBox" name="groupBox_15" >
-          <property name="title" >
-           <string>Autosave</string>
+        <item row="0" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
           </property>
-          <layout class="QHBoxLayout" >
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <property name="leftMargin" >
-            <number>9</number>
-           </property>
-           <property name="topMargin" >
-            <number>9</number>
-           </property>
-           <property name="rightMargin" >
-            <number>9</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>9</number>
-           </property>
-           <item>
-            <widget class="QCheckBox" name="checkBox" >
-             <property name="text" >
-              <string>Observed games</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_4" >
-             <property name="text" >
-              <string>Played games</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel1_title_4" >
+            <property name="minimumSize" >
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Title:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LineEdit_title" >
+            <property name="toolTip" >
+             <string>title, e.g.: guest account at NNGS</string>
+            </property>
+            <property name="whatsThis" >
+             <string>unique title, e.g.:
+
+guest account at NNGS
+qGo1234 (IGS)
+xyz
+
+The title field is used to chose a server connection.
+
+Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item rowspan="6" row="0" column="1" colspan="3" >
          <widget class="QTreeWidget" name="ListView_hosts" >
@@ -2569,6 +2515,177 @@ Delay between the moves in autoplay mode in seconds.</string>
           </column>
          </widget>
         </item>
+        <item row="1" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel3_5" >
+            <property name="minimumSize" >
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Name:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LineEdit_login" >
+            <property name="toolTip" >
+             <string>use your login name; if unregistered use a unique name like 'hotdog17' (NNGS, CWS) or guest (other servers)</string>
+            </property>
+            <property name="whatsThis" >
+             <string>name
+
+Registered users: 
+use your login name and password provided by the go server operator after registration
+
+New users: depends on server
+NNGS, CWS:	use a unique name like 'hotdog17'
+others:		guest</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel1_8" >
+            <property name="minimumSize" >
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Host:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_server" >
+            <property name="editable" >
+             <bool>false</bool>
+            </property>
+            <item>
+             <property name="text" >
+              <string>IGS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>WING</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>LGS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Other</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="TextLabel2_6" >
+            <property name="minimumSize" >
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>address :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LineEdit_address" />
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3" >
+            <property name="text" >
+             <string>Port :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="LineEdit_port" >
+            <property name="maximumSize" >
+             <size>
+              <width>60</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip" >
+             <string>port address, e.g.: 9696</string>
+            </property>
+            <property name="whatsThis" >
+             <string>port address, e.g.: 9696
+
+Port address is defined for each go server. It's a fixed number. See Host for predefined server names.</string>
+            </property>
+            <property name="maxLength" >
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
         <item row="4" column="0" >
          <layout class="QHBoxLayout" >
           <property name="spacing" >
@@ -2614,6 +2731,60 @@ New users: leave blank!</string>
             </property>
             <property name="echoMode" >
              <enum>QLineEdit::PasswordEchoOnEdit</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="5" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="textLabel1_6" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Codec:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="ComboBox_codec" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="editable" >
+             <bool>false</bool>
+            </property>
+            <property name="duplicatesEnabled" >
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -2712,65 +2883,6 @@ Note: 'Delete' concerns saved records.</string>
           </item>
          </layout>
         </item>
-        <item row="2" column="0" >
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="TextLabel1_8" >
-            <property name="minimumSize" >
-             <size>
-              <width>70</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>Host:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBox_server" >
-            <property name="editable" >
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text" >
-              <string>IGS</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>WING</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>LGS</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>Other</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item row="6" column="3" >
          <spacer>
           <property name="orientation" >
@@ -2786,26 +2898,6 @@ Note: 'Delete' concerns saved records.</string>
            </size>
           </property>
          </spacer>
-        </item>
-        <item row="10" column="0" colspan="2" >
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="10" column="3" >
-         <widget class="QPushButton" name="pushButton_4" >
-          <property name="text" >
-           <string>Apply</string>
-          </property>
-         </widget>
         </item>
         <item row="7" column="0" colspan="4" >
          <widget class="Line" name="Line4_3" >
@@ -3329,62 +3421,89 @@ Click to get a new, editable offline window.</string>
           </property>
          </widget>
         </item>
-        <item row="10" column="2" >
-         <widget class="QPushButton" name="pushButton_3" >
-          <property name="text" >
-           <string>Cancel</string>
+        <item row="8" column="0" colspan="2" >
+         <widget class="QGroupBox" name="groupBox_6" >
+          <property name="title" >
+           <string>Byo Yomi warning</string>
           </property>
+          <layout class="QHBoxLayout" >
+           <item>
+            <widget class="QLabel" name="label_21" >
+             <property name="text" >
+              <string>Seconds</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="ByoSecWarning" >
+             <property name="maximum" >
+              <number>60</number>
+             </property>
+             <property name="singleStep" >
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="ByoSoundWarning" >
+             <property name="text" >
+              <string>sound warning</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
-        <item row="0" column="0" >
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
+        <item row="8" column="2" colspan="2" >
+         <widget class="QGroupBox" name="groupBox_15" >
+          <property name="title" >
+           <string>Autosave</string>
           </property>
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="TextLabel1_title_4" >
-            <property name="minimumSize" >
-             <size>
-              <width>70</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>Title:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="LineEdit_title" >
-            <property name="toolTip" >
-             <string>title, e.g.: guest account at NNGS</string>
-            </property>
-            <property name="whatsThis" >
-             <string>unique title, e.g.:
-
-guest account at NNGS
-qGo1234 (IGS)
-xyz
-
-The title field is used to chose a server connection.
-
-Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+          <layout class="QHBoxLayout" >
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>9</number>
+           </property>
+           <property name="topMargin" >
+            <number>9</number>
+           </property>
+           <property name="rightMargin" >
+            <number>9</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>9</number>
+           </property>
+           <item>
+            <widget class="QCheckBox" name="CheckBox_autoSave" >
+             <property name="text" >
+              <string>Observed games</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="CheckBox_autoSave_Played" >
+             <property name="text" >
+              <string>Played games</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
         <item row="9" column="0" colspan="4" >
          <widget class="QGroupBox" name="groupBox_14" >
@@ -3557,6 +3676,9 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
                </item>
                <item>
                 <widget class="QCheckBox" name="automaticNegotiationCheckBox" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
                  <property name="toolTip" >
                   <string>allow client to negotiate automatic</string>
                  </property>
@@ -4071,171 +4193,25 @@ up to :</string>
           </layout>
          </widget>
         </item>
-        <item row="5" column="0" >
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
+        <item row="10" column="0" colspan="2" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="leftMargin" >
-           <number>0</number>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
           </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="textLabel1_6" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>70</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>Codec:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="ComboBox_codec" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="editable" >
-             <bool>false</bool>
-            </property>
-            <property name="duplicatesEnabled" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </spacer>
         </item>
-        <item row="3" column="0" >
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
+        <item row="10" column="2" >
+         <widget class="QPushButton" name="cancelButtonServer" >
+          <property name="text" >
+           <string>Cancel</string>
           </property>
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="TextLabel2_6" >
-            <property name="minimumSize" >
-             <size>
-              <width>70</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>address :</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="LineEdit_address" />
-          </item>
-          <item>
-           <widget class="QLabel" name="label_3" >
-            <property name="text" >
-             <string>Port :</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="LineEdit_port" >
-            <property name="maximumSize" >
-             <size>
-              <width>60</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip" >
-             <string>port address, e.g.: 9696</string>
-            </property>
-            <property name="whatsThis" >
-             <string>port address, e.g.: 9696
-
-Port address is defined for each go server. It's a fixed number. See Host for predefined server names.</string>
-            </property>
-            <property name="maxLength" >
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0" >
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="TextLabel3_5" >
-            <property name="minimumSize" >
-             <size>
-              <width>70</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>Name:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="LineEdit_login" >
-            <property name="toolTip" >
-             <string>use your login name; if unregistered use a unique name like 'hotdog17' (NNGS, CWS) or guest (other servers)</string>
-            </property>
-            <property name="whatsThis" >
-             <string>name
-
-Registered users: 
-use your login name and password provided by the go server operator after registration
-
-New users: depends on server
-NNGS, CWS:	use a unique name like 'hotdog17'
-others:		guest</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </widget>
         </item>
        </layout>
       </widget>

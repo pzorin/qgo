@@ -64,13 +64,19 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	
 	programProcess = new QProcess();
 	QStringList arguments;
-
-	arguments << "--mode" << "gtp" << "--quiet" ;
+	issueCmdNb = FALSE;
 	
+
+	if (filename.toLower().contains("gnugo"))
+	{
+		arguments << "--mode" << "gtp" << "--quiet" ;
+		issueCmdNb = TRUE;
+	}
+
 	connect(programProcess, SIGNAL(readyRead()),
 		this, SLOT(slot_readFromStdout()) );
 	connect(programProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
-		this, SLOT(slot_processExited()) );
+		this, SLOT(slot_processExited(int , QProcess::ExitStatus )) );
 	
 	programProcess->start(filename, arguments);
 
@@ -106,9 +112,9 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 			// return FAIL;
 		}
 
-
+/*
 		if(knownCommand("level")==FAIL)
-    		{
+		{
 			  return FAIL;
 		}
 	
@@ -119,12 +125,13 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 				return FAIL;
 			}
         	}
- 
+*/ 
       
 		if(setKomi(komi)==FAIL)
 		{
 			return FAIL;
 		}
+
 		if(fixedHandicap(handicap)==FAIL)
 		{
 			return FAIL;
@@ -176,7 +183,7 @@ void QGtp::slot_readFromStdout()
 
 	qDebug("** QGtp::slot_read():  \'%s\'" , _response.toLatin1().constData());
 
-
+/*
 	switch (number)
 	{
 		case GENMOVE:
@@ -185,15 +192,16 @@ void QGtp::slot_readFromStdout()
 		default:
 			;
 	}
-
+*/
 }
 
 // exit
-void QGtp::slot_processExited()
+void QGtp::slot_processExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	qDebug("%d quit",_cpt);
-	sprintf (outFile, "%d quit\n", _cpt);
-	fflush(outFile);
+	qDebug("Process Exited with exit code %i and status  %d", exitCode, exitStatus);
+//	sprintf (outFile, "%d quit\n", _cpt);
+//	sprintf (outFile, "quit\n");
+//	fflush(outFile);
 	//	return waitResponse();
 }
 
@@ -290,7 +298,11 @@ int
 QGtp::protocolVersion ()
 {
 	qDebug("%d protocol_version",_cpt);
-	sprintf (outFile, "%d protocol_version\n", /*_cpt*/ PROTOCOL);
+	if (issueCmdNb)
+		sprintf (outFile, "%d protocol_version\n", /*_cpt*/ PROTOCOL);
+	else
+		sprintf (outFile, "protocol_version\n");
+		
 	fflush(outFile);
 	return waitResponse();
 }
@@ -309,7 +321,12 @@ int msglen = strlen(s);
 	_cpt++;
 
 	qDebug("flush -> %s",s);
-	programProcess->write(QByteArray::QByteArray(s));
+	int i= programProcess->write(QByteArray::QByteArray(s));
+
+	int j= programProcess->waitForBytesWritten ( 100 );
+
+	if ( i != strlen(s)) 
+		qDebug("Error writing %s",s);
 	
 	
 }
@@ -326,7 +343,8 @@ int msglen = strlen(s);
 int
 QGtp::quit ()
 {
-	sprintf (outFile, "%d quit\n", _cpt);
+//	sprintf (outFile, "%d quit\n", _cpt);
+	sprintf (outFile, "quit\n");
 	fflush(outFile);
 	return waitResponse();
 }
@@ -339,7 +357,8 @@ QGtp::quit ()
 int
 QGtp::version ()
 {
-	sprintf (outFile, "%d version\n", _cpt);
+//	sprintf (outFile, "%d version\n", _cpt);
+	sprintf (outFile,"version\n");
 	fflush(outFile);
 	return waitResponse();
 }
@@ -357,7 +376,10 @@ QGtp::version ()
 int
 QGtp::setBoardsize (int size)
 {
-	sprintf (outFile, "%d boardsize %d\n", BOARDSIZE /*_cpt*/, size);
+	if (issueCmdNb)
+		sprintf (outFile, "%d boardsize %d\n", BOARDSIZE /*_cpt*/, size);
+	else
+		sprintf (outFile, "boardsize %d\n", size);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -389,9 +411,12 @@ QGtp::queryBoardsize()
 int
 QGtp::clearBoard ()
 {
-    sprintf (outFile, "%d clear_board\n", _cpt);
-    fflush(outFile);
-    return waitResponse();
+//	if (issueCmdNb)
+//		sprintf (outFile, "%d clear_board\n", _cpt);
+//	else
+		sprintf (outFile,"clear_board\n");
+	fflush(outFile);
+	return waitResponse();
 }
 
 /***************************
@@ -406,7 +431,10 @@ QGtp::clearBoard ()
 int
 QGtp::setKomi(float f)
 {
-	sprintf (outFile, "%d komi %.2f\n", KOMI /*_cpt*/,f);
+	if (issueCmdNb)
+		sprintf (outFile, "%d komi %.2f\n", KOMI /*_cpt*/,f);
+	else
+		sprintf (outFile, "komi %.2f\n", f);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -436,7 +464,10 @@ int
 QGtp::playblack (char c , int i)
 {
 	//  sprintf (outFile, "%d play black %c%d\n", _cpt,c,i);
-	sprintf (outFile, "%d play black %c%d\n", PLAY_BLACK/*_cpt*/,c,i);
+	if (issueCmdNb)
+		sprintf (outFile, "%d play black %c%d\n", PLAY_BLACK/*_cpt*/,c,i);
+	else
+		sprintf (outFile, "play black %c%d\n", c,i);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -450,7 +481,10 @@ int
 QGtp::playblackPass ()
 {
 	//  sprintf (outFile, "%d play black pass\n", _cpt);
-	sprintf (outFile, "%d play black pass\n", PLAY_BLACK /*_cpt*/);
+	if (issueCmdNb)
+		sprintf (outFile, "%d play black pass\n", PLAY_BLACK /*_cpt*/);
+	else
+		sprintf (outFile, "play black pass\n");
 	fflush(outFile);
 	return waitResponse();
 }
@@ -464,7 +498,10 @@ int
 QGtp::playwhite (char c, int i)
 {
 	//  sprintf (outFile, "%d play white %c%d\n", _cpt,c,i);
-	sprintf (outFile, "%d play white %c%d\n", PLAY_WHITE /*_cpt*/,c,i);
+	if (issueCmdNb)
+		sprintf (outFile, "%d play white %c%d\n", PLAY_WHITE /*_cpt*/,c,i);
+	else
+		sprintf (outFile, "play white %c%d\n", c,i);
 	fflush(outFile);
 	return waitResponse();
 }
@@ -478,7 +515,10 @@ int
 QGtp::playwhitePass ()
 {
 	//  sprintf (outFile, "%d play white pass\n", _cpt);
-	sprintf (outFile, "%d play white pass\n",PLAY_WHITE /*_cpt*/);
+	if (issueCmdNb)
+		sprintf (outFile, "%d play white pass\n",PLAY_WHITE /*_cpt*/);
+	else
+		sprintf (outFile, "play white pass\n");
 	fflush(outFile);
 	return waitResponse();
 }
@@ -830,9 +870,16 @@ QGtp::combinationAttack (QString color)
 int
 QGtp::genmoveBlack ()
 {
-	sprintf (outFile, "%d genmove black\n", GENMOVE);
+	if (issueCmdNb)
+		sprintf (outFile, "%d genmove black\n", GENMOVE);
+	else
+		sprintf (outFile, "genmove black\n");
 	fflush(outFile);
-//	return waitResponse();
+	waitResponse();
+
+	emit signal_computerPlayed( (buff != "?") , _response );
+//	responseReceived = FALSE;
+
 	return OK;
 }
 
@@ -844,9 +891,15 @@ QGtp::genmoveBlack ()
 int
 QGtp::genmoveWhite ()
 {
-	sprintf (outFile, "%d genmove white\n", GENMOVE);
+	if (issueCmdNb)
+		sprintf (outFile, "%d genmove white\n", GENMOVE);
+	else
+		sprintf (outFile, "genmove white\n");
 	fflush(outFile);
-//	return waitResponse();
+	return waitResponse();
+	emit signal_computerPlayed( (buff != "?") , _response );
+//	responseReceived = FALSE;
+
 	return OK;
 }
 
@@ -1249,7 +1302,7 @@ QGtp::help ()
 int
 QGtp::knownCommand (QString s)
 {
-	sprintf (outFile, "%d known_command %s\n", _cpt,s.toLatin1().constData());
+	sprintf (outFile, "%d list_command %s\n", _cpt,s.toLatin1().constData());
 	fflush(outFile);
 	return waitResponse();
 }

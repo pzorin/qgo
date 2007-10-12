@@ -296,6 +296,7 @@ public:
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	void set_move(StoneColor sc, QString pt, QString mv_nr);
 	void enterScoreMode();
+	void timerEvent(QTimerEvent*);
 
 public slots:
 	void slotUpdateComment() {}
@@ -316,6 +317,8 @@ private:
 	void localMoveRequest(StoneColor c, int x, int y);
 	void localMarkDeadRequest(int x, int y);
 	QString game_Id;
+//	bool warningSound;
+//	int warningSecs;
 
 };
 

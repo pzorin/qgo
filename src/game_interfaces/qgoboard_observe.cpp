@@ -149,6 +149,16 @@ void qGoBoardObserveInterface::set_move(StoneColor sc, QString pt, QString mv_nr
 	else
 		mv_nr_int = mv_nr.toInt();
 
+
+	//special case : after an undo, IGS will give the last move before the undo move
+	// since we are already there, we skip
+	if ((mv_nr_int + 1 == mv_counter) && (mv_nr_int > 0))
+	{
+		qDebug("move given is before last move");
+		return;
+	}
+
+
 	// We are observing a game, and we take the game in the middle
 	if (mv_nr_int > mv_counter)
 	{

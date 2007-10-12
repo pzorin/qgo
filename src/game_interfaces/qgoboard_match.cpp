@@ -41,6 +41,8 @@ bool qGoBoardMatchInterface::init()
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
+//	warningSound = settings.value("BYO_SOUND_WARNING").toBool();
+//	warningSecs = settings.value("BYO_SEC_WARNING").toInt();
 
 	startTimer(1000);
 
@@ -330,6 +332,19 @@ void qGoBoardMatchInterface::sendMoveToInterface(StoneColor /*c*/, int x, int y)
 
 	emit signal_sendCommandFromBoard(QString(c1) + QString::number(c2) + " " + id, FALSE);
 
+}
+
+void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
+{
+	if (boardwindow->getGamePhase() != phaseOngoing)
+		return;
+	
+	boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
+
+	if ((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
+	   ((!getBlackTurn()) && boardwindow->getMyColorIsWhite()))
+		boardwindow->getClockDisplay()->warning(getBlackTurn());
+		
 }
 
 

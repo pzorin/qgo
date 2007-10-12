@@ -34,6 +34,7 @@ public:
 	int sendTextFromApp(const QString&, bool localecho=true);
 	void sendcommand(const QString&, bool localecho=false);
 	void set_sessionparameter(QString, bool);
+	void sendNmatchParameters();
 
 public slots:
 	// sfg slots
@@ -51,6 +52,8 @@ public slots:
 	void slot_clickedListView(QTreeWidgetItem *lvi ,  int i);
 	void slot_new();
 	void slot_serverChanged( const QString &server);
+	void slot_cancelPressed();
+	void slot_currentChanged(int );
 
 	// client slots
 	void slot_connect(bool b);

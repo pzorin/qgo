@@ -34,7 +34,7 @@ public:
 	void removeDeadMarks();
 	void updateLastMove(StoneColor c, int x, int y);
 
-	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
+//	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
 	bool updateStone(StoneColor c, int x, int y, bool dead = false);
 	void setCursorType(CursorType cur);
 //	void updateDeadMarks(int &black, int &white);
@@ -59,6 +59,7 @@ protected:
 	QHash<int,Stone *> *stones;
 	QList<Mark*> *marks;
 	QList<Stone*> *ghosts;
+	QList<QGraphicsSimpleTextItem*> *hCoords1, *hCoords2 , *vCoords1,*vCoords2 ;
 
 private:
 

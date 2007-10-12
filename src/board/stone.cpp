@@ -34,12 +34,8 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 		shadow->setZValue(4);
 	}
 	
-//	moveNum = new QGraphicsSimpleTextItem("x",this);
-//	QColor col = ( color == stoneBlack ? Qt::white : Qt::black);
-//	moveNum->setPen(QPen(( color == stoneBlack ? Qt::white : Qt::black), 1));
-//	moveNum->setFont(QFont("",pixmap().width()/2));
-//	moveNum->font().setPointSize(pixmap().width()/2);
-//	setOffset(QPoint::QPoint(-pixmap().width ()/2,-pixmap().height()/2));
+	moveNum = new QGraphicsSimpleTextItem("",this);
+	moveNum->setPen(QPen(( color == stoneBlack ? Qt::white : Qt::black)));
 
 	setZValue(5);
 	show();
@@ -53,6 +49,7 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 Stone::~Stone()
 {
 	delete shadow;
+	delete moveNum;
 } 
 
 /*
@@ -60,13 +57,19 @@ Stone::~Stone()
  */
 void Stone::setColor(StoneColor c)
 {
-	setPixmap(pixmapList->at( c == stoneBlack ? 0 : (rand() % WHITE_STONES_NB) + 1  ));
+
+
+	if (pixmapList->count() <= 2)
+		setPixmap(pixmapList->at( c == stoneBlack ? 0 : 1));
+	else	
+		setPixmap(pixmapList->at( c == stoneBlack ? 0 : (rand() % (pixmapList->count() -2) ) + 1));
+
 	color = c;
 	
 	if (shadow)
 		shadow->setPixmap(pixmapList->last());
 
-	int w= pixmap().width();
+//	int w= pixmap().width();
 
 //	QFont f("",w);
 //	QString xx = moveNum->text();
@@ -97,6 +100,15 @@ void Stone::setPos(double x, double y)
 		 shadow->setPos((qreal)(x-offset / 8 ), (qreal)(y+ offset / 8));
 	}
 	
+	moveNum->setFont(QFont("",pixmap().width()/3, 1));
+
+//	qreal h = moveNum->boundingRect().height();
+//	qreal w = 0;
+	qreal h = (boundingRect().height() - moveNum->boundingRect().height())/2 ;
+	qreal w = (boundingRect().width() - moveNum->boundingRect().width())/2 ;
+
+	moveNum->setPos(w,h);
+
 }
 
 

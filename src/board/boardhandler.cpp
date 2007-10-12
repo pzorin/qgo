@@ -787,7 +787,7 @@ void BoardHandler::countScore()
 	Matrix *m = new Matrix(*(tree->getCurrent()->getMatrix()));
 	Q_CHECK_PTR(m);
 
-	m->debug();
+///	m->debug();
 	// Do some cleanups, we only need stones
 	//m->absMatrix();
 	m->clearAllMarks();
@@ -924,8 +924,9 @@ void BoardHandler::exitScore()
 	}
 	
 	// Unshade dead stones
-	board->removeDeadMarks();
-	markedDead = false;
+	//board->removeDeadMarks();
 	
+	markedDead = false;
+	tree->getCurrent()->getMatrix()->absMatrix();
 	updateMove(tree->getCurrent());
 }

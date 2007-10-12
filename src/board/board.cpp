@@ -97,6 +97,37 @@ void Board::init(int size)
 
 	//Init the stones
 	stones = new QHash<int,Stone *>::QHash();
+
+	// Init the coordinates
+	vCoords1 = new QList<QGraphicsSimpleTextItem*>;
+	hCoords1 = new QList<QGraphicsSimpleTextItem*>;
+	vCoords2 = new QList<QGraphicsSimpleTextItem*>;
+	hCoords2 = new QList<QGraphicsSimpleTextItem*>;
+
+	QString hTxt,vTxt;
+
+	for (int i=0; i<board_size; i++)
+	{
+		// Left side
+		if(showSGFCoords)
+		{
+			vTxt = QString(QChar(static_cast<const char>('a' + i)));
+			hTxt = QString(QChar(static_cast<const char>('a' + i)));
+		}
+		else
+		{
+			vTxt = QString::number(board_size - i);
+			hTxt = QString(QChar(static_cast<const char>('A' + (i<8?i:i+1))));
+		}
+
+//		vCoord = new QGraphicsSimpleTextItem(hTxt, 0, canvas);
+//		hCoord = 
+		vCoords1->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
+		hCoords1->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+		vCoords2->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
+		hCoords2->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+
+	}
 }
 
 Board::~Board()
@@ -301,7 +332,7 @@ void Board::drawCoordinates()
 	QString txt;
 
 	// Draw vertical coordinates. Numbers
-	for (i=0; i<board_size; i++)
+/*	for (i=0; i<board_size; i++)
 	{
 		// Left side
 		if(showSGFCoords)
@@ -337,6 +368,50 @@ void Board::drawCoordinates()
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 ,offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2  );
 		coord->show();
 	}
+*/
+
+	for (i=0; i<board_size; i++)
+	{
+		// Left side
+		coord = vCoords1->at(i);
+		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
+
+		if (showCoords)
+			coord->show();
+		else
+			coord->hide();
+
+		// Right side
+		
+		coord = vCoords2->at(i);
+    		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
+
+		if (showCoords)
+			coord->show();
+		else
+			coord->hide();
+
+		// Top
+		coord = hCoords1->at(i);
+		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 , offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
+		
+		if (showCoords)
+			coord->show();
+		else
+			coord->hide();
+		
+		// Bottom
+		coord = hCoords2->at(i);
+		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 ,offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2  );
+		
+		if (showCoords)
+			coord->show();
+		else
+			coord->hide();
+	}
+
+
+
 
 }
 
@@ -418,12 +493,12 @@ void Board::resizeBoard(int w, int h)
 		/*
 		 * Coordinates : type = 9
 		 */
-		if (item->type() == 9)// || item->type() == 3)// || item->rtti() == 7)
-		{
+//		if (item->type() == 9)// || item->type() == 3)// || item->rtti() == 7)
+//		{
 //			item->hide();
-			delete item;
-		}
-		else if (item->type() == RTTI_STONE)
+//			delete item;
+//		}
+		/*else*/ if (item->type() == RTTI_STONE)
 		{
 			Stone *s = (Stone*)item;
 			s->setColor(s->getColor());
@@ -463,7 +538,7 @@ void Board::resizeBoard(int w, int h)
 	// Redraw the board
 	drawBackground();
 	drawGatter();
-	if (showCoords && !isDisplayBoard)
+//	if (showCoords && !isDisplayBoard)
 		drawCoordinates();
 
   // Redraw the mark on the last played stone                             
@@ -577,7 +652,8 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
 /*
  * Adds a stone on the board at coords x,y and color c
  */
-Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool /*shown*/)
+/*
+Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool /*shown*//* )
 {
 	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 	{
@@ -650,7 +726,7 @@ Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool /*shown*/)
 	return s;
 
 }
-
+*/
 
 
 /*
@@ -699,7 +775,10 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 		
 		// We need to check wether the stones have been toggled dead or seki before (scoring mode)
 		if ((stone->isDead() || stone->isSeki()) && !dead)
+		{
 			stone->togglePixmap(imageHandler->getStonePixmaps(), TRUE);
+			stone->setDead(FALSE);
+		}
 		
 		if ((!stone->isDead()) && dead)
 		{
@@ -899,7 +978,7 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 	default:
 		qWarning("   *** Board::setMark() - Bad mark type! ***");
 		return;
-    }
+	}
 	
 	Q_CHECK_PTR(m);
 	m->setPos(offsetX + square_size * (x-1) - m->getSizeX()/2 , offsetY + square_size * (y-1) - m->getSizeY()/2);
@@ -1062,7 +1141,7 @@ void Board::removeLastMoveMark()
 /*
  * Updates the mark on the last stone played
  */
-void Board::updateLastMove(StoneColor c, int x, int y)
+ void Board::updateLastMove(StoneColor c, int x, int y)
 {
 
 	delete lastMoveMark;

@@ -1988,10 +1988,11 @@ InfoType Parser::put_line(const QString &txt)
 			                     "([0-9]+|-) +([0-9]+|-) +"
 			//                    9               10                   11    12
 			//                    Idle            Flags
-			                     "([A-Za-z0-9]+) +([^ ]{,2}) +default  ([TF])(.*)?");
+			                     "([A-Za-z0-9]+) +([^ ]{,2}) +default  ([TF])(.*)?"
+						);
 			if(re.indexIn(txt) < 0)
 			{
-				qDebug("%s\n", txt.toUtf8().data());
+				qDebug("\n%s", txt.toUtf8().data());
 				qDebug("No match\n");
 				break;
 			}

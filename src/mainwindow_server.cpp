@@ -274,8 +274,8 @@ void MainWindow::slot_textReceived(const QString &txt)
 					set_sessionparameter("nmatch",true);
 
 					//TODO temporary settings to prevent use of Koryo BY on IGS (as opposed to canadian)
-					sendcommand("nmatchrange BWN 0-9 2-19 60-60 60-3600 25-25 0 0 0-0",false);
-//					send_nmatch_range_parameters();
+//					sendcommand("nmatchrange BWN 0-9 2-19 60-60 60-3600 25-25 0 0 0-0",false);
+					sendNmatchParameters();
 //					}
 					sendcommand("toggle newundo",true);
 //					sendcommand("toggle review",true);
@@ -2380,8 +2380,8 @@ void MainWindow::timerEvent(QTimerEvent* e)
 		}
 		else if (myAccount->get_gsname() == IGS && holdTheLine)
 		{
-			sendcommand("ayt", false);
-			qDebug(QString("%1 -> ayt").arg(statusOnlineTime->text()).toLatin1().constData());
+			sendcommand("gamelist", false);
+			qDebug(QString("%1 -> gamelist").arg(statusOnlineTime->text()).toLatin1().constData());
 		}
 	}
 
@@ -2456,3 +2456,37 @@ void MainWindow::slot_msgBox(const QString& msg)
 	ui.msgTextEdit->append(msg);
 }
 
+
+/*
+* on IGS, sends the 'nmatch'time, BY, handicap ranges
+* command syntax : "nmatchrange 	BWN 	0-9 19-19	 60-60 		60-3600 	25-25 		0 0 0-0"
+*				(B/W/ nigiri)	Hcp Sz	   Main time (secs)	BY time (secs)	BY stones	Koryo time
+*/
+void MainWindow::sendNmatchParameters()
+{
+	
+	if ((myAccount->get_gsname() != IGS) || (myAccount->get_status() == OFFLINE))
+		return ;
+
+	QString c = "nmatchrange ";
+	QSettings settings;
+
+	c.append(settings.value("NMATCH_BLACK").toBool() ? "B" : "");
+	c.append(settings.value("NMATCH_WHITE").toBool() ? "W" : "");
+	c.append(settings.value("NMATCH_NIGIRI").toBool() ? "N" : "");
+	c.append(" 0-");
+	c.append(settings.value("NMATCH_HANDICAP").toString());
+	c.append(" ");
+	c.append(settings.value("DEFAULT_SIZE").toString());
+	c.append("-19 ");
+	c.append(QString::number(settings.value("DEFAULT_TIME").toInt()*60));
+	c.append("-");
+	c.append(QString::number(settings.value("NMATCH_MAIN_TIME").toInt()*60));
+	c.append(" ");
+	c.append(QString::number(settings.value("DEFAULT_BY").toInt()*60));
+	c.append("-");
+	c.append(QString::number(settings.value("NMATCH_BYO_TIME").toInt()*60));
+	c.append(" 25-25 0 0 0-0");
+	
+	sendcommand(c, true);
+}

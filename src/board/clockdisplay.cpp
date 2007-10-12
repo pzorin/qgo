@@ -7,7 +7,7 @@
 
 #include "clockdisplay.h"
 #include "boardwindow.h"
-
+#include "audio.h"
 
 ClockDisplay::ClockDisplay(BoardWindow *bw) : QObject(bw)
 {
@@ -23,6 +23,12 @@ ClockDisplay::ClockDisplay(BoardWindow *bw) : QObject(bw)
 	w_stones = -1; 
 	b_periods = 0; 
 	w_periods = 0;	
+
+	QSettings settings;
+	playWarningSound = settings.value("BYO_SOUND_WARNING").toBool();
+	warningSecs = settings.value("BYO_SEC_WARNING").toInt();
+
+	warningSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/timer.wav" );
 }
 
 /*
@@ -52,7 +58,6 @@ void ClockDisplay::setTimeStep(bool black, int secs)
 	
 	updateTimers();
 }
-
 
 
 /*
@@ -90,5 +95,41 @@ void ClockDisplay::updateTimers()
 			break;
 	}
 
+
+}
+
+
+
+/*
+ * activates the byo-time warnings
+ */
+void ClockDisplay::warning(bool black)
+{
+	static bool colorToggle = false;
+
+	if (black)
+	{
+		if ((b_time > 0) &&  (b_time < warningSecs))
+		{
+			colorToggle = !colorToggle;
+			pb_timeBlack->setPalette( ( colorToggle ? QPalette(Qt::red) : QPalette(Qt::black) ));
+			if (playWarningSound)
+				warningSound->play();
+		}
+		else if ((colorToggle)&& (pb_timeBlack->palette().color(QPalette::Background) != Qt::black))
+			pb_timeBlack->setPalette(QPalette(Qt::black));	
+	}
+	else
+	{
+		if ((w_time > 0) &&  (w_time < warningSecs))
+		{
+			colorToggle = !colorToggle;
+			pb_timeWhite->setPalette( ( colorToggle ? QPalette(Qt::red) : QPalette(Qt::black) ));
+			if (playWarningSound)
+				warningSound->play();
+		}
+		else if ((colorToggle)&& (pb_timeWhite->palette().color(QPalette::Background) != Qt::black))
+			pb_timeWhite->setPalette(QPalette(Qt::black));	
+	}
 
 }

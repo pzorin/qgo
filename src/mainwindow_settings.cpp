@@ -197,6 +197,49 @@ void PlayerTableItem::set_nmatchSettings(Player *p)
 
 }
 
+
+/*
+ * a cancel button has been pressed on the preference pages  
+ */
+void MainWindow::slot_cancelPressed()
+{
+	loadSettings();
+}
+
+/*
+ * a page has been left. If it's a preference or server stting page, we check the settings
+ */
+void MainWindow::slot_currentChanged(int i)
+{
+	static int former=-1;
+	QSettings settings;
+	bool resend = FALSE;
+
+	if ((former == 3) || (former == 4))
+	{
+		//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
+		resend=((settings.value("NMATCH_BLACK").toBool() != ui.checkBox_Nmatch_Black->isChecked()) || 
+			(settings.value("NMATCH_WHITE").toBool() != ui.checkBox_Nmatch_White->isChecked()) ||
+			(settings.value("NMATCH_NIGIRI").toBool() != ui.checkBox_Nmatch_Nigiri->isChecked()) ||
+			(settings.value("NMATCH_MAIN_TIME").toInt() != ui.timeSpin_Nmatch->value()) ||
+			(settings.value("NMATCH_BYO_TIME").toInt() != ui.BYSpin_Nmatch->value()) ||
+			(settings.value("NMATCH_HANDICAP").toInt() != ui.HandicapSpin_Nmatch->value()) ||
+			(settings.value("DEFAULT_SIZE").toInt() != ui.boardSizeSpin->value()) ||
+			(settings.value("DEFAULT_TIME").toInt() != ui.timeSpin->value()) ||
+			(settings.value("DEFAULT_BY").toInt() != ui.BYSpin->value()) );
+
+		saveSettings();
+		if (resend)
+			sendNmatchParameters();
+	}
+
+	former = i;
+	
+}
+
+
+
+
 /*
  * saves the parameters on the 2 lats tabs into the QSettings 
  */
@@ -206,6 +249,11 @@ void MainWindow::saveSettings()
 
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
 	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
+
+	settings.setValue("SKIN", ui.LineEdit_goban->text()); 
+	settings.setValue("SKIN_TABLE", ui.LineEdit_Table->text()); 
+
+	settings.setValue("TIMER_INTERVAL", ui.timerComboBox->currentIndex());
 
 	int i = 0;
 	if ( ui.radioButtonStones_2D->isChecked())
@@ -245,6 +293,23 @@ void MainWindow::saveSettings()
 	settings.setValue("DEFAULT_TIME",ui.timeSpin->value() );
 	settings.setValue("DEFAULT_BY",ui.BYSpin->value() );
 
+	settings.setValue("NMATCH_BLACK", ui.checkBox_Nmatch_Black->isChecked());
+	settings.setValue("NMATCH_WHITE", ui.checkBox_Nmatch_White->isChecked());
+	settings.setValue("NMATCH_NIGIRI",ui.checkBox_Nmatch_Nigiri->isChecked());
+	settings.setValue("NMATCH_MAIN_TIME", ui.timeSpin_Nmatch->value());
+	settings.setValue("NMATCH_BYO_TIME", ui.BYSpin_Nmatch->value());
+	settings.setValue("NMATCH_HANDICAP", ui.HandicapSpin_Nmatch->value());
+
+
+
+	settings.setValue("AUTOSAVE", ui.CheckBox_autoSave->isChecked());
+	settings.setValue("AUTOSAVE_PLAYED", ui.CheckBox_autoSave_Played->isChecked());
+
+
+	//server byo yomi warning
+	settings.setValue("BYO_SOUND_WARNING", ui.ByoSoundWarning->isChecked());
+	settings.setValue("BYO_SEC_WARNING",ui.ByoSecWarning->value());
+
 	//SGF edition tab default values
 	settings.setValue("EDIT_SIZE",ui.newFile_Size->value());
 	settings.setValue("EDIT_HANDICAP",ui.newFile_Handicap->value());
@@ -275,9 +340,15 @@ void MainWindow::loadSettings()
 	ui.radioButton_noSound->setChecked((settings.value("SOUND")==1));
 	ui.radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
 
+	ui.LineEdit_goban->setText(settings.value("SKIN").toString());
+	ui.LineEdit_Table->setText(settings.value("SKIN_TABLE").toString());
+
+	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
 
 	//server list
 	hostlist.clear();
+	ui.ListView_hosts->clear();
+	ui.cb_connect->clear();
 	Host *h;
 	int size = settings.beginReadArray("HOSTS");
 	for (int i = 0; i < size; ++i) 
@@ -314,11 +385,28 @@ void MainWindow::loadSettings()
 	ui.boardSizeSpin->setValue(settings.value("DEFAULT_SIZE").toInt());
 	ui.timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
 	ui.BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
+
+	ui.checkBox_Nmatch_Black->setChecked(settings.value("NMATCH_BLACK", QVariant(TRUE)).toBool());
+	ui.checkBox_Nmatch_White->setChecked(settings.value("NMATCH_WHITE", QVariant(TRUE)).toBool());
+	ui.checkBox_Nmatch_Nigiri->setChecked(settings.value("NMATCH_NIGIRI", QVariant(TRUE)).toBool());
+	ui.HandicapSpin_Nmatch->setValue(settings.value("NMATCH_HANDICAP", QVariant(8)).toInt());	
+	ui.timeSpin_Nmatch->setValue(settings.value("NMATCH_MAIN_TIME", QVariant(99)).toInt());
+	ui.BYSpin_Nmatch->setValue(settings.value("NMATCH_BYO_TIME", QVariant(60)).toInt());
+
+	ui.CheckBox_autoSave->setChecked(settings.value("AUTOSAVE").toBool());
+	ui.CheckBox_autoSave_Played->setChecked(settings.value("AUTOSAVE_PLAYED").toBool());
+
+	//server byo yomi warning
+	ui.ByoSoundWarning->setChecked(settings.value("BYO_SOUND_WARNING").toBool());
+	ui.ByoSecWarning->setValue(settings.value("BYO_SEC_WARNING").toInt());
+	
 	
 	//SGF edition tab default values
 	ui.newFile_Size->setValue(settings.value("EDIT_SIZE").toInt());
 	ui.newFile_Handicap->setValue(settings.value("EDIT_HANDICAP").toInt());
 	ui.newFile_Komi->setText(settings.value("EDIT_KOMI").toString());
+
+
 
 
 }
