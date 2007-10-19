@@ -87,6 +87,7 @@ public slots:
 	void slotExportPicClipB();
 	void slotExportPic();
 	void slotDuplicate();
+	void keyPressEvent(QKeyEvent *e);
 
 private:
 

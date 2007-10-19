@@ -182,10 +182,10 @@ void BoardWindow::init()
 	if (! gameData->fileName.isEmpty())
 		loadSGF(gameData->fileName);
 
-//	ui.board->init(boardSize);
 	qgoboard->init();		
 	gamePhase = phaseOngoing;
 	show();
+	setFocus();
 
 	//make sure to set the sound button to the proper state before anything
 	if (qgoboard->getPlaySound())
@@ -579,4 +579,101 @@ void BoardWindow::slotEditDelete()
 }
 
 
+void BoardWindow::keyPressEvent(QKeyEvent *e)
+{
+	qDebug("key pressed");
+
+#if 0
+	// check for window resize command = number button
+	if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9)
+	{
+		QString strKey = QString::number(e->key() - Qt::Key_0);
+		
+		if (e->state() & AltButton)
+		{
+			// true -> store
+			reStoreWindowSize(strKey, true);
+			return;
+		}
+		else if (e->state() & ControlButton)
+		{
+			// false -> restore
+			if (!reStoreWindowSize(strKey, false))
+			{
+				// sizes not found -> leave
+				e->ignore();
+				return;
+			}
+			
+			return;
+		}
+	}
+#endif
+	
+//	bool localGame = true;
+	// don't view last moves while observing or playing
+	if (//gameMode == modeObserve ||
+		gameMode == modeMatch ||
+		gameMode == modeTeach)
+	{
+		qDebug("Not local game.\n");
+//		localGame = false;
+		e->ignore();
+		return;
+	}
+	
+	switch (e->key())
+	{
+		/*
+		// TODO: DEBUG
+#ifndef NO_DEBUG
+case Key_W:
+board->debug();
+break;
+
+case Key_L:
+board->openSGF("foo.sgf");
+break;
+
+case Key_S:
+board->saveBoard("foo.sgf");
+break;
+
+case Key_X:
+board->openSGF("foo.xml", "XML");
+break;
+		// /DEBUG
+#endif
+*/
+
+		case Qt::Key_Left:
+			boardHandler->slotNavBackward();
+			break;
+
+		case Qt::Key_Right:
+			boardHandler->slotNavForward();
+			break;
+
+		case Qt::Key_Up:
+			boardHandler->slotNavPrevVar();
+			break;
+
+		case Qt::Key_Down:
+			boardHandler->slotNavNextVar();
+			break;
+
+		case Qt::Key_Home:
+			boardHandler->slotNavFirst();
+			break;
+
+		case Qt::Key_End:
+			boardHandler->slotNavLast();
+			break;
+
+		default:
+			e->ignore();
+	}
+
+	e->accept();
+}
 

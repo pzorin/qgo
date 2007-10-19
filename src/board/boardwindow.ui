@@ -15,6 +15,9 @@
     <height>670</height>
    </size>
   </property>
+  <property name="focusPolicy" >
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle" >
    <string>MainWindow</string>
   </property>
