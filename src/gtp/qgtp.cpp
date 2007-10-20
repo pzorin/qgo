@@ -66,7 +66,6 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	QStringList arguments;
 	issueCmdNb = FALSE;
 	
-
 	if (filename.toLower().contains("gnugo"))
 	{
 		arguments << "--mode" << "gtp" << "--quiet" ;
@@ -78,7 +77,11 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	connect(programProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
 		this, SLOT(slot_processExited(int , QProcess::ExitStatus )) );
 	
+	qDebug("starting Go engine : %s %s", filename.toLatin1().constData(), arguments.join(" ").toLatin1().constData());
+
 	programProcess->start(filename, arguments);
+
+	
 
 	if (!programProcess->waitForStarted())
 	{

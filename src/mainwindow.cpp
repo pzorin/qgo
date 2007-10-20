@@ -150,7 +150,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
 		this,
 		SLOT(slot_loadComputerFile(const QModelIndex & , const QModelIndex &  )));
-
+	connect( ui.computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
+	connect(ui.LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
 
 	
 	// connecting the server tab buttons

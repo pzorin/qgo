@@ -2027,7 +2027,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_12" >
+            <widget class="QPushButton" name="computerPathButton" >
              <property name="text" >
               <string>Get engine</string>
              </property>

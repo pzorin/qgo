@@ -46,6 +46,8 @@ public slots:
 	void slot_computerNewBoard();
 	void slot_computerOpenBoard();
 	void slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & bottomRight );
+	void slot_getComputerPath();
+	void slot_computerPathChanged(const QString &);
 
 	//preferences tabs slots
 	void slot_addServer();

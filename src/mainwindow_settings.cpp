@@ -248,7 +248,7 @@ void MainWindow::saveSettings()
 	QSettings settings;
 
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
-	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
+//	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
 
 	settings.setValue("SKIN", ui.LineEdit_goban->text()); 
 	settings.setValue("SKIN_TABLE", ui.LineEdit_Table->text()); 
@@ -582,5 +582,29 @@ void MainWindow::slot_serverChanged( const QString &server)
 		}
 	}
 }
+
+/*
+ * The 'get engine' button has been pressed on the Go engine tab
+ */
+void MainWindow::slot_getComputerPath()
+{
+	QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"), "",
+		tr("All Files (*)")));
+	if (fileName.isEmpty())
+		return;
+
+  	ui.LineEdit_computer->setText(fileName);
+}
+
+/*
+ * The engine path has been modified on the Go engine tab
+ */
+void MainWindow::slot_computerPathChanged(const QString & text)
+{
+	QSettings settings;
+
+	settings.setValue("COMPUTER_PATH", text);
+}
+
 
 
