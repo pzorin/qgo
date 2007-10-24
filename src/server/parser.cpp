@@ -1345,7 +1345,7 @@ InfoType Parser::put_line(const QString &txt)
 //			if (line.contains("-->"))
 //				emit signal_kibitz(0, 0, element(line, 1, " ", "EOL"));
 //			else
-//				emit signal_kibitz(0, 0, element(line, 0, ":", "EOL"));
+			emit signal_kibitz(0, element(line, 0, "*", "*"), element(line, 0, ":", "EOL"));
 			break;
 			
 				

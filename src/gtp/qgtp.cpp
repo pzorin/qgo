@@ -58,7 +58,7 @@ QString QGtp::getLastMessage()
 	return _response;
 }
 
-int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, int level)
+int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, int /*level*/)
 {
 	_cpt = 1000;
 	
@@ -71,6 +71,13 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 		arguments << "--mode" << "gtp" << "--quiet" ;
 		issueCmdNb = TRUE;
 	}
+
+	if (filename.toLower().contains("mogo"))
+	{
+		arguments << "--19" << "--dontDisplay" << "1" ;
+
+	}
+
 
 	connect(programProcess, SIGNAL(readyRead()),
 		this, SLOT(slot_readFromStdout()) );
@@ -324,9 +331,9 @@ int msglen = strlen(s);
 	_cpt++;
 
 	qDebug("flush -> %s",s);
-	int i= programProcess->write(QByteArray::QByteArray(s));
+	uint i= programProcess->write(QByteArray::QByteArray(s));
 
-	int j= programProcess->waitForBytesWritten ( 100 );
+//	int j= programProcess->waitForBytesWritten ( 100 );
 
 	if ( i != strlen(s)) 
 		qDebug("Error writing %s",s);
@@ -536,8 +543,12 @@ QGtp::fixedHandicap (int handicap)
 {
 	if (handicap < 2) 
 		return OK;
-	
-	sprintf (outFile, "%d fixed_handicap %d\n", _cpt,handicap);
+
+	if (issueCmdNb)
+		sprintf (outFile, "%d fixed_handicap %d\n", _cpt,handicap);
+	else
+		sprintf (outFile, "fixed_handicap %d\n",handicap);
+
 	fflush(outFile);
 	return waitResponse();
 }
@@ -1305,7 +1316,7 @@ QGtp::help ()
 int
 QGtp::knownCommand (QString s)
 {
-	sprintf (outFile, "%d list_command %s\n", _cpt,s.toLatin1().constData());
+	sprintf (outFile, "%d known_command %s\n", _cpt,s.toLatin1().constData());
 	fflush(outFile);
 	return waitResponse();
 }

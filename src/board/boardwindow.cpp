@@ -618,7 +618,8 @@ void BoardWindow::keyPressEvent(QKeyEvent *e)
 	{
 		qDebug("Not local game.\n");
 //		localGame = false;
-		e->ignore();
+//		e->accept();
+//		e->ignore();
 		return;
 	}
 	

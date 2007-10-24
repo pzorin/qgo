@@ -439,6 +439,24 @@ void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModel
 	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
 }
 
+void MainWindow::loadSgfFile(QString fn)
+{
+	fileLoaded2 = fn.toLatin1().constData();
+	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
+	
+	if (SGFloaded2 == NULL)
+	{
+		ui.button_loadComputerGame->setDisabled(true);
+		return ;
+	}
+
+	ui.button_loadComputerGame->setEnabled(true);
+	
+	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
+
+	qgoif->createGame(modeNormal, GameLoaded2 , TRUE, TRUE);// , SGFloaded );
+}
+
 
 
 /*
@@ -632,3 +650,4 @@ void MainWindow::slot_setRankSpread()
 
 	qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
 }
+

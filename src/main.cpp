@@ -29,12 +29,27 @@ int main(int argc, char *argv[])
 {
 	Q_INIT_RESOURCE(application);
 	QApplication app(argc, argv);
+	QString *sgf_file = NULL;
 
 	QCoreApplication::setOrganizationName("qgo2");
 
 	MainWindow * mw = new MainWindow(0,0);
 
-	mw->show();
+	if ( argc > 1 )
+	{
+		sgf_file = new QString( argv[1] );
+	}
+
+	if ( sgf_file )
+	{
+		mw->loadSgfFile( *sgf_file );
+		delete sgf_file;
+		//mw->hide();
+	}
+	else
+	{
+		mw->show();
+	}
 
 	return app.exec();
 }

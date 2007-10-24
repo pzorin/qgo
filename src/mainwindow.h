@@ -35,6 +35,7 @@ public:
 	void sendcommand(const QString&, bool localecho=false);
 	void set_sessionparameter(QString, bool);
 	void sendNmatchParameters();
+	void loadSgfFile(QString fn);
 
 public slots:
 	// sfg slots
@@ -103,6 +104,7 @@ public slots:
 	void slot_addSeekCondition(const QString& , const QString& , const QString& , const QString& , const QString& );
 	void slot_seekList(const QString& , const QString& );
 	void slot_msgBox(const QString&);
+
 
 protected:
 	void closeEvent(QCloseEvent *e);

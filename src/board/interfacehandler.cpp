@@ -343,7 +343,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		boardwindow->getUi().resignButton->setDisabled(true);
 //		boardwindow->getUi().adjournButton->setDisabled(true);
 //		boardwindow->getUi().refreshButton_2->setEnabled(TRUE);
-//		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
+		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		editCut->setEnabled(false);
@@ -368,9 +368,11 @@ void InterfaceHandler::toggleMode(GameMode mode)
 		boardwindow->getUi().resignButton->setEnabled(TRUE);
 		boardwindow->getUi().adjournButton->setEnabled(TRUE);
 		boardwindow->getUi().refreshButton->setEnabled(TRUE);
-		boardwindow->getUi().doneButton->setEnabled(false);
+		boardwindow->getUi().doneButton->setEnabled(FALSE);
 		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi().navButtonsFrame->setEnabled(false);
+//		boardwindow->getUi().commentEdit2->setEnabled(TRUE);
+//		boardwindow->getUi().commentEdit2->setReadOnly(FALSE);
+		boardwindow->getUi().navButtonsFrame->setEnabled(FALSE);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		fileNew->setEnabled(false);

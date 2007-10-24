@@ -653,7 +653,7 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
  * Adds a stone on the board at coords x,y and color c
  */
 /*
-Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool /*shown*//* )
+Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool shown)
 {
 	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 	{
