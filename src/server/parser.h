@@ -49,6 +49,8 @@ signals:
 	void signal_undo(const QString&, const QString&, const QString&);
 	void signal_msgBox(const QString&);
 	void  signal_gameReview(Game*);
+	void signal_reviewInvite(const QString&, const QString&);
+	void signal_reviewNode(int, int, StoneColor, int, int);
 
 //	void signal_move(Game*);
 	void signal_move(GameInfo*);

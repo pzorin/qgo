@@ -44,7 +44,7 @@ public slots:
 	void slot_cancel();
 	// parser
 //	void slot_suggest(const QString&, const QString&, const QString&, const QString&, int);
-	void slot_matchCreate(const QString&, const QString&);
+//	void slot_matchCreate(const QString&, const QString&);
 	void slot_notOpen(const QString&, int motive = 0);
 	void slot_komiRequest(const QString&, int, int, bool);
 //	void slot_opponentopen(const QString&);

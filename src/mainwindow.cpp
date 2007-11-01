@@ -211,7 +211,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		qgoif, SLOT(slot_requestDialog(const QString&, const QString&, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_undo(const QString&, const QString&, const QString&)), qgoif, SLOT(slot_undo(const QString&, const QString&, const QString&)));
 	connect(parser, SIGNAL(signal_gameReview(Game*)), qgoif, SLOT(slot_gameReview(Game*)));
-
+	connect(parser, SIGNAL(signal_reviewInvite(const QString&, const QString&)), qgoif, SLOT(slot_reviewInvite(const QString&, const QString&)));
+	connect(parser, SIGNAL(signal_reviewNode(int, int, StoneColor, int, int)), qgoif, SLOT(slot_reviewNode(int, int, StoneColor, int, int)));
 
 	//Connects the interface signals
 	connect(qgoif,SIGNAL(signal_sendCommandFromInterface(const QString&, bool)), SLOT(slot_sendCommand(const QString &, bool)));

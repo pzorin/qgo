@@ -16,6 +16,8 @@
 Tree::Tree(int board_size)
 {
 	root = new Move(board_size);
+	// node index used for IGS review
+	root->setNodeIndex(1);
 	current = root;
 	boardSize = board_size;
 
@@ -31,6 +33,8 @@ void Tree::init(int board_size)
 {
 	clear();
 	root = new Move(board_size);
+	// node index used for IGS review
+	root->setNodeIndex(1);
 	current = root;
 	boardSize = board_size;
 }
@@ -309,6 +313,9 @@ void Tree::clear()
 	current = NULL;
 }
 
+/*
+ * Traverse the tree and deletes all moves after the given move
+ */
 void Tree::traverseClear(Move *m)
 {
 	Q_CHECK_PTR(m);
@@ -317,7 +324,7 @@ void Tree::traverseClear(Move *m)
 
 	Move *t = NULL;
 	
-	// Traverse the tree and drop every node into stack trash
+	//drop every node into stack trash	
 	stack.push(m);
 	
 	while (!stack.isEmpty())
@@ -365,6 +372,9 @@ void Tree::traverseFind(Move *m, int x, int y, QStack<Move*> &result)
 	}
 }
 
+/*
+ * Find a move starting from the given in the argument in the main branch, or at marked move.
+ */
 Move* Tree::findMove(Move *start, int x, int y, bool checkmarker)
 {
 	if (start == NULL)
@@ -384,6 +394,49 @@ Move* Tree::findMove(Move *start, int x, int y, bool checkmarker)
 	return NULL;
 }
 
+
+
+
+/*
+ * Find a move starting from the given in the argument in the 
+ * all following branches.
+ */
+Move* Tree::findNode(Move *m, int node)
+{
+	Q_CHECK_PTR(m);
+	QStack<Move*> stack;
+	Move *t = NULL;
+	
+	// Traverse the tree and drop every node into stack result
+	stack.push(m);
+	
+	while (!stack.isEmpty())
+	{
+		t = stack.pop();
+		if (t != NULL)
+		{
+			if (t->getNodeIndex() == node)
+				return t;
+			stack.push(t->brother);
+			stack.push(t->son);
+		}
+	}
+
+	// node index not found
+	return NULL;
+}
+
+
+
+
+
+
+
+
+
+/*
+ * count all moves in the tree.
+ */
 int Tree::count()
 {
 	if (root == NULL)
@@ -969,7 +1022,7 @@ Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
 //TODO wipe this out : replaced in Matrix
 Group* Tree::checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m) 
 {
-/*
+ *
  * qGo original code completely rewritten
  *
 	bool visible = false ;
@@ -1127,7 +1180,7 @@ void Tree::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &libe
 	
 //	MatrixStone *s;
 	Q_CHECK_PTR(m);
-/*
+ *
  * We	will assume that in the qGo2 structure, passing a null matrix does not happen
  *
   if (m==NULL) //added eb 8 -> we don't have a matrix passed here, so we check on the board

@@ -59,6 +59,8 @@ public slots:
 	void slot_undo(const QString&, const QString&, const QString&);
 	void slot_duplicateBoard(GameData *, const QString &, int);
 	void slot_gameReview(Game *);
+	void slot_reviewInvite(const QString&, const QString&);
+	void slot_reviewNode(int, int, StoneColor, int, int);
 /*	void slot_move(Game*);
 	void slot_title(const QString&);
 	void slot_komi(const QString&, const QString&, bool);

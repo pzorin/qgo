@@ -2134,13 +2134,18 @@ InfoType Parser::put_line(const QString &txt)
 		// 56 CONTROL 107 eb5
 		// 56 DATAEND 107
 		// 56 ERROR That user's client does not support review.
+		// 56 INVITED_PLAY 58 yfh2test
+
 		case 56:
 			if (line.contains("CREATE"))
 				aGame->nr = element(line, 1, " ");
 			if (line.contains("OWNER"))
 				aGame->player = element(line, 2, " ");
 			if (line.contains("BOARDSIZE"))
+			{
 				aGame->Sz = element(line, 2, " ");			
+				memory = aGame->Sz.toInt();
+			}
 			if (line.contains("KOMI"))
 				aGame->K = element(line, 2, " ");
 			if (line.contains("WHITENAME"))
@@ -2157,6 +2162,30 @@ InfoType Parser::put_line(const QString &txt)
 				emit signal_gameReview(aGame);
 				break;
 			}
+
+			if (line.contains("INVITED_PLAY"))
+			{
+				emit signal_reviewInvite(element(line, 1, " "), element(line, 2, " "));
+				break ;
+			}
+
+			if (line.contains("NODE"))
+			{
+				
+				StoneColor sc = stoneNone;
+				int c = element(line, 3, " ").toInt();
+				
+				if (c==1)
+					sc = stoneBlack;
+				else if(c==2)
+					sc=stoneWhite;
+
+
+				emit signal_reviewNode(element(line, 1, " ").toInt(), element(line, 2, " ").toInt(), sc, element(line, 4, " ", "EOL").toInt() ,element(line, 3, " ").toInt() );
+				break ;
+			}
+
+
 
 			break;
 

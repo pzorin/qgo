@@ -13,7 +13,7 @@ CONFIG += warn_on \
           thread \
           qtestlib \
           stl \
-          release
+          debug
 TEMPLATE = app 
 FORMS += mainwindow.ui \
 board/boardwindow.ui \
@@ -78,7 +78,7 @@ SOURCES += main.cpp \
            displayboard.cpp \
            game_interfaces/qgoboard_review.cpp
 QT -= qt3support
-DEPENDPATH += ""board sgf game_tree game_interfaces gtp""
+DEPENDPATH += "board sgf game_tree game_interfaces gtp"
 macx{
     CONFIG += x86 ppc
     QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk

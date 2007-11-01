@@ -96,7 +96,7 @@ void Board::init(int size)
 */
 
 	//Init the stones
-	stones = new QHash<int,Stone *>::QHash();
+	stones = new QHash<int,Stone *>();//::QHash();
 
 	// Init the coordinates
 	vCoords1 = new QList<QGraphicsSimpleTextItem*>;
@@ -451,9 +451,9 @@ void Board::resizeEvent(QResizeEvent*)
 */
 void Board::changeSize()
 {
-#ifdef Q_WS_WIN
-	resizeDelayFlag = false;
-#endif
+//#ifdef Q_WS_WIN
+//	resizeDelayFlag = false;
+//#endif
 
 //	QSize s = QSize::QSize(width()-5, height()-5);
 //	resizeBoard(s.width(), s.height());

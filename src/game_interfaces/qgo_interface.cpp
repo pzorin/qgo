@@ -98,7 +98,36 @@ void qGoIF::slot_boardClosed(int n)
 		emit signal_sendCommandFromInterface("observe " + QString::number(n), FALSE);
 		boardlist->insert(n, NULL);
 	}
+
+	if ( bw && bw->getGameMode()==modeReview )
+	{
+		emit signal_sendCommandFromInterface("review quit " + QString::number(n), FALSE);
+	}
+
 }
+
+
+/*
+ * a node information has been received and is sent by parser. This is review protocol
+ */
+void qGoIF::slot_reviewNode(int game_id, int move_nr, StoneColor c, int x, int y)
+{
+
+	BoardWindow *bw = getBoardWindow(game_id);
+
+	if (!bw)
+	{
+		qDebug("Cound not find reviw game n° %i", game_id);
+		return;
+	}
+
+	bw->qgoboard->setNode(move_nr, c, x, y);
+	
+}
+
+
+
+
 
 
 /*
@@ -309,6 +338,29 @@ void qGoIF::slot_gameReview(Game *g)
 
 	createGame(modeReview , gd, owner, owner);
 }
+
+/*
+ * a game review has started, and you are invited by 'reviewer'
+ */
+void qGoIF::slot_reviewInvite(const QString& nr, const QString& reviewer)
+{
+	QMessageBox mb(tr("Game review"),
+			//QString(tr("%1 wants to %2\nYES = %3\nCANCEL = %4")).arg(opp).arg(yes).arg(yes).arg(no),
+			QString(tr("%1 has started the review of your game\n\nDo you want to join ? \n")).arg(reviewer),
+			QMessageBox::Question,
+			QMessageBox::Yes | QMessageBox::Default,
+			QMessageBox::No | QMessageBox::Escape,
+			QMessageBox::NoButton);
+//	mb.setActiveWindow();
+	mb.raise();
+//	qgo->playPassSound();
+
+	if (mb.exec() == QMessageBox::Yes)
+		emit signal_sendCommandFromInterface("review wantto_play  " + nr, false);
+
+}
+
+
 
 /*
 // handle move info and distribute to different boards

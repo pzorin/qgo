@@ -125,6 +125,14 @@ void BoardWindow::init()
 			break;	
 		}	
 
+		case modeReview :
+		{
+			qgoboard = new 	qGoBoardReviewInterface(this, tree,gameData);
+			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
+
+			break;	
+		}	
+
 
 		default:
 			break;

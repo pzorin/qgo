@@ -45,6 +45,7 @@ public:
 	Move* findMoveInMainBranch(int x, int y) { return findMove(root, x, y, false); }
 	Move* findMoveInBranch(int x, int y) { return findMove(current, x, y, true); }
 	Move* findLastMoveInMainBranch();
+	Move* findNode(Move *m, int node);
 	void traverseFind(Move *m, int x, int y, QStack<Move*> &result);
 
 /*

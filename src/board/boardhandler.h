@@ -27,6 +27,7 @@ public:
 	void updateMove(Move *m=0, bool ignore_update = false);
 	bool updateAll(Matrix *m, bool toDraw=true);
 	void updateCursor(StoneColor c=stoneNone);
+	void gotoMove(Move *m);
 //	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
 
 	void findMoveByPos(int x,int  y);
@@ -58,7 +59,6 @@ private:
 //	GameMode gameMode;
 	int boardSize;
 	
-	void gotoMove(Move *m);
 	void updateVariationGhosts(Move *m);
 	bool navIntersectionStatus;
 

@@ -2023,10 +2023,10 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 			dlg,
 			SLOT(slot_dispute(const QString&, const QString&)));
 
-		connect(dlg,
-			SIGNAL(signal_matchSettings(const QString&, const QString&, const QString&, assessType)),
-			qgoif,
-			SLOT(slot_matchSettings(const QString&, const QString&, const QString&, assessType)));
+//		connect(dlg,
+//			SIGNAL(signal_matchSettings(const QString&, const QString&, const QString&, assessType)),
+//			qgoif,
+//			SLOT(slot_matchSettings(const QString&, const QString&, const QString&, assessType)));
 	}
 
 	if (myrequest)

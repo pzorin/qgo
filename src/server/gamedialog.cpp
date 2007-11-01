@@ -224,7 +224,7 @@ void GameDialog::slot_changed()
 //		ComboBox_free->setEnabled(true);
 	}
 }
-
+/*
 void GameDialog::slot_matchCreate(const QString &nr, const QString &opponent)
 {
 	qDebug("#### GameDialog::slot_matchcreate()");
@@ -241,7 +241,7 @@ void GameDialog::slot_matchCreate(const QString &nr, const QString &opponent)
 				kt = RATED;
 		}
 		else
-*/
+*//*
 			kt = noREQ;
 
 		// send to qgoif
@@ -254,7 +254,7 @@ void GameDialog::slot_matchCreate(const QString &nr, const QString &opponent)
 		return;
 	}
 }
-
+*/
 void GameDialog::slot_notOpen(const QString &opponent, int motive)
 {
 	if (motive == 0)

@@ -53,6 +53,8 @@ public:
 	virtual void deleteNode();
 	virtual void enterScoreMode() ;
 	virtual void markDeadStone(int x, int y);
+
+	virtual void setNode(int , StoneColor , int , int ) {}
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -198,7 +200,7 @@ protected:
 	virtual void sendPassToInterface(StoneColor c)=0;
 	virtual void localPassRequest();
 //	virtual void enterScoreMode() ;
-	virtual void leaveScoreMode() = 0;
+	virtual void leaveScoreMode() {};//= 0;
 	
 };
 
@@ -337,6 +339,7 @@ public:
 //	void setResult(QString res, QString xt_res);
 //	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	void set_move(StoneColor sc, QString pt, QString mv_nr);
+	void setNode(int move_nr, StoneColor c, int x, int y);
 
 public slots:
 	void slotUpdateComment() {}

@@ -59,6 +59,31 @@ void qGoBoardReviewInterface::localMoveRequest(StoneColor c, int x, int y)
 	
 }
 
+/*
+ * A node is incoming from the interface (server)
+ */
+void qGoBoardReviewInterface::setNode(int node_nr, StoneColor sc, int x, int y)
+{
+	Move *m = tree->findNode(tree->getRoot(), node_nr);
+
+	if (m)
+	//node found, we go there
+		boardwindow->getBoardHandler()->gotoMove(m);
+	else
+	// no node found, we create one from the current move
+	{
+		if (! doMove(sc, x,y))
+			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1,%2 seems to be invalid").arg(x).arg(y));
+		else
+			tree->getCurrent()->setNodeIndex(node_nr);
+
+		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+	}
+
+	
+}
+
+
 
 /*
  * A move string is incoming from the interface (server)

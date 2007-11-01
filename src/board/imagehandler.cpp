@@ -184,7 +184,7 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 	// these are the images
 	int *pb=new int[d*d];
 	int i, j, g,g1,g2, k;
-	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
+	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3);
 	double x, y, z, xr,xr1, xr2, xg1,xg2,hh;
 		
 	k=0;
@@ -309,7 +309,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 	// these are the images
 	int *pw=new int[d*d];
 	int i, j, g, g1,g2,k;
-	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
+	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3);
 	double x, y, z, xr, xr1, xr2, xg1,xg2, hh;
 	
 	k=0;
@@ -516,7 +516,7 @@ void ImageHandler::init(int size, bool isDisplay)
 	hotspots.append(point);
 
 	// Assemble the data in a list
-	ghostPixmaps =  new QList<QPixmap>::QList(ghostlist);
+	ghostPixmaps =  new QList<QPixmap>(ghostlist); //::QList(ghostlist);
 }
 
 void ImageHandler::rescale(int size)//, bool smallerStones)
@@ -574,12 +574,12 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 void ImageHandler::ghostImage(QImage *img)
 {
        
-    int w = img->width(),
+	int w = img->width(),
 		h = img->height(),
 		x, y;
 
-    for (y=0; y<h; y++)
-    {
+	for (y=0; y<h; y++)
+	{
 		uint *line = (uint*)img->scanLine(y);
 		for (x=0; x<w; x++)
 		{
@@ -588,6 +588,6 @@ void ImageHandler::ghostImage(QImage *img)
 				line[x] = qRgba(qRed(line[x]), qGreen(line[x]), qBlue(line[x]), (line[x] ? 125 : 0));
 			}
 		}
-    }
+	}
 
 }
