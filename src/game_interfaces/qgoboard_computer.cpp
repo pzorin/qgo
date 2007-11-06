@@ -26,16 +26,6 @@
 
 qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {
-
-}
-
-/*
- * This functions initialises the board for computer game
- * It also starts the go engine.
- * it sends True if sucessful, 0 if the engine could not be started
- */
-bool qGoBoardComputerInterface::init()
-{
 	QSettings settings;
 
 	gtp = new QGtp() ;
@@ -48,16 +38,7 @@ bool qGoBoardComputerInterface::init()
 				gameData->handicap,
 				GNUGO_LEVEL)==FAIL)
 	{
-		// if gnugo fails
-//		QString mesg = QString(QObject::tr("Error opening program: %1\n")).arg(gtp->getLastMessage());
-		QMessageBox msg(QObject::tr("Error"), //mesg,
-			QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage()),
-			QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
-//		msg.setActiveWindow();
-		msg.raise();
-		msg.exec();
-
-		return FALSE ;
+		throw QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage());
 	}
 
 
@@ -69,16 +50,7 @@ bool qGoBoardComputerInterface::init()
 //		gtp->loadsgf(fi.absoluteFilePath());
 		if (gtp->loadsgf(gameData->fileName))
 		{
-			// if gnugo fails
-	//		QString mesg = QString(QObject::tr("Error opening program: %1\n")).arg(gtp->getLastMessage());
-			QMessageBox msg(QObject::tr("Error"), //mesg,
-				QString(QObject::tr("Error GNUgo loading file %1 : %2")).arg(gameData->fileName).arg(gtp->getLastMessage()),
-				QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
-	//		msg.setActiveWindow();
-			msg.raise();
-			msg.exec();
-	
-			return FALSE ;
+			throw QString(QObject::tr("Error GNUgo loading file %1 : %2")).arg(gameData->fileName).arg(gtp->getLastMessage());
 		}	
 	}
 	//FIXME : GNU go will not want whitespaces in the name. Either feed it with the moves, or get through a temporary file.
@@ -88,15 +60,9 @@ bool qGoBoardComputerInterface::init()
 		setHandicap(gameData->handicap);
 
 
-	Move *m = tree->findLastMoveInMainBranch();
-	tree->setCurrent(m);
-	boardwindow->getBoardHandler()->updateMove(m);
-
+	/* What is playSound for??*/
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
-
-	return TRUE;
-
 }
 
 /*
@@ -106,6 +72,10 @@ void qGoBoardComputerInterface::startGame()
 {
 	bool blackToPlay = getBlackTurn();
 	
+	Move *m = tree->findLastMoveInMainBranch();
+	tree->setCurrent(m);
+	boardwindow->getBoardHandler()->updateMove(m);
+
 	if ((boardwindow->getMyColorIsBlack() && blackToPlay) || (boardwindow->getMyColorIsWhite() && !blackToPlay))
 		return;
 
@@ -208,8 +178,8 @@ void qGoBoardComputerInterface::playComputer(StoneColor c)
 
 	// have the computer play a stone of color 'c'
 
-//	get_win()->getInterfaceHandler()->passButton->setEnabled(false);
-//TODO	get_win()->getInterfaceHandler()->undoButton->setEnabled(false);
+	//get_win()->getInterfaceHandler()->passButton->setEnabled(false);
+	//get_win()->getInterfaceHandler()->undoButton->setEnabled(false);
 
 	switch (c)
 	{
@@ -261,9 +231,10 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &comput
 		return ;
 	}	
 
+
 	set_move(b ? stoneBlack : stoneWhite , computer_answer, "" /*mv_nr*/);
 
-//	qDebug ("computer move played");
+	//qDebug ("computer move played");
 
 	//the computer just played. Are we after 2 passes moves ?
  

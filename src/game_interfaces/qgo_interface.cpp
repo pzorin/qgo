@@ -37,17 +37,39 @@ qGoIF::~qGoIF()
  */
 BoardWindow * qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _myColorIsBlack , bool _myColorIsWhite )
 {
+	BoardWindow * b;
+
+	if(!_gameData)
+	{
+		qDebug("No game data to createGame");
+	}
 	//local game ? set the game id accordingly
 	if (_gameMode == modeNormal || _gameMode == modeComputer)
 		_gameData->gameNumber = ++localBoardCounter;
 
-	BoardWindow *b = new BoardWindow(parent, 0 , _gameData , _gameMode , _myColorIsBlack , _myColorIsWhite);
+	try
+	{
+		b = new BoardWindow(parent, 0 , _gameData , _gameMode , _myColorIsBlack , _myColorIsWhite);
+	}
+	catch(QString err)
+	{
+		QMessageBox msg(QObject::tr("Error"),
+		err,
+		QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
+		//msg.setActiveWindow();
+		msg.raise();
+		msg.exec();
+		// Do we need to decrement localBoardCounter above?
+		return NULL;
+	}
 	
 	// if we passed a size, we can initialise, otherwise, we have to do it later
 	//(i.e : we are creating something else than an observed game from a move info)
 	if (_gameData->size)
 	{
-		b->init();
+		//is set game data necessary ?
+		b->setGameData(_gameData);
+		//b->loadgame();
 		b->qgoboard->set_gsName(gsName);
 	}
 	
@@ -133,26 +155,19 @@ void qGoIF::slot_reviewNode(int game_id, int move_nr, StoneColor c, int x, int y
 /*
  * a game information (move or time info) has been received and is sent by parser
  */
-void qGoIF::slot_move(GameInfo* gi)
+void qGoIF::observeGame(Game * g)
 {
-	int game_id = gi->nr.toInt();
+	int game_id = g->nr.toInt();
 
 	BoardWindow *bw = getBoardWindow(game_id);
 
-	// If we do not have a board window with the game Id, create it
-	// we must take care of a null game being in the list (observed game waiting to be closed)
 	if ( bw == NULL && ! boardlist->contains(game_id) )
 	{
-		GameData *gd = new GameData();
-		gd->gameNumber = gi->nr.toInt();
-		gd->playerBlack = gi->bname;
-		gd->playerWhite = gi->wname;
-		// we set the size to 0 since 
-		gd->size = 0;	
+ 		GameData *gd = makeGameData(g);
 
 		GameMode mode;
-		bool imWhite = (gi->wname == myName);
-		bool imBlack = (gi->bname == myName);		
+		bool imWhite = (g->wname == myName);
+		bool imBlack = (g->bname == myName);		
 
 		if ( imWhite && imBlack )
 			mode = modeTeach;
@@ -161,13 +176,36 @@ void qGoIF::slot_move(GameInfo* gi)
 		else
 			mode = modeObserve;
 	
-		createGame(mode, gd, imBlack,imWhite );
+		bw = createGame(mode, gd, imBlack,imWhite );
 
-		emit signal_sendCommandFromInterface("games " + gi->nr, FALSE);
+		//emit signal_sendCommandFromInterface("games " + g->nr, FALSE);
+		if(mode == modeObserve)
+			emit signal_sendCommandFromInterface("moves " + g->nr, FALSE);
+
+		bw->qgoboard->set_havegd(TRUE);
+
+		// needed for correct sound
+		bw->qgoboard->set_statedMoveCount(g->mv.toInt());
 
 		return ;
 	}
 
+}
+
+/*
+ * a game information (move or time info) has been received and is sent by parser
+ */
+void qGoIF::slot_move(GameInfo* gi)
+{
+	int game_id = gi->nr.toInt();
+
+	BoardWindow *bw = getBoardWindow(game_id);
+
+	// If we do not have a board window with the game Id, create it
+	// we must take care of a null game being in the list (observed game waiting to be closed)
+
+	if(bw == NULL && ! boardlist->contains(game_id) )
+		return;
 	//if the initials commands (getting all moves) has not been sent, discard
 	if (bw->getGamePhase() == phaseInit)
 		return;
@@ -297,34 +335,40 @@ GameData *qGoIF::makeGameData( Game *g)
  */
 void qGoIF::slot_gameInfo(Game *g)
 {
-	BoardWindow *bw = getBoardWindow(g->nr.toInt());
+	int game_id = g->nr.toInt();
+	qDebug("qGoIF::slotgameInfo!!!\n");
+
+	BoardWindow *bw = getBoardWindow(game_id);
 
 	if (!bw)
-		return;
-
- 	GameData *gd = makeGameData(g);
-	
-//	setMode();
-//	initGame();
-//	setMode();
-//	win->getInterfaceHandler()->toggleMode();
-//	have_gameData = true;
-
-	bw->setGameData(gd);
-//	sound = false;
-
-	// did we have a board size ?
-	if (!bw->getBoardSize())
 	{
-		bw->setBoardSize(gd->size);
-		bw->init();
-		bw->qgoboard->set_gsName(gsName);
-	}	
+		return;
+	}
+	else
+	{
+ 		GameData *gd = makeGameData(g);
+//		setMode();
+//		initGame();
+//		setMode();
+//		win->getInterfaceHandler()->toggleMode();
+//		have_gameData = true;
 
-	bw->qgoboard->set_havegd(TRUE);
+		bw->setGameData(gd);
+//		sound = false;
 
-	// needed for correct sound
-	bw->qgoboard->set_statedMoveCount(g->mv.toInt());
+		// did we have a board size ?
+		if (!bw->getBoardSize())
+		{
+			bw->setBoardSize(gd->size);
+			//bw->init();
+			bw->qgoboard->set_gsName(gsName);
+		}	
+
+		bw->qgoboard->set_havegd(TRUE);
+
+		// needed for correct sound
+		bw->qgoboard->set_statedMoveCount(g->mv.toInt());
+	}
 }
 
 /*

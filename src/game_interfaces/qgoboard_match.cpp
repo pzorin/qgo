@@ -25,15 +25,7 @@
 qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {
 	game_Id = QString::number(gd->gameNumber);
-}
 
-
-
-/*
- * This functions initialises the board for a match game
- */
-bool qGoBoardMatchInterface::init()
-{
 	boardwindow->getUi().board->clearData();
 	emit signal_sendCommandFromBoard("moves " +  game_Id, FALSE);
 	emit signal_sendCommandFromBoard("all " +  game_Id, FALSE);
@@ -47,8 +39,6 @@ bool qGoBoardMatchInterface::init()
 	startTimer(1000);
 
 	boardwindow->getBoardHandler()->slotNavLast();
-
-	return TRUE;
 }
 
 

@@ -26,13 +26,7 @@
 qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {
 	game_Id = QString::number(gd->gameNumber);
-}
 
-/*
- * This functions initialises the board for a match game
- */
-bool qGoBoardReviewInterface::init()
-{
 	boardwindow->getUi().board->clearData();
 
 	QSettings settings;
@@ -40,8 +34,6 @@ bool qGoBoardReviewInterface::init()
 	playSound = (settings.value("SOUND") != 1);
 	
 	boardwindow->getBoardHandler()->slotNavFirst();
-	
-	return TRUE;
 }
 
 

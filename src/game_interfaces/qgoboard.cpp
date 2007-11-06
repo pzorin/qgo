@@ -653,15 +653,6 @@ void qGoBoard::deleteNode()
 qGoBoardNormalInterface::qGoBoardNormalInterface(BoardWindow *bw, Tree * t, GameData *gd) 
 	: qGoBoard(bw, t, gd)
 {
-
-}
-
-/*
- * This functions initialises the interface for local game
- * It sets the handicap stones into the tree
- */
-bool qGoBoardNormalInterface::init()
-{
 	boardwindow->getUi().board->clearData();
 
 	// If we have handicap, but not from a loaded file, we have to set the handicap move
@@ -670,15 +661,13 @@ bool qGoBoardNormalInterface::init()
 		setHandicap(gameData->handicap);
 		boardwindow->getBoardHandler()->slotNavLast();
 	}
-	else
+	else {}
 //	tree->setToFirstMove();	
 		boardwindow->getBoardHandler()->slotNavFirst();
 
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
-
-	return TRUE;
 }
 
 

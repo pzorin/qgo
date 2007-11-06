@@ -26,7 +26,6 @@ public:
 	qGoBoard(BoardWindow *bw, Tree * t, GameData *gd);
 //	qGoBoard(qGoBoard &qgoboard );
 	virtual ~qGoBoard() {}
-	virtual bool init()=0;
 	virtual void setHandicap(int handicap);
 	virtual void addStone(StoneColor c, int x, int y);
 	virtual void removeStone(int x, int y);
@@ -213,7 +212,6 @@ public:
 	qGoBoardNormalInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	virtual ~qGoBoardNormalInterface() {}
 
-	bool init();
 
 private:
 	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
@@ -231,8 +229,6 @@ public:
 	qGoBoardComputerInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	~qGoBoardComputerInterface() {}
 	void set_move(StoneColor sc, QString pt, QString mv_nr);
-
-	bool init();
 
 public slots:
 	void slot_playComputer(bool ok, const QString &computer_answer);
@@ -260,7 +256,6 @@ public:
 	qGoBoardObserveInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	~qGoBoardObserveInterface() {}
 
-	bool init();
 	void setModified(bool)	{} //we don't modify an observed game
 	void setResult(QString res, QString xt_res);
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
@@ -292,7 +287,6 @@ public:
 	qGoBoardMatchInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	~qGoBoardMatchInterface() {}
 
-	bool init();
 	void setModified(bool)	{} //we don't modify a match game
 	void setResult(QString res, QString xt_res);
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
@@ -334,7 +328,6 @@ public:
 	qGoBoardReviewInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	~qGoBoardReviewInterface() {}
 
-	bool init();
 //	void setModified(bool)	{} //we don't modify an  game
 //	void setResult(QString res, QString xt_res);
 //	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);

@@ -26,7 +26,7 @@ BoardWindow::BoardWindow(QWidget * parent, Qt::WindowFlags flags, int size)
 	myColorIsBlack = TRUE;
 	myColorIsWhite = TRUE;
 	interfaceHandler = new InterfaceHandler( this);
-//	init();
+	//init();
 }
 
 BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd , GameMode gm , bool iAmBlack , bool iAmWhite)
@@ -75,12 +75,6 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 
 	gamePhase = phaseInit;
 	boardSize = gd->size;
-//	init();
-
-}
-
-void BoardWindow::init()
-{
 
 //	gamePhase = phaseInit;
 
@@ -97,6 +91,13 @@ void BoardWindow::init()
 	if (gameData)
 		interfaceHandler->updateCaption(gameData);
 
+	// creates the board handler for navigating in the tree
+	boardHandler = new BoardHandler(this, tree, boardSize);
+
+	//Loads the sgf file if any
+	if (! gameData->fileName.isEmpty())
+		loadSGF(gameData->fileName);
+
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameMode)
 	{
@@ -107,7 +108,14 @@ void BoardWindow::init()
 		}
 		case modeComputer :
 		{
-			qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
+			try
+			{
+				qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
+			}
+			catch(QString err)
+			{
+				throw err;
+			}
 			break;	
 		}
 		case modeObserve :
@@ -137,10 +145,6 @@ void BoardWindow::init()
 		default:
 			break;
 	}
-
-	// creates the board handler for noavigating in the tree
-	boardHandler = new BoardHandler(this, tree, boardSize);
-
 
 
 	// Connects the nav buttons to the slots
@@ -174,10 +178,12 @@ void BoardWindow::init()
 	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
 	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
 	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
+	if (gameData->fileName.isEmpty() || gameMode == modeObserve)
 	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
+	if (gameData->fileName.isEmpty())
 	connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 
 //connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
@@ -186,11 +192,13 @@ void BoardWindow::init()
 		this, SLOT(slotEditButtonPressed( int )));
 	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
-	//Loads the sgf file if any
-	if (! gameData->fileName.isEmpty())
-		loadSGF(gameData->fileName);
 
-	qgoboard->init();		
+
+//	ui.board->init(boardSize);
+	/*if(!qgoboard->init())
+	{
+		qDebug("qgoboard init failed\n");
+	}*/
 	gamePhase = phaseOngoing;
 	show();
 	setFocus();

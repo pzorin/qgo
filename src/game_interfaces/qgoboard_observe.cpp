@@ -27,15 +27,7 @@
 qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {
 	game_Id = QString::number(gd->gameNumber);
-}
 
-
-
-/*
- * This functions initialises the board for observing a game
- */
-bool qGoBoardObserveInterface::init()
-{
 	boardwindow->getUi().board->clearData();
 
 //	emit signal_sendCommandFromBoard("games " + game_Id, FALSE);
@@ -47,9 +39,6 @@ bool qGoBoardObserveInterface::init()
 	playSound = (settings.value("SOUND") == 0);
 
 	startTimer(1000);
-
-	return TRUE;
-
 }
 
 /*
