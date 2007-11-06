@@ -29,6 +29,7 @@ GameDialog::GameDialog()//QWidget* parent, const char* name, bool modal, WFlags 
 	connect(ui.buttonOffer,SIGNAL(clicked(bool)),SLOT( slot_offer(bool)));
 	connect(ui.buttonStats,SIGNAL(pressed()), SLOT(slot_statsOpponent()));
 
+
 //  boardSizeSpin->setValue(setting->readIntEntry("DEFAULT_SIZE"));
 //  timeSpin->setValue(setting->readIntEntry("DEFAULT_TIME"));
 //  byoTimeSpin->setValue(setting->readIntEntry("DEFAULT_BY"));
@@ -98,6 +99,7 @@ void GameDialog::slot_opponentopen(const QString &opp)
 */
 
 
+/* This is used for offering and accepting */
 void GameDialog::slot_offer(bool active)
 {
 	qDebug("#### GameDialog::slot_offer()");
@@ -128,6 +130,7 @@ void GameDialog::slot_offer(bool active)
 	//{
 		// ok, I am white
 		if (is_nmatch)
+		{
 			//<nmatch yfh2test W 3 19 60 600 25 0 0 0>
 			emit signal_sendCommand("nmatch " + 
 						ui.playerOpponentEdit->text() + 
@@ -137,8 +140,13 @@ void GameDialog::slot_offer(bool active)
 						QString::number(ui.timeSpin->value() * 60) + " " +
 						QString::number(ui.byoTimeSpin->value() * 60) + 
 						" 25 0 0 0", true); // carefull : 25 stones hard coded : bad
+			qDebug("nmatch...");
+		}
 		else 
+		{
+			qDebug("match...");
 			emit signal_sendCommand("match " + ui.playerOpponentEdit->text() + color + ui.boardSizeSpin->text() + " " + ui.timeSpin->text() + " " + ui.byoTimeSpin->text(), false);
+		}
 
 	switch (gsname)
 	{
@@ -205,6 +213,14 @@ void GameDialog::slot_changed()
 		ui.byoTimeSpin->setEnabled(false);
 		ui.timeSpin->setEnabled(false);
 	}
+	else if(!is_nmatch)
+	{
+
+		/* If game is offered we "accept", we don't offer it again */
+		ui.buttonOffer->setText(tr("Accept"));
+		ui.byoTimeSpin->setEnabled(true);
+		ui.timeSpin->setEnabled(true);
+	}
 	else
 	{
 		ui.buttonOffer->setText(tr("Offer"));
@@ -233,7 +249,7 @@ void GameDialog::slot_matchCreate(const QString &nr, const QString &opponent)
 		// current match has been created -> send settings
 		assessType kt;
 		// check if komi has been requested
-/*		if (myRk != "NR" && oppRk != "NR")
+*//*		if (myRk != "NR" && oppRk != "NR")
 		{
 			if (ComboBox_free->currentText() == QString(tr("yes")))
 				kt = FREE;
