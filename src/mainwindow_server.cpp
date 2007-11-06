@@ -516,6 +516,7 @@ void MainWindow::set_sessionparameter(QString par, bool val)
 
 void MainWindow::slot_sendCommand(const QString &cmd, bool localecho)
 {
+	localecho = true;
 	sendcommand( cmd,  localecho);
 }
 
@@ -1940,6 +1941,7 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 	GameDialog *dlg = NULL;
 	QString opponent;
 
+	qDebug("Match has been Requested");
 	// seek dialog
 	if (!myrequest)
 	{
@@ -1997,9 +1999,9 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 			SLOT(slot_sendCommand(const QString&, bool)));
 
 		connect(parser,
-			SIGNAL(signal_matchCreate(const QString&)),
+			SIGNAL(signal_matchCreate(const QString &, const QString &)),
 			this,
-			SLOT(slot_removeDialog(const QString&)));
+			SLOT(slot_removeDialog(const QString &, const QString &)));
 
 // CAUTION : this is used in qGo1 for sending parameters (handicap, komi) to the server. We won't use this for now
 //		connect(parser,
@@ -2277,13 +2279,38 @@ void MainWindow::slot_removeDialog(GameDialog *dlg)
 /*
  * The parser has sent 'match create' signal because a game has started
  */
-void MainWindow::slot_removeDialog(const QString &opp)
+void MainWindow::slot_removeDialog(const QString & nr, const QString & opp)
 {
+	GameDialog * dlg;
+
 	int i;
 	for ( i=0; i < matchList.count(); i++)
 	{
-		if (matchList.at(i)->getUi().playerOpponentEdit->text() == opp)
+		dlg = matchList.at(i);
+		if (dlg->getUi().playerOpponentEdit->text() == opp)
 		{
+			Game * g = new Game();
+			g->nr = nr;
+			if(dlg->getUi().play_white_button->isChecked())
+			{
+				g->wname = myAccount->acc_name;
+				g->wrank = myAccount->get_rank(); 
+				g->bname = dlg->getUi().playerOpponentEdit->text();
+				g->brank = dlg->getUi().playerOpponentRkEdit->text();
+			}
+			else
+			{
+				g->bname = myAccount->acc_name;
+				g->brank = myAccount->get_rank(); 
+				g->wname = dlg->getUi().playerOpponentEdit->text();
+				g->wrank = dlg->getUi().playerOpponentRkEdit->text();
+			}
+			g->H = dlg->getUi().handicapSpin->text();
+			g->Sz = dlg->getUi().boardSizeSpin->text();
+			g->K = dlg->getUi().komiSpin->text();
+			g->By = dlg->getUi().byoTimeSpin->text();
+			g->mv = "0";
+			qgoif->createMatch(g);
 			delete matchList.takeAt(i); 
 			return ;
 		}
