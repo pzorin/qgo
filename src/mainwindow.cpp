@@ -474,7 +474,6 @@ void MainWindow::slot_fileNewBoard()
 	gd->playerWhite = ui.newFile_WhitePlayer->text();
 	gd->komi = ui.newFile_Komi->text().toFloat();
 
-//	createGame(modeNormal, gd , TRUE, TRUE );
 	qgoif->createGame(modeNormal, gd , TRUE, TRUE );
 }
 
