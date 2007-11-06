@@ -81,8 +81,8 @@ BoardWindow * qGoIF::createGame(GameMode _gameMode, GameData * _gameData, bool _
 	connect (b , SIGNAL(signal_boardClosed(int)) , SLOT(slot_boardClosed(int)));
 	connect(b , SIGNAL(signal_duplicate( GameData *, const QString&, int)) , SLOT(slot_duplicateBoard(GameData *, const QString&, int)));
 
-//	if ((_gameMode == modeMatch || _gameMode == modeObserve))
-//		b->qgoboard->set_gsName(gsName);
+	if ((_gameMode == modeMatch || _gameMode == modeObserve))
+		b->qgoboard->set_gsName(gsName);
 
 	return b;
 }
@@ -109,7 +109,7 @@ void qGoIF::slot_boardClosed(int n)
 {
 
 	BoardWindow *bw = getBoardWindow(n);
-
+	qDebug("Closing board %d", n);
 	if (boardlist->remove(n) == 0) 
 		qDebug("Problem removing the board with Id :%d from the list - Id not found",n);
 
@@ -147,15 +147,7 @@ void qGoIF::slot_reviewNode(int game_id, int move_nr, StoneColor c, int x, int y
 	
 }
 
-
-
-
-
-
-/*
- * a game information (move or time info) has been received and is sent by parser
- */
-void qGoIF::observeGame(Game * g)
+void qGoIF::createMatch(Game * g)
 {
 	int game_id = g->nr.toInt();
 
@@ -173,10 +165,46 @@ void qGoIF::observeGame(Game * g)
 			mode = modeTeach;
 		else if ( imWhite || imBlack)
 			mode = modeMatch;
-		else
-			mode = modeObserve;
-	
+
 		bw = createGame(mode, gd, imBlack,imWhite );
+
+		//emit signal_sendCommandFromInterface("games " + g->nr, FALSE);
+
+		bw->qgoboard->set_havegd(TRUE);
+
+		// needed for correct sound
+		bw->qgoboard->set_statedMoveCount(g->mv.toInt());
+
+		return;
+	}
+}
+
+
+void qGoIF::observeGame(Game * g)
+{
+	/* This seems to work except moves take a second to show up
+	 * should be more immediate, maybe not */
+	int game_id = g->nr.toInt();
+
+	BoardWindow *bw = getBoardWindow(game_id);
+
+	if ( bw == NULL && ! boardlist->contains(game_id) )
+	{
+ 		GameData *gd = makeGameData(g);
+
+		GameMode mode;
+		// isn't mode always observe here?
+		/*bool imWhite = (g->wname == myName);
+		bool imBlack = (g->bname == myName);		
+
+		if ( imWhite && imBlack )
+			mode = modeTeach;
+		else if ( imWhite || imBlack)
+			mode = modeMatch;
+		else
+			mode = modeObserve;*/
+	
+		bw = createGame(modeObserve, gd, 0, 0);
 
 		//emit signal_sendCommandFromInterface("games " + g->nr, FALSE);
 		if(mode == modeObserve)
@@ -189,7 +217,6 @@ void qGoIF::observeGame(Game * g)
 
 		return ;
 	}
-
 }
 
 /*
@@ -336,7 +363,6 @@ GameData *qGoIF::makeGameData( Game *g)
 void qGoIF::slot_gameInfo(Game *g)
 {
 	int game_id = g->nr.toInt();
-	qDebug("qGoIF::slotgameInfo!!!\n");
 
 	BoardWindow *bw = getBoardWindow(game_id);
 
