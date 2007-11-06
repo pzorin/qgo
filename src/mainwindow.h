@@ -99,7 +99,7 @@ public slots:
 	void slot_checkbox(int , bool );
 	void slot_playerConnected(Player*);
 	void slot_connexionClosed();
-	void slot_removeDialog(const QString &);
+	void slot_removeDialog(const QString &, const QString &);
 	void slot_clearSeekCondition();
 	void slot_addSeekCondition(const QString& , const QString& , const QString& , const QString& , const QString& );
 	void slot_seekList(const QString& , const QString& );
