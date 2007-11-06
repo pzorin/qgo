@@ -66,6 +66,12 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	QStringList arguments;
 	issueCmdNb = FALSE;
 	
+	if(!filename.count())
+	{
+		_response = "No go engine path set";
+		return FAIL;
+	}
+
 	if (filename.toLower().contains("gnugo"))
 	{
 		arguments << "--mode" << "gtp" << "--quiet" ;
@@ -229,7 +235,6 @@ QGtp::waitResponse()
 	//	char symbole;
 	//int number;
 	//int pos;
-	
 	do //FIXME : we don't nned this, since the process sends the readyRead signal
 	{
 		qApp->processEvents();
@@ -240,7 +245,6 @@ QGtp::waitResponse()
 #endif
 */
 	} while (!responseReceived/*_response.length() == 0 || _response == buf*/);
-	
 	/*
 	inFile=new QTextStream(programProcess->readStdout(),IO_ReadOnly);
 	do
@@ -910,7 +914,8 @@ QGtp::genmoveWhite ()
 	else
 		sprintf (outFile, "genmove white\n");
 	fflush(outFile);
-	return waitResponse();
+	waitResponse();
+
 	emit signal_computerPlayed( (buff != "?") , _response );
 //	responseReceived = FALSE;
 
