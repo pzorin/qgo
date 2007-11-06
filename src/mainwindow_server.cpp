@@ -2036,7 +2036,7 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 //		QString rk = element(line, 1, " ");
 		QString rk = line.section(" ",1,1);
 		// set values
-
+		
 		dlg->getUi().playerOpponentEdit->setText(opponent);		
 //		dlg->getUi().playerOpponentEdit->setReadOnly(true);
 		dlg->set_myName( myAccount->acc_name);
@@ -2104,6 +2104,7 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 		dlg->getUi().komiSpin->setValue(settings.value("DEFAULT_KOMI").toInt() );  // *10+5);
 
 //		dlg->getUi().slot_pbsuggest();
+		dlg->getUi().buttonOffer->setText(tr("Offer"));
 	}
 	else
 	{
@@ -2203,9 +2204,8 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 			dlg->getUi().play_white_button->setChecked(true);		
 
 		dlg->getUi().buttonDecline->setEnabled(true);
-//		dlg->getUi().buttonOffer->setText(tr("Accept"));
+		dlg->getUi().buttonOffer->setText(tr("Accept"));
 		dlg->getUi().buttonCancel->setDisabled(true);
-
 	}
 
 	dlg->slot_changed();

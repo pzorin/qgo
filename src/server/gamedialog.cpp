@@ -128,7 +128,6 @@ void GameDialog::slot_offer(bool active)
 	else if (ui.play_nigiri_button->isChecked() && is_nmatch)
 		color = " N ";
 	//{
-		// ok, I am white
 		if (is_nmatch)
 		{
 			//<nmatch yfh2test W 3 19 60 600 25 0 0 0>
@@ -213,17 +212,9 @@ void GameDialog::slot_changed()
 		ui.byoTimeSpin->setEnabled(false);
 		ui.timeSpin->setEnabled(false);
 	}
-	else if(!is_nmatch)
-	{
-
-		/* If game is offered we "accept", we don't offer it again */
-		ui.buttonOffer->setText(tr("Accept"));
-		ui.byoTimeSpin->setEnabled(true);
-		ui.timeSpin->setEnabled(true);
-	}
 	else
 	{
-		ui.buttonOffer->setText(tr("Offer"));
+		//ui.buttonOffer->setText(tr("Offer"));
 //		ComboBox_free->setEnabled(true);
 
 		ui.byoTimeSpin->setEnabled(true);
