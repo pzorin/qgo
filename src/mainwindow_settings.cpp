@@ -315,7 +315,7 @@ void MainWindow::saveSettings()
 	settings.setValue("EDIT_HANDICAP",ui.newFile_Handicap->value());
 	settings.setValue("EDIT_KOMI",ui.newFile_Komi->text());
 
-	
+	//qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());	
 
 
 }
@@ -489,6 +489,7 @@ void MainWindow::slot_addServer()
 	//slot_cbtitle(QString());
 	ui.LineEdit_title->clear();
 	
+	slot_serverChanged(ui.comboBox_server->currentText());
 }
 
 
@@ -516,9 +517,9 @@ void MainWindow::slot_clickedListView(QTreeWidgetItem *lvi ,  int )
 
 	ui.LineEdit_title->setText(h->title());
 	ui.LineEdit_login->setText(h->loginName());
-//	ui.LineEdit_login->setText(h->loginName());
+	ui.LineEdit_pass->setText(h->password());
+	ui.LineEdit_address->setText(h->address());
 	ui.LineEdit_port->setText(QString::number(h->port()));
-	
 
 }
 
@@ -544,14 +545,18 @@ void MainWindow::slot_serverChanged( const QString &server)
 	if (server == tr("Other"))
 	{
 		ui.LineEdit_port->clear();
-		ui.LineEdit_port->setReadOnly(FALSE);
+		//ui.LineEdit_port->setReadOnly(FALSE);
+		ui.LineEdit_port->setEnabled(TRUE);
 		ui.LineEdit_address->clear();
-		ui.LineEdit_address->setReadOnly(FALSE);
+		//ui.LineEdit_address->setReadOnly(FALSE);
+		ui.LineEdit_address->setEnabled(TRUE);
 	}
 	else
 	{
-		ui.LineEdit_address->setReadOnly(TRUE);
-		ui.LineEdit_port->setReadOnly(TRUE);
+		//ui.LineEdit_address->setReadOnly(TRUE);
+		//ui.LineEdit_port->setReadOnly(TRUE);
+		ui.LineEdit_address->setEnabled(FALSE);
+		ui.LineEdit_port->setEnabled(FALSE);
 
 		if (server == QString("LGS"))
 		{
