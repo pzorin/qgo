@@ -19,6 +19,8 @@
 
 
 #include "audio/audio.h"
+#include <QDir>
+#include <QFile>
 
 #ifdef Q_OS_LINUX
 #include "audio/alsa.h"
@@ -28,6 +30,23 @@ QSoundSound::QSoundSound(const QString &filename, QObject *parent)
 	: Sound(filename, parent)
 {
 	qSound = new QSound(filename, this);
+
+	if (!QFile::exists(filename))		// jm 071106 start - in case file is not at the right place OR Windows OS
+	{
+		delete qSound;
+
+		QStringList sl;
+		sl << QDir::homePath() + "/ressources/sounds" 
+			<< "../ressources/sounds"
+			<< "../../src/ressources/sounds"
+			<< "../src/ressources/sounds"
+			<< ":/ressources/sounds";
+
+		QDir::setSearchPaths("sounds", sl);
+
+		QFile f("sounds:" + filename.right(filename.length() - filename.lastIndexOf('/') - 1));
+		qSound = new QSound(f.fileName());
+	}		// jm end
 }
 
 void QSoundSound::play(void)

@@ -17,17 +17,18 @@
 
 class BoardHandler;
 
-BoardWindow::BoardWindow(QWidget * parent, Qt::WindowFlags flags, int size)
-	: QMainWindow( parent,  flags )
-{
-	boardSize = size;
-	gameData = NULL;
-	gameMode = modeNormal;
-	myColorIsBlack = TRUE;
-	myColorIsWhite = TRUE;
-	interfaceHandler = new InterfaceHandler( this);
-	//init();
-}
+// jm 061107: two constructors is too dangerous
+//BoardWindow::BoardWindow(QWidget * parent, Qt::WindowFlags flags, int size)
+//	: QMainWindow( parent,  flags )
+//{
+//	boardSize = size;
+//	gameData = NULL;
+//	gameMode = modeNormal;
+//	myColorIsBlack = TRUE;
+//	myColorIsWhite = TRUE;
+//	interfaceHandler = new InterfaceHandler( this);
+//	//init();
+//}
 
 BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd , GameMode gm , bool iAmBlack , bool iAmWhite)
 	: QMainWindow( parent,  flags )

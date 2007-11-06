@@ -39,6 +39,12 @@
     </property>
     <item>
      <widget class="QListWidget" name="listWidget" >
+      <property name="minimumSize" >
+       <size>
+        <width>85</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="maximumSize" >
        <size>
         <width>85</width>
@@ -1568,13 +1574,13 @@
               </size>
              </property>
              <property name="whatsThis" >
-              <string>Click on the board to place a stone.
-
-When in normal mode, left click plays moves in alternating colors.
-Shift + left click moves to the first move in the main branch.
-Shift + right click moves to the next move in the current branch.
-When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
-When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+              <string>Click on the board to place a stone.&#xd;
+&#xd;
+When in normal mode, left click plays moves in alternating colors.&#xd;
+Shift + left click moves to the first move in the main branch.&#xd;
+Shift + right click moves to the next move in the current branch.&#xd;
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.&#xd;
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.&#xd;
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
              </property>
             </widget>
@@ -1939,13 +1945,13 @@ When in score mode, left click to mark a group as dead, right click to mark it a
               </size>
              </property>
              <property name="whatsThis" >
-              <string>Click on the board to place a stone.
-
-When in normal mode, left click plays moves in alternating colors.
-Shift + left click moves to the first move in the main branch.
-Shift + right click moves to the next move in the current branch.
-When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
-When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+              <string>Click on the board to place a stone.&#xd;
+&#xd;
+When in normal mode, left click plays moves in alternating colors.&#xd;
+Shift + left click moves to the first move in the main branch.&#xd;
+Shift + right click moves to the next move in the current branch.&#xd;
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.&#xd;
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.&#xd;
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
              </property>
             </widget>
@@ -2206,8 +2212,8 @@ When in score mode, left click to mark a group as dead, right click to mark it a
               <string>Time interval for autoplay</string>
              </property>
              <property name="whatsThis" >
-              <string>Time interval for autoplay
-
+              <string>Time interval for autoplay&#xd;
+&#xd;
 Delay between the moves in autoplay mode in seconds.</string>
              </property>
              <item>
@@ -2454,14 +2460,14 @@ Delay between the moves in autoplay mode in seconds.</string>
              <string>title, e.g.: guest account at NNGS</string>
             </property>
             <property name="whatsThis" >
-             <string>unique title, e.g.:
-
-guest account at NNGS
-qGo1234 (IGS)
-xyz
-
-The title field is used to chose a server connection.
-
+             <string>unique title, e.g.:&#xd;
+&#xd;
+guest account at NNGS&#xd;
+qGo1234 (IGS)&#xd;
+xyz&#xd;
+&#xd;
+The title field is used to chose a server connection.&#xd;
+&#xd;
 Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
             </property>
            </widget>
@@ -2551,13 +2557,13 @@ Note: don't use a default server name, i.e. '-- Aurora --' etc.</string>
              <string>use your login name; if unregistered use a unique name like 'hotdog17' (NNGS, CWS) or guest (other servers)</string>
             </property>
             <property name="whatsThis" >
-             <string>name
-
-Registered users: 
-use your login name and password provided by the go server operator after registration
-
-New users: depends on server
-NNGS, CWS:	use a unique name like 'hotdog17'
+             <string>name&#xd;
+&#xd;
+Registered users: &#xd;
+use your login name and password provided by the go server operator after registration&#xd;
+&#xd;
+New users: depends on server&#xd;
+NNGS, CWS:	use a unique name like 'hotdog17'&#xd;
 others:		guest</string>
             </property>
            </widget>
@@ -2675,8 +2681,8 @@ others:		guest</string>
              <string>port address, e.g.: 9696</string>
             </property>
             <property name="whatsThis" >
-             <string>port address, e.g.: 9696
-
+             <string>port address, e.g.: 9696&#xd;
+&#xd;
 Port address is defined for each go server. It's a fixed number. See Host for predefined server names.</string>
             </property>
             <property name="maxLength" >
@@ -2722,11 +2728,11 @@ Port address is defined for each go server. It's a fixed number. See Host for pr
              <string>your password; if unregistered: blank field</string>
             </property>
             <property name="whatsThis" >
-             <string>password
-
-Registered users: 
-use your login name and password provided by the go server operator after registration
-
+             <string>password&#xd;
+&#xd;
+Registered users: &#xd;
+use your login name and password provided by the go server operator after registration&#xd;
+&#xd;
 New users: leave blank!</string>
             </property>
             <property name="echoMode" >
@@ -2819,8 +2825,8 @@ New users: leave blank!</string>
              <string>clear form</string>
             </property>
             <property name="whatsThis" >
-             <string>New
-
+             <string>New&#xd;
+&#xd;
 clear form; doesn't make any changes to the entries</string>
             </property>
             <property name="text" >
@@ -2851,10 +2857,10 @@ clear form; doesn't make any changes to the entries</string>
                <string>add/change current entry</string>
               </property>
               <property name="whatsThis" >
-               <string>Add or Change
-
-Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
-
+               <string>Add or Change&#xd;
+&#xd;
+Label 'Change ' appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.&#xd;
+&#xd;
 Label 'Add' is default. The given entries will be saved under the given title.</string>
               </property>
               <property name="text" >
@@ -2868,10 +2874,10 @@ Label 'Add' is default. The given entries will be saved under the given title.</
                <string>delete current entry</string>
               </property>
               <property name="whatsThis" >
-               <string>Delete
-
-Deletes the saved entries with same Title.
-
+               <string>Delete&#xd;
+&#xd;
+Deletes the saved entries with same Title.&#xd;
+&#xd;
 Note: 'Delete' concerns saved records.</string>
               </property>
               <property name="text" >
@@ -3400,14 +3406,14 @@ Note: 'Delete' concerns saved records.</string>
            <string>Score/Edit</string>
           </property>
           <property name="whatsThis" >
-           <string>Score
-
-Left click on a group to mark it as dead.
-Right click on a group to mark it alive in seki.
-Click a second time on a group to unmark it as dead or seki.
-
-Edit
-
+           <string>Score&#xd;
+&#xd;
+Left click on a group to mark it as dead.&#xd;
+Right click on a group to mark it alive in seki.&#xd;
+Click a second time on a group to unmark it as dead or seki.&#xd;
+&#xd;
+Edit&#xd;
+&#xd;
 Click to get a new, editable offline window.</string>
           </property>
           <property name="frameShape" >
@@ -3683,14 +3689,14 @@ Click to get a new, editable offline window.</string>
                   <string>allow client to negotiate automatic</string>
                  </property>
                  <property name="whatsThis" >
-                  <string>Automatic Negotiation
-
-Allow client to negotiate komi automatic.
-
+                  <string>Automatic Negotiation&#xd;
+&#xd;
+Allow client to negotiate komi automatic.&#xd;
+&#xd;
 Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</string>
                  </property>
                  <property name="text" >
-                  <string>Automatic komi 
+                  <string>Automatic komi &#xd;
 negotiation</string>
                  </property>
                 </widget>
@@ -3720,7 +3726,7 @@ negotiation</string>
                   <string>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</string>
                  </property>
                  <property name="text" >
-                  <string>Byoyomi
+                  <string>Byoyomi&#xd;
 time:</string>
                  </property>
                  <property name="alignment" >
@@ -3778,7 +3784,7 @@ time:</string>
                   <string>Playing time</string>
                  </property>
                  <property name="text" >
-                  <string>Main 
+                  <string>Main &#xd;
 time :</string>
                  </property>
                  <property name="alignment" >
@@ -3941,7 +3947,7 @@ time :</string>
                       <string>Playing time</string>
                      </property>
                      <property name="text" >
-                      <string>Main time 
+                      <string>Main time &#xd;
 up to :</string>
                      </property>
                      <property name="alignment" >
@@ -3999,7 +4005,7 @@ up to :</string>
                       <string>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</string>
                      </property>
                      <property name="text" >
-                      <string>Byo time
+                      <string>Byo time&#xd;
 up to :</string>
                      </property>
                      <property name="alignment" >
@@ -4149,7 +4155,7 @@ up to :</string>
                       <string>board size</string>
                      </property>
                      <property name="text" >
-                      <string>Handicap 
+                      <string>Handicap &#xd;
 up to :</string>
                      </property>
                      <property name="alignment" >

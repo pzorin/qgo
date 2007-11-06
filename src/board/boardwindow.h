@@ -37,7 +37,7 @@ class BoardWindow : public QMainWindow, public Ui::BoardWindow
 	Q_OBJECT
 
 public:
-	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 , int size =19);
+	//BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 , int size = 19); // jm 071106: two standard constructors are dangerous!
 	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE);
 	~BoardWindow();
 	
