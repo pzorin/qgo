@@ -115,15 +115,24 @@ void qGoIF::slot_boardClosed(int n)
 
 	// if this was an observed game, we have to replace by a null pointer in the 
 	// list so that any incoming move is ignored before the server cancels sending moves
-	if ( bw && bw->getGameMode()==modeObserve && bw->getGamePhase() != phaseEnded )
+	if (bw)
 	{
-		emit signal_sendCommandFromInterface("observe " + QString::number(n), FALSE);
-		boardlist->insert(n, NULL);
-	}
+		if(bw->getGameMode()==modeObserve && bw->getGamePhase() != phaseEnded )
+		{
+			emit signal_sendCommandFromInterface("observe " + QString::number(n), FALSE);
+			boardlist->insert(n, NULL);
+		}
 
-	if ( bw && bw->getGameMode()==modeReview )
-	{
-		emit signal_sendCommandFromInterface("review quit " + QString::number(n), FALSE);
+		if (bw->getGameMode()==modeReview )
+		{
+			emit signal_sendCommandFromInterface("review quit " + QString::number(n), FALSE);
+		}
+		if(bw->getGameMode()==modeMatch)
+		{
+			/* Might be something as well, boardwindow.cpp needs
+			 * to prompt before emitting signal */
+			emit signal_sendCommandFromInterface("adjourn", false);
+		}
 	}
 
 }

@@ -232,6 +232,9 @@ BoardWindow::~BoardWindow()
 
 void BoardWindow::closeEvent(QCloseEvent *)
 {
+	/* We need to prompt user on close as well as
+	 * set up code to send adjourn/resign signal, etc.
+	 * Otherwise other client can actually get stuck */
 	emit signal_boardClosed(getId());
 
 }
