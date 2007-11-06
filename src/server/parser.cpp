@@ -749,7 +749,7 @@ InfoType Parser::put_line(const QString &txt)
 				QString dummy = element(line, 0, "]", ".").trimmed();
 				QString opp = element(dummy, 1, " ");
 
-				emit signal_matchCreate(/*nr,*/ opp);
+				emit signal_matchCreate(nr, opp);
         			// automatic opening of a dialog tab for further conversation
         			emit signal_talk(opp, "", true);
 			}
@@ -757,7 +757,7 @@ InfoType Parser::put_line(const QString &txt)
 			{
 				QString nr = element(line, 0, "[", "]");
 				QString opp = element(line, 3, " ");
-				emit signal_matchCreate(/*nr,*/ opp);
+				emit signal_matchCreate(nr, opp);
         
 			}
 			// 9 frosla withdraws the match offer.
@@ -1478,7 +1478,7 @@ InfoType Parser::put_line(const QString &txt)
 				
 				if (gsName == WING && aGame->wname == aGame->bname)
 					// WING doesn't send 'create match' msg in case of teaching game
-					emit signal_matchCreate(/*aGame->nr,*/ aGame->bname);
+					emit signal_matchCreate(aGame->nr, aGame->bname);
 
 				emit signal_game(aGame);
 				return GAME;

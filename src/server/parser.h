@@ -70,7 +70,7 @@ signals:
 	void signal_suggest(const QString&, const QString&, const QString&, const QString&, int);
 	void signal_matchRequest(const QString&, bool);
 	void signal_matchCanceled(const QString&);
-	void signal_matchCreate(const QString&);//, const QString&);
+	void signal_matchCreate(const QString& , const QString&);
 	void signal_notOpen(const QString&, int);
 	void signal_komirequest(const QString&, int, int, bool);
 	void signal_opponentopen(const QString&);
