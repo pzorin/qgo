@@ -103,12 +103,9 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	switch (gameMode)
 	{
 		case modeNormal :
-		{
 			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
 			break;
-		}
 		case modeComputer :
-		{
 			try
 			{
 				qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
@@ -118,30 +115,28 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 				throw err;
 			}
 			break;	
-		}
 		case modeObserve :
-		{
 			qgoboard = new 	qGoBoardObserveInterface(this, tree,gameData);
 			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
 
 			break;	
-		}
 		case modeMatch :
-		{
-			qgoboard = new 	qGoBoardMatchInterface(this, tree,gameData);
+			try
+			{
+				qgoboard = new 	qGoBoardMatchInterface(this, tree,gameData);
+			}
+			catch(QString err)
+			{
+				throw err;
+			}
 			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
-
 			break;	
-		}	
 
 		case modeReview :
-		{
 			qgoboard = new 	qGoBoardReviewInterface(this, tree,gameData);
 			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
 
 			break;	
-		}	
-
 
 		default:
 			break;
@@ -179,12 +174,12 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
 	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
 	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
-	if (gameData->fileName.isEmpty() || gameMode == modeObserve)
+	//if (gameData->fileName.isEmpty() || gameMode == modeObserve)
 	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
-	if (gameData->fileName.isEmpty())
+	//if (gameData->fileName.isEmpty())
 	connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 
 //connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
