@@ -216,8 +216,7 @@ void qGoIF::observeGame(Game * g)
 		bw = createGame(modeObserve, gd, 0, 0);
 
 		//emit signal_sendCommandFromInterface("games " + g->nr, FALSE);
-		if(mode == modeObserve)
-			emit signal_sendCommandFromInterface("moves " + g->nr, FALSE);
+		emit signal_sendCommandFromInterface("moves " + g->nr, FALSE);
 
 		bw->qgoboard->set_havegd(TRUE);
 
