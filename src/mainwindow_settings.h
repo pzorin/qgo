@@ -90,12 +90,16 @@ public:
 	int     num_games;
 	int     num_watchedplayers;
 	int     num_observedgames;
+	Game * getGame(int game_number);
+	void addGame(int game_number, Game * game);
+	void removeGame(int game_number);
 
 private:
 	QString rank;
 	QString line;
 	QString standard;
 	QWidget *parent;
+	std::map <int,Game *> games;
 };
 
 class PlayerTableItem : public QTreeWidgetItem

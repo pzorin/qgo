@@ -104,6 +104,7 @@ public slots:
 	void slot_addSeekCondition(const QString& , const QString& , const QString& , const QString& , const QString& );
 	void slot_seekList(const QString& , const QString& );
 	void slot_msgBox(const QString&);
+	Account * getAccount(void) { return myAccount; }
 
 
 protected:

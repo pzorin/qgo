@@ -1155,6 +1155,11 @@ void MainWindow::slot_game(Game* g)
 			myAccount->num_games++;
 			statusGames->setText(" G: " + QString::number(ui.ListView_games->topLevelItemCount()));//myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 		}
+
+		/* Add to account games list */
+		Game * new_g = new Game();
+		*new_g = *g;
+		myAccount->addGame(g->nr.toInt(), new_g);
 /*
 		// update player info if this is not a 'who'-result or if it's me
 		if (!g->H || myMark == "A") //g->status.length() < 2)
@@ -1265,6 +1270,7 @@ void MainWindow::slot_game(Game* g)
 			// decrease number of games
 			myAccount->num_games--;
 			statusGames->setText(" G: " + QString::number(ui.ListView_games->topLevelItemCount()));
+			myAccount->removeGame(g->nr.toInt());
 //			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
 /*
 			QTreeWidgetItemIterator lvp(ListView_players);
@@ -2289,28 +2295,6 @@ void MainWindow::slot_removeDialog(const QString & nr, const QString & opp)
 		dlg = matchList.at(i);
 		if (dlg->getUi().playerOpponentEdit->text() == opp)
 		{
-			Game * g = new Game();
-			g->nr = nr;
-			if(dlg->getUi().play_white_button->isChecked())
-			{
-				g->wname = myAccount->acc_name;
-				g->wrank = myAccount->get_rank(); 
-				g->bname = dlg->getUi().playerOpponentEdit->text();
-				g->brank = dlg->getUi().playerOpponentRkEdit->text();
-			}
-			else
-			{
-				g->bname = myAccount->acc_name;
-				g->brank = myAccount->get_rank(); 
-				g->wname = dlg->getUi().playerOpponentEdit->text();
-				g->wrank = dlg->getUi().playerOpponentRkEdit->text();
-			}
-			g->H = dlg->getUi().handicapSpin->text();
-			g->Sz = dlg->getUi().boardSizeSpin->text();
-			g->K = dlg->getUi().komiSpin->text();
-			g->By = dlg->getUi().byoTimeSpin->text();
-			g->mv = "0";
-			qgoif->createMatch(g);
 			delete matchList.takeAt(i); 
 			return ;
 		}

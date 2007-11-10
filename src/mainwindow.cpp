@@ -574,21 +574,7 @@ void MainWindow::slot_sortPlayers (int i)
  */
 void MainWindow::slot_gamesDoubleClicked(QTreeWidgetItem* lv)
 {
-	Game * g = new Game();
-	g->nr = lv->text(0);
-	g->wname = lv->text(1);
-	g->wrank = lv->text(2);
-	g->bname = lv->text(3);
-	g->brank = lv->text(4);
-	g->mv = lv->text(5);
-	g->Sz = lv->text(6);
-	g->H = lv->text(7);
-	g->K = lv->text(8);
-	g->By = lv->text(9);
-	g->FR = lv->text(10);
-	g->ob = lv->text(11);
 	sendcommand ("observe " + lv->text(0));
-	qgoif->observeGame(g);
 }
 
 /*

@@ -27,8 +27,6 @@ public:
 
 	BoardWindow * getBoardWindow(int n)	{return (boardlist->contains(n) ? boardlist->value(n) : NULL) ;}
 	BoardWindow * getBoardWindow(QString &player);
-	void observeGame(Game * g);
-	void createMatch(Game * g);
 /*	bool set_observe(QString);
 	void set_initIF();
 	void set_myName(const QString &n) { myName = n; }

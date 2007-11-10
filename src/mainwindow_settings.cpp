@@ -21,7 +21,6 @@
 #include "mainwindow_settings.h"
 #include "mainwindow.h"
 
-
 /*
  *   Host - Class to save Host info
  */
@@ -70,10 +69,12 @@ Account::Account(QWidget* parent)
 	standard = PACKAGE + QString("V") + VERSION;
 
 	set_offline();
+	//games.clear();	//unnecessary
 }
 
 Account::~Account()
 {
+
 }
 
 // set caption
@@ -173,6 +174,35 @@ Status Account::get_status()
 GSName Account::get_gsname()
 {
 	return gsName;
+}
+
+Game * Account::getGame(int game_number)
+{
+	std::map<int,Game *>::iterator iter = games.find(game_number);
+	if(iter != games.end())
+		return games[game_number];
+	else
+		return NULL;
+}
+
+void Account::removeGame(int game_number)
+{
+	Game * g;
+	if(games.find(game_number) != games.end())
+	{
+		qDebug("game_number %d found", game_number);
+		g = games[game_number];
+		delete g;
+		games.erase(game_number);
+	}
+	else
+		qDebug("game_number %d not found", game_number);
+}
+
+void Account::addGame(int game_number, Game * game)
+{
+	qDebug("Adding game_number %d: %p", game_number, game);
+	games[game_number] = game;
 }
 
 void PlayerTableItem::set_nmatchSettings(Player *p)

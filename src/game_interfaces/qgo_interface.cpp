@@ -156,77 +156,6 @@ void qGoIF::slot_reviewNode(int game_id, int move_nr, StoneColor c, int x, int y
 	
 }
 
-void qGoIF::createMatch(Game * g)
-{
-	int game_id = g->nr.toInt();
-
-	BoardWindow *bw = getBoardWindow(game_id);
-
-	if ( bw == NULL && ! boardlist->contains(game_id) )
-	{
- 		GameData *gd = makeGameData(g);
-
-		GameMode mode;
-		bool imWhite = (g->wname == myName);
-		bool imBlack = (g->bname == myName);		
-
-		if ( imWhite && imBlack )
-			mode = modeTeach;
-		else if ( imWhite || imBlack)
-			mode = modeMatch;
-
-		bw = createGame(mode, gd, imBlack,imWhite );
-
-		//emit signal_sendCommandFromInterface("games " + g->nr, FALSE);
-
-		bw->qgoboard->set_havegd(TRUE);
-
-		// needed for correct sound
-		bw->qgoboard->set_statedMoveCount(g->mv.toInt());
-
-		return;
-	}
-}
-
-
-void qGoIF::observeGame(Game * g)
-{
-	/* This seems to work except moves take a second to show up
-	 * should be more immediate, maybe not */
-	int game_id = g->nr.toInt();
-
-	BoardWindow *bw = getBoardWindow(game_id);
-
-	if ( bw == NULL && ! boardlist->contains(game_id) )
-	{
- 		GameData *gd = makeGameData(g);
-
-		GameMode mode;
-		// isn't mode always observe here?
-		/*bool imWhite = (g->wname == myName);
-		bool imBlack = (g->bname == myName);		
-
-		if ( imWhite && imBlack )
-			mode = modeTeach;
-		else if ( imWhite || imBlack)
-			mode = modeMatch;
-		else
-			mode = modeObserve;*/
-	
-		bw = createGame(modeObserve, gd, 0, 0);
-
-		//emit signal_sendCommandFromInterface("games " + g->nr, FALSE);
-		emit signal_sendCommandFromInterface("moves " + g->nr, FALSE);
-
-		bw->qgoboard->set_havegd(TRUE);
-
-		// needed for correct sound
-		bw->qgoboard->set_statedMoveCount(g->mv.toInt());
-
-		return ;
-	}
-}
-
 /*
  * a game information (move or time info) has been received and is sent by parser
  */
@@ -238,9 +167,36 @@ void qGoIF::slot_move(GameInfo* gi)
 
 	// If we do not have a board window with the game Id, create it
 	// we must take care of a null game being in the list (observed game waiting to be closed)
-
-	if(bw == NULL && ! boardlist->contains(game_id) )
+	
+	if(bw == NULL && !boardlist->contains(game_id) )
+	{
+		Game * g = ((MainWindow *)parent)->getAccount()->getGame(game_id);
+		if(g)
+		{
+ 			GameData * gd  = makeGameData(g);
+			GameMode mode;
+			bool imWhite = (gi->wname == myName);
+			bool imBlack = (gi->bname == myName);		
+	
+			if ( imWhite && imBlack )
+				mode = modeTeach;
+			else if ( imWhite || imBlack)
+				mode = modeMatch;
+			else
+				mode = modeObserve;
+			bw = createGame(mode, gd, imBlack, imWhite);
+	
+			bw->qgoboard->set_havegd(TRUE);
+	
+			emit signal_sendCommandFromInterface("games " + gi->nr, FALSE);
+			if(mode == modeObserve)
+				emit signal_sendCommandFromInterface("moves " + g->nr, FALSE);
+			// needed for correct sound
+			bw->qgoboard->set_statedMoveCount(gi->mv_nr.toInt());
+		}
+		else
 		return;
+	}
 	//if the initials commands (getting all moves) has not been sent, discard
 	if (bw->getGamePhase() == phaseInit)
 		return;
