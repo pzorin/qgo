@@ -177,6 +177,8 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	//if (gameData->fileName.isEmpty() || gameMode == modeObserve)
 	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 
+	// Needs Adjourn button ????
+
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
 	//if (gameData->fileName.isEmpty())
