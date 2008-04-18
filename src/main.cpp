@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 	if ( sgf_file )
 	{
-		mw->loadSgfFile( *sgf_file );
+		mw->loadCreateSGFFile( *sgf_file );
 		delete sgf_file;
 		//mw->hide();
 	}
