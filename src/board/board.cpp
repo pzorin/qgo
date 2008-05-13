@@ -10,9 +10,11 @@
 #include "stone.h"
 #include "gatter.h"
 #include "mark.h"
+#include "imagehandler.h"
 
 #include <QtGui>
 
+class ImageHandler;
 
 
 /*
@@ -232,6 +234,8 @@ void Board::drawGatter()
 */
 void Board::drawBackground()
 {
+	QSettings settings;
+
 	int 	w = (int)canvas->width(),
 		h = (int)canvas->height();
 	
@@ -245,17 +249,15 @@ void Board::drawBackground()
 	painter.setPen(Qt::NoPen);
 
 
-	painter.drawTiledPixmap (0, 0, w, h,QPixmap::QPixmap(":/new/prefix1/ressources/pics/table.png"));
-	// /home/eb/Packages/qgo2/src/board/ressources/pics/table.png"));
-	//TODO (ImageHandler::getTablePixmap(  setting->readEntry("SKIN_TABLE"))));
+	painter.drawTiledPixmap (0, 0, w, h,*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString())));
 
 	painter.drawTiledPixmap (
 		offsetX - offset,
 		offsetY - offset,
 		board_pixel_size + offset*2,
 		board_pixel_size + offset*2,
-		//TODO (ImageHandler::getBoardPixmap(setting->readEntry("SKIN"))));
-		QPixmap::QPixmap(":/new/prefix1/ressources/pics/wood.png"));
+		* (ImageHandler::getBoardPixmap(settings.value("SKIN").toString())));
+
 	painter.end();
 
 	QImage image = all.toImage();

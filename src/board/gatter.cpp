@@ -130,8 +130,9 @@ void Gatter::resize(int offsetX, int offsetY, int square_size)
 		size--;
 	if ((size < 7) && (size>2))
 		size = 7;
-	else 
+	else if (size <= 2)
 		size = 3;
+	
 
 	for (i=0; i<board_size; i++)
 		for (j=0; j<board_size; j++)

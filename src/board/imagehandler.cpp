@@ -22,9 +22,9 @@
 /*
 * Static class variables
 */
-QPixmap* ImageHandler::woodPixmap1 = NULL;
+QPixmap *ImageHandler::woodPixmap1 = NULL;
 
-QPixmap* ImageHandler::tablePixmap = NULL;
+QPixmap *ImageHandler::tablePixmap = NULL;
 QList<QPixmap> *ImageHandler::altGhostPixmaps = NULL;
 int ImageHandler::classCounter = 0;
 
@@ -40,10 +40,10 @@ int ImageHandler::classCounter = 0;
 ImageHandler::ImageHandler()
 {
 	// Load the pixmaps
-	if (tablePixmap == NULL)
-		tablePixmap = new QPixmap(":/new/prefix1/ressources/pics/table.png");
-	if (woodPixmap1 == NULL)
-		woodPixmap1 = new QPixmap(":/new/prefix1/ressources/pics/wood.png");
+//	if (tablePixmap == NULL)
+		tablePixmap =  new QPixmap(":/new/prefix1/ressources/pics/table.png");
+//	if (woodPixmap1 == NULL)
+		woodPixmap1 =  new QPixmap(":/new/prefix1/ressources/pics/wood.png");
 
 //    if (tablePixmap == NULL || tablePixmap->isNull())
 //		qFatal("Could not load pixmaps.");
@@ -85,11 +85,11 @@ ImageHandler::~ImageHandler()
 	classCounter --;
 	if (classCounter == 0)
 	{
-		delete woodPixmap1;
-		woodPixmap1 = NULL;
+//		delete woodPixmap1;
+//		woodPixmap1 = NULL;
 
-		delete tablePixmap;
-		tablePixmap = NULL;
+//		delete tablePixmap;
+//		tablePixmap = NULL;
 
 		altGhostPixmaps->clear();
 //		delete altGhostPixmaps;
@@ -424,10 +424,14 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 }
 
 
-QPixmap* ImageHandler::getBoardPixmap(QString filename)
+QPixmap *ImageHandler::getBoardPixmap(QString filename)
 {
 	
-	QPixmap *p = new QPixmap(filename) ;
+
+	if (! QFile::exists (QString(filename)))
+		return woodPixmap1;
+
+	QPixmap *p =  new QPixmap(filename) ;
 
 	if (p->isNull())
 		return woodPixmap1;
@@ -436,10 +440,12 @@ QPixmap* ImageHandler::getBoardPixmap(QString filename)
 
 }
 
-QPixmap* ImageHandler::getTablePixmap(QString filename) 
+QPixmap *ImageHandler::getTablePixmap(QString filename) 
 {
-	
-	QPixmap *p = new QPixmap(filename) ;
+	if (! QFile::exists (QString(filename)))
+		return tablePixmap;
+
+	QPixmap *p =  new QPixmap(filename) ;
 
 	if (p->isNull())
 		return tablePixmap;

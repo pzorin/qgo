@@ -12,6 +12,7 @@
 #include "interfacehandler.h"
 #include "qgoboard.h"
 #include "move.h"
+#include "ui_gameinfo.h"
 
 #include <QtGui>
 
@@ -221,6 +222,7 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	connect(ui.actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
 	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
 	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
+	connect(ui.actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
 
 	// This is only needed with a computer game, when the computer has to make the first move
 	qgoboard->startGame();
@@ -464,6 +466,38 @@ void BoardWindow::slotViewCoords(bool toggle)
 		ui.board->setShowCoords(false);
 	else
 		ui.board->setShowCoords(true);
+	
+//	statusBar()->message(tr("Ready."));
+}
+
+void BoardWindow::slotGameInfo(bool toggle)
+{
+	QDialog *dlg = new QDialog;
+	Ui::GameinfoDialog ui;
+	ui.setupUi( dlg );
+	ui.whiteName->setText( gameData->playerWhite );
+	ui.blackName->setText( gameData->playerBlack );
+	ui.whiteRank->setText( gameData->rankWhite );
+	ui.blackRank->setText( gameData->rankBlack );
+	ui.komi->setText( QString::number(gameData->komi ));
+	ui.handicap->setText( QString::number(gameData->handicap ));
+	ui.result->setText( gameData->result );
+	ui.gameName->setText( gameData->gameName );
+	ui.date->setText( gameData->date );
+	ui.playedAt->setText( gameData->place );
+	ui.copyright->setText( gameData->copyright );
+	ui.whiteName->setReadOnly( 1 );
+	ui.blackName->setReadOnly( 1 );
+	ui.whiteRank->setReadOnly( 1 );
+	ui.blackRank->setReadOnly( 1 );
+	ui.komi->setReadOnly(1);
+	ui.handicap->setReadOnly(1);
+	ui.result->setReadOnly(1);
+	ui.gameName->setReadOnly(1);
+	ui.date->setReadOnly(1);
+	ui.playedAt->setReadOnly(1);
+	ui.copyright->setReadOnly(1);
+	dlg->show();
 	
 //	statusBar()->message(tr("Ready."));
 }

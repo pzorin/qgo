@@ -14,6 +14,8 @@
 
 #include <QtGui>
 
+class ImageHandler;
+
 class Board : public QGraphicsView
 {
 	Q_OBJECT

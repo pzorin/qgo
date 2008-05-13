@@ -26,8 +26,8 @@ public:
 	
 	void init(int size, bool isDisplay = FALSE);
 	void rescale(int size);
-	static QPixmap* getBoardPixmap(QString );
-	static QPixmap* getTablePixmap(QString );
+	static QPixmap *getBoardPixmap(QString ) ;
+	static QPixmap *getTablePixmap(QString ) ;
 	QList<QPixmap> *getStonePixmaps() const { return stonePixmaps; }
 	QList<QPixmap> *getGhostPixmaps() const { return ghostPixmaps; }
 	static QList<QPixmap> * getAlternateGhostPixmaps() { return altGhostPixmaps; }
