@@ -431,11 +431,15 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 	
 	QString sAB="", sAW="", sAE="";
 	int i, j;
-	
+	int z;
 	for (i=0; i<size; i++)
 	{
 		for (j=0; j<size; j++)
 		{
+			z = matrix[i][j] % 10;
+			if (z != 0)
+				z= 0;
+			
 			switch (matrix[i][j] % 10)
 			{
 			case stoneBlack * -1:

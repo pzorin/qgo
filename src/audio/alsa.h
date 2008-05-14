@@ -22,6 +22,8 @@
 #include "audio/audio.h"
 #include <alsa/asoundlib.h>
 
+ #include <QThread>
+
 typedef  struct
 {	u_int32_t  dwSize ;
 	u_int16_t  wFormatTag ;
@@ -33,7 +35,7 @@ typedef  struct
 } WAVEFORMAT ;
 
 
-class QAlsaSound : public Sound
+class QAlsaSound : public Sound, public QThread
 {
 //Q_OBJECT
 public :
@@ -59,6 +61,8 @@ private:
 	char* findchunk(char* pstart, char* fourcc, size_t n);
 	WAVEFORMAT waveformat ;
 	u_long samples, datastart;
+
+	void run();
 
 };
 

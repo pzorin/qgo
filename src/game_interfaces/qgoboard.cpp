@@ -28,14 +28,15 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 
 //TODO get the sound from correct path
 	clickSound = SoundFactory::newSound( "/usr/share/qgo2/sounds/stone.wav" );
+//	clickSound = SoundFactory::newSound( "/home/eb/Packages/qgo.new/src/sounds/enter.wav" );
 }
 
 
 void qGoBoard::setHandicap(int handicap)
 {
-//	GameMode store = boardwindow->getGameMode();
+	GamePhase store = boardwindow->getGamePhase();
 	//qDebug("set Handicap " + QString::number(handicap) + ", stored mode == " + QString::number(store));
-//	setMode(modeEdit);
+	boardwindow->setGamePhase(phaseEdit);
 
 	int size = gameData->size;
 	int edge_dist = (size > 12 ? 4 : 3);
@@ -152,7 +153,7 @@ void qGoBoard::setHandicap(int handicap)
 	// Change cursor stone color
 	//board->setCurStoneColor();
 	//gameData->handicap = handicap;
-	//setMode(store);
+	boardwindow->setGamePhase(store);
 	//board->getInterfaceHandler()->disableToolbarButtons();
 }
 
@@ -661,7 +662,7 @@ qGoBoardNormalInterface::qGoBoardNormalInterface(BoardWindow *bw, Tree * t, Game
 		setHandicap(gameData->handicap);
 		boardwindow->getBoardHandler()->slotNavLast();
 	}
-	else {}
+	else 
 //	tree->setToFirstMove();	
 		boardwindow->getBoardHandler()->slotNavFirst();
 

@@ -73,12 +73,12 @@ bool QAlsaSound::initialise()
 	}
 
 	if ( lseek(fd,0L,SEEK_SET) != 0L ) {
-		qDebug("Error nRewinding WAV file %s\n",Path.toLatin1().constData());
+		qDebug("Error Rewinding WAV file %s\n",Path.toLatin1().constData());
 		return FALSE;		/* Wav file must be seekable device */
 	}
 
 
-	read (fd, buffer, BUFFERSIZE) ;
+	::read (fd, buffer, BUFFERSIZE) ;
 
 	if (findchunk (buffer, "RIFF", BUFFERSIZE) != buffer) {
 		qDebug("Bad format: Cannot find RIFF file marker\n");	/* wwg: Report error */
@@ -150,7 +150,7 @@ bool QAlsaSound::initialise()
 	/*
 	 *	ALSA pain
 	 */
-	snd_pcm_hw_params_alloca(&params);
+//	snd_pcm_hw_params_alloca(&params);
   	
 
 	if ((err = snd_pcm_open (&handle, device, SND_PCM_STREAM_PLAYBACK,SND_PCM_ASYNC)) < 0) {
@@ -159,6 +159,9 @@ bool QAlsaSound::initialise()
                                  snd_strerror (err));
                         return FALSE;
                 }
+
+
+	snd_pcm_hw_params_alloca(&params);
 
 	if ((err = snd_pcm_nonblock(handle, 1))< 0) {
 			qDebug("Audio : nonblock setting error: %s", snd_strerror(err));
@@ -207,8 +210,11 @@ bool QAlsaSound::initialise()
 
 	chunk_size = 0;
 	buffer_size=0;
-	snd_pcm_hw_params_get_buffer_size(params, &buffer_size);
 	snd_pcm_hw_params_get_period_size(params, &chunk_size, 0);
+//	snd_pcm_hw_params_get_buffer_size(params, &buffer_size);
+
+	buffer_size = chunk_size * waveformat.wChannels *2;
+
 	bits_per_sample = snd_pcm_format_physical_width(format);
 	bits_per_frame = bits_per_sample * waveformat.wChannels;
 	chunk_bytes = chunk_size * bits_per_frame / 8;
@@ -219,16 +225,8 @@ bool QAlsaSound::initialise()
 
 }
 
-
-
-void QAlsaSound::play()
-{
-
-	if (!is_available)
-		return;
-
-//#ifdef Q_OS_LINUX
-
+void QAlsaSound::run()
+{	
 	int err;
 	/* 
 	 * start playback
@@ -242,7 +240,7 @@ void QAlsaSound::play()
 	int count,f;
 	char *buffer2;
 	buffer2 = (char *)malloc (buffer_size);
-        while ((count = read (fd, buffer2,buffer_size))) 
+        while ((count = ::read (fd, buffer2,buffer_size))) 
 	{
 		f=count*8/bits_per_frame;
 //		while ((frames = snd_pcm_writei(handle, buffer2, f)) < 0) 
@@ -251,8 +249,16 @@ void QAlsaSound::play()
 		while (f > 0) {
 
 			frames = snd_pcm_writei(handle, buffer2+written, f);
+
+			if (frames == -EPIPE)
+			{
+				qDebug("Audio : underrun occured");
+				snd_pcm_prepare(handle);
+			}
+
                 	if (frames == -EAGAIN || (frames >= 0 && frames < f)) 
 				snd_pcm_wait(handle, 100);
+
 			else if (frames < 0)//{
 				frames = snd_pcm_recover(handle, frames, 0);
 				//snd_pcm_prepare(handle);//}
@@ -269,7 +275,23 @@ void QAlsaSound::play()
 		}
 	
         }
+	free(buffer2);
+
+	// the 'usleep' is needed when using the drain, otherwise, there is a 'click' at the end of the sound
+	// either comment away the two lines, or let them together.
+	usleep(100000);
 	snd_pcm_drain(handle);
+}
+
+void QAlsaSound::play()
+{
+
+	if (!is_available)
+		return;
+
+//#ifdef Q_OS_LINUX
+	start();
+
 }
 
 char* QAlsaSound::findchunk  (char* pstart, char* fourcc, size_t n)
