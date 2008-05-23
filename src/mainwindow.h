@@ -52,11 +52,14 @@ public slots:
 
 	//preferences tabs slots
 	void slot_addServer();
+	void slot_deleteServer();
 	void slot_clickedListView(QTreeWidgetItem *lvi ,  int i);
 	void slot_new();
 	void slot_serverChanged( const QString &server);
 	void slot_cancelPressed();
 	void slot_currentChanged(int );
+	void slot_getGobanPath();
+	void slot_getTablePath();
 
 	// client slots
 	void slot_connect(bool b);

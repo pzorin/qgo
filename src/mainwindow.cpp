@@ -158,6 +158,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	
 	// connecting the server tab buttons
 	connect(ui.pb_add,SIGNAL(pressed()),SLOT(slot_addServer()));
+	connect(ui.pb_delete,SIGNAL(pressed()),SLOT(slot_deleteServer()));
 	connect(ui.ListView_hosts, SIGNAL(itemClicked ( QTreeWidgetItem * , int )),SLOT(slot_clickedListView(QTreeWidgetItem * ,  int)));
 	connect(ui.pb_new,SIGNAL(pressed()),SLOT(slot_new()));	
 	connect(ui.comboBox_server,SIGNAL(currentIndexChanged ( const QString &)),
@@ -172,6 +173,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
 	connect(ui.stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
 
+	//coneects the preference buttons
+	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
+	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
 
 	// connects the parser signals to the main window (lists, rooms, ...)
 	connect(parser, SIGNAL(signal_svname(GSName&)), SLOT(slot_svname(GSName&)));
