@@ -41,6 +41,7 @@ public:
 	virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual bool modified()				{ return isModified;}
 	virtual void setModified(bool b= true)		{ isModified = b;}
+	virtual bool getModified()			{ return isModified; }
 	virtual bool getPlaySound()			{ return playSound;}
 	virtual void setPlaySound(bool b) 		{ playSound = b; }
 	virtual	void set_gsName(GSName g) 		{ gsName = g; }

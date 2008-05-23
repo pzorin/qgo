@@ -47,6 +47,7 @@ signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
 	void signalWheelEvent(QWheelEvent *);
 
+
 protected:
 	bool isDisplayBoard;
 	void calculateSize();

@@ -67,6 +67,8 @@ public:
 	QString get_bplayer()			{return gameData->playerBlack;}
 	ClockDisplay *getClockDisplay()		{return clockDisplay;}
 
+	int checkModified(bool interactive = TRUE);
+
 	qGoBoard *qgoboard;
 
 protected:
@@ -108,6 +110,7 @@ private:
 	QButtonGroup *editButtons;
 	MarkType editMark;
 	ClockDisplay *clockDisplay;
+
 };
 
 #endif

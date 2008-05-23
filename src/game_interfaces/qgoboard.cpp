@@ -175,6 +175,7 @@ void qGoBoard::addMark( int x, int y, MarkType t )
 	tree->getCurrent()->getMatrix()->insertMark(x,y,t);
 
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+	setModified();
 }
 
 /*
@@ -187,6 +188,7 @@ void qGoBoard::removeMark( int x, int y)
 		tree->getCurrent()->getMatrix()->removeMark(x,y);
 		
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+	setModified();
 }
 
 /*
@@ -197,6 +199,7 @@ void qGoBoard::addStone(StoneColor c, int x, int y)
 {
 	tree->addStoneSGF(c,x,y,FALSE);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+	setModified();
 }
 
 
@@ -209,6 +212,7 @@ void qGoBoard::removeStone( int x, int y)
 	//TODO make sure this is the correct way
 	tree->updateCurrentMatrix(stoneNone,  x,  y);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+	setModified();
 }
 
 
@@ -347,6 +351,8 @@ void qGoBoard::doPass()
 	tree->doPass(FALSE);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
+	setModified();
+
 }
 
 
@@ -378,11 +384,13 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 	}
 	else
 		if (tree->getCurrent()->getMoveNumber() > stated_mv_count)
-//		{
+		{
 //			qDebug("playing sound");
 			if (playSound)
 				clickSound->play();
-//		}
+
+			setModified();
+		}
 //	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
 	return validMove;
@@ -465,7 +473,15 @@ void qGoBoard::markDeadStone(int x, int y)
  */
 void qGoBoard::slotUpdateComment()
 {
-	tree->getCurrent()->setComment(boardwindow->getUi().commentEdit->toPlainText());
+	QString s = boardwindow->getUi().commentEdit->toPlainText();
+
+	// case where the text has 'really' been altered, versus text changed
+	// because we traverse moves
+	if (tree->getCurrent()->getComment() != s)
+	{
+		tree->getCurrent()->setComment(s);
+		setModified();
+	}
 }
 
 
@@ -638,7 +654,7 @@ void qGoBoard::deleteNode()
 	
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	
-//	board->setModified();
+	setModified();
 }
 
 

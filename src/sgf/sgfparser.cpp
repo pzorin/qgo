@@ -1597,7 +1597,9 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 {
 	*stream << "(";
 	int col = -1, cnt = 6;
-	
+
+	QString d;	
+
 	do {
 		if (isRoot)
 		{
@@ -1619,6 +1621,7 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 			}
 
 			*stream << txt;
+			d = stream->readAll();
 			col++;
 		}
 		

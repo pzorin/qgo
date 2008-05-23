@@ -33,7 +33,8 @@ void Board::init(int size)
 
 	viewport()->setMouseTracking(TRUE);
 	setUpdatesEnabled ( TRUE );
-
+	
+//	isModified = false;
 	lockResize =  false ;
 	board_size = size;//DEFAULT_BOARD_SIZE;
 	showCoords = !isDisplayBoard;//true;//TODO setting->readBoolEntry("BOARD_COORDS");
@@ -65,6 +66,7 @@ void Board::init(int size)
 	calculateSize();
 
 	imageHandler->init(square_size, isDisplayBoard);
+	
 /*	
 	// Initialize some class variables
 	nodeResultsDlg = NULL;
@@ -138,6 +140,7 @@ Board::~Board()
 	qDeleteAll(*ghosts);
 	qDeleteAll(*marks);
 }
+
 
 /*
  * cleans up the board

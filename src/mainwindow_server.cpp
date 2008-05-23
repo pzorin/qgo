@@ -2285,7 +2285,7 @@ void MainWindow::slot_removeDialog(GameDialog *dlg)
 /*
  * The parser has sent 'match create' signal because a game has started
  */
-void MainWindow::slot_removeDialog(const QString & nr, const QString & opp)
+void MainWindow::slot_removeDialog(const QString & /*nr*/, const QString & opp)
 {
 	GameDialog * dlg;
 

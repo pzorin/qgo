@@ -234,14 +234,50 @@ BoardWindow::~BoardWindow()
 
 }
 
-void BoardWindow::closeEvent(QCloseEvent *)
+void BoardWindow::closeEvent(QCloseEvent *e)
 {
 	/* We need to prompt user on close as well as
 	 * set up code to send adjourn/resign signal, etc.
 	 * Otherwise other client can actually get stuck */
 	emit signal_boardClosed(getId());
-
+	
+	if (checkModified()==1)
+		e->accept();
+	else
+		e->ignore();
 }
+
+
+int BoardWindow::checkModified(bool /*interactive*/)
+{	
+	if (!qgoboard->getModified())
+		return 1;
+	
+//	if (!interactive)
+//		return 0;
+	
+	switch (QMessageBox::warning(this, PACKAGE,
+		tr("You modified the game.\nDo you want to save your changes?"),
+		tr("Yes"), tr("No"), tr("Cancel"),
+		0, 2))
+	{
+		case 0:
+			return slotFileSave() && !qgoboard->getModified();
+			
+		case 1:
+			return 1;
+			
+		case 2:
+			return 2;
+			
+		default:
+			qWarning("Unknown messagebox input.");
+			return 0;
+	}
+		
+	return 1;
+}
+
 
 void BoardWindow::setGameData(GameData *gd)
 {
@@ -470,7 +506,7 @@ void BoardWindow::slotViewCoords(bool toggle)
 //	statusBar()->message(tr("Ready."));
 }
 
-void BoardWindow::slotGameInfo(bool toggle)
+void BoardWindow::slotGameInfo(bool /*toggle*/)
 {
 	QDialog *dlg = new QDialog;
 	Ui::GameinfoDialog ui;
@@ -568,7 +604,7 @@ bool BoardWindow::doSave(QString fileName, bool force)
 	}
 		
 //	statusBar()->message(fileName + " " + tr("saved."));
-//	board->setModified(false);
+	qgoboard->setModified(false);
 	return true;
 }
 

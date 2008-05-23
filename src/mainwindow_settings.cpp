@@ -281,7 +281,7 @@ void MainWindow::saveSettings()
 //	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
 
 	settings.setValue("SKIN", ui.LineEdit_goban->text()); 
-	settings.setValue("SKIN_TABLE", ui.LineEdit_Table->text()); 
+	settings.setValue("SKIN_TABLE", ui.LineEdit_table->text()); 
 
 	settings.setValue("TIMER_INTERVAL", ui.timerComboBox->currentIndex());
 
@@ -371,7 +371,7 @@ void MainWindow::loadSettings()
 	ui.radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
 
 	ui.LineEdit_goban->setText(settings.value("SKIN").toString());
-	ui.LineEdit_Table->setText(settings.value("SKIN_TABLE").toString());
+	ui.LineEdit_table->setText(settings.value("SKIN_TABLE").toString());
 
 	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
 
@@ -447,7 +447,10 @@ void MainWindow::loadSettings()
 void MainWindow::slot_addServer()
 {
 	// check if at least title and host inserted
-	if (!ui.LineEdit_title->text().isEmpty() && !ui.comboBox_server->currentText().isEmpty())
+
+	qDebug("Slot add server : %s - %s ",ui.LineEdit_title->text().toLatin1().constData(), ui.comboBox_server->currentText().toLatin1().constData());
+
+	if (!ui.LineEdit_title->text().isEmpty() && ! ui.comboBox_server->currentText().isEmpty())
 	{
 		// check if title already exists
 		bool found = false;
@@ -518,8 +521,55 @@ void MainWindow::slot_addServer()
 	// init insertion fields
 	//slot_cbtitle(QString());
 	ui.LineEdit_title->clear();
-	
+	ui.LineEdit_login->clear();
+	ui.LineEdit_address->clear();
+	ui.LineEdit_pass->clear();
+	ui.LineEdit_port->clear();
 	slot_serverChanged(ui.comboBox_server->currentText());
+}
+
+
+/*
+ * server tabs : button "delete" clicked 
+ */
+void MainWindow::slot_deleteServer()
+{
+	// check if at least title and host inserted
+
+	if (! ui.ListView_hosts->currentItem())
+		return;
+
+	QString s = ui.ListView_hosts->currentItem()->text(0);
+
+	bool found = FALSE;
+
+
+
+	Host *h;
+	int i=0;
+	for (/*int i=0*/; i < hostlist.count() && !found ; i++)
+	{
+		h= hostlist.at(i);
+		if (h->title() == ui.LineEdit_title->text())
+		{
+			found = TRUE;
+			delete hostlist.takeAt(i);
+		}
+	}
+		
+	if (found)
+	{
+		i = ui.ListView_hosts->indexOfTopLevelItem(ui.ListView_hosts->currentItem());
+		ui.ListView_hosts->takeTopLevelItem(i);
+	}
+
+	ui.LineEdit_title->clear();
+	ui.LineEdit_login->clear();
+	ui.LineEdit_address->clear();
+	ui.LineEdit_pass->clear();
+	ui.LineEdit_port->clear();
+	
+
 }
 
 
@@ -564,7 +614,7 @@ void MainWindow::slot_new( )
 	ui.LineEdit_port->clear();
 	ui.LineEdit_pass->clear();
 	ui.LineEdit_address->clear();
-
+	ui.comboBox_server->setCurrentIndex ( 0);
 }
 
 /*
@@ -572,15 +622,24 @@ void MainWindow::slot_new( )
  */
 void MainWindow::slot_serverChanged( const QString &server)
 {
-	if (server == tr("Other"))
+
+	if (server.isEmpty())
 	{
 		ui.LineEdit_port->clear();
-		//ui.LineEdit_port->setReadOnly(FALSE);
+		ui.LineEdit_port->setEnabled(FALSE);
+		ui.LineEdit_address->clear();
+		ui.LineEdit_address->setEnabled(FALSE);
+	}	
+
+
+	else if (server == tr("Other"))
+	{
+		ui.LineEdit_port->clear();
 		ui.LineEdit_port->setEnabled(TRUE);
 		ui.LineEdit_address->clear();
-		//ui.LineEdit_address->setReadOnly(FALSE);
 		ui.LineEdit_address->setEnabled(TRUE);
 	}
+
 	else
 	{
 		//ui.LineEdit_address->setReadOnly(TRUE);
@@ -590,7 +649,7 @@ void MainWindow::slot_serverChanged( const QString &server)
 
 		if (server == QString("LGS"))
 		{
-			ui.LineEdit_title->clear();
+//			ui.LineEdit_title->clear();
 			ui.LineEdit_address->setText("lgs.taiwango.net");
 			ui.LineEdit_port->setText("9696");
 //			ui.LineEdit_login->setText("guest");
@@ -599,7 +658,7 @@ void MainWindow::slot_serverChanged( const QString &server)
 		}
 		else if (server == QString("WING"))
 		{
-			ui.LineEdit_title->clear();
+//			ui.LineEdit_title->clear();
 			ui.LineEdit_address->setText("wing.gr.jp");
 			ui.LineEdit_port->setText("1515");
 //			ui.LineEdit_login->setText("guest");
@@ -608,7 +667,7 @@ void MainWindow::slot_serverChanged( const QString &server)
 		}
 		else if (server == QString("IGS"))
 		{
-			ui.LineEdit_title->clear();
+//			ui.LineEdit_title->clear();
 			ui.LineEdit_address->setText("igs.joyjoy.net");
 			ui.LineEdit_port->setText("7777");
 //			ui.LineEdit_login->setText("guest");
@@ -630,6 +689,33 @@ void MainWindow::slot_getComputerPath()
 
   	ui.LineEdit_computer->setText(fileName);
 }
+
+/*
+ * The 'get goban path' button has been pressed on the preferences tab
+ */
+void MainWindow::slot_getGobanPath()
+{
+	QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"), "",
+		tr("All Files (*)")));
+	if (fileName.isEmpty())
+		return;
+
+  	ui.LineEdit_goban->setText(fileName);
+}
+
+/*
+ * The 'get table path' button has been pressed on the preferences tab
+ */
+void MainWindow::slot_getTablePath()
+{
+	QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"), "",
+		tr("All Files (*)")));
+	if (fileName.isEmpty())
+		return;
+
+  	ui.LineEdit_table->setText(fileName);
+}
+
 
 /*
  * The engine path has been modified on the Go engine tab

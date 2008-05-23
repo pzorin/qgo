@@ -96,7 +96,7 @@ const QString Move::saveMove(bool isRoot)
 {
 	QString str;
 	
-	if (!isRoot)
+	if (!isRoot && !handicapMove )
 		str += ";"; //"\n;";
 	
 	if (x != -1 && y != -1 && gamePhase != phaseEdit)
