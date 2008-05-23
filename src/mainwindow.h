@@ -35,7 +35,7 @@ public:
 	void sendcommand(const QString&, bool localecho=false);
 	void set_sessionparameter(QString, bool);
 	void sendNmatchParameters();
-	void loadCreateSGFFile(QString fn);
+	void loadSgfFile(QString fn);
 
 public slots:
 	// sfg slots
@@ -119,16 +119,14 @@ private:
 	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
-	QString SGFLoaded, fileLoaded;
-	GameData * GameLoaded;
+	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
+	GameData * GameLoaded , * GameLoaded2 ;
 	qGoIF * qgoif;
 	Sound *connectSound, *gameSound;
 
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 	void initStatusBar();
-	void displayGame(DisplayBoard * board);
-	GameData * loadSGFFile(QString fn);
-	GameData * loadSGFFile(const QModelIndex & i);
+	void displayGame();
 
 	// online time
 	int	onlineCount;

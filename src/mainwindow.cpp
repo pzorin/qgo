@@ -87,7 +87,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.pbRefreshGames,SIGNAL(pressed()),SLOT(slot_RefreshGames()));
 	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
 
-	SGFLoaded = "";
+	SGFloaded = "";
+	SGFloaded2 = "";
 
 	// loads the settings
 	loadSettings();
@@ -139,9 +140,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	connect(ui.button_newComputerGame,SIGNAL(pressed()),SLOT(slot_computerNewBoard()));
 	connect(ui.button_loadComputerGame,SIGNAL(pressed()),SLOT(slot_computerOpenBoard()));
-	// allow double clicks on file tree views
-	connect(ui.dirView_1, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_fileOpenBoard()));
-	connect(ui.dirView_2, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_computerOpenBoard()));
 
 	connect(ui.dirView_1->selectionModel(),  
 		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
@@ -317,6 +315,7 @@ void MainWindow::initStatusBar()
  */
 void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
+
 	ui.displayBoard->clearData();
 
 	ui.File_WhitePlayer->setText("");
@@ -327,26 +326,62 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 	ui.File_Komi->setText("");
 	ui.File_Size->setText("");
 
-	GameLoaded = loadSGFFile(topLeft);
-	if(!GameLoaded)
+	QVariant v = topLeft.data(QDirModel::FilePathRole);
+	//qDebug( "Selected item : %s" ,v.toString().toLatin1().constData());
+
+	if (model->isDir(topLeft))
 	{
 		ui.button_loadGame->setDisabled(true);
-		return;
+		return ;
 	}
-	else
-		ui.button_loadGame->setEnabled(true);
+	//qDebug( "Selected file : %s \n" ,model->filePath(topLeft).toLatin1().constData());
 
+	fileLoaded = model->filePath(topLeft);
+	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
+	
+	if (SGFloaded == NULL)
+	{
+		ui.button_loadGame->setDisabled(true);
+		return ;
+	}
 
-	displayGame(ui.displayBoard);
+	ui.button_loadGame->setEnabled(true);
+	
+	GameLoaded = MW_SGFparser-> initGame(SGFloaded, fileLoaded);
+	
+	if (GameLoaded)
+	{
+		QString komi, hcp, sz;
+		komi.setNum(GameLoaded->komi);	
+		hcp.setNum(GameLoaded->handicap);
+		sz.setNum(GameLoaded->size);
+
+		ui.File_WhitePlayer->setText(GameLoaded->playerWhite);
+		ui.File_BlackPlayer->setText(GameLoaded->playerBlack);
+		ui.File_Date->setText(GameLoaded->date);
+		ui.File_Handicap->setText(hcp);
+		ui.File_Result->setText(GameLoaded->result);
+		ui.File_Komi->setText(komi);
+		ui.File_Size->setText(sz);
+
+		displayGame();
+	}	
+
 }
 
 
 /*
  *
  */
-void MainWindow::displayGame(DisplayBoard * board)
+void MainWindow::displayGame()
 {
-	QString s = SGFLoaded.trimmed();
+	
+	if (ui.displayBoard->getSize() != GameLoaded->size)
+		ui.displayBoard->init(GameLoaded->size);
+		
+	ui.displayBoard->displayHandicap(GameLoaded->handicap);
+
+	QString s = SGFloaded.trimmed();
 	int end_main = s.indexOf(")(");
 	if (end_main == -1)
 		end_main = s.size();
@@ -355,23 +390,6 @@ void MainWindow::displayGame(DisplayBoard * board)
 	int x,y;
 	int nb_displayed = 20;
 	QString coords;
-	QString komi, hcp, sz;
-	komi.setNum(GameLoaded->komi);	
-	hcp.setNum(GameLoaded->handicap);
-	sz.setNum(GameLoaded->size);
-
-	ui.File_WhitePlayer->setText(GameLoaded->playerWhite);
-	ui.File_BlackPlayer->setText(GameLoaded->playerBlack);
-	ui.File_Date->setText(GameLoaded->date);
-	ui.File_Handicap->setText(hcp);
-	ui.File_Result->setText(GameLoaded->result);
-	ui.File_Komi->setText(komi);
-	ui.File_Size->setText(sz);
-
-	if (board->getSize() != GameLoaded->size)
-		board->init(GameLoaded->size);
-		
-	board->displayHandicap(GameLoaded->handicap);
 
 	cursor = s.indexOf(";B[");
 
@@ -379,7 +397,7 @@ void MainWindow::displayGame(DisplayBoard * board)
 	{
 		x = s.at(cursor+3).unicode() - a_offset;
 		y = s.at(cursor+4).unicode() - a_offset;
-		board->updateStone(stoneBlack,x,y);
+		ui.displayBoard->updateStone(stoneBlack,x,y);
 		cursor = s.indexOf(";B[",cursor +1);
 
 	}
@@ -391,10 +409,12 @@ void MainWindow::displayGame(DisplayBoard * board)
 	{
 		x = s.at(cursor+3).unicode() - a_offset;
 		y = s.at(cursor+4).unicode() - a_offset;
-		board->updateStone(stoneWhite,x,y);
+		ui.displayBoard->updateStone(stoneWhite,x,y);
 		cursor = s.indexOf(";W[",cursor +1);
 
 	}
+
+
 }
 
 /* 
@@ -402,55 +422,47 @@ void MainWindow::displayGame(DisplayBoard * board)
  */
 void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
-	//QVariant v = topLeft.data(QDirModel::FilePathRole);
+	QVariant v = topLeft.data(QDirModel::FilePathRole);
 
-	ui.displayBoard2->clearData();
-
-	ui.File_WhitePlayer->setText("");
-	ui.File_BlackPlayer->setText("");
-	ui.File_Date->setText("");
-	ui.File_Handicap->setText("");
-	ui.File_Result->setText("");
-	ui.File_Komi->setText("");
-	ui.File_Size->setText("");
-
-	GameLoaded = loadSGFFile(topLeft);
-	if(!GameLoaded)
+	if (model->isDir(topLeft))
 	{
 		ui.button_loadComputerGame->setDisabled(true);
-		return;
+		return ;
 	}
-	else
-		ui.button_loadComputerGame->setEnabled(true);
 
-	displayGame(ui.displayBoard2);
-}
-
-GameData * MainWindow::loadSGFFile(const QModelIndex & i)
-{
-	if(model->isDir(i))
-		return NULL;
-	else
-		return loadSGFFile(model->filePath(i));
-}
-
-GameData * MainWindow::loadSGFFile(QString fn)
-{
-	fileLoaded = fn.toLatin1().constData();
-	SGFLoaded = MW_SGFparser->loadFile(fileLoaded);
+	fileLoaded2 = model->filePath(topLeft).toLatin1().constData();
+	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
 	
-	if (SGFLoaded == NULL)
-		return NULL;
+	if (SGFloaded2 == NULL)
+	{
+		ui.button_loadComputerGame->setDisabled(true);
+		return ;
+	}
 
-	return (MW_SGFparser->initGame(SGFLoaded, fileLoaded));
+	ui.button_loadComputerGame->setEnabled(true);
+	
+	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
 }
 
-void MainWindow::loadCreateSGFFile(QString fn)
+void MainWindow::loadSgfFile(QString fn)
 {
-	GameData * gd = loadSGFFile(fn);
-	if(gd)
-		qgoif->createGame(modeNormal, gd, TRUE, TRUE);
+	fileLoaded2 = fn.toLatin1().constData();
+	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
+	
+	if (SGFloaded2 == NULL)
+	{
+		ui.button_loadComputerGame->setDisabled(true);
+		return ;
+	}
+
+	ui.button_loadComputerGame->setEnabled(true);
+	
+	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
+
+	qgoif->createGame(modeNormal, GameLoaded2 , TRUE, TRUE);// , SGFloaded );
 }
+
+
 
 /*
  * The 'New Game' button in 'sgf editor' tab has been pressed.
@@ -471,9 +483,7 @@ void MainWindow::slot_fileNewBoard()
 
 void MainWindow::slot_fileOpenBoard()
 {
-	GameLoaded = loadSGFFile(ui.dirView_1->currentIndex());
-	if(GameLoaded != NULL)
-		qgoif->createGame(modeNormal, GameLoaded , TRUE, TRUE);// , SGFloaded );
+	qgoif->createGame(modeNormal, GameLoaded , TRUE, TRUE);// , SGFloaded );
 }
 
 /*
@@ -512,9 +522,8 @@ void MainWindow::slot_computerNewBoard()
  */
 void MainWindow::slot_computerOpenBoard()
 {
-	GameLoaded = loadSGFFile(ui.dirView_2->currentIndex());
-	if(GameLoaded != NULL)
-		qgoif->createGame(modeComputer, GameLoaded , TRUE, TRUE );
+//	createGame(modeComputer, GameLoaded2 , TRUE, TRUE , SGFloaded2 );
+	qgoif->createGame(modeComputer, GameLoaded2 , TRUE, TRUE );
 }
 
 /*
