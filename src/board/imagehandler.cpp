@@ -8,7 +8,6 @@
 
 
 #include "defines.h"
-#include "globals.h"
 #include "imagehandler.h"
 
 #include <QtGui>
