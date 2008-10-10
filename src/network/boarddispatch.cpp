@@ -233,13 +233,7 @@ void BoardDispatch::recvEnterScoreMode(void)
 {
 	if(!boardwindow)
 		return;
-	if(boardwindow->getGameMode() == modeObserve)
-	{
-		boardwindow->setGamePhase ( phaseScore );
-		boardwindow->getUi().tabDisplay->setCurrentIndex(1);
-	}
-	else
-		boardwindow->qgoboard->enterScoreMode();
+	boardwindow->qgoboard->enterScoreMode();
 }
 
 void BoardDispatch::recvRequestAdjourn(void)

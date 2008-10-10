@@ -304,7 +304,7 @@ signals:
 
 private:
 //	bool doMove(StoneColor c, int x, int y);
-//	void enterScoreMode() {}
+	void enterScoreMode(void);
 
 	
 

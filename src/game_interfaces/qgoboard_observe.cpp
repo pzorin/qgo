@@ -31,6 +31,15 @@ qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, Ga
 	boardwindow->getBoardDispatch()->requestGameInfo();
 }
 
+void qGoBoardObserveInterface::enterScoreMode()
+{
+	qDebug("qgb::enterScoreMode()");
+	boardwindow->setGamePhase ( phaseScore );
+	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
+	//boardwindow->getBoardHandler()->updateCursor();
+	boardwindow->getBoardHandler()->countScore();
+}
+
 #ifdef OLD
 /*
  * Result has been sent byu the server.
