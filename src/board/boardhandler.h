@@ -23,9 +23,11 @@ public:
 	void clearData();
 	bool markedDead;
 	void countScore();
+	void countMarked(void);
+	class GameResult retrieveScore(void);
 	void exitScore();
 	void updateMove(Move *m=0, bool ignore_update = false);
-	bool updateAll(Matrix *m, bool toDraw=true);
+	bool updateAll(Move *move, bool toDraw=true);
 	void updateCursor(StoneColor c=stoneNone);
 	void gotoMove(Move *m);
 //	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
@@ -55,6 +57,7 @@ private:
 	BoardWindow * boardwindow;
 
 	int capturesBlack, capturesWhite, caps_black, caps_white;
+	int terrBlack, terrWhite;
 	Move *lastValidMove;
 //	GameMode gameMode;
 	int boardSize;

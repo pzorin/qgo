@@ -15,6 +15,7 @@
 #include "move.h"
 #include "matrix.h"
 #include "tree.h"
+#include "../network/messages.h"
 
 #include <iostream>
 
@@ -205,8 +206,13 @@ void BoardHandler::slotNavNextComment()
 void BoardHandler::slotNavIntersection()
 {
 	//should not happen
-	if (boardwindow->getGameMode() != modeNormal)
+	if (boardwindow->getGameMode() != modeNormal &&
+	    boardwindow->getGameMode() != modeObserve)
 		return;
+	/* Double check the above, seems like we should be able to use
+	 * the nav button in any mode except maybe the scorephase of
+	 * a game.. but I mean why can't we look back over moves whenever?
+	 * FIXME */
 
 	boardwindow->setGamePhase ( phaseNavTo );
 	board->setCursorType(cursorNavTo);
@@ -478,14 +484,18 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 		
 		m->checked = true;
 	}
-*/	
+	*//* FIXME We can set the color from the SGFParser to black and that
+	 * will fix the cursor color but it doesn't fix the move that's played
+	 * which means its a deeper issue.  This had to do with getBlackTurn()
+	 * in qgoboard.cpp which thought that the root had something to
+	 * do with who's turn it is.  But move color and cursor color
+	 * should be linked somehow, encapsulated, etc.. */
+/**/	
 	Q_CHECK_PTR(m);
 //	int currentMove = m->getMoveNumber();
 //	int brothers = getNumBrothers();
-
 	// Update slider branch length
 	boardwindow->getInterfaceHandler()->setSliderMax(m->getMoveNumber() + tree->getBranchLength());	
-
 	// Display move data and comment in the GUI
 //	if (m->getGameMode() == modeNormal)
 		boardwindow->getInterfaceHandler()->setMoveData(
@@ -528,10 +538,10 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 		board->removeDeadMarks();
 //		markedDead = false;
 //	}
-	updateAll(m->getMatrix());
+	updateAll(m);
 //	if (m->getGameMode() == modeNormal || m->getGameMode() == modeObserve )  //SL add eb 8
 		// If the node is in normal mode, show the circle to mark the last move
-		    board->updateLastMove(m->getColor(), m->getX(), m->getY());
+	board->updateLastMove(m);
 //	else
 		// ... if node is in edit mode, just delete that circle
 //	{
@@ -578,45 +588,60 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //	board->updateCanvas();
 }
 
-bool BoardHandler::updateAll(Matrix *m, bool /* toDraw*/)
+bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 {
-	
+	Matrix * m = move->getMatrix();
 	Q_CHECK_PTR(m);
 	
-	tree->updateAll(m);	
+	//qDebug("BoardHandler::updateAll FIXME"); FIXME FIXME FIXME
+	//tree->updateAll(m);	
 	
 //	m->debug();
 
 //	Stone *stone;
 	bool modified = false;//, fake = false;
-	short data;
+	StoneColor color;
 	bool dead;
 	/*
 	* Synchronize the matrix with the stonehandler data and
 	* update the canvas.
 	* This is usually called when navigating through the tree.
 	*/
-	
+#ifdef FIXME
+	//possibly still obscure boardsize changing ASSERT matrix bug that
+	//comes from around here
+	qDebug("boardSize: %d", boardSize);
+#endif //FIXME
 	for (int y=1; y<=boardSize; y++)
 	{
 		for (int x=1; x<=boardSize; x++)
 		{
-			// Extract the data for the stone from the matrix
-			data = (m->at(x-1, y-1) % 10);
-			dead = (data < 0);
-			data = abs(data);
+			/* FIXME apparently matrix uses negative values for
+			 * both dead and edited stones.  I think the
+			 * assumption is that we won't be editing during
+			 * a score phase which is the only time things will
+			 * be marked dead whereas other ghosts are used
+			 * for variations.
+			 * I'm not sure what the consequences on editing
+			 * will be for this, but for now, I just want to
+			 * make sure the handicap stones can't be ghosted.
+			 * We could say that the handicap stones aren't
+			 * edits, but this is what they've been set up
+			 * as so that's more tricky. */
 			
-			board->updateStone((StoneColor)data,x,y, dead);
+			dead = (m->isStoneDead(x, y)) & (move->getMoveNumber() != 0);
+			color = m->getStoneAt(x, y);
+			
+			board->updateStone(color,x,y, dead);
 
 			
 			// Skip mark drawing when reading sgf
 //			if (!toDraw)
 //				continue;
 			
-			// Extract the mark data from the matrix
-			data = abs(m->at(x-1, y-1) / 10);
-			switch (data)
+			switch (m->getMarkAt(x, y))
 			{
+			case markKoMarker:
 			case markSquare:
 				modified = true;
 				board->setMark(x, y, markSquare, false);
@@ -694,17 +719,27 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 		break;//cur = cursorIdle;
 
 	case modeMatch :
-		if  (currentMoveColor == stoneBlack )
-			cur =  ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
-		else
-			cur = ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+		if (boardwindow->getGamePhase() == phaseScore)
+			cur = cursorIdle;
+		else if(boardwindow->getGamePhase() == phaseOngoing)
+		{
+			if  (currentMoveColor == stoneBlack )
+				cur =  ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
+			else
+				cur = ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+		}
+		//else	//FIXME
 		break;
-
 	case modeComputer :
-		if  (currentMoveColor == stoneBlack )
-			cur = ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
+		if (boardwindow->getGamePhase() == phaseScore ||boardwindow->getGamePhase() == phaseEdit )
+			cur = cursorIdle;
 		else
-			cur = ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
+		{
+			if  (currentMoveColor == stoneBlack )
+				cur = ( boardwindow->getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
+			else
+				cur = ( boardwindow->getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
+		}
 		break;
 	}
 
@@ -718,7 +753,6 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 void BoardHandler::updateVariationGhosts(Move *move)
 {
 	// qDebug("BoardHandler::updateVariationGhosts()");
-	
 	Move *m = move->parent->son;
 	Q_CHECK_PTR(m);
 	
@@ -771,9 +805,10 @@ void BoardHandler::slotWheelEvent(QWheelEvent *e)
  * Performs all operations on the matrix of current move to display score marks
  * and score informaton on the uI
  */
-void BoardHandler::countScore()
+void BoardHandler::countScore(void)
 {
-	tree->getCurrent()->getMatrix()->clearTerritoryMarks();
+	Matrix * current_matrix = tree->getCurrent()->getMatrix();
+	current_matrix->clearTerritoryMarks();
 
 	// capturesBlack -= caps_black;
 	// capturesWhite -= caps_white;
@@ -781,15 +816,17 @@ void BoardHandler::countScore()
 	capturesWhite = tree->getCurrent()->getCapturesWhite();
 	caps_black = 0;
 	caps_white = 0;
+	
 	tree->getCurrent()->setScored(true);
 
 	// Copy the current matrix
-	Matrix *m = new Matrix(*(tree->getCurrent()->getMatrix()));
+	Matrix *m = new Matrix(*current_matrix);
 	Q_CHECK_PTR(m);
 
-///	m->debug();
+//	m->debug();
 	// Do some cleanups, we only need stones
 	//m->absMatrix();
+	
 	m->clearAllMarks();
 	
 	// Mark all dead stones in the matrix with negative number
@@ -816,14 +853,15 @@ void BoardHandler::countScore()
 			}
 		}
 
-	int terrWhite = 0, terrBlack = 0;
-
+	terrWhite = 0;
+	terrBlack = 0;
+	
 	while (m != NULL)
 	{
 		bool found = false;
-		
+			
 		for (i=0; i< boardSize; i++)
-		{
+		{	
 			for (j=0; j< boardSize; j++)
 			{
 				if (m->at(i, j) <= 0)
@@ -853,16 +891,16 @@ void BoardHandler::countScore()
 					// Black territory
 					if (col == stoneBlack)
 					{
-						tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
-						tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrBlack);
+						current_matrix->removeMark(i+1, j+1);
+						current_matrix->insertMark(i+1, j+1, markTerrBlack);
 						terrBlack ++;
 						m->set(i, j, MARK_TERRITORY_DONE_BLACK);
 					}
 					// White territory
 					else if (col == stoneWhite)
 					{
-						tree->getCurrent()->getMatrix()->removeMark(i+1, j+1);
-						tree->getCurrent()->getMatrix()->insertMark(i+1, j+1, markTerrWhite);
+						current_matrix->removeMark(i+1, j+1);
+						current_matrix->insertMark(i+1, j+1, markTerrWhite);
 						terrWhite ++;
 						m->set(i, j, MARK_TERRITORY_DONE_WHITE);
 					}
@@ -873,7 +911,7 @@ void BoardHandler::countScore()
 			}
 		}
 	}
-
+	
 	// Finally, remove all false eyes that have been marked as territory. This
 	// has to be here, as in the above loop we did not find all dame points yet.
 	for (i = 0; i < boardSize; i++) 
@@ -886,7 +924,7 @@ void BoardHandler::countScore()
 				StoneColor col = (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ? stoneBlack : stoneWhite);
 				if (m->checkFalseEye(i, j, col)) 
 				{
-					tree->getCurrent()->getMatrix()->removeMark(i + 1, j + 1);
+					current_matrix->removeMark(i + 1, j + 1);
 					if (col == stoneBlack)
 						terrBlack--;
 					else
@@ -895,11 +933,10 @@ void BoardHandler::countScore()
 			}
 		}
 	}
-
 	// Mark the move having territory marks
 	tree->getCurrent()->setTerritoryMarked(true);
 	// Paint the territory on the board
-	updateAll(tree->getCurrent()->getMatrix());
+	updateAll(tree->getCurrent());
 //	board->updateCanvas();
 	
 	// Update Interface
@@ -908,6 +945,71 @@ void BoardHandler::countScore()
 		boardwindow->getGameData()->komi);
 	
 	delete m;
+}
+
+void BoardHandler::countMarked(void)
+{
+	Matrix * current_matrix = tree->getCurrent()->getMatrix();
+	int i, j, terrWhite, terrBlack, caps_black, caps_white;
+	capturesBlack = tree->getCurrent()->getCapturesBlack();
+	capturesWhite = tree->getCurrent()->getCapturesWhite();
+	caps_black = 0;
+	caps_white = 0;
+	terrWhite = 0;
+	terrBlack = 0;
+	
+	for (i=0; i< boardSize; i++)
+		for (j=0; j< boardSize; j++)
+		{
+			
+			/* When called from network code, we're just using
+			 * the board as server has reported it.  No stones
+			 * are marked as dead, but apparently ones marked as
+			 * territory get ghosted out */
+			if(current_matrix->getMarkAt(i + 1, j + 1) == markTerrBlack)
+			{
+				terrBlack++;
+				if (current_matrix->getStoneAt(i+1,j+1) == stoneWhite)
+					caps_black++;
+			}
+			else if(current_matrix->getMarkAt(i + 1, j + 1) == markTerrWhite)
+			{
+				terrWhite++;
+				if (current_matrix->getStoneAt(i +1,j+1) == stoneBlack)
+					caps_white++;
+			}
+		}
+	//qDebug("cb %d cw %d cb2 %d cw2 %d", capturesBlack, capturesWhite, caps_black, caps_white);
+	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack  + caps_black,
+		terrWhite, capturesWhite + caps_white ,
+		boardwindow->getGameData()->komi);
+}
+
+/* Not totally confident that this belongs here, but
+ * the score is counted here */
+GameResult BoardHandler::retrieveScore(void)
+{
+	GameResult g;
+	g.result = GameResult::SCORE;
+	/* What about different scoring types? (chinese versus japanese)
+	 * FIXME This basically confirms for me that this does not
+	 * belong here */ 
+	
+	float blackScore = terrBlack + capturesBlack + caps_black;
+	float whiteScore = terrWhite + capturesWhite + caps_white + boardwindow->getGameData()->komi;
+	if(whiteScore > blackScore)
+	{
+		g.winner_color = stoneWhite;
+		g.winner_score = whiteScore;
+		g.loser_score = blackScore;
+	}
+	else
+	{
+		g.winner_color = stoneBlack;
+		g.winner_score = blackScore;
+		g.loser_score = whiteScore;
+	}
+	return g;
 }
 
 /*
