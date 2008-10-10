@@ -22,6 +22,7 @@
 #include "qgtp.h"
 #include "tree.h"
 #include "move.h"
+#include "../network/messages.h"
 
 
 qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
@@ -33,7 +34,7 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 	connect (gtp, SIGNAL(signal_computerPlayed(bool, const QString&)), SLOT(slot_playComputer(bool, const QString&)));
 
 	if (gtp->openGtpSession(settings.value("COMPUTER_PATH").toString(),
-				gameData->size,
+				gameData->boardSize,
 				gameData->komi,
 				gameData->handicap,
 				GNUGO_LEVEL)==FAIL)
@@ -57,12 +58,19 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 	
 //	prepareComputerBoard();  
 	if (gameData->handicap && gameData->fileName.isEmpty())
+	//if(gameData->handicap)
 		setHandicap(gameData->handicap);
 
 
 	/* What is playSound for??*/
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
+}
+
+qGoBoardComputerInterface::~qGoBoardComputerInterface()
+{
+	qDebug("Deconstructing computer interface");
+	delete gtp;
 }
 
 /*
@@ -89,6 +97,9 @@ void qGoBoardComputerInterface::startGame()
 void qGoBoardComputerInterface::localPassRequest()
 //was slot_doPass()
 {
+	qDebug("qgbCI::localPassRequest");
+	/* Don't think we're using localPassRequest any more since
+	 * its redundant with subclass sendPassToInterface FIXME */
 	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 
 	tree->doPass(FALSE);
@@ -102,24 +113,29 @@ void qGoBoardComputerInterface::localPassRequest()
 		playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
 }
 
-
-/*
- * This functions gets the move request (from a board click)
- * and displays the resulting stone (if valid)
- * It also passes it to the 'proxy' or interface to the go engine
- */
-void qGoBoardComputerInterface::localMoveRequest(StoneColor c, int x, int y)
+void qGoBoardComputerInterface::slotDonePressed()
 {
-//	if (!doMove(c,x,y))
-//		return;
-	
-//	sendMoveToInterface(c,x,y);
-
-	qGoBoard::localMoveRequest(c,  x,  y);
-	// FIXME : this should be made in a better way : wait for the interface to acknowledge before adding the move to the tree
-	playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
+	/* FIXME  Since there's no server to tell us the result, we have
+	 * to calculate it or whatever, print out a winner a score, etc..
+	 * I'm really surprised there's no existing code to do this
+	 * actually.  Also feels like the kind of thing that could
+	 * be in qGoBoard, some generic win reporting thing, score
+	 * reporting, etc.. and then the set_result functions could
+	 * call that qGoBoard thing with the specifics.*/
+	qGoBoard::slotDonePressed();
+	qDebug("Done Pressed\n");
 }
 
+void qGoBoardComputerInterface::slotUndoPressed()
+{
+	if(boardwindow->getGamePhase() == phaseScore)
+		leaveScoreMode();
+	else
+	{
+		gtp->undo(0);
+		qGoBoard::slotUndoPressed();
+	}
+}
 
 /*
  * This sends the move to the computer through GTP
@@ -138,6 +154,7 @@ void qGoBoardComputerInterface::sendMoveToInterface(StoneColor c,int x, int y)
 	int c2 = boardwindow->getBoardSize()  + 1 - y;
 	
 	
+	boardwindow->getUi().resignButton->setEnabled(false);
 //	mv_counter++;
   
 	switch (c)
@@ -167,6 +184,9 @@ void qGoBoardComputerInterface::sendMoveToInterface(StoneColor c,int x, int y)
 		default :
 		; 
 	}
+
+	/* Moved here from after the localMoveRequest */
+	playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
 }
 
 /*
@@ -225,13 +245,15 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &comput
 
 	if (computer_answer == "resign")
    	{
-		boardwindow->getInterfaceHandler()->displayComment((!b ? "White resigned" : "Black resigned"));
-		boardwindow->getGameData()->result = (!b ? "B+R" : "W+R");
+		GameResult g((!b ? stoneBlack : stoneWhite), GameResult::RESIGN);
+		setResult(g);
+		//boardwindow->getInterfaceHandler()->displayComment((!b ? "White resigned" : "Black resigned"));
+		//boardwindow->getGameData()->result = (!b ? "B+R" : "W+R");
 //		slot_DoneComputer();
 		return ;
 	}	
 
-
+	qDebug("computer answers: %s", computer_answer.toLatin1().constData());
 	set_move(b ? stoneBlack : stoneWhite , computer_answer, "" /*mv_nr*/);
 
 	//qDebug ("computer move played");
@@ -247,7 +269,13 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &comput
 	// trick : if we have the computer play against himself, we recurse ...
 //	if (win->blackPlayerType ==   win->whitePlayerType)
 //		playComputer( c==stoneBlack ? stoneWhite : stoneBlack);
-   
+	/* We shouldn't be able to resign during computers turn
+	 * but this is a little awkward to put it in the comp
+	 * interface here.  But otherwise there's no real
+	 * way to check who the current player is since the computer
+	 * moves are done with a function call rather than based on
+	 * some check of who's turn it is */
+	boardwindow->getUi().resignButton->setEnabled(true);
 }
 
 /*
@@ -259,11 +287,18 @@ void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 //		return;
 
 //	mv_counter++;
+	//StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
+	doPass();
+	//tree->doPass(FALSE);
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
+	
 	//check if this is the second pass move.
 	if ((tree->getCurrent()->isPassMove())&&(tree->getCurrent()->parent->isPassMove()))
 	{
 //		emit signal_2passes(0,0);
+		enterScoreMode();
+		qDebug("2nd pass move");
 		return;
 	}
   
@@ -276,6 +311,8 @@ void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 			QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to pass within program \n") + gtp->getLastMessage());
 			return;
 		}
+		else
+			qDebug("comp notified of white pass");
 	//	if (win->blackPlayerType==COMPUTER)
 	//		playComputer(c);
 	
@@ -295,6 +332,11 @@ void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 		default :
 		;
 	}
+	
+	if (tree->getCurrent()->parent->isPassMove())
+		enterScoreMode();	
+	else
+		playComputer( c == stoneWhite ? stoneBlack : stoneWhite );
 
 }
 
@@ -318,9 +360,9 @@ void qGoBoardComputerInterface::set_move(StoneColor sc, QString pt, QString/* mv
 		int j;
 
 		if (pt[2] >= '0' && pt[2] <= '9')
-			j = boardwindow->getGameData()->size + 1 - pt.mid(1,2).toInt();
+			j = boardwindow->getGameData()->boardSize + 1 - pt.mid(1,2).toInt();
 		else
-			j = boardwindow->getGameData()->size + 1 - pt[1].digitValue();
+			j = boardwindow->getGameData()->boardSize + 1 - pt[1].digitValue();
 
 
 		if (!doMove(sc, i, j))
