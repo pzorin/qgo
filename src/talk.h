@@ -21,27 +21,29 @@
 #define TALK_H
 
 #include "ui_talk_gui.h"
-
 #include <QtGui>
 
+class TalkDispatch;
+class PlayerListing;
 
 class Talk : public QDialog, public Ui::TalkGui
 {
 Q_OBJECT
 
 public:
-	Talk(const QString&, QWidget*, bool isplayer = true);
+	Talk(TalkDispatch * dis, const PlayerListing & player);
 	virtual ~Talk();
 	QTextEdit      *get_mle() const { return ui.MultiLineEdit1; } 
 	QLineEdit      *get_le() const {return ui.LineEdit1; }
 	QWidget        *get_tabWidget()  { return this; }
-	QString        get_name() const { return name; }
-	void           set_name(QString &n) { name = n; }
+	QString        get_name() const;
+	//void           set_name(QString &n) { name = n; }
 	void           write(const QString &text = QString()) const;
+	void	       updatePlayerListing(void);
 	bool           pageActive;
 	void           setTalkWindowColor(QPalette pal);
 	Ui::TalkGui	getUi() 		{return ui;}
-
+	void setDispatch(TalkDispatch * dis) { dispatch = dis; };
 public slots:
 	void slot_returnPressed();
 	void slot_pbRelTab();
@@ -50,13 +52,14 @@ public slots:
 signals:
 	void signal_talkTo(QString&, QString&);
 	void signal_pbRelOneTab(QWidget*);
-	void signal_matchRequest(const QString&,bool);
+	void signal_matchRequest(const QString&);
 
 
 private:
 	Ui::TalkGui ui;
-	QString        name;
 	static int     counter;
+	TalkDispatch * dispatch;
+	const PlayerListing & opponent;
 
 };
 
