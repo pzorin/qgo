@@ -5,7 +5,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "globals.h"
+#include "defines.h"
 #include "group.h"
 
 class Matrix
@@ -13,13 +13,15 @@ class Matrix
 public:
 	Matrix(int s=DEFAULT_BOARD_SIZE);
 	Matrix(const Matrix &m);
+	Matrix & operator=(const Matrix &m);
 	~Matrix();
 	int getSize() const { return size; }
 	void clear();
-	void insertStone(int x, int y, StoneColor c, GamePhase phase = phaseOngoing);
+	void insertStone(int x, int y, StoneColor c, GamePhase phase);
 	void removeStone(int x, int y);
 	void eraseStone(int x, int y);
 	StoneColor getStoneAt(int x, int y);
+	bool isStoneDead(int x, int y);
 	MarkType getMarkAt(int x, int y);
 	QString getFirstTextAvailable(MarkType t);
 
@@ -27,7 +29,7 @@ public:
 	void removeMark(int x, int y);
 	void setMarkText(int x, int y, const QString &txt);
 	const QString getMarkText(int x, int y);
-	short at(int x, int y) const;
+	unsigned short at(int x, int y) const;
 	void set(int x, int y, int n);
 	void clearAllMarks();
 	void clearTerritoryMarks();
@@ -44,8 +46,10 @@ public:
 	bool checkNeighbourTerritory( const int &x, const int &y, StoneColor &col);
 	void checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties);
 	Group* assembleGroup(MatrixStone *stone);
+	Group* assembleAreaGroups(MatrixStone *stone);
 	bool checkFalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
+	void toggleAreaAt( int x, int y );
 	void updateDeadMarks(int &black, int &white);
 
 	static long coordsToKey(int x, int y)
@@ -69,7 +73,7 @@ protected:
 	QStringList::Iterator getMarkTextIterator(int x, int y);
 	
 private:
-	short **matrix;
+	unsigned short **matrix;
 	int size;
 	QStringList *markTexts;
 };

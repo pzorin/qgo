@@ -28,6 +28,19 @@ Matrix::Matrix(const Matrix &m)
 			matrix[i][j] = m.at(i, j);
 }
 
+Matrix & Matrix::operator=(const Matrix &m)
+{
+	if(this != &m)
+	{
+		size = m.getSize();
+		init();
+		for (int i=0; i<size; i++)
+			for (int j=0; j<size; j++)
+				matrix[i][j] = m.at(i, j);
+	}
+	return *this;
+}
+
 Matrix::~Matrix()
 {
 	Q_ASSERT(size > 0 && size <= 36);
@@ -41,12 +54,12 @@ Matrix::~Matrix()
 
 void Matrix::init()
 {
-	matrix = new short*[size];
+	matrix = new unsigned short*[size];
 	Q_CHECK_PTR(matrix);
 	
 	for (int i=0; i<size; i++)
 	{
-		matrix[i] = new short[size];
+		matrix[i] = new unsigned short[size];
 		Q_CHECK_PTR(matrix[i]);
 		
 		for (int j=0; j<size; j++)
@@ -143,9 +156,9 @@ void Matrix::insertStone(int x, int y, StoneColor c, GamePhase phase)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-	matrix[x-1][y-1] = abs(matrix[x-1][y-1] / 10 * 10) + c;
+	matrix[x-1][y-1] = (matrix[x-1][y-1] & 0xfff0) | c;
 	if (phase == phaseEdit)
-		matrix[x-1][y-1] *= -1;
+		matrix[x-1][y-1] |= MX_STONEEDIT;
 }
 
 void Matrix::removeStone(int x, int y)
@@ -153,7 +166,7 @@ void Matrix::removeStone(int x, int y)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-	matrix[x-1][y-1] = abs(matrix[x-1][y-1] / 10 * 10);
+	matrix[x-1][y-1] &= 0xfff0;
 }
 
 void Matrix::eraseStone(int x, int y)
@@ -161,11 +174,12 @@ void Matrix::eraseStone(int x, int y)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-	matrix[x-1][y-1] = (abs(matrix[x-1][y-1] / 10 * 10) + stoneErase) * -1;
+	matrix[x-1][y-1] = (matrix[x-1][y-1] & 0xfff0) | stoneErase | MX_STONEDEAD;
 }
 
-short Matrix::at(int x, int y) const
+unsigned short Matrix::at(int x, int y) const
 {	
+	//qDebug("assert line %d: %d %d < %d", __LINE__, x, y, size); 
 	Q_ASSERT(x >= 0 && x < size &&
 		y >= 0 && y < size);
 	
@@ -177,7 +191,16 @@ StoneColor Matrix::getStoneAt(int x, int y)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-	return ( (StoneColor) (abs(matrix[x - 1][y -1])%10) );
+	return  (StoneColor) (matrix[x - 1][y -1] & 0x000f);
+}
+
+bool Matrix::isStoneDead(int x, int y)
+{	
+	//qDebug("xy: %d %d", x, y);
+	Q_ASSERT(x > 0 && x <= size &&
+			y > 0 && y <= size);
+	
+	return (matrix[x - 1][y -1] & MX_STONEDEAD);
 }
 
 MarkType Matrix::getMarkAt(int x, int y)
@@ -185,12 +208,8 @@ MarkType Matrix::getMarkAt(int x, int y)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-	return ( (MarkType) (abs(matrix[x -1][y-1])/ 10 * 10) );
+	return  (MarkType) ((matrix[x -1][y-1] >> 4) & 0x000f);
 }
-
-
-
-
 
 void Matrix::set(int x, int y, int n)
 {
@@ -205,8 +224,7 @@ void Matrix::insertMark(int x, int y, MarkType t)
 	//Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
 	if (!(x > 0 && x <= size && y > 0 && y <= size))
 		return;
-
-	matrix[x-1][y-1] = (abs(matrix[x-1][y-1]) + 10*t) * (matrix[x-1][y-1] < 0 ? -1 : 1);
+	matrix[x-1][y-1] |= (t << 4);
 }
 
 void Matrix::removeMark(int x, int y)
@@ -214,12 +232,12 @@ void Matrix::removeMark(int x, int y)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-	matrix[x-1][y-1] %= 10;
+	matrix[x-1][y-1] &= 0xff0f;
 	
 	if (markTexts != NULL && !markTexts->isEmpty())
 	{
 		QStringList::Iterator it = getMarkTextIterator(x, y);
-		if (*it != NULL)
+		if (it != markTexts->end())
 			markTexts->erase(it);
 	}
 }
@@ -230,7 +248,7 @@ void Matrix::clearAllMarks()
 	
 	for (int i=0; i<size; i++)
 		for (int j=0; j<size; j++)
-			matrix[i][j] %= 10;
+			matrix[i][j] &= 0x000f;
 		
 		if (markTexts != NULL)
 		{
@@ -247,9 +265,9 @@ void Matrix::clearTerritoryMarks()
 	
 	for (int i=0; i<size; i++)
 		for (int j=0; j<size; j++)
-			if ((data = abs(matrix[i][j] / 10)) == markTerrBlack ||
+			if ((data = getMarkAt(i + 1, j + 1)) == markTerrBlack ||
 				data == markTerrWhite)
-				matrix[i][j] %= 10;
+				matrix[i][j] &= 0x000f;
 }
 
 void Matrix::absMatrix()
@@ -260,11 +278,10 @@ void Matrix::absMatrix()
 	{
 		for (int j=0; j<size; j++)
 		{
-			matrix[i][j] = abs(matrix[i][j]);
-			if (matrix[i][j] == stoneErase)
-				matrix[i][j] = stoneNone;
-			if (matrix[i][j] % 10 == stoneErase)
-				matrix[i][j] = matrix[i][j] / 10 * 10;
+			//matrix[i][j] = abs(matrix[i][j]);
+			matrix[i][j] &= 0x2fff;		//remove dead and edit?
+			if (getStoneAt(i + 1, j + 1) == stoneErase)
+				insertStone(i + 1, j + 1, stoneNone, phaseOngoing);
 		}
 	}
 }
@@ -336,7 +353,7 @@ const QString Matrix::getMarkText(int x, int y)
 		return NULL;
 	
 	QStringList::Iterator it = getMarkTextIterator(x, y);
-	if (*it == NULL)  // Nope, this entry does not exist.
+	if (it == markTexts->end())  // Nope, this entry does not exist.
 		return NULL;
 	
 	QString s = (QString)(*it);
@@ -359,7 +376,7 @@ const QString Matrix::saveMarks()
 	{
 		for (j=0; j<size; j++)
 		{
-			switch (abs(matrix[i][j] / 10))
+			switch (getMarkAt(i + 1, j + 1))
 			{
 			case markSquare:
 				if (sSQ.isEmpty())
@@ -436,13 +453,14 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 	{
 		for (j=0; j<size; j++)
 		{
-			z = matrix[i][j] % 10;
+			z = getStoneAt(i + 1, j + 1);
 			if (z != 0)
 				z= 0;
-			
-			switch (matrix[i][j] % 10)
+			if(!(matrix[i][j] | MX_STONEEDIT))
+				continue;
+			switch (getStoneAt(i + 1, j + 1))
 			{
-			case stoneBlack * -1:
+			case stoneBlack:
 				if (parent != NULL &&
 					parent->at(i, j) == stoneBlack)
 					break;
@@ -451,7 +469,7 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 				sAB += "[" + coordsToString(i, j) + "]";
 				break;
 				
-			case stoneWhite * -1:
+			case stoneWhite:
 				if (parent != NULL &&
 					parent->at(i, j) == stoneWhite)
 					break;
@@ -460,7 +478,7 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 				sAW += "[" + coordsToString(i, j) + "]";
 				break;
 				
-			case stoneErase * -1:
+			case stoneErase:
 				if (parent != NULL &&
 					(parent->at(i, j) == stoneNone ||
 					parent->at(i, j) == stoneErase))
@@ -468,6 +486,9 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 				if (sAE.isEmpty())
 					sAE += "AE";
 				sAE += "[" + coordsToString(i, j) + "]";
+				break;
+			default:
+			case stoneNone:
 				break;
 			}
 		}
@@ -508,7 +529,7 @@ const QString Matrix::printMe(ASCII_Import *charset)
 		str += QString::number(size-i) + " |";
 		for (j=0; j<size; j++)
 		{
-			switch (abs(matrix[j][i] % 10))
+			switch (getStoneAt(j + 1, i + 1))
 			{
 			case stoneBlack: str += QChar(charset->blackStone); str += " "; break;
 			case stoneWhite: str += QChar(charset->whiteStone); str += " "; break;
@@ -575,10 +596,9 @@ void Matrix::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &li
 	if (!x || !y)
 		return;
 	
-
-	if (	x <= size && y <= size && x >= 0 && y >= 0 &&
+	if (	x <= size && y <= size && x > 0 && y > 0 &&
 	    	!libCounted.contains(100*x + y) &&
-	    	(at(x - 1, y - 1)%10 == stoneNone ))  // ?? check stoneErase ?
+	    	(getStoneAt(x, y) == stoneNone ))  // ?? check stoneErase ?
 	{
 		  libCounted.append(100*x + y);
 		  liberties ++;
@@ -598,8 +618,8 @@ void Matrix::checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, i
 	
 	if (	x <= size && y <= size && x >= 0 && y >= 0 &&
 		!libCounted.contains(100*x + y) &&
-		(at(x - 1, y - 1) == MARK_TERRITORY_DONE_BLACK ||
-		at(x - 1, y - 1) == MARK_TERRITORY_DONE_WHITE))
+		(at(x - 1, y - 1) & MARK_TERRITORY_DONE_BLACK ||
+		at(x - 1, y - 1) & MARK_TERRITORY_DONE_WHITE))
 	{
 		libCounted.append(100*x + y);
 		liberties ++;
@@ -643,7 +663,8 @@ Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group)
 
 /*
  * Counts and returns the number of liberties of a group of adjacetn stones
- */
+ * Since we replaced checkPosition, this might only be called by checkFalseEye
+ * if anything.  */
 int Matrix::countLiberties(Group *group) 
 {
 	int liberties = 0;
@@ -747,7 +768,7 @@ bool Matrix::checkNeighbourTerritory(const int &x, const int &y, StoneColor &col
 	
 	// A stone, but no color found yet? Then set this color and dont continue
 	// The stone must not be marked as alive in seki.
-	if (col == stoneNone && at(x, y) > 0 && at(x, y) < MARK_SEKI)
+	if (col == stoneNone && at(x, y) < MARK_SEKI)
 	{
 		col = (StoneColor)at(x, y);
 		return false;
@@ -809,9 +830,66 @@ Group* Matrix::assembleGroup(MatrixStone *stone)
 	return group;
 }
 
+
+/* This is kind of ugly but I'm trying to use the existing matrix
+ * code for something weird 
+ * Could there be a potential miscalc if called on empty vertex?
+ * Would it be*/
+Group* Matrix::assembleAreaGroups(MatrixStone *stone)
+{
+	Group *group = new Group();
+	Q_CHECK_PTR(group);
+	StoneColor oppColor;
+
+	group->append(stone);
+	
+	int mark = 0;
+	
+	if(stone->c == stoneWhite)
+		oppColor = stoneBlack;
+	else
+		oppColor = stoneWhite;
+	StoneColor col = stone->c;
+	// Walk through the horizontal and vertical directions and assemble the
+	// attached stones to this group.
+	while (mark < group->count())
+	{
+		stone = group->at(mark);
+		
+		if (at(stone->x - 1, stone->y - 1) != oppColor )
+		{
+			int 	stoneX = stone->x,
+			stoneY = stone->y;
+			
+			
+			// North
+			group = checkNeighbour(stoneX, stoneY-1, col, group);
+			group = checkNeighbour(stoneX, stoneY-1, stoneNone, group);
+			// West
+			group = checkNeighbour(stoneX-1, stoneY, col, group);
+			group = checkNeighbour(stoneX-1, stoneY, stoneNone, group);
+			// South
+			group = checkNeighbour(stoneX, stoneY+1, col, group);
+			group = checkNeighbour(stoneX, stoneY+1, stoneNone, group);
+			// East
+			group = checkNeighbour(stoneX+1, stoneY, col, group);
+			group = checkNeighbour(stoneX+1, stoneY, stoneNone, group);
+		}
+		mark ++;
+	}
+	
+	return group;
+}
+
+
 /*
  * Returns true if the stone at x,y belongs to a groups with only 1 liberty
- */
+ * Previously checkFalseEye worked on the scored liberties.  The problem
+ * was that it missed certain eyes on disconnected groups that could be
+ * connected.  I don't know why it would only look at scored liberties.
+ * If group is dead that's another matter, but I don't think that's an
+ * issue. 
+*/
 bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 {
 	MatrixStone *tmp= new MatrixStone ;
@@ -823,7 +901,9 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	{
 		tmp->x = x +1 ;
 		tmp->y = y ;
-		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//	return true;
+		if (countLiberties(assembleGroup(tmp)) == 1) 
 			return true;
 	}
 
@@ -832,7 +912,9 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	{
 		tmp->x = x  ;
 		tmp->y = y + 1 ;
-		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//	return true;
+		if (countLiberties(assembleGroup(tmp)) == 1) 
 			return true;
 	}
 
@@ -841,7 +923,9 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	{
 		tmp->x = x + 1 ;
 		tmp->y = y + 2 ;
-		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//	return true;
+		if (countLiberties(assembleGroup(tmp)) == 1) 
 			return true;
 	}
  
@@ -850,10 +934,12 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	{
 		tmp->x = x + 2 ;
 		tmp->y = y + 1 ;
-		if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//if (countScoredLiberties(assembleGroup(tmp)) == 1) 
+		//	return true;
+		if (countLiberties(assembleGroup(tmp)) == 1) 
 			return true;
 	}
-
+	
 	return false;
 }
 
@@ -877,8 +963,32 @@ void Matrix::toggleGroupAt( int x, int y)
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
-		matrix[s->x -1][s->y -1] *= -1;
+		matrix[s->x -1][s->y -1] |= MX_STONEDEAD;
 
+	}
+
+}
+
+/* Any stones connected to this xy stone by empty
+ * vertices are to be marked dead */
+void Matrix::toggleAreaAt( int x, int y)
+{
+	StoneColor col = getStoneAt(x, y);
+
+	if ( col != stoneWhite && col != stoneBlack )
+		return ;
+
+	MatrixStone *s = new MatrixStone;
+	s->x = x;
+	s->y = y;
+	s->c = col;
+
+	Group *g = assembleAreaGroups(s);
+
+	for (int i=0; i<g->count(); i++)
+	{
+		s = g->at(i);
+		matrix[s->x -1][s->y -1] |= MX_STONEDEAD;
 	}
 
 }
@@ -930,5 +1040,3 @@ QString Matrix::getFirstTextAvailable(MarkType t)
 	return mark;
 	
 }
-
-
