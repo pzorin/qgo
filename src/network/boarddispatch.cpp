@@ -1,5 +1,4 @@
 #include "boarddispatch.h"
-#include "../game_interfaces/qgo_interface.h"
 #include "boardwindow.h"
 #include "messages.h"
 #include "listviews.h"
