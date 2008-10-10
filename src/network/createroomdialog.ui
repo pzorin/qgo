@@ -1,0 +1,1064 @@
+<ui version="4.0" >
+ <class>CreateRoomDialog</class>
+ <widget class="QDialog" name="CreateRoomDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Create Room</string>
+  </property>
+  <widget class="QWidget" name="horizontalLayoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>213</x>
+     <y>248</y>
+     <width>168</width>
+     <height>45</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout" >
+    <item>
+     <widget class="QPushButton" name="cancelButton" >
+      <property name="text" >
+       <string>Cancel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="createButton" >
+      <property name="text" >
+       <string>Create</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QTabWidget" name="roomTypeTab" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="geometry" >
+    <rect>
+     <x>13</x>
+     <y>64</y>
+     <width>369</width>
+     <height>183</height>
+    </rect>
+   </property>
+   <property name="currentIndex" >
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="Game" >
+    <attribute name="title" >
+     <string>Game</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>8</x>
+       <y>12</y>
+       <width>280</width>
+       <height>134</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2" >
+      <item>
+       <widget class="QGroupBox" name="groupBox" >
+        <property name="title" >
+         <string>Wished Opponent</string>
+        </property>
+        <widget class="QWidget" name="layoutWidget" >
+         <property name="geometry" >
+          <rect>
+           <x>21</x>
+           <y>28</y>
+           <width>95</width>
+           <height>92</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2" >
+          <item>
+           <widget class="QRadioButton" name="opponentStrongerRB" >
+            <property name="text" >
+             <string>Stronger</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="opponentEvenRB" >
+            <property name="text" >
+             <string>Even</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="opponentWeakerRB" >
+            <property name="text" >
+             <string>Weaker</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="opponentAnyRB" >
+            <property name="text" >
+             <string>Anybody</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_2" >
+        <property name="title" >
+         <string>Time Limits</string>
+        </property>
+        <widget class="QWidget" name="layoutWidget" >
+         <property name="geometry" >
+          <rect>
+           <x>20</x>
+           <y>29</y>
+           <width>96</width>
+           <height>90</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3" >
+          <item>
+           <widget class="QRadioButton" name="timeQuickRB" >
+            <property name="text" >
+             <string>Quick</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="timeNormalRB" >
+            <property name="text" >
+             <string>Normal</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="timePonderousRB" >
+            <property name="text" >
+             <string>Ponderous</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="timeAnyRB" >
+            <property name="text" >
+             <string>Any</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>304</x>
+       <y>55</y>
+       <width>45</width>
+       <height>54</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <widget class="QRadioButton" name="oneOnOneRB" >
+        <property name="text" >
+         <string>1:1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="pairRB" >
+        <property name="text" >
+         <string>Pair</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Gomoku" >
+    <attribute name="title" >
+     <string>Gomoku</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="Chat" >
+    <attribute name="title" >
+     <string>Chat</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>66</x>
+       <y>25</y>
+       <width>236</width>
+       <height>105</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>Topic:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QComboBox" name="topicCB" >
+        <item>
+         <property name="text" >
+          <string>Baduk</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Movies</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Music</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Sports</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Games</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Manga</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Humor</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Current Affairs</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Literature</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Hobbies</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Travel</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Climbing</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Entertainment</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Computing</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Internet</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Miscellaneous</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>Age:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QComboBox" name="ageCB" >
+        <item>
+         <property name="text" >
+          <string>All Ages</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>-9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>10-19</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>20-29</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>30-39</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>40-49</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>50-59</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>60-69</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>70+</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Location:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QComboBox" name="locationCB" >
+        <item>
+         <property name="text" >
+          <string>Korea</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>China</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Japan</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Thai</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>US</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Europe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Australia</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Foreign</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Other</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Review" >
+    <attribute name="title" >
+     <string>Review</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>64</x>
+       <y>33</y>
+       <width>238</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3" >
+      <item>
+       <widget class="QLabel" name="teachingRangeLabel" >
+        <property name="text" >
+         <string>Levels for Comments:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="commentsCB" >
+        <property name="currentIndex" >
+         <number>16</number>
+        </property>
+        <item>
+         <property name="text" >
+          <string>below 7D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 6D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 5D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 4D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 3D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 2D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 1D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 1K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 2K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 3K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 4K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 5K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 6K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 7K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 8K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 9K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 10K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 11K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 12K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 13K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 14K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 15K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 16K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 17K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 18K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 19K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 20K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 21K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 22K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 23K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 24K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 25K</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>74</x>
+       <y>107</y>
+       <width>210</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4" >
+      <item>
+       <widget class="QRadioButton" name="teachingRB" >
+        <property name="text" >
+         <string>Teaching</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="liveRB" >
+        <property name="text" >
+         <string>Live Commentary</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="" >
+     <property name="geometry" >
+      <rect>
+       <x>78</x>
+       <y>68</y>
+       <width>214</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_5" >
+      <item>
+       <widget class="QLabel" name="label_11" >
+        <property name="text" >
+         <string>Teaching Contents: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="teachingContentCB" >
+        <item>
+         <property name="text" >
+          <string>Joseki</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Fuseki</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>L &amp; D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Endgame</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Focused</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Multi" >
+    <attribute name="title" >
+     <string>Multi(1:N)</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>84</x>
+       <y>16</y>
+       <width>200</width>
+       <height>125</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>Max people:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QSpinBox" name="spinBox" >
+        <property name="minimum" >
+         <number>2</number>
+        </property>
+        <property name="maximum" >
+         <number>10</number>
+        </property>
+        <property name="value" >
+         <number>7</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_8" >
+        <property name="text" >
+         <string>Wait for:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QComboBox" name="waitTimeCB" >
+        <property name="currentIndex" >
+         <number>2</number>
+        </property>
+        <item>
+         <property name="text" >
+          <string>10 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>15 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>20 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>25 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>30 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>60 M(s)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_9" >
+        <property name="text" >
+         <string>Black time limit:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QComboBox" name="blackTimeCB" >
+        <property name="currentIndex" >
+         <number>3</number>
+        </property>
+        <item>
+         <property name="text" >
+          <string>5 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>10 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>15 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>20 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>30 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>40 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>50 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>60 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>90 M(s)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>120 M(s)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="label_10" >
+        <property name="text" >
+         <string>Strength range:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QComboBox" name="strengthRangeCB" >
+        <property name="currentIndex" >
+         <number>16</number>
+        </property>
+        <item>
+         <property name="text" >
+          <string>below 7D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 6D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 5D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 4D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 3D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 2D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 1D</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 1K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 2K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 3K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 4K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 5K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 6K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 7K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 8K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 9K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 10K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 11K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 12K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 13K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 14K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 15K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 16K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 17K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 18K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 19K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 20K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 21K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 22K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 23K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 24K</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>below 25K</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Version" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+    <attribute name="title" >
+     <string>Version</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QSplitter" name="splitter" >
+   <property name="geometry" >
+    <rect>
+     <x>9</x>
+     <y>5</y>
+     <width>378</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <widget class="QLabel" name="label" >
+    <property name="text" >
+     <string>Name:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="nameEdit" />
+  </widget>
+  <widget class="QSplitter" name="splitter_2" >
+   <property name="geometry" >
+    <rect>
+     <x>8</x>
+     <y>33</y>
+     <width>264</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <widget class="QLabel" name="passwordLabel" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+    <property name="text" >
+     <string>Password:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="passwordEdit" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="privateCB" >
+    <property name="text" >
+     <string>Private</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
