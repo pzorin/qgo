@@ -138,7 +138,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
 	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
 
-	currentCommand = new sendBuf("",0);
+	//currentCommand = new sendBuf("",0);
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);

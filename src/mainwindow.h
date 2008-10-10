@@ -151,8 +151,8 @@ private:
 	HostList hostlist;
 	NetworkDispatch * netdispatch;		//bad place for this to be!!!
 
-	QList<sendBuf*>  sendBuffer;
-	sendBuf		*currentCommand;
+	//QList<sendBuf*>  sendBuffer;
+	//sendBuf		*currentCommand;
 	QMenu 		*seekMenu;
 	QList<Talk*>	talkList;
 	QList<GameDialog*> matchList;
