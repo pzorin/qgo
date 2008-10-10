@@ -22,25 +22,16 @@
 #include "qgtp.h"
 #include "tree.h"
 #include "move.h"
+#include "network/boarddispatch.h"
+#include "network/messages.h"
 
 
-qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
+qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {
-	game_Id = QString::number(gd->gameNumber);
-
-	boardwindow->getUi().board->clearData();
-
-//	emit signal_sendCommandFromBoard("games " + game_Id, FALSE);
-	emit signal_sendCommandFromBoard("moves " +  game_Id, FALSE);
-	emit signal_sendCommandFromBoard("all " +  game_Id, FALSE);
-	
-	QSettings settings;
-	// value 1 = no sound, 0 all games, 2 my games
-	playSound = (settings.value("SOUND") == 0);
-
-	startTimer(1000);
+	boardwindow->getBoardDispatch()->requestGameInfo();
 }
 
+#ifdef OLD
 /*
  * Result has been sent byu the server.
  */
@@ -63,19 +54,41 @@ void qGoBoardObserveInterface::setResult(QString res, QString xt_res)
 	boardwindow->setGamePhase(phaseEnded);
 }
 
+void qGoBoardObserveInterface::setResult(GameResult * r)
+{
+	if (tree->getCurrent() == NULL)		//how can this happen???
+	{
+		qDebug("How can this possibly happen???");
+		return;
+	}
+
+	kibitzReceived("\n" + r->shortMessage());
+	boardwindow->getGameData()->result = r->shortMessage();
+
+	QMessageBox::information(boardwindow , tr("Game n° ") + QString::number(boardwindow->getId()), r->longMessage());
+
+	QSettings settings;
+	if( settings.value("AUTOSAVE").toBool())
+		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
+
+	boardwindow->setGamePhase(phaseEnded);
+}
 
 /*
  * Comment line - return sent
  */
 void qGoBoardObserveInterface::slotSendComment()
 {
+	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi().commendEdit2->text());
 	emit signal_sendCommandFromBoard("kibitz " + game_Id + " " + boardwindow->getUi().commentEdit2->text() , FALSE);
 
+	// this should be our username: !!!  
 	boardwindow->getUi().commentEdit->append("-> " + boardwindow->getUi().commentEdit2->text());
 
 	boardwindow->getUi().commentEdit2->clear();
 }
 
+#endif //OLD
 
 /*
  *  time info has been send by parser
@@ -83,6 +96,7 @@ void qGoBoardObserveInterface::slotSendComment()
  */
 void qGoBoardObserveInterface::setTimerInfo(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
 {
+	qDebug("Does anyone use qGoBoardObserveInterface::setTimerInfo??\n");
 	int bt_i = btime.toInt();
 	int wt_i = wtime.toInt();
 //	b_stones = bstones;
@@ -115,6 +129,77 @@ void qGoBoardObserveInterface::setTimerInfo(const QString &btime, const QString 
 //	sound = true;
 }
 
+
+#ifdef OLD
+/* Move this to qGoBoard since its so common */
+void qGoBoardObserveInterface::set_move(MoveRecord * m)
+{
+	Move *remember = tree->getCurrent();
+	Move *last = tree->findLastMoveInMainBranch();
+
+	tree->setCurrent(last);
+
+	int move_number = m->number;
+	//bool hcp_move = tree->getCurrent()->isHandicapMove();
+	int move_counter = tree->getCurrent()->getMoveNumber();
+	/* If move_counter == 0 even though a handicap has been set, there's
+	 * a problem */
+	int handicap = boardwindow->getGameData()->handicap;
+	/* Since we don't send the handicap move right now... */
+	if(move_counter == 0)
+	{
+		if(handicap && move_number == 0)	//1??
+		{	
+			qDebug("Setting handicap to %d\n", handicap); 
+			setHandicap(handicap);
+			if (remember != last)
+				tree->setCurrent(remember);
+			boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+		}
+		//else if(move_counter == 0)
+		//	move_counter++;
+	}
+	/* This is insanely ugly: setHandicap should properly update the
+	 * move counter */
+	if(handicap)
+		move_counter++;
+
+	switch(m->flags)
+	{
+		case MoveRecord::TERRITORY:
+			if(m->color == stoneBlack)
+				boardwindow->qgoboard->addMark(m->y, m->x, markTerrWhite);
+			else
+				boardwindow->qgoboard->addMark(m->y, m->x, markTerrWhite);
+			break;
+		case MoveRecord::UNDO:
+			qDebug("Got undo message in observer interface!!\n");
+			//move_number = mv_counter - 1;
+			break;
+		case MoveRecord::PASS:
+			doPass();
+			break;
+		case MoveRecord::HANDICAP:
+			break;
+		default:
+		case MoveRecord::NONE:
+			if((move_number + 1 == move_counter && move_number == 0) ||
+			  (move_number == move_counter))
+			{
+				if (!doMove(m->color, m->x, m->y))
+					QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 %2 seems to be invalid").arg(QString::number(m->x), QString::number(m->y)));
+			}
+			break;
+		case MoveRecord::REMOVE:
+			break;
+	}
+
+	//check wether we should update to the incoming move or not
+	if (remember != last)
+		tree->setCurrent(remember);
+
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+}
 
 /*
  * A move string is incoming from the interface (server)
@@ -309,4 +394,5 @@ void qGoBoardObserveInterface::set_move(StoneColor sc, QString pt, QString mv_nr
 		
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 }
+#endif //OLD
 

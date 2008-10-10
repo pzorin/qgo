@@ -13,9 +13,11 @@
 
 #include "boardwindow.h"
 #include "tree.h"
-#include "globals.h"
+#include "defines.h"
 #include "qgtp.h"
 
+/* I think its easier to have the computer and normal modes override a few functions to
+ * null then have review and match provide the same complicated net functionality */
 
 
 class qGoBoard : public QObject //, public Misc<QString>
@@ -25,7 +27,7 @@ class qGoBoard : public QObject //, public Misc<QString>
 public:
 	qGoBoard(BoardWindow *bw, Tree * t, GameData *gd);
 //	qGoBoard(qGoBoard &qgoboard );
-	virtual ~qGoBoard() {}
+	virtual ~qGoBoard() {}; 
 	virtual void setHandicap(int handicap);
 	virtual void addStone(StoneColor c, int x, int y);
 	virtual void removeStone(int x, int y);
@@ -34,27 +36,33 @@ public:
 	virtual void removeMark( int x, int y);
 
 //	virtual void localMoveRequest(int x, int y)=0;
-	virtual bool getBlackTurn();
+	virtual bool getBlackTurn(bool time = false);
 	virtual void startGame() {}
-	virtual void set_move(StoneColor , QString , QString ) {}
+	virtual void set_move(StoneColor , QString , QString ) {};
+	virtual void set_move(class MoveRecord *) {}; 
 	virtual void set_statedMoveCount(int n) 	{ stated_mv_count = n;}
-	virtual void set_havegd(bool b) 		{ have_gameData = b; }
-	virtual bool modified()				{ return isModified;}
+	int getMoveNumber(void);
+	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual void setModified(bool b= true)		{ isModified = b;}
 	virtual bool getModified()			{ return isModified; }
 	virtual bool getPlaySound()			{ return playSound;}
 	virtual void setPlaySound(bool b) 		{ playSound = b; }
-	virtual	void set_gsName(GSName g) 		{ gsName = g; }
 	
-	virtual void setResult(QString , QString ) {}
+	virtual void setResult(QString , QString ) {};
+	virtual void setResult(class GameResult & );
 	virtual void kibitzReceived(const QString& txt);
 	virtual void setTimerInfo(const QString&, const QString&, const QString&, const QString&) {}
 	virtual void timerEvent(QTimerEvent*);
-	virtual void deleteNode();
+	class TimeRecord getOurTimeRecord(void);		//awkward
+	//virtual void deleteNode();
 	virtual void enterScoreMode() ;
 	virtual void markDeadStone(int x, int y);
+	virtual void markDeadArea(int x, int y, bool alive = false);
 
 	virtual void setNode(int , StoneColor , int , int ) {}
+	virtual void requestAdjournDialog(void) {};
+	virtual void adjournGame(void) {};
+	virtual void recvRefuseAdjourn(void) {};
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -127,11 +135,13 @@ public slots:
 	// Board
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
 	virtual void slotPassPressed();
-	virtual void slotDonePressed() {}
-	virtual void slotReviewPressed() {}
-	virtual void slotUndoPressed() {}
+	virtual void slotDonePressed();
+	virtual void slotResignPressed();
+	virtual void slotReviewPressed() {};
+	virtual void slotUndoPressed();
 	virtual void slotScoreToggled(bool);
 	virtual void slotUpdateComment();
+	virtual void slotSendComment() {};
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 /*	void slot_stoneComputer(enum StoneColor, int, int);    
 	void slot_PassComputer(StoneColor c) ;                 
@@ -158,10 +168,11 @@ protected:
 	Tree *tree;
 	GameData *gameData;
 	Sound *clickSound;
+	int boardTimerId;
 
 //	bool        timer_running;
 //	bool        game_paused;
-	bool	have_gameData;
+//	bool	have_gameData;
 	bool	isModified;
 //	bool        sent_movescmd;
 //	bool        adjourned;
@@ -183,7 +194,6 @@ protected:
 //	QString     req_komi;
 //	assessType  req_free;
 //	bool		    requests_set;
-	GSName      gsName;
 //	QString     myName;
 //	int         BY_timer;
 
@@ -193,17 +203,17 @@ protected:
 
 	virtual void localMoveRequest(StoneColor c, int x, int y);
 	virtual void localMarkDeadRequest(int x, int y);
-	virtual void sendMoveToInterface(StoneColor c,int x, int y) =0;
-	virtual bool doMove(StoneColor c, int x, int y);
+	virtual void sendMoveToInterface(StoneColor ,int, int) {};
+	virtual void sendPassToInterface(StoneColor ) { doPass(); };
+	virtual bool doMove(StoneColor c, int x, int y, bool dontplayyet = false);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
 //	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
-	virtual void sendPassToInterface(StoneColor c)=0;
-	virtual void localPassRequest();
 //	virtual void enterScoreMode() ;
-	virtual void leaveScoreMode() {};//= 0;
-	
+	virtual void leaveScoreMode();//= 0;
 };
 
+/* We can override the virtuals above with nulls below if the option
+ * isn't supported or needs to be drastically changed */
 
 
 class qGoBoardNormalInterface : public qGoBoard 
@@ -216,10 +226,8 @@ public:
 
 private:
 	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
-	void sendPassToInterface(StoneColor /*c*/) {}
 //	bool doMove(StoneColor c, int x, int y);
 //	void enterScoreMode();
-	void leaveScoreMode() ;
 };
 
 class qGoBoardComputerInterface : public qGoBoard 
@@ -228,19 +236,20 @@ class qGoBoardComputerInterface : public qGoBoard
 
 public:
 	qGoBoardComputerInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
-	~qGoBoardComputerInterface() {}
+	~qGoBoardComputerInterface();
 	void set_move(StoneColor sc, QString pt, QString mv_nr);
 
 public slots:
 	void slot_playComputer(bool ok, const QString &computer_answer);
+	virtual void slotDonePressed();
+	virtual void slotUndoPressed();
 
 private:
-	void sendMoveToInterface(StoneColor c,int x, int y) ;
-	void sendPassToInterface(StoneColor c);
 //	bool doMove(StoneColor c, int x, int y);
+	virtual void sendMoveToInterface(StoneColor c,int x, int y);
+	virtual void sendPassToInterface(StoneColor c);
 
 	void playComputer(StoneColor c);
-	void localMoveRequest(StoneColor c, int x, int y);
 	void localPassRequest();
 	void startGame();
 //	void enterScoreMode() {}
@@ -249,7 +258,30 @@ private:
 	QGtp *gtp;
 };
 
-class qGoBoardObserveInterface : public qGoBoard 
+class qGoBoardNetworkInterface : public qGoBoard
+{
+	Q_OBJECT
+public:
+	virtual ~qGoBoardNetworkInterface() {};
+public slots:
+	virtual void slotSendComment();	
+	virtual void slotUndoPressed();
+	virtual void slotDonePressed();
+	virtual void slotResignPressed();
+	virtual void slotReviewPressed() {};		//should FIXME these two
+	virtual void slotAdjournPressed() {};
+protected:
+	qGoBoardNetworkInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
+	virtual void sendMoveToInterface(StoneColor c,int x, int y);
+	virtual void sendPassToInterface(StoneColor c);
+	virtual void set_move(MoveRecord * m);
+	virtual void adjournGame(void);
+	
+	QString game_Id;
+	bool dontsend;
+};
+
+class qGoBoardObserveInterface : public qGoBoardNetworkInterface
 {
 	Q_OBJECT
 
@@ -258,29 +290,27 @@ public:
 	~qGoBoardObserveInterface() {}
 
 	void setModified(bool)	{} //we don't modify an observed game
-	void setResult(QString res, QString xt_res);
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-	void set_move(StoneColor sc, QString pt, QString mv_nr);
 
 public slots:
-	void slotUpdateComment() {}
-	void slotSendComment();
+	void slotUpdateComment() {}		//what is this ?!?!?
+	virtual void slotUndoPressed(void){};
+	virtual void slotDonePressed(void){};
+	virtual void slotResignPressed(void){};
+	virtual void slotAdjournPressed(void){};
 
 signals:
 	void signal_sendCommandFromBoard(const QString&, bool);
 
 private:
-	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
-	void sendPassToInterface(StoneColor /*c*/) {}
 //	bool doMove(StoneColor c, int x, int y);
 //	void enterScoreMode() {}
-	void leaveScoreMode() {}
 
-	QString game_Id;
+	
 
 };
 
-class qGoBoardMatchInterface : public qGoBoard 
+class qGoBoardMatchInterface : public qGoBoardNetworkInterface 
 {
 	Q_OBJECT
 
@@ -289,31 +319,22 @@ public:
 	~qGoBoardMatchInterface() {}
 
 	void setModified(bool)	{} //we don't modify a match game
-	void setResult(QString res, QString xt_res);
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-	void set_move(StoneColor sc, QString pt, QString mv_nr);
 	void enterScoreMode();
 	void timerEvent(QTimerEvent*);
-
+	virtual void requestAdjournDialog(void);
+	virtual void recvRefuseAdjourn(void);
 public slots:
 	void slotUpdateComment() {}
-	void slotSendComment();
-	void slotDonePressed();
-	void slotReviewPressed();
-	void slotUndoPressed() ;
-	void slotResignPressed() ;
-	void slotAdjournPressed();
+	virtual void slotReviewPressed();
+	virtual void slotAdjournPressed();
 
 signals:
 	void signal_sendCommandFromBoard(const QString&, bool);
 
 private:
-	void sendMoveToInterface(StoneColor c,int x, int y );
-	void sendPassToInterface(StoneColor c);
-	void leaveScoreMode() {}
 	void localMoveRequest(StoneColor c, int x, int y);
 	void localMarkDeadRequest(int x, int y);
-	QString game_Id;
 //	bool warningSound;
 //	int warningSecs;
 
@@ -321,7 +342,7 @@ private:
 
 
 
-class qGoBoardReviewInterface : public qGoBoard 
+class qGoBoardReviewInterface : public qGoBoardNetworkInterface 
 {
 	Q_OBJECT
 
@@ -332,12 +353,11 @@ public:
 //	void setModified(bool)	{} //we don't modify an  game
 //	void setResult(QString res, QString xt_res);
 //	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-	void set_move(StoneColor sc, QString pt, QString mv_nr);
+	//void set_move(StoneColor sc, QString pt, QString mv_nr);
 	void setNode(int move_nr, StoneColor c, int x, int y);
 
 public slots:
 	void slotUpdateComment() {}
-	void slotSendComment();
 //	void slotDonePressed();
 	void slotUndoPressed() ;
 
@@ -345,10 +365,7 @@ signals:
 	void signal_sendCommandFromBoard(const QString&, bool);
 
 private:
-	void sendMoveToInterface(StoneColor c,int x, int y );
-	void sendPassToInterface(StoneColor c);
 	void localMoveRequest(StoneColor c, int x, int y);
-	QString game_Id;
 
 };
 

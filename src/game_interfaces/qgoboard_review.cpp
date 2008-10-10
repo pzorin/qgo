@@ -23,7 +23,7 @@
 #include "tree.h"
 #include "move.h"
 
-qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
+qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {
 	game_Id = QString::number(gd->gameNumber);
 
@@ -51,6 +51,7 @@ void qGoBoardReviewInterface::localMoveRequest(StoneColor c, int x, int y)
 	
 }
 
+/* This is like a special set_move and should be more clear */
 /*
  * A node is incoming from the interface (server)
  */
@@ -77,6 +78,7 @@ void qGoBoardReviewInterface::setNode(int node_nr, StoneColor sc, int x, int y)
 
 
 
+#ifdef OLD
 /*
  * A move string is incoming from the interface (server)
  * TODO : code duplicate : make sure we can't send this to qgoboard
@@ -91,13 +93,17 @@ void qGoBoardReviewInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
  */
 void qGoBoardReviewInterface::sendPassToInterface(StoneColor /*c*/)
 {
+	/* What really is this doing in the review interface ??? */
 	emit signal_sendCommandFromBoard("pass", FALSE);
+	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(MoveRecord::PASS));
 }
+#endif //OLD
 
 /*
  * sends a move to the server
  */
-void qGoBoardReviewInterface::sendMoveToInterface(StoneColor /*c*/, int x, int y)
+#ifdef OLD
+void qGoBoardReviewInterface::sendMoveToInterface(StoneColor c, int x, int y)
 {
 
 	if (x > 8)
@@ -113,10 +119,16 @@ void qGoBoardReviewInterface::sendMoveToInterface(StoneColor /*c*/, int x, int y
 
 //	if (gsName == IGS)
 		id = game_Id;
+	/* Where and why would we get the number here, is 0 okay for now ??? FIXME */
+
+	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(0, x, y, c)); 
 
 	emit signal_sendCommandFromBoard(QString(c1) + QString::number(c2) + " " + id, FALSE);
 
+	
+
 }
+#endif //OLD
 
 /*
  * 'undo' button pressed
@@ -126,13 +138,18 @@ void qGoBoardReviewInterface::slotUndoPressed()
 
 }
 
+#ifdef OLD
 /*
  * Comment line - return sent
  */
 void qGoBoardReviewInterface::slotSendComment()
 {
+	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi().commentEdit2->text());
+	
 	emit signal_sendCommandFromBoard("say " + boardwindow->getUi().commentEdit2->text() , FALSE);
+	// again, like kibitz, this should be our username FIXME
 	boardwindow->getUi().commentEdit->append("-> " + boardwindow->getUi().commentEdit2->text());
 
 	boardwindow->getUi().commentEdit2->clear();
 }
+#endif //OLD

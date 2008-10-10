@@ -9,8 +9,11 @@
 #include "boardwindow.h"
 #include "tree.h"
 #include "move.h"
-#include "globals.h"
+#include "defines.h"
 #include "audio.h"
+#include "network/boarddispatch.h"
+#include "network/messages.h"
+#include "resultdialog.h"
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {
@@ -31,14 +34,15 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 //	clickSound = SoundFactory::newSound( "/home/eb/Packages/qgo.new/src/sounds/enter.wav" );
 }
 
-
+/* FIXME: Make sure this isn't called from places it shouldn't be. Like
+ * subclass interfaces.  */
 void qGoBoard::setHandicap(int handicap)
 {
 	GamePhase store = boardwindow->getGamePhase();
 	//qDebug("set Handicap " + QString::number(handicap) + ", stored mode == " + QString::number(store));
 	boardwindow->setGamePhase(phaseEdit);
-
-	int size = gameData->size;
+	qDebug("setHandicap called\n");
+	int size = gameData->boardSize;
 	int edge_dist = (size > 12 ? 4 : 3);
 	int low = edge_dist;
 	int middle = (size + 1) / 2;
@@ -54,7 +58,8 @@ void qGoBoard::setHandicap(int handicap)
 	// change: handicap is first move
 //	if (handicap > 1)
 //	{
-		tree->createMoveSGF();
+		/* Commented out because handi should be root move */
+		//tree->createMoveSGF();
 		//createNode(*tree->getCurrent()->getMatrix(), false, false);
 		/* Move should already be set to 0 by board handler and the placement
 		 * of handicap stones won't change that */
@@ -62,6 +67,8 @@ void qGoBoard::setHandicap(int handicap)
 		tree->getCurrent()->setMoveNumber(0);
 		tree->getCurrent()->setHandicapMove(TRUE);
 //	}
+	if(tree->getCurrent()->getNumBrothers())
+		qDebug("handi has brother??");
 
 	// extra:
 	if (size == 19 && handicap > 9)
@@ -216,13 +223,24 @@ void qGoBoard::removeStone( int x, int y)
 }
 
 
+int qGoBoard::getMoveNumber(void)
+{
+	return tree->getCurrent()->getMoveNumber();
+}
+
 /*
  * 'Pass' button pressed
+ * FIXME we could just overload the slotPassPressed
+ * which would obviate sendPassToInterface
  */
 void qGoBoard::slotPassPressed()
 //was slot_doPass()
 {
-	localPassRequest();
+	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
+
+	if((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
+	   (!getBlackTurn() && boardwindow->getMyColorIsWhite()))
+		sendPassToInterface(c);
 }
 
 /*
@@ -237,13 +255,72 @@ void qGoBoard::slotScoreToggled(bool pressed)
 		leaveScoreMode();
 }
 
+void qGoBoard::setResult(GameResult & r)
+{
+	if (tree->getCurrent() == NULL)		//how can this happen???
+	{
+		qDebug("How can this possibly happen???");
+		return;
+	}
+	if(boardwindow->getGamePhase() == phaseEnded)
+	{
+		/* FIXME This is only okay if this is the only function
+		 * setting the gamePhase to phaseEnded */
+		qDebug("Already received result");
+		return;
+	}
+	kibitzReceived("\n" + r.shortMessage());
+	boardwindow->getGameData()->result = r.shortMessage();
+	/* This is all a little ugly. FIXME.  The problem is that the
+	 * QString result is used by the sgf loader, its sort of
+	 * an easy way to store and load results through sgf files.
+	 * The problem is that these aren't necessarily anything
+	 * more than a string which means either we have to interpret
+	 * them and allow partial GameResult records or this, 
+	 * which is to have two different results on the game data.  And then
+	 * all of this is just basically so the network code
+	 * can get the margin when the client calulates it for
+	 * a protocol.  So yeah, find a better way. FIXME 
+	 * Really, I'd like to make the gamedata be one, single
+	 * stand alone object instead of something we copy to different
+	 * places, and then I'd like to do the same with the result
+	 * as an add on to it.  Just add whatever interpretation of
+	 * SGF files is necessary.*/
+	boardwindow->getGameData()->fullresult = new GameResult(r);
+	BoardDispatch * boarddispatch = boardwindow->getBoardDispatch();
+	if(!boarddispatch)
+	{
+		qDebug("No board dispatch for game result");
+		return;
+	}
+	GameData * gr = boarddispatch->getGameData();
+	gr->fullresult = new GameResult(r);
+	/* This should be parent window modal, otherwise its annoying.
+	 * I'm going to make it its own dialog so it could be extended
+	 * later */
+	ResultDialog * rd = new ResultDialog(boardwindow, boarddispatch, boardwindow->getId(), &r);
+	rd->setWindowModality(Qt::WindowModal);
+	rd->show();
+
+	QSettings settings;
+	if( settings.value("AUTOSAVE").toBool())
+		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
+
+	boardwindow->setGamePhase(phaseEnded);
+	/* FIXME:  getting the result doesn't set the result
+	 * in the toolbar for some reason.  Like it doesn't
+	 * show score or captures or anything else. 
+	 * this was an enterScoreMode thing, but there's more
+	 * issues there*/
+}
+
 /*
  * This handles the main envent with qGo : something has been clicked on the board
  */
 void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState)
 {
 	bool blackToPlay = getBlackTurn();
-
+	
 	switch (boardwindow->getGamePhase())
 	{
 		case phaseInit:
@@ -301,20 +378,6 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 	}
 }
 
-
-/*
- * This processes a 'Pass' button pressed
- */
-void qGoBoard::localPassRequest()
-//was slot_doPass()
-{
-	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
-
-	doPass();
-	sendPassToInterface(c);
-}
-
-
 /*
  * This functions gets the move request (from a board click)
  * and displays the resulting stone (if valid)
@@ -326,9 +389,7 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 		sendMoveToInterface(c,x,y);
 	}
-	
 }
-
 
 /*
  * This functions gets the request (from a board click)
@@ -340,6 +401,7 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
 }
 
 
+/* We need to combine the below perhaps with the above sendPassToInterface */
 /*
  * This function adds a pass move to a game. there is no need to return anything
  */
@@ -361,37 +423,55 @@ void qGoBoard::doPass()
 /*
  * This functions adds a move to a game. returns 1 if move was valid, 0 if not)
  */
-bool qGoBoard::doMove(StoneColor c, int x, int y)
+bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 {
 	bool validMove = TRUE;
+	static QTime lastSound = QTime(0,0,0);
 
 	// does the matrix have already a stone there ?
 	if (tree->getCurrent()->getMatrix()->getStoneAt(x,y) != stoneNone)
 	{
-		qDebug ("QGoboard:doMove - We seem to have already a stone at this place : %d %d",x,y);
+		qDebug ("QGoboard:doMove - We seem to have already a stone at this place : %d %d (%d)",x,y, dontplayyet);
 		return FALSE;
 	}
 
+	/* FIXME, I don't understand this, why is there addMove and addStoneSGF?? */
+	
 	//The move is added to the tree. if it exists already, it becomes the current move
-	tree->addMove(c,  x, y, TRUE);
+	tree->addMove(c, x, y, TRUE);
 
 	// Is the move valid ?
-	if ( tree->addStoneSGF(c,x,y,TRUE) < 0)
+	if ( tree->addStoneSGF(c,x,y,TRUE,dontplayyet) < 0)
 	{
 		qDebug ("QGoboard:doMove - This move does not seem to be valid : %d %d",x,y);
 		tree->deleteNode(); 
 		validMove = FALSE;
 	}
-	else
-		if (tree->getCurrent()->getMoveNumber() > stated_mv_count)
-		{
-//			qDebug("playing sound");
+	if(dontplayyet && validMove)	//i.e., we didn't go into last conditional
+	{
+		qDebug("not playing...");
+		tree->deleteNode();
+		/* Ugly, we need to figure out why there's
+		 * an addMove, and an addStoneSGF and why its called
+		 * SGF, and clear out both of those, and then here...
+		 * we shouldn't be adding a bad node, and then deleting it
+		 * if its bad, we shouldn't add it if its bad... FIXME */
+	}
+	/* Non trivial here.  We don't want to play a sound as we get all
+	 * the moves from an observed game.  But there's no clean way
+	 * to tell when the board has stopped loading, particularly for IGS.
+	 * so we only play a sound every 500 msecs... 
+	 * Also, maybe it should play even if we aren't looking at last move */
+	if(!dontplayyet && validMove && boardwindow->getGamePhase() == phaseOngoing &&
+		   QTime::currentTime() > lastSound &&
+		   tree->getCurrent()->getMoveNumber() == tree->findLastMoveInMainBranch()->getMoveNumber())
+	{
 			if (playSound)
 				clickSound->play();
-
-			setModified();
-		}
-//	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+			//setModified();
+			lastSound = QTime::currentTime();	
+			lastSound = lastSound.addMSecs(500);
+	}
 	
 	return validMove;
 }
@@ -400,16 +480,18 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 
 /*
  * Returns true wether it's black to play
+ * FIXME shouldn't this be in board.cpp or some place?
+ * maybe not...
  */
-bool qGoBoard::getBlackTurn()
+bool qGoBoard::getBlackTurn(bool time)
 {
 	if (tree->getCurrent()->getPLinfo())
 		// color of next stone is same as current
 		return tree->getCurrent()->getPLnextMove() == stoneBlack;
-
-	if (tree->getCurrent() == tree->getRoot())
-		return TRUE;
-
+	
+	//if (tree->getCurrent() == tree->getRoot())
+	//	return TRUE;
+	
 	// the first handicap move bears number 0 as well
 	if (tree->getCurrent()->getMoveNumber() == 0)
 	{
@@ -430,7 +512,13 @@ bool qGoBoard::getBlackTurn()
 	if (boardwindow->getGamePhase() != phaseEdit)
 	{
 		// change color
-		return (tree->getCurrent()->getColor() == stoneWhite);
+		/* This is to prevent clock ticking for wrong player
+		 * when looking back over moves in an observed game,
+		 * for instance */
+		if(time)
+			return (tree->findLastMoveInMainBranch()->getColor() == stoneWhite);
+		else
+			return (tree->getCurrent()->getColor() == stoneWhite);
 	}
 	// Edit mode. Return color of parent move.
 	else if (tree->getCurrent()->parent != NULL)
@@ -448,10 +536,23 @@ bool qGoBoard::getBlackTurn()
  */
 void qGoBoard::enterScoreMode()
 {
+	qDebug("qgb::enterScoreMode()");
 	boardwindow->setGamePhase ( phaseScore );
 	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
 	boardwindow->getBoardHandler()->updateCursor();
 	boardwindow->getBoardHandler()->countScore();
+}
+
+
+/*
+ * This functions leaves the scoring mode
+ */
+void qGoBoard::leaveScoreMode()
+{
+	qDebug("leaving score mode");
+	boardwindow->getUi().tabDisplay->setCurrentIndex(0);
+	boardwindow->setGamePhase ( phaseOngoing );
+	boardwindow->getBoardHandler()->exitScore();
 }
 
 
@@ -466,6 +567,42 @@ void qGoBoard::markDeadStone(int x, int y)
 
 	tree->getCurrent()->getMatrix()->toggleGroupAt(x, y);
 	boardwindow->getBoardHandler()->countScore();
+}
+
+/* ORO is the only thing that uses this right now */
+void qGoBoard::markDeadArea(int x, int y, bool alive)
+{
+	// is the click on a stone ?
+	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
+		return ;
+	
+	// Don't toggle it if its already dead or already alive
+	if(alive && !tree->getCurrent()->getMatrix()->isStoneDead(x, y)) 
+		return;
+	if(!alive && tree->getCurrent()->getMatrix()->isStoneDead(x, y))
+		return;
+	tree->getCurrent()->getMatrix()->toggleAreaAt(x, y);
+	boardwindow->getBoardHandler()->countScore();
+}
+
+void qGoBoard::slotUndoPressed(void)
+{
+	/* Are we supposed to make a brother node or something ??? FIXME */
+	tree->deleteNode();
+	/* Why doesn't the move get updated when we delete a node automatically FIXME? */
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+}
+
+void qGoBoard::slotResignPressed(void)
+{
+	GameResult g((getBlackTurn() ? stoneWhite : stoneBlack), GameResult::RESIGN);
+	setResult(g);
+}
+
+void qGoBoard::slotDonePressed(void)
+{
+	GameResult g = boardwindow->getBoardHandler()->retrieveScore();
+	setResult(g);
 }
 
 /*
@@ -492,6 +629,7 @@ void qGoBoard::kibitzReceived(const QString& text)
 {
 
 	QString k = text;
+	// be nice to do this in bold or something
 	k.prepend( "(" + QString::number(tree->getCurrent()->getMoveNumber()) + ") ");
 	
 	QString txt = tree->getCurrent()->getComment();
@@ -507,7 +645,7 @@ void qGoBoard::kibitzReceived(const QString& text)
 
 	
 	boardwindow->getUi().commentEdit->append(k);
-
+	//qDebug("kibitzReceived: %s\n", text.toLatin1().constData());
 }
 
 // send regular time Info
@@ -535,7 +673,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 
 	}
 */
-	boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
+	boardwindow->getClockDisplay()->setTimeStep(getBlackTurn(true));
 /*
 	// warn if I am within the last 10 seconds
 	if (gameMode == modeMatch)
@@ -573,90 +711,11 @@ void qGoBoard::timerEvent(QTimerEvent*)
 */
 }
 
-/*
- * Deletes the current move, and all the following
- */
-void qGoBoard::deleteNode()
+/* No pointer?  Just an object?? FIXME */
+TimeRecord qGoBoard::getOurTimeRecord(void)
 {
-//	CHECK_PTR(tree);
-	
-	Move 	*m = tree->getCurrent(),
-		*remember = NULL,
-		*remSon = NULL;
-	Q_CHECK_PTR(m);
-	
-	if (m->parent != NULL)
-	{
-		remember = m->parent;
-		
-		// Remember son of parent if its not the move to be deleted.
-		// Then check for the brothers and fix the pointer connections, if we
-		// delete a node with brothers. (It gets ugly now...)
-		// YUCK! I hope this works.
-		if (remember->son == m)                  // This son is our move to be deleted?
-		{
-			if (remember->son->brother != NULL)  // This son has a brother?
-				remSon = remember->son->brother; // Reset pointer
-		}
-		else                                     // No, the son is not our move
-		{
-			remSon = remember->son;
-			Move *tmp = remSon, *oldTmp = tmp;
-			
-			do {   // Loop through all brothers until we find our move
-				if (tmp == m)
-				{
-					if (m->brother != NULL)            // Our move has a brother?
-						oldTmp->brother = m->brother;  // Then set the previous move brother
-					else                               // to brother of our move
-						oldTmp->brother = NULL;        // No brother found.
-					break;
-				}
-				oldTmp = tmp;
-			} while ((tmp = tmp->brother) != NULL);
-		}
-	}
-	else if (tree->hasPrevBrother())
-	{
-		remember = tree->previousVariation();
-		if (m->brother != NULL)
-			remember->brother = m->brother;
-		else
-			remember->brother = NULL;
-	}
-	else if (tree->hasNextBrother())
-	{
-		remember = tree->nextVariation();
-		// Urgs, remember is now root.
-		tree->setRoot(remember);
-	}
-	else
-	{
-		// Oops, first and only move. We delete everything
-		tree->init(boardwindow->getBoardSize());
-//		board->hideAllStones();
-//		board->hideAllMarks();
-//		board->updateCanvas();
-		boardwindow->getBoard()->clearData();
-
-//		lastValidMove = NULL;
-//		stoneHandler->clearData();
-		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-		return;
-	}
-	
-	if (m->son != NULL)
-		Tree::traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
-	delete m;                         // Delete our move
-	tree->setCurrent(remember);       // Set current move to previous move
-	remember->son = remSon;           // Reset son pointer
-	remember->marker = NULL;          // Forget marker
-	
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-	
-	setModified();
+	return boardwindow->getClockDisplay()->getTimeRecord(getBlackTurn(true));
 }
-
 
 
 /***************************************************************************
@@ -686,15 +745,3 @@ qGoBoardNormalInterface::qGoBoardNormalInterface(BoardWindow *bw, Tree * t, Game
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
 }
-
-
-/*
- * This functions leaves the scoring mode
- */
-void qGoBoardNormalInterface::leaveScoreMode()
-{
-	boardwindow->getUi().tabDisplay->setCurrentIndex(0);
-	boardwindow->setGamePhase ( phaseOngoing );
-	boardwindow->getBoardHandler()->exitScore();
-}
-
