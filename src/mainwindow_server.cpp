@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 
-#include "globals.h"
+#include "defines.h"
 #include "mainwindow.h"
 //#include "parser.h"
 #include "talk.h"

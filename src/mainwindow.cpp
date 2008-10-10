@@ -20,7 +20,7 @@
 
 
 #include "stdio.h"
-#include "globals.h"
+#include "defines.h"
 #include "mainwindow.h"
 #include "boardwindow.h"
 #include "sgfparser.h"
