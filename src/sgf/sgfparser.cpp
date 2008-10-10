@@ -6,10 +6,11 @@
 
 
 #include "sgfparser.h"
-#include "../globals.h"
+#include "../defines.h"
 #include "move.h"
 #include "tree.h"
 #include "matrix.h"
+#include "gamedata.h"
 
 #include <QtGui>
 
@@ -188,7 +189,7 @@ SGFParser::~SGFParser()
 //	delete xmlParser;
 }
 
-bool SGFParser::parse(const QString &fileName, const QString &/*filter*/, bool fastLoad)
+bool SGFParser::parse(const QString &fileName, const QString &/*filter*/)
 {
 	if (fileName.isNull() || fileName.isEmpty())
 	{
@@ -219,7 +220,7 @@ bool SGFParser::parse(const QString &fileName, const QString &/*filter*/, bool f
 	*/
 	if (!initGame(toParse, fileName))
 		return corruptSgf();
-	return doParse(toParse, fastLoad);
+	return doParse(toParse);
 }
 /*
 // Called from clipboard SGF import
@@ -362,7 +363,7 @@ bool SGFParser::initStream(QTextStream *stream)
 	return true;
 }
 
-bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
+bool SGFParser::doParse(const QString &toParseStr)
 {
 	if (toParseStr.isNull() || toParseStr.isEmpty())
 	{
@@ -518,9 +519,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 				}
 				
 				moves = x;
- 				
-				if (!fastLoad)
-					tree->updateAll(m->getMatrix(), false);			
+ 							
 				
 				tree->setCurrent(m);
 			}
@@ -547,6 +546,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 //				qDebug("############### Before creating move ####################");
 //				qDebug(toParse->Str.toLatin1().constData());
 				tree->createMoveSGF();
+				/* This does happen, why??? FIXME */
 //				qDebug("###############                      ####################");
 //				qDebug(toParse->Str.toLatin1().constData());
 //				qDebug("############### After creating move ####################");
@@ -557,6 +557,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 			}
 			else
 				isRoot = false;
+			
 			
 			new_node = true;
 			
@@ -741,7 +742,6 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 						// CGoban stores pass as 'B[]' or 'W[]'
 						if (prop == moveBlack || prop == moveWhite)
 						{
-///////////////////////////////				boardHandler->doPass(true);
 							tree->doPass(true);
 							
 							// Remember this move for later, to remove from the matrix.
@@ -764,10 +764,12 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 						if (remember_root)
 						{
 							qDebug("root contains stone -> node created");
-/////////////////////////				boardHandler->createMoveSGF();
+							/* Something is screwy here, inconsistencies
+							 * in the way SGF's are treated. Like the below:
+							 * the whole point of "remember_root", FIXME*/
 							tree->createMoveSGF();
-							unknownProperty = QString();
 							isRoot = false;
+							unknownProperty = QString();
 							if (tree->getCurrent()->getTimeinfo())
 								qWarning("*** Timeinfo set !!!!");
 							//tree->getCurrent()->setTimeinfo(false);
@@ -806,32 +808,38 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 							for (j = y; j <= y1; j++)
 							{
 								if (i == 20 && j == 20)
-////////////////////////						boardHandler->doPass(true);
 									tree->doPass(true);
 
 								else if (prop == editErase)
 								{
-									if (!fastLoad)
-///////////////////								boardHandler->removeStoneSGF(i, j, true, false);
-										tree->removeStoneSGF(i, j, true, false);
-									else
+									tree->removeStoneSGF(i, j, true, false);
+									/*else  fastload
 									{
 										tree->getCurrent()->setX(0);
 										tree->getCurrent()->setY(0);
 										tree->getCurrent()->setColor(stoneNone);
-									}
+									}*/
 								}
 								else
 								{
-									if (!fastLoad)
-/////////////////////								boardHandler->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, new_node);
-										tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, new_node);
-									else
+									
+									/* May not be necessary this remember_root clause FIXME */
+									if(remember_root)
 									{
+										//qDebug("remember root");
+										tree->getCurrent()->setHandicapMove(true);
+										//tree->getCurrent()->setMoveNumber(0);
+										//tree->getCurrent()->setColor(stoneBlack);
+									}
+									tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, setup ? false : new_node);
+									
+									/*else	//fastload
+									{
+										qDebug("SGF fastLoad");
 										tree->getCurrent()->setX(i);
 										tree->getCurrent()->setY(j);
 										tree->getCurrent()->setColor(black? stoneBlack : stoneWhite);
-									}
+									}*/
 								}
 								// tree->getCurrent()->getMatrix()->debug();
 								//qDebug("ADDING MOVE %s %d/%d", black?"B":"W", x, y);
@@ -898,7 +906,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 								commentStr.append(toParse->at(pos));
 						}
 
-						// qDebug("Comment read: %s", commentStr.latin1());
+					 	//qDebug("Comment read: %s", commentStr.toLatin1().constData());
 						if (!commentStr.isEmpty())
 							// add comment; skip 'C[]'
 							tree->getCurrent()->setNodeName(commentStr);
@@ -947,7 +955,7 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 								commentStr.append(toParse->at(pos));
 						}
 
-						// qDebug("Comment read: %s", commentStr.latin1());
+						//qDebug("Comment read: %s", commentStr.toLatin1().constData());
 						if (!commentStr.isEmpty())
 						{
 							// add comment; skip 'C[]'
@@ -1051,24 +1059,22 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 								// treat integers as characters...
 								check = false;
 								
-								if (!fastLoad)
-								{
-									if (check)
-										tree->getCurrent()->getMatrix()->
-										insertMark(x, y, markNumber);  // Worked, its a number
-									else
-										tree->getCurrent()->getMatrix()->
-										insertMark(x, y, markType);    // Nope, its a letter
+								if (check)
 									tree->getCurrent()->getMatrix()->
-										setMarkText(x, y, moveStr);
-								}
+									insertMark(x, y, markNumber);  // Worked, its a number
 								else
+									tree->getCurrent()->getMatrix()->
+									insertMark(x, y, markType);    // Nope, its a letter
+								tree->getCurrent()->getMatrix()->
+										setMarkText(x, y, moveStr);
+							
+								/*else	//fastload
 								{
 									if (check)  // Number
 										tree->getCurrent()->insertFastLoadMark(x, y, markNumber);
 									else        // Text
 										tree->getCurrent()->insertFastLoadMark(x, y, markType, moveStr);
-								}
+								}*/
 							}
 							else
 							{
@@ -1093,10 +1099,9 @@ bool SGFParser::doParse(const QString &toParseStr, bool fastLoad)
 								for (i = x; i <= x1; i++)
 									for (j = y; j <= y1; j++)
 									{
-										if (!fastLoad)
-											tree->getCurrent()->getMatrix()->insertMark(i, j, markType);
-										else
-											tree->getCurrent()->insertFastLoadMark(i, j, markType);
+										tree->getCurrent()->getMatrix()->insertMark(i, j, markType);
+										//else	//fastload
+										//	tree->getCurrent()->insertFastLoadMark(i, j, markType);
 
 										// auto increment for old property 'L'
 										if (old_label)
@@ -1298,9 +1303,9 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	if (!parseProperty(toParse, "SZ", tmp))
 		return false;
 	if (!tmp.isEmpty())
-		gameData->size = tmp.toInt();
+		gameData->boardSize = tmp.toInt();
 	else
-		gameData->size = 19;
+		gameData->boardSize = 19;
 	
 	// Komi
 	if (!parseProperty(toParse, "KM", tmp))
@@ -1395,11 +1400,14 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 			{
 				pos2 = tmp.indexOf("byo");
 				QString time = tmp.mid(pos1+1, pos2-pos1-1);
-				gameData->byoTime = time.toInt();
+				/*gameData->byoTime = time.toInt();
 				gameData->byoPeriods = tmp.left(pos1).toInt();
-				gameData->byoStones = 0;
+				gameData->byoStones = 0;*/
+				//FIXME okay?
+				gameData->periodtime = time.toInt();
+				gameData->stones_periods = tmp.left(pos1).toInt();
 
-				qDebug(QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime).toLatin1().constData());
+				qDebug(QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->stones_periods).arg(gameData->periodtime).toLatin1().constData());
 			}
 		}
 		else if (tmp.contains(":"))
@@ -1411,9 +1419,9 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 			{
 				QString time = tmp.left(pos1);
 				int t = time.toInt()*60 + tmp.right(tmp.length() - pos1 - 1).toInt();
-				gameData->byoTime = 30;
-				gameData->byoPeriods = t/gameData->byoTime;
-				gameData->byoStones = 0;
+				gameData->periodtime = 30;
+				gameData->stones_periods = t/gameData->periodtime;
+				//gameData->byoStones = 0;
 
 ////////////////////FIXME	qDebug(QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->byoPeriods).arg(gameData->byoTime));
 			}
@@ -1427,19 +1435,19 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 			{
 				pos2 = tmp.indexOf("Can");
 				QString time = tmp.mid(pos1+1, pos2-pos1-1);
-				gameData->byoTime = time.toInt();
-				gameData->byoStones = tmp.left(pos1).toInt();
+				gameData->periodtime = time.toInt();
+				gameData->stones_periods = tmp.left(pos1).toInt();
 
 ///////////////////////				qDebug(QString("Canadian time system: %1 seconds at %2 stones").arg(gameData->byoTime).arg(gameData->byoStones));
 			}
 		}
 
 		// simple check
-		if (gameData->byoStones < 0)
-			gameData->byoStones = 0;
-		if (gameData->byoTime <= 0)
+		if (gameData->stones_periods < 0)
+			gameData->stones_periods = 0;
+		if (gameData->periodtime <= 0)
 		{
-			gameData->byoTime = 0;
+			gameData->periodtime = 0;
 //			gameData->timeSystem = none;
 		}
 	}
@@ -1447,7 +1455,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	{
 		gameData->overtime = "";
 //		gameData->timeSystem = none;
-		gameData->byoStones = 0;
+		gameData->stones_periods = 0;
 	}
 
 	// Game number
@@ -1551,7 +1559,8 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	else
 		*stream << "GN[" << gameData->gameName << "]"		// Game Name
 		<< endl;
-	*stream << "SZ[" << gameData->size << "]"				// Board size
+	qDebug("Parser things handicap is: %d\n", gameData->handicap);
+	*stream << "SZ[" << gameData->boardSize << "]"				// Board size
 		<< "HA[" << gameData->handicap << "]"			// Handicap
 		<< "KM[" << gameData->komi << "]";				// Komi
 //		<< endl;
@@ -1574,6 +1583,7 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	if (!gameData->rankBlack.isEmpty())
 		*stream << "BR[" << gameData->rankBlack << "]";    // Black rank
 	
+	qDebug("Parser things result is: %s\n", gameData->result.toLatin1().constData());
 	if (!gameData->result.isEmpty())
 		*stream << "RE[" << gameData->result << "]";       // Result
 	

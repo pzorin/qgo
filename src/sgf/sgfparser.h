@@ -5,7 +5,7 @@
 #ifndef SGFPARSER_H
 #define SGFPARSER_H
 
-#include "../globals.h"
+#include "../defines.h"
 #include "tree.h"
 
 #include <QtCore>
@@ -16,9 +16,9 @@ class Tree;
 class QTextStream;
 class Move;
 struct ASCII_Import;
-class XMLParser;
+class XMLParser;*/
 class GameData;
-*/
+
 class SGFParser
 {
 public:
@@ -27,9 +27,9 @@ public:
 	QString loadFile(const QString &fileName);
 	GameData * initGame(const QString &toParse, const QString &fileName);
 
-	bool parse(const QString &fileName, const QString &filter=0, bool fastLoad=false);
+	bool parse(const QString &fileName, const QString &filter=0);
 
-	bool doParse(const QString &toParseStr, bool fastLoad=false);
+	bool doParse(const QString &toParseStr);
 	bool doWrite(const QString &fileName, Tree *tree, GameData *gameData);
 	bool exportSGFtoClipB(QString *str, Tree *tree, GameData *gameData);
 /*
