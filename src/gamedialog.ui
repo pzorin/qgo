@@ -620,7 +620,7 @@
         </rect>
        </property>
        <property name="text" >
-        <string>Number of periods</string>
+        <string>Number of overtimes</string>
        </property>
       </widget>
       <widget class="QTimeEdit" name="ASIAPeriodTimeSpin" >
@@ -671,7 +671,7 @@
         </rect>
        </property>
        <property name="text" >
-        <string>Period time</string>
+        <string>Overtime</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_19" >
@@ -684,7 +684,7 @@
         </rect>
        </property>
        <property name="text" >
-        <string>Main Time</string>
+        <string>Period time</string>
        </property>
       </widget>
      </widget>
