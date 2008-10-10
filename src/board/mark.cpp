@@ -164,7 +164,10 @@ MarkCross::~MarkCross()
 {
 	if (ol != NULL)
 		ol->hide();
-	delete ol;
+	/* There's something funny here.  A double free with
+	 * something later. FIXME.  Here's a start on it. */
+	//delete ol;
+	//ol = NULL;
 	hide();
 }
 
