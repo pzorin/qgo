@@ -30,25 +30,28 @@ class ClockDisplay : public QObject
 	Q_OBJECT
 
 public:
-	ClockDisplay(BoardWindow *bw);
+	ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _period, int _periodtime);
 	~ClockDisplay() {}
 	void setTime( bool black, int secs);
-	void setTimeStep( bool black, int sec = -1);
-	void setTimeInfo(int btime, int bstones, int bperiods, int wtime, int wstones, int wperiods);
+	void setTimeStep(bool black);
+	void rerackTime(bool black);
+	void makeMove(bool black);
+	class TimeRecord getTimeRecord(bool black);
+	void setTimeInfo(int btime, int bstones_periods, int wtime, int wstones_periods);
 	void updateTimers();
-	void warning(bool black);
-	
+	bool warning(bool black);
 private :
 	BoardWindow *boardwindow;
 	TimeSystem timeSystem;
 	int w_time, b_time;
-	int w_stones, b_stones;
-	int w_periods, b_periods;
-	
+	int w_stones_periods, b_stones_periods;
+	int maintime, periods, periodtime;
 	QPushButton *pb_timeBlack, * pb_timeWhite;
 	Sound *warningSound;
 	int warningSecs;
 	bool playWarningSound;
+	bool outOfMainTime;
+	bool last_black;
 };
 
 #endif
