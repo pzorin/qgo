@@ -106,7 +106,7 @@ const QString Move::saveMove(bool isRoot)
  		str += "[" + Matrix::coordsToString(x-1, y-1) + "]";
 	}
 	
-	// Save edited moves
+	// Save edited moves (including handicap)
 	str += matrix->saveEditedMoves(parent != NULL ? parent->getMatrix() : 0);
 	
 	// Save marks
