@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>774</width>
-    <height>737</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -29,22 +29,10 @@
     </size>
    </property>
    <layout class="QGridLayout" >
-    <property name="leftMargin" >
+    <property name="margin" >
      <number>2</number>
     </property>
-    <property name="topMargin" >
-     <number>2</number>
-    </property>
-    <property name="rightMargin" >
-     <number>2</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>2</number>
-    </property>
-    <property name="horizontalSpacing" >
-     <number>6</number>
-    </property>
-    <property name="verticalSpacing" >
+    <property name="spacing" >
      <number>6</number>
     </property>
     <item row="0" column="0" >
@@ -63,16 +51,7 @@
         <property name="spacing" >
          <number>2</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -99,22 +78,10 @@
            <number>0</number>
           </property>
           <layout class="QGridLayout" >
-           <property name="leftMargin" >
+           <property name="margin" >
             <number>0</number>
            </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <property name="horizontalSpacing" >
-            <number>0</number>
-           </property>
-           <property name="verticalSpacing" >
+           <property name="spacing" >
             <number>0</number>
            </property>
            <item row="3" column="2" >
@@ -1787,16 +1754,7 @@ Shows the number of sons and brothers within the current node.</string>
                <property name="spacing" >
                 <number>2</number>
                </property>
-               <property name="leftMargin" >
-                <number>0</number>
-               </property>
-               <property name="topMargin" >
-                <number>0</number>
-               </property>
-               <property name="rightMargin" >
-                <number>0</number>
-               </property>
-               <property name="bottomMargin" >
+               <property name="margin" >
                 <number>0</number>
                </property>
                <item>
@@ -1829,16 +1787,7 @@ Shows the number of sons and brothers within the current node.</string>
                   <property name="spacing" >
                    <number>0</number>
                   </property>
-                  <property name="leftMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="topMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="rightMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="bottomMargin" >
+                  <property name="margin" >
                    <number>1</number>
                   </property>
                   <item>
@@ -2360,16 +2309,7 @@ Click on
                     <property name="spacing" >
                      <number>6</number>
                     </property>
-                    <property name="leftMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin" >
+                    <property name="margin" >
                      <number>0</number>
                     </property>
                     <item>
@@ -2442,16 +2382,7 @@ Click on
                   <property name="spacing" >
                    <number>0</number>
                   </property>
-                  <property name="leftMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="topMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="rightMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="bottomMargin" >
+                  <property name="margin" >
                    <number>1</number>
                   </property>
                   <item>
@@ -2973,16 +2904,7 @@ Click on
                     <property name="spacing" >
                      <number>6</number>
                     </property>
-                    <property name="leftMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin" >
+                    <property name="margin" >
                      <number>0</number>
                     </property>
                     <item>
@@ -3032,16 +2954,7 @@ Click on
                <property name="spacing" >
                 <number>2</number>
                </property>
-               <property name="leftMargin" >
-                <number>0</number>
-               </property>
-               <property name="topMargin" >
-                <number>0</number>
-               </property>
-               <property name="rightMargin" >
-                <number>0</number>
-               </property>
-               <property name="bottomMargin" >
+               <property name="margin" >
                 <number>0</number>
                </property>
                <item>
@@ -3130,7 +3043,7 @@ Click on
                       <property name="sizeType" >
                        <enum>QSizePolicy::MinimumExpanding</enum>
                       </property>
-                      <property name="sizeHint" >
+                      <property name="sizeHint" stdset="0" >
                        <size>
                         <width>10</width>
                         <height>20</height>
@@ -3223,7 +3136,7 @@ Click on
                       <property name="sizeType" >
                        <enum>QSizePolicy::MinimumExpanding</enum>
                       </property>
-                      <property name="sizeHint" >
+                      <property name="sizeHint" stdset="0" >
                        <size>
                         <width>10</width>
                         <height>20</height>
@@ -3263,16 +3176,7 @@ Click on
                     <property name="spacing" >
                      <number>6</number>
                     </property>
-                    <property name="leftMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin" >
+                    <property name="margin" >
                      <number>0</number>
                     </property>
                     <item>
@@ -3323,7 +3227,7 @@ Use "komi x" to request a komi of x (number).</string>
                       <property name="sizeType" >
                        <enum>QSizePolicy::MinimumExpanding</enum>
                       </property>
-                      <property name="sizeHint" >
+                      <property name="sizeHint" stdset="0" >
                        <size>
                         <width>10</width>
                         <height>20</height>
@@ -3438,7 +3342,7 @@ Use "komi x" to request a komi of x (number).</string>
                       <property name="orientation" >
                        <enum>Qt::Horizontal</enum>
                       </property>
-                      <property name="sizeHint" >
+                      <property name="sizeHint" stdset="0" >
                        <size>
                         <width>40</width>
                         <height>20</height>
@@ -3528,7 +3432,7 @@ Use "komi x" to request a komi of x (number).</string>
                       <property name="orientation" >
                        <enum>Qt::Horizontal</enum>
                       </property>
-                      <property name="sizeHint" >
+                      <property name="sizeHint" stdset="0" >
                        <size>
                         <width>10</width>
                         <height>20</height>
@@ -3541,7 +3445,7 @@ Use "komi x" to request a komi of x (number).</string>
                       <property name="orientation" >
                        <enum>Qt::Horizontal</enum>
                       </property>
-                      <property name="sizeHint" >
+                      <property name="sizeHint" stdset="0" >
                        <size>
                         <width>40</width>
                         <height>20</height>
@@ -3965,26 +3869,14 @@ Use "komi x" to request a komi of x (number).</string>
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QGridLayout" >
-              <property name="leftMargin" >
+              <property name="margin" >
                <number>2</number>
               </property>
-              <property name="topMargin" >
-               <number>2</number>
-              </property>
-              <property name="rightMargin" >
-               <number>2</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>2</number>
-              </property>
-              <property name="horizontalSpacing" >
-               <number>1</number>
-              </property>
-              <property name="verticalSpacing" >
+              <property name="spacing" >
                <number>1</number>
               </property>
               <item row="1" column="1" >
-               <widget class="QLabel" name="TextLabel_free" >
+               <widget class="QLabel" name="freeratedLabel" >
                 <property name="toolTip" >
                  <string>free/rated game</string>
                 </property>
@@ -4006,16 +3898,7 @@ use "free" command to make game rated or unrated (free)</string>
                 <property name="spacing" >
                  <number>6</number>
                 </property>
-                <property name="leftMargin" >
-                 <number>0</number>
-                </property>
-                <property name="topMargin" >
-                 <number>0</number>
-                </property>
-                <property name="rightMargin" >
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin" >
+                <property name="margin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -4056,16 +3939,7 @@ Number of stones placed by black as his first move.</string>
                 <property name="spacing" >
                  <number>6</number>
                 </property>
-                <property name="leftMargin" >
-                 <number>0</number>
-                </property>
-                <property name="topMargin" >
-                 <number>0</number>
-                </property>
-                <property name="rightMargin" >
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin" >
+                <property name="margin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -4098,16 +3972,7 @@ Use "komi x" to request a komi of x (number).</string>
                 <property name="spacing" >
                  <number>6</number>
                 </property>
-                <property name="leftMargin" >
-                 <number>0</number>
-                </property>
-                <property name="topMargin" >
-                 <number>0</number>
-                </property>
-                <property name="rightMargin" >
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin" >
+                <property name="margin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -4176,16 +4041,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               <property name="spacing" >
                <number>2</number>
               </property>
-              <property name="leftMargin" >
-               <number>2</number>
-              </property>
-              <property name="topMargin" >
-               <number>2</number>
-              </property>
-              <property name="rightMargin" >
-               <number>2</number>
-              </property>
-              <property name="bottomMargin" >
+              <property name="margin" >
                <number>2</number>
               </property>
               <item>
@@ -4193,16 +4049,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                 <property name="spacing" >
                  <number>0</number>
                 </property>
-                <property name="leftMargin" >
-                 <number>0</number>
-                </property>
-                <property name="topMargin" >
-                 <number>0</number>
-                </property>
-                <property name="rightMargin" >
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin" >
+                <property name="margin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -4220,7 +4067,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/2leftarrow.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/2leftarrow.png</normaloff>:/new/prefix1/ressources/pics/2leftarrow.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4242,7 +4090,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/previous.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/previous.png</normaloff>:/new/prefix1/ressources/pics/previous.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4264,7 +4113,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/next.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/next.png</normaloff>:/new/prefix1/ressources/pics/next.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4286,7 +4136,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/2rightarrow.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/2rightarrow.png</normaloff>:/new/prefix1/ressources/pics/2rightarrow.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4300,16 +4151,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                 <property name="spacing" >
                  <number>6</number>
                 </property>
-                <property name="leftMargin" >
-                 <number>0</number>
-                </property>
-                <property name="topMargin" >
-                 <number>0</number>
-                </property>
-                <property name="rightMargin" >
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin" >
+                <property name="margin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -4327,7 +4169,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/previous_comment.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/previous_comment.png</normaloff>:/new/prefix1/ressources/pics/previous_comment.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4349,7 +4192,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/goto_move.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/goto_move.png</normaloff>:/new/prefix1/ressources/pics/goto_move.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4371,7 +4215,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/next_comment.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/next_comment.png</normaloff>:/new/prefix1/ressources/pics/next_comment.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4392,16 +4237,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                 <property name="spacing" >
                  <number>0</number>
                 </property>
-                <property name="leftMargin" >
-                 <number>0</number>
-                </property>
-                <property name="topMargin" >
-                 <number>0</number>
-                </property>
-                <property name="rightMargin" >
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin" >
+                <property name="margin" >
                  <number>0</number>
                 </property>
                 <item>
@@ -4419,7 +4255,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/top.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/top.png</normaloff>:/new/prefix1/ressources/pics/top.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4441,7 +4278,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/up.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/up.png</normaloff>:/new/prefix1/ressources/pics/up.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4463,7 +4301,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/reload.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/reload.png</normaloff>:/new/prefix1/ressources/pics/reload.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4485,7 +4324,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/down.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/down.png</normaloff>:/new/prefix1/ressources/pics/down.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4507,7 +4347,8 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                    <string/>
                   </property>
                   <property name="icon" >
-                   <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/bottom.png</iconset>
+                   <iconset resource="board.qrc" >
+                    <normaloff>:/new/prefix1/ressources/pics/bottom.png</normaloff>:/new/prefix1/ressources/pics/bottom.png</iconset>
                   </property>
                   <property name="flat" >
                    <bool>true</bool>
@@ -4524,7 +4365,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
              <property name="orientation" >
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" >
+             <property name="sizeHint" stdset="0" >
               <size>
                <width>20</width>
                <height>40</height>
@@ -4548,16 +4389,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                <property name="spacing" >
                 <number>2</number>
                </property>
-               <property name="leftMargin" >
-                <number>0</number>
-               </property>
-               <property name="topMargin" >
-                <number>0</number>
-               </property>
-               <property name="rightMargin" >
-                <number>0</number>
-               </property>
-               <property name="bottomMargin" >
+               <property name="margin" >
                 <number>0</number>
                </property>
                <item>
@@ -4578,22 +4410,10 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                   <string>Stones tools</string>
                  </property>
                  <layout class="QGridLayout" >
-                  <property name="leftMargin" >
+                  <property name="margin" >
                    <number>2</number>
                   </property>
-                  <property name="topMargin" >
-                   <number>2</number>
-                  </property>
-                  <property name="rightMargin" >
-                   <number>2</number>
-                  </property>
-                  <property name="bottomMargin" >
-                   <number>2</number>
-                  </property>
-                  <property name="horizontalSpacing" >
-                   <number>2</number>
-                  </property>
-                  <property name="verticalSpacing" >
+                  <property name="spacing" >
                    <number>2</number>
                   </property>
                   <item row="0" column="0" colspan="3" >
@@ -4601,16 +4421,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
                     <property name="spacing" >
                      <number>6</number>
                     </property>
-                    <property name="leftMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="topMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="rightMargin" >
-                     <number>0</number>
-                    </property>
-                    <property name="bottomMargin" >
+                    <property name="margin" >
                      <number>0</number>
                     </property>
                     <item>
@@ -4648,7 +4459,8 @@ Edit stones on the board. Left click for a black, right click for a white stone.
                        <string/>
                       </property>
                       <property name="icon" >
-                       <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_add.png</iconset>
+                       <iconset resource="board.qrc" >
+                        <normaloff>:/new/prefix1/ressources/pics/stone_add.png</normaloff>:/new/prefix1/ressources/pics/stone_add.png</iconset>
                       </property>
                       <property name="iconSize" >
                        <size>
@@ -4699,7 +4511,8 @@ Set the color of next move. If left untouched, default color is chosen.</string>
                        <string/>
                       </property>
                       <property name="icon" >
-                       <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_black.png</iconset>
+                       <iconset resource="board.qrc" >
+                        <normaloff>:/new/prefix1/ressources/pics/stone_black.png</normaloff>:/new/prefix1/ressources/pics/stone_black.png</iconset>
                       </property>
                       <property name="iconSize" >
                        <size>
@@ -4755,7 +4568,8 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_number.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/stone_number.png</normaloff>:/new/prefix1/ressources/pics/stone_number.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -4806,7 +4620,8 @@ Edit letter marks on the board. Left click sets a mark, right click removes it. 
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_letter.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/stone_letter.png</normaloff>:/new/prefix1/ressources/pics/stone_letter.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -4857,7 +4672,8 @@ Edit cross marks on the board. Left click sets a mark, right click removes it.</
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_cross.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/stone_cross.png</normaloff>:/new/prefix1/ressources/pics/stone_cross.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -4902,7 +4718,8 @@ Edit triangle marks on the board. Left click sets a mark, right click removes it
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_triangle.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/stone_triangle.png</normaloff>:/new/prefix1/ressources/pics/stone_triangle.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -4953,7 +4770,8 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_circle.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/stone_circle.png</normaloff>:/new/prefix1/ressources/pics/stone_circle.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5004,7 +4822,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/stone_square.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/stone_square.png</normaloff>:/new/prefix1/ressources/pics/stone_square.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5035,22 +4854,10 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <string>Game Tree tools</string>
                  </property>
                  <layout class="QGridLayout" >
-                  <property name="leftMargin" >
+                  <property name="margin" >
                    <number>1</number>
                   </property>
-                  <property name="topMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="rightMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="bottomMargin" >
-                   <number>1</number>
-                  </property>
-                  <property name="horizontalSpacing" >
-                   <number>1</number>
-                  </property>
-                  <property name="verticalSpacing" >
+                  <property name="spacing" >
                    <number>1</number>
                   </property>
                   <item row="0" column="2" >
@@ -5086,7 +4893,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/swap_variations.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/swap_variations.png</normaloff>:/new/prefix1/ressources/pics/swap_variations.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5135,7 +4943,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/eraser.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/eraser.png</normaloff>:/new/prefix1/ressources/pics/eraser.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5184,7 +4993,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/duplicate_move.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/duplicate_move.png</normaloff>:/new/prefix1/ressources/pics/duplicate_move.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5233,7 +5043,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/empty_branch.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/empty_branch.png</normaloff>:/new/prefix1/ressources/pics/empty_branch.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5258,22 +5069,10 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                   <string>Clipboard tools</string>
                  </property>
                  <layout class="QGridLayout" >
-                  <property name="leftMargin" >
+                  <property name="margin" >
                    <number>2</number>
                   </property>
-                  <property name="topMargin" >
-                   <number>2</number>
-                  </property>
-                  <property name="rightMargin" >
-                   <number>2</number>
-                  </property>
-                  <property name="bottomMargin" >
-                   <number>2</number>
-                  </property>
-                  <property name="horizontalSpacing" >
-                   <number>2</number>
-                  </property>
-                  <property name="verticalSpacing" >
+                  <property name="spacing" >
                    <number>2</number>
                   </property>
                   <item row="0" column="0" >
@@ -5309,7 +5108,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/editcut.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/editcut.png</normaloff>:/new/prefix1/ressources/pics/editcut.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5358,7 +5158,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/paste.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/paste.png</normaloff>:/new/prefix1/ressources/pics/paste.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5407,7 +5208,8 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                      <string/>
                     </property>
                     <property name="icon" >
-                     <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/paste_as_var.png</iconset>
+                     <iconset resource="board.qrc" >
+                      <normaloff>:/new/prefix1/ressources/pics/paste_as_var.png</normaloff>:/new/prefix1/ressources/pics/paste_as_var.png</iconset>
                     </property>
                     <property name="iconSize" >
                      <size>
@@ -5431,16 +5233,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                  <property name="spacing" >
                   <number>1</number>
                  </property>
-                 <property name="leftMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin" >
+                 <property name="margin" >
                   <number>0</number>
                  </property>
                  <item>
@@ -5448,7 +5241,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                    <property name="orientation" >
                     <enum>Qt::Vertical</enum>
                    </property>
-                   <property name="sizeHint" >
+                   <property name="sizeHint" stdset="0" >
                     <size>
                      <width>20</width>
                      <height>2</height>
@@ -5519,16 +5312,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
              </widget>
              <widget class="QWidget" name="page_4" >
               <layout class="QVBoxLayout" >
-               <property name="leftMargin" >
-                <number>0</number>
-               </property>
-               <property name="topMargin" >
-                <number>0</number>
-               </property>
-               <property name="rightMargin" >
-                <number>0</number>
-               </property>
-               <property name="bottomMargin" >
+               <property name="margin" >
                 <number>0</number>
                </property>
                <item>
@@ -5536,7 +5320,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                  <property name="orientation" >
                   <enum>Qt::Vertical</enum>
                  </property>
-                 <property name="sizeHint" >
+                 <property name="sizeHint" stdset="0" >
                   <size>
                    <width>109</width>
                    <height>31</height>
@@ -5549,16 +5333,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                  <property name="spacing" >
                   <number>1</number>
                  </property>
-                 <property name="leftMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin" >
+                 <property name="margin" >
                   <number>0</number>
                  </property>
                  <item>
@@ -5598,16 +5373,7 @@ Pass your turn.</string>
                  <property name="spacing" >
                   <number>1</number>
                  </property>
-                 <property name="leftMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin" >
+                 <property name="margin" >
                   <number>0</number>
                  </property>
                  <item>
@@ -5677,16 +5443,7 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
                  <property name="spacing" >
                   <number>1</number>
                  </property>
-                 <property name="leftMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin" >
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin" >
+                 <property name="margin" >
                   <number>0</number>
                  </property>
                  <item>
@@ -6256,7 +6013,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
                    <property name="orientation" >
                     <enum>Qt::Vertical</enum>
                    </property>
-                   <property name="sizeHint" >
+                   <property name="sizeHint" stdset="0" >
                     <size>
                      <width>20</width>
                      <height>40</height>
@@ -6303,16 +6060,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
          <property name="spacing" >
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin" >
           <number>0</number>
          </property>
          <item>
@@ -6343,7 +6091,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
          </item>
         </layout>
        </widget>
-       <widget class="QTreeWidget" name="observerList" >
+       <widget class="QTreeView" name="observerView" >
         <property name="horizontalScrollBarPolicy" >
          <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
@@ -6365,16 +6113,6 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
         <property name="sortingEnabled" >
          <bool>true</bool>
         </property>
-        <column>
-         <property name="text" >
-          <string>Name</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Rank</string>
-         </property>
-        </column>
        </widget>
       </widget>
      </widget>
@@ -6430,13 +6168,14 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
      <x>0</x>
      <y>0</y>
      <width>774</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
   <action name="actionFileSave" >
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/filesave.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/filesave.png</normaloff>:/new/prefix1/ressources/pics/filesave.png</iconset>
    </property>
    <property name="text" >
     <string>fileSave</string>
@@ -6444,7 +6183,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionFileSaveAs" >
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/filesaveas.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/filesaveas.png</normaloff>:/new/prefix1/ressources/pics/filesaveas.png</iconset>
    </property>
    <property name="text" >
     <string>fileSaveAs</string>
@@ -6455,7 +6195,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionQuit" >
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/exit2.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/exit2.png</normaloff>:/new/prefix1/ressources/pics/exit2.png</iconset>
    </property>
    <property name="text" >
     <string>quit</string>
@@ -6469,7 +6210,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/export2.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/export2.png</normaloff>:/new/prefix1/ressources/pics/export2.png</iconset>
    </property>
    <property name="text" >
     <string>export</string>
@@ -6483,7 +6225,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/import2.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/import2.png</normaloff>:/new/prefix1/ressources/pics/import2.png</iconset>
    </property>
    <property name="text" >
     <string>import</string>
@@ -6491,7 +6234,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionGameInfo" >
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/idea.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/idea.png</normaloff>:/new/prefix1/ressources/pics/idea.png</iconset>
    </property>
    <property name="text" >
     <string>gameInfo</string>
@@ -6502,7 +6246,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/sound_on.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/sound_on.png</normaloff>:/new/prefix1/ressources/pics/sound_on.png</iconset>
    </property>
    <property name="text" >
     <string>sound</string>
@@ -6510,7 +6255,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionWhatsThis" >
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/contexthelp.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/contexthelp.png</normaloff>:/new/prefix1/ressources/pics/contexthelp.png</iconset>
    </property>
    <property name="text" >
     <string>whatsThis</string>
@@ -6518,7 +6264,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionDuplicate" >
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/duplicate.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/duplicate.png</normaloff>:/new/prefix1/ressources/pics/duplicate.png</iconset>
    </property>
    <property name="text" >
     <string>duplicate</string>
@@ -6529,7 +6276,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/coord2.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/coord2.png</normaloff>:/new/prefix1/ressources/pics/coord2.png</iconset>
    </property>
    <property name="text" >
     <string>coordinates</string>
@@ -6540,7 +6288,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="board.qrc" >:/new/prefix1/ressources/pics/player_play.png</iconset>
+    <iconset resource="board.qrc" >
+     <normaloff>:/new/prefix1/ressources/pics/player_play.png</normaloff>:/new/prefix1/ressources/pics/player_play.png</iconset>
    </property>
    <property name="text" >
     <string>play</string>

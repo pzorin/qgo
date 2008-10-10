@@ -27,6 +27,7 @@
 #include "tree.h"
 #include "qgoboard.h"
 #include "clockdisplay.h"
+#include "gamedata.h"
 
 class BoardHandler;
 class qGoBoard;
@@ -37,12 +38,12 @@ class BoardWindow : public QMainWindow, public Ui::BoardWindow
 	Q_OBJECT
 
 public:
-	//BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 , int size = 19); // jm 071106: two standard constructors are dangerous!
-	BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE);
+	//BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE, class BoardDispatch * _dispatch = 0);
+	BoardWindow(GameMode gamemode = modeNormal, GameData *gamedata = 0 , bool iAmBlack = TRUE, bool iAmWhite = TRUE, class BoardDispatch * _dispatch = 0);
 	~BoardWindow();
 	
 	void init();
-	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad = false); //TODO get rid of fastload
+	bool loadSGF(const QString fileName, const QString SGFLoaded=0);
 	bool doSave(QString fileName, bool force);
 	QString getCandidateFileName();
 
@@ -60,19 +61,29 @@ public:
 	int getId()				{return gameData->gameNumber;}
 	MarkType getEditMark()			{return editMark;}
 	void setBoardSize(int sz)		{boardSize=sz;}
-	void setGamePhase(GamePhase gp)		{gamePhase = gp;}
+	void setGamePhase(GamePhase gp);
 	void setTree(Tree *t)			{tree=t;}
 	void setGameData(GameData *gd);	
 	QString get_wplayer()			{return gameData->playerWhite;}
 	QString get_bplayer()			{return gameData->playerBlack;}
 	ClockDisplay *getClockDisplay()		{return clockDisplay;}
-
+	void swapColors(bool noswap = false);
+	
 	int checkModified(bool interactive = TRUE);
-
+	
 	qGoBoard *qgoboard;
+	//virtual QSize sizeHint() const;
+	/* boarddispatch should be stored in the interface, NOT here
+	 * in boardwindow, but we'll move it once we see where its
+	 * going to be everywhere */
+	class BoardDispatch * getBoardDispatch(void) { return dispatch; };
+	void setBoardDispatch(BoardDispatch * d);
+	/* Doesn't really belong here !!! FIXME */
+	class ObserverListModel * observerListModel;
 
 protected:
 	void closeEvent(QCloseEvent *e);
+	void resizeEvent(QResizeEvent *e);
 
 signals:
 	void signal_boardClosed(int);
@@ -93,6 +104,8 @@ public slots:
 	void keyPressEvent(QKeyEvent *e);
 
 private:
+	void setupUI(void);
+	void setupBoardUI(void);
 
 	Ui::BoardWindow ui;
 	Tree *tree;
@@ -100,6 +113,7 @@ private:
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
 //	qGoBoard *qgoboard;
+	class BoardDispatch * dispatch;		//may not be the best place!!!
 
 	GameData *gameData;
 	GameMode gameMode;

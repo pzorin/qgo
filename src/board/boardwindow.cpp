@@ -1,7 +1,7 @@
 /***************************************************************************
 *
 * This class is the board window. It's the main purpose of qGo
-* The main interface handles all the open boards as a list of this class
+* The boards get close messages,etc. from parent mainwindow on application exit
 *
  ***************************************************************************/
 
@@ -12,31 +12,178 @@
 #include "interfacehandler.h"
 #include "qgoboard.h"
 #include "move.h"
+#include "../network/boarddispatch.h"
+#include "listviews.h"
 #include "ui_gameinfo.h"
 
 #include <QtGui>
 
 class BoardHandler;
 
-// jm 061107: two constructors is too dangerous
-//BoardWindow::BoardWindow(QWidget * parent, Qt::WindowFlags flags, int size)
-//	: QMainWindow( parent,  flags )
-//{
-//	boardSize = size;
-//	gameData = NULL;
-//	gameMode = modeNormal;
-//	myColorIsBlack = TRUE;
-//	myColorIsWhite = TRUE;
-//	interfaceHandler = new InterfaceHandler( this);
-//	//init();
-//}
-
-BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd , GameMode gm , bool iAmBlack , bool iAmWhite)
-	: QMainWindow( parent,  flags )
+BoardWindow::BoardWindow(GameMode gm, GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
+	: QMainWindow((QWidget*)mainwindow, 0)
 {
-
-	gameData = new GameData(gd);
+	if(!gd)
+		qDebug("No game data to createGame");
 	
+	gameData = new GameData(gd);
+	dispatch = _dispatch;
+	
+	gameMode = gm;
+	if(gameData->nigiriToBeSettled)
+	{
+		myColorIsBlack = false;
+		myColorIsWhite = false;
+	}
+	else
+	{
+		myColorIsBlack = iAmBlack;
+		myColorIsWhite = iAmWhite;
+	}
+	
+	gamePhase = phaseInit;
+	qDebug("PHASE is init\n");
+	boardSize = gd->boardSize;
+	qDebug("Boardsize: %d handicap %d", boardSize, gd->handicap);
+	//Creates the game tree
+	tree = new Tree(boardSize);
+
+	observerListModel = 0;
+	setupUI();
+
+	//Loads the sgf file if any
+	if (! gameData->fileName.isEmpty())
+		loadSGF(gameData->fileName);
+
+	//creates the board interface (or proxy) that will handle the moves an command requests
+	switch (gameMode)
+	{
+		case modeNormal :
+			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
+			break;
+		case modeComputer :
+			try
+			{
+				qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
+			}
+			catch(QString err)
+			{
+				QMessageBox msg(QObject::tr("Error"),
+						err,
+						QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
+				//msg.setActiveWindow();
+				msg.raise();
+				msg.exec();
+				return;
+			}
+			break;	
+		case modeObserve :
+			qgoboard = new 	qGoBoardObserveInterface(this, tree,gameData);
+			break;	
+		case modeMatch :
+			try
+			{
+				qgoboard = new 	qGoBoardMatchInterface(this, tree,gameData);
+			}
+			catch(QString err)
+			{
+				QMessageBox msg(QObject::tr("Error"),
+						err,
+						QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
+				//msg.setActiveWindow();
+				msg.raise();
+				msg.exec();
+				return;
+			}
+			break;	
+
+		case modeReview :
+			qgoboard = new 	qGoBoardReviewInterface(this, tree,gameData);
+			break;	
+
+		default:
+			break;
+	}
+	setupBoardUI();
+
+//	ui.board->init(boardSize);
+	/*if(!qgoboard->init())
+	{
+		qDebug("qgoboard init failed\n");
+	}*/
+
+	/* FIXME since we're now having setGamePhase actually do something
+	 * we might want to use it here to set up the initial button
+	 * settings */
+	gamePhase = phaseOngoing;
+	show();
+	setFocus();
+
+
+	// This is only needed with a computer game, when the computer has to make the first move
+	qgoboard->startGame();
+	//ui.board->resize(407, 606);
+		//ui.board->setBaseSize(407, 606);
+	//ui.board->setGeometry(0, 0, 407, 606);
+	
+	//update();
+	//gridLayout->update();
+	
+}
+
+/*QSize BoardWindow::sizeHint() const
+{
+	QSize size = QSize(407, 606);
+	
+	qDebug("Size hint called\n");
+	return size;
+}*/
+
+BoardWindow::~BoardWindow()
+{
+	qDebug("Deleting BoardWindow\n");
+	QSettings settings;
+	if(settings.value("SAVE_WINDOW_SIZES").toBool())
+	{
+		qDebug("Saving window sizes: %d %d\n", width(), height());
+		settings.setValue("BOARD_WINDOW_SIZE_X", width());
+		settings.setValue("BOARD_WINDOW_SIZE_Y", height());
+	}
+	
+	delete tree;	//okay?
+	
+	if(observerListModel)
+		delete observerListModel;
+	/* FIXME I'm not totally certain we want to delete the dispatch
+	 * here.  If the boardwindow closes, then that sends its own
+	 * closed signal through the network if it exits.  If the
+	 * dispatch closes, then it doesn't close the board anyway */
+	//if(dispatch)
+	//	delete dispatch;
+}
+
+void BoardWindow::closeEvent(QCloseEvent *e)
+{
+	/* We need to prompt user on close as well as
+	* set up code to send adjourn/resign signal, etc.
+	* Otherwise other client can actually get stuck */
+	if (checkModified()==1)		//checkModified needs to be checked out FIXME
+	{
+		e->accept();
+		if(dispatch)
+		{
+			dispatch->closeBoard();
+		}
+		//FIXME delete
+		//deleteLater();
+	}
+	else
+		e->ignore();
+}
+
+void BoardWindow::setupUI(void)
+{
+	QSettings settings;
 	ui.setupUi(this);
 	ui.actionWhatsThis = QWhatsThis::createAction ();
 
@@ -67,27 +214,15 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	exportButton->setPopupMode( QToolButton::InstantPopup);
 	ui.toolBar->insertWidget ( ui.actionImport, exportButton );
 
-	clockDisplay = new ClockDisplay(this);
-
-	interfaceHandler = new InterfaceHandler( this);
-
-	gameMode = gm;
-	myColorIsBlack = iAmBlack;
-	myColorIsWhite = iAmWhite;
-
-	gamePhase = phaseInit;
-	boardSize = gd->size;
-
-//	gamePhase = phaseInit;
-
-	
+	if(!gameData)
+		qDebug("bw: no game data? okay?, line: %d\n", __LINE__);
+	if(!gameData)
+		clockDisplay = new ClockDisplay(this, canadian, 6000, 25, 60);	//what is this, FIXME
+	else
+		clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
 	ui.board->init(boardSize);
 
-	//Creates the game tree
-	tree = new Tree(boardSize);
-
-	//creates the interface handler
-//	interfaceHandler = new InterfaceHandler( this);
+	interfaceHandler = new InterfaceHandler( this);
 	interfaceHandler->toggleMode(gameMode);
 
 	if (gameData)
@@ -96,53 +231,13 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	// creates the board handler for navigating in the tree
 	boardHandler = new BoardHandler(this, tree, boardSize);
 
-	//Loads the sgf file if any
-	if (! gameData->fileName.isEmpty())
-		loadSGF(gameData->fileName);
-
-	//creates the board interface (or proxy) that will handle the moves an command requests
-	switch (gameMode)
+	if(settings.value("SAVE_WINDOW_SIZES").toBool())
 	{
-		case modeNormal :
-			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
-			break;
-		case modeComputer :
-			try
-			{
-				qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
-			}
-			catch(QString err)
-			{
-				throw err;
-			}
-			break;	
-		case modeObserve :
-			qgoboard = new 	qGoBoardObserveInterface(this, tree,gameData);
-			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
-
-			break;	
-		case modeMatch :
-			try
-			{
-				qgoboard = new 	qGoBoardMatchInterface(this, tree,gameData);
-			}
-			catch(QString err)
-			{
-				throw err;
-			}
-			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
-			break;	
-
-		case modeReview :
-			qgoboard = new 	qGoBoardReviewInterface(this, tree,gameData);
-			connect (qgoboard, SIGNAL(signal_sendCommandFromBoard(const QString&, bool)), parentWidget(), SLOT(slot_sendCommand(const QString&, bool)));
-
-			break;	
-
-		default:
-			break;
+		int window_x, window_y;
+		window_x = settings.value("BOARD_WINDOW_SIZE_X").toInt();
+		window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
+		resize(window_x, window_y);
 	}
-
 
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
@@ -160,48 +255,37 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	connect(ui.navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
 	connect(ui.slider, SIGNAL(sliderMoved ( int)), boardHandler , SLOT(slotNthMove(int)));
 
-	//Connects the board to the interface and boardhandler
-	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
-		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
 
 	connect(ui.board, SIGNAL(signalWheelEvent(QWheelEvent*)),
 		boardHandler, SLOT(slotWheelEvent(QWheelEvent*)));
 
 
-	//Connects the game buttons to the slots
-	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-	connect(ui.passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-	connect(ui.scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
-	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
-	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
-	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
-	//if (gameData->fileName.isEmpty() || gameMode == modeObserve)
-	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
-
-	// Needs Adjourn button ????
-
-	//connects the comments and edit line to the slots
-	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
-	//if (gameData->fileName.isEmpty())
-	connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
-
-//connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
 	//Connects the 'edit' buttons to the slots
 	connect(editButtons, SIGNAL(buttonPressed ( int )), 
 		this, SLOT(slotEditButtonPressed( int )));
 	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
 
+	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
+	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
+	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
+	connect(ui.actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
+	connect(ui.actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
+	connect(ui.actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
+	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
+	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
 
-//	ui.board->init(boardSize);
-	/*if(!qgoboard->init())
+	if(gameMode == modeObserve || gameMode == modeMatch || gameMode == modeReview)
 	{
-		qDebug("qgoboard init failed\n");
-	}*/
-	gamePhase = phaseOngoing;
-	show();
-	setFocus();
+		observerListModel = new ObserverListModel();
+		ui.observerView->setModel(observerListModel);
+	}
+	/* Set column widths ?? */
+}
 
+
+void BoardWindow::setupBoardUI(void)
+{
 	//make sure to set the sound button to the proper state before anything
 	if (qgoboard->getPlaySound())
 	{
@@ -214,6 +298,27 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_off.png"));
 	}
 
+	//Connects the board to the interface and boardhandler
+	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
+		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
+
+	//Connects the game buttons to the slots
+	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+	connect(ui.passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+	connect(ui.scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+	
+	
+	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
+	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
+	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
+	if (gameMode == modeMatch || gameMode == modeComputer)
+	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
+	if(gameMode == modeMatch)
+	connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
+	/* eb added this but I've had it in the setupUI function since
+	 * its more part of the UI than the board.  But maybe its better
+	 * or different here.  FIXME */
+	/*
 	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
 	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
 	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
@@ -223,30 +328,22 @@ BoardWindow::BoardWindow( QWidget *parent , Qt::WindowFlags flags , GameData *gd
 	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
 	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
 	connect(ui.actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
+	*/
 
-	// This is only needed with a computer game, when the computer has to make the first move
-	qgoboard->startGame();
-	
+	// Needs Adjourn button ????
+
+	//connects the comments and edit line to the slots
+	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
+	if (gameMode != modeNormal && gameMode != modeComputer )
+	connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
+//connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+
 }
 
-BoardWindow::~BoardWindow()
+void BoardWindow::resizeEvent(QResizeEvent *)
 {
-
+	qDebug("boardwindow resize event\n");
 }
-
-void BoardWindow::closeEvent(QCloseEvent *e)
-{
-	/* We need to prompt user on close as well as
-	 * set up code to send adjourn/resign signal, etc.
-	 * Otherwise other client can actually get stuck */
-	emit signal_boardClosed(getId());
-	
-	if (checkModified()==1)
-		e->accept();
-	else
-		e->ignore();
-}
-
 
 int BoardWindow::checkModified(bool /*interactive*/)
 {	
@@ -284,10 +381,41 @@ void BoardWindow::setGameData(GameData *gd)
 	gameData = new GameData(gd); 
 	interfaceHandler->updateCaption(gd);
 }
+
+void BoardWindow::swapColors(bool noswap)
+{
+	if(!noswap)
+	{
+		QString rank, name;
+		
+		name = gameData->playerBlack;
+		rank = gameData->rankBlack;
+		gameData->playerBlack = gameData->playerWhite;
+		gameData->rankBlack = gameData->rankWhite;
+		gameData->playerWhite = name;
+		gameData->rankWhite = rank;
+	}
+	gameData->nigiriToBeSettled = false;
+	qDebug("bw:swapColors: %s %s vs %s %s", gameData->playerBlack.toLatin1().constData(), gameData->rankBlack.toLatin1().constData(), gameData->playerWhite.toLatin1().constData(), gameData->rankWhite.toLatin1().constData());
+	if(gameData->playerBlack == dispatch->getUsername())
+	{
+		myColorIsBlack = true;
+		myColorIsWhite = false;
+	}
+	else
+	{
+		myColorIsBlack = false;
+		myColorIsWhite = true;
+	}
+	interfaceHandler->updateCaption(gameData);
+	getBoardHandler()->updateCursor();	//appropriate?
+	//also need to start any timers if necessary
+	//also network timers in addition to game timers
+}
 /*
  * Loads the SGF string. returns true if the file was sucessfully parsed
  */
-bool BoardWindow::loadSGF(const QString fileName, const QString SGF, bool /* fastLoad */)
+bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
 {
 
 	SGFParser *sgfParser = new SGFParser(tree);
@@ -373,6 +501,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 		// set next move's color
 		if (qgoboard->getBlackTurn())
 		{
+			qDebug("blacks turn");
 			current->setPLinfo(stoneWhite);
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
@@ -383,6 +512,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 		}
 		else
 		{
+			qDebug("whites turn");
 			current->setPLinfo(stoneBlack);
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
@@ -391,12 +521,10 @@ void BoardWindow::slotEditButtonPressed( int m )
 			boardHandler->updateCursor(stoneWhite);
 //#endif
 		}
-
 		// check if set color is natural color:
 		if (current->getMoveNumber() == 0 && current->getPLnextMove() == stoneBlack ||
 			current->getMoveNumber() > 0 && current->getColor() != current->getPLnextMove())
 			current->clearPLinfo();
-
 //		board->setCurStoneColor();
 		return;
 	}
@@ -479,17 +607,25 @@ void BoardWindow::slotExportPicClipB()
  */
 void BoardWindow::slotDuplicate()
 {
-	QString str = "";
-
+	QString sgf = "";
+	QString filename;
+	
 	SGFParser *p = new SGFParser( tree);
 
-	if (!p->exportSGFtoClipB(&str, tree, gameData))
+	if (!p->exportSGFtoClipB(&sgf, tree, gameData))
 	{
 		QMessageBox::warning(this, tr("Export"), tr("Could not duplicate the game"));
 //		qDebug ("QGoboard:setMove - move %d %d done",i,j);
 		return ;
 	}
-	emit signal_duplicate(gameData, str, tree->getCurrent()->getMoveNumber());
+	
+	filename = gameData->fileName;	//save
+	gameData->fileName = "";
+	BoardWindow *b = new BoardWindow(modeNormal, gameData, TRUE, TRUE);
+
+	b->loadSGF(0,sgf);
+	b->getBoardHandler()->slotNthMove(tree->getCurrent()->getMoveNumber());
+	gameData->fileName = filename; //restore
 }
 
 
@@ -556,7 +692,7 @@ void BoardWindow::slotSound(bool toggle)
 
 /* 
  * Saves the game tree under file 'filename'
- */
+ * Note that qt handles overwrite check. */
 bool BoardWindow::doSave(QString fileName, bool force)
 {
 	if (!force)
@@ -584,13 +720,6 @@ bool BoardWindow::doSave(QString fileName, bool force)
 	if (fileName.right(4).toLower() != ".sgf")
 		fileName.append(".sgf");
 	
-	// Confirm overwriting file.
-	if (!force && QFile(fileName).exists())
-		if (QMessageBox::information(this, PACKAGE,
-			tr("This file already exists. Do you want to overwrite it?"),
-			tr("Yes"), tr("No"), 0, 0, 1) == 1)
-			return false;
-		
 	gameData->fileName = fileName;
 		
 //	if (setting->readBoolEntry("REM_DIR"))
@@ -606,6 +735,52 @@ bool BoardWindow::doSave(QString fileName, bool force)
 //	statusBar()->message(fileName + " " + tr("saved."));
 	qgoboard->setModified(false);
 	return true;
+}
+void BoardWindow::setGamePhase(GamePhase gp)
+{
+	gamePhase = gp;
+	/* FIXME We should set and clear buttons and the like here */
+	switch(gp)
+	{
+		case phaseEnded:
+			if(ui.undoButton)
+				ui.undoButton->setDisabled(true);
+			if(ui.resignButton)
+				ui.resignButton->setDisabled(true);
+			if(ui.adjournButton)
+				ui.adjournButton->setDisabled(true);
+			if(ui.refreshButton)		//what the hell is this for FIXME
+				ui.refreshButton->setDisabled(true);
+			if(ui.passButton)
+				ui.passButton->setDisabled(true);
+			// right? enable done button?
+			// FIXME, not getting enabled...
+			if(ui.doneButton)
+				ui.doneButton->setEnabled(true);
+			break;
+		case phaseOngoing:
+			/* among many other things: FIXME, adding as we go, for now,
+			 * sloppy */
+			if(ui.passButton)
+				ui.passButton->setEnabled(true);
+			break;
+		case phaseScore:
+			/* Maybe we should take everything out of
+			 * qgoboard enterScoreMode and put it here */
+			/* We might also disable the pass button... except
+			 * really maybe its already disabled from being not
+			 * our turn.. also, should the button's being
+			 * disabled prevent sending the message instead
+			 * of the button checking state?  Probably. FIXME */
+			if(ui.passButton)
+				ui.passButton->setDisabled(true);
+			/* FIXME doublecheck, what is doneButton connected to
+			 * in observing a game ?? */
+			ui.doneButton->setEnabled(true);
+			break;
+		default:
+			break;
+	}
 }
 
 /*
@@ -662,13 +837,14 @@ bool BoardWindow::slotFileSaveAs()
  */
 void BoardWindow::slotEditDelete()
 {
-	qgoboard->deleteNode();
+	tree->deleteNode();
 }
 
-
+/* FIXME this comes up with unrelated keys, which is okay I guess, little
+ * annoying. */
 void BoardWindow::keyPressEvent(QKeyEvent *e)
 {
-	qDebug("key pressed");
+	qDebug("boardwindow.cpp: key pressed");
 
 #if 0
 	// check for window resize command = number button
@@ -763,5 +939,10 @@ break;
 	}
 
 	e->accept();
+}
+
+void BoardWindow::setBoardDispatch(BoardDispatch * d)
+{
+	dispatch = d;
 }
 
