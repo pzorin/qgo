@@ -8,19 +8,21 @@
 
 #include "ui_mainwindow.h"
 #include "mainwindow_settings.h"
-#include "globals.h"
+#include "defines.h"
 #include "sgfparser.h"
 #include "boardwindow.h"
 #include "igsconnection.h"
-#include "parser.h"
-#include "qgo_interface.h"
+//#include "oldparser.h"
+//#include "qgo_interface.h"
 #include "talk.h"
 #include "gamedialog.h"
 #include "audio.h"
+#include "network/networkdispatch.h"
 
 #include <QtGui>
 
 class HostList;
+class RoomListing;
 
 
 class MainWindow : public QMainWindow
@@ -31,21 +33,27 @@ public:
 	MainWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 );
 	~MainWindow();
 
-	int sendTextFromApp(const QString&, bool localecho=true);
-	void sendcommand(const QString&, bool localecho=false);
-	void set_sessionparameter(QString, bool);
-	void sendNmatchParameters();
+	void matchRequest(class MatchRequest * mr);
+	void set_sessionparameter(QString par, bool val); //FIXME
 	void loadSgfFile(QString fn);
-
+	void onConnectionError(void);
+	
+	void recvSeekCondition(class SeekCondition * s);
+	void recvSeekCancel(void);
+	void recvSeekPlayer(QString player, QString condition);
+	
 public slots:
+	void slot_expanded(const QModelIndex & i);
 	// sfg slots
 	void slot_fileNewBoard();
 	void slot_fileOpenBoard();
+	void slot_fileOpenBoard(const QModelIndex &);
 	void slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & bottomRight );
 	
 	// go engine slots
 	void slot_computerNewBoard();
 	void slot_computerOpenBoard();
+	void slot_computerOpenBoard(const QModelIndex &);
 	void slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & bottomRight );
 	void slot_getComputerPath();
 	void slot_computerPathChanged(const QString &);
@@ -60,55 +68,44 @@ public slots:
 	void slot_currentChanged(int );
 	void slot_getGobanPath();
 	void slot_getTablePath();
-
+	void slot_newFile_HandicapChange(int);
+	void slot_newComputer_HandicapChange(int);
 	// client slots
 	void slot_connect(bool b);
-	void slot_textReceived(const QString &txt);
+	//void slot_textReceived(const QString &txt);
 	void slot_message(QString, QColor = Qt::black);
 //	void slot_message(QString txt);
+	void slot_createRoom(void);
+	void slot_changeServer(void);
 	void set_tn_ready();
-	void slot_sendCommand(const QString &, bool);
+	//void slot_sendCommand(const QString &, bool);
 //	void slot_cmdactivated_int(int);
 	void slot_cmdactivated(const QString&);
-	void slot_RefreshGames();
-	void slot_RefreshPlayers();
+	
 	void slot_roomListClicked(const QString &);
+	void slot_seek(bool);
+	void slot_seek(QAction *);
 	void slot_talk(const QString& , const QString &, bool );
+	void talkOpened(Talk * d);
+	void talkRecv(Talk * d);
 	void slot_pbRelOneTab(QWidget *w);
 	void slot_cblooking();
 	void slot_cbopen();
 	void slot_cbquiet();
-	void slot_cancelSeek();
-	void slot_setRankSpread();
-	void slot_matchRequest(const QString &, bool);
-	void slot_talkTo(QString &, QString &);
+	//void slot_matchRequest(const QString &);
+	//void slot_talkTo(QString &, QString &);
 	void slot_removeDialog(GameDialog *);
 	void slot_matchCanceled(const QString&);
-	void slot_seek(QAction *);
-	void slot_seek(bool);
 
 	// parser slots
-	void slot_refresh(int i);
-	void slot_accname(QString &name);
-	void slot_svname(GSName &gs);
-	void slot_room(const QString& room, bool b);
-	void slot_game(Game* g);
-	void slot_player(Player *p, bool cmdplayers);
-	void slot_statsPlayer(Player*);
-	void slot_sortGames (int);
-	void slot_sortPlayers (int);
-	void slot_gamesDoubleClicked(QTreeWidgetItem* );
-	void slot_playersDoubleClicked(QTreeWidgetItem*);
+	void recvRoomListing(const RoomListing & room, bool b);
+	void slot_statsPlayer(PlayerListing*);
 	void slot_checkbox(int , bool );
-	void slot_playerConnected(Player*);
+	//void slot_playerConnected(Player*);
 	void slot_connexionClosed();
 	void slot_removeDialog(const QString &, const QString &);
-	void slot_clearSeekCondition();
-	void slot_addSeekCondition(const QString& , const QString& , const QString& , const QString& , const QString& );
-	void slot_seekList(const QString& , const QString& );
 	void slot_msgBox(const QString&);
-	Account * getAccount(void) { return myAccount; }
-
+	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -116,12 +113,18 @@ protected:
 	void saveSettings();
 
 private:
+	ConnectionType serverStringToConnectionType(const QString & s);  //FIXME move to settings
+	QString connectionTypeToServerString(const ConnectionType c);
+	void setupConnection(void);
+	void closeConnection(void);
+	
+	friend class Room;	//FIXME awkward
 	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
 	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
 	GameData * GameLoaded , * GameLoaded2 ;
-	qGoIF * qgoif;
+	//qGoIF * qgoif;
 	Sound *connectSound, *gameSound;
 
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
@@ -136,7 +139,7 @@ private:
 	bool	gamesListSteadyUpdate;
 //	bool    gamesListEmpty;
 	bool	autoAwayMessage;
-	int 	timer;
+	int 	mainServerTimer;
 	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
 	//    else cmd is from history list
 	int	cmd_count;
@@ -146,20 +149,18 @@ private:
 	bool	tn_ready;
 	bool	tn_wait_for_tn_ready;
 	HostList hostlist;
-	IGSConnection 	*igsConnection;
+	NetworkDispatch * netdispatch;		//bad place for this to be!!!
 
 	QList<sendBuf*>  sendBuffer;
 	sendBuf		*currentCommand;
-	Account		*myAccount;
-	Parser		*parser;
 	QMenu 		*seekMenu;
 	QList<Talk*>	talkList;
 	QList<GameDialog*> matchList;
+	std::vector<const RoomListing *> roomList;
 	int 	seekButtonTimer;
 
 	//players table
 	void showOpen(bool show);
-	void prepareTables(InfoType cmd);
 	void setColumnsForExtUserInfo();
 	QString rkToKey(QString txt, bool integer=FALSE);
 	QString rkMax, rkMin;

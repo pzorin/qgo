@@ -25,7 +25,7 @@
  *   Host - Class to save Host info
  */
 
-Host::Host(const QString &title, const QString &host, const QString &address ,const unsigned int port, const QString &login, const QString &pass, const QString &cod)
+Host::Host(const QString &title, const ConnectionType host, const QString &address ,const unsigned int port, const QString &login, const QString &pass, const QString &cod)
 {
 	t = title;
 	h = host;
@@ -57,7 +57,7 @@ int HostList::compareItems(Host* d1, Host* d2)
 		return 0;
 }
 
-
+#ifdef FIXME
 /*
  *   account & caption
  */
@@ -205,6 +205,7 @@ void Account::addGame(int game_number, Game * game)
 	games[game_number] = game;
 }
 
+
 void PlayerTableItem::set_nmatchSettings(Player *p)
 {
 	nmatch = p->nmatch;
@@ -226,7 +227,7 @@ void PlayerTableItem::set_nmatchSettings(Player *p)
 	nmatch_settings =  !(p->nmatch_settings == "No match conditions");
 
 }
-
+#endif //FIXME
 
 /*
  * a cancel button has been pressed on the preference pages  
@@ -259,8 +260,15 @@ void MainWindow::slot_currentChanged(int i)
 			(settings.value("DEFAULT_BY").toInt() != ui.BYSpin->value()) );
 
 		saveSettings();
+#ifdef FIXME
 		if (resend)
 			sendNmatchParameters();
+#endif //FIXME
+	}
+	if(i == 1 || i == 2)
+	{
+		//refresh file system model
+		model->refresh();
 	}
 
 	former = i;
@@ -291,22 +299,32 @@ void MainWindow::saveSettings()
 	else if ( ui.radioButtonStones_3D->isChecked())
 		i=2;
 	settings.setValue("STONES_LOOK", i);
-
+	
 	i = 0;
 	if ( ui.radioButton_noSound->isChecked())
 		i=1;
 	else if ( ui.radioButton_myGamesSound->isChecked())
 		i=2;
 	settings.setValue("SOUND", i);
-
-
+	
+	if ( ui.komarkerCB->isChecked())
+		i=1;
+	else
+		i=0;
+	settings.setValue("KOMARKER", i);
+	if ( ui.observeOutsideCB->isChecked())
+		i=1;
+	else
+		i=0;
+	settings.setValue("OBSERVEOUTSIDE", i);
+	
 	//saves hosts list
 	settings.beginWriteArray("HOSTS");
 	for (int i = 0; i < hostlist.size(); ++i) 
 	{
 		settings.setArrayIndex(i);
 		settings.setValue("title", hostlist.at(i)->title());
-		settings.setValue("server", hostlist.at(i)->host());
+		settings.setValue("server", connectionTypeToServerString(hostlist.at(i)->host()));
 		settings.setValue("address", hostlist.at(i)->address());
 		settings.setValue("port", hostlist.at(i)->port());
 		settings.setValue("loginName", hostlist.at(i)->loginName());
@@ -330,8 +348,6 @@ void MainWindow::saveSettings()
 	settings.setValue("NMATCH_BYO_TIME", ui.BYSpin_Nmatch->value());
 	settings.setValue("NMATCH_HANDICAP", ui.HandicapSpin_Nmatch->value());
 
-
-
 	settings.setValue("AUTOSAVE", ui.CheckBox_autoSave->isChecked());
 	settings.setValue("AUTOSAVE_PLAYED", ui.CheckBox_autoSave_Played->isChecked());
 
@@ -347,7 +363,7 @@ void MainWindow::saveSettings()
 
 	//qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());	
 
-
+	preferences.save();
 }
 
 
@@ -374,7 +390,9 @@ void MainWindow::loadSettings()
 	ui.LineEdit_table->setText(settings.value("SKIN_TABLE").toString());
 
 	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
-
+	ui.komarkerCB->setChecked((settings.value("KOMARKER") == 1));
+	ui.observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
+	
 	//server list
 	hostlist.clear();
 	ui.ListView_hosts->clear();
@@ -385,7 +403,7 @@ void MainWindow::loadSettings()
 	{
 		settings.setArrayIndex(i);
 		h = new Host( 	settings.value("title").toString(),
-				settings.value("server").toString(),
+				serverStringToConnectionType(settings.value("server").toString()),
 				settings.value("address").toString(),
 				settings.value("port").toInt(),
 				settings.value("loginName").toString(),
@@ -436,9 +454,45 @@ void MainWindow::loadSettings()
 	ui.newFile_Handicap->setValue(settings.value("EDIT_HANDICAP").toInt());
 	ui.newFile_Komi->setText(settings.value("EDIT_KOMI").toString());
 
+	preferences.fill();
 
 
+}
 
+ConnectionType MainWindow::serverStringToConnectionType(const QString & s)
+{
+	if(s == "IGS")
+		return TypeIGS;
+	else if(s == "WING")
+		return TypeWING;
+	else if(s == "LGS")
+		return TypeLGS;
+	else if(s == "CyberORO")
+		return TypeORO;
+	else
+		return TypeUNKNOWN;
+}
+
+QString MainWindow::connectionTypeToServerString(const ConnectionType c)
+{
+	switch(c)
+	{
+		case TypeIGS:
+			return "IGS";
+			break;
+		case TypeWING:
+			return "WING";
+			break;
+		case TypeLGS:
+			return "LGS";
+			break;
+		case TypeORO:
+			return "CyberORO";
+			break;
+		default:
+			return "Unknown";
+			break;
+	}
 }
 
 /*
@@ -473,10 +527,18 @@ void MainWindow::slot_addServer()
 				delete hostlist.takeAt(i);
 			}
 		}
-		
+		/* FIXME  In addition to password/user saving issues and rather
+		 * nonintuitive buttons, the Host button is used as a kind of auto 
+		 * filler for a particular ip... we might want to use it as a protocol
+		 * setter instead.  Its all possible that the app could "ship" with
+		 * the standard ip addresses and setups. 
+		 * Also, what's the codec for?  Is that supposed to the protocol? There's
+		 * no entries but I usually think of "codecs" as for language, not net
+		 * protocols... */
 		// insert host (at it's sorted position) //TODO check wether this is needed
 		hostlist.append(new Host(ui.LineEdit_title->text(),
-				ui.comboBox_server->currentText(),
+				(ConnectionType)ui.comboBox_server->currentIndex(),
+				//ui.comboBox_server->currentText(),
 				ui.LineEdit_address->text(),
 				tmp,
 				ui.LineEdit_login->text(),
@@ -644,8 +706,11 @@ void MainWindow::slot_serverChanged( const QString &server)
 	{
 		//ui.LineEdit_address->setReadOnly(TRUE);
 		//ui.LineEdit_port->setReadOnly(TRUE);
-		ui.LineEdit_address->setEnabled(FALSE);
-		ui.LineEdit_port->setEnabled(FALSE);
+		
+		// I'm enabling these for now because I might want to change it
+		// and they might change FIXME
+		//ui.LineEdit_address->setEnabled(FALSE);
+		//ui.LineEdit_port->setEnabled(FALSE);
 
 		if (server == QString("LGS"))
 		{
@@ -672,6 +737,25 @@ void MainWindow::slot_serverChanged( const QString &server)
 			ui.LineEdit_port->setText("7777");
 //			ui.LineEdit_login->setText("guest");
 			ui.ComboBox_codec->setCurrentIndex (1);
+	
+		}
+		/* Again, this is a strange way of doing this FIXME */
+		else if (server == QString("CyberORO"))
+		{
+//			ui.LineEdit_title->clear();
+			//ui.LineEdit_address->setText("211.38.95.204");
+			//ui.LineEdit_port->setText("7002");
+			/* It looks like there's one gateway server which
+			 * responds with a bunch of other servers.. no real
+			 * way to get around this which means we might have
+			 * to bring up some other dialog to choose the
+			 * server from the meta server.  At least I assume
+			 * this because it doesn't respond to me and
+			 * the login information is sent to the gateway. */
+			ui.LineEdit_address->setText("211.113.91.78");
+			ui.LineEdit_port->setText("7447");
+//			ui.LineEdit_login->setText("guest");
+			ui.ComboBox_codec->setCurrentIndex (2);
 	
 		}
 	}

@@ -21,9 +21,11 @@
 
 #include "globals.h"
 #include "mainwindow.h"
-#include "parser.h"
+//#include "parser.h"
 #include "talk.h"
 #include "gamedialog.h"
+#include "listviews.h"
+#include "playergamelistings.h"		//FIXME should be moved out
 
 /*
  * return pressed in edit line -> command to send
@@ -33,6 +35,9 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 	if (cmd.trimmed().isEmpty())
 		return;
 
+	netdispatch->sendConsoleText(cmd.toLatin1().constData());
+	ui.cb_cmdLine->clearEditText();
+	return;
 	qDebug("cmd_valid: %i", (int)cmd_valid);
 	// check if valid cmd -> cmd number risen
 //	if (cmd_valid)
@@ -44,7 +49,7 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
  
 		// echo & send
 		QString cmdLine = cmd;
-		sendcommand(cmdLine.trimmed(),true);
+		//sendcommand(cmdLine.trimmed(),true);
 		cmd_valid = false;
 
 /*		// check for known commands
@@ -64,7 +69,7 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 		if (cmdLine.mid(0,3).contains("who"))
 		{
 			// clear table if manually entered
-			prepareTables(WHO);
+			//prepareTables(WHO);
 //			playerListSteadyUpdate = false;
 		}
 //		if (cmdLine.mid(0,5).contains("; \\-1") && myAccount->get_gsname() == IGS)
@@ -83,10 +88,6 @@ void MainWindow::slot_connect(bool b)
 {
 	if (b)
 	{
-		// create instance of telnetConnection
-		if (!igsConnection)
-			qFatal("No telnetConnection!");
-		
 		bool found = FALSE;
 		Host *h;
 		for (int i=0; i < hostlist.count() && !found ; i++)
@@ -101,83 +102,215 @@ void MainWindow::slot_connect(bool b)
 		if (!found)
 		{
 			qDebug("Problem in hostlist : did not find list title : %s" , ui.cb_connect->currentText().toLatin1().constData());
-			ui.pb_connect->setDown(FALSE);
+			ui.pb_connect->setChecked(FALSE);
 			return;
 		}
-
-
-		// connect to selected host
-		if (igsConnection->openConnection(h->address().toLatin1(),
+		
+		netdispatch = new NetworkDispatch(ConnectionInfo(
+						h->address().toLatin1().constData(), 
 						h->port(),
-						h->loginName().toLatin1(),
-						h->password().toLatin1()) )
-			return;
+						h->loginName().toLatin1().constData(),
+						h->password().toLatin1().constData(), h->host()));
+		// check for errors here
+		if(netdispatch->checkForErrors() < 0)
+		{
+			// we need to have the errors drive this... so remove
+			// it here FIXME
+			delete netdispatch;
+			netdispatch = 0;	//necessary? probably
+			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
+		}
 		else
-			ui.pb_connect->setDown(FALSE);
+		{
+			netdispatch->setMainWindow(this);
+			ui.pb_connect->setChecked(true);
+			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
+			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
+			setupConnection();
+		}
 	}
-	else
+	else	// toggled off
 	{
-		// disconnect
-		igsConnection->closeConnection();
+		closeConnection();
 	}
 }
 
+/* FIXME I feel like all the UI elements below that hide
+ * should hide on destruction of connection, not on
+ * reconnect to another service.  At the same time,
+ * ORO reconnects as part of its session so that would
+ * be a bit tricky.  We'll leave it here for now. */
+void MainWindow::setupConnection(void)
+{
+	unsigned long rs_flags = netdispatch->getRoomStructureFlags();
+	if(rs_flags & RS_NOROOMLIST)
+	{
+		ui.RoomList->hide();
+		ui.roomsLabel->hide();
+	}
+	else if(rs_flags & RS_SHORTROOMLIST)
+	{
+		ui.RoomList->show();
+		ui.roomsLabel->hide();
+	}
+	else if(rs_flags & RS_LONGROOMLIST)
+	{
+		/* Here, FIXME, we'd want to replace
+		* the menu with a button that brings
+		* up a window with a tree list, to join
+		* different rooms */
+	}
+	
+	if(netdispatch->supportsServerChange())
+	{
+		ui.changeServerPB->show();
+		connect(ui.changeServerPB, SIGNAL(clicked()), SLOT(slot_changeServer()));
+	}
+	else
+	{
+		ui.changeServerPB->hide();
+	}
+	if(netdispatch->supportsCreateRoom())
+	{
+		ui.createRoomPB->show();
+		connect(ui.createRoomPB, SIGNAL(clicked()), SLOT(slot_createRoom()));
+	}
+	else
+	{
+		ui.createRoomPB->hide();
+	}
+	
+	if(netdispatch->supportsSeek())
+	{
+		ui.toolSeek->show();
+		ui.seekHandicapList->show();
+	}
+	else
+	{
+		ui.toolSeek->hide();
+		ui.seekHandicapList->hide();
+	}
+	if(netdispatch->supportsChannels())
+	{
+		ui.channelsLabel->show();
+		ui.channelsCB->show();
+	}
+	else
+	{
+		ui.channelsLabel->hide();
+		ui.channelsCB->hide();
+	}
+	netdispatch->setKeepAlive(600);		//600 seconds okay? FIXME
+	/* FIXME Also need away message and maybe game/player refresh */
+#ifdef FIXME	
+	// quiet mode? if yes do clear table before refresh
+	gamesListSteadyUpdate = ! ui.setQuietMode->isChecked(); 
+	playerListSteadyUpdate = ! ui.setQuietMode->isChecked(); 
 
+	// enable extended user info features
+	setColumnsForExtUserInfo();
+
+			// check for messages
+	if (youhavemsg)
+		sendcommand("message", false);
+	// init shouts
+	//TODO		slot_talk("Shouts*", 0, true);
+	
+			// show current Server name in status bar
+	statusServer->setText(" " + myAccount->svname + " ");
+#endif //FIXME
+	// start timer: event every second
+	onlineCount = 0;
+	//mainServerTimer = startTimer(1000);
+	
+	connectSound->play();
+}
+
+/* Shouldn't be here. FIXME */
+void MainWindow::onConnectionError(void)
+{
+	qDebug("onConnectionError");
+	closeConnection();
+}
+
+void MainWindow::closeConnection(void)
+{
+	if(netdispatch)
+	{
+		ui.pb_connect->setChecked(false);	//doesn't matter
+		delete netdispatch;
+		netdispatch = 0;
+	}
+	connectSound->play();
+
+	// show current Server name in status bar
+	statusServer->setText(" OFFLINE ");
+
+	ui.pb_connect->setIcon(QIcon(":/ressources/pics/connect_no2.png"));
+	ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+}
 
 /*
  * connection closed - triggered by parser signal
  */
 void MainWindow::slot_connexionClosed()
 {
+	qDebug("slot_connexionClosed");
 	// no Timers in offline mode!
-	killTimer(timer);
+	killTimer(mainServerTimer);
 
+#ifdef FIXME
+	/* We may need to set somet status somewhere or like the
+	 * OFFLINE text, but that needs to be somewhere else.
+	 * This is just a reminder. */
 	// set to offline:
 	myAccount->set_offline();
+#endif //FIXME
 	//pb_connect->setOn(FALSE);
 	ui.pb_connect->setChecked(FALSE);
 	seekMenu->clear();
+
+#ifdef FIXME
+	/* FIXME FIXME seeking */
 	slot_cancelSeek();	
-
-	// clear channel
-	prepareTables(CHANNELS);
-
-	prepareTables(WHO);
-	prepareTables(GAMES);
-	// remove boards
-//	qgoif->set_initIF();
+#endif //FIXME
+	
 
 //	qDebug("slot_connclosed()");
 //	qDebug(QString("%1 -> slot_connclosed()").arg(statusOnlineTime->text()));
 
-	connectSound->play();
-
-	// show current Server name in status bar
-	statusServer->setText(" OFFLINE ");
-
-	// set menu
-//	Connect->setEnabled(true);
-//	Disconnect->setEnabled(false);
-//	toolConnect->setOn(false);
-	ui.pb_connect->setIcon(QIcon(":/ressources/pics/connect_no2.png"));
-//	toolConnect->setPixmap(disconnectedIcon);
-//	QToolTip::remove(toolConnect);
-	ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+	//delete netdispatch;	//connection has deleted the network dispatch
+	//netdispatch = 0;
 }
 
+/* We need a separate server panel class with changeServer and maybe seek and the room and channel
+ * lists  It would need access to the mainwindow ui and could handle a lot of things that weren't
+ * room specific and also to the network dispatch */
+void MainWindow::slot_changeServer(void)
+{
+	netdispatch->changeServer();
+}
+
+void MainWindow::slot_createRoom(void)
+{
+	netdispatch->createRoom();
+}
 
 // used for singleShot actions
 void MainWindow::set_tn_ready()
 {
 	tn_ready = true;
 	tn_wait_for_tn_ready = false;
-	sendTextFromApp(0);
+	//sendTextFromApp(0);
 }
 
 // tell, say, kibitz...
 void MainWindow::slot_message(QString txt, QColor c)
 {
 	ui.MultiLineEdit2->setTextColor(c);
+	if(txt.length() - 2 >= 0 && 
+		  txt[txt.length() - 1] == '\n' && txt[txt.length() - 2] == '\n')
+		txt.truncate(txt.length() - 1);
 	// Scroll at bottom of text, set cursor to end of line
 	if (! (ui.MultiLineEdit2->toPlainText().endsWith('\n') && txt == "\n"))
 		ui.MultiLineEdit2->append(txt);
@@ -186,6 +319,9 @@ void MainWindow::slot_message(QString txt, QColor c)
 }  
 
 
+#ifdef FIXME
+/* We can probably just cut the below out... but just in case it contains
+ * some tidbit of wisdom for later... */
 /*
  * text is send by igsconnection signal
  */
@@ -193,26 +329,15 @@ void MainWindow::slot_textReceived(const QString &txt)
 {
 
 	static int store_sort_col = -1;
-	static int store_games_sort_col = -1;
 	static bool player7active = false;
 
 	// put text to parser
-	InfoType it_  = parser->put_line(txt);
+	//InfoType it_  = parser->put_line(txt);
+	InfoType it_;
 
 	// some statistics
 //	setBytesIn(txt.length()+2);
 
-
-	// GAME7_END emulation:
-	if (player7active && it_ != GAME7)
-	{
-		player7active = false;
-		if (store_games_sort_col != -1)
-			ui.ListView_games->sortByColumn(store_games_sort_col);
-		store_games_sort_col = -1;
-
-//		ui.ListView_games->sort();
-	}
 
 	switch (it_)
 	{
@@ -283,8 +408,8 @@ void MainWindow::slot_textReceived(const QString &txt)
 					sendcommand("seek config_list ",true);
 					sendcommand("room",true);
 						
-					slot_refresh(11);
-					slot_refresh(10);
+					//slot_refresh(11);
+					//slot_refresh(10);
 					break;
 				}
 
@@ -292,51 +417,15 @@ void MainWindow::slot_textReceived(const QString &txt)
 				default:
 					set_sessionparameter("client", true);
 					set_sessionparameter("quiet", false);
-					slot_refresh(11);
-					if (myAccount->get_gsname() != CWS)
-						slot_refresh(10);
+					//slot_refresh(11);
+					//if (myAccount->get_gsname() != CWS)
+				//		slot_refresh(10);
 					break;
 			}
 
-			// check if tables are sorted
-//			if ( ! ui.ListView_players->isSortingEnabled())
-				ui.ListView_players->sortItems(12,Qt::AscendingOrder);
-//			if ( ! ui.ListView_games->isSortingEnabled())
-				ui.ListView_games->sortItems(12,Qt::AscendingOrder);
 
 
-			// set menu
-//			Connect->setEnabled(false);
-//			Disconnect->setEnabled(true);
-			ui.pb_connect->setChecked(true);
-			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
-//			QToolTip::remove(pb_connect);
-//			QToolTip::add(pb_connect, tr("Disconnect from") + " " + cb_connect->currentText());
-			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
-
-			// quiet mode? if yes do clear table before refresh
-			gamesListSteadyUpdate = ! ui.setQuietMode->isChecked(); 
-			playerListSteadyUpdate = ! ui.setQuietMode->isChecked(); 
-
-
-			// enable extended user info features
-			setColumnsForExtUserInfo();
-
-			// check for messages
-			if (youhavemsg)
-				sendcommand("message", false);
-
-			// let qgo know which server
-			qgoif->set_gsName(myAccount->get_gsname());
-			// show current Server name in status bar
-			statusServer->setText(" " + myAccount->svname + " ");
-
-			// start timer: event every second
-			onlineCount = 0;
-			timer = startTimer(1000);
-			// init shouts
-//TODO			slot_talk("Shouts*", 0, true);
-			connectSound->play();
+			
 
 			break;
 
@@ -344,8 +433,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 		case PLAYER42_END:
 		case PLAYER27_END:
 			// anyway, end of fast filling
-			if (store_sort_col != -1)
-				ui.ListView_players->sortByColumn(store_sort_col);
+
 
 			store_sort_col = -1;
 
@@ -360,7 +448,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 		case PLAYER27_START:
 		case PLAYER42_START:
 			// disable sorting for fast operation; store sort column index
-			store_sort_col = ui.ListView_players->sortColumn();
+
 //			ui.ListView_players->setSortingEnabled(FALSE);
 
 			if (playerListEmpty)
@@ -375,15 +463,14 @@ void MainWindow::slot_textReceived(const QString &txt)
 			if (playerListEmpty)
 			{
 				// only if playerListEmpty, else PLAYERXX_END would not arise
-				store_games_sort_col = ui.ListView_games->sortColumn();
+
 //				ui.ListView_games->setSortingEnabled(FALSE);
 			}
 			break;
 
 		case ACCOUNT:
 			// let qgo and parser know which account in case of setting something for own games
-			qgoif->set_myName(myAccount->acc_name);
-			parser->set_myName(myAccount->acc_name);
+
 			break;
 
 
@@ -392,7 +479,7 @@ void MainWindow::slot_textReceived(const QString &txt)
 			currentCommand->txt="stats";
 		
 		// if (!talklist.current())
-			slot_talk( parser->get_statsPlayer()->name,0,true);
+
 		
 			//else if (parser->get_statsPlayer()->name != talklist.current()->get_name())
 			//    slot_talk( parser->get_statsPlayer()->name,0,true);
@@ -411,8 +498,9 @@ void MainWindow::slot_textReceived(const QString &txt)
 //	qDebug(txt.toLatin1());
 
 }
-
-
+#endif //FIXME
+#ifdef FIXME
+/* This can all probably go. */
 // send text via telnet session; skipping empty string!
 int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 {
@@ -444,7 +532,13 @@ int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 		if (s)
 		{
 			// send buffer cmd first; then put current cmd to buffer
-			igsConnection->sendTextToHost(s->get_txt());
+			//igsConnection->sendTextToHost(s->get_txt());
+			if(!netdispatch)
+			{
+				qDebug("No network dispatch\n");
+				return 0;
+			}
+			netdispatch->sendText(s->get_txt().toLatin1().constData());
 			qDebug("SENDBUFFER send: %s", s->get_txt().toLatin1().constData());
 
 			// hold the line if cmd is sent; 'ayt' is autosend cmd
@@ -469,7 +563,13 @@ int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 		else if (valid)
 		{
 			// buffer empty -> send direct
-			igsConnection->sendTextToHost(txt);
+			//igsConnection->sendTextToHost(txt);
+			if(!netdispatch)
+			{
+				qDebug("No network dispatch\n");
+				return 0;
+			}
+			netdispatch->sendText(txt.toLatin1().constData());
       //currentCommand->txt = txt;
       
 //TODO			if (!txt.contains("ayt"))
@@ -490,29 +590,33 @@ int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 	return sendBuffer.count();
 
 }
-
+#endif //FIXME
+/* We're going to leave this as is until we figure out what other
+ * protocols might use for it. But obviously its necessary even
+ * for the other text protocols.*/
 // set session parameter
 void MainWindow::set_sessionparameter(QString par, bool val)
 {
 	QString value;
-	if (val)
-		value = " true";
-	else
-		value = " false";
+	if(!netdispatch)
+		return;
+	
 
-	switch(myAccount->get_gsname())
+	//netdispatch->sendText("toggle " + par + value);
+	netdispatch->sendToggle(par, val);
+	/*switch(myAccount->get_gsname())
 	{
 		// only toggling...
 		case IGS:
-			sendcommand("toggle " + par + value);
+			netdispatch->sendText("toggle " + par + value);
 			break;
 			
 		default:
-			sendcommand("set " + par + value);
+			netdispatch->sendText("set " + par + value);
 			break;
-	}
+	}*/
 }
-
+#ifdef FIXME
 
 void MainWindow::slot_sendCommand(const QString &cmd, bool localecho)
 {
@@ -526,6 +630,7 @@ void MainWindow::sendcommand(const QString &cmd, bool localecho)
  {
 	QString testcmd = cmd;
 
+	qDebug("Sending command: %s\n", cmd.toLatin1().constData());
 	// for testing
 	if (cmd.indexOf("#") == 0)
 	{
@@ -578,7 +683,13 @@ void MainWindow::sendcommand(const QString &cmd, bool localecho)
 	}
 
 	// send to Host
-	sendTextFromApp(cmd, localecho);
+	//sendTextFromApp(cmd, localecho);
+	if(!consoledispatch)
+	{
+		qDebug("No console dispatch\n");
+		return;
+	}
+	consoledispatch->sendText(cmd.toLatin1().constData());
 }
 
 /*
@@ -586,6 +697,9 @@ void MainWindow::sendcommand(const QString &cmd, bool localecho)
  */
 void MainWindow::showOpen(bool show)
 {
+	qDebug("showOpen %d", show);
+#ifdef FIXME
+	/* This is important!!! */
 	QTreeWidgetItemIterator lv(ui.ListView_players);
 /*	
 	for (; lv.current() ;lv++)
@@ -604,126 +718,43 @@ void MainWindow::showOpen(bool show)
 			(*lv)->setHidden(show);		
         	++lv;
 	}
-
+#endif //FIXME
 }
 
+#endif //FIXME
 /*
  * room list clicked
  */
 void MainWindow::slot_roomListClicked(const QString& text)
 {
-	QString room;
-
-	if (text == QObject::tr("Lobby"))
-		room = "0";
-	else
-		room = text.section(":",0,0);
-
-	sendcommand("join " + room);	
+	qDebug("slot_roomListClicked\n");
+	
+	std::vector <const RoomListing *>::iterator it = roomList.begin();
+	while(it != roomList.end())
+	{
+		if((*it)->name == text)
+		{
+			netdispatch->sendJoinRoom((**it));
+			return;
+		}
+		it++;
+	}
+	qDebug("Can't find room %s", text.toLatin1().constData());
 	
 /*	if (room == "0")
 		statusBar()->message(tr("rooms left"));
 	else
 		statusBar()->message(tr("Room ")+ room);
 */	
-	//refresh the players table
-	slot_refresh(0);	
 }
+#ifdef FIXME
 
 
 
 
 
-/*
- * refresh games button clicked
- */
-void MainWindow::slot_RefreshGames()
-{
-//	if (gamesListSteadyUpdate)
-//		slot_refresh(1);
-//	else
-//	{
-		// clear table in case of quiet mode
-		slot_refresh(11);
-//		gamesListSteadyUpdate = !setQuietMode->isOn(); 
-//	}
-}
-
-/*
- * refresh players button clicked
- */
-void MainWindow::slot_RefreshPlayers()
-{
-//	if (playerListSteadyUpdate)
-//		slot_refresh(0);
-//	else
-//	{
-		// clear table in case of quiet mode
-		slot_refresh(10);
-//		playerListSteadyUpdate = !setQuietMode->isOn(); 
-//	}
-}
-
-
-/*
- * refresh lists
- */
-void MainWindow::slot_refresh(int i)
-{
-
-	slot_setRankSpread();
-
-	QString wparam =  rkMax + "-" + rkMin ;
-	// refresh depends on selected page
-	switch (i)
-	{
-		case 10:
-			prepareTables(WHO);
-		case 0:
-			// send "WHO" command
-      			//set the params of "who command"
-/*			if ((ui.whoBox1->currentIndex() >1)  || (ui.whoBox2->currentIndex() >1))
-        		{
-				wparam.append(ui.whoBox1->currentIndex()==1 ? "9p" : ui.whoBox1->currentText());
-				if ((ui.whoBox1->currentIndex())  && (ui.whoBox2->currentIndex()))
-					wparam.append("-");
-
-				wparam.append(ui.whoBox2->currentIndex()==1 ? "9p" : ui.whoBox2->currentText());
-         		} 
-			else if ((ui.whoBox1->currentIndex())  || (ui.whoBox2->currentIndex()))
-        			wparam.append("1p-9p");
-			else
-				wparam.append(((myAccount->get_gsname() == IGS) ? "9p-BC" : " "));
-*/				
-
-			if (ui.whoOpenCheck->isChecked())
-				wparam.append(((myAccount->get_gsname() == WING) ? " O" : " o"));//wparam.append(" o");
-
-			if (myAccount->get_gsname() == IGS )//&& extUserInfo)
-				sendcommand(wparam.prepend("userlist "));
-			else
-				sendcommand(wparam.prepend("who "));
-
-      			prepareTables(WHO);
-			break;
-
-		case 11:
-			prepareTables(GAMES);
-		case 1:
-			// send "GAMES" command
-			sendcommand("games");
-//			prepare_tables(GAMES);
-			// which games are watched right now
-			// don't work correct at IGS !!!!
-//			sendcommand("watching");
-			break;
-
-		default:
-			break;
-	}
-
-}
-
+/* Same thing as the slot above that we can probably remove
+ * but just in case */
 // prepare tables (clear, ...)
 void MainWindow::prepareTables(InfoType cmd)
 {
@@ -737,7 +768,9 @@ void MainWindow::prepareTables(InfoType cmd)
 //				lv++;
 //				delete lvi;
 //			}
+#ifdef FIXME
 			ui.ListView_players->clear();
+#endif //FIXME
 
 			// set number of players to 0
 			myAccount->num_players = 0;
@@ -756,7 +789,9 @@ void MainWindow::prepareTables(InfoType cmd)
 //				lv++;
 //				delete lvi;
 //			}
+#ifdef FIXME
 			ui.ListView_games->clear();
+#endif //FIXME
 
 			// set number of games to 0
 			myAccount->num_games = 0;
@@ -787,7 +822,12 @@ void MainWindow::prepareTables(InfoType cmd)
 
 	}
 }
+#endif //FIXME
 
+
+#ifdef FIXME
+/* Below, again, could be helpful and such column changes DO need to be
+ * done, but they're specific to the connection */
 /*
  * sets the columns for specific IGS infos
  */
@@ -797,11 +837,16 @@ void MainWindow::setColumnsForExtUserInfo()
 	if (/* !extUserInfo || */(myAccount->get_gsname() != IGS) )
 	{
 		// set player table's columns to 'who' mode
+#ifdef FIXME
+		/* We'll have to test this on other servers? 
+		 * Actually the columns should be there or not
+		 * but we just might leave them blank or "-"*/
 		ui.ListView_players->setColumnHidden(11,TRUE);
 		ui.ListView_players->setColumnHidden(10,TRUE);
 		ui.ListView_players->setColumnHidden(9,TRUE);
 		ui.ListView_players->setColumnHidden(8,TRUE);
 		ui.ListView_players->setColumnHidden(7,TRUE);
+#endif //FIXME
 	}
 	else// if ( ui.ListView_players->columns()  < 9 )  
 	{
@@ -817,8 +862,10 @@ void MainWindow::setColumnsForExtUserInfo()
 //		ui.ListView_players->setColumnAlignment(7, Qt::AlignRight);
 //		ui.ListView_players->setColumnAlignment(8, AlignRight);
 //		ui.ListView_players->setColumnAlignment(9, AlignRight);
+#ifdef FIXME
 		ui.ListView_players->setColumnHidden(11,FALSE);
 		ui.ListView_players->setColumnHidden(10,FALSE);
+#endif //FIXME
 //		ui.ListView_players->setColumnHidden(9,FALSE);
 //		ui.ListView_players->setColumnHidden(8,FALSE);
 //		ui.ListView_players->setColumnHidden(7,FALSE);
@@ -836,6 +883,7 @@ void MainWindow::slot_svname(GSName &gs)
 	myAccount->set_caption();
 }
 
+
 /*
  * account name found by parser
  */
@@ -847,34 +895,26 @@ void MainWindow::slot_accname(QString &name)
 	myAccount->set_caption();
 }
 
+#endif //FIXME
 
-/*
- * 'seek' time condition was received from parser
- */
-void MainWindow::slot_addSeekCondition(const QString& a, const QString& b, const QString& c, const QString& d, const QString& )
+void MainWindow::recvSeekCondition(class SeekCondition * s)
 {
-	QString time_condition ;
+	if(!s)
+		seekMenu->clear();
+	else
+	{
+		QString time_condition;
 	
-	time_condition = QString::number(int(b.toInt() / 60)) + " min + " + QString::number(int(c.toInt() / 60)) + " min / " + d + " stones";
+		time_condition = QString::number((s->maintime / 60)) + " min + " + QString::number(int(s->periodtime / 60)) + " min / " + QString::number(s->periods) + " stones";
 
-	QAction *act = seekMenu->addAction(time_condition);// , this, SLOT(slot_seek(QAction*)));//, 0, a.toInt());
-	act->setData(a.toInt());
+		QAction *act = seekMenu->addAction(time_condition);// , this, SLOT(slot_seek(QAction*)));//, 0, a.toInt());
+		act->setData(s->number);
+		delete s;
+	}
 }
 
-/*
- * seek header received after 'seek config_list' command
- */
-void MainWindow::slot_clearSeekCondition()
-{
-	seekMenu->clear();
-}
-
-/* 
- * seek request is being canceled
- */
-void MainWindow::slot_cancelSeek()
-{
-
+void MainWindow::recvSeekCancel(void)
+{	
 	ui.toolSeek->setChecked(FALSE);
 	ui.toolSeek->setMenu(seekMenu);
 //	ui.toolSeek->setPopupDelay(1);
@@ -884,75 +924,9 @@ void MainWindow::slot_cancelSeek()
 
 }
 
-
-/*
- * the 'seek' button was pressed
- */
-void MainWindow::slot_seek(bool b)
+void MainWindow::recvSeekPlayer(QString player, QString condition)
 {
-//qDebug("seek button pressed : status %i", (int)b);
-
-	//if the button was just pressed on, we have already used the popup menu : nothing to do
-	if (b)
-		return;
-
-	sendcommand("seek entry_cancel",false);
-}
-
-
-/*
- * seek button : menu entry (time conditions) selected
- */
-void MainWindow::slot_seek(QAction *act)
-{
-	int i = act->data().toInt();
-	ui.toolSeek->setChecked(true);
-	ui.toolSeek->setMenu(NULL);
-
-	//seek entry 1 19 5 3 0
-	QString send_seek = 	"seek entry " + 
-				QString::number(i) + 
-				" 19 " ;
-
-	//childish, but we want to have an animated icon there
-	seekButtonTimer = startTimer(200);
-
-	switch (ui.seekHandicapList->currentIndex())
-	{
-		case 0 :
-			send_seek.append("1 1 0");
-			break ;
-
-		case 1 :
-			send_seek.append("2 2 0");
-			break ;
-		
-		case 2 :
-			send_seek.append("5 5 0");
-			break ;
-
-		case 3 :
-			send_seek.append("9 9 0");
-			break ;
-
-		case 4 :
-			send_seek.append("0 9 0");
-			break ;	
-
-		case 5 :
-			send_seek.append("9 0 0");
-			break ;
-	}
-	
-	sendcommand(send_seek,false);
-	qDebug(send_seek.toLatin1().constData());
-}
-
-/*
- * seek entry received from parser
- */
-void MainWindow::slot_seekList(const QString& player, const QString& condition)
-{
+#ifdef FIXME
 	QString Rk;
 
 	QTreeWidgetItemIterator lv(ui.ListView_players);
@@ -975,588 +949,125 @@ void MainWindow::slot_seekList(const QString& player, const QString& condition)
 		Rk.append(" ");
 
 	slot_message(player.leftJustified(15,' ',true) + Rk.rightJustified(5) +  " : " + condition, Qt::darkRed);
-
+#endif //FIXME
 }
 
+/*
+ * the 'seek' button was pressed
+ */
+void MainWindow::slot_seek(bool b)
+{
+//qDebug("seek button pressed : status %i", (int)b);
+
+	//if the button was just pressed on, we have already used the popup menu : nothing to do
+	if (b)
+		return;
+	if(netdispatch)
+		netdispatch->sendSeekCancel();
+}
+
+
+/*
+ * seek button : menu entry (time conditions) selected
+ */
+void MainWindow::slot_seek(QAction *act)
+{
+	ui.toolSeek->setChecked(true);
+	ui.toolSeek->setMenu(NULL);
+
+	//childish, but we want to have an animated icon there
+	seekButtonTimer = startTimer(200);
+	
+	SeekCondition * s = new SeekCondition();
+	s->number = act->data().toInt();
+	qDebug("preparing to send seek");
+	switch (ui.seekHandicapList->currentIndex())
+	{
+		case 0 :
+			s->strength_wished = "1 1 0";
+			break ;
+
+		case 1 :
+			s->strength_wished = "2 2 0";
+			break ;
+		
+		case 2 :
+			s->strength_wished = "5 5 0";
+			break ;
+
+		case 3 :
+			s->strength_wished = "9 9 0";
+			break ;
+
+		case 4 :
+			s->strength_wished = "0 9 0";
+			break ;	
+
+		case 5 :
+			s->strength_wished = "9 0 0";
+			break ;
+	}
+	netdispatch->sendSeek(s);
+	delete s;
+}
+
+
+/* FIXME FIXME FIXME
+ * Same thing here, room changes, as in channels, should be fixed.. but I'm
+ * thinking, no console and tabbed chat rooms FIXME FIXME */
 /*
  * room string received after 'room' command
  */
-void MainWindow::slot_room(const QString& room, bool b)
+void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 {
-	//do we already have the same room number in list ?
-	if (ui.RoomList->findText(room.left(3), Qt::MatchStartsWith )!= -1)
-		return;
-	//so far, we just create the room if it is open
-	if (!b)
-		ui.RoomList->addItem (room);//,  -1 );
+	unsigned long rf = netdispatch->getRoomStructureFlags();
+	/* FIXME, either way, we should keep a list of RoomListings
+	 * some where */
+	std::vector <const RoomListing *>::iterator it = roomList.begin();
+	while(it != roomList.end())
+	{
+		if((*it)->name == room.name)
+		{
+			if(!b)
+			{
+				//room has been removed
+				roomList.erase(it);
+				if(rf & RS_SHORTROOMLIST)
+				{
+					//remove item from list	
+				}
+				else if(rf & RS_LONGROOMLIST)
+				{
+					
+				}
+			}
+			return;
+		}
+		it++;
+	}
+	if(!b)
+		return;		//removed room not found
+	roomList.push_back(&room);
 	
-	//RoomList->item(RoomList->count()-1)->setSelectable(!b);		
+	if(rf & RS_SHORTROOMLIST)
+	{
+		//do we already have the same room number in list ?
+		//if (ui.RoomList->findText(room.name.left(3), Qt::MatchStartsWith )!= -1)
+		//	return;
+		//so far, we just create the room if it is open
+		//if(b)
+		ui.RoomList->addItem(room.name);//,  -1 );
+		//RoomList->item(RoomList->count()-1)->setSelectable(!b);	
+	}
+	else if(rf & RS_LONGROOMLIST)
+	{
+		//FIXME update that window tree view we would add
+	}
 }	
-
-
-/*
- * game info received after 'games' command
- */
-void MainWindow::slot_game(Game* g)
-{
-	// insert into ListView
-	QTreeWidgetItemIterator lv(ui.ListView_games);
-
-	if (g->running)
-	{
-		bool found = false;
-		QTreeWidgetItem *lvi_mem = NULL;
-
-		// check if game already exists
-		if (!playerListEmpty)
-		{
-			QTreeWidgetItemIterator lvii = lv;
-//			for (GamesTableItem *lvi; (lvi = static_cast<GamesTableItem*>(lvii.current())) && !found;)
-//			{
-//				lvii++;
-//				// compare game id
-//				if (lvi->text(0) == g->nr)
-//				{
-//					found = true;
-//					lvi_mem = lvi;
-//				}
-//			}
-
-			while (*lvii) 
-			{
-        			if ((*lvii)->text(0) == g->nr)
-				{
-					found = true;
-					lvi_mem = *lvii;
-				}
-         			++lvii;
-     			}
-
-
-		}
-		else if (g->H.isEmpty() && !myAccount->num_games)
-		{
-			// skip games until initial table has loaded
-			qDebug("game skipped because no init table");
-			return;
-		}
-/*
-		QString excludeMark = "";
-		QString myMark = "B";
-		
-		// check if exclude entry is done later
-		if (g->H) //g->status.length() > 1)
-		{
-			QString emw;
-			QString emb;
-
-			// no: do it now
-			emw = getPlayerExcludeListEntry(g->wname);
-			emb = getPlayerExcludeListEntry(g->bname);
-
-			// ensure that my game is listed first
-			if (emw && emw == "M" || emb && emb == "M")
-			{
-				myMark = "A";
-				excludeMark = "M";
-
-				// I'm playing, thus I'm open, except teaching games
-				if (emw && emw && (emw != "M" || emb != "M"))
-				{
-					// checkbox open
-					slot_checkbox(0, true);
-				}
-			}
-			else if (emw && emw == "W" || emb && emb == "W")
-			{
-				excludeMark = "W";
-			}
-		}
-*/		
-		if (found)
-		{
-			// supersede entry
-			//lvi_mem->setText(0, g->nr);
-			lvi_mem->setText(1, g->wname);
-			lvi_mem->setText(2, g->wrank);
-			lvi_mem->setText(3, g->bname);
-			lvi_mem->setText(4, g->brank);
-			lvi_mem->setText(5, g->mv);
-			lvi_mem->setText(6, g->Sz);
-			lvi_mem->setText(7, g->H);
-			lvi_mem->setText(8, g->K);
-			lvi_mem->setText(9, g->By);
-			lvi_mem->setText(10, g->FR);
-			lvi_mem->setText(11, g->ob);
-//			lvi_mem->setText(6, g->status + " (" + g->ob + ")");
-			lvi_mem->setText(12, /*myMark +*/ rkToKey(g->wrank) + g->wname.toLower()  /*+ ":" + excludeMark */);
-			lvi_mem->setText(13,  rkToKey(g->brank) + g->bname.toLower()  /*+ ":" + excludeMark */);
-
-//			lvi_mem->ownRepaint();
-		}
-		else
-		{
-			// from GAMES command or game info{...}
-			QStringList sl;	
-
-//			if (!g->H.isEmpty())
-//			{
-//				lv = new QTreeWidgetItem(ListView_games,
-				sl 	<< g->nr
-					<< " " + g->wname
-					<< g->wrank
-					<< " " + g->bname
-					<< g->brank
-					<< g->mv
-					<< g->Sz
-					<< g->H
-					<< g->K
-					<< g->By
-					<< g->FR
-					<< g->ob
-					<< rkToKey(g->wrank) + g->wname.toLower() 
-					<< rkToKey(g->brank) + g->bname.toLower();
-
-//			}
-//			else
-//			{
-//				lv = new QTreeWidgetItem(ListView_games,
-//				sl 	<< g->nr
-//					<< " " + g->wname
-//					<< g->wrank
-//					<< " " + g->bname
-//					<< g->brank
-//					<< g->mv
-//					<< g->Sz;
-
-
-
-//			}
-			QTreeWidgetItem *lvi = new QTreeWidgetItem(ui.ListView_games, sl);
-
-//			lvi->setText(12, myMark + rkToKey(g->wrank) + g->wname.toLower() + ":" + excludeMark);
-//			lvi->setText(13, myMark + rkToKey(g->brank) + g->bname.toLower() + ":" + excludeMark);
-
-//			lvi->setText(12, rkToKey(g->wrank) + g->wname.toLower() );
-//			lvi->setText(13, rkToKey(g->brank) + g->bname.toLower() );
-
-			lvi->setTextAlignment(0,Qt::AlignRight);
-			lvi->setTextAlignment(5,Qt::AlignRight);
-			lvi->setTextAlignment(6,Qt::AlignRight);
-			lvi->setTextAlignment(7,Qt::AlignRight);
-			lvi->setTextAlignment(8,Qt::AlignRight);
-			lvi->setTextAlignment(9,Qt::AlignRight);
-			lvi->setTextAlignment(10,Qt::AlignRight);
-			lvi->setTextAlignment(11,Qt::AlignRight);
-
-//			static_cast<GamesTableItem*>(lv.current())->ownRepaint();
-
-			// increase number of games
-			myAccount->num_games++;
-			statusGames->setText(" G: " + QString::number(ui.ListView_games->topLevelItemCount()));//myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
-		}
-
-		/* Add to account games list */
-		Game * new_g = new Game();
-		*new_g = *g;
-		myAccount->addGame(g->nr.toInt(), new_g);
-/*
-		// update player info if this is not a 'who'-result or if it's me
-		if (!g->H || myMark == "A") //g->status.length() < 2)
-		{
-			QListViewItemIterator lvp(ListView_players);
-			QListViewItem *lvpi;
-			int found = 0;
-
-			// look for players in playerlist
-			for (; (lvpi = lvp.current()) && found < 2;)
-			{
-				// check if names are identical
-				if (lvpi->text(1) == g->wname || lvpi->text(1) == g->bname)
-				{
-					lvpi->setText(3, g->nr);
-					found++;
-
-					// check if players has a rank
-					if (g->wrank == "??" || g->brank == "??")
-					{
-						// no rank given in case of continued game -> set rank in games table
-						if (lvpi->text(1) == g->wname)
-						{
-							lv.current()->setText(2, lvpi->text(2));
-							// correct sorting of col 2 -> set col 12
-							lv.current()->setText(12, myMark + rkToKey(lvpi->text(2)) + lvpi->text(1).lower() + ":" + excludeMark);
-						}
-
-						// no else case! bplayer could be identical to wplayer!
-						if (lvpi->text(1) == g->bname)
-							lv.current()->setText(4, lvpi->text(2));
-
-						static_cast<GamesTableItem*>(lv.current())->ownRepaint();
-					}
-				}
-
-				lvp++;
-			}
-			ListView_games->sort();
-		}
-*/
-	}
-	else
-	{
-		// from game info {...}
-		bool found = false;
-		QString game_id;
-
-		if (g->nr != "@")
-		{
-//			for (QListViewItem *lvi; (lvi = lv.current()) && !found;)
-//			{
-//				lv++;
-//				// compare game id
-//				if (lvi->text(0) == g->nr)
-//				{
-//					lv++;
-//					delete lvi;
-//					found = true;;
-//				}
-//			}
-			while (*lv) 
-			{
-        			if ((*lv)->text(0) == g->nr)
-				{
-					found = true;
-					delete *lv;
-				}
-         			++lv;
-     			}
-
-			// used for player update below
-			game_id = g->nr;
-		}
-		else
-		{
-//			for (QListViewItem *lvi; (lvi = lv.current()) && !found;)
-//			{
-//				lv++;
-//				// look for name
-//				if (lvi->text(1) == myAccount->acc_name ||
-//				    lvi->text(3) == myAccount->acc_name)
-//				{
-					// used for player update below
-//					game_id = lvi->text(0);
-
-//					lv++;
-//					delete lvi;
-//					found = true;;
-//				}
-			while (*lv) 
-			{
-        			if ((*lv)->text(1) == myAccount->acc_name ||
-				    (*lv)->text(3) == myAccount->acc_name)
-				{
-					found = true;
-					delete *lv;
-				}
-         			++lv;
-     			}
-
-		}
-
-		if (!found)
-			qWarning("game not found");
-		else
-		{
-			// decrease number of games
-			myAccount->num_games--;
-			statusGames->setText(" G: " + QString::number(ui.ListView_games->topLevelItemCount()));
-			myAccount->removeGame(g->nr.toInt());
-//			statusGames->setText(" G: " + QString::number(myAccount->num_games) + " / " + QString::number(myAccount->num_observedgames) + " ");
-/*
-			QTreeWidgetItemIterator lvp(ListView_players);
-			QListViewItem *lvpi;
-			int found = 0;
-
-			// look for players in playerlist
-			for (; (lvpi = lvp.current()) && found < 2;)
-			{
-				// check if numbers are identical
-				if (lvpi->text(3) == game_id)
-				{
-					lvpi->setText(3, "-");
-					found++;
-				}
-
-				lvp++;
-			}
-*/
-		}
-	}
-}
-
-
-/*
- * take a new player from parser
- */
-void MainWindow::slot_player(Player *p, bool cmdplayers)
-{
-	// insert into ListView
-
-  	QTreeWidgetItemIterator lv(ui.ListView_players);  
-
-	QPoint pp(0,0);
-//	QTreeWidgetItem *topViewItem = ui.ListView_players->itemAt(pp);
-	PlayerTableItem *topViewItem = (PlayerTableItem *)ui.ListView_players->itemAt(pp);
-
-  	bool deleted_topViewItem = false;
-//  	QTreeWidgetItem *lvi;
-	PlayerTableItem *lvi;
-
-	if (p->online)
-	{
-		// check if it's an empty list, i.e. all items deleted before
-		if (cmdplayers && !playerListEmpty)
-		{
-			for (; (*lv); lv++)
-			{
-//				lv++;
-				lvi = (PlayerTableItem *)*lv;
-				// compare names
-				if (lvi->text(1) == p->name)
-				{
-					// check if new player info is less than old
-					if (p->info != "??")
-					{
-						// new entry has more info
-						lvi->setText(0, p->info);
-						//p->name,
-						lvi->setText(2, p->rank);
-						lvi->setText(3, p->play_str);
-						lvi->setText(4, p->obs_str);
-						lvi->setText(5, p->idle);
-						//mark,
-						lvi->setText(12, rkToKey(p->rank) + p->name.toLower());
-
-						if (/*extUserInfo &&*/ myAccount->get_gsname() == IGS)
-						{
-							lvi->setText(7, p->extInfo);
-							lvi->setText(8, p->won);
-							lvi->setText(9, p->lost);
-							lvi->setText(10, p->country);
-							lvi->setText(11, p->nmatch_settings);
-						}
-						lvi->set_nmatchSettings(p);					
-						//lvi->nmatch = p->nmatch;
-
-//						lvi->ownRepaint();
-					}
-
-					if (p->name == myAccount->acc_name)
-					{
-						qDebug("updating my account info... (1)");
-						// checkbox open
-						bool b = (p->info.contains('X') == 0);
-						slot_checkbox(0, b);
-						// checkbox looking - don't set if closed
-						if (p->info.contains('!') != 0)
-							// "!" found
-							slot_checkbox(1, true);
-						else if (b)
-							// "!" not found && open
-							slot_checkbox(1, false);
-						// checkbox quiet
-						// NOT CORRECT REPORTED BY SERVER!
-						//b = (p->info.contains('Q') != 0);
-						//slot_checkbox(2, b);
-						// -> WORKAROUND
-						if (p->info.contains('Q') != 0)
-							slot_checkbox(2, true);
-
-						// get rank to calc handicap when matching
-						myAccount->set_rank(p->rank);
-
-						for (int i = 0; i < lvi->columnCount(); i++)
-							lvi->setForeground(i, QBrush::QBrush(Qt::blue));
-
-					}
-
-					return;
-				}
-			}
-		}
-		else if (!cmdplayers && !myAccount->num_players)
-		{
-			qDebug("player skipped because no init table");
-			// skip players until initial table has loaded
-			return;
-		}
-
-
-		QString mark;
-/*
-		// check for watched players
-		if (watch && watch.contains(";" + p->name + ";"))
-		{
-			mark = "W";
-
-			// sound for entering - no sound while "who" cmd is executing
-			if (!cmdplayers)
-				qgoif->get_qgo()->playEnterSound();
-			else if (p->name == myAccount->acc_name)
-				// it's me
-				// - only possible if 'who'/'user' cmd is executing
-				// - I am on the watchlist, however
-				// don't count!
-				myAccount->num_watchedplayers--;
-
-			myAccount->num_watchedplayers++;
-		}
-		// check for excluded players
-		else if (exclude && exclude.contains(";" + p->name + ";"))
-		{
-			mark = "X";
-		}
-*/
-
-		QStringList sl;
-		// from WHO command or {... has connected}
-//		if (/*extUserInfo && */myAccount->get_gsname() == IGS)
-//		{
-			
-			
-//			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
-			sl	<<	p->info
-				<<	p->name
-				<<	p->rank
-				<<	p->play_str
-				<<	p->obs_str
-				<<	p->idle
-				<<	mark
-				<<	p->extInfo
-				<<	p->won
-				<<	p->lost
-				<<	p->country
-				<<	p->nmatch_settings
-				<<	rkToKey(p->rank) + p->name.toLower();
-//			lv1->set_nmatchSettings(p);
-//		}
-//		else
-//		{
-//			PlayerTableItem *lv1 = new PlayerTableItem(ListView_players,
-//			sl	<<	p->info
-//				<<	p->name
-//				<<	p->rank
-//				<<	p->play_str
-//				<<	p->obs_str
-//				<<	p->idle
-//				<<	mark << "" << "" << "" << "" << "" << rkToKey(p->rank) + p->name.toLower();;
-//			lv1->setText(12, rkToKey(p->rank) + p->name.lower());
-//			lv1->set_nmatchSettings(p);
-//		}
-		
-//		lvi = new QTreeWidgetItem(ui.ListView_players, sl);
-		lvi = new PlayerTableItem(ui.ListView_players, sl);
-		lvi->set_nmatchSettings(p);
-
-		lvi->setTextAlignment(0,Qt::AlignRight);
-		lvi->setTextAlignment(3,Qt::AlignRight);
-		lvi->setTextAlignment(4,Qt::AlignRight);
-		lvi->setTextAlignment(5,Qt::AlignRight);
-		lvi->setTextAlignment(6,Qt::AlignRight);
-		lvi->setTextAlignment(7,Qt::AlignRight);
-		lvi->setTextAlignment(8,Qt::AlignRight);
-		lvi->setTextAlignment(9,Qt::AlignRight);
-
-		// check for open/looking state
-		if (cmdplayers)
-		{
-			if (p->name == myAccount->acc_name)
-			{
-				qDebug("updating my account info...(2)");
-				// checkbox open
-				bool b = (p->info.contains('X') == 0);
-				slot_checkbox(0, b);
-				// checkbox looking
-				b = (p->info.contains('!') != 0);
-				slot_checkbox(1, b);
-				// checkbox quiet
-				// NOT CORRECT REPORTED BY SERVER!
-				//b = (p->info.contains('Q') != 0);
-				//slot_checkbox(2, b);
-				// -> WORKAROUND
-				if (p->info.contains('Q') != 0)
-					slot_checkbox(2, true);
-
-				// get rank to calc handicap when matching
-				myAccount->set_rank(p->rank);
-				mark = "M";
-
-				for (int i = 0; i < lvi->columnCount(); i++)
-					lvi->setForeground(i, QBrush::QBrush(Qt::blue));
-
-
-			}
-		}
-
-		// increase number of players
-		myAccount->num_players++;
-		statusUsers->setText(" P: " + QString::number(ui.ListView_players->topLevelItemCount()));
-//		statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
-		
-
-		//if (!cmdplayers)
-		//	ListView_players->sort() ;
-
-	}
-	else
-	{
-		// {... has disconnected}
-		bool found = false;
-//		for (QListViewItem *lvi; (lvi = lv.current()) && !found;)
-		for (; (*lv); lv++)
-		{
-//			lv++;
-			lvi = (PlayerTableItem *)*lv;
-			// compare names
-			if (lvi->text(1) == p->name)
-			{
-/*				// check if it was a watched player
-				if (lvi->text(6) == "W")
-				{
-					qgoif->get_qgo()->playLeaveSound();
-					myAccount->num_watchedplayers--;
-				}
-*/
-				lv++;
-				if (lvi == topViewItem)     // are we trying to delete the 'anchor' of the list viewport ?
-					deleted_topViewItem = true  ;
-				delete lvi;
-				found = true;;
-
-				// decrease number of players
-				myAccount->num_players--;
-				statusUsers->setText(" P: " + QString::number(ui.ListView_players->topLevelItemCount()));
-//				statusUsers->setText(" P: " + QString::number(myAccount->num_players) + " / " + QString::number(myAccount->num_watchedplayers) + " ");
-			}
-		}
-
-		if (!found)
-			qWarning(QString("disconnected player not found: " + p->name).toLatin1());
-	}
-
-//	if (! deleted_topViewItem) //don't try to refer to a deleted element ...
-//	{
-//		int ip = topViewItem->itemPos();
-//		ListView_players->setContentsPos(0,ip);
-//	}
-}
-
-
-
-
 
 // convert rk to key for sorting;
 // if integer is true, then result can be used to calculate handicap
+// this is for sort list
 QString MainWindow::rkToKey(QString txt, bool integer)
 {
 	QString rk = txt;
@@ -1651,12 +1162,14 @@ QString MainWindow::rkToKey(QString txt, bool integer)
 	}
 }
 
-
+/* FIXME If nothing uses this, we should remove it */
  // handle chat boxes in a list
-void MainWindow::slot_talk(const QString &name, const QString &text, bool isplayer)
+void MainWindow::slot_talk(const QString &name, const QString &text, bool /*isplayer*/)
 {
 	static Talk *dlg;
 	QString txt;
+	qDebug("slot_talk\n");
+	return;
 //	bool bonus = false;
 //	bool autoAnswer = true;
 
@@ -1695,11 +1208,11 @@ void MainWindow::slot_talk(const QString &name, const QString &text, bool isplay
 		// not found -> create new dialog
 		if (!dlg)
 		{
-			dlg = new Talk(name, 0, isplayer);
+			//dlg = new Talk(name, 0, isplayer);
 			talkList.insert(0, dlg);     
 //			dlg = talkList.current();
 			connect(dlg, SIGNAL(signal_talkTo(QString&, QString&)), this, SLOT(slot_talkTo(QString&, QString&)));
-			connect(dlg, SIGNAL(signal_matchRequest(const QString&,bool)), this, SLOT(slot_matchRequest(const QString&,bool)));
+			//connect(dlg, SIGNAL(signal_matchRequest(const QString&)), this, SLOT(slot_matchRequest(const QString&)));
       
 			// make new multiline field
 			ui.talkTabs->addTab(dlg->get_tabWidget(), dlg->get_name());
@@ -1717,9 +1230,10 @@ void MainWindow::slot_talk(const QString &name, const QString &text, bool isplay
 //			dlg->get_le()->setPalette(pal);
 			
 			//if (!name.isEmpty() && name != tr("Shouts*") && currentCommand->get_txt() !="stats")
+#ifdef FIXME
 			if (!name.isEmpty() && isplayer)
 				slot_sendCommand("stats " + name, false);    // automatically request stats
-      
+#endif //FIXME
 		}
 
 		Q_CHECK_PTR(dlg);
@@ -1771,6 +1285,39 @@ void MainWindow::slot_talk(const QString &name, const QString &text, bool isplay
 */
 }
 
+void MainWindow::talkOpened(Talk * d)
+{
+	talkList.insert(0, d);     
+	// make new multiline field
+	ui.talkTabs->addTab(d->get_tabWidget(), d->get_name());
+			
+	ui.talkTabs->setCurrentWidget(d->get_tabWidget());
+		
+	d->pageActive = true;
+	connect(d->get_le(), SIGNAL(returnPressed()), d, SLOT(slot_returnPressed()));
+	connect(d, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
+
+	if (!d->pageActive)
+	{
+		ui.talkTabs->addTab(d->get_tabWidget(), d->get_name());
+		d->pageActive = true;
+		ui.talkTabs->setCurrentWidget(d->get_tabWidget());
+	}
+}
+
+void MainWindow::talkRecv(Talk * d)
+{
+	/* FIXME This needs to set this dialog as active
+	 * or have its name blink or turn red or something */
+	qDebug("MW::talkRecv");
+	if (!d->pageActive)
+	{
+		ui.talkTabs->addTab(d->get_tabWidget(), d->get_name());
+		d->pageActive = true;
+		ui.talkTabs->setCurrentWidget(d->get_tabWidget());
+	}
+}
+
 /*
  * close button pressed on talk tab
  */
@@ -1789,6 +1336,12 @@ void MainWindow::slot_pbRelOneTab(QWidget *w)
 //		dlg = talkList.takeAt(i);
 		ui.talkTabs->removeTab(ui.talkTabs->currentIndex()) ;
 		dlg->pageActive = false;
+		/* Something is seriously buggy here and I think it
+		 * can even cause the game dialog match crashes. FIXME
+		 * FIXME FIXME */
+		/* If we don't delete here, then one can never open this
+		 * dialog again. */
+		dlg->deleteLater();		//right? 
 	}
 
 }
@@ -1798,10 +1351,12 @@ void MainWindow::slot_pbRelOneTab(QWidget *w)
 /*
  * 'stats' information has been received by the parser
  */
-void MainWindow::slot_statsPlayer(Player *p)
+void MainWindow::slot_statsPlayer(PlayerListing *p)
 {
-	 Talk *dlg = 0;
-  
+	Talk *dlg = 0;
+	QString txt = "";
+	/* FIXME !!! */
+	slot_talk( p->name, txt, true);
 	if (!p->name.isEmpty())
 	{
 		// seek dialog
@@ -1816,17 +1371,17 @@ void MainWindow::slot_statsPlayer(Player *p)
 			dlg->getUi().stats_rating->setText(p->rank);
 			dlg->getUi().stats_info->setText(p->info);
 			dlg->getUi().stats_default->setText(p->extInfo);
-			dlg->getUi().stats_wins->setText(p->won + " /");
-			dlg->getUi().stats_loss->setText(p->lost );
+			dlg->getUi().stats_wins->setText(QString::number(p->wins) + " /");
+			dlg->getUi().stats_loss->setText(QString::number(p->losses) );
 			dlg->getUi().stats_country->setText(p->country);
-			dlg->getUi().stats_playing->setText(p->play_str);
-//			dlg->getUi().stats_rated->setText(p->rated);
-			dlg->getUi().stats_address->setText(p->address);
+			dlg->getUi().stats_playing->setText(QString::number(p->playing));
+			//dlg->getUi().stats_rated->setText(p->rated);
+			dlg->getUi().stats_address->setText(p->email_address);
 			
 			// stored either idle time or last access	 
-			dlg->getUi().stats_idle->setText(p->idle);
-			if (!p->idle.isEmpty())
-				dlg->getUi().Label_Idle->setText(p->idle.at(0).isDigit() ? "Idle :": "Last log :");
+			dlg->getUi().stats_idle->setText(p->idletime);
+			if (!p->idletime.isEmpty())
+				dlg->getUi().Label_Idle->setText(p->idletime.at(0).isDigit() ? "Idle :": "Last log :");
 	
 		
 		}   
@@ -1889,7 +1444,7 @@ void MainWindow::slot_cbopen()
 {
 	bool val = ui.setOpenMode->isChecked(); 
 	set_sessionparameter("open", val);
-
+	qDebug("Setting session open: %d", val);
 	if (!val)
 		// if not open then set close
 		set_sessionparameter("looking", false);
@@ -1911,89 +1466,25 @@ void MainWindow::slot_cbquiet()
 	}
 }
 
-/*
- * A player has connected
- */
-void MainWindow::slot_playerConnected(Player *p)
+
+
+
+void MainWindow::matchRequest(MatchRequest * mr)
 {
-	//don't do anything if we are in a room (otherwise, it cripples the room players list)
-	if (ui.RoomList->currentIndex())
-		return;
-
-	switch(myAccount->get_gsname())
-	{
-		case IGS:
-		{
-			// we send the informaton request only if the players rank is within our rank selection
-			if ((rkToKey(p->rank) <= rkToKey(rkMin)) && (rkToKey(p->rank) >= rkToKey(rkMax)))
-				sendcommand("userlist " + p->name, false);
-			break;
-		}	
-		default:
-		{
-			slot_player(p,false);
-		}			
-	}
-}
-
-
-/*
- * A match has been requested
- * 
- */
-void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
-{
-	// set up match dialog
 	GameDialog *dlg = NULL;
-	QString opponent;
-
 	qDebug("Match has been Requested");
-	// seek dialog
-	if (!myrequest)
-	{
-		// match xxxx B 19 1 10
-//		opponent = element(line, 1, " ");
-		opponent = line.section(" ",1,1);
-
-		// play sound
-//		qgoif->get_qgo()->playMatchSound();
-	}
-	else
-	{
-		// xxxxx 4k*
-//		opponent = element(line, 0, " ");
-		opponent = line.section(" ",0,0);
-	}
-
-	// look for same opponent
-//	dlg = matchlist.first();
-//	while (dlg && dlg->getUi().playerOpponentEdit->text() != opponent)// && dlg->getUi().playerBlackEdit->text() != opponent)
-//		dlg = matchlist.next();
 
 	for (int i=0; i < matchList.count(); i++)
 	{
-		if (matchList.at(i)->getUi().playerOpponentEdit->text() == opponent)
+		if (matchList.at(i)->getUi().playerOpponentEdit->text() == mr->opponent)
 			dlg = matchList.at(i);
 	}
 
-
 	if (!dlg)
 	{
-		dlg = new GameDialog();
+		//dlg = new GameDialog();
 
 		matchList.insert(0, dlg);//new GameDialog(/* tr("New Game")*/);
-//		dlg = matchlist.current();
-		
-/*		if (myAccount->get_gsname() == NNGS ||
-			myAccount->get_gsname() == LGS)
-		{
-			// now connect suggest signal
-			connect(parser,
-				SIGNAL(signal_suggest(const QString&, const QString&, const QString&, const QString&, int)),
-				dlg,
-				SLOT(slot_suggest(const QString&, const QString&, const QString&, const QString&, int)));
-		}
-*/		
 		connect(dlg,
 			SIGNAL(signal_removeDialog(GameDialog *)), 
 			this, 
@@ -2004,16 +1495,12 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 			this,
 			SLOT(slot_sendCommand(const QString&, bool)));
 
+#ifdef OLD
 		connect(parser,
 			SIGNAL(signal_matchCreate(const QString &, const QString &)),
 			this,
 			SLOT(slot_removeDialog(const QString &, const QString &)));
 
-// CAUTION : this is used in qGo1 for sending parameters (handicap, komi) to the server. We won't use this for now
-//		connect(parser,
-//			SIGNAL(signal_matchCreate(const QString&, const QString&)),
-//			dlg,
-//			SLOT(slot_matchCreate(const QString&, const QString&)));
 		connect(parser,
 			SIGNAL(signal_notOpen(const QString&, int)),
 			dlg,
@@ -2031,203 +1518,104 @@ void MainWindow::slot_matchRequest(const QString &line, bool myrequest)
 			dlg,
 			SLOT(slot_dispute(const QString&, const QString&)));
 
-//		connect(dlg,
-//			SIGNAL(signal_matchSettings(const QString&, const QString&, const QString&, assessType)),
-//			qgoif,
-//			SLOT(slot_matchSettings(const QString&, const QString&, const QString&, assessType)));
+
 	}
 
-	if (myrequest)
+	if (mr->nmatch)
 	{
-//		QString rk = element(line, 1, " ");
-		QString rk = line.section(" ",1,1);
-		// set values
-		
-		dlg->getUi().playerOpponentEdit->setText(opponent);		
-//		dlg->getUi().playerOpponentEdit->setReadOnly(true);
-		dlg->set_myName( myAccount->acc_name);
-
-		// set my and opponent's rank for suggestion
-		dlg->set_oppRk(rk);
-		dlg->getUi().playerOpponentRkEdit->setText(rk);
-		rk = myAccount->get_rank();
-		dlg->set_myRk(rk);
-
-		dlg->set_gsName(myAccount->get_gsname());
-		dlg->getUi().handicapSpin->setEnabled(false);
-
-		dlg->getUi().buttonDecline->setDisabled(true);
-		
-
-		// teaching game:
-		if (dlg->getUi().playerOpponentEdit->text() == myAccount->acc_name)
-			dlg->getUi().buttonOffer->setText(tr("Teaching"));
-
-		//nmatch settings from opponent 
-		bool is_nmatch = false;
-
-		// we want to make sure the player is selected, because the match request may come from an other command (match button on the tab dialog)
-		QString lv_popup_name ;
-		PlayerTableItem* lv_popupPlayer = (PlayerTableItem*)ui.ListView_players->currentItem();
-
-		if (lv_popupPlayer )
-		{
-			lv_popup_name = (lv_popupPlayer->text(1).right(1) == "*" ? lv_popupPlayer->text(1).left( lv_popupPlayer->text(1).length() -1 ):lv_popupPlayer->text(1));
-		
-
-			is_nmatch = ((lv_popupPlayer->nmatch ) &&  (lv_popup_name == opponent));// && setting->readBoolEntry("USE_NMATCH");
-		}
-
-		dlg->set_is_nmatch(is_nmatch);
-
-		if ( (is_nmatch) && (lv_popupPlayer->nmatch_settings ))
-		{
-			//FIXME make sure we can set this with canadian when the opponent is set to japanese
-			dlg->getUi().timeSpin->setRange((int)(lv_popupPlayer->nmatch_timeMin/60), (int)(lv_popupPlayer->nmatch_timeMax/60));
-			dlg->getUi().byoTimeSpin->setRange((int)(lv_popupPlayer->nmatch_BYMin/60), (int)(lv_popupPlayer->nmatch_BYMax/60));
-			
-			dlg->getUi().handicapSpin->setRange( (lv_popupPlayer->nmatch_handicapMin == 0 ? 1 : lv_popupPlayer->nmatch_handicapMin), lv_popupPlayer->nmatch_handicapMax);
-		}
-		else
-		{
-			dlg->getUi().timeSpin->setRange(0,60);
-			dlg->getUi().byoTimeSpin->setRange(0,60);
-//			dlg->getUi().handicapSpin->setRange(0,9);
-		}
-		//no handicap , nigiri,  Jap. Byo yomi - with usual game requests
-		dlg->getUi().handicapSpin->setEnabled(is_nmatch);
-		dlg->getUi().play_nigiri_button->setEnabled(is_nmatch);
-		if (!is_nmatch)
-			dlg->getUi().timeTab->removeTab(1);		
-
-		//default settings
-
-		QSettings settings;
-
-		dlg->getUi().boardSizeSpin->setValue(settings.value("DEFAULT_SIZE").toInt());
-		dlg->getUi().timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
-		dlg->getUi().byoTimeSpin->setValue(settings.value("DEFAULT_BY").toInt());
-		dlg->getUi().komiSpin->setValue(settings.value("DEFAULT_KOMI").toInt() );  // *10+5);
-
-//		dlg->getUi().slot_pbsuggest();
-		dlg->getUi().buttonOffer->setText(tr("Offer"));
+		//specific behavior here : IGS nmatch not totally supported
+		// disputes are hardly supported
+		dlg->set_is_nmatch(true);
+		dlg->getUi().timeSpin->setRange(0,100);
+		dlg->getUi().timeSpin->setValue(mr->time.toInt()/60);
+		dlg->getUi().byoTimeSpin->setRange(0,100);
+		dlg->getUi().byoTimeSpin->setValue(mr->byotime.toInt()/60);
+		dlg->getUi().BY_label->setText(tr(" Byo Time : (") + mr->byostones+ tr(" stones)"));
+		dlg->getUi().handicapSpin->setRange(1,9);
+		dlg->getUi().handicapSpin->setValue(mr->handicap);
+		dlg->getUi().boardSizeSpin->setRange(1,19);
+		dlg->getUi().boardSizeSpin->setValue(mr->board_size);
 	}
 	else
 	{
-		// match xxxx B 19 1 10 - using this line means: I am black!
-		bool opp_plays_white = (line.section(" ",2,2) == "B");//QString(tr("B")));
-		bool opp_plays_nigiri = (line.section(" ",2,2) == "N");
+		dlg->set_is_nmatch(false);
+		dlg->getUi().timeSpin->setRange(0,1000);
+		dlg->getUi().timeSpin->setValue(mr->time.toInt());
+		dlg->getUi().byoTimeSpin->setRange(0,100);
+		dlg->getUi().byoTimeSpin->setValue(mr->byotime.toInt());
+		dlg->getUi().handicapSpin->setEnabled(false);
+		dlg->getUi().play_nigiri_button->setEnabled(false);
+		dlg->getUi().boardSizeSpin->setRange(1,19);
+		dlg->getUi().boardSizeSpin->setValue(mr->board_size);
 
-		QString handicap, size, time,byotime, byostones ;
-
-		if (line.contains("nmatch"))
-		{
-			//specific behavior here : IGS nmatch not totally supported
-			// disputes are hardly supported
-			dlg->set_is_nmatch(true);
-			handicap = line.section(" ",3,3);
-			size = line.section(" ",4,4);
-			time = line.section(" ",5,5);
-			byotime = line.section(" ",6,6);
-			byostones = line.section(" ",7,7);
-			dlg->getUi().timeSpin->setRange(0,100);
-			dlg->getUi().timeSpin->setValue(time.toInt()/60);
-			dlg->getUi().byoTimeSpin->setRange(0,100);
-			dlg->getUi().byoTimeSpin->setValue(byotime.toInt()/60);
-			dlg->getUi().BY_label->setText(tr(" Byo Time : (") + byostones+ tr(" stones)"));
-			dlg->getUi().handicapSpin->setRange(1,9);
-			dlg->getUi().handicapSpin->setValue(handicap.toInt());
-			dlg->getUi().boardSizeSpin->setRange(1,19);
-			dlg->getUi().boardSizeSpin->setValue(size.toInt());
-		}
-		else
-		{
-			dlg->set_is_nmatch(false);
-			size = line.section(" ",3,3);//element(line, 3, " ");
-			time = line.section(" ",4,4);//element(line, 4, " ");
-			byotime = line.section(" ",5,5);//element(line, 5, " ");
-			dlg->getUi().timeSpin->setRange(0,1000);
-			dlg->getUi().timeSpin->setValue(time.toInt());
-			dlg->getUi().byoTimeSpin->setRange(0,100);
-			dlg->getUi().byoTimeSpin->setValue(byotime.toInt());
-			dlg->getUi().handicapSpin->setEnabled(false);
-			dlg->getUi().play_nigiri_button->setEnabled(false);
-			dlg->getUi().boardSizeSpin->setRange(1,19);
-			dlg->getUi().boardSizeSpin->setValue(size.toInt());
-
-			dlg->getUi().timeTab->removeTab(1);
-		}
+		dlg->getUi().timeTab->removeTab(1);
+	}
 		
 
-//		QString rk = getPlayerRk(opponent);
-		// look for players in playerlist
-		QTreeWidgetItemIterator lv(ui.ListView_players);
-		QTreeWidgetItem *lvi;
-		for (; (*lv); lv++)
-		{
-			lvi = *lv;
-			// compare names
-			if (lvi->text(1) == opponent)
+//	QString rk = getPlayerRk(opponent);
+	// look for players in playerlist
+	QTreeWidgetItemIterator lv(ui.ListView_players);
+	QTreeWidgetItem *lvi;
+	for (; (*lv); lv++)
+	{
+		lvi = *lv;
+		// compare names
+		if (lvi->text(1) == mr->opponent)
 			dlg->set_oppRk(lvi->text(2));
-			break;
-		}
-
-
-//		dlg->set_oppRk(rk);
-		QString myrk = myAccount->get_rank();
-		dlg->set_myRk(myrk);
-
-		dlg->getUi().playerOpponentEdit->setText(opponent);		
-		dlg->getUi().playerOpponentEdit->setReadOnly(true);		
-//		dlg->getUi().playerOpponentRkEdit->setText(rk);
-		dlg->set_myName( myAccount->acc_name);
-
-		if (opp_plays_white)
-		{
-/*			dlg->getUi().playerBlackEdit->setText(myAccount->acc_name);
-			dlg->getUi().playerBlackEdit->setReadOnly(true);
-			dlg->getUi().playerBlackRkEdit->setText(myAccount->get_rank());
-			dlg->getUi().playerWhiteEdit->setText(opponent);
-			dlg->getUi().playerWhiteEdit->setReadOnly(false);
-			dlg->getUi().playerWhiteRkEdit->setText(rk);
-*/
-			dlg->getUi().play_black_button->setChecked(true);
-
-
-		}
-		else if (opp_plays_nigiri)
-		{
-/*			dlg->getUi().playerWhiteEdit->setText(myAccount->acc_name);
-			dlg->getUi().playerWhiteEdit->setReadOnly(true);
-			dlg->getUi().playerWhiteRkEdit->setText(myAccount->get_rank());
-			dlg->getUi().playerBlackEdit->setText(opponent);
-			dlg->getUi().playerBlackEdit->setReadOnly(false);
-			dlg->getUi().playerBlackRkEdit->setText(rk);
-*/
-			dlg->getUi().play_nigiri_button->setChecked(true);
-		}
-		else
-			dlg->getUi().play_white_button->setChecked(true);		
-
-		dlg->getUi().buttonDecline->setEnabled(true);
-		dlg->getUi().buttonOffer->setText(tr("Accept"));
-		dlg->getUi().buttonCancel->setDisabled(true);
+		break;
 	}
+
+
+//	dlg->set_oppRk(rk);
+	/* Once we figure out what we're doing with the listView
+	 * classes, then we'll add getOurListing() which will use
+	 * them and the connection->user[name] to look up a player
+	 * listing for ourself, maybe out of a list it keeps.  If
+	 * we want to really do this right, then everything having to do
+	 * with those lists should be really dynamic.  clicks, everything.
+	 * They shouldn't be just flat lists */
+	PlayerListing * ourAccount = getOurListing(); 
+	QString myrk = myAccount->get_rank();
+	dlg->set_myRk(myrk);
+
+	dlg->getUi().playerOpponentEdit->setText(opponent);		
+	dlg->getUi().playerOpponentEdit->setReadOnly(true);		
+//	dlg->getUi().playerOpponentRkEdit->setText(rk);
+	dlg->set_myName( myAccount->acc_name);
+
+	if (mr->opp_plays_white)
+	{
+		dlg->getUi().play_black_button->setChecked(true);
+	}
+	else if (mr->opp_plays_nigiri)
+	{
+		dlg->getUi().play_nigiri_button->setChecked(true);
+	}
+	else
+		dlg->getUi().play_white_button->setChecked(true);		
+
+	dlg->getUi().buttonDecline->setEnabled(true);
+	dlg->getUi().buttonOffer->setText(tr("Accept"));
+	dlg->getUi().buttonCancel->setDisabled(true);
 
 	dlg->slot_changed();
 	dlg->show();
 //	dlg->setWindowState(Qt::WindowActive);
 	dlg->raise();
 
-	if (!myrequest)
-		gameSound->play();
+	gameSound->play();
+#endif //OLD
+	}
 }
 
+#ifdef FIXME
+/* PRobably just remove */
 /*
  * talk dialog -> return pressed
  */
 void MainWindow::slot_talkTo(QString &receiver, QString &txt)
 {
+	qDebug("MW::slot_talkTo deprecated");
 	// echo
 	if (txt.length())
 	{
@@ -2262,7 +1650,7 @@ void MainWindow::slot_talkTo(QString &receiver, QString &txt)
 	}
 }
 
-
+#endif //FIXME
 /*
  * A game dialog has sent a 'remove' signal
  */
@@ -2277,7 +1665,6 @@ void MainWindow::slot_removeDialog(GameDialog *dlg)
 		delete dlg;
 		return;
 	}
-	
 	delete matchList.takeAt(i); 
 
 }
@@ -2309,6 +1696,9 @@ void MainWindow::slot_removeDialog(const QString & /*nr*/, const QString & opp)
  */
 void MainWindow::slot_matchCanceled(const QString& opp)
 {
+	// FIXME Probably just remove this.
+	// We now look the dialogs up in a common place
+	// and not open is a message on the dialog box
 	GameDialog *dlg=NULL;
 	
 	for (int i=0; i < matchList.count(); i++)
@@ -2318,8 +1708,8 @@ void MainWindow::slot_matchCanceled(const QString& opp)
 	}
 
 
-	if (dlg)
-		dlg->slot_notOpen(opp, 2);
+	//if (dlg)
+	//	dlg->slot_notOpen(opp, 2);
 
 }
 
@@ -2345,7 +1735,7 @@ void MainWindow::timerEvent(QTimerEvent* e)
 		ui.toolSeek->setIcon(QIcon(ic));
 		return;
 	}
-
+	// else its the mainServerTimer
 	if (tn_ready)
 	{
 		// case: ready to send
@@ -2372,12 +1762,13 @@ void MainWindow::timerEvent(QTimerEvent* e)
 			// new: reset timer after one hour of idle state
 			//      -> if not observing a game!
 			//qDebug(QString("%1 -> HoldTheLine: status = %2").arg(statusOnlineTime->text()).arg(holdTheLine));
+#ifdef FIXME
 			if (holdTheLine)
 				sendcommand("ayt", false);
-
+#endif //FIXME
 			// 12*5 min
 			counter = 899;//	resetCounter();
-
+#ifdef FIXME
 			if (myAccount->num_observedgames == 0)
 			{
 				// nothing observing
@@ -2388,12 +1779,15 @@ void MainWindow::timerEvent(QTimerEvent* e)
 			{
 //qDebug(QString("%1: HoldTheLine LENGTHENED: observing game...").arg(statusOnlineTime->text()));
 			}
+#endif //FIXME
 		}
+#ifdef FIXME
 		else if (myAccount->get_gsname() == IGS && holdTheLine)
 		{
 			sendcommand("gamelist", false);
 			qDebug(QString("%1 -> gamelist").arg(statusOnlineTime->text()).toLatin1().constData());
 		}
+#endif //FIXME
 	}
 
 	counter--;
@@ -2463,41 +1857,7 @@ void MainWindow::timerEvent(QTimerEvent* e)
  */
 void MainWindow::slot_msgBox(const QString& msg)
 {
+	qDebug("slot_msgBox\n");
 	ui.talkTabs->setCurrentIndex(1);
 	ui.msgTextEdit->append(msg);
-}
-
-
-/*
-* on IGS, sends the 'nmatch'time, BY, handicap ranges
-* command syntax : "nmatchrange 	BWN 	0-9 19-19	 60-60 		60-3600 	25-25 		0 0 0-0"
-*				(B/W/ nigiri)	Hcp Sz	   Main time (secs)	BY time (secs)	BY stones	Koryo time
-*/
-void MainWindow::sendNmatchParameters()
-{
-	
-	if ((myAccount->get_gsname() != IGS) || (myAccount->get_status() == OFFLINE))
-		return ;
-
-	QString c = "nmatchrange ";
-	QSettings settings;
-
-	c.append(settings.value("NMATCH_BLACK").toBool() ? "B" : "");
-	c.append(settings.value("NMATCH_WHITE").toBool() ? "W" : "");
-	c.append(settings.value("NMATCH_NIGIRI").toBool() ? "N" : "");
-	c.append(" 0-");
-	c.append(settings.value("NMATCH_HANDICAP").toString());
-	c.append(" ");
-	c.append(settings.value("DEFAULT_SIZE").toString());
-	c.append("-19 ");
-	c.append(QString::number(settings.value("DEFAULT_TIME").toInt()*60));
-	c.append("-");
-	c.append(QString::number(settings.value("NMATCH_MAIN_TIME").toInt()*60));
-	c.append(" ");
-	c.append(QString::number(settings.value("DEFAULT_BY").toInt()*60));
-	c.append("-");
-	c.append(QString::number(settings.value("NMATCH_BYO_TIME").toInt()*60));
-	c.append(" 25-25 0 0 0-0");
-	
-	sendcommand(c, true);
 }

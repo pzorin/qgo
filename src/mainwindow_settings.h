@@ -22,17 +22,16 @@
 #define MAINWINDOW_SETTINGS_H
 
 #include "defines.h"
-#include "globals.h"
 
 #include <QtGui>
 
 class Host
 {
 public:
-	Host(const QString&, const QString&, const QString&, const unsigned int, const QString&, const QString&, const QString&);
+	Host(const QString&, const ConnectionType, const QString&, const unsigned int, const QString&, const QString&, const QString&);
 	~Host() {};
 	QString title() const { return t; };
-	QString host() const { return h; };
+	ConnectionType host() const { return h; };
 	unsigned int port() const { return pt; };
 	QString loginName() const { return lg; };
 	QString password() const { return pw; };
@@ -50,7 +49,7 @@ public:
 
 private:
 	QString t;
-	QString h;
+	ConnectionType h;
 	QString ad;
 	QString lg;
 	QString pw;
@@ -67,22 +66,28 @@ public:
 	virtual int compareItems(Host * d1, Host * d2);
 };
 
+/* FIXME using settings.value for the few settings that are used
+ * is awkward because it means searching for a string, not looking up
+ * a variable.  that needs to be fixed so it can be used in important places */
+
+#ifdef FIXME
+/* We can eventually remove this.  Its all stored on the network connection now */
 class Account
 {
 public:
 	Account(QWidget*);
 	~Account();
 	void set_caption();
-	void set_gsname(GSName);
+	void set_connectionType(ConnectionType);
 	void set_offline();
 	void set_accname(QString&);
 	void set_status(Status);
 	void set_rank(QString &rk) { rank = rk; }
 	QString get_rank() { return rank; }
 	Status  get_status();
-	GSName  get_gsname();
+	ConnectionType  get_connectionType();
 
-	GSName  gsName;
+	ConnectionType connectionType;
 	QString svname;
 	QString acc_name;
 	Status  status;
@@ -101,6 +106,7 @@ private:
 	QWidget *parent;
 	std::map <int,Game *> games;
 };
+#endif //FIXME
 
 class PlayerTableItem : public QTreeWidgetItem
 { 
@@ -121,7 +127,7 @@ public:
 
 //	void ownRepaint();
 //	void replace() ;
-	void set_nmatchSettings(Player *p);
+//	void set_nmatchSettings(Player *p);
 
 	bool nmatch;
 
