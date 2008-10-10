@@ -41,11 +41,9 @@ DisplayBoard::~DisplayBoard()
 	qDeleteAll(*marks);
 }
 
-
-
+/* Used by file browse display */
 void DisplayBoard::displayHandicap(int handicap)
 {
-
 	int size = 19;
 	int edge_dist = (size > 12 ? 4 : 3);
 	int low = edge_dist;
