@@ -23,7 +23,10 @@
 #include <QtGui>
 
 #include "mainwindow.h"
-#include "globals.h"
+#include "defines.h"
+
+struct _preferences preferences;
+MainWindow * mainwindow = 0;
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +36,7 @@ int main(int argc, char *argv[])
 
 	QCoreApplication::setOrganizationName("qgo2");
 
-	MainWindow * mw = new MainWindow(0,0);
+	mainwindow = new MainWindow(0,0);
 
 	if ( argc > 1 )
 	{
@@ -42,13 +45,13 @@ int main(int argc, char *argv[])
 
 	if ( sgf_file )
 	{
-		mw->loadSgfFile( *sgf_file );
+		mainwindow->loadSgfFile( *sgf_file );
 		delete sgf_file;
-		//mw->hide();
+		//mainwindow->hide();
 	}
 	else
 	{
-		mw->show();
+		mainwindow->show();
 	}
 
 	return app.exec();
