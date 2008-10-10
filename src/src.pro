@@ -15,17 +15,32 @@ CONFIG += warn_on \
           stl \
           debug
 TEMPLATE = app 
+OBJECTS_DIR = objects
+TRANSLATIONS = translations/qgo2_cz.ts \
+	    	translations/qgo2_de.ts \
+		translations/qgo2_dk.ts \
+		translations/qgo2_fr.ts \
+		translations/qgo2_it.ts \
+		translations/qgo2_la.ts \
+		translations/qgo2_nl.ts \
+		translations/qgo2_pt.ts \
+		translations/qgo2_ru.ts \
+		translations/qgo2_tr.ts \
+		translations/qgo2_zh_cn.ts \
+		translations/qgo2_zh.ts
 FORMS += mainwindow.ui \
 board/boardwindow.ui \
 talk_gui.ui \
-server/gamedialog.ui \
-board/gameinfo.ui
+gamedialog.ui \
+board/gameinfo.ui \
+network/createroomdialog.ui
 HEADERS += mainwindow.h \
 board/boardwindow.h \
 board/board.h \
 defines.h \
+gamedata.h \
 sgf/sgfparser.h \
-globals.h \
+#globals.h \
 game_tree/matrix.h \
 game_tree/move.h \
 game_tree/tree.h \
@@ -40,13 +55,40 @@ gtp/qgtp.h \
 game_interfaces/qgoboard.h \
 audio/audio.h \
 mainwindow_settings.h \
-server/igsconnection.h \
-server/parser.h \
-game_interfaces/qgo_interface.h \
+room.h \
+listviews.h \
+network/playergamelistings.h \
+network/networkconnection.h \
+network/networkdispatch.h \
+network/messages.h \
+network/msghandler.h \
+network/roomdispatch.h\
+network/boarddispatch.h \
+network/consoledispatch.h \
+network/gamedialogdispatch.h \
+network/talkdispatch.h \
+#network/parser.h \
+roomregistries.h \
+network/dispatchregistries.h \
+registry.h \
+network/igsconnection.h \
+network/wing.h \
+network/lgs.h \
+network/cyberoroconnection.h \
+game_interfaces/undoprompt.h \
+game_interfaces/resultdialog.h \
 board/clockdisplay.h \
 talk.h \
-server/gamedialog.h \
-displayboard.h
+gamedialog.h \
+displayboard.h \
+ network/serverlistdialog.h \
+ network/matchinvitedialog.h \
+ network/gamedialogflags.h \
+ network/orosetphrasechat.h \
+ network/setphrasepalette.h \
+ network/createroomdialog.h \
+ network/cyberoroprotocolcodes.h
+
 SOURCES += main.cpp \
            mainwindow.cpp \
            board/boardwindow.cpp \
@@ -65,27 +107,50 @@ SOURCES += main.cpp \
            gtp/qgtp.cpp \
            game_interfaces/qgoboard.cpp \
            game_interfaces/qgoboard_computer.cpp \
+	   game_interfaces/undoprompt.cpp \
+	   game_interfaces/resultdialog.cpp \
            audio/audio.cpp \
            mainwindow_settings.cpp \
-           server/igsconnection.cpp \
-           server/parser.cpp \
+	   network/networkconnection.cpp \
+	   network/networkdispatch.cpp \
+ 	   network/msghandler.cpp \
+	   network/igsconnection.cpp \
+	   network/wing.cpp \
+	   network/lgs.cpp \
+	   network/cyberoroconnection.cpp \
+	   network/messages.h \
+	   network/networkconnection.h \
+	   network/roomdispatch.cpp \
+	   network/boarddispatch.cpp \
+	   network/gamedialogdispatch.cpp \
+	   network/talkdispatch.cpp \
+	   network/consoledispatch.cpp \
+	   newline_pipe.h \
+	   room.cpp \
            mainwindow_server.cpp \
-           game_interfaces/qgo_interface.cpp \
-           game_interfaces/qgoboard_observe.cpp \
+	   listviews.cpp \
            board/clockdisplay.cpp \
            talk.cpp \
-           server/gamedialog.cpp \
-           game_interfaces/qgoboard_match.cpp \
+           gamedialog.cpp \
            displayboard.cpp \
-           game_interfaces/qgoboard_review.cpp
+	   game_interfaces/qgoboard_network.cpp \
+           game_interfaces/qgoboard_observe.cpp \
+           game_interfaces/qgoboard_match.cpp \
+           game_interfaces/qgoboard_review.cpp \
+ 	   network/serverlistdialog.cpp \
+ 	   network/matchinvitedialog.cpp \
+ 	   network/orosetphrasechat.cpp \
+ 	   network/setphrasepalette.cpp \ 
+	   network/createroomdialog.cpp
+
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp""""""
-macx{
+macx {
     CONFIG += x86 ppc
     QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
 }
 
-linux-g++{
+linux-g++ {
     SOURCES += audio/alsa.cpp
     HEADERS += audio/alsa.h
 
@@ -93,6 +158,7 @@ linux-g++{
 
 }
 INCLUDEPATH += server \
+network \
 audio \
 gtp \
 game_interfaces \
