@@ -844,7 +844,7 @@ void BoardHandler::countScore(void)
 		for (j=0; j< boardSize; j++)
 		{
 			// we increase the temporary counter for dead stones removed at score phase
-			if (m->at(i, j) <= 0)
+			if (m->isStoneDead(i + 1, j + 1))
 			{
 				if (m->getStoneAt(i +1,j+1) == stoneBlack)
 					caps_white++;
@@ -864,7 +864,7 @@ void BoardHandler::countScore(void)
 		{	
 			for (j=0; j< boardSize; j++)
 			{
-				if (m->at(i, j) <= 0)
+				if (m->at(i, j) == 0 || (m->at(i, j) & MX_STONEDEAD))
 				{
 					found = true;
 					break;

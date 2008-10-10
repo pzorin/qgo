@@ -248,7 +248,7 @@ void Matrix::clearAllMarks()
 	
 	for (int i=0; i<size; i++)
 		for (int j=0; j<size; j++)
-			matrix[i][j] &= 0x000f;
+			matrix[i][j] &= (0x000f | MX_STONEDEAD);
 		
 		if (markTexts != NULL)
 		{
@@ -267,7 +267,7 @@ void Matrix::clearTerritoryMarks()
 		for (int j=0; j<size; j++)
 			if ((data = getMarkAt(i + 1, j + 1)) == markTerrBlack ||
 				data == markTerrWhite)
-				matrix[i][j] &= 0x000f;
+				matrix[i][j] &= (0x000f | MX_STONEDEAD);
 }
 
 void Matrix::absMatrix()
@@ -462,7 +462,7 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 			{
 			case stoneBlack:
 				if (parent != NULL &&
-					parent->at(i, j) == stoneBlack)
+					parent->getStoneAt(i + 1, j + 1) == stoneBlack)
 					break;
 				if (sAB.isEmpty())
 					sAB += "AB";
@@ -471,7 +471,7 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 				
 			case stoneWhite:
 				if (parent != NULL &&
-					parent->at(i, j) == stoneWhite)
+					parent->getStoneAt(i + 1, j + 1) == stoneWhite)
 					break;
 				if (sAW.isEmpty())
 					sAW += "AW";
@@ -480,8 +480,8 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 				
 			case stoneErase:
 				if (parent != NULL &&
-					(parent->at(i, j) == stoneNone ||
-					parent->at(i, j) == stoneErase))
+					(parent->getStoneAt(i + 1, j + 1) == stoneNone ||
+					parent->getStoneAt(i + 1, j + 1) == stoneErase))
 					break;
 				if (sAE.isEmpty())
 					sAE += "AE";
@@ -618,8 +618,8 @@ void Matrix::checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, i
 	
 	if (	x <= size && y <= size && x >= 0 && y >= 0 &&
 		!libCounted.contains(100*x + y) &&
-		(at(x - 1, y - 1) & MARK_TERRITORY_DONE_BLACK ||
-		at(x - 1, y - 1) & MARK_TERRITORY_DONE_WHITE))
+		((at(x - 1, y - 1) & MARK_TERRITORY_DONE_BLACK) ||
+		(at(x - 1, y - 1) & MARK_TERRITORY_DONE_WHITE)))
 	{
 		libCounted.append(100*x + y);
 		liberties ++;
@@ -763,14 +763,14 @@ bool Matrix::checkNeighbourTerritory(const int &x, const int &y, StoneColor &col
 		return false;
 	
 	// No stone ? Continue
-	if (at(x, y) <= 0)
+	if (at(x , y) == 0 || (at(x, y) & MX_STONEDEAD))
 		return true;
 	
 	// A stone, but no color found yet? Then set this color and dont continue
 	// The stone must not be marked as alive in seki.
 	if (col == stoneNone && at(x, y) < MARK_SEKI)
 	{
-		col = (StoneColor)at(x, y);
+		col = getStoneAt(x + 1, y + 1);
 		return false;
 	}
 	
@@ -809,7 +809,7 @@ Group* Matrix::assembleGroup(MatrixStone *stone)
 	{
 		stone = group->at(mark);
 		
-		if (at(stone->x - 1, stone->y - 1) != stoneNone )
+		if (getStoneAt(stone->x, stone->y) != stoneNone )
 		{
 			int 	stoneX = stone->x,
 				stoneY = stone->y;
@@ -856,7 +856,7 @@ Group* Matrix::assembleAreaGroups(MatrixStone *stone)
 	{
 		stone = group->at(mark);
 		
-		if (at(stone->x - 1, stone->y - 1) != oppColor )
+		if (getStoneAt(stone->x, stone->y) != oppColor )
 		{
 			int 	stoneX = stone->x,
 			stoneY = stone->y;
@@ -897,7 +897,7 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	tmp->c =  col;
 
 	// Stone to the North?
-	if (y - 1 >= 0 && at(x, y - 1) == col)
+	if (y - 1 >= 0 && getStoneAt(x + 1, y) == col)
 	{
 		tmp->x = x +1 ;
 		tmp->y = y ;
@@ -908,7 +908,7 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	}
 
 	// Stone to the west?
-	if (x - 1 >= 0 && at(x - 1, y) == col)
+	if (x - 1 >= 0 && getStoneAt(x, y + 1) == col)
 	{
 		tmp->x = x  ;
 		tmp->y = y + 1 ;
@@ -919,7 +919,7 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	}
 
 	// Stone to the south?
-	if (y + 1 < size && at(x, y + 1) == col)
+	if (y + 1 < size && getStoneAt(x + 1, y + 2) == col)
 	{
 		tmp->x = x + 1 ;
 		tmp->y = y + 2 ;
@@ -930,7 +930,7 @@ bool Matrix::checkFalseEye( int x, int y, StoneColor col)
 	}
  
 	// Stone to the east?
-	if (x + 1 < size && at(x + 1, y) == col)
+	if (x + 1 < size && getStoneAt(x + 2, y + 1) == col)
 	{
 		tmp->x = x + 2 ;
 		tmp->y = y + 1 ;
@@ -963,8 +963,7 @@ void Matrix::toggleGroupAt( int x, int y)
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
-		matrix[s->x -1][s->y -1] |= MX_STONEDEAD;
-
+		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
 	}
 
 }
@@ -988,7 +987,7 @@ void Matrix::toggleAreaAt( int x, int y)
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
-		matrix[s->x -1][s->y -1] |= MX_STONEDEAD;
+		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
 	}
 
 }
