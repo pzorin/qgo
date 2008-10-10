@@ -7,7 +7,7 @@
 
 #include "defines.h"
 #include "matrix.h"
-#include "group.h"
+//#include "group.h"
 
 #include <QtCore>
 
@@ -52,13 +52,13 @@ public:
  * Former Boardhandler functions called by SGF parser
  */
 
-	void createMoveSGF(bool brother =false, bool fastload = false);
+	void createMoveSGF(bool brother =false);
 	void removeStoneSGF(int x, int y, bool hide=false, bool new_node=true);
-	void updateCurrentMatrix(StoneColor c, int x, int y);
+	void updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase = phaseOngoing);
  	void addMove(StoneColor c, int x, int y, bool clearMarks = true);
 	void doPass(bool sgf, bool fastLoad = false);
 	void editMove(StoneColor c, int x, int y);
-	int addStoneSGF(StoneColor c, int x, int y, bool new_node);
+	int addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayyet = false);
 	void deleteNode();
 
 /*
@@ -66,14 +66,14 @@ public:
  * Those functions are used when adding a stone, and check all Go issues : libertes, death, ...
  */
 
-	int checkPosition(MatrixStone *s,Matrix *m, bool koStone = false);
+	int checkPosition(MatrixStone *s, Matrix *m);
 //	Group* assembleGroup(MatrixStone *stone, Matrix *m);
 //	Group* checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m);// TODO remove
 	bool removeStone(int x, int y, bool hide=false);
 	int hasMatrixStone(int x, int y);
 //	int countLiberties(Group *group, Matrix *m); // TODO remove
 //	void checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties, Matrix *m);// TODO remove
-	bool updateAll(Matrix *m, bool toDraw=true);
+	//bool updateAll(Matrix *m, bool toDraw=true);
 
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
@@ -81,8 +81,9 @@ protected:
 private:
 	Move *root, *current;
 	int boardSize;
-	QList<Group *> *groups;
+	//QList<Group *> *groups;
 	QHash<int,MatrixStone *> *stones;
+	Matrix * checkPositionTags;
 };
 
 #endif

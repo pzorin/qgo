@@ -1,13 +1,12 @@
 /*
 * tree.cpp
 */
-
 #include "tree.h"
 #include "move.h"
 #include "matrix.h"
 
 #include <iostream>
-
+#include <vector>
 
 #include <QtCore>
 
@@ -20,12 +19,15 @@ Tree::Tree(int board_size)
 	root->setNodeIndex(1);
 	current = root;
 	boardSize = board_size;
-
+	
+	checkPositionTags = new Matrix(board_size);
 /* 
  * This initialisation is from stonehandler
  * It might not be needed
  */
+#ifdef OLD
 	groups = new QList<Group*>();//::QList();
+#endif //OLD
 	stones = new QHash<int,MatrixStone *>();//::QHash();
 }
 
@@ -41,12 +43,15 @@ void Tree::init(int board_size)
 
 Tree::~Tree()
 {
+	
+	delete checkPositionTags;
+	
 	qDeleteAll(*stones);
 	stones->clear();
-	
+#ifdef OLD
 	qDeleteAll( *groups);
 	groups->clear();
-
+#endif //OLD
 	clear();
 }
 
@@ -504,36 +509,40 @@ Move *Tree::findLastMoveInMainBranch()
 /*
  * This creates an empty move in the tree
  */
-void Tree::createMoveSGF( bool brother, bool fastLoad)
+void Tree::createMoveSGF( bool /*brother*/)
 {
 	// qDebug("BoardHandler::createMoveSGF() - %d", mode);
 	
 	Move *m;
 	
-	if (! fastLoad)
-	{
-		Matrix *mat = current->getMatrix();
-		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing, *mat);
-	}
-	else
+	Matrix *mat = current->getMatrix();
+	m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing, *mat);
+	/*else	//fastload
 	{
 		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing);
-	}
-	
+	}*/
+#ifdef FIXME
 	if (!brother && hasSon(m))
 	{
+		/* FIXME in loading that Kogo's joseki dictionary we get
+		 * about 20 of these, probably sources to a sgfparser issue */
+		/* Okay, as far as I know, this function is never called with
+		 * "brother", so it just always does addSon.
+		 * Then addSon will add a brother if it should be a brother.
+		 * Obviously this needs clarification */
 		qDebug("*** HAVE THIS SON ALREADY! ***");
 		delete m;
 		return;
 	}
+#endif //FIXME	
+	//if (!fastLoad ) // mode is ALWAYS normal && mode == modeNormal)
+	m->getMatrix()->clearAllMarks();
 	
-	if (!fastLoad ) // mode is ALWAYS normal && mode == modeNormal)
-		m->getMatrix()->clearAllMarks();
-	
-	if (!brother)
+	/* Below removed since brother never used */
+	//if (!brother)
 		addSon(m);
-	else
-		addBrother(m);
+	//else
+	//	addBrother(m);
 
 }
 
@@ -566,7 +575,7 @@ void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 }
 
 
-void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
+void Tree::updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase)
 {
 	// Passing?
 	if (x == 20 && y == 20)
@@ -586,7 +595,7 @@ void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
 	else if (c == stoneErase)
 		current->getMatrix()->eraseStone(x, y);
 	else
-		current->getMatrix()->insertStone(x, y, c);//, gameMode);
+		current->getMatrix()->insertStone(x, y, c, gamePhase);
 }
 
 
@@ -651,21 +660,6 @@ void Tree::doPass(bool sgf, bool fastLoad)
 	if (current->parent != NULL)
 		current->setCaptures(current->parent->getCapturesBlack(),
 		current->parent->getCapturesWhite());
-/*	
-	if (!sgf)
-	{
-		board->getInterfaceHandler()->setMoveData(currentMove, getBlackTurn(), getNumBrothers(), getNumSons(),
-			hasParent(), hasPrevBrother(), hasNextBrother(), 20, 20);
-
-		if (board->get_isLocalGame())
-			board->getInterfaceHandler()->clearComment();
-		
-		board->updateLastMove(c, 20, 20);
-		board->updateCanvas();
-	}
-	
-	board->setModified();
-*/
 }
 
 void Tree::editMove(StoneColor c, int x, int y)
@@ -687,13 +681,27 @@ void Tree::editMove(StoneColor c, int x, int y)
 
 }
 
+
 /*
  * This function updates the matrix with a stones at coords x,y and color c
  * Since the addMove reproduces the matrix of the previous move, it is updated here
  * It returns the same result as checkPosition (-1 for invalid move, else the number of stones taken)
  */
-int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
+ /* FIXME It looks like this function was originally just for SGF files? and now
+  * its used for everything?  Anyway, I added dontplayyet so that moves could be
+  * tested before being sent to server, but all the commented out code below
+  * should probably just be cleaned out and the name should be changed.  If it
+  * really has something still to do with the SGF stuff then that functionality
+  * should be put somewhere else in a wrapper around this */
+int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayyet)
 {
+	static int koStoneX = 0;
+	static int koStoneY = 0;
+#ifdef DIFFERING_ADJACENT_PLAY_FIX
+	static int dpyX = 0, dpyY = 0;
+#endif //DIFFERING_ADJACENT_PLAY_FIX
+	static Matrix * last_move_matrix = 0;
+	static int last_captures;
 //	bool shown = false;
 	
 	/* qDebug("BoardHandler::addStoneSGF(StoneColor c, int x, int y) - %d %d/%d %d",
@@ -743,21 +751,35 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	}
 	else
 		capturesBlack = capturesWhite = 0;
-
-	if (current->parent == root && ! new_node)
+	
+	/* FIXME This is weird to me.  The root is move 0, right?  So
+	 * what is this parent == root nonsense??? And that "TODO"
+	 * makes me think this is not the proper way. */
+	if ((current->parent == root || current == root)&& ! new_node)
 	{
+		qDebug("setting that first weird move line %d", __LINE__);
+		if(current->parent == root)
+			qDebug("current parent root no new node %d %d", x, y);
 		current->setMoveNumber(0); //TODO : make sure this is the proper way
-		current->setX(-1);
-		current->setY(-1);
+		current->setX(-1);//-1
+		current->setY(-1);//-1
+		/* SGF submits handicap edit moves as root, they need to be
+		 * given a color so that that color can flip over the cursor
+		 * this is ugly, the cursor should be set by who's turn it
+		 * is, by whatever means that's found, NOT by the color
+		 * of the last move, to unify it.  Regardless, here's our
+		 * solution.  Took me a while to find it because I assumed
+		 * that the cursor and the move color we're linked when they're
+		 * not.  Note also that this color is different from the
+		 * individual colors of the matrix positions for this move */
+		current->setColor(stoneBlack);
 	}
 	else if (new_node)
 		editMove(c, x, y);
 
-	bool koStone;
+	bool koStone = 0;
 	if (current->getMoveNumber() > 1)
 		koStone = (current->parent->parent->getMatrix()->at(x-1, y-1) == c);
-
-
 /*	
  * This code is replaced by the above line. 
 
@@ -798,12 +820,164 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	* The update on the matrix has been moved up because int qGo code, 
 	* the check Position is against the stones, white here its against the matrix
 	* therefore, we needed to update the matrix before the check position
-	*/	
-	updateCurrentMatrix(c, x, y);
-	int captures = checkPosition(s, current->getMatrix(), koStone);
-
+	*/
+	if(!new_node)	//for handicap stones and others?
+		updateCurrentMatrix(c, x, y, phaseEdit);
+	else if(!dontplayyet)
+		updateCurrentMatrix(c, x, y);
+	//qDebug("addStoneSGF: %d %d black: %d", x, y, c == stoneBlack);
+	int captures;
+	
+	
+	Matrix * checkPosition_matrix;
+	
+	if(dontplayyet)
+	{
+		Matrix *m = current->getMatrix();
+		checkPosition_matrix = new Matrix(*m);
+		checkPosition_matrix->insertStone(x, y, c, phaseOngoing);
+#ifdef DIFFERING_ADJACENT_PLAY_FIX
+		dpyX = x;
+		dpyY = y;
+#endif //DIFFERING_ADJACENT_PLAY_FIX
+	}
+	else if(!last_move_matrix)
+		checkPosition_matrix = current->getMatrix();
+#ifdef DIFFERING_ADJACENT_PLAY_FIX
+	else if(last_move_matrix && x != dpyX || y ! = dpyY)
+	{
+		delete last_move_matrix;
+		last_move_matrix = 0;
+		checkPosition_matrix = current->getMatrix();
+	}
+#endif //DIFFERING_ADJACENT_PLAY_FIX
+	/* Potential issue.  We don't want to call checkPosition twice
+	 * since its intensive, so we check the legality of a move and
+	 * then when it comes back from the server, we play it.  A
+	 * possible issue is if a move was evaluated as legal and
+	 * then the move to follow was somehow different.  Not sure
+	 * when this would happen, but if it did, I don't think we
+	 * would handle it properly.  
+	 * This actually happens if we call setHandicap between
+	 * the checking and playing of a stone.  The solution
+	 * is really to make sure that setHandicap is only
+	 * called once when it should be.  Unfortunately, its
+	 * possible that with certain protocols, we'll need
+	 * GAMERPROPS msg to get the handicap so we're just
+	 * going to test here with dpyX and dpyY.  This is
+	 * totally unnecessary overhead if setHandicap was
+	 * set up properly so we should FIXME at some point.*/
+	if(!last_move_matrix)
+	{
+		//check for ko
+		if(koStone && x == koStoneX && y == koStoneY)
+			captures = -1;
+		else
+			captures = checkPosition(s, checkPosition_matrix);
+	}
+	else
+	{
+		captures = last_captures;
+		checkPosition_matrix = current->getMatrix();
+		*checkPosition_matrix = *last_move_matrix;
+		delete last_move_matrix;
+		last_move_matrix = 0;
+	}
+	
 	if (captures < 0)
+	{
+		if(dontplayyet)
+		{
+			delete checkPosition_matrix;
+		}
 		return -1;
+	}
+	if(dontplayyet)
+	{
+		/* We've ran check position and the move is okay, but
+		 * we haven't gotten it back from the server yet, so we
+		 * don't want to actually make the move. */
+		last_captures = captures;
+		last_move_matrix = checkPosition_matrix;
+		return captures;
+	}
+	
+	/* Add ko mark */
+	if(captures == 1)
+	{
+		StoneColor opp = (c == stoneBlack ? stoneWhite : stoneBlack);
+		Matrix * trix = current->getMatrix();
+		StoneColor testcolor;
+		int sides = 3;
+		if(x < trix->getSize())
+		{
+			testcolor = trix->getStoneAt(x + 1, y);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x + 1;
+				koStoneY = y;
+			}
+		}
+		else
+			sides--;
+		
+		if(x > 1)
+		{
+			testcolor = trix->getStoneAt(x - 1, y);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x - 1;
+				koStoneY = y;
+			}
+		}
+		else
+			sides--;
+		if(y < trix->getSize())
+		{
+			testcolor = trix->getStoneAt(x, y + 1);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x;
+				koStoneY = y + 1;
+			}
+		}
+		else
+			sides--;
+		
+		if(y > 1)
+		{
+			testcolor = trix->getStoneAt(x, y - 1);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x;
+				koStoneY = y - 1;
+			}
+		}
+		else
+			sides--;
+		
+		if(sides != 0)
+		{
+			koStoneX = 0;
+			koStoneY = 0;
+		}
+		else
+		{
+			/* Don't save to file */
+			if(preferences.draw_ko_marker)
+				trix->insertMark(koStoneX, koStoneY, markKoMarker);
+		}
+	}
+	
+	
 
 	if (c == stoneBlack)
 		capturesBlack += captures;
@@ -817,6 +991,435 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node)
 	return captures;
 }
 
+
+int Tree::checkPosition(MatrixStone * stone, Matrix * m)
+{
+	StoneColor c;
+	StoneColor move_color = stone->c;
+	StoneColor oppcolor = (move_color == stoneBlack ? stoneWhite : stoneBlack);
+	int i, j;
+	int board_size = m->getSize();
+	
+	//qDebug("Checking position of move: %d %d", stone->x, stone->y);
+	i = stone->x;
+	j = stone->y;
+
+	/* If the adjXs aren't "zeroed" out, then they can coincidentally
+	 * prevent the wrong vector from being marked as completed and
+	 * cause a segmentation fault.  But then here this could still
+	 * happen with move 255, 255, somehow... */
+	unsigned short adjN = 0xffff, adjW = 0xffff, adjS = 0xffff, adjE = 0xffff;
+	unsigned short stone_pos, move_pos;
+	unsigned int init_adj = 0;
+	int captures = 0;
+	int list_size = 0;
+	std::vector <unsigned short> suicidePrevention;
+	/* NWSE could be wrong in the sense that the display may
+	* be inverted from ordinals, but that's not
+	* really a problem.*/
+	std::vector <unsigned short> capN, capW, capS, capE;
+	std::vector <unsigned short> * addlist;
+	std::vector <unsigned short> checklist;
+	int current_color;
+	
+	/* Clear the tag matrix */
+	/* There's no particular reason to use a "Matrix" nor for "phaseOngoing",
+	 * but the facility was there, any matrix would have sufficed though */
+	/* Another random annoyance.  The "Matrix" code was created with
+	 * inconsistent 0 basing.  Which means that when we use set and at with
+	 * our custom matrix, we need to subtract 1 from x and y so that we
+	 * can use the same variables with getStoneAt on the m matrix */
+	checkPositionTags->clear();
+#define NONE		0
+#define SOUTH		1
+#define EAST		2
+#define WEST		3
+#define NORTH		4
+#define OURCOLOR	5
+		
+	checkPositionTags->set(i - 1, j - 1, OURCOLOR);
+	
+	if(i + 1 <= board_size)	//EAST
+	{
+		adjE = ((i + 1) << 8) + j;
+		init_adj++;
+		checklist.push_back(adjE);
+	}
+	else
+		capE.push_back(0xffff);
+	if(i - 1 > 0)		//WEST
+	{
+		adjW = ((i - 1) << 8) + j;
+		init_adj++;
+		checklist.push_back(adjW);
+	}
+	else
+		capW.push_back(0xffff);
+	if(j - 1 > 0)		//SOUTH
+	{
+		adjS = (i << 8) + j - 1;
+		init_adj++;
+		checklist.push_back(adjS);
+	}
+	else
+		capS.push_back(0xffff);
+	if(j + 1 <= board_size)	//NORTH
+	{
+		adjN = (i << 8) + j + 1;
+		init_adj++;
+		checklist.push_back(adjN);
+	}
+	else
+		capN.push_back(0xffff);
+	//checklist.push_back(i << 8 + j);
+	move_pos = (i << 8) + j;
+	suicidePrevention.push_back(move_pos);
+	while(!checklist.empty())
+	{
+		unsigned short adj = checklist.back();
+		checklist.pop_back();
+		list_size--;
+		i = adj >> 8;
+		j = adj & 0x00ff;
+		c = m->getStoneAt(i, j);
+		if(checklist.size() < init_adj)	// just popped
+		{
+			init_adj--;
+			if(c == move_color)
+			{
+				if(adj == adjE)
+					capE.push_back(0xffff);
+				else if(adj == adjW)
+					capW.push_back(0xffff);
+				else if(adj == adjS)
+					capS.push_back(0xffff);
+				else if(adj == adjN)
+					capN.push_back(0xffff);
+				if(suicidePrevention.back() == 0xffff)
+					continue;
+				addlist = &suicidePrevention;
+				current_color = OURCOLOR;
+			}
+			else if(c == stoneNone)
+			{
+				// SP always has at least move so this is okay
+				if(suicidePrevention.back() != 0xffff)
+				{
+					suicidePrevention.clear();
+					suicidePrevention.push_back(0xffff);
+				}
+				if(adj == adjE)
+					capE.push_back(0xffff);
+				else if(adj == adjW)
+					capW.push_back(0xffff);
+				else if(adj == adjS)
+					capS.push_back(0xffff);
+				else if(adj == adjN)
+					capN.push_back(0xffff);
+				// no stone, no trace
+				continue;
+			}
+			else if(adj == adjE)
+			{
+				if(!capE.empty())
+					continue;
+				addlist = &capE;
+				capE.push_back(adj);
+				current_color = EAST;
+			}
+			else if(adj == adjW)
+			{
+				if(!capW.empty())
+					continue;
+				addlist = &capW;
+				capW.push_back(adj);
+				current_color = WEST;
+			}
+			else if(adj == adjS)
+			{
+				if(!capS.empty())
+					continue;
+				addlist = &capS;
+				capS.push_back(adj);
+				current_color = SOUTH;
+			}
+			else if(adj == adjN)
+			{
+				/* Probably don't need a check for
+				 * last list since it would take
+				 * priority */
+				//if(capN.back() == 0xffff)
+				//	continue;
+				addlist = &capN;
+				capN.push_back(adj);
+				current_color = NORTH;
+			}
+			list_size = 0;
+			checkPositionTags->set(i - 1, j - 1, current_color);
+		}
+		else
+		{
+			stone_pos = (i << 8) + j;
+			//if we come at the move from other
+			//than the move, then we take over
+			//that list
+			//this should only clear the list
+			//BEFORE we get there by the way
+			//which probably means we should
+			//verify this
+			if(adjE == stone_pos)
+			{
+				capE.clear();
+				capE.push_back(0xffff);
+			}
+			else if(adjW == stone_pos)
+			{
+				capW.clear();
+				capW.push_back(0xffff);
+			}
+			/*else if(adjN == stone_pos)
+			{
+				//can't happen
+				capN.clear();
+				capN.push_back(0xffff);
+			}*/
+			else if(adjS == stone_pos)
+			{
+				capS.clear();
+				capS.push_back(0xffff);
+			}
+		}
+		
+		if(i + 1 <= board_size)
+		{
+			stone_pos = ((i + 1) << 8) + j;
+			c = m->getStoneAt(i + 1, j);
+			if(checkPositionTags->at(i, j - 1) == NONE)
+			{
+				
+				if(c == stoneNone)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+				else if((c == move_color && addlist == &suicidePrevention) ||
+					(c == oppcolor && addlist != &suicidePrevention))
+				{
+					list_size++;
+					addlist->push_back(stone_pos);
+					checklist.push_back(stone_pos);
+					checkPositionTags->set(i, j - 1, current_color);
+				}	
+			}
+			else if(addlist != &suicidePrevention && checkPositionTags->at(i, j - 1) != current_color)
+			{
+				/* If we enter a colored list that did not
+				 * supercede the list we're on now, then the
+				 * currentlist is clear */
+				if(c == oppcolor)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+			}
+		}
+		if(i - 1 > 0)
+		{
+			stone_pos = ((i - 1) << 8) + j;
+			c = m->getStoneAt(i - 1, j);
+			if(checkPositionTags->at(i - 2, j - 1) == NONE)
+			{
+				
+				if(c == stoneNone)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+				else if((c == move_color && addlist == &suicidePrevention) ||
+					(c == oppcolor && addlist != &suicidePrevention))
+				{
+					list_size++;
+					addlist->push_back(stone_pos);
+					checklist.push_back(stone_pos);
+					checkPositionTags->set(i - 2, j - 1, current_color);
+				}
+					
+			}
+			else if(addlist != &suicidePrevention && checkPositionTags->at(i - 2, j - 1) != current_color)
+			{
+				if(c == oppcolor)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+			}
+		}
+		if(j - 1 > 0)
+		{
+			stone_pos = (i << 8) + j - 1;
+			c = m->getStoneAt(i, j - 1);
+			if(checkPositionTags->at(i - 1, j - 2) == NONE)
+			{
+				if(c == stoneNone)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+				else if((c == move_color && addlist == &suicidePrevention) ||
+					(c == oppcolor && addlist != &suicidePrevention))
+				{
+					list_size++;
+					addlist->push_back(stone_pos);
+					checklist.push_back(stone_pos);
+					checkPositionTags->set(i - 1, j - 2, current_color);
+				}
+			}
+			else if(addlist != &suicidePrevention && checkPositionTags->at(i - 1, j - 2) != current_color)
+			{
+				if(c == oppcolor)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+			}	
+		}
+		if(j + 1 <= board_size)
+		{
+			stone_pos = (i << 8) + j + 1;
+			c = m->getStoneAt(i, j + 1);
+			if(checkPositionTags->at(i - 1, j) == NONE)
+			{
+				
+				if(c == stoneNone)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+				else if((c == move_color && addlist == &suicidePrevention) ||
+					(c == oppcolor && addlist != &suicidePrevention))
+				{
+					list_size++;
+					addlist->push_back(stone_pos);
+					checklist.push_back(stone_pos);
+					checkPositionTags->set(i - 1, j, current_color);
+				}	
+			}
+			else if(addlist != &suicidePrevention && checkPositionTags->at(i - 1, j) != current_color)
+			{
+				if(c == oppcolor)
+				{
+					for(int k = 0; k < list_size; k++)
+						checklist.pop_back();
+					addlist->clear();
+					addlist->push_back(0xffff);
+					continue;
+				}
+			}
+		}
+	}
+	
+	// check lists for captures and suicide and execute
+	if((!capW.empty() && capW.back() == 0xffff) &&
+		(!capE.empty() && capE.back() == 0xffff) &&
+		(!capN.empty() && capN.back() == 0xffff) &&
+		(!capS.empty() && capS.back() == 0xffff) &&
+		suicidePrevention.back() != 0xffff)
+	{
+		// suicide
+		qDebug("no suicide");
+		removeStone(stone->x, stone->y, false);
+		return -1;
+	}
+	else
+	{
+		/*
+		// kos handled in addStoneSGF caller
+		if(koStone)
+		{
+			int sum = 0;
+			if(capW.back() != 0xffff)
+				sum += capW.size();
+			if(capS.back() != 0xffff)
+				sum += capS.size();
+			if(capN.back() != 0xffff)
+				sum += capN.size();
+			if(capE.back() != 0xffff)
+				sum += capE.size();
+			if(sum == 1)
+			{
+				qDebug("Cannot take back the ko yet");
+				removeStone(i, j, false);
+				return -1;
+			}
+		}
+		*/
+		if(capW.back() != 0xffff)
+		{
+			while(!capW.empty())
+			{
+				stone_pos = capW.back();
+				capW.pop_back();
+				m->removeStone(stone_pos >> 8, stone_pos & 0x00ff);
+				captures++;
+			}
+		}
+		if(capE.back() != 0xffff)
+		{
+			while(!capE.empty())
+			{
+				stone_pos = capE.back();
+				capE.pop_back();
+				m->removeStone(stone_pos >> 8, stone_pos & 0x00ff);
+				captures++;
+			}
+		}
+		if(capN.back() != 0xffff)
+		{
+			while(!capN.empty())
+			{
+				stone_pos = capN.back();
+				capN.pop_back();
+				m->removeStone(stone_pos >> 8, stone_pos & 0x00ff);
+				captures++;
+			}
+		}
+		if(capS.back() != 0xffff)
+		{
+			while(!capS.empty())
+			{
+				stone_pos = capS.back();
+				capS.pop_back();
+				m->removeStone(stone_pos >> 8, stone_pos & 0x00ff);
+				captures++;
+			}
+		}
+	}
+	//qDebug("%d captures", captures);
+	return captures;
+}	
+		
+#ifdef OLD
 /*
  * This functions does 2 things :
  * - It calculates the validity of a new stone inserted into a matrix
@@ -831,6 +1434,163 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 	Q_CHECK_PTR(m);
 	Group *active = NULL;
 	
+	/* FIXME I think we have a design issue here.  Each move is given a matrix which stores
+	 * the board position at that move.  This is a little bit heavy handed and I considered
+	 * replacing with just a list of changes from the previous position.  After all, what's
+	 * the use of a tree if every board position is stored in full on every move.  (I mean
+	 * obviously the tree has other uses in terms of brothers and sons, etc., but the point
+	 * is that its redundant, like this parenthetical statement.)
+	 * 
+	 * The real problem is that this "groups" object is one per tree.  This means that if
+	 * one is looking at an earlier move while observing a network game, and a new move
+	 * comes in, that new move gets evaluated, (I believe), according to the groups on
+	 * the move observed.  At least this is what I have ascertained the problem to be.
+	 * The result is that boards get screwed up.  Stones disappear, there's very particular
+	 * liberty problems.
+	 *
+	 * The easiest way to solve this is to add something here with a static Move * variable
+	 * such that if the parent of the move for which we are currently checking position
+	 * is not the previous static move stored, then we delete the existing groups and 
+	 * recreate them for the add.  We'd still have to verify that problems couldn't occur
+	 * right up against the incoming net move, i.e., if we were looking at the move right
+	 * before.
+	 *
+	 * Basically, we certainly don't want to store all the groups for every single board
+	 * position and all variations.  But at the same time, its a pain in the ass to
+	 * recalculate the groups whenever we switch branches of the tree or look back.
+	 * One possibility is to very carefully make the groups object reversible.  So
+	 * that whenever we go back to an earlier position... well but see we can skip
+	 * many moves, its not one at a time, so that still means recreating the groups
+	 * under most circumstances.
+	 *
+	 * But then why do we need the groups at all?  All this work of tracking groups,
+	 * bringing them together when they are connected, deleting them, etc., seems like
+	 * it could be done a lot faster.  I mean if the only use for the groups (double
+	 * check this) is for checking the validity of a move and capturing stones, then
+	 * it seems like we could just have a recursive function that, whenever a stone
+	 * was placed or added to the board position, would check the adjacent stones at
+	 * its liberties... maybe not recursive, but with the same sort of functionality...
+	 * it could count the liberties of all connected groups on the fly.  So it would
+	 * queue up each connected stone up until it reached an empty space or a piece
+	 * of opposing color or a board edge... tagging stones as they were added and
+	 * examined... maybe they'd have to marked as white, gray, or black or something.
+	 *
+	 * Okay, this is feasible, the question is whether its more efficient than what
+	 * we have.  If it turns out groups are used for or could be used for some weird
+	 * analysis or computer opponent stuff somehow (I doubt it), then we should
+	 * rethink this.  If they're not, then basically we're already checking each
+	 * stone on the board in order to recreate all the groups.  Doing an algorithm
+	 * that searches for liberties, if written very efficiently, would be slower
+	 * in the cases where we went from one move straight to the next one, but if
+	 * we have to recreate all groups anyway, then its potentially faster overall.
+	 * Since we'd only be examining the groups that mattered and there'd be less
+	 * object overhead.  We'd likely have a set of static list objects that we'd
+	 * fill in and queue up... double ended queues or something... we wouldn't
+	 * be calling "attach group" like functions all the time, and deleting groups, 
+	 * etc..
+	 *
+	 * One last consideration is that, if moves in the middle of a game aren't
+	 * checked, if the only reason there's any problem here or any possible
+	 * group overhead is because of incoming net moves while we're at a different
+	 * point in the tree, then its possible that simply recreating the groups
+	 * when this occurs is more efficient in the long run.
+	 *
+	 * The algo has going for it the idea that, at any point where we might
+	 * care to branch off or whatever, regardless of what's coming in, etc.,
+	 * all moves are, when they're played or examined, checked for validity
+	 * without any dependence on where we were before or some existing structure.
+	 *
+	 * But if the only issue is incoming net moves, then it might make sense to,
+	 * during an ongoing game, or any situation where the tree can be altered
+	 * at a different place then we're looking at it, just backup and swap out
+	 * the groups according to the static Move * check considered first here.
+	 *
+	 * Yet another consideration is that the groups stuff is still slow no matter
+	 * what and that, since we are often recreating the groups or altering the
+	 * groups each time we look at a different board position, whether or not
+	 * incoming moves yield actual corruption in the tree, it might make sense
+	 * to just consider whether our algorithm is an improvement over the groups
+	 * code that currently exists.  The groups code that currently exists has 
+	 * ...
+	 * Okay, I'm an idiot.  It was unnecessary to write all of this.  I look
+	 * down and find that updateAll(), which I know is called all over the
+	 * place, deletes and recreates via this function all existing groups...
+	 *
+	 * So that means first that the current code is officially garbage.  That
+	 * anything I put here is better than what is currently here.  But more
+	 * importantly it means that everytime the tree position is changed, 
+	 * the groups are recreated.  Now the algorithm we envisioned was centered
+	 * around the move played and its impact on the board.  If we were to
+	 * assume that the previous (parent) move's matrix was correct or that
+	 * the current board position according to the position in the tree was
+	 * correct, then we could still run our algo on the move that's added for
+	 * the new position.  Essentially, that's the only time checkposition
+	 * would be run.  Not, as it is now, every time we change positions, but
+	 * instead, just when the tree is changed.
+	 *
+	 * The only potential problem with this is that if we altered the code
+	 * to remove the large matrices and leave instead a list of changes, 
+	 * then we'd have to play the game up to the current position each time
+	 * the board changed.  If we were sort of searching around, this might
+	 * be difficult.  We could add removed as well as added marks to the
+	 * lists put in place of matrix, and then we could have a reversal
+	 * operation that found the new place in the tree from the old, played
+	 * back and then forward.  But then presumably only if the distance was
+	 * less than just playing forward to that position from the beginning.
+	 *
+	 * Here's what my final thought is on this.  The matrices seem like
+	 * a waste of space, but since they're intact, we can do our new algo
+	 * to focus on the stone that was added.  Throw the groups away, and
+	 * it fixes the net corruption as well as potentially making board
+	 * operations faster.
+	 * 
+	 * The algo:  Each move has between 2 and 4 adjacencies. The matrix
+	 * doesn't have pointers or anything, its just a bunch of ints, so
+	 * we could store x, y, coords as maybe a short or a long, depending
+	 * on whether board sizes past 255 are allowed.  (38x38 even is huge)
+	 * so then we have something that looks at the 4 adjacencies of the
+	 * current stone and if there's no liberties, it adds it to a list
+	 * and goes to the next stone.  It does this for all of the stones
+	 * of the same color as the current move, it doesn't move to stones
+	 * of the opposing color, and if it finds a liberty, it immediately
+	 * breaks out.  If it never finds a liberty, then that means that
+	 * the move played has to capture to keep from being suicide and
+	 * now I'm thinking we should check this first.
+	 *
+	 * So we step to adjacencies of the opposing color of the move, and
+	 * we trace them until we find either a liberty or a piece of the same
+	 * color.  We keep adding the stones to a queue as long as we don't
+	 * find a liberty.
+	 * At the end of all this, either we break out of the now first
+	 * opposing color check, and then the second same color check
+	 * doesn't break which means the move is an illegal suicide, or
+	 * we get a list of stones of the opposing color that are to
+	 * be captured by the move played and we don't even check the
+	 * same color.
+	 *
+	 * The most complicated part is the traversal.  We need a way to
+	 * queue up the moves (as xy shorts for instance) as their checked
+	 * as adjacent and of the color being checked.  But we don't
+	 * want to add a move twice (endless loop?) but we don't particularly
+	 * want to keep checking the whole list for the current adjacency.
+	 * We do need to be aware of whether we end up checking a stone
+	 * that's another adjacency of the move, because that means we have
+	 * one less adjacency of the move to check.  (There could be
+	 * multiple unconnected lists captured for certain moves.)
+	 *
+	 * I think we can do this simply by having some rule about how we trace
+	 * adjacencies.  For instance, go south and east as far as possible...
+	 * like go east adjacency, and then east, and then south, and then south
+	 * and then we could have a list of stones done in this way, and then we
+	 * could go through them and go west on each one, replacing the existing
+	 * secondary list and queuing up the new ones, and so on, until we
+	 * couldn't go west anymore, and then we could go north and check that out.
+	 * The only think we'd need to do is check if the adjacencies to the move
+	 * we're connected on the going north or the switching adjacency.  We
+	 * could draw some diagrams and plan it out.  Since we're just subtracting
+	 * and adding and using a list and checking an array, it should be
+	 * much faster than the existing group memory allocations and deallocations.
+*/	
 	// No groups existing? Create one.
 	if (groups->isEmpty())
 	{
@@ -867,6 +1627,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 					active = m->assembleGroup(stone);
 					groups->insert(i, active);
 					flag = true;
+					//qDebug("Assembling group around stone %d %d inserted at %d", stone->x, stone->y, i);
 				}
 				// Groups connected, remove one
 				else
@@ -973,117 +1734,7 @@ int Tree::checkPosition(MatrixStone *stone, Matrix *m, bool koStone)
 	return stoneCounter;
 }
 
-//TODO : wipe out , moved to matrix
-/*
-Group* Tree::assembleGroup(MatrixStone *stone, Matrix *m)
-{
-//	if (stones->isEmpty())
-//		qFatal("StoneHandler::assembleGroup(Stone *stone): No stones on the board!");
-	
-	Group *group = new Group();
-	Q_CHECK_PTR(group);
-	
-
-	group->append(stone);
-	
-	int mark = 0;
-	
-	// Walk through the horizontal and vertical directions and assemble the
-	// attached stones to this group.
-	while (mark < group->count())
-	{
-		stone = group->at(mark);
-		// we use preferably the matrix
-		if ((m==NULL )|| (m!= NULL || m->at(stone->x - 1, stone->y - 1) != stoneNone ))
-		{
-			int 	stoneX = stone->x,
-				stoneY = stone->y;
-			StoneColor col = stone->c;
-			
-			// North
-			//group = checkNeighbour(stoneX, stoneY-1, col, group,m);
-			group = m->checkNeighbour(stoneX, stoneY-1, col, group);
-			// West
-			//group = checkNeighbour(stoneX-1, stoneY, col, group,m);
-			group = m->checkNeighbour(stoneX-1, stoneY, col, group);
-			// South
-			//group = checkNeighbour(stoneX, stoneY+1, col, group,m);
-			group = m->checkNeighbour(stoneX, stoneY+1, col, group);
-			// East
-			//group = checkNeighbour(stoneX+1, stoneY, col, group,m);
-			group = m->checkNeighbour(stoneX+1, stoneY, col, group);
-		}
-		mark ++;
-	}
-	
-	return group;
-}
-
-//TODO wipe this out : replaced in Matrix
-Group* Tree::checkNeighbour(int x, int y, StoneColor color, Group *group, Matrix *m) 
-{
- *
- * qGo original code completely rewritten
- *
-	bool visible = false ;
-	int size = boardSize;
-
-	if (stones->find(Matrix::coordsToKey(x, y)) != stones->end())
-		tmp = stones->find(Matrix::coordsToKey(x, y)).value();
-
-
-  // Okay, this is dirty and synthetic :
-  // Because we use this function where the matrix can be NULL, we need to check this
-  // Furthermore, since this has been added after the first code, 
-  // we keep the 'stone->visible' test where one should only use the 'matrix' code
-	if (m != NULL && x-1 >= 0 && x-1 < size && y-1 >= 0 && y-1 < size) 
-   		visible = (m->at(x - 1, y - 1) != stoneNone); 
-  // We do this in order not to pass a null matrix to the matrix->at function 
-  // (seen in handicap games)
-
-  // again we priviledge matrix over stone visibility (we might be browsing a game)
-	if (tmp != NULL && tmp->c == color &&  tmp->visible() (tmp->c != stoneNone) || visible)) 
-	{
-		if (!group->contains(tmp))
-		{
-			group->append(tmp);
-//			tmp->checked = true;
-		}
-	}
-*/
-/*
-	if (!m)
-		qDebug("Oops : null matrix in Tree::checkNeighbour");
-
-	// Are we into the board, and is the tentative stone present in the matrix ?
-	if (x == 0 || x == boardSize + 1  || y == 0 || y == boardSize + 1 ||  (m->at(x - 1, y - 1) != color))
-		return group;
-
-	MatrixStone *tmp= new MatrixStone ;
-	tmp->x = x;
-	tmp->y = y;	
-	tmp->c =  color;
-
-	int mark = 0;
-	bool found = FALSE;
-
-	while ( mark < group->count() && !found )
-	{
-		//Do we find the same stone in the group ?
-		if (! group->compareItems(tmp, group->at(mark)))
-			found = TRUE ;
-
-		mark ++;
-	}
-	
-	// if not, we add it to the group
-	if (!found)
-		group->append(tmp);
-
-	return group;
-}
-*/
-
+#endif //OLD
 
 bool Tree::removeStone(int x, int y, bool hide)
 {
@@ -1136,80 +1787,7 @@ int Tree::hasMatrixStone(int x, int y)
 	return -1;
 }
 
-/*
-//TODO wipe this function out : replaced in Matrix code
-int Tree::countLiberties(Group *group, Matrix *m) 
-{
-//	CHECK_PTR(group);
-//	CHECK_PTR(m); 
-  
-	int liberties = 0;
-	QList<int> libCounted;
-	
-	// Walk through the horizontal and vertial directions, counting the
-	// liberties of this group.
-	for (int i=0; i<group->count(); i++)
-	{
-		MatrixStone *tmp = group->at(i);
-		//CHECK_PTR(tmp);
-		
-		int 	x = tmp->x,
-			y = tmp->y;
-		
-		// North
-//		checkNeighbourLiberty(x, y-1, libCounted, liberties,m);
-		m->checkNeighbourLiberty(x, y-1, libCounted, liberties);
-		// West
-		//checkNeighbourLiberty(x-1, y, libCounted, liberties,m);
-		m->checkNeighbourLiberty(x-1, y, libCounted, liberties);
-		// South
-		//checkNeighbourLiberty(x, y+1, libCounted, liberties,m);
-		m->checkNeighbourLiberty(x, y+1, libCounted, liberties);
-		// East
-		//checkNeighbourLiberty(x+1, y, libCounted, liberties,m);
-		m->checkNeighbourLiberty(x+1, y, libCounted, liberties);
-	}
-	return liberties;
-}
-
-//TODO wipe this function out : replaced in Matrix code
-void Tree::checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties, Matrix *m)
-{
-	if (!x || !y)
-		return;
-	
-//	MatrixStone *s;
-	Q_CHECK_PTR(m);
- *
- * We	will assume that in the qGo2 structure, passing a null matrix does not happen
- *
-  if (m==NULL) //added eb 8 -> we don't have a matrix passed here, so we check on the board
-  {
-	  if (x <= boardHandler->board->getBoardSize() && y <= boardHandler->board->getBoardSize() && x >= 0 && y >= 0 &&
-		  !libCounted.contains(100*x + y) &&
-  		((s = stones->find(Matrix::coordsToKey(x, y))) == NULL ||
-	  	!s->visible()))
-	  {
-		  libCounted.append(100*x + y);
-		  liberties ++;
-	  }
-  }  
-  else                                      
-  {
-*/    
-/*
-	if (	x <= boardSize && 
-		y <= boardSize && x >= 0 && y >= 0 &&
-	    	!libCounted.contains(100*x + y) &&
-	    	(m->at(x - 1, y - 1) == stoneNone ))         // ?? check stoneErase ?
-	{
-		  libCounted.append(100*x + y);
-		  liberties ++;
-	}
-//  }
-}
-*/
-
+#ifdef OLD
 /*
  * This is used by the sgfparser when reverting to the previous node after the end of a branch
  * It is only used to recalculates all the groups according to the matrix
@@ -1239,8 +1817,8 @@ bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 		delete groups->takeFirst();
 	//Might not be needed
 	groups->clear();
-	
-
+	qDebug("updateAll: %p %p", this, m);
+/*
 	for (int y=1; y<=boardSize; y++)
 	{
 		for (int x=1; x<=boardSize; x++)
@@ -1260,10 +1838,10 @@ bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
 			}
 		}
 	}
-
+*/
 	return modified;
 }
-
+#endif //OLD
 /*
  * this deletes the current node an all its sons
  */
@@ -1343,5 +1921,3 @@ void Tree::deleteNode()
 	
 //	board->setModified();
 }
-
-
