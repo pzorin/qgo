@@ -6,12 +6,12 @@
 #define INTERFACEHANDLER_H
 
 #include "defines.h"
-#include "globals.h"
 //#include "boardhandler.h"
 
 
 //struct ButtonState;
 class BoardWindow;
+class GameData;
 
 class InterfaceHandler
 {

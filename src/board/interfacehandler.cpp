@@ -12,6 +12,7 @@
 //#include "defines.h"
 #include "interfacehandler.h"
 #include "boardwindow.h"
+#include "gamedata.h"
 
 /*
 struct ButtonState
@@ -104,7 +105,7 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	QString player = gd->playerWhite;
 	if (simple && player == QObject::tr("White"))
 		gb->setTitle(QObject::tr("White"));	
-	else
+	else if(!gd->nigiriToBeSettled)
 	{
 		// truncate to 12 characters max
 		player.truncate(12);
@@ -122,7 +123,7 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	player = gd->playerBlack;
 	if (simple && player == QObject::tr("Black"))
 		gb->setTitle(QObject::tr("Black"));	
-	else
+	else if(!gd->nigiriToBeSettled)
 	{
 		// truncate to 12 characters max
 		player.truncate(12);
@@ -136,7 +137,15 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	}
 	
 	//TODO set  clock
-
+	
+	if(gd->freegame == RATED || gd->rated)
+		boardwindow->getUi().freeratedLabel->setText("Rated");
+	else if(gd->freegame == FREE)
+		boardwindow->getUi().freeratedLabel->setText("Free");
+	else if(gd->freegame == TEACHING)
+		boardwindow->getUi().freeratedLabel->setText("Teaching");
+	
+	qDebug("Komi: %f captures %d\n", gd->komi, gd->handicap);
 	boardwindow->getUi().komi->setText(QString().setNum(gd->komi));
 	boardwindow->getUi().handicap->setText(QString().setNum(gd->handicap));
 }
@@ -149,7 +158,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 	// move number
 	QString s(QObject::tr("Move") + " ");
 	s.append(QString::number(n));
-
+	
 	// color and coordinates
 	if (lastX >= 1 && lastX <= boardwindow->getBoardSize() && lastY >= 1 && lastY <= boardwindow->getBoardSize())
 	{
@@ -528,6 +537,7 @@ void InterfaceHandler::toggleToolbarButtons(bool state)
 /*
  * displays the remaining time for playing
  */
+/* FIXME shouldn't this be in the clockdisplay code?? */
 void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
 {
 	if (!btime.isEmpty())
