@@ -15,6 +15,7 @@
 #include <QtGui>
 
 class ImageHandler;
+class Move;
 
 class Board : public QGraphicsView
 {
@@ -27,6 +28,7 @@ public:
 	void changeSize();
 	void init(int size);
 	void setShowCoords(bool b);
+	void resizeBoard(int w, int h);
 
 	void removeGhosts();
 	void setVarGhost(StoneColor c, int x, int y);
@@ -34,7 +36,7 @@ public:
 	Mark* hasMark(int x, int y);
 	void removeMark(int x, int y, bool update = false);
 	void removeDeadMarks();
-	void updateLastMove(StoneColor c, int x, int y);
+	void updateLastMove(Move * move);
 
 //	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
 	bool updateStone(StoneColor c, int x, int y, bool dead = false);
@@ -56,7 +58,6 @@ protected:
 	void drawGatter();
 	void drawCoordinates();
 //	void drawStarPoint(int x, int y);
-	void resizeBoard(int w, int h);
 	int convertCoordsToPoint(int c, int o);
 	void resizeEvent(QResizeEvent*);
 	QHash<int,Stone *> *stones;
@@ -85,6 +86,7 @@ private:
 	Stone *curStone;
 	CursorType cursor;
 	short curX, curY;
+	short downX, downY;	//FIXME can we combine safely somehow with curX, curY?
 
 	static long coordsToKey(int x, int y)	
 		{ return x * 100 + y; }

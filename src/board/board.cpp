@@ -11,6 +11,7 @@
 #include "gatter.h"
 #include "mark.h"
 #include "imagehandler.h"
+#include "move.h"		//for updateLastMove, cleaner and yet not FIXME
 
 #include <QtGui>
 
@@ -28,6 +29,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 
 void Board::init(int size)
 {
+	QSettings settings;
 //	setRenderHints(QPainter::SmoothPixmapTransform);
 //	gamePhase = phaseInit;
 
@@ -47,14 +49,35 @@ void Board::init(int size)
 	Q_CHECK_PTR(imageHandler);
 	
 	// Init the canvas
-	canvas = new QGraphicsScene(0,0,BOARD_X, BOARD_Y,this);
+	/* We can't set the board size like this because even if it worked
+	 * this code is used for the miniboard in the open dialog as well
+	 * but it doesn't anyway... its set someplace else. 
+	 * But these two seem to always be 500x500 so I'm thinking this
+	 * is an initial default and the resize code is relied on
+	 * for everything else.  Still weird though.*/
+	int board_x, board_y;
+	/*if(settings.value("SAVE_WINDOW_SIZES").toInt())
+	{
+		board_x = settings.value("BOARD_SIZE_X").toInt();
+		board_y = settings.value("BOARD_SIZE_Y").toInt();
+		//quick sanity check
+		if(board_x > board_y * 1.5 || board_y > board_x * 1.5)
+		{
+			board_x = BOARD_X;
+			board_y = BOARD_Y;
+		}
+	}
+	else
+	{*/
+		board_x = BOARD_X;
+		board_y = BOARD_Y;
+	//}
+	canvas = new QGraphicsScene(0,0, board_x, board_y,this);
 	Q_CHECK_PTR(canvas);
 
 	setScene(canvas);
 	gatter = new Gatter(canvas, board_size);
 	
-
-		
 	// Init data storage for marks and ghosts
 	marks = new QList<Mark*>;
 //	marks->setAutoDelete(TRUE);
@@ -86,9 +109,11 @@ void Board::init(int size)
 	curX = curY = -1;
 	showCursor = setting->readBoolEntry("CURSOR");
 */	
+	downX = downY = -1;
 //	isLocalGame = true;
 	
 	// Init the ghost cursor stone
+	cursor = cursorIdle;
 	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
 	curStone->setZValue(4);
 	curStone->hide();
@@ -136,9 +161,23 @@ void Board::init(int size)
 
 Board::~Board()
 {
+	QSettings settings;
+	qDebug("Board size: %d, %d.", width(), height());
+
+	if(settings.value("SAVE_WINDOW_SIZES").toBool())
+	{
+		settings.setValue("BOARD_SIZE_X", width());
+		settings.setValue("BOARD_SIZE_Y", height());
+	}
+
 	qDeleteAll(*stones);
 	qDeleteAll(*ghosts);
 	qDeleteAll(*marks);
+	
+	delete gatter;
+	/* FIXME, can be a segmentation fault, when deleting canvas */
+	delete canvas;
+	qDebug("Finishing deleting board");
 }
 
 
@@ -183,6 +222,7 @@ void Board::calculateSize()
 	const int 	margin = 1,              
 		w = (int)canvas->width() - margin * 2,  
 		h = (int)canvas->height() - margin * 2;
+		qDebug("c %d %d\n", (int)canvas->width(), (int)canvas->height());
 
 	int table_size = (w < h ? w : h );
 
@@ -447,6 +487,8 @@ void Board::resizeEvent(QResizeEvent*)
 	if (!lockResize)
 		changeSize();
 #endif
+	qDebug("Board resize event\n");
+	qDebug("Board size: %d, %d.", width(), height());
 }
 
 
@@ -464,6 +506,8 @@ void Board::changeSize()
 //	resizeBoard(s.width(), s.height());
 
 	resizeBoard(width()-5, height()-5);
+
+
 }
 
 
@@ -825,9 +869,9 @@ void Board::setVarGhost(StoneColor c, int x, int y)
 		s = new Stone(imageHandler->getAlternateGhostPixmaps(), canvas, c, x, y, FALSE);
 //	else
 //		return;
-	
+		
 	s->setZValue(3);//FIXME : this should not be here, but in the 'stone' code
-
+	/* FIXME Variation ghosts on handicap stones for some weird reason */
 	ghosts->append(s);
     
 	if (x == 20 && y == 20)  // Pass
@@ -1146,15 +1190,18 @@ void Board::removeLastMoveMark()
 /*
  * Updates the mark on the last stone played
  */
- void Board::updateLastMove(StoneColor c, int x, int y)
+ void Board::updateLastMove(Move * move)
 {
-
+	StoneColor c = move->getColor();
+	int x = move->getX();
+	int y = move->getY();
+	
 	delete lastMoveMark;
 	lastMoveMark = NULL;
 
-	if (x == 20 && y == 20)  // Passing
+	if (x == 20 && y == 20)  // Passing	(FIXME don't think we use this anymore)
 		removeLastMoveMark();
-
+	else if(move->isHandicapMove()) {}	// no last move marks on handicaps
 	else if (c != stoneNone && x != -1 && y != -1 && x <= board_size && y <= board_size)
 	{
 //		lastMoveMark = new MarkText(imageHandler, x, y, square_size, "+", canvas,
@@ -1205,6 +1252,14 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 	int x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
 
+	/* FIXME, maybe don't draw cursor if x/y changes from downX downY?? */
+	if(downX > 0 && (downX != x || downY != y))
+	{
+		curStone->hide();
+		canvas->update();
+		curX = curY = -1;
+		return;
+	}
 	// Outside the valid board?
 	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 	{
@@ -1269,8 +1324,17 @@ void Board::wheelEvent(QWheelEvent *e)
 /*
  * starts the counter for anticlivko moves
  */
-void Board::mousePressEvent(QMouseEvent *)
+void Board::mousePressEvent(QMouseEvent * e)
 {
+	downX = convertCoordsToPoint(e->x(), offsetX),
+	downY = convertCoordsToPoint(e->y(), offsetY);
+
+	// Button gesture outside the board?
+	if ((downX < 1) || downX > board_size || downY < 1 || downY > board_size)
+	{
+		downX = downY = -1;
+		//return	//??
+	}
 	clickTime = QTime::currentTime();
 	clickTime = clickTime.addMSecs(250);
 }
@@ -1282,6 +1346,13 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 	int 	x = convertCoordsToPoint(e->x(), offsetX),
 		y = convertCoordsToPoint(e->y(), offsetY);
 
+	/* FIXME click protection... if we don't like, we should change it */
+	if(downX != x || downY != y)
+	{
+		downX = downY = -1;
+		return;
+	}
+	downX = downY = -1;
 	// Button gesture outside the board?
 	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 /*	{
