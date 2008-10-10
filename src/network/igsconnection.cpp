@@ -2471,7 +2471,7 @@ void IGS_move::handleMsg(QString line)
 	BoardDispatch * boarddispatch;
 	RoomDispatch * roomdispatch = connection->getDefaultRoomDispatch();
 		//case 15:
-	qDebug("%s", line.toLatin1().constData());
+	//qDebug("%s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();	
 	static bool need_time = false;	
 	//console->recvText(line.toLatin1().constData());
@@ -2523,10 +2523,10 @@ void IGS_move::handleMsg(QString line)
 					MatchRequest * mr = connection->getAndCloseGameDialogDispatch(*p);
 					if(mr)
 					{
-						qDebug("mr bs: %d", mr->board_size);
+						//qDebug("mr bs: %d", mr->board_size);
 						aGameData->board_size = mr->board_size;
 						aGameData->komi = mr->komi;
-						qDebug("mr komi: %f", aGameData->komi);
+						//qDebug("mr komi: %f", aGameData->komi);
 						aGameData->handicap = mr->handicap;
 						if(aGameData->white_name == connection->getUsername())
 						{
@@ -2695,7 +2695,7 @@ void IGS_move::handleMsg(QString line)
 			*  0 sets tree properly*/
 			aMove->flags = MoveRecord::HANDICAP;
 			aMove->x = element(point, 1, " ", "EOL").toInt();
-			qDebug("handicap %d", aMove->x);
+			//qDebug("handicap %d", aMove->x);
 		}
 		else if(point.contains("Pass", Qt::CaseInsensitive))
 		{
@@ -2714,12 +2714,12 @@ void IGS_move::handleMsg(QString line)
 				delete aMove;
 				return;
 			}
-			qDebug("board size from record: %d", r->board_size);
+			//qDebug("board size from record: %d", r->board_size);
 			
 			aMove->x = (int)(point.toAscii().at(0));
 			aMove->x -= 'A';
 			point.remove(0,1);
-			qDebug("move number: %d\n", aMove->number);
+			//qDebug("move number: %d\n", aMove->number);
 			aMove->y = element(point, 0, " ").toInt();
 					
 			if(aMove->x < 9)	//no I on IGS
@@ -2728,7 +2728,7 @@ void IGS_move::handleMsg(QString line)
 			//{	
 				aMove->y = r->board_size + 1 - aMove->y;
 			//}
-			qDebug("%d %d\n", aMove->x, aMove->y);
+			//qDebug("%d %d\n", aMove->x, aMove->y);
 			if(element(line, 0, "(", ")") == "W")
 				aMove->color = stoneWhite; 
 			else
