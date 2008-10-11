@@ -469,7 +469,8 @@ void MainWindow::slot_computerNewBoard()
 	gd->board_size = ui.newComputer_Size->text().toInt();
 	gd->handicap = ui.newComputer_Handicap->text().toInt();
 	gd->komi = ui.newComputer_Komi->text().toFloat();
-
+	gd->oneColorGo = ui.OneColorGoCheckBox->isChecked();
+	
 	bool imBlack = (ui.computerPlaysWhite->isChecked());//cb_ComputerBlackPlayer->currentIndex() != 0);
 	bool imWhite = (ui.computerPlaysBlack->isChecked());//cb_ComputerWhitePlayer->currentIndex() != 0);
 	gd->black_name = (imBlack ? "Human" : "Computer"); //ui.newComputer_BlackPlayer->text();

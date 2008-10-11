@@ -632,6 +632,8 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 			dead = (m->isStoneDead(x, y)) & (move->getMoveNumber() != 0);
 			color = m->getStoneAt(x, y);
 			
+			if (boardwindow->getGameData()->oneColorGo && color == stoneBlack)
+				color = stoneWhite;
 			board->updateStone(color,x,y, dead);
 
 			
