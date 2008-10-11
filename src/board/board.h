@@ -42,7 +42,7 @@ public:
 	bool updateStone(StoneColor c, int x, int y, bool dead = false);
 	void setCursorType(CursorType cur);
 //	void updateDeadMarks(int &black, int &white);
-	int getSize()	{return board_size;}
+	unsigned int getSize()	{return board_size;}
 	void exportPicture(const QString &fileName,  QString *filter, bool toClipboard);
 
 signals:
