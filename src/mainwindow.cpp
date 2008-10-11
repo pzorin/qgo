@@ -277,10 +277,10 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 		QString komi, hcp, sz;
 		komi.setNum(GameLoaded->komi);	
 		hcp.setNum(GameLoaded->handicap);
-		sz.setNum(GameLoaded->boardSize);
+		sz.setNum(GameLoaded->board_size);
 
-		ui.File_WhitePlayer->setText(GameLoaded->playerWhite);
-		ui.File_BlackPlayer->setText(GameLoaded->playerBlack);
+		ui.File_WhitePlayer->setText(GameLoaded->white_name);
+		ui.File_BlackPlayer->setText(GameLoaded->black_name);
 		ui.File_Date->setText(GameLoaded->date);
 		ui.File_Handicap->setText(hcp);
 		ui.File_Result->setText(GameLoaded->result);
@@ -299,8 +299,8 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 void MainWindow::displayGame()
 {
 	
-	if (ui.displayBoard->getSize() != GameLoaded->boardSize)
-		ui.displayBoard->init(GameLoaded->boardSize);
+	if (ui.displayBoard->getSize() != GameLoaded->board_size)
+		ui.displayBoard->init(GameLoaded->board_size);
 		
 	ui.displayBoard->displayHandicap(GameLoaded->handicap);
 
@@ -371,10 +371,10 @@ void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModel
 		QString komi, hcp, sz;
 		komi.setNum(GameLoaded2->komi);	
 		hcp.setNum(GameLoaded2->handicap);
-		sz.setNum(GameLoaded2->boardSize);
+		sz.setNum(GameLoaded2->board_size);
 
-		ui.File_WhitePlayer->setText(GameLoaded2->playerWhite);
-		ui.File_BlackPlayer->setText(GameLoaded2->playerBlack);
+		ui.File_WhitePlayer->setText(GameLoaded2->white_name);
+		ui.File_BlackPlayer->setText(GameLoaded2->black_name);
 		ui.File_Date->setText(GameLoaded2->date);
 		ui.File_Handicap->setText(hcp);
 		ui.File_Result->setText(GameLoaded2->result);
@@ -421,10 +421,10 @@ void MainWindow::slot_fileNewBoard()
 	
 	GameData *gd = new GameData();
 
-	gd->boardSize = ui.newFile_Size->value();
+	gd->board_size = ui.newFile_Size->value();
 	gd->handicap = ui.newFile_Handicap->value();
-	gd->playerBlack = ui.newFile_BlackPlayer->text();
-	gd->playerWhite = ui.newFile_WhitePlayer->text();
+	gd->black_name = ui.newFile_BlackPlayer->text();
+	gd->white_name = ui.newFile_WhitePlayer->text();
 	gd->komi = ui.newFile_Komi->text().toFloat();
 	new BoardWindow(modeNormal, gd, TRUE, TRUE);
 	delete gd;	//it is... copied, right?
@@ -463,14 +463,14 @@ void MainWindow::slot_computerNewBoard()
 	
 	GameData *gd = new GameData();
 
-	gd->boardSize = ui.newComputer_Size->text().toInt();
+	gd->board_size = ui.newComputer_Size->text().toInt();
 	gd->handicap = ui.newComputer_Handicap->text().toInt();
 	gd->komi = ui.newComputer_Komi->text().toFloat();
 
 	bool imBlack = (ui.computerPlaysWhite->isChecked());//cb_ComputerBlackPlayer->currentIndex() != 0);
 	bool imWhite = (ui.computerPlaysBlack->isChecked());//cb_ComputerWhitePlayer->currentIndex() != 0);
-	gd->playerBlack = (imBlack ? "Human" : "Computer"); //ui.newComputer_BlackPlayer->text();
-	gd->playerWhite = (imWhite ? "Human" : "Computer"); //ui.newComputer_WhitePlayer->text();
+	gd->black_name = (imBlack ? "Human" : "Computer"); //ui.newComputer_BlackPlayer->text();
+	gd->white_name = (imWhite ? "Human" : "Computer"); //ui.newComputer_WhitePlayer->text();
 
 	if (imBlack == imWhite)
 	{

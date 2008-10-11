@@ -11,19 +11,13 @@ class GameData
 {
 	public:
 		GameData() :
-			 playerBlack(QObject::tr("Black")),
-			 playerWhite(QObject::tr("White")),
-			 rankBlack(""),
-			 rankWhite(""),
-			 white_name(""),
-			 black_name(""),
+			 white_name(QObject::tr("White")),
+			 black_name(QObject::tr("Black")),
 			 white_rank(""),
 			 black_rank(""),
 			 number(0),
-			 gameNumber(0),
 			 moves(0),
 			 board_size(19),
-			 boardSize(19),
 			 handicap(0),
 			 komi(5.5),
 			 timeSystem(canadian),
@@ -37,7 +31,6 @@ class GameData
 			 result(""),
 			 fullresult(0),
 			 game_code(0),
-			 rated(false),
 			 nigiriToBeSettled(false),
 			 oneColorGo(false),
 			 style(1),
@@ -47,15 +40,11 @@ class GameData
 			 gameName(""),
 			 fileName(""),
 			 overtime(""),
-			 freegame(noREQ) {};
+			 free_rated(noREQ) {};
 		GameData(GameData *d)
 		{
 			if (d)
 			{
-				playerBlack = d->playerBlack;
-				playerWhite = d->playerWhite;
-				rankBlack = d->rankBlack;
-				rankWhite = d->rankWhite;
 				white_name = d->white_name;
 				black_name = d->black_name;
 				white_rank = d->white_rank;
@@ -69,10 +58,8 @@ class GameData
 				gameName = d->gameName;
 				fileName = d->fileName;
 				overtime = d->overtime;
-				boardSize = d->boardSize;
 				board_size = d->board_size;
 				handicap = d->handicap;
-				gameNumber = d->gameNumber;
 				number = d->number;
 				//byoTime = d->byoTime;
 				//byoPeriods = d->byoPeriods;
@@ -80,21 +67,19 @@ class GameData
 				timelimit = d->timelimit;
 				style = d->style;
 				komi = d->komi;
-				freegame = d->freegame;
+				free_rated = d->free_rated;
 				timeSystem = d->timeSystem;
 				oneColorGo = d->oneColorGo;
 				maintime = d->maintime;
 				stones_periods = d->stones_periods;
 				periodtime = d->periodtime;
 				nigiriToBeSettled = d->nigiriToBeSettled;
-				rated = d->rated;
 				game_code = d->game_code;
 			}
 		}
 
 		~GameData() {};
 		
-		QString playerBlack, playerWhite, rankBlack, rankWhite;
 		QString white_name;
 		QString black_name;
 		QString white_rank;
@@ -102,10 +87,8 @@ class GameData
 		
 		bool running;
 		unsigned int number;
-		int gameNumber;
 		unsigned int moves;
 		unsigned int board_size;
-		int boardSize;
 		unsigned int handicap;
 		float komi;
 		
@@ -132,12 +115,11 @@ class GameData
 		unsigned short game_code;
 		unsigned short opponent_id;
 		
-		bool rated;
 		bool nigiriToBeSettled;
 		bool oneColorGo;
 		int style;
 		QString date, place, copyright, gameName, fileName, overtime;
-		assessType freegame;
+		assessType free_rated;
 };
 
 

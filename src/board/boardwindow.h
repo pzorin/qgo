@@ -58,14 +58,14 @@ public:
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
 	bool getMyColorIsWhite()		{return myColorIsWhite;}
 	GameData *getGameData() 		{return gameData;}
-	int getId()				{return gameData->gameNumber;}
+	int getId()				{return gameData->number;}
 	MarkType getEditMark()			{return editMark;}
 	void setBoardSize(int sz)		{boardSize=sz;}
 	void setGamePhase(GamePhase gp);
 	void setTree(Tree *t)			{tree=t;}
 	void setGameData(GameData *gd);	
-	QString get_wplayer()			{return gameData->playerWhite;}
-	QString get_bplayer()			{return gameData->playerBlack;}
+	QString get_wplayer()			{return gameData->white_name;}
+	QString get_bplayer()			{return gameData->black_name;}
 	ClockDisplay *getClockDisplay()		{return clockDisplay;}
 	void swapColors(bool noswap = false);
 	

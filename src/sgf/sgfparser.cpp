@@ -1271,41 +1271,41 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	if (!parseProperty(toParse, "PW", tmp))
 		return false;
 	if (!tmp.isEmpty())
-		gameData->playerWhite = tmp;
+		gameData->white_name = tmp;
 	else
-		gameData->playerWhite = "White";
+		gameData->white_name = "White";
 
 	// White player rank
 	if (!parseProperty(toParse, "WR", tmp))
 		return false;
 	if (!tmp.isEmpty())
-		gameData->rankWhite = tmp;
+		gameData->white_rank = tmp;
 	else
-		gameData->rankWhite = "";
+		gameData->white_rank = "";
 
 	// Black player name
 	if (!parseProperty(toParse, "PB", tmp))
 		return false;
 	if (!tmp.isEmpty())
-		gameData->playerBlack = tmp;
+		gameData->black_name = tmp;
 	else
-		gameData->playerBlack = "Black";
+		gameData->black_name = "Black";
 	
 	// Black player rank
 	if (!parseProperty(toParse, "BR", tmp))
 		return false;
 	if (!tmp.isEmpty())
-		gameData->rankBlack = tmp;
+		gameData->black_rank = tmp;
 	else
-		gameData->rankBlack = "";
+		gameData->black_rank = "";
 	
 	// Board size
 	if (!parseProperty(toParse, "SZ", tmp))
 		return false;
 	if (!tmp.isEmpty())
-		gameData->boardSize = tmp.toInt();
+		gameData->board_size = tmp.toInt();
 	else
-		gameData->boardSize = 19;
+		gameData->board_size = 19;
 	
 	// Komi
 	if (!parseProperty(toParse, "KM", tmp))
@@ -1459,7 +1459,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	}
 
 	// Game number
-	gameData->gameNumber = 0;
+	gameData->number = 0;
 
 	gameData->fileName = fileName;
 	
@@ -1560,7 +1560,7 @@ void SGFParser::writeGameHeader(GameData *gameData)
 		*stream << "GN[" << gameData->gameName << "]"		// Game Name
 		<< endl;
 	qDebug("Parser things handicap is: %d\n", gameData->handicap);
-	*stream << "SZ[" << gameData->boardSize << "]"				// Board size
+	*stream << "SZ[" << gameData->board_size << "]"				// Board size
 		<< "HA[" << gameData->handicap << "]"			// Handicap
 		<< "KM[" << gameData->komi << "]";				// Komi
 //		<< endl;
@@ -1571,17 +1571,17 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	if (!gameData->overtime.isEmpty())
 		*stream << "OT[" << gameData->overtime << "]" << endl;		// Overtime
 	
-	if (!gameData->playerWhite.isEmpty())
-		*stream << "PW[" << gameData->playerWhite << "]";  // White name
+	if (!gameData->white_name.isEmpty())
+		*stream << "PW[" << gameData->white_name << "]";  // White name
 	
-	if (!gameData->rankWhite.isEmpty())
-		*stream << "WR[" << gameData->rankWhite << "]";    // White rank
+	if (!gameData->white_rank.isEmpty())
+		*stream << "WR[" << gameData->white_rank << "]";    // White rank
 	
-	if (!gameData->playerBlack.isEmpty())
-		*stream << "PB[" << gameData->playerBlack << "]";  // Black name
+	if (!gameData->black_name.isEmpty())
+		*stream << "PB[" << gameData->black_name << "]";  // Black name
 	
-	if (!gameData->rankBlack.isEmpty())
-		*stream << "BR[" << gameData->rankBlack << "]";    // Black rank
+	if (!gameData->black_rank.isEmpty())
+		*stream << "BR[" << gameData->black_rank << "]";    // Black rank
 	
 	qDebug("Parser things result is: %s\n", gameData->result.toLatin1().constData());
 	if (!gameData->result.isEmpty())

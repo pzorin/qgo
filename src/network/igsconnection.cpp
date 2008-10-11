@@ -1539,7 +1539,7 @@ void IGS_info::handleMsg(QString line)
 		MatchRequest * aMatch = new MatchRequest();
 		unsigned long flags = 0;
 		/* All games are rated except for ones in free room on IGS FIXME */
-		aMatch->rated = true;
+		aMatch->free_rated = RATED;
 		aMatch->opponent = line.section(" ", 1, 1);
 		if(line.contains("as White"))
 			aMatch->color_request = MatchRequest::BLACK;

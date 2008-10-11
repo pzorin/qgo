@@ -85,24 +85,24 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	// example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
 	// or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
 	boardwindow->setWindowTitle( /* QString(isModified ? "* " : "") + */
-		( (gd->gameNumber != 0 && gd->gameNumber < 10000) ?
-			"(" + QString::number(gd->gameNumber) + ") " : 
+		( (gd->number != 0 && gd->number < 10000) ?
+			"(" + QString::number(gd->number) + ") " : 
 			QString()) + (gd->gameName.isEmpty() ?
-				gd->playerWhite 
-				+ (!gd->rankWhite.isEmpty() ?
-					" " + gd->rankWhite : 
+				gd->white_name 
+				+ (!gd->white_rank.isEmpty() ?
+					" " + gd->white_rank : 
 					QString()) 
-				+ " " + QObject::tr("vs.") + " " + gd->playerBlack 
-				+ (!gd->rankBlack.isEmpty() ?
-					" " + gd->rankBlack : 
+				+ " " + QObject::tr("vs.") + " " + gd->black_name 
+				+ (!gd->black_rank.isEmpty() ?
+					" " + gd->black_rank : 
 					QString()) :
 				gd->gameName) +	"   " + QString(PACKAGE   " "  VERSION));
 
 
-	bool simple = gd->rankWhite.length() == 0 && gd->rankBlack.length() == 0;
+	bool simple = gd->white_rank.length() == 0 && gd->black_rank.length() == 0;
 	QGroupBox *gb = boardwindow->getUi().whiteFrame;
 
-	QString player = gd->playerWhite;
+	QString player = gd->white_name;
 	if (simple && player == QObject::tr("White"))
 		gb->setTitle(QObject::tr("White"));	
 	else if(!gd->nigiriToBeSettled)
@@ -110,8 +110,8 @@ void InterfaceHandler::updateCaption(GameData *gd)
 		// truncate to 12 characters max
 		player.truncate(12);
 
-		if (gd->rankWhite.length() != 0)
-			player = QObject::tr("W") + ": " + player + " " + gd->rankWhite;
+		if (gd->white_rank.length() != 0)
+			player = QObject::tr("W") + ": " + player + " " + gd->white_rank;
 		else
 			player = QObject::tr("W") + ": " + player;
 		
@@ -120,7 +120,7 @@ void InterfaceHandler::updateCaption(GameData *gd)
 
 	gb = boardwindow->getUi().blackFrame;
 
-	player = gd->playerBlack;
+	player = gd->black_name;
 	if (simple && player == QObject::tr("Black"))
 		gb->setTitle(QObject::tr("Black"));	
 	else if(!gd->nigiriToBeSettled)
@@ -128,8 +128,8 @@ void InterfaceHandler::updateCaption(GameData *gd)
 		// truncate to 12 characters max
 		player.truncate(12);
 
-		if (gd->rankBlack.length() != 0)
-			player = QObject::tr("B") + ": " + player + " " + gd->rankBlack;
+		if (gd->black_rank.length() != 0)
+			player = QObject::tr("B") + ": " + player + " " + gd->black_rank;
 		else
 			player = QObject::tr("B") + ": " + player;
 		
@@ -138,11 +138,11 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	
 	//TODO set  clock
 	
-	if(gd->freegame == RATED || gd->rated)
+	if(gd->free_rated == RATED)
 		boardwindow->getUi().freeratedLabel->setText("Rated");
-	else if(gd->freegame == FREE)
+	else if(gd->free_rated == FREE)
 		boardwindow->getUi().freeratedLabel->setText("Free");
-	else if(gd->freegame == TEACHING)
+	else if(gd->free_rated == TEACHING)
 		boardwindow->getUi().freeratedLabel->setText("Teaching");
 	
 	qDebug("Komi: %f captures %d\n", gd->komi, gd->handicap);

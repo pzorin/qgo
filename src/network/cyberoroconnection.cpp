@@ -1178,8 +1178,10 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 	packet[7] = (mr.last_game_code >> 8);
 	packet[8] = 0x00;
 	packet[9] = 0x02;	//02 or 00
-	
-	packet[10] = !mr.rated;
+	if(mr.free_rated == RATED)
+		packet[10] = 0x00;
+	else
+		packet[10] = 0x01;	//friendly
 	packet[11] = mr.flags;
 	if(mr.color_request == MatchRequest::NIGIRI)
 		packet[11] |= 0x08;
@@ -5313,7 +5315,7 @@ void CyberOroConnection::handleRematchAccept(unsigned char * msg, unsigned int s
 	m->board_size = gd->board_size;
 	m->komi = gd->komi;
 	m->handicap = gd->handicap;
-	m->rated = gd->rated;
+	m->free_rated = gd->free_rated;
 	if(m->handicap == 0 && gd->komi > 0.0)
 	{
 		//switch colors?
@@ -6800,8 +6802,10 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size
 	p += 2;
 	//01f0
 	// first byte 01 = friendly, 00 = promotional/rated?
-	bool rated = !p[0];
-	mr.rated = rated;
+	if(p[0])
+		mr.free_rated = FREE;
+	else
+		mr.free_rated = RATED;
 	//second byte contains partly bit field for settings
 	// double check
 	undo = p[1] & 0x80;

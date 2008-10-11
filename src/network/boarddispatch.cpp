@@ -343,22 +343,14 @@ void BoardDispatch::mergeListingIntoRecord(GameData * r, GameListing * l)
 	r->FR = l->FR;
 	r->observers = l->observers;
 	
-	/* These are issues with the data struct that need to be fixed up, except for
-	 * the date, but maybe boardwindow should do that.
-	 * everything else are name redundancies*/
 	//GameData * gd = qgoif->makeGameData(gameData);  //FIXME
-	gameData->playerBlack = gameData->black_name;
-	gameData->playerWhite = gameData->white_name;
-	gameData->rankBlack = gameData->black_rank;
-	gameData->rankWhite = gameData->white_rank;
-	gameData->gameNumber = gameData->number;
-	gameData->boardSize = gameData->board_size;
-	if (gameData->FR.contains("F") || !gameData->rated)
-		gameData->freegame = FREE;
+	if (gameData->FR.contains("F"))
+		gameData->free_rated = FREE;
 	else if (gameData->FR.contains("T"))
-		gameData->freegame = TEACHING;
-	else if(gameData->rated)
-		gameData->freegame = RATED;
+		gameData->free_rated = TEACHING;
+	else
+		gameData->free_rated = RATED;
+	
 	gameData->date = QDate::currentDate().toString("dd MM yyyy") ;
 }
 

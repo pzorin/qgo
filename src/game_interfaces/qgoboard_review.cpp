@@ -25,7 +25,7 @@
 
 qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {
-	game_Id = QString::number(gd->gameNumber);
+	game_Id = QString::number(gd->number);
 
 	boardwindow->getUi().board->clearData();
 

@@ -159,7 +159,7 @@ void GameDialog::slot_play_nigiri_button(void)
 
 void GameDialog::ratedCB_changed(bool checked)
 {
-	if(current_match_request->rated == checked)	//must have changed to get here
+	if((current_match_request->free_rated == RATED) == checked)	//must have changed to get here
 	{
 		dialog_changed--;
 		ratedchanged = false;
@@ -990,7 +990,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		mr->number = dispatch->getRoomNumber();
 		mr->opponent_is_challenger = false;
 		mr->first_offer = true;
-		mr->rated = false;
+		mr->free_rated = FREE;
 		
 		dialog_changed = 10000;	//so it can't be anything but "Offer"
 	}
@@ -1022,10 +1022,13 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 	ui.playerOpponentRkEdit->setText(mr->their_rank);
 	set_myName(mr->our_name);
 
-	if(mr->rated != current_match_request->rated)
+	if(mr->free_rated != current_match_request->free_rated)
 		ui.ratedCB->setPalette(p);
-	ui.ratedCB->setChecked(mr->rated);
-	ratedCB_changed(mr->rated);
+	if(mr->free_rated == RATED)
+		ui.ratedCB->setChecked(true);
+	else
+		ui.ratedCB->setChecked(false);
+	ratedCB_changed((mr->free_rated == RATED));
 	
 	/* These may have rated fixed issues as well */
 	switch(mr->color_request)

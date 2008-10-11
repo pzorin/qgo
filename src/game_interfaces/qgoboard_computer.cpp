@@ -34,7 +34,7 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 	connect (gtp, SIGNAL(signal_computerPlayed(bool, const QString&)), SLOT(slot_playComputer(bool, const QString&)));
 
 	if (gtp->openGtpSession(settings.value("COMPUTER_PATH").toString(),
-				gameData->boardSize,
+				gameData->board_size,
 				gameData->komi,
 				gameData->handicap,
 				GNUGO_LEVEL)==FAIL)
@@ -360,9 +360,9 @@ void qGoBoardComputerInterface::set_move(StoneColor sc, QString pt, QString/* mv
 		int j;
 
 		if (pt[2] >= '0' && pt[2] <= '9')
-			j = boardwindow->getGameData()->boardSize + 1 - pt.mid(1,2).toInt();
+			j = boardwindow->getGameData()->board_size + 1 - pt.mid(1,2).toInt();
 		else
-			j = boardwindow->getGameData()->boardSize + 1 - pt[1].digitValue();
+			j = boardwindow->getGameData()->board_size + 1 - pt[1].digitValue();
 
 
 		if (!doMove(sc, i, j))

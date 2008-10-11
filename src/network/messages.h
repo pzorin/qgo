@@ -162,7 +162,7 @@ struct MatchRequest
 	* to carry even though there's currently no way to change it.  This
 	* is because it needs to be the same on the accept/mods */
 	unsigned char flags;
-	bool rated;
+	assessType free_rated;
 	unsigned short number;
 	unsigned short opponent_id;
 	bool opponent_is_challenger;	//i.e., he initiated the exchange
@@ -170,7 +170,19 @@ struct MatchRequest
 	unsigned short last_game_code;
 	bool rematch;
 	bool first_offer;
-	MatchRequest() : opponent(""), color_request(WHITE), handicap(0), board_size(19), maintime(0), periodtime(0), nmatch(0), nmatch_timeMax(0), nmatch_BYMax(0), nmatch_handicapMax(0), number(0), opponent_id(0), last_game_code(0), rematch(false), first_offer(false) {};
+	MatchRequest() : opponent(""), 
+		color_request(WHITE), 
+		handicap(0), 
+		board_size(19), 
+		maintime(0), 
+		periodtime(0), 
+		nmatch(0), 
+		nmatch_timeMax(0), 
+		nmatch_BYMax(0), 
+		nmatch_handicapMax(0), 
+		free_rated(noREQ), 
+		number(0), opponent_id(0), 
+		last_game_code(0), rematch(false), first_offer(false) {};
 };
 
 // FIXME We added a recvToggle function, after having forgotten about this

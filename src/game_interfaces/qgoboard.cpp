@@ -42,7 +42,7 @@ void qGoBoard::setHandicap(int handicap)
 	//qDebug("set Handicap " + QString::number(handicap) + ", stored mode == " + QString::number(store));
 	boardwindow->setGamePhase(phaseEdit);
 	qDebug("setHandicap called\n");
-	int size = gameData->boardSize;
+	int size = gameData->board_size;
 	int edge_dist = (size > 12 ? 4 : 3);
 	int low = edge_dist;
 	int middle = (size + 1) / 2;

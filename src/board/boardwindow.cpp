@@ -43,7 +43,7 @@ BoardWindow::BoardWindow(GameMode gm, GameData *gd, bool iAmBlack , bool iAmWhit
 	
 	gamePhase = phaseInit;
 	qDebug("PHASE is init\n");
-	boardSize = gd->boardSize;
+	boardSize = gd->board_size;
 	qDebug("Boardsize: %d handicap %d", boardSize, gd->handicap);
 	//Creates the game tree
 	tree = new Tree(boardSize);
@@ -388,16 +388,15 @@ void BoardWindow::swapColors(bool noswap)
 	{
 		QString rank, name;
 		
-		name = gameData->playerBlack;
-		rank = gameData->rankBlack;
-		gameData->playerBlack = gameData->playerWhite;
-		gameData->rankBlack = gameData->rankWhite;
-		gameData->playerWhite = name;
-		gameData->rankWhite = rank;
+		name = gameData->black_name;
+		rank = gameData->black_rank;
+		gameData->black_name = gameData->white_name;
+		gameData->black_rank = gameData->white_rank;
+		gameData->white_name = name;
+		gameData->white_rank = rank;
 	}
 	gameData->nigiriToBeSettled = false;
-	qDebug("bw:swapColors: %s %s vs %s %s", gameData->playerBlack.toLatin1().constData(), gameData->rankBlack.toLatin1().constData(), gameData->playerWhite.toLatin1().constData(), gameData->rankWhite.toLatin1().constData());
-	if(gameData->playerBlack == dispatch->getUsername())
+	if(gameData->black_name == dispatch->getUsername())
 	{
 		myColorIsBlack = true;
 		myColorIsWhite = false;
@@ -501,7 +500,6 @@ void BoardWindow::slotEditButtonPressed( int m )
 		// set next move's color
 		if (qgoboard->getBlackTurn())
 		{
-			qDebug("blacks turn");
 			current->setPLinfo(stoneWhite);
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
@@ -512,7 +510,6 @@ void BoardWindow::slotEditButtonPressed( int m )
 		}
 		else
 		{
-			qDebug("whites turn");
 			current->setPLinfo(stoneBlack);
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
@@ -647,10 +644,10 @@ void BoardWindow::slotGameInfo(bool /*toggle*/)
 	QDialog *dlg = new QDialog;
 	Ui::GameinfoDialog ui;
 	ui.setupUi( dlg );
-	ui.whiteName->setText( gameData->playerWhite );
-	ui.blackName->setText( gameData->playerBlack );
-	ui.whiteRank->setText( gameData->rankWhite );
-	ui.blackRank->setText( gameData->rankBlack );
+	ui.whiteName->setText( gameData->white_name );
+	ui.blackName->setText( gameData->black_name );
+	ui.whiteRank->setText( gameData->white_rank );
+	ui.blackRank->setText( gameData->black_rank );
 	ui.komi->setText( QString::number(gameData->komi ));
 	ui.handicap->setText( QString::number(gameData->handicap ));
 	ui.result->setText( gameData->result );
@@ -789,7 +786,7 @@ void BoardWindow::setGamePhase(GamePhase gp)
 QString BoardWindow::getCandidateFileName()
 {
 	
-	QString base = QDate::currentDate().toString("yyyy-MM-dd") + "-" + gameData->playerWhite + "-" + gameData->playerBlack    ;
+	QString base = QDate::currentDate().toString("yyyy-MM-dd") + "-" + gameData->white_name + "-" + gameData->black_name    ;
 	QString result = base ;
 	QString dir= "" ;
 
