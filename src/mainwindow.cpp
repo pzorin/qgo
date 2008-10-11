@@ -238,7 +238,8 @@ void MainWindow::initStatusBar()
  */
 void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
-
+	GameLoaded = NULL;
+	SGFloaded = QString();
 	ui.displayBoard->clearData();
 
 	ui.File_WhitePlayer->setText("");
@@ -270,7 +271,7 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 
 	ui.button_loadGame->setEnabled(true);
 	
-	GameLoaded = MW_SGFparser-> initGame(SGFloaded, fileLoaded);
+	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
 	
 	if (GameLoaded)
 	{
@@ -345,6 +346,8 @@ void MainWindow::displayGame()
  */
 void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
+	GameLoaded2 = NULL;
+	SGFloaded2 = QString();
 	QVariant v = topLeft.data(QDirModel::FilePathRole);
 
 	if (model->isDir(topLeft))
