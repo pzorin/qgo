@@ -1559,7 +1559,6 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	else
 		*stream << "GN[" << gameData->gameName << "]"		// Game Name
 		<< endl;
-	qDebug("Parser things handicap is: %d\n", gameData->handicap);
 	*stream << "SZ[" << gameData->board_size << "]"				// Board size
 		<< "HA[" << gameData->handicap << "]"			// Handicap
 		<< "KM[" << gameData->komi << "]";				// Komi
@@ -1583,7 +1582,6 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	if (!gameData->black_rank.isEmpty())
 		*stream << "BR[" << gameData->black_rank << "]";    // Black rank
 	
-	qDebug("Parser things result is: %s\n", gameData->result.toLatin1().constData());
 	if (!gameData->result.isEmpty())
 		*stream << "RE[" << gameData->result << "]";       // Result
 	
@@ -1608,7 +1606,6 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 	*stream << "(";
 	int col = -1, cnt = 6;
 
-	QString d;	
 
 	do {
 		if (isRoot)
@@ -1631,7 +1628,6 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 			}
 
 			*stream << txt;
-			d = stream->readAll();
 			col++;
 		}
 		
