@@ -61,9 +61,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(seekMenu,SIGNAL(triggered(QAction*)), SLOT(slot_seek(QAction*)));		
 	connect(ui.toolSeek, SIGNAL( toggled(bool) ), SLOT( slot_seek(bool) ) );
 
-	// create qGo Interface for board handling
-	//qgoif = new qGoIF(this);
-
 	// filling the file view
 	QStringList filters = (QStringList() << "*.sgf" << "*.SGF");
 	model = new QDirModel(filters,  QDir::AllEntries | QDir::AllDirs , QDir::Name,0);
@@ -137,8 +134,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	//coneects the preference buttons
 	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
 	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
-
-	//currentCommand = new sendBuf("",0);
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
@@ -471,10 +466,10 @@ void MainWindow::slot_computerNewBoard()
 	gd->komi = ui.newComputer_Komi->text().toFloat();
 	gd->oneColorGo = ui.OneColorGoCheckBox->isChecked();
 	
-	bool imBlack = (ui.computerPlaysWhite->isChecked());//cb_ComputerBlackPlayer->currentIndex() != 0);
-	bool imWhite = (ui.computerPlaysBlack->isChecked());//cb_ComputerWhitePlayer->currentIndex() != 0);
-	gd->black_name = (imBlack ? "Human" : "Computer"); //ui.newComputer_BlackPlayer->text();
-	gd->white_name = (imWhite ? "Human" : "Computer"); //ui.newComputer_WhitePlayer->text();
+	bool imBlack = (ui.computerPlaysWhite->isChecked());
+	bool imWhite = (ui.computerPlaysBlack->isChecked());
+	gd->black_name = (imBlack ? "Human" : "Computer");
+	gd->white_name = (imWhite ? "Human" : "Computer");
 
 	if (imBlack == imWhite)
 	{
