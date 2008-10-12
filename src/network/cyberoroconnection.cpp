@@ -17,6 +17,7 @@
 #include "playergamelistings.h"
 #include <QMessageBox>
 
+
 unsigned char * temp_packet;
 
 #define ALLOW_ALL_INVITES		0
@@ -26,7 +27,7 @@ unsigned char * temp_packet;
 #define ALLOW_PAIR_INVITE		4
 #define IGNORE_ALL_INVITES		5
 
-//#define RE_DEBUG 1
+//#define RE_DEBUG 
 CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const class ConnectionInfo & info)
 {
 	dispatch = _dispatch;
@@ -126,14 +127,6 @@ void CyberOroConnection::OnConnected()
 void CyberOroConnection::sendText(QString text)
 {
 	return;
-	// FIXME We're getting some nonsense on the end of this sometimes for
-	// some reason
-	qDebug("sendText: %s", text.toLatin1().constData());
-	QByteArray raw = textCodec->fromUnicode(text);
-	if(write(raw.data(), raw.size()) < 0)
-		qWarning("*** failed sending to host: %s", raw.data());
-	else
-		write("\r\n", 2);
 }
 
 void CyberOroConnection::sendDisconnect(void)
@@ -149,29 +142,11 @@ void CyberOroConnection::sendText(const char * text)
 {
 	qDebug("Wanted to send %s", text);
 	return;
-	if(write(text, strlen(text)) < 0)
-		qWarning("*** failed sending to host: %s", text);
-	else
-		write("\r\n", 2);
 }
 
 /* What about a room_id?? */
 void CyberOroConnection::sendMsg(unsigned int, QString text)
 {
-	/*GameData * g = getGameData(game_id);
-	switch(g->gameType)
-	{
-		case modeReview:
-		case modeMatch:
-			sendText("say " + text);
-			break;
-		case modeObserve:
-			sendText("kibitz " + QString::number(game_id) + " " + text);
-			break;
-		default:
-			qDebug("no game type");
-			break;
-	}*/
 	sendRoomChat(text.toLatin1().constData());
 }
 
@@ -706,7 +681,12 @@ void CyberOroConnection::sendObserveOutside(const GameListing & game)
 
 	/* We need to turn this to a join if its a room, not a game
 	 * otherwise bad things happen FIXME */
-	
+	if(!game.game_code)
+	{
+		qDebug("No game code for %d", game.number);
+		// can we send number instead?  where was the game code?
+		return;
+	}
 	packet[0] = 0x40;
 	packet[1] = 0x9c;
 	packet[2] = 0x0a;
@@ -719,7 +699,7 @@ void CyberOroConnection::sendObserveOutside(const GameListing & game)
 	packet[9] = 0x00;	//careful could be something else? FIXME
 	//our id game id then ED0B, maybe two random bytes? time?
 #ifdef RE_DEBUG
-	printf("Sending observe outside to %s vs %s: %d", game.white_name().toLatin1().constData(), game.black_name().toLatin1().constData(), game.game_code);
+	printf("Sending observe outside to %s vs %s: %d ", game.white_name().toLatin1().constData(), game.black_name().toLatin1().constData(), game.game_code);
 	for(i = 0; i < (int)length; i++)
 		printf("%02x ", (unsigned char)packet[i]);
 	printf("\n");
@@ -3361,7 +3341,7 @@ QString CyberOroConnection::getCountryFromCode(unsigned char code)
 			return "FRANCE";
 			break;
 		case 0xd:
-			return "AUSTRAILIA";
+			return "AUSTRALIA";
 			break;
 		case 0xe:
 			return "RUSSIA";
@@ -3846,7 +3826,7 @@ void CyberOroConnection::handlePlayerConnect(unsigned char * msg, unsigned int s
 #endif //RE_DEBUG
 	p += 2;
 #ifdef RE_DEBUG
-	for(i = 0; i < 8; i++)
+	for(int i = 0; i < 8; i++)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -4463,7 +4443,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 	//the rest are pretty repetitive, non-specific FIXME
 #ifdef RE_DEBUG
 	printf("0xe1af: ");
-	for(i = 0; i < (int)size; i++)
+	for(int i = 0; i < (int)size; i++)
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -4511,6 +4491,7 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 	/* Okay, since we changed the listing to handle numbers, game codes
 	 * on board dispatches... what's changed here ??? FIXME */
 	aGameListing->owner_id = p[0] + (p[1] << 8);
+	aGameListing->observers = 0;	//okay?
 	white = roomdispatch->getPlayerListing(aGameListing->owner_id);
 	if(!white)
 	{
@@ -4525,6 +4506,7 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 		white->observing = aGameListing->number;
 		if(aGameListing->owner_id == our_player_id)
 			setRoomNumber(aGameListing->number);
+		aGameListing->observers++;
 	}
 	p += 2;
 	id = p[0] + (p[1] << 8);
@@ -4540,11 +4522,11 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 		black->observing = aGameListing->number;
 		if(id == our_player_id)
 			setRoomNumber(aGameListing->number);
+		aGameListing->observers++;
 	}
 	/* FIXME, no recv, no game yet, maybe there should be. */
 	aGameListing->white = white;
 	aGameListing->black = black;
-	//aGameListing->observers = 1;	//the person who created it
 #ifdef RE_DEBUG
 	printf("0a7d for game with no game code: %d %s %s\n", aGameListing->number, white->name.toLatin1().constData(), black->name.toLatin1().constData());
 #endif //RE_DEBUG
@@ -5924,7 +5906,7 @@ void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 	for(i = 0; i < 7; i++)	//8, 9 or 10?
 		printf("%02x", p[i]);
 	printf("\n");
-#endif RE_DEBUG
+#endif //RE_DEBUG
 	seconds = p[0] + (p[1] << 8);
 	//3rd byte is periods remaining, first byte is probably seconds
 	periods = p[2];
