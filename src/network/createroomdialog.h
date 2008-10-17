@@ -1,11 +1,11 @@
 #include <QDialog>
-#include "../ui_createroomdialog.h"
+//#include "../ui_createroomdialog.h"
 
 class QLabel;
 class QDialogButtonBox;
 class NetworkConnection;
 
-class CreateRoomDialog : public QDialog, public Ui::CreateRoomDialog
+class CreateRoomDialog : public QDialog/*, public Ui::CreateRoomDialog*/
 {
 	Q_OBJECT
 	public:
@@ -33,7 +33,7 @@ class CreateRoomDialog : public QDialog, public Ui::CreateRoomDialog
 		void slot_liveRB(void);
 	private:
 		NetworkConnection * connection;
-		Ui::CreateRoomDialog ui;
+		//Ui::CreateRoomDialog ui;
 };
 
 struct RoomCreate

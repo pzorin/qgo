@@ -1,9 +1,13 @@
 #include <QtGui>
 #include "createroomdialog.h"
 #include "networkconnection.h"
-
+/* CreateRoomDialog requires qformlayout.h which is a Qt 4.4 file
+ * not even in Qt 4.3, so I am temporarily removing it since its
+ * not made use of anyway. FIXME */
+ 
 CreateRoomDialog::CreateRoomDialog(NetworkConnection * conn) : connection(conn)
 {
+#ifdef THISISQT44ONLY
 	ui.setupUi(this);
 	ui.roomTypeTab->removeTab(5);			//specialty versions
 	ui.roomTypeTab->setTabEnabled(3, false);	//review
@@ -34,6 +38,7 @@ CreateRoomDialog::CreateRoomDialog(NetworkConnection * conn) : connection(conn)
 	setLayout(mainLayout);
 	
 	setWindowTitle(tr("Create Room"));*/
+	
 	connect(ui.createButton, SIGNAL(clicked()), this, SLOT(slot_create()));
 	connect(ui.cancelButton, SIGNAL(clicked()), this, SLOT(slot_cancel()));
 	
@@ -58,14 +63,17 @@ CreateRoomDialog::CreateRoomDialog(NetworkConnection * conn) : connection(conn)
 	
 	connect(ui.teachingRB, SIGNAL(clicked()), this, SLOT(slot_teachingRB()));
 	connect(ui.liveRB, SIGNAL(clicked()), this, SLOT(slot_liveRB()));
+#endif //THISISQT44ONLY
 }
 
 void CreateRoomDialog::slot_privateCB(bool checked)
 {
+#ifdef THISISQT44ONLY
 	ui.passwordLabel->setEnabled(checked);
 	ui.passwordEdit->setEnabled(checked);
 	if(!checked)
 		ui.passwordEdit->clear();
+#endif //THISISQT44ONLY
 }
 		
 void CreateRoomDialog::slot_roomTypeTab(void)
@@ -117,6 +125,7 @@ CreateRoomDialog::~CreateRoomDialog()
 void CreateRoomDialog::slot_create(void)
 {
 	done(0);		//FIXME
+#ifdef THISISQT44ONLY
 	RoomCreate * room = new RoomCreate();
 	/* FIXME This could be problematic if the index
 	 * can change when we remove tabs, but that's
@@ -142,6 +151,7 @@ void CreateRoomDialog::slot_create(void)
 	}
 	connection->sendCreateRoom(room);
 	done(1);
+#endif //THISISQT44ONLY
 }
 
 void CreateRoomDialog::slot_cancel(void)
