@@ -103,6 +103,7 @@ void PlayerListModel::insertListing(const PlayerListing * l)
 {
 	PlayerListItem * item = new PlayerListItem(l);	
 	ListModel::insertListing(*item);	
+	//sort(P_TOTALCOLUMNS);	//too slow?	FIXME
 }
 
 void PlayerListModel::updateListing(const PlayerListing * l)
@@ -854,6 +855,8 @@ int ListModel::columnCount(const QModelIndex & /* parent */) const
 QModelIndex ListModel::index(int row, int column, const QModelIndex & /*parent*/) const
 {
 	const ListItem * item;
+	if(items.count() == row)
+		return QModelIndex();
 	if(list_sort_order == Qt::DescendingOrder)
 		item = items[row];
 	else
