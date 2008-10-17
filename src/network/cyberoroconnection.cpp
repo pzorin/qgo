@@ -1,4 +1,5 @@
 #include <string.h>
+#include <math.h>
 #include "cyberoroconnection.h"
 #include "cyberoroprotocolcodes.h"
 #include "consoledispatch.h"
@@ -294,6 +295,11 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			{
 				c = new unsigned char[bytes];
 				p->read(c, bytes);
+#ifdef RE_DEBUG
+				for(int i = 0; i < bytes; i++)
+					printf("%02x", c[i]);
+				printf("\n");
+#endif //RE_DEBUG
 				/* First packet is list of servers and ips */
 				handleServerList(c);
 				delete[] c;
@@ -2636,11 +2642,14 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 	 * messages per packet, etc. */
 	/*if((message_type & 0x00ff) == 0x00b3)
 	{*/
-		/*printf("****: \n");
+#ifdef RE_DEBUG
+		printf("****: \n");
 		for(i = 0; i < size; i++)
 			printf("%02x", msg[i]);
-		printf("\n");*/
+		printf("\n");
+#endif //RE_DEBUG
 	/*}*/
+		
 	msg += 4;
 	size -=4;
 	switch(message_type)
