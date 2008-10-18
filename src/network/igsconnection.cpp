@@ -2009,7 +2009,12 @@ void IGS_info::handleMsg(QString line)
 			/* is kibitzing this here what we want?*/
 			/* FIXME... should be a shortened list, not the full
 			* result msg kibitz */
-			boarddispatch->recvKibitz("", line);
+			/* More, looks like there is possible
+			 * crash here if we already received a result
+			 * and there's no good way to turn this off.
+			 * FIXME All of the recvResult stuff needs
+			 * to be cleaned up really */
+			//boarddispatch->recvKibitz("", line);
 		}
 		roomdispatch->recvGameListing(aGame);
 		delete aGame;
