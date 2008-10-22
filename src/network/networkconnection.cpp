@@ -151,9 +151,6 @@ NetworkConnection::~NetworkConnection()
 	//closeConnection();			//specific impl already calls this
 	/* Not sure where to delete qsocket.  Possible OnDelayClosedFinish() thing. */
 	//delete qsocket;
-	delete boardDispatchRegistry;
-	delete gameDialogDispatchRegistry;
-	delete talkDispatchRegistry;
 }
 
 void NetworkConnection::setConsoleDispatch(class ConsoleDispatch * c)
