@@ -37,7 +37,8 @@ public:
 
 //	virtual void localMoveRequest(int x, int y)=0;
 	virtual bool getBlackTurn(bool time = false);
-	virtual void startGame() {}
+	virtual void startGame() {};
+	virtual void stopTime() {};
 	virtual void set_move(StoneColor , QString , QString ) {};
 	virtual void set_move(class MoveRecord *) {}; 
 	virtual void set_statedMoveCount(int n) 	{ stated_mv_count = n;}
@@ -54,6 +55,7 @@ public:
 	virtual void setTimerInfo(const QString&, const QString&, const QString&, const QString&) {}
 	virtual void timerEvent(QTimerEvent*);
 	class TimeRecord getOurTimeRecord(void);		//awkward
+	class TimeRecord getTheirTimeRecord(void);
 	//virtual void deleteNode();
 	virtual void enterScoreMode() ;
 	virtual void markDeadStone(int x, int y);
@@ -276,6 +278,9 @@ protected:
 	virtual void sendPassToInterface(StoneColor c);
 	virtual void set_move(MoveRecord * m);
 	virtual void adjournGame(void);
+	virtual void startGame(void) {};
+	virtual void stopTime(void);
+	virtual void onFirstMove(void) {};
 	
 	QString game_Id;
 	bool dontsend;
@@ -305,6 +310,7 @@ signals:
 private:
 //	bool doMove(StoneColor c, int x, int y);
 	void enterScoreMode(void);
+	virtual void onFirstMove(void);
 
 	
 
@@ -335,6 +341,8 @@ signals:
 private:
 	void localMoveRequest(StoneColor c, int x, int y);
 	void localMarkDeadRequest(int x, int y);
+	virtual void startGame(void);
+	virtual void onFirstMove(void);
 //	bool warningSound;
 //	int warningSecs;
 

@@ -30,6 +30,7 @@ class GameData
 			 stones_periods(0),
 			 result(""),
 			 fullresult(0),
+			 gameMode(modeUndefined),
 			 game_code(0),
 			 nigiriToBeSettled(false),
 			 oneColorGo(false),
@@ -40,7 +41,8 @@ class GameData
 			 gameName(""),
 			 fileName(""),
 			 overtime(""),
-			 free_rated(noREQ) {};
+			 free_rated(noREQ),
+			 white_first_flag(false) {};
 		GameData(GameData *d)
 		{
 			if (d)
@@ -74,7 +76,9 @@ class GameData
 				stones_periods = d->stones_periods;
 				periodtime = d->periodtime;
 				nigiriToBeSettled = d->nigiriToBeSettled;
+				white_first_flag = d->white_first_flag;
 				game_code = d->game_code;
+				gameMode = d->gameMode;
 			}
 		}
 
@@ -109,7 +113,7 @@ class GameData
 	//enum GameType { UNKNOWN, TEACHING, FREE, RANKED, DEMONSTRATION } gameType;
 		QString By;			//these two need to be changed somehow
 		QString FR;
-		GameMode gameType;
+		GameMode gameMode;
 		//struct BoardRecord * board;
 		
 		unsigned short game_code;
@@ -120,6 +124,10 @@ class GameData
 		int style;
 		QString date, place, copyright, gameName, fileName, overtime;
 		assessType free_rated;
+		//for tygem, I would love to remove but I think we need it
+		//for time messages and I don't want to pick it off
+		//the listing since that's possibly less reliable:
+		bool white_first_flag;
 };
 
 

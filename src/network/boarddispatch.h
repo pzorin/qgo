@@ -9,7 +9,8 @@ class BoardDispatch : public NetworkDispatch
 		void recvMove(class MoveRecord * m);
 		void sendMove(class MoveRecord * m);
 		void sendTimeLoss(void);
-		void recvRecord(class GameData * g);
+		void gameDataChanged(void);
+		void openBoard(void);
 		void recvTime(const class TimeRecord & wt, const class TimeRecord & bt);
 		void recvResult(class GameResult * r);
 		void recvObserver(class PlayerListing * p, bool present);
@@ -27,6 +28,8 @@ class BoardDispatch : public NetworkDispatch
 		void sendRematchRequest(void);
 		void sendRematchAccept(void);
 		void recvRematchRequest(void);
+		void sendTime(void);
+		void startGame(void);
 		bool isAttribBoard(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		bool isOpponentBoard(QString us, QString them);
 		void swapColors(bool noswap = false);
@@ -34,10 +37,13 @@ class BoardDispatch : public NetworkDispatch
 		void requestGameInfo(void);
 		class GameData * getGameData(void);
 		class TimeRecord getOurTimeRecord(void);
+		class TimeRecord getTheirTimeRecord(void);
 		QString getOpponentName(void);
 		bool supportsMultipleUndo(void) { if(connection) return connection->supportsMultipleUndo(); return false; };
 		bool supportsRematch(void);
 		bool startTimerOnOpen(void) { if(connection) return connection->startTimerOnOpen(); else return false; };
+		bool clientCountsTime(void) { if(connection) return connection->clientCountsTime(); else return false; };
+		bool clientSendsTime(void) { if(connection) return connection->clientSendsTime(); else return false; };
 	private:
 		void mergeListingIntoRecord(class GameData * r, class GameListing * l);
 		class MainWindow * mainwindow;
@@ -46,5 +52,4 @@ class BoardDispatch : public NetworkDispatch
 		class GameData * gameData;
 		class GameListing * gameListing;
 		class ResultDialog * resultdialog;
-		GameMode gameMode;
 };

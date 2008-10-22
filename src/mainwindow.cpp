@@ -267,7 +267,7 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 	ui.button_loadGame->setEnabled(true);
 	
 	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
-	
+	GameLoaded->gameMode = modeNormal;
 	if (GameLoaded)
 	{
 		QString komi, hcp, sz;
@@ -363,6 +363,7 @@ void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModel
 	ui.button_loadComputerGame->setEnabled(true);
 	
 	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
+	GameLoaded2->gameMode = modeComputer;
 	//draw board FIXME?
 	if (GameLoaded2)
 	{
@@ -399,8 +400,8 @@ void MainWindow::loadSgfFile(QString fn)
 	ui.button_loadComputerGame->setEnabled(true);
 	
 	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
-
-	new BoardWindow(modeNormal, GameLoaded2, TRUE, TRUE);
+	GameLoaded2->gameMode = modeNormal;
+	new BoardWindow(new GameData(GameLoaded2), TRUE, TRUE);
 }
 
 void MainWindow::slot_expanded(const QModelIndex & i)
@@ -418,14 +419,14 @@ void MainWindow::slot_fileNewBoard()
 {
 	
 	GameData *gd = new GameData();
+	gd->gameMode = modeNormal;
 
 	gd->board_size = ui.newFile_Size->value();
 	gd->handicap = ui.newFile_Handicap->value();
 	gd->black_name = ui.newFile_BlackPlayer->text();
 	gd->white_name = ui.newFile_WhitePlayer->text();
 	gd->komi = ui.newFile_Komi->text().toFloat();
-	new BoardWindow(modeNormal, gd, TRUE, TRUE);
-	delete gd;	//it is... copied, right?
+	new BoardWindow(gd, TRUE, TRUE);
 }
 
 
@@ -443,7 +444,7 @@ void MainWindow::slot_newComputer_HandicapChange(int a)
 
 void MainWindow::slot_fileOpenBoard()
 {
-	new BoardWindow(modeNormal, GameLoaded, TRUE, TRUE);
+	new BoardWindow(new GameData(GameLoaded), TRUE, TRUE);
 }
 
 void MainWindow::slot_fileOpenBoard(const QModelIndex & i)
@@ -460,7 +461,8 @@ void MainWindow::slot_computerNewBoard()
 {
 	
 	GameData *gd = new GameData();
-
+	
+	gd->gameMode = modeComputer;
 	gd->board_size = ui.newComputer_Size->text().toInt();
 	gd->handicap = ui.newComputer_Handicap->text().toInt();
 	gd->komi = ui.newComputer_Komi->text().toFloat();
@@ -478,7 +480,7 @@ void MainWindow::slot_computerNewBoard()
 		return;
 	}
 
-	if(!new BoardWindow(modeComputer, gd , imBlack, imWhite ))
+	if(!new BoardWindow(gd , imBlack, imWhite ))
 	{
 		delete gd; gd = NULL;
 	}
@@ -489,7 +491,7 @@ void MainWindow::slot_computerNewBoard()
  */
 void MainWindow::slot_computerOpenBoard()
 {
-	new BoardWindow(modeComputer, GameLoaded2 , TRUE, TRUE );
+	new BoardWindow(new GameData(GameLoaded2) , TRUE, TRUE );
 }
 
 void MainWindow::slot_computerOpenBoard(const QModelIndex & i)

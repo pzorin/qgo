@@ -103,7 +103,13 @@ void WingConnection::sendMove(unsigned int game_id, MoveRecord * move)
 			
 			if(move->x > 8)		// no I in IGS
 				c1++;
-			GameData * g = getGameData(game_id);
+			BoardDispatch *bd = getIfBoardDispatch(game_id);
+			if(!bd)
+			{
+				qDebug("Can't get board dispatch for sending move");
+				return;
+			}
+			GameData * g = bd->getGameData();
 			//if(g->board_size > 9)
 			int c2 = g->board_size + 1 - move->y;
 			//else
@@ -508,7 +514,7 @@ void WING_info::handleMsg(QString line)
 		else
 		{
 			boarddispatch = connection->getBoardDispatch(connection->protocol_save_int);
-			GameData * r = connection->getGameData(connection->protocol_save_int);
+			GameData * r = boarddispatch->getGameData();
 			if(!r)
 			{
 				qDebug("Game has no game Record, line: %d", __LINE__);

@@ -28,7 +28,16 @@
 
 qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {
+	if(bw->getBoardDispatch()->startTimerOnOpen() && bw->getBoardDispatch()->clientCountsTime())
+		boardTimerId = startTimer(1000);
 	boardwindow->getBoardDispatch()->requestGameInfo();
+}
+
+void qGoBoardObserveInterface::onFirstMove(void)
+{
+	//we can now start the timer
+	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && boardwindow->getBoardDispatch()->clientCountsTime())
+		boardTimerId = startTimer(1000);
 }
 
 void qGoBoardObserveInterface::enterScoreMode()

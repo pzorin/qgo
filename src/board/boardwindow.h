@@ -39,7 +39,7 @@ class BoardWindow : public QMainWindow, public Ui::BoardWindow
 
 public:
 	//BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = TRUE, bool iAmWhite = TRUE, class BoardDispatch * _dispatch = 0);
-	BoardWindow(GameMode gamemode = modeNormal, GameData *gamedata = 0 , bool iAmBlack = TRUE, bool iAmWhite = TRUE, class BoardDispatch * _dispatch = 0);
+	BoardWindow(GameData *gamedata = 0 , bool iAmBlack = TRUE, bool iAmWhite = TRUE, class BoardDispatch * _dispatch = 0);
 	~BoardWindow();
 	
 	void init();
@@ -53,7 +53,7 @@ public:
 	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
 	BoardHandler *getBoardHandler() 	{return boardHandler;}
 	Ui::BoardWindow getUi() 		{return ui;}
-	GameMode getGameMode() 			{return gameMode; } 
+	GameMode getGameMode() 			{return gameData->gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
 	bool getMyColorIsWhite()		{return myColorIsWhite;}
@@ -63,6 +63,7 @@ public:
 	void setBoardSize(int sz)		{boardSize=sz;}
 	void setGamePhase(GamePhase gp);
 	void setTree(Tree *t)			{tree=t;}
+	void gameDataChanged(void);
 	void setGameData(GameData *gd);	
 	QString get_wplayer()			{return gameData->white_name;}
 	QString get_bplayer()			{return gameData->black_name;}
@@ -116,7 +117,6 @@ private:
 	class BoardDispatch * dispatch;		//may not be the best place!!!
 
 	GameData *gameData;
-	GameMode gameMode;
 	GamePhase gamePhase;
 	bool myColorIsBlack , myColorIsWhite ;
 	bool localStoneSound ;

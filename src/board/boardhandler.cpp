@@ -711,6 +711,7 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 	case modeNormal :
 	case modeTeach :
 	case modeReview :
+	case modeUndefined:
 		if (boardwindow->getGamePhase() == phaseScore ||boardwindow->getGamePhase() == phaseEdit )
 			cur = cursorIdle;
 		else

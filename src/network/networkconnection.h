@@ -48,6 +48,7 @@ class NetworkConnection : public QObject
 		virtual void sendGamesRequest(void) = 0;
 		virtual void sendMatchInvite(const PlayerListing &) = 0;
 		virtual void adjournGame(const GameListing &) = 0;
+		virtual void sendTime(BoardDispatch *) {};
 		virtual void sendMove(unsigned int game_id, class MoveRecord * m) = 0;
 		virtual void sendTimeLoss(unsigned int) {};	//overwrite or not
 		virtual void sendMatchRequest(class MatchRequest * mr) = 0;
@@ -77,7 +78,6 @@ class NetworkConnection : public QObject
 		// FIXME Not certain but maybe this chunk below should be protected:??
 		BoardDispatch * getBoardDispatch(unsigned int game_id);
 		BoardDispatch * getIfBoardDispatch(unsigned int game_id);
-		class GameData * getGameData(unsigned int game_id);
 		virtual void closeBoardDispatch(unsigned int game_id);
 		GameDialogDispatch * getGameDialogDispatch(const PlayerListing & opponent);
 		GameDialogDispatch * getIfGameDialogDispatch(const PlayerListing & opponent);
@@ -99,6 +99,8 @@ class NetworkConnection : public QObject
 		virtual bool supportsServerChange(void) { return false; };
 		virtual bool supportsRematch(void) { return false; };
 		virtual bool startTimerOnOpen(void) { return false; };	//name?? no "supports"?
+		virtual bool clientCountsTime(void) { return true; };
+		virtual bool clientSendsTime(void) { return false; };
 		virtual bool supportsSeek(void) { return false; };
 		virtual unsigned long getPlayerListColumns(void) { return 0; };
 		#define PL_NOWINSLOSSES		0x01
@@ -159,7 +161,6 @@ class NetworkConnection : public QObject
 		
 	private:
 		QTcpSocket * qsocket;	
-
 		
 	protected slots:
 		virtual void OnConnected();

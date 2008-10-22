@@ -1,11 +1,9 @@
 #include <QtGui>
 #include "serverlistdialog.h"
 
-/* FIXME add something to gray out an entry that we're already
- * connected to !! */
-ServerListDialog::ServerListDialog(std::vector <ServerItem *> serverlist)
+ServerListDialog::ServerListDialog(std::vector <ServerItem *> serverlist, int current)
 {
-	
+	current_server = current;
 	serverListView = constructTreeWidget(serverlist);
 	
 	connectButton = new QPushButton(tr("Connect"));
@@ -44,6 +42,7 @@ QTreeWidget * ServerListDialog::constructTreeWidget(std::vector<ServerItem *> se
 	QTreeWidget * treeWidget = new QTreeWidget(this);
 	QTreeWidgetItem * i;
 	QStringList stringList;
+	int index = 0;
 	
 	treeWidget->setRootIsDecorated(false);
 	treeWidget->setColumnCount(2);
@@ -56,9 +55,12 @@ QTreeWidget * ServerListDialog::constructTreeWidget(std::vector<ServerItem *> se
 	{
 		stringList << (*it)->name << (*it)->ipaddress;
 		i = new QTreeWidgetItem(treeWidget, stringList);
-		if(it == serverlist.begin())	//ugly but short list
+		if(index == current_server)
+			i->setDisabled(true);
+		if(it == serverlist.begin())	//ugly but its a short list
 			treeWidget->setCurrentItem(i);
 		stringList.clear();
+		index++;
 	}
 	return treeWidget;
 }
@@ -66,7 +68,7 @@ QTreeWidget * ServerListDialog::constructTreeWidget(std::vector<ServerItem *> se
 void ServerListDialog::slot_listDoubleClicked(QTreeWidgetItem * i, int)
 {
 	int index = serverListView->indexOfTopLevelItem(i);
-	if(index < 0)
+	if(index < 0 || index == current_server)
 		return;
 	done(index);
 }

@@ -46,6 +46,7 @@ CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const 
 	//FIXME check for validity of codecs ??? 
 	ORO_setup_setphrases();
 	
+	current_server_index = -1;
 	challenge_response = 0;
 	current_server_addr = 0;
 	codetable = 0;
@@ -387,7 +388,8 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 		// pad out to 15 (max ip length
 		p += (16 - ip_string_length);
 		s = p + 18;
-		strncpy(si->name, (const char *)p, 18);
+		//strncpy(si->name, (const char *)p, 18);
+		si->name = QString((char *)p);
 		while(p < s && *p != 0x00)
 		{
 			printf("%c", *p++);
@@ -453,7 +455,7 @@ int CyberOroConnection::reconnectToServer(void)
 	 * currently on */
 	/* FIXME, why does the serverReconnectDialog disappear the ui
 	 * elements in the server window ?!?!? */
-	ServerListDialog * serverReconnectDialog = new ServerListDialog(serverList);
+	ServerListDialog * serverReconnectDialog = new ServerListDialog(serverList, current_server_index);
 	int server_i = serverReconnectDialog->exec();
 	if(server_i < 0)
 		return server_i;
@@ -465,11 +467,13 @@ int CyberOroConnection::reconnectToServer(void)
 		return -1;
 	}
 	strncpy(current_server_addr, serverList[server_i]->ipaddress, 16);
+	current_server_index = server_i;
+	
 	/* FIXME
 	 * Might be neat if we listed the server that one was currently on
 	 * somewhere, like on the main window. */
 	
-	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name, current_server_addr);
+	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), current_server_addr);
 	ConnectionInfo * newCI = new ConnectionInfo(current_server_addr,
 						    7002,
 						   connectionInfo->user,
@@ -4779,7 +4783,9 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 #ifdef RE_DEBUG
 	qDebug("Apparently joining or not %d (%d?)", game_number, connecting_to_game_number);
 #endif //RE_DEBUG
-	aGameData = new GameData();
+	boarddispatch = getBoardDispatch(game_number);
+	aGameData = boarddispatch->getGameData();
+	
 	aGameData->number = game_number;
 	/* Also, we should check for connecting_to_game_number */
 	p += 2;
@@ -4925,7 +4931,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		return;	
 	}
 	
-	boarddispatch = getBoardDispatch(game_number);
+	
 	//recv game record? but what's to receive?
 	
 	aGameData->black_name = aGameListing->black_name();
@@ -4933,10 +4939,9 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	aGameData->black_rank = aGameListing->black_rank();
 	aGameData->white_rank = aGameListing->white_rank();
 	
-	boarddispatch->recvRecord(aGameData);
+	boarddispatch->openBoard();
 	boarddispatch->recvTime(TimeRecord(white_seconds, white_periods), TimeRecord(black_seconds, black_periods));
 	
-	delete aGameData;
 	//delete aGameListing;
 }
 
@@ -6477,7 +6482,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 		boarddispatch->recvObserver(our_player, true);
 	}
 	
-	aGameData = new GameData();
+	aGameData = boarddispatch->getGameData();
 	
 	p += 2;
 	//b50d 7203 0002 01f0 0201 0300 0000 3c00 3c003c00
@@ -6627,7 +6632,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	aGameData->number = game_number;
 	aGameData->game_code = game_id;
 	aGameData->komi = komi;
-	boarddispatch->recvRecord(aGameData);
+	boarddispatch->openBoard();
 	boarddispatch->recvTime(TimeRecord(white_seconds, white_periods), TimeRecord(black_seconds, black_periods));
 	
 	if(playerA->id == our_player_id || playerB->id == our_player_id)
@@ -6646,7 +6651,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 		}
 	}
 	/* seems like color can get reversed */
-	delete aGameData;
+
 	connecting_to_game_number = 0;
 	playing_game_number = 0;
 }

@@ -467,7 +467,9 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		fileOpen->setEnabled(false);
 //		statusMode->setText(" " + QObject::tr("T", "Board status line: teach mode") + " ");
 //		statusMark->setText(getStatusMarkText(board->getMarkType()));
-		return ;		
+		return ;
+	case modeUndefined:
+		return;	
 //	default:
 //		return modeNormal;
 	}

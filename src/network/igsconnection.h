@@ -212,16 +212,14 @@ class IGS_move : public MsgHandler
 	public:
 		IGS_move(NetworkConnection * c) : MsgHandler(c)
 		{
-			aGameData = new GameData();
 			btime = new TimeRecord();
 			wtime = new TimeRecord();
 		};
-		~IGS_move() { delete aGameData; delete btime; delete wtime; };
+		~IGS_move() { delete btime; delete wtime; };
 		virtual void handleMsg(QString);
 	private:
 		/* FIXME, maybe these should just be on stack or whatever,
 		 * why allocate and deallocte explicitly? */
-		GameData * aGameData;
 		TimeRecord * btime, * wtime;
 };
 class IGS_say : public MsgHandler

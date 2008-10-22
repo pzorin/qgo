@@ -78,7 +78,7 @@
 * Enum definitions
 */
 enum StoneColor { stoneNone, stoneWhite, stoneBlack, stoneErase };
-enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, modeReview };
+enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, modeReview, modeUndefined };
 enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseNavTo, phaseScore, phaseEnded};
 enum MarkType { markNone, markSquare, markCircle, markTriangle, markCross, markText, markNumber, markTerrBlack, markTerrWhite, markKoMarker };
 enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
@@ -102,8 +102,8 @@ enum InfoType {PLAYER, GAME, MESSAGE, YOUHAVEMSG, SERVERNAME,
 		PLAYER27, PLAYER27_START, PLAYER27_END, GAME7, GAME7_START,
 		PLAYER42, PLAYER42_START, PLAYER42_END, WS};
 /* ConnectionType in line with ui comboBox_server entry. FIXME to make more securely connected */
-enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS, TypeORO, TypeUNKNOWN,
-			TypeNNGS, TypeCTN, TypeCWS, TypeDEFAULT };
+enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS, TypeORO, TypeTYGEM,
+			TypeUNKNOWN, TypeNNGS, TypeCTN, TypeCWS, TypeDEFAULT };
 /* TypeCyberORO?? just IGS, and CyberORO, instead of with Type?? FIXME 
  * and reconcile with mainwindow_settings.h */
 

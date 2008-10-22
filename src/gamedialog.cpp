@@ -582,8 +582,12 @@ void GameDialog::slot_offer(bool active)
 	save_to_preferences();
 	if(!dialog_changed)
 	{
-		dispatch->acceptOffer(current_match_request);
+		if(current_match_request->first_offer)
+			dispatch->sendRequest(current_match_request);
+		else
+			dispatch->acceptOffer(current_match_request);
 		qDebug("Match request unchanged\n");
+		return;
 	}
 	// if both names are identical -> teaching game
 	if (ui.playerOpponentEdit->text() == myName)
@@ -995,7 +999,14 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		dialog_changed = 10000;	//so it can't be anything but "Offer"
 	}
 	else
-		offered_and_unrefused = true;
+	{
+		if(mr->first_offer)
+		{
+			this_is_offer = true;
+		}
+		else
+			offered_and_unrefused = true;
+	}
 	/* I think above is right... so if its a default that we haven't offered yet,
 	 * then offered_and_unrefused is left off, but if its from them, then we
 	 * can send decline.  We also send a decline after we offer which is
@@ -1076,8 +1087,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		
 		if(mr->maintime != current_match_request->maintime)
 			ui.BYTimeSpin->setPalette(p);
-		
-		ui.BYTimeSpin->setTime(QTime(0, mr->maintime/60, mr->maintime%60));
+		ui.BYTimeSpin->setTime(QTime(mr->maintime/3600, (mr->maintime % 3600)/60, mr->maintime%60));
 		
 		if(mr->periodtime != current_match_request->periodtime)
 			ui.BYPeriodTimeSpin->setPalette(p);

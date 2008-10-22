@@ -20,16 +20,18 @@
 
 class BoardHandler;
 
-BoardWindow::BoardWindow(GameMode gm, GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
+BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
 	: QMainWindow((QWidget*)mainwindow, 0)
 {
 	if(!gd)
-		qDebug("No game data to createGame");
+	{
+		gameData = new GameData();
+		gameData->gameMode = modeNormal;
+	}
 	
-	gameData = new GameData(gd);
+	gameData = gd;
 	dispatch = _dispatch;
 	
-	gameMode = gm;
 	if(gameData->nigiriToBeSettled)
 	{
 		myColorIsBlack = false;
@@ -56,7 +58,7 @@ BoardWindow::BoardWindow(GameMode gm, GameData *gd, bool iAmBlack , bool iAmWhit
 		loadSGF(gameData->fileName);
 
 	//creates the board interface (or proxy) that will handle the moves an command requests
-	switch (gameMode)
+	switch (gameData->gameMode)
 	{
 		case modeNormal :
 			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
@@ -120,8 +122,9 @@ BoardWindow::BoardWindow(GameMode gm, GameData *gd, bool iAmBlack , bool iAmWhit
 	setFocus();
 
 
-	// This is only needed with a computer game, when the computer has to make the first move
-	qgoboard->startGame();
+	// Computer may have to make the first move
+	if(gameData->gameMode == modeComputer)
+		qgoboard->startGame();
 	//ui.board->resize(407, 606);
 		//ui.board->setBaseSize(407, 606);
 	//ui.board->setGeometry(0, 0, 407, 606);
@@ -154,6 +157,8 @@ BoardWindow::~BoardWindow()
 	
 	if(observerListModel)
 		delete observerListModel;
+	
+	delete gameData;
 	/* FIXME I'm not totally certain we want to delete the dispatch
 	 * here.  If the boardwindow closes, then that sends its own
 	 * closed signal through the network if it exits.  If the
@@ -223,7 +228,7 @@ void BoardWindow::setupUI(void)
 	ui.board->init(boardSize);
 
 	interfaceHandler = new InterfaceHandler( this);
-	interfaceHandler->toggleMode(gameMode);
+	interfaceHandler->toggleMode(gameData->gameMode);
 
 	if (gameData)
 		interfaceHandler->updateCaption(gameData);
@@ -275,7 +280,7 @@ void BoardWindow::setupUI(void)
 	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
 	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
 
-	if(gameMode == modeObserve || gameMode == modeMatch || gameMode == modeReview)
+	if(gameData->gameMode == modeObserve || gameData->gameMode == modeMatch || gameData->gameMode == modeReview)
 	{
 		observerListModel = new ObserverListModel();
 		ui.observerView->setModel(observerListModel);
@@ -311,9 +316,9 @@ void BoardWindow::setupBoardUI(void)
 	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
 	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
 	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
-	if (gameMode == modeMatch || gameMode == modeComputer)
+	if (gameData->gameMode == modeMatch || gameData->gameMode == modeComputer)
 	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
-	if(gameMode == modeMatch)
+	if(gameData->gameMode == modeMatch)
 	connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
 	/* eb added this but I've had it in the setupUI function since
 	 * its more part of the UI than the board.  But maybe its better
@@ -334,7 +339,7 @@ void BoardWindow::setupBoardUI(void)
 
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
-	if (gameMode != modeNormal && gameMode != modeComputer )
+	if (gameData->gameMode != modeNormal && gameData->gameMode != modeComputer )
 	connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 //connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
 
@@ -375,9 +380,14 @@ int BoardWindow::checkModified(bool /*interactive*/)
 	return 1;
 }
 
+void BoardWindow::gameDataChanged(void)
+{
+	interfaceHandler->updateCaption(gameData);
+}
 
 void BoardWindow::setGameData(GameData *gd)
 {
+	qDebug("BoardWindow::setGameData deprecated!!!!");
 	gameData = new GameData(gd); 
 	interfaceHandler->updateCaption(gd);
 }
@@ -615,14 +625,13 @@ void BoardWindow::slotDuplicate()
 //		qDebug ("QGoboard:setMove - move %d %d done",i,j);
 		return ;
 	}
-	
-	filename = gameData->fileName;	//save
-	gameData->fileName = "";
-	BoardWindow *b = new BoardWindow(modeNormal, gameData, TRUE, TRUE);
+	GameData * gd = new GameData(gameData);
+	gd->gameMode = modeNormal;
+	gd->fileName = "";
+	BoardWindow *b = new BoardWindow(gd, TRUE, TRUE);
 
 	b->loadSGF(0,sgf);
 	b->getBoardHandler()->slotNthMove(tree->getCurrent()->getMoveNumber());
-	gameData->fileName = filename; //restore
 }
 
 
@@ -872,9 +881,9 @@ void BoardWindow::keyPressEvent(QKeyEvent *e)
 	
 //	bool localGame = true;
 	// don't view last moves while observing or playing
-	if (//gameMode == modeObserve ||
-		gameMode == modeMatch ||
-		gameMode == modeTeach)
+	if (//gameData->gameMode == modeObserve ||
+		   gameData->gameMode == modeMatch ||
+		   gameData->gameMode == modeTeach)
 	{
 		qDebug("Not local game.\n");
 //		localGame = false;

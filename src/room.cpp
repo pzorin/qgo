@@ -142,7 +142,9 @@ Room::~Room()
 
 void Room::onError(void)
 {
-	mainwindow->onConnectionError();
+	/* We're going to call this straight from the network dispatch
+	 * until we work out any room UI issues */
+	//mainwindow->onConnectionError();
 }
 
 void Room::onConnectionAssignment(QString username)

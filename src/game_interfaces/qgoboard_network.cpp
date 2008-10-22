@@ -24,8 +24,7 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	boardTimerId = 0;
 	
 	// what about review games?  games without timers ??
-	if(bw->getBoardDispatch()->startTimerOnOpen())
-		boardTimerId = startTimer(1000);
+	
 }
 
 
@@ -287,9 +286,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 					QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 %2 seems to be invalid").arg(QString::number(m->x), QString::number(m->y)));
 				else if(m->color == stoneWhite && !boardTimerId)  //awkward ?  FIXME for always move 1?
 				{
-					//we can now start the timer
-					if(!boardwindow->getBoardDispatch()->startTimerOnOpen())
-						boardTimerId = startTimer(1000);
+					onFirstMove();
 				}
 			}
 			else if(move_number < move_counter)
@@ -402,7 +399,7 @@ void qGoBoardNetworkInterface::slotResignPressed()
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendMove(new MoveRecord(MoveRecord::RESIGN));
+		boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
 		boardwindow->getUi().resignButton->setEnabled(false);		//FIXME okay? don't want to send resign twice
 	}
 }
@@ -424,4 +421,12 @@ void qGoBoardNetworkInterface::adjournGame(void)
 	else
 		QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("Game with ") + opp_name + tr(" has been adjourned."));
 	boardwindow->getUi().adjournButton->setEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
+}
+
+/* Might look nicer if we just set the game phase to ended or
+ * something, I'll though we might just have lost connection so... */
+void qGoBoardNetworkInterface::stopTime(void)
+{
+	if(boardTimerId)
+		killTimer(boardTimerId);
 }

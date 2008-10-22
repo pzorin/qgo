@@ -714,7 +714,12 @@ void qGoBoard::timerEvent(QTimerEvent*)
 /* No pointer?  Just an object?? FIXME */
 TimeRecord qGoBoard::getOurTimeRecord(void)
 {
-	return boardwindow->getClockDisplay()->getTimeRecord(getBlackTurn(true));
+	return boardwindow->getClockDisplay()->getTimeRecord(boardwindow->getMyColorIsBlack());
+}
+
+TimeRecord qGoBoard::getTheirTimeRecord(void)
+{
+	return boardwindow->getClockDisplay()->getTimeRecord(!boardwindow->getMyColorIsBlack());
 }
 
 

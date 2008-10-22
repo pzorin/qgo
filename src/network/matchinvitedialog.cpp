@@ -40,7 +40,7 @@ void MatchInviteDialog::timerEvent(QTimerEvent*)
 {
 	seconds--;
 	if(seconds == -1)
-		close();	//does this return 0?
+		done(-1);	//does this return 0?
 	timelabel->setText(tr("%1 seconds").arg(seconds));
 }
 

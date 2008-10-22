@@ -10,15 +10,16 @@
 NetworkConnection::NetworkConnection() :
 dispatch(0), default_room_dispatch(0), console_dispatch(0), qsocket(0)
 {
-	boardDispatchRegistry = new BoardDispatchRegistry(this);
-	gameDialogDispatchRegistry = new GameDialogDispatchRegistry(this);
-	talkDispatchRegistry = new TalkDispatchRegistry(this);
 	protocol_save_int = -1;
 	firstonReadyCall = 1;
 }
 
 bool NetworkConnection::openConnection(const class ConnectionInfo & info)
 {
+	boardDispatchRegistry = new BoardDispatchRegistry(this);
+	gameDialogDispatchRegistry = new GameDialogDispatchRegistry(this);
+	talkDispatchRegistry = new TalkDispatchRegistry(this);
+	
 	qsocket = new QTcpSocket();	//try with no parent passed for now
 	if(!qsocket)
 		return 0;
@@ -96,15 +97,19 @@ void NetworkConnection::writeFromBuffer(void)
 
 void NetworkConnection::closeConnection(bool send_disconnect)
 {
-	/* FIXME We also need to close any open dispatches,
-	 * boards etc., for instance if there was an error.
-	 * Clearing lists and such would be good to.
-	 * there's a MainWindow::connexionClosed that does
-	 * good stuff we should move into somewhere
-	 * nearby.*/
 	if(!qsocket)		//when can this happen?  this function shouldn't be
 				//called if we get here!!!
 		return;
+	
+	/* FIXME We also need to close any open dispatches,
+	* boards etc., for instance if there was an error.
+	* Clearing lists and such would be good to.
+	* there's a MainWindow::connexionClosed that does
+	* good stuff we should move into somewhere
+	* nearby., also what about onError?*/
+	delete boardDispatchRegistry;
+	delete gameDialogDispatchRegistry;
+	delete talkDispatchRegistry;
 	
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
@@ -342,6 +347,8 @@ MatchRequest * NetworkConnection::getAndCloseGameDialogDispatch(const PlayerList
 		new_mr = new MatchRequest(*mr);
 		closeGameDialogDispatch(opponent);
 	}
+	else
+		qDebug("Couldn't find gamedialog for opponent: %s", opponent.name.toLatin1().constData());
 	return new_mr;
 }
 
@@ -354,21 +361,6 @@ void NetworkConnection::closeTalkDispatch(const PlayerListing & opponent)
 {
 	qDebug("deleting %s\n", opponent.name.toLatin1().constData());
 	talkDispatchRegistry->deleteEntry(&opponent);
-}
-
-/* FIXME probably should be moved to networkconnection.cpp
- * also may be several functions that don't check for the
- * null return!!! Although sendMsg and sendMove are
- * probably okay since they're executed from a board. 
- * Also, I feel like having such a function is a bit
- * redundant with having a get Listing function */
-GameData * NetworkConnection::getGameData(unsigned int game_id)
-{
-	BoardDispatch * bd = getIfBoardDispatch(game_id);
-	if(bd)
-		return bd->getGameData();
-	else 
-		return 0;
 }
 
 BoardDispatch * BoardDispatchRegistry::getNewEntry(unsigned int game_id)

@@ -28,10 +28,29 @@ qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameDa
 {	
 //	warningSound = settings.value("BYO_SOUND_WARNING").toBool();
 //	warningSecs = settings.value("BYO_SEC_WARNING").toInt();
-
+	
+	if(bw->getBoardDispatch()->startTimerOnOpen() && 
+		  (bw->getBoardDispatch()->clientCountsTime() || bw->getBoardDispatch()->clientSendsTime()))
+		boardTimerId = startTimer(1000);
+	
 	boardwindow->getBoardHandler()->slotNavLast();
 }
 
+/* This timer stuff is awkward looking. FIXME */
+void qGoBoardMatchInterface::startGame(void)
+{
+	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 
+		   (boardwindow->getBoardDispatch()->clientCountsTime() || boardwindow->getBoardDispatch()->clientSendsTime()))
+		boardTimerId = startTimer(1000);
+}
+
+void qGoBoardMatchInterface::onFirstMove(void)
+{
+	//we can now start the timer
+	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 
+		   (boardwindow->getBoardDispatch()->clientCountsTime() || boardwindow->getBoardDispatch()->clientSendsTime()))
+		boardTimerId = startTimer(1000);				
+}
 
 /*
  * We subclass this function, because the server will send the move back
@@ -56,14 +75,27 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 {
 	if (boardwindow->getGamePhase() != phaseOngoing)
 		return;
+	BoardDispatch * boarddispatch = boardwindow->getBoardDispatch();
+	if(!boarddispatch)
+	{
+		qDebug("Match timer event but no board dispatch");
+		return;
+	}
+	if(boarddispatch->clientCountsTime())
+		boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
 	
-	boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
-
+	
 	if ((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
 	   ((!getBlackTurn()) && boardwindow->getMyColorIsWhite()))
 	{
+		if(!boarddispatch->clientCountsTime() && boarddispatch->clientSendsTime())
+			boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
+		
 		if(!boardwindow->getClockDisplay()->warning(getBlackTurn()))
-			boardwindow->getBoardDispatch()->sendTimeLoss();
+			boarddispatch->sendTimeLoss();
+		
+		if(boarddispatch->clientSendsTime())
+			boarddispatch->sendTime();
 	}		
 }
 

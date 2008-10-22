@@ -20,7 +20,13 @@ BoardDispatch::BoardDispatch(GameListing * l)
 	//networkdispatch = n;
 	boardwindow = 0;
 	resultdialog = 0;
-	gameData = 0;
+	/* New rules.  The boarddispatch creates the game data or
+	 * whatever loads the game data before passing it to the
+	 * boardwindow creates it.  The boardwindow deletes it.
+	 * there's only one gameData per board */
+	gameData = new GameData();
+	//maybe we could set number here?  if we have it?
+	
 	/* Not sure we can do this. GameListings have to have a
 	 * key.  But to go without a gameListing in the BoardDispatch?*/
 	if(l)
@@ -37,10 +43,19 @@ BoardDispatch::BoardDispatch(GameListing * l)
  * Anyway, code is taken from qGoIF::slot_boardClosed*/
 BoardDispatch::~BoardDispatch()
 {
+	qDebug("Destroying board dispatch\n");
 	/* Clear dispatch so boardwindow doesn't try to close it */
 	if(boardwindow)
+	{
+		if(boardwindow->getGamePhase() != phaseEnded)
+		{
+			boardwindow->qgoboard->stopTime();
+			boardwindow->qgoboard->kibitzReceived("Disconnected");
+		}
 		boardwindow->setBoardDispatch(0);
-	qDebug("Destroying board dispatch\n");
+	}
+	if(resultdialog)
+		delete resultdialog;
 	
 	delete gameListing;
 }
@@ -76,7 +91,6 @@ void BoardDispatch::closeBoard(void)
 		{
 			qDebug("Closing board dispatch\n");
 			int number = gameData->number;
-			delete gameData;
 			gameData = 0;
 			connection->closeBoardDispatch(number);
 		}
@@ -112,7 +126,12 @@ void BoardDispatch::sendTimeLoss(void)
 	already_sent = true;
 }
 
-void BoardDispatch::recvRecord(GameData * g)
+void BoardDispatch::gameDataChanged(void)
+{
+	boardwindow->gameDataChanged();
+}
+
+void BoardDispatch::openBoard(void)
 {
 	if(!boardwindow)
 	{
@@ -121,36 +140,53 @@ void BoardDispatch::recvRecord(GameData * g)
 			qDebug("Connection not set on board dispatch\n");
 			return;
 		}
-		gameData = new GameData(*g);
 		mergeListingIntoRecord(gameData, gameListing);
 		
-		QString myName = connection->getUsername();
-		bool imWhite = (g->white_name == myName);
-		bool imBlack = (g->black_name == myName);		
-		if ( imWhite && imBlack )
-			gameMode = modeTeach;
-		else if ( imWhite || imBlack)
-			gameMode = modeMatch;
-		else
-			gameMode = modeObserve;
-		qDebug("Board size: %d", gameListing->board_size);
-		boardwindow = new BoardWindow(gameMode, gameData, imBlack, imWhite, this);
-		gameData->gameType = gameMode;
+		bool imWhite = false;
+		bool imBlack = false;
+		if(gameData->gameMode == modeUndefined)
+		{
+			QString myName = connection->getUsername();
+			imWhite = (gameData->white_name == myName);
+			imBlack = (gameData->black_name == myName);		
+			if ( imWhite && imBlack )
+				gameData->gameMode = modeTeach;
+			else if ( imWhite || imBlack)
+				gameData->gameMode = modeMatch;
+			else
+				gameData->gameMode = modeObserve;
+		}
+		//else, something else has set it ahead of time
+		
+		boardwindow = new BoardWindow(gameData, imBlack, imWhite, this);
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 	}
 	else
 	{
+		qDebug("Game data update");
+		/* Probably need to call some boardwindow text update thing
+		 * Actually, recvRecord would just be called to trigger
+		 * some kind of update since we would alter the record directly.
+		 * But I want just one game data I think... but who creates
+		 * and who deletes.  We usually claim network creates, and...
+		 * board window deletes?  That seems okay.  What if there's a
+		 * failure when game starts up?  But I guess record would already
+		 * exist in some sense so... FIXME */
+		
+		
 		/* Mainly to allow accurate IGS status lookups */
-		gameData->black_prisoners = g->black_prisoners;
-		gameData->white_prisoners = g->white_prisoners;
+		//gameData->black_prisoners = g->black_prisoners;
+		//gameData->white_prisoners = g->white_prisoners;
 	}
 	//boardwindow = bw;
 }
 
 void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)
 {
-	if(!boardwindow || boardwindow->getGamePhase() != phaseOngoing)
+	/* I don't think I care if its not ongoing.  That's a minor issue
+	 * if we recvTime, we should set it */
+	if(!boardwindow /*|| boardwindow->getGamePhase() != phaseOngoing*/)
 		return;
 	
 	boardwindow->getClockDisplay()->setTimeInfo(bt.time,
@@ -289,10 +325,22 @@ void BoardDispatch::recvRematchRequest(void)
 		qDebug("board dispatch received rematch but no gameData present");
 }
 
+void BoardDispatch::sendTime(void)
+{
+	if(connection)
+		connection->sendTime(this);
+}
+
+/* So far just to trigger timer */
+void BoardDispatch::startGame(void)
+{
+	boardwindow->qgoboard->startGame();	
+}
+
 bool BoardDispatch::supportsRematch(void)
 { 
 	/* A little tricky to have this check here but... */
-	if(gameMode != modeMatch)
+	if(!gameData || gameData->gameMode != modeMatch)
 		return false;
 	if(connection) 
 		return connection->supportsRematch(); 
@@ -430,6 +478,14 @@ TimeRecord BoardDispatch::getOurTimeRecord(void)
 {
 	if(boardwindow)
 		return boardwindow->qgoboard->getOurTimeRecord();
+	else
+		return TimeRecord();
+}
+
+TimeRecord BoardDispatch::getTheirTimeRecord(void)
+{
+	if(boardwindow)
+		return boardwindow->qgoboard->getTheirTimeRecord();
 	else
 		return TimeRecord();
 }

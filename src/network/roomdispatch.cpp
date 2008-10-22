@@ -243,9 +243,6 @@ void RoomDispatch::recvGameListing(GameListing * game)
 PlayerListing * RoomDispatch::getPlayerListing(const QString & name)
 {
 	PlayerListing * p = playerListingRegistry->getEntry(name);
-	if(!p)
-		qDebug("rd: gpl no player listing");
-	
 #ifdef FIXME
 	/* this is tricky FIXME */
 	if(!p)

@@ -82,8 +82,14 @@ void IGSConnection::sendDisconnect(void)
 /* What about a room_id?? */
 void IGSConnection::sendMsg(unsigned int game_id, QString text)
 {
-	GameData * g = getGameData(game_id);
-	switch(g->gameType)
+	BoardDispatch * bd = getIfBoardDispatch(game_id);
+	if(!bd)
+	{
+		qDebug("No board dispatch to send message from");
+		return;
+	}
+	GameData * g = bd->getGameData();
+	switch(g->gameMode)
 	{
 		case modeReview:
 		case modeMatch:
@@ -238,7 +244,13 @@ void IGSConnection::sendMove(unsigned int game_id, MoveRecord * move)
 			char c1 = move->x - 1 + 'A';
 			if(move->x > 8)		// no I in IGS
 				c1++;
-			GameData * g = getGameData(game_id);
+			BoardDispatch * bd = getIfBoardDispatch(game_id);
+			if(!bd)
+			{
+				qDebug("No board dispatch to send move from");
+				return;
+			}
+			GameData * g = bd->getGameData();
 			int c2 = g->board_size + 1 - move->y; 
 			/* Why do we send the id here but
 			 * not with the others?  Can we play
@@ -1184,7 +1196,7 @@ void IGS_games::handleMsg(QString line)
 		BoardDispatch * boarddispatch = connection->getBoardDispatch(number);
 		/* This is ugly, we can get bad info here so we have
 		 * to create a half record to send. FIXME*/
-		GameData * aGameData = new GameData();
+		GameData * aGameData = boarddispatch->getGameData();
 		aGameData->number = aGame->number;
 		aGameData->white_name = aGame->white_name();
 		aGameData->black_name = aGame->black_name();
@@ -1193,8 +1205,8 @@ void IGS_games::handleMsg(QString line)
 		aGameData->board_size = aGame->board_size;
 		aGameData->handicap = aGame->handicap;
 		aGameData->komi = aGame->komi;
-		boarddispatch->recvRecord(aGameData);
-		delete aGameData;
+		boarddispatch->openBoard();
+		
 		connection->requestGameInfo(number);
 		connection->protocol_save_string = QString();
 	}
@@ -1714,7 +1726,7 @@ void IGS_info::handleMsg(QString line)
 		qDebug("Getting boarddispatch from memory: %d", connection->protocol_save_int);
 		boarddispatch = connection->getBoardDispatch(connection->protocol_save_int);
 		boarddispatch->recvEnterScoreMode();
-		memory_str = QString("rmv@");		
+		//connection->protocol_save_string = QString("rmv@");		
 	}
 			// IGS: 9 Board is restored to what it was when you started scoring
 	else if (line.contains("what it was when you"))
@@ -2476,9 +2488,11 @@ void IGS_move::handleMsg(QString line)
 	BoardDispatch * boarddispatch;
 	RoomDispatch * roomdispatch = connection->getDefaultRoomDispatch();
 		//case 15:
-	//qDebug("%s", line.toLatin1().constData());
+	qDebug("%s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();	
 	static bool need_time = false;	
+	int number;
+	QString white, black;
 	//console->recvText(line.toLatin1().constData());
 	/* I think we'll need game_number for scores, so I'm going to
 	 * have it on the connection->protocol_saved_int since
@@ -2487,88 +2501,96 @@ void IGS_move::handleMsg(QString line)
 	//static int game_number = -1;
 			//qDebug("Game_number: %d\n", game_number);
 	if (line.contains("Game"))
-	{
-				
-		aGameData->number = element(line, 1, " ").toInt();
-		aGameData->white_name = element(line, 3, " ");
-		aGameData->black_name = element(line, 8, " ");
+	{		
+		number = element(line, 1, " ").toInt();
+		white = element(line, 3, " ");
+		black = element(line, 8, " ");
 		
 		/* Check if we're reloading the game */
 		/* Other problem, with IGS, this might be all we get
 		* for a restarted game Is this okay here?  Maybe doesn't
 		* always get called?  It could have a listing already.*/
-		if(!connection->getIfBoardDispatch(aGameData->number))
+		boarddispatch = connection->getIfBoardDispatch(number);
+		if(!boarddispatch)
 		{
-		if(aGameData->white_name == connection->getUsername() || aGameData->black_name == connection->getUsername())
-		{
-			if(connection->protocol_save_string == aGameData->white_name || connection->protocol_save_string == aGameData->black_name)
+			
+			if(white == connection->getUsername() || black == connection->getUsername())
 			{
-				qDebug("starting to restore");
-					/* Then this is a restarted game, create
-					* board dispatch */
-					//connection->getBoardDispatch(game_number);
-				
-				//boarddispatch = connection->getBoardDispatch(aGame->nr);
-				//boarddispatch->recvGameListing(aGame);
-				connection->requestGameStats(aGameData->number);
-				/* Stats will pick up the info and create the board, otherwise
-				* boardsize can get lost, etc. */
-				connection->protocol_save_string = "restoring";
-			}
-			else
-			{
-				/* accept? */
-				connection->protocol_save_string = QString();
+				if(connection->protocol_save_string == white || connection->protocol_save_string == black)
+				{
+					qDebug("starting to restore");
+					connection->requestGameStats(number);
+					/* Stats will pick up the info and create the board, otherwise
+					* boardsize can get lost, etc. */
+					connection->protocol_save_string = "restoring";
+					connection->protocol_save_int = number;
+				}
+				else
+				{
+					/* accept? */
+					connection->protocol_save_string = QString();
 					/* This code should be unified from that from the other case, msg 9
 					* that does this same thing, maybe the 9 should be removed.. FIXME */
-				QString opp = (aGameData->white_name == connection->getUsername() ? aGameData->black_name : aGameData->white_name);
-				if((aGameData->white_name == connection->getUsername() || aGameData->black_name == connection->getUsername()) && !dynamic_cast<IGSConnection *>(connection)->getBoardFromOurOpponent(opp))
-				{
-					PlayerListing * p = roomdispatch->getPlayerListing(opp);
-					MatchRequest * mr = connection->getAndCloseGameDialogDispatch(*p);
-					if(mr)
+					QString opp = (white == connection->getUsername() ? black : white);
+					if((white == connection->getUsername() || black == connection->getUsername()) && !dynamic_cast<IGSConnection *>(connection)->getBoardFromOurOpponent(opp))
 					{
-						//qDebug("mr bs: %d", mr->board_size);
-						aGameData->board_size = mr->board_size;
-						aGameData->komi = mr->komi;
-						//qDebug("mr komi: %f", aGameData->komi);
-						aGameData->handicap = mr->handicap;
-						if(aGameData->white_name == connection->getUsername())
+						PlayerListing * p = roomdispatch->getPlayerListing(opp);
+						MatchRequest * mr = connection->getAndCloseGameDialogDispatch(*p);
+						if(mr)
 						{
-							aGameData->white_rank = mr->our_rank;
-							aGameData->black_rank = mr->their_rank;
+							boarddispatch = connection->getBoardDispatch(number);
+							GameData * aGameData = boarddispatch->getGameData();
+							
+							aGameData->number = number;
+							aGameData->white_name = white;
+							aGameData->black_name = black;
+							aGameData->board_size = mr->board_size;
+							aGameData->komi = mr->komi;
+							aGameData->handicap = mr->handicap;
+							if(aGameData->white_name == connection->getUsername())
+							{
+								aGameData->white_rank = mr->our_rank;
+								aGameData->black_rank = mr->their_rank;
+							}
+							else
+							{
+								aGameData->white_rank = mr->their_rank;
+								aGameData->black_rank = mr->our_rank;
+							}
+							boarddispatch->openBoard();
 						}
 						else
 						{
-							aGameData->white_rank = mr->their_rank;
-							aGameData->black_rank = mr->our_rank;
+							PlayerListing * blackPlayer = roomdispatch->getPlayerListing(black);
+							PlayerListing * whitePlayer = roomdispatch->getPlayerListing(white);
+							boarddispatch = connection->getBoardDispatch(number);
+							GameData * aGameData = boarddispatch->getGameData();
+							aGameData->number = number;
+							aGameData->white_name = white;
+							aGameData->black_name = black;
+							if(blackPlayer)	
+								aGameData->black_rank = blackPlayer->rank;
+							if(whitePlayer)
+								aGameData->white_rank = whitePlayer->rank;
+							// Could be from seek opponent !!!
+							
+							boarddispatch->openBoard();
+							need_time = true;
 						}
-						boarddispatch = connection->getBoardDispatch(aGameData->number);
-						boarddispatch->recvRecord(aGameData);
+						connection->protocol_save_int = number;
 					}
-					else
-					{
-						PlayerListing * black = roomdispatch->getPlayerListing(aGameData->black_name);
-						PlayerListing * white = roomdispatch->getPlayerListing(aGameData->white_name);
-						if(black)	
-							aGameData->black_rank = black->rank;
-						if(white)
-							aGameData->white_rank = white->rank;
-						// Could be from seek opponent !!!
-						boarddispatch = connection->getBoardDispatch(aGameData->number);
-						boarddispatch->recvRecord(aGameData);
-						need_time = true;
-					}
+					/* We probably just accepted a match */
+						
 				}
-				return;
-				/* We probably just accepted a match */
-					
+					//connection->requestGameInfo(game_number);
+					//delete aGame;
 			}
-				//connection->requestGameInfo(game_number);
-				//delete aGame;
+			return;
 		}
-		}
-		GameListing * l = roomdispatch->getGameListing(aGameData->number);
+		
+		GameData * aGameData = boarddispatch->getGameData();
+		aGameData->number = number;
+		GameListing * l = roomdispatch->getGameListing(number);
 		if(!l)
 		{
 			qDebug("Game for unlisted game");
@@ -2594,7 +2616,7 @@ void IGS_move::handleMsg(QString line)
 			aGameData->board_size = l->board_size;
 			aGameData->komi = l->komi;
 		}
-		connection->protocol_save_int = aGameData->number;
+		connection->protocol_save_int = number;
 				//aGameData->type = element(line, 1, " ", ":");
 		
 		aGameData->white_prisoners = element(line, 0, "(", " ").toInt();
@@ -2614,16 +2636,29 @@ void IGS_move::handleMsg(QString line)
 				* a sense. */
 		/* Another issue here is that we do not want to call this when
 		 * restoring a game since there really isn't a gamedialog... FIXME */
+		boarddispatch->recvTime(*wtime, *btime);
+		boarddispatch->gameDataChanged();
+		boarddispatch->openBoard();
 	}
 	else if (line.contains("TIME"))
 	{	
+		number = element(line, 0, ":",":").toInt();
 		// FIXME Does WING have these messages???
-				// Might not need game record here!!!
+		// Might not need game record here!!!
+		
+		boarddispatch = connection->getIfBoardDispatch(number);
+		if(!boarddispatch)
+		{
+			qDebug("TIME message received but no board");
+			return;
+		}
+		connection->protocol_save_int = number;
+		
+		GameData * aGameData = boarddispatch->getGameData();
 #ifdef FIXME
 		aGameData->mv_col = "T";
 #endif //FIXME
-		aGameData->number = element(line, 0, ":",":").toInt();
-		connection->protocol_save_int = aGameData->number;
+		aGameData->number = number;
 		QString time1 = element(line, 1, " ","/");
 		QString time2 = element(line, 2, " ","/");
 		QString stones = element(line, 3, " ","/");				
@@ -2657,6 +2692,10 @@ void IGS_move::handleMsg(QString line)
 		}
 		else //never know with IGS ...
 			return;
+		boarddispatch->recvTime(*wtime, *btime);
+		//gameDataChanged necessary if above white_name, black_name is issue
+		//FIXME
+		//boarddispatch->gameDataChanged();
 	}
 	else if (line.contains("GAMERPROPS"))
 	{
@@ -2683,6 +2722,12 @@ void IGS_move::handleMsg(QString line)
 	}
 	else
 	{
+		boarddispatch = connection->getIfBoardDispatch(connection->protocol_save_int);
+		if(!boarddispatch)
+		{
+			qDebug("Possible move messages received but no board dispatch");
+			return;
+		}
 		/* FIXME if two moves are sent on the same line, then
 		* I think the last one is real and the one before is
 		* an undo, this is when we get a move list initially.
@@ -2711,7 +2756,7 @@ void IGS_move::handleMsg(QString line)
 			/* If we're getting moves that we can use, then
 			 * they have some existing board, which means a boardrecord
 			 * which should be more reliable than the listing */
-			GameData * r  = connection->getGameData(connection->protocol_save_int);
+			GameData * r  = boarddispatch->getGameData();
 			//GameListing * l = roomdispatch->getGameListing(connection->protocol_save_int);
 			if(!r)
 			{
@@ -2740,38 +2785,14 @@ void IGS_move::handleMsg(QString line)
 				aMove->color = stoneBlack; 
 		}
 		/* Any other color options ??? */
-		boarddispatch = connection->getIfBoardDispatch(connection->protocol_save_int);		
-		if(boarddispatch)
-			boarddispatch->recvMove(aMove);
+		boarddispatch->recvMove(aMove);
 		delete aMove;
 		return;
 	}
-
-	/* This also creates the board for first 15 message 
-	 * FIXME.  We need to make sure that, if we were to close
-	 * a game right before score result was reported, that wouldn't
-	 * pop it back up... but maybe 22 deals with that.*/
-	
-	/* Either this follows an observe, a restore or a gamedialog or it
-	 * just pops up randomly and we're expected to ignore it.  */
-	boarddispatch = connection->getIfBoardDispatch(aGameData->number);
-	if(boarddispatch)
-	{
-		boarddispatch->recvRecord(aGameData);
-		boarddispatch->recvTime(*wtime, *btime);
-		if(connection->protocol_save_string == QString("rmv@"))
-		{
-			boarddispatch->recvEnterScoreMode();
-			connection->protocol_save_string = QString();
-		}
-		/* At the very least for some case 9 messages like
-		* resign.  This parser is such a mess but I don't want
-		* to write it from scratch, I just want to get it
-		* working with the rest of the net code. */
-		connection->protocol_save_int = aGameData->number;
-		/* This could be set at the wrong time now since we changed the variable FIXME,
-		 * see protocol_save_int where it was scoring_game_id */
-	}
+	//ugly, redundant but IGS doesn't give us a good way to know when
+	//to do this otherwise
+	//if(boarddispatch)
+	//	boarddispatch->openBoard();
 }
 		// SAY
 		// 19 *xxxx*: whish you a nice game  :)
@@ -3397,6 +3418,14 @@ void IGS_tell::handleMsg(QString line)
 			// //emit player + message + true (=player)
 			////emit signal_talk(e1, e2, true);
 	PlayerListing * p = roomdispatch->getPlayerListing(e1);
+	if(!p)
+	{
+		p = new PlayerListing();
+		p->online = true;
+		p->name = e1;
+		roomdispatch->recvPlayerListing(p);
+		p = roomdispatch->getPlayerListing(e1);
+	}
 	TalkDispatch * talk = connection->getTalkDispatch(*p);
 	if(talk)
 		talk->recvTalk(e2);
@@ -4065,7 +4094,7 @@ void IGS_removed::handleMsg(QString line)
 			qDebug("removing for game we don't have");
 			return;
 		}
-		GameData * r = connection->getGameData(game);
+		GameData * r = boarddispatch->getGameData();
 		if(!r)
 		{
 			qDebug("Can't get game record");
