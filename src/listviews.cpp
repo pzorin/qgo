@@ -583,7 +583,8 @@ QVariant GamesListItem::data(int column) const
 	{
 		qDebug("Listing: %p %d", listing, listing->number);
 		qDebug("Found removed white player: %p, %d game %d", listing->white, removed_player[listing->white], listing->number);
-		exit(0);
+		QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
+		return QVariant();
 	}
 	if(listing->black)
 		it = removed_player.find(listing->black);
@@ -591,7 +592,8 @@ QVariant GamesListItem::data(int column) const
 	{
 		qDebug("Listing: %p %d", listing, listing->number);
 		qDebug("Found removed black player: %p, %d game %d", listing->black, removed_player[listing->black], listing->number);
-		exit(0);
+		QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
+		return QVariant();
 	}
 	switch(column)
 	{
