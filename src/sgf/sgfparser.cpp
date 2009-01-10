@@ -51,7 +51,7 @@ public:
 	{
 		// ignore lower characters, too
 		while (at(i).isSpace() || // == ' ' || at(i) == '\n' || at(i) == '\t' || 
-			   at(i) >= 'a' && at(i) <= 'z')
+			   (at(i) >= 'a' && at(i) <= 'z'))
 			i++;
 		return i;
 	}
@@ -90,7 +90,7 @@ public:
 		// Offset. Hope that is enough. TODO Long comments check?
 		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength;
 		
-		while (Str.at(index) != c && index++ < l-1);
+		while (Str.at(index) != c && index++ < l-1) {};
 		if (index == l)
 			return -1;
 		return index;
@@ -160,7 +160,7 @@ public:
 		// Offset. Hope that is enough. TODO Long comments check?
 		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength;
 		
-		while (Str[index] != c && index++ < l);
+		while (Str[index] != c && index++ < l) {};
 		if (index == l)
 			return -1;
 		return index;
@@ -1621,7 +1621,7 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 			QString txt = t->saveMove(false);
 			int cnt_old = cnt;
 			cnt = txt.length();
-			if (col % 10 == 0 || col == 1 && cnt != 6 || cnt_old != 6 || col == -1)
+			if (col % 10 == 0 || (col == 1 && cnt != 6) || cnt_old != 6 || col == -1)
 			{
 				*stream << endl;
 				col = 0;
