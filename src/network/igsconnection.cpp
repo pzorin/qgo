@@ -2636,9 +2636,10 @@ void IGS_move::handleMsg(QString line)
 				* a sense. */
 		/* Another issue here is that we do not want to call this when
 		 * restoring a game since there really isn't a gamedialog... FIXME */
+		//openBoard obviously has to be done first
+		boarddispatch->openBoard();
 		boarddispatch->recvTime(*wtime, *btime);
 		boarddispatch->gameDataChanged();
-		boarddispatch->openBoard();
 	}
 	else if (line.contains("TIME"))
 	{	
