@@ -127,7 +127,7 @@ void PlayerListModel::removeListing(const PlayerListing * l)
 {
 	for(int i = 0; i < items.count(); i++)
 	{
-		PlayerListItem * item = static_cast<const PlayerListItem *>(items[i]);
+		const PlayerListItem * item = static_cast<const PlayerListItem *>(items[i]);
 		if(item->getListing() == l)
 		{
 			emit beginRemoveRows(QModelIndex(), i, i);
@@ -146,7 +146,7 @@ void PlayerListModel::clearList(void)
 	//emit beginRemoveRows(QModelIndex(), 0, items.count() - 1);
 	for(int i = 0; i < items.count(); i++)
 	{
-		PlayerListItem * item = static_cast<const PlayerListItem *>(items[i]);
+		const PlayerListItem * item = static_cast<const PlayerListItem *>(items[i]);
 		emit beginRemoveRows(QModelIndex(), i, i);
 		items.removeAt(i);
 		emit endRemoveRows();
@@ -239,7 +239,7 @@ void GamesListModel::removeListing(const GameListing * l)
 {
 	for(int i = 0; i < items.count(); i++)
 	{
-		GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
+		const GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
 		if(item->getListing() == l)
 		{
 			/* Really this is supposed to be not QModelIndex() but the
@@ -264,7 +264,7 @@ void GamesListModel::clearList(void)
 	//emit beginRemoveRows(QModelIndex(), 0, items.count() - 1);
 	for(int i = 0; i < items.count(); i++)
 	{
-		GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
+		const GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
 		emit beginRemoveRows(QModelIndex(), i, i);
 		items.removeAt(i);
 		emit endRemoveRows();
