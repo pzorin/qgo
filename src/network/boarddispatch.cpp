@@ -128,6 +128,8 @@ void BoardDispatch::sendTimeLoss(void)
 
 void BoardDispatch::gameDataChanged(void)
 {
+	if(!boardwindow)	//this really shouldn't happen
+		return;
 	boardwindow->gameDataChanged();
 }
 
