@@ -175,7 +175,6 @@ void QGtp::slot_readFromStdout()
 	QString s;
 	do 
 	{
-		programProcess->waitForReadyRead ( 10 ) ; 
 		s = programProcess->readAllStandardOutput();
 		answer.append(s); 
 	} while (!s.isEmpty());
