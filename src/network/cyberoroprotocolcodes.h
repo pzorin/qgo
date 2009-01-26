@@ -1,6 +1,6 @@
 #define ORO_CODETABLE		0x00fa
-#define ORO_PLAYERLIST		0xd061
 #define ORO_ROOMLIST		0xc661
+#define ORO_PLAYERLIST		0xd061
 #define ORO_GAMELIST		0xda61
 #define ORO_BROADCASTLIST	0xf861
 
