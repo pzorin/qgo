@@ -17,7 +17,8 @@ struct PlayerListing
 	unsigned int wins;
 	unsigned int losses;
 	unsigned int rated_games;
-	int observing;				//used for playing as well in ORO
+	int observing;			//used by IGS and ORO, so not ready to get rid of it			
+	std::vector <unsigned short> room_list; 	//used by Tygem et al.
 	int playing;
 	QString extInfo;
 	QString email_address;
@@ -46,13 +47,13 @@ struct PlayerListing
 	rank_score(0),
 	country(0), 
 	wins(0), 
-	losses(0), 
-	rated_games(0), 
-	observing(0), 
+	losses(0),
+	rated_games(0),
+	observing(0),
 	playing(0), 
-	extInfo(0), 
-	email_address(0), 
-	specialbyte(0), 
+	extInfo(0),
+	email_address(0),
+	specialbyte(0),
 	pro(false){};
 	// there's also some setttings as well as match requirements
 	//PlayerListing(const QString* n, const char * i, const char * r, const char * c, unsigned int w, unsigned int l, unsigned o) : name(n), idletime(i), rank(r), country(c), wins(w), losses(l), observing_str() {};
@@ -135,6 +136,7 @@ struct GameListing
 	bool isBetting;
 	bool isLocked;
 	bool white_first_flag;
+	std::vector <PlayerListing *> observer_list;
 	/* Also need byomi time, one color go, running, private, flags, ranked, etc.*/
 	GameListing() : running(0), 
 	moves(0), 
