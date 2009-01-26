@@ -416,11 +416,9 @@ QVariant ObserverListItem::data(int column) const
 	switch(column)
 	{
 		case OC_NAME:
-			//return QVariant(name);
 			return listing->name;
 			break;
 		case OC_RANK:
-			//return QVariant(rank);
 			return listing->rank;
 			break;
 		default:
@@ -583,7 +581,8 @@ QVariant GamesListItem::data(int column) const
 	{
 		qDebug("Listing: %p %d", listing, listing->number);
 		qDebug("Found removed white player: %p, %d game %d", listing->white, removed_player[listing->white], listing->number);
-		QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
+		//QMessageBox here is BAD, its in some Qt draw loop here
+		//QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
 		return QVariant();
 	}
 	if(listing->black)
@@ -592,7 +591,7 @@ QVariant GamesListItem::data(int column) const
 	{
 		qDebug("Listing: %p %d", listing, listing->number);
 		qDebug("Found removed black player: %p, %d game %d", listing->black, removed_player[listing->black], listing->number);
-		QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
+		//QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
 		return QVariant();
 	}
 	switch(column)
@@ -675,7 +674,8 @@ QVariant PlayerListItem::data(int column) const
 			return QVariant(listing->playing);
 			break;
 		case PC_OBSERVING:
-			if(listing->observing == 0)
+			if(listing->observing == 0 ||
+			  	listing->observing == listing->playing)
 				return QVariant("-");
 			return QVariant(listing->observing);
 			break;
