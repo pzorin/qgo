@@ -499,17 +499,23 @@ void IGSConnection::onReady(void)
 	/* There's a bug here where a person who's name is "" gets painted blue FIXME */
 	//getDefaultRoomDispatch()->setAccountName(username);
 	
-	/* We can't seem to really send automatic commands.
-	 * We get banned for a time and we get socket errors
-	 * so we need to check for readabililty and I wonder
-	 * if we need another newline pipe all around to buffer
-	 * outgoing data until socket can be written to! 
-	 * ... or maybe everything is fine.*/
 	QString v = "id qGo2v" + QString(VERSION) + "\r\n";
 	sendText(v.toLatin1().constData());
 	//sendText("toggle newrating\r\n");
 	
-	//sendText("toggle open false\r\n");
+	/* Below should be some place more general, not even in igs code maybe
+	 * FIXME (Also, we should add to WING and LGS code.*/
+	QSettings settings;
+	
+	if(settings.value("LOOKING_FOR_GAMES").toBool())
+		sendText("toggle looking true\r\n");
+	else
+		sendText("toggle looking false\r\n");
+	if(settings.value("OPEN_FOR_GAMES").toBool())
+		sendText("toggle open true\r\n");
+	else
+		sendText("toggle open false\r\n");
+	
 	sendText("toggle newundo on\r\n");
 	sendText("toggle client on\r\n");		//adds type codes
 	sendText("toggle nmatch on\r\n");		//allows nmatch
@@ -2612,6 +2618,10 @@ void IGS_move::handleMsg(QString line)
 		}
 		else
 		{
+			//qDebug("igs: %s %s\n", l->white_name().toLatin1().constData(), l->black_name().toLatin1().constData());
+			//we sometimes don't appear to have name here either
+			aGameData->white_name = l->white_name();
+			aGameData->black_name = l->black_name();
 			aGameData->handicap = l->handicap;
 			aGameData->board_size = l->board_size;
 			aGameData->komi = l->komi;
