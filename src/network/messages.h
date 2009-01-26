@@ -33,6 +33,7 @@ struct ConnectionInfo
 struct MoveRecord
 {
 	unsigned int number;
+#define NOMOVENUMBER		0xffff
 	unsigned int x, y;
 	StoneColor color;	//maybe we update this with mark class or something later
 	// having accept and refuse undo here is a little weird but its almost a kind
@@ -203,6 +204,7 @@ struct RoomStats
 	RoomStats(int p, int g) : players(p), games(g) {};
 };
 
+/* Confusing name since we use games as rooms with ORO, maybe not an issue */
 struct RoomListing
 {
 	int number;

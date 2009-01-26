@@ -100,9 +100,24 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 		move_number = m->number;
 		//bool hcp_move = tree->getCurrent()->isHandicapMove();
 		move_counter = tree->getCurrent()->getMoveNumber();
+		if(move_number == NOMOVENUMBER)	//not all services number
+			move_number = move_counter;
 		/* If move_counter == 0 even though a handicap has been set, there's
 		 * a problem */
-		//qDebug("MN: %d MC: %d", move_number, move_counter);
+		qDebug("MN: %d MC: %d", move_number, move_counter);
+		if(move_number > 1 && move_counter == 0)
+		{
+			/* This is a bit ugly and I still want to rewrite this whole
+			 * function.  But basically, if we get a move before we've
+			 * retrieved the boardstate, then I guess, and this is
+			 * really the thing that should be fixed, not this, but
+			 * the offset_1 flag below gets screwed up
+			 * such that the first move is skipped if we don't return here*/
+			qDebug("Received move before move list, ignoring");
+			if (remember != last)
+				tree->setCurrent(remember);
+			return;
+		}
 		//1 0
 		handicap = boardwindow->getGameData()->handicap;
 		/* Since we don't send the handicap move right now... */
@@ -187,6 +202,8 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			}
 			else
 				tree->deleteNode();
+			/* I've turned off multiple undo for tygem, just for now... 
+			 * since NOMOVENUMBER FIXME */
 			qDebug("Undoing move %d = %d - 1", move_number, move_counter);
 			/* FIXME This can get screwy especially around the scoreMode
 			 * stuff.... apparently we can only undo our own passes
@@ -293,6 +310,8 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			{
 				/* FIXME, this prevents the next if statement
 				* partly, this whole thing is screwy */
+				/* IGS, certain games have this remove a legit first
+				 * move */
 				qDebug("Repeat move after undo??");
 			}
 			/* This is for resetting the stones for canadian
@@ -309,7 +328,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 	}
 	if(move_alteration)
 	{
-		//check wether we should update to the incoming move or not
+		//check whether we should update to the incoming move or not
 		if (remember != last)
 			tree->setCurrent(remember);
 	
