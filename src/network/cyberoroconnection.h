@@ -114,6 +114,7 @@ class CyberOroConnection : public NetworkConnection
 		void handleGamesList(unsigned char * msg, unsigned int size);
 		void handlePlayerConnect(unsigned char * msg, unsigned int size);
 		void handlePlayerRoomJoin(unsigned char * msg, unsigned int size);
+		void removeObserverFromGameListing(const PlayerListing * p);
 		void handlePlayerDisconnect2(unsigned char * msg, unsigned int size);
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);
 		void handleServerRoomChat(unsigned char * msg, unsigned int size);
@@ -190,6 +191,12 @@ class CyberOroConnection : public NetworkConnection
 		std::vector <GameListing *> rooms_without_games;
 		std::vector <GameListing *> rooms_without_owners;
 		std::map <unsigned short, unsigned short> game_code_to_number;
+		unsigned short playerlist_skipnumber;
+		unsigned short playerlist_received;
+		unsigned short playerlist_roomnumber;
+		unsigned short playerlist_observernumber;
+		unsigned short roomlist_observers;
+		std::vector <PlayerListing *> playerlist_inorder;
 		
 		unsigned short room_were_in;
 		unsigned short connecting_to_game_number;	//awkward FIXME
