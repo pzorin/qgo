@@ -113,13 +113,13 @@ void NetworkConnection::closeConnection(bool send_disconnect)
 	
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
-	
-		if(console_dispatch)
-			console_dispatch->recvText("Disconnecting...\n");
-		qDebug("Disconnecting...");
 		if(send_disconnect)
+		{
+			if(console_dispatch)
+				console_dispatch->recvText("Disconnecting...\n");
+			qDebug("Disconnecting...");
 			sendDisconnect();		//legit?	
-
+		}
 		// Close it.
 		qsocket->close();
 	
