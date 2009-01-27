@@ -225,7 +225,8 @@ void CyberOroConnection::closeBoardDispatch(unsigned int game_id)
 	 * also possibly finish observing used in matches somehow as well? */
 		/* Order here matters apparently, leave is for leaving the room,
 			FinishObserving says we're no longer looking at board.
-		      FIXME doublecheck */
+		      FIXME doublecheck 
+			No, that didn't fix it.*/
 		if(room_were_in == g->number)
 			sendLeave(*g);
 		sendFinishObserving(*g);
@@ -4337,7 +4338,9 @@ void CyberOroConnection::removeObserverFromGameListing(const PlayerListing * p)
 	GameListing * game = roomdispatch->getGameListing(p->observing);
 	if(!game)
 		return;
+#ifdef RE_DEBUG
 	printf("Removing observer from game %d with %d observers\n", game->number, game->observers);
+#endif //RE_DEBUG
 	if(game->observers == 0)
 	{
 		/* This can happen if, for instance, someone creates a broadcast game
@@ -5194,7 +5197,9 @@ void CyberOroConnection::handleGamePhaseUpdate(unsigned char * msg, unsigned int
 	}
 	else
 	{
+#ifdef RE_DEBUG
 		qDebug("Received 5ac3 for non existent game/room\n");
+#endif //RE_DEBUG
 	}
 }
 

@@ -104,7 +104,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			move_number = move_counter;
 		/* If move_counter == 0 even though a handicap has been set, there's
 		 * a problem */
-		qDebug("MN: %d MC: %d", move_number, move_counter);
+		//qDebug("MN: %d MC: %d", move_number, move_counter);
 		if(move_number > 1 && move_counter == 0)
 		{
 			/* This is a bit ugly and I still want to rewrite this whole
