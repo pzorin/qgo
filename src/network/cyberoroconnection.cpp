@@ -3258,7 +3258,9 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 		if(playerlist_skipnumber != PLAYERLIST_SKIPNUMBER_UNSET
 		   && playerlist_skipnumber < playerlist_received)
 		{
+#ifdef RE_DEBUG
 			printf("Playerlist received %d skip number %d\n", playerlist_received, playerlist_skipnumber);
+#endif //RE_DEBUG
 			/* get next room with observers */
 			GameListing * gamelisting = roomdispatch->getGameListing(playerlist_roomnumber);
 			if(!gamelisting)
@@ -3289,7 +3291,9 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 			backPlayer->observing = playerlist_roomnumber;
 			/* add player to room */
 			gamelisting->observer_list.push_back(backPlayer);
+#ifdef RE_DEBUG
 			printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
+#endif //RE_DEBUG
 			goto label_playerlist_was_observer;
 		}
 label_playerlist_nogame:
@@ -3551,7 +3555,9 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 					player->observing = number;
 					/* add player to room */
 					aGameListing->observer_list.push_back(player);
+#ifdef RE_DEBUG
 					printf("Adding player %s %d to game %d\n", player->name.toLatin1().constData(), player->id, number);
+#endif //RE_DEBUG
 					playerlist_observernumber++;
 					if(playerlist_observernumber == aGameListing->observers)
 					{
