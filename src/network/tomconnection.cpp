@@ -24,9 +24,11 @@ int TomConnection::requestServerInfo(void)
 		 "Host: duiyi.sports.tom.com\r\n" \
 		 "Connection: Keep-Alive\r\n" \
 		 "Cache-Control: no-cache\r\n\r\n");
+#ifdef RE_DEBUG
 	for(int i = 0; i < length; i++)
 		printf("%02x", packet[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	if(write((const char *)packet, length) < 0)
 	{
 		qWarning("*** failed sending server info request");
@@ -43,11 +45,12 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	char * p = (char *)msg;
 	int i, j;
 	ServerItem * si;
-	
+
+#ifdef RE_DEBUG
 	for(i = 0; i < length; i++)
 		printf("%c", p[i]);
 	printf("\n");
-	
+#endif //RE_DEBUG
 	if(strncmp(p, "HTTP/1.1 200 OK\r\n", 17) != 0)
 	{
 		qDebug("Server info response not OK!");

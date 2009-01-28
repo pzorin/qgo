@@ -24,9 +24,11 @@ int EWeiQiConnection::requestServerInfo(void)
 		 "Host: service.tygem.com\r\n" \
 		 "Connection: Keep-Alive\r\n" \
 		 "Cache-Control: no-cache\r\n\r\n");
+#ifdef RE_DEBUG
 	for(int i = 0; i < length; i++)
 		printf("%02x", packet[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	if(write((const char *)packet, length) < 0)
 	{
 		qWarning("*** failed sending server info request");
