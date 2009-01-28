@@ -10,10 +10,11 @@ ServerListDialog::ServerListDialog(std::vector <ServerItem *> serverlist, int cu
 	connectButton->setDefault(true);
 	
 	cancelButton = new QPushButton(tr("&Cancel"));
+	cancelButton->setAutoDefault(false);
 	
 	buttonBox = new QDialogButtonBox(Qt::Horizontal);
-	buttonBox->addButton(connectButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
+	buttonBox->addButton(connectButton, QDialogButtonBox::ActionRole);
 	
 	connect(serverListView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(slot_listDoubleClicked(QTreeWidgetItem *, int)));
 	
