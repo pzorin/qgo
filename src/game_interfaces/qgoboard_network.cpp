@@ -38,7 +38,26 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 	{
 		MoveRecord * m = new MoveRecord();
 		if(tree->getCurrent()->getMatrix()->isStoneDead(x, y))
+		{
+			if(boardwindow->getBoardDispatch()->unmarkUnmarksAllDeadStones())
+			{
+					QMessageBox mb(tr("Unmark All?"),
+		      			QString(tr("Unmark all your dead stones?\n")),
+		      			QMessageBox::Question,
+		      			QMessageBox::Yes,
+		      			QMessageBox::No | QMessageBox::Escape | QMessageBox::Default,
+		      			QMessageBox::NoButton);
+						mb.raise();
+						//qgo->playPassSound();	//FIXME sound here? chime?
+
+					if (mb.exec() == QMessageBox::No)
+					{
+						dontsend = false;	//ready to send again
+						return;
+					}
+			}
 			m->flags = MoveRecord::UNREMOVE;
+		}
 		else
 			m->flags = MoveRecord::REMOVE;
 		m->x = x;
@@ -65,6 +84,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 	}
 }
 
+/* Horrible name, FIXME */
 void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 {
 	bool move_alteration = false;
@@ -260,7 +280,12 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			break;
 		case MoveRecord::UNREMOVE_AREA:
 			//FIXME
-			boardwindow->qgoboard->markDeadArea(m->x, m->y, true);
+			if(boardwindow->getBoardDispatch()->unmarkUnmarksAllDeadStones())
+			{
+				/* Not sure where we get the dead groups from, FIXME */
+			}
+			else
+				boardwindow->qgoboard->markDeadArea(m->x, m->y, true);
 			break;
 		case MoveRecord::DONE_SCORING:
 			/* Not sure we can really use this.  terrBlack and terrWhite

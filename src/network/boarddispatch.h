@@ -44,6 +44,7 @@ class BoardDispatch : public NetworkDispatch
 		bool startTimerOnOpen(void) { if(connection) return connection->startTimerOnOpen(); else return false; };
 		bool clientCountsTime(void) { if(connection) return connection->clientCountsTime(); else return false; };
 		bool clientSendsTime(void) { if(connection) return connection->clientSendsTime(); else return false; };
+		bool unmarkUnmarksAllDeadStones(void) { if(connection) return connection->unmarkUnmarksAllDeadStones(); else return false; };
 	private:
 		void mergeListingIntoRecord(class GameData * r, class GameListing * l);
 		class MainWindow * mainwindow;
