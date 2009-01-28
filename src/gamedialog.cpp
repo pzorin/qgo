@@ -984,8 +984,8 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 			mr->challenger_is_black = 1;
 			mr->color_request = MatchRequest::WHITE;
 		}
-		if(mr->handicap == 0 && (flags & GDF_HANDICAP1))
-			mr->handicap = 1; 
+		if(mr->handicap == 1 && !(flags & GDF_HANDICAP1))
+			mr->handicap = 0; 
 		we_are_challenger = true;
 		this_is_offer = true;
 		/* FIXME, a lot of stuff to fill in here, defaults and the
@@ -1244,6 +1244,10 @@ unsigned int GameDialog::timeToSeconds(QString time)
 }
 
 //we just assume that white has the higher rank
+/* We're having this return 1 handicap if there's a one stone
+ * difference, but this only works because this is only called
+ * from the one place... then we'll use the GDF_HANDICAP1 flag
+ * to determine if that's set */
 bool GameDialog::getProperKomiHandicap(QString rankA, QString rankB, float * komi, unsigned int * handicap)
 {
 	/* Check for k, d, or p (as d), calc difference, */
@@ -1262,7 +1266,7 @@ bool GameDialog::getProperKomiHandicap(QString rankA, QString rankB, float * kom
 		difference = ordinalB + ordinalA - 1;
 		*komi = 0.0;
 		if(difference == 1)
-			*handicap = 0;	//or should this be 1??		
+			*handicap = 1;	
 		else if(difference > 9)
 			*handicap = 9;
 		else
@@ -1285,7 +1289,7 @@ bool GameDialog::getProperKomiHandicap(QString rankA, QString rankB, float * kom
 			difference = abs(ordinalA - ordinalB);
 			*komi = 0.0;
 			if(difference == 1)
-				*handicap = 0;	//or should this be 1??		
+				*handicap = 1;	
 			else if(difference > 9)
 				*handicap = 9;
 			else
