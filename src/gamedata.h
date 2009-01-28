@@ -42,7 +42,8 @@ class GameData
 			 fileName(""),
 			 overtime(""),
 			 free_rated(noREQ),
-			 white_first_flag(false) {};
+			 white_first_flag(false),
+			 our_invitation(false) {};
 		GameData(GameData *d)
 		{
 			if (d)
@@ -77,6 +78,7 @@ class GameData
 				periodtime = d->periodtime;
 				nigiriToBeSettled = d->nigiriToBeSettled;
 				white_first_flag = d->white_first_flag;
+				our_invitation = d->our_invitation;
 				game_code = d->game_code;
 				gameMode = d->gameMode;
 			}
@@ -128,6 +130,9 @@ class GameData
 		//for time messages and I don't want to pick it off
 		//the listing since that's possibly less reliable:
 		bool white_first_flag;
+		// apparently we also need this, we might later try to simplify this
+		// or take the one off...
+		bool our_invitation;
 };
 
 
