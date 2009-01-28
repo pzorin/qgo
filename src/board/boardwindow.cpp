@@ -455,6 +455,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 	
 	//we have to emulate exclusive buttons, while raise the button if it was down
 	if (m >= 0 && m < 7 )
+	{
 		if ( m== editButtons->checkedId())
 		{
 //			editButtons->button (m)->setChecked( FALSE );
@@ -473,7 +474,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 					editButtons->button (i)->setChecked( FALSE );
 
 		}
-
+	}
 	switch(m)
 	{
 	case 0:
@@ -529,8 +530,8 @@ void BoardWindow::slotEditButtonPressed( int m )
 //#endif
 		}
 		// check if set color is natural color:
-		if (current->getMoveNumber() == 0 && current->getPLnextMove() == stoneBlack ||
-			current->getMoveNumber() > 0 && current->getColor() != current->getPLnextMove())
+		if ((current->getMoveNumber() == 0 && current->getPLnextMove() == stoneBlack) ||
+			(current->getMoveNumber() > 0 && current->getColor() != current->getPLnextMove()))
 			current->clearPLinfo();
 //		board->setCurStoneColor();
 		return;

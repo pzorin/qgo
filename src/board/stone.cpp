@@ -138,9 +138,10 @@ void Stone::togglePixmap(QList<QPixmap> *a, bool showShadow)
 		setPixmap(a->at( color == stoneBlack ? 0 : (rand() % (a->count() -2) ) + 1));
 
 	if (shadow)
+	{
 		if (showShadow)
 			shadow->show();
 		else 
 			shadow->hide();
-		
+	}
 }
