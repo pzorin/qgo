@@ -53,7 +53,7 @@ void RoomDispatch::onError(void)
 void RoomDispatch::setConnection(NetworkConnection * c)
 {
 	NetworkDispatch::setConnection(c);
-	if(connection->getConnectionType() == TypeORO)
+	if(connection->playerTrackingByID())
 	{
 		qDebug("Creating player ID Registry");
 		playerListingIDRegistry = new PlayerListingIDRegistry(room->playerListModel);
