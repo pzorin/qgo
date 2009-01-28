@@ -7,7 +7,7 @@ RESOURCES = application.qrc  \
 board/board.qrc
 QT = core gui \
 network
-TARGET = ../bin/qgo2 
+TARGET = ../bin/qgo2
 CONFIG += warn_on \
           qt \
           thread \
@@ -32,6 +32,7 @@ FORMS += mainwindow.ui \
 board/boardwindow.ui \
 talk_gui.ui \
 gamedialog.ui \
+login.ui \
 board/gameinfo.ui \
 network/createroomdialog.ui
 HEADERS += mainwindow.h \
@@ -75,6 +76,9 @@ network/igsconnection.h \
 network/wing.h \
 network/lgs.h \
 network/cyberoroconnection.h \
+network/tygemconnection.h \
+network/eweiqiconnection.h \
+network/tomconnection.h \
 game_interfaces/undoprompt.h \
 game_interfaces/resultdialog.h \
 board/clockdisplay.h \
@@ -87,7 +91,9 @@ displayboard.h \
  network/orosetphrasechat.h \
  network/setphrasepalette.h \
  network/createroomdialog.h \
- network/cyberoroprotocolcodes.h
+ network/cyberoroprotocolcodes.h \
+ network/tygemprotocolcodes.h \
+ login.h
 
 SOURCES += main.cpp \
            mainwindow.cpp \
@@ -112,12 +118,15 @@ SOURCES += main.cpp \
            audio/audio.cpp \
            mainwindow_settings.cpp \
 	   network/networkconnection.cpp \
-	   network/networkdispatch.cpp \
  	   network/msghandler.cpp \
 	   network/igsconnection.cpp \
 	   network/wing.cpp \
 	   network/lgs.cpp \
 	   network/cyberoroconnection.cpp \
+	   network/tygemconnection.cpp \
+	   network/eweiqiconnection.cpp \
+	   network/tomconnection.cpp \
+	   network/networkdispatch.cpp \
 	   network/messages.h \
 	   network/networkconnection.h \
 	   network/roomdispatch.cpp \
@@ -132,6 +141,7 @@ SOURCES += main.cpp \
            board/clockdisplay.cpp \
            talk.cpp \
            gamedialog.cpp \
+ 	   login.cpp \
            displayboard.cpp \
 	   game_interfaces/qgoboard_network.cpp \
            game_interfaces/qgoboard_observe.cpp \
@@ -142,7 +152,6 @@ SOURCES += main.cpp \
  	   network/orosetphrasechat.cpp \
  	   network/setphrasepalette.cpp \ 
 	   network/createroomdialog.cpp
-
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp""""""
 macx {
