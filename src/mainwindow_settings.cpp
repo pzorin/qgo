@@ -25,15 +25,12 @@
  *   Host - Class to save Host info
  */
 
-Host::Host(const QString &title, const ConnectionType host, const QString &address ,const unsigned int port, const QString &login, const QString &pass, const QString &cod)
+/* FIXME, there's a cleaner way to define such a simple data structure */
+Host::Host(const QString &host, const QString &login, const QString &pass)
 {
-	t = title;
 	h = host;
-	ad = address;
-	pt = port;
 	lg = login;
 	pw = pass;
-	cdc = cod;
 }
 
 /*
@@ -268,7 +265,10 @@ void MainWindow::slot_currentChanged(int i)
 	if(i == 1 || i == 2)
 	{
 		//refresh file system model
-		model->refresh();
+		/* Apparently unnecessary and causes large slowdown in windows 
+		 * EXCEPT, it might be nice to be able to refresh the file
+		 * view somehow.  Need to figure out why its slow in windows.  FIXME*/
+		//model->refresh();
 	}
 
 	former = i;
@@ -300,6 +300,12 @@ void MainWindow::saveSettings()
 		i=2;
 	settings.setValue("STONES_LOOK", i);
 	
+	if ( ui.terrCrossRB->isChecked())
+		i=0;
+	else
+		i=1;
+	settings.setValue("TERR_STONE_MARK", i);
+	
 	i = 0;
 	if ( ui.radioButton_noSound->isChecked())
 		i=1;
@@ -312,6 +318,12 @@ void MainWindow::saveSettings()
 	else
 		i=0;
 	settings.setValue("KOMARKER", i);
+	if ( ui.numberCurrentMoveCB->isChecked())
+		i=1;
+	else
+		i=0;
+	settings.setValue("NUMBER_CURRENT_MOVE", i);
+	
 	if ( ui.observeOutsideCB->isChecked())
 		i=1;
 	else
@@ -323,17 +335,13 @@ void MainWindow::saveSettings()
 	for (int i = 0; i < hostlist.size(); ++i) 
 	{
 		settings.setArrayIndex(i);
-		settings.setValue("title", hostlist.at(i)->title());
-		settings.setValue("server", connectionTypeToServerString(hostlist.at(i)->host()));
-		settings.setValue("address", hostlist.at(i)->address());
-		settings.setValue("port", hostlist.at(i)->port());
+		settings.setValue("server", hostlist.at(i)->host());
 		settings.setValue("loginName", hostlist.at(i)->loginName());
 		settings.setValue("password", hostlist.at(i)->password());
-		settings.setValue("codec", hostlist.at(i)->codec());
 	}
 	settings.endArray();
 
-	settings.setValue("ACCOUNT",ui.cb_connect->currentIndex ());
+	settings.setValue("ACCOUNT", ui.cb_connect->currentIndex());
 
 	//server games default values
 	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
@@ -363,7 +371,8 @@ void MainWindow::saveSettings()
 
 	//qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());	
 
-	preferences.save();
+	preferences.fill();
+	preferences.save();	//FIXME, save is only for match setting defaults right?
 }
 
 
@@ -377,7 +386,7 @@ void MainWindow::loadSettings()
 
 	ui.comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
 	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
-
+	//computer plays FIXME black white
 	ui.radioButtonStones_real->setChecked(TRUE);
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
 	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
@@ -391,36 +400,32 @@ void MainWindow::loadSettings()
 
 	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
 	ui.komarkerCB->setChecked((settings.value("KOMARKER") == 1));
+	ui.numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
+	ui.terrCrossRB->setChecked((settings.value("TERR_STONE_MARK") == 0));
+	ui.terrStoneRB->setChecked((settings.value("TERR_STONE_MARK") == 1));
 	ui.observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
 	
 	//server list
 	hostlist.clear();
-	ui.ListView_hosts->clear();
-	ui.cb_connect->clear();
+	//ui.cb_connect->clear();
 	Host *h;
 	int size = settings.beginReadArray("HOSTS");
 	for (int i = 0; i < size; ++i) 
 	{
 		settings.setArrayIndex(i);
-		h = new Host( 	settings.value("title").toString(),
-				serverStringToConnectionType(settings.value("server").toString()),
-				settings.value("address").toString(),
-				settings.value("port").toInt(),
+		h = new Host(settings.value("server").toString(),
 				settings.value("loginName").toString(),
-				settings.value("password").toString(),
-				settings.value("codec").toString());
+				settings.value("password").toString());
 		hostlist.append(h);
-
-		QStringList sl;
-		sl 	<< settings.value("title").toString()
-			<< settings.value("server").toString()
-			<< settings.value("port").toString()
+		
+		/*QStringList sl;
+		sl	<< settings.value("server").toString()
 			<< settings.value("loginName").toString()
 			<< (h->password().isEmpty() ? "" : "***");
 
-		new QTreeWidgetItem(ui.ListView_hosts, sl);		
+		new QTreeWidgetItem(ui.ListView_hosts, sl);	*/	
 
-		ui.cb_connect->addItem(h->title());
+		//ui.cb_connect->addItem(h->title());
 
 	}
  	settings.endArray();
@@ -457,308 +462,6 @@ void MainWindow::loadSettings()
 	preferences.fill();
 
 
-}
-
-ConnectionType MainWindow::serverStringToConnectionType(const QString & s)
-{
-	if(s == "IGS")
-		return TypeIGS;
-	else if(s == "WING")
-		return TypeWING;
-	else if(s == "LGS")
-		return TypeLGS;
-	else if(s == "CyberORO")
-		return TypeORO;
-	else
-		return TypeUNKNOWN;
-}
-
-QString MainWindow::connectionTypeToServerString(const ConnectionType c)
-{
-	switch(c)
-	{
-		case TypeIGS:
-			return "IGS";
-			break;
-		case TypeWING:
-			return "WING";
-			break;
-		case TypeLGS:
-			return "LGS";
-			break;
-		case TypeORO:
-			return "CyberORO";
-			break;
-		default:
-			return "Unknown";
-			break;
-	}
-}
-
-/*
- * server tabs : button "add" clicked 
- */
-void MainWindow::slot_addServer()
-{
-	// check if at least title and host inserted
-
-	qDebug("Slot add server : %s - %s ",ui.LineEdit_title->text().toLatin1().constData(), ui.comboBox_server->currentText().toLatin1().constData());
-
-	if (!ui.LineEdit_title->text().isEmpty() && ! ui.comboBox_server->currentText().isEmpty())
-	{
-		// check if title already exists
-		bool found = false;
-		bool check;
-		unsigned int tmp = ui.LineEdit_port->text().toUInt(&check);
-		if (!check)
-		{
-			tmp = 0;
-			qWarning("Failed to convert port to integer!");
-		}
-
-		Host *h;
-		for (int i=0; i < hostlist.count() && !found ; i++)
-		{
-			h= hostlist.at(i);
-			if (h->title() == ui.LineEdit_title->text())
-			{
-				found = true;
-				// if found, insert at current pos, and remove old item
-				delete hostlist.takeAt(i);
-			}
-		}
-		/* FIXME  In addition to password/user saving issues and rather
-		 * nonintuitive buttons, the Host button is used as a kind of auto 
-		 * filler for a particular ip... we might want to use it as a protocol
-		 * setter instead.  Its all possible that the app could "ship" with
-		 * the standard ip addresses and setups. 
-		 * Also, what's the codec for?  Is that supposed to the protocol? There's
-		 * no entries but I usually think of "codecs" as for language, not net
-		 * protocols... */
-		// insert host (at it's sorted position) //TODO check wether this is needed
-		hostlist.append(new Host(ui.LineEdit_title->text(),
-				(ConnectionType)ui.comboBox_server->currentIndex(),
-				//ui.comboBox_server->currentText(),
-				ui.LineEdit_address->text(),
-				tmp,
-				ui.LineEdit_login->text(),
-				ui.LineEdit_pass->text(),
-				ui.ComboBox_codec->currentText()));
-
-
-		QStringList sl;
-		sl 	<< ui.LineEdit_title->text()
-			<< ui.comboBox_server->currentText()
-			<< QString::number(tmp)
-			<< ui.LineEdit_login->text()
-			<< (ui.LineEdit_pass->text().length() ? "***" : "");
-
-		// create entry in listview
-		if (!found)
-		{
-			new QTreeWidgetItem(ui.ListView_hosts, sl);
-			ui.cb_connect->addItem(ui.LineEdit_title->text());
-		}
-
-		else
-		{
-			ui.ListView_hosts->currentItem()->setText(0, ui.LineEdit_title->text());
-			ui.ListView_hosts->currentItem()->setText(1, ui.comboBox_server->currentText());
-			ui.ListView_hosts->currentItem()->setText(2, QString::number(tmp));
-			ui.ListView_hosts->currentItem()->setText(3, ui.LineEdit_login->text());
-			ui.ListView_hosts->currentItem()->setText(4, (ui.LineEdit_pass->text().length() ? "***" : ""));
-		}
-//		ListView_hosts->repaint();
-//			cb_title->insertItem(LineEdit_title->text(), 0);
-/*
-		// add to ClientWindow hostlist       !!! does not seem to be used !
-		emit signal_addHost(LineEdit_title->text(),
-		                    LineEdit_host->text(),
-		                    tmp,
-		                    LineEdit_login->text(),
-		                    LineEdit_pass->text());
-*/
-	}
-
-	// init insertion fields
-	//slot_cbtitle(QString());
-	ui.LineEdit_title->clear();
-	ui.LineEdit_login->clear();
-	ui.LineEdit_address->clear();
-	ui.LineEdit_pass->clear();
-	ui.LineEdit_port->clear();
-	slot_serverChanged(ui.comboBox_server->currentText());
-}
-
-
-/*
- * server tabs : button "delete" clicked 
- */
-void MainWindow::slot_deleteServer()
-{
-	// check if at least title and host inserted
-
-	if (! ui.ListView_hosts->currentItem())
-		return;
-
-	QString s = ui.ListView_hosts->currentItem()->text(0);
-
-	bool found = FALSE;
-
-
-
-	Host *h;
-	int i=0;
-	for (/*int i=0*/; i < hostlist.count() && !found ; i++)
-	{
-		h= hostlist.at(i);
-		if (h->title() == ui.LineEdit_title->text())
-		{
-			found = TRUE;
-			delete hostlist.takeAt(i);
-		}
-	}
-		
-	if (found)
-	{
-		i = ui.ListView_hosts->indexOfTopLevelItem(ui.ListView_hosts->currentItem());
-		ui.ListView_hosts->takeTopLevelItem(i);
-	}
-
-	ui.LineEdit_title->clear();
-	ui.LineEdit_login->clear();
-	ui.LineEdit_address->clear();
-	ui.LineEdit_pass->clear();
-	ui.LineEdit_port->clear();
-	
-
-}
-
-
-/*
- * server tabs : a line has been clicked on the list 
- */
-void MainWindow::slot_clickedListView(QTreeWidgetItem *lvi ,  int )
-{
-	bool found = FALSE;
-	Host *h;
-	for (int i=0; i < hostlist.count() && !found ; i++)
-	{
-		h= hostlist.at(i);
-		if (h->title() == lvi->text(0))
-		{
-			found = true;
-		}
-	}
-
-	if (!found)
-	{
-		qDebug("Problem in hostlist : did not find entry title : %s" , lvi->text(0).toLatin1().constData());
-		return;
-	}
-
-	ui.LineEdit_title->setText(h->title());
-	ui.LineEdit_login->setText(h->loginName());
-	ui.LineEdit_pass->setText(h->password());
-	ui.LineEdit_address->setText(h->address());
-	ui.LineEdit_port->setText(QString::number(h->port()));
-
-}
-
-/*
- * server tabs : 'new' button clicked : we clear the fields 
- */
-void MainWindow::slot_new( )
-{
-	ui.LineEdit_title->clear();
-	ui.LineEdit_login->clear();
-//	ui.LineEdit_login->setText(h->loginName());
-	ui.LineEdit_port->clear();
-	ui.LineEdit_pass->clear();
-	ui.LineEdit_address->clear();
-	ui.comboBox_server->setCurrentIndex ( 0);
-}
-
-/*
- * server tabs : an item in the server list has been selected 
- */
-void MainWindow::slot_serverChanged( const QString &server)
-{
-
-	if (server.isEmpty())
-	{
-		ui.LineEdit_port->clear();
-		ui.LineEdit_port->setEnabled(FALSE);
-		ui.LineEdit_address->clear();
-		ui.LineEdit_address->setEnabled(FALSE);
-	}	
-
-
-	else if (server == tr("Other"))
-	{
-		ui.LineEdit_port->clear();
-		ui.LineEdit_port->setEnabled(TRUE);
-		ui.LineEdit_address->clear();
-		ui.LineEdit_address->setEnabled(TRUE);
-	}
-
-	else
-	{
-		//ui.LineEdit_address->setReadOnly(TRUE);
-		//ui.LineEdit_port->setReadOnly(TRUE);
-		
-		// I'm enabling these for now because I might want to change it
-		// and they might change FIXME
-		//ui.LineEdit_address->setEnabled(FALSE);
-		//ui.LineEdit_port->setEnabled(FALSE);
-
-		if (server == QString("LGS"))
-		{
-//			ui.LineEdit_title->clear();
-			ui.LineEdit_address->setText("lgs.taiwango.net");
-			ui.LineEdit_port->setText("9696");
-//			ui.LineEdit_login->setText("guest");
-			// What codec does this use?
-			ui.ComboBox_codec->setCurrentIndex ( 0);//setCurrentText("");
-		}
-		else if (server == QString("WING"))
-		{
-//			ui.LineEdit_title->clear();
-			ui.LineEdit_address->setText("wing.gr.jp");
-			ui.LineEdit_port->setText("1515");
-//			ui.LineEdit_login->setText("guest");
-			// What codec does this use?
-			ui.ComboBox_codec->setCurrentIndex ( 0);
-		}
-		else if (server == QString("IGS"))
-		{
-//			ui.LineEdit_title->clear();
-			ui.LineEdit_address->setText("igs.joyjoy.net");
-			ui.LineEdit_port->setText("7777");
-//			ui.LineEdit_login->setText("guest");
-			ui.ComboBox_codec->setCurrentIndex (1);
-	
-		}
-		/* Again, this is a strange way of doing this FIXME */
-		else if (server == QString("CyberORO"))
-		{
-//			ui.LineEdit_title->clear();
-			//ui.LineEdit_address->setText("211.38.95.204");
-			//ui.LineEdit_port->setText("7002");
-			/* It looks like there's one gateway server which
-			 * responds with a bunch of other servers.. no real
-			 * way to get around this which means we might have
-			 * to bring up some other dialog to choose the
-			 * server from the meta server.  At least I assume
-			 * this because it doesn't respond to me and
-			 * the login information is sent to the gateway. */
-			ui.LineEdit_address->setText("211.113.91.78");
-			ui.LineEdit_port->setText("7447");
-//			ui.LineEdit_login->setText("guest");
-			ui.ComboBox_codec->setCurrentIndex (2);
-	
-		}
-	}
 }
 
 /*

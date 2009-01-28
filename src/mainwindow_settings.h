@@ -28,33 +28,26 @@
 class Host
 {
 public:
-	Host(const QString&, const ConnectionType, const QString&, const unsigned int, const QString&, const QString&, const QString&);
+	Host(const QString&, const QString&, const QString&);
 	~Host() {};
-	QString title() const { return t; };
-	ConnectionType host() const { return h; };
-	unsigned int port() const { return pt; };
+	QString host() const { return h; };
 	QString loginName() const { return lg; };
 	QString password() const { return pw; };
-	QString codec() const { return cdc; };
-	QString address() const { return ad; };
 	// operators <, ==
 	int operator== (Host h)
-		{ return (this->title() == h.title()); };
+		{ return (this->host() == h.host() && this->loginName() == h.loginName()); };
 	int operator== (Host *h)
-		{ return (this->title() == h->title()); };
-	bool operator< (Host h)
+		{ return (this->host() == h->host() && this->loginName() == h->loginName()); };
+	/* Do we need any of these anymore? */
+	/*bool operator< (Host h)
 		{ return (this->title() < h.title()); };
 	bool operator< (Host *h)
-		{ return (this->title() < h->title()); };
+		{ return (this->title() < h->title()); };*/
 
 private:
-	QString t;
-	ConnectionType h;
-	QString ad;
+	QString h;
 	QString lg;
 	QString pw;
-	unsigned int pt;
-	QString cdc;
 };
 
 class HostList : public QList<Host*>
