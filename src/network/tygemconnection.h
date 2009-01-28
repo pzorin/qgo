@@ -227,6 +227,7 @@ class TygemConnection : public NetworkConnection
 		unsigned short our_game_being_played;	//redundant with playing_game_number??
 		int matchKeepAliveTimerID, matchRequestKeepAliveTimerID;
 		int serverKeepAliveTimerID;
+		int retryLoginTimerID;
 		int observing_game_count;
 		//unsigned short opp_requests_undo_move_number;
 		unsigned short done_response;

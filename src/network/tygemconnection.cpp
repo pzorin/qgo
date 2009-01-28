@@ -131,7 +131,7 @@ TygemConnection::TygemConnection(class NetworkDispatch * _dispatch, const QStrin
 	
 	matchKeepAliveTimerID = 0;
 	matchRequestKeepAliveTimerID = 0;
-	
+	retryLoginTimerID = 0;
 	/* We should either create the palette on creation of
 	 * the connection, or have a button to activate it that
 	 * appears when the room is connected */
@@ -468,8 +468,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 						//we can't continue
 						//special response
 						qDebug("Already logged in? Too recent?");
-						//usleep(2000);
-						sendLogin(true);
+						retryLoginTimerID = startTimer(2000);
 						/* FIXME its real ugly if this happens
 						 * more than once and we hammer the
 						 * server until it lets us in.  We need
@@ -2393,6 +2392,12 @@ void TygemConnection::timerEvent(QTimerEvent * event)
 {
 	if(event->timerId() == serverKeepAliveTimerID)
 		sendServerKeepAlive();
+	else if(event->timerId() == retryLoginTimerID)
+	{
+		sendLogin(true);
+		killTimer(retryLoginTimerID);
+		retryLoginTimerID = 0;
+	}
 	/*if(event->timerId() == matchKeepAliveTimerID ||
 		  event->timerId() == matchRequestKeepAliveTimerID)
 	{
