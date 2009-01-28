@@ -101,6 +101,7 @@ public slots:
 	void slot_removeDialog(const QString &, const QString &);
 	void slot_msgBox(const QString&);
 	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
+	void setNetworkDispatch(NetworkDispatch * n) { netdispatch = n; };	//awkward
 	
 protected:
 	void closeEvent(QCloseEvent *e);

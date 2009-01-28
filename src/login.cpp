@@ -1,12 +1,14 @@
 #include <QtGui>
 #include "login.h"
+#include "mainwindow.h"
 #include "mainwindow_settings.h"		//for hostlist
 #include "network/networkdispatch.h"
 
-LoginDialog::LoginDialog(const QString & s, HostList * h)
+LoginDialog::LoginDialog(const QString & s, HostList * h, MainWindow * m)
 {
 	ui.setupUi(this);
 	connectionName = s;
+	mainwindow = m;		//awkward, but otherwise can connect faster than it gets set
 	
 	connType = serverStringToConnectionType(connectionName);
 	setWindowTitle(connectionName);
@@ -43,7 +45,11 @@ void LoginDialog::slot_connect(void)
 		return;
 	}
 	netdispatch = new NetworkDispatch(connType, ui.loginEdit->currentText(), ui.passwordEdit->text());	
-	
+	/* Its awkward to do this here FIXME, just make sure that, for instance
+	 * the connection has the mainwindow set within the network dispatch so its
+	 * not passing information into nothing */
+	mainwindow->setNetworkDispatch(netdispatch);
+	netdispatch->setMainWindow(mainwindow);
 	/* We need to wait here to get authorization confirm, no errors,
 	   maybe popup either "please wait" dialog, which we'd annoyingly
 	   have to handle and then close which might require a separate

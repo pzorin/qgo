@@ -32,9 +32,6 @@
  * return pressed in edit line -> command to send
  */
  
-unsigned long mi_flags = 0x01010101;
-unsigned long mo_flags = 0x00000201;
-unsigned long send_flags = 0x0102ffff;
 void MainWindow::slot_cmdactivated(const QString &cmd)
 {
 	unsigned long flags;
@@ -107,11 +104,9 @@ void MainWindow::slot_connect(bool b)
 				found = true;
 			}
 		}*/
-		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
+		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist, this);
 		if(logindialog->exec())
 		{
-			netdispatch = logindialog->getNetworkDispatch();
-			netdispatch->setMainWindow(this);
 			ui.pb_connect->setChecked(true);
 			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
 			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
@@ -125,7 +120,7 @@ void MainWindow::slot_connect(bool b)
 			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
 		//delete logindialog;	//not supposed to delete?
 		logindialog = 0;
-		qDebug("after new logindialog");
+		// FIXME needs to be cleaned up here
 		/*if (!found)
 		{
 			qDebug("Problem in hostlist : did not find list title : %s" , ui.cb_connect->currentText().toLatin1().constData());
@@ -1048,6 +1043,7 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 	unsigned long rf = netdispatch->getRoomStructureFlags();
 	/* FIXME, either way, we should keep a list of RoomListings
 	 * some where */
+	qDebug("Recv room listing %d %s", room.number, room.name.toLatin1().constData());
 	std::vector <const RoomListing *>::iterator it = roomList.begin();
 	while(it != roomList.end())
 	{

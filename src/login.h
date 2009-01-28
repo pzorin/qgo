@@ -3,14 +3,14 @@
 #include "defines.h"
 
 class HostList;
+class MainWindow;
 class NetworkDispatch;
 
 class LoginDialog : public QDialog, Ui::LoginDialog
 {
 	Q_OBJECT
 	public:
-		LoginDialog(const QString &, HostList * h);
-		NetworkDispatch * getNetworkDispatch(void) { return netdispatch; };
+		LoginDialog(const QString &, HostList * h, MainWindow * m);
 	private slots:		//or can these be private?
 		void slot_connect(void);
 		void slot_cancel(void);
@@ -23,4 +23,5 @@ class LoginDialog : public QDialog, Ui::LoginDialog
 		NetworkDispatch * netdispatch;
 		HostList * hostlist;
 		QString connectionName;
+		MainWindow * mainwindow;
 };
