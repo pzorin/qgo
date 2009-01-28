@@ -11,7 +11,7 @@ class TalkDispatch;
 class WingConnection : public IGSConnection
 {
 	public:
-		WingConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info);
+		WingConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
 		virtual void sendPlayersRequest(void);
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);

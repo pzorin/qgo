@@ -15,7 +15,8 @@ class TalkDispatch;
 class IGSConnection : public NetworkConnection
 {
 	public:
-		IGSConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info);
+		IGSConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
+		IGSConnection();
 		~IGSConnection();
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);
@@ -60,6 +61,12 @@ class IGSConnection : public NetworkConnection
 		virtual bool supportsChannels(void) { return true; };
 		virtual unsigned long getGameDialogFlags(void);
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); };
+	
+		/* This is because of that silly IGShandler crap and because I don't want
+		* connectionState to be public, just protected */
+		void setPassFailed(void) { connectionState = PASS_FAILED; };
+		void setProtocolError(void) { connectionState = PROTOCOL_ERROR; };
+			
 	protected:
 		virtual bool readyToWrite(void);
 		virtual void setReadyToWrite(void) { writeReady = true; };
@@ -78,13 +85,6 @@ class IGSConnection : public NetworkConnection
 		int time_to_seconds(const QString & time);
 		
 		QTextCodec * textCodec;
-
-		enum {
-			LOGIN,
-			PASSWORD,
-			SESSION,
-			AUTH_FAILED
-		} authState;
 		
 		virtual void timerEvent(QTimerEvent*);
 	private:

@@ -11,7 +11,7 @@ class TalkDispatch;
 class LGSConnection : public IGSConnection
 {
 	public:
-		LGSConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info);
+		LGSConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
 		virtual void sendPlayersRequest(void);
 		virtual void onReady(void);
 		virtual unsigned long getRoomStructureFlags(void) { return RS_NOROOMLIST; };

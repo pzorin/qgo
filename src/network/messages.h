@@ -18,17 +18,6 @@
  * uses it... so far this is a safe bet... but its something to worry about.*/
 
 class PlayerListing;
- 
-struct ConnectionInfo
-{
-	const char * host;
-	const unsigned int port;
-	const char * user;
-	const char * pass;
-	ConnectionType type;
-	ConnectionInfo(const char * h, const unsigned int p, const char * u, const char * s, ConnectionType t) : host(h), port(p), user(u), pass(s), type(t) {};
-	//~ConnectionInfo() {};
-};
 
 struct MoveRecord
 {

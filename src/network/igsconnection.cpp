@@ -9,14 +9,22 @@
 #include "gamedialogflags.h"
 #include "playergamelistings.h"
 
-IGSConnection::IGSConnection(class NetworkDispatch * _dispatch, const class ConnectionInfo & info)
+IGSConnection::IGSConnection()
+{
+	writeReady = false;
+	keepAliveTimer = 0;
+	textCodec = QTextCodec::codecForLocale();
+	registerMsgHandlers();
+}
+
+IGSConnection::IGSConnection(class NetworkDispatch * _dispatch, const QString & user, const QString & pass)
 {
 	dispatch = _dispatch;
-	if(openConnection(info))
+	if(openConnection("igs.joyjoy.net", 7777))
 	{
-		authState = LOGIN;
-		username = QString(info.user);
-		password = QString(info.pass);
+		connectionState = LOGIN;
+		username = user;
+		password = pass;
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
@@ -397,7 +405,7 @@ void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 	char * c;
 	int bytes;
 
-	switch(authState)
+	switch(connectionState)
 	{
 		case LOGIN:
 			bytes = p->canRead();
@@ -419,7 +427,8 @@ void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 				delete[] c;
 			}
 			break;
-		case SESSION:
+		case PASSWORD_SENT:
+		case CONNECTED:
 			while((bytes = p->canReadLine()))
 			{
 				c = new char[bytes + 1];
@@ -433,6 +442,16 @@ void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 		case AUTH_FAILED:
 			qDebug("Auth failed\n");
 			break;
+		case PASS_FAILED:
+			qDebug("Pass failed\n");
+			break;
+		case PROTOCOL_ERROR:
+			//wait for someone to destroy the connection
+			//can't imagine why we're even here
+			break;
+		default:
+			qDebug("Connection State not related to IGS protocol!!!");
+			break;
 	}
 }
 
@@ -444,11 +463,11 @@ void IGSConnection::handleLogin(QString msg)
 		writeReady = true;
 		QString u = username + "\r\n";
 		sendText(u.toLatin1().constData());	
-		authState = PASSWORD;
+		connectionState = PASSWORD;
 	}
 	else if(msg.contains("sorry") > 0)
 	{
-		authState = AUTH_FAILED;
+		connectionState = AUTH_FAILED;
 		if(console_dispatch)
 			console_dispatch->recvText("Sorry");
 	}
@@ -465,13 +484,13 @@ void IGSConnection::handlePassword(QString msg)
 		writeReady = true;
 		QString p = password + "\r\n";
 		sendText(p.toLatin1().constData());	
-		authState = SESSION;
+		connectionState = PASSWORD_SENT;
 	}
 }
 
 bool IGSConnection::isReady(void)
 {
-	if(authState == SESSION)
+	if(connectionState == CONNECTED)
 		return 1;
 	else
 		return 0;
@@ -481,7 +500,14 @@ void IGSConnection::onReady(void)
 {
 	if(firstonReadyCall)
 	{
+		/* Check here because I've forgotten exactly which kinds of "1"
+		 * msgs might call onReady() and apparently it can happen
+		 * after our password has been refused.  I'll add this to
+		 * WING and LGS as well*/
+		if(connectionState != PASSWORD_SENT)
+			return;
 		firstonReadyCall = 0;
+		connectionState = CONNECTED;
 	/* This gets called too much, we need a better
 	 * way to call it */
 	/* also needs to be earlier */
@@ -914,7 +940,22 @@ void IGS_error::handleMsg(QString line)
 	RoomDispatch * roomdispatch = connection->getDefaultRoomDispatch();
 	qDebug("error? %s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();
-	if (line.contains("No user named"))
+	if(line.contains("Invalid password"))
+	{
+		static_cast<IGSConnection*>(connection)->setPassFailed();
+		if(connection->getConsoleDispatch())
+		connection->getConsoleDispatch()->recvText(line.toLatin1().constData());
+		connection->closeConnection();
+		return;
+	}
+	else if(line.contains("string you have typed is illegal"))
+	{
+		static_cast<IGSConnection*>(connection)->setProtocolError();
+		connection->getConsoleDispatch()->recvText(line.toLatin1().constData());
+		connection->closeConnection();
+		return;
+	}
+	else if (line.contains("No user named"))
 	{
 		QString name = element(line, 1, "\"");
 //				//emit signal_talk(name, "@@@", true);

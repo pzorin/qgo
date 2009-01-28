@@ -16,7 +16,7 @@ class NetworkDispatch
 {
 	public:
 		NetworkDispatch(): connection(0), isSubDispatch(true){};
-		NetworkDispatch(class ConnectionInfo info);
+		NetworkDispatch(ConnectionType connType, QString, QString);
 		virtual ~NetworkDispatch();
 		int checkForErrors(void);
 		void onError(void);

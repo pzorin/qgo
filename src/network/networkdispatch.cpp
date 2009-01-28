@@ -4,6 +4,9 @@
 #include "wing.h"
 #include "lgs.h"
 #include "cyberoroconnection.h"
+#include "tygemconnection.h"
+#include "eweiqiconnection.h"
+#include "tomconnection.h"
 #include "consoledispatch.h"
 #include "roomdispatch.h"
 #include "gamedialogdispatch.h"
@@ -11,25 +14,34 @@
 #include "room.h"
 #include "../mainwindow.h"
 
-NetworkDispatch::NetworkDispatch(class ConnectionInfo info)
+NetworkDispatch::NetworkDispatch(ConnectionType connType, QString username, QString password)
 {
 	mainwindow = 0;
 	mainwindowroom = 0;
 	consoledispatch = 0;
 	isSubDispatch = false;	//only main dispatch deletes connection
-	switch(info.type)	
+	switch(connType)	
 	{
 		case TypeIGS:
-			connection = new IGSConnection(this, info);
+			connection = new IGSConnection(this, username, password);
 			break;
 		case TypeORO:
-			connection = new CyberOroConnection(this, info);
+			connection = new CyberOroConnection(this, username, password);
 			break;
 		case TypeWING:
-			connection = new WingConnection(this, info);
+			connection = new WingConnection(this, username, password);
 			break;
 		case TypeLGS:
-			connection = new LGSConnection(this, info);
+			connection = new LGSConnection(this, username, password);
+			break;
+		case TypeTYGEM:
+			connection = new TygemConnection(this, username, password);
+			break;
+		case TypeEWEIQI:
+			connection = new EWeiQiConnection(this, username, password);
+			break;
+		case TypeTOM:
+			connection = new TomConnection(this, username, password);
 			break;
 		default:
 			qDebug("Bad connection Type");
@@ -42,12 +54,14 @@ NetworkDispatch::NetworkDispatch(class ConnectionInfo info)
  * maybe we even wait until socket is complete
  * or return a "waiting" error? At the very
  * least this will ensure the connection
- * exists everywhere. */
+ * exists everywhere.
+ * Well, we made it more complex, but now
+ * name should probably be changed. */
 int NetworkDispatch::checkForErrors(void)
 {
 	if(!connection)
-		return -1;
-	return 0;
+		return ND_BADCONNECTION;
+	return connection->getConnectionState();
 }
 
 void NetworkDispatch::setMainWindow(MainWindow * mw)
@@ -242,9 +256,13 @@ void NetworkDispatch::onError(void)
 	 * it would be okay to notify all rooms, eventually, each registered room 
 	 * FIXME */
 	qDebug("ND::onError");
-	RoomDispatch * room = connection->getDefaultRoomDispatch();
-	if(room)
-		room->onError();
+	//RoomDispatch * room = connection->getDefaultRoomDispatch();
+	//if(room)
+	//	room->onError();
+	if(mainwindowroom)
+		mainwindowroom->onError();
 	/* We could also have the rooms deleted here. */
 	//delete this;
+	if(mainwindow)
+		mainwindow->onConnectionError();
 }

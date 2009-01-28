@@ -9,9 +9,18 @@
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
 
-LGSConnection::LGSConnection(class NetworkDispatch * _dispatch, const class ConnectionInfo & info) :
-IGSConnection(_dispatch, info)
+LGSConnection::LGSConnection(class NetworkDispatch * _dispatch, const QString & user, const QString & pass) :
+IGSConnection()
 {
+	dispatch = _dispatch;
+	if(openConnection("lgs.taiwango.net", 9696))
+	{
+		connectionState = LOGIN;
+		username = user;
+		password = pass;
+	}
+	else
+		qDebug("Can't open Connection\n");	//throw error?
 	registerMsgHandlers();
 }
 
@@ -33,7 +42,10 @@ void LGSConnection::onReady(void)
 {
 	if(firstonReadyCall)
 	{
+		if(connectionState != PASSWORD_SENT)
+			return;
 		firstonReadyCall = 0;
+		connectionState = CONNECTED;
 	
 		sendText("toggle client on\r\n");		//adds type codes
 

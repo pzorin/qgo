@@ -1,7 +1,7 @@
 #include "eweiqiconnection.h"
 
-EWeiQiConnection::EWeiQiConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info)
-: TygemConnection(_dispatch, info)
+EWeiQiConnection::EWeiQiConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass)
+: TygemConnection(_dispatch, user, pass, TypeEWEIQI)
 {
 	serverCodec = QTextCodec::codecForName("GB2312");
 	//error handling!
@@ -11,8 +11,7 @@ EWeiQiConnection::EWeiQiConnection(NetworkDispatch * _dispatch, const class Conn
 int EWeiQiConnection::requestServerInfo(void)
 {
 	qDebug("Requesting eWeiQi Server Info");
-	ConnectionInfo server("121.189.9.52", 80, "", "", TypeNone);
-	if(!openConnection(server))
+	if(!openConnection("121.189.9.52", 80))
 	{
 		qDebug("Can't get server info");
 		return -1;

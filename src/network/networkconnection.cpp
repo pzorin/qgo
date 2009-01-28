@@ -14,7 +14,26 @@ dispatch(0), default_room_dispatch(0), console_dispatch(0), qsocket(0)
 	firstonReadyCall = 1;
 }
 
-bool NetworkConnection::openConnection(const class ConnectionInfo & info)
+/* Maybe this should return an enum, but I'm feeling lazy at the moment,
+ * and don't want to define two different connectionState like enums */
+int NetworkConnection::getConnectionState(void)
+{
+	switch(connectionState)
+	{
+		case AUTH_FAILED:
+			return ND_BADLOGIN;
+		case PASS_FAILED:
+			return ND_BADPASSWORD;
+		case PROTOCOL_ERROR:
+			return ND_PROTOCOL_ERROR;
+		case CONNECTED:
+			return ND_CONNECTED;
+		default:
+			return ND_WAITING;
+	}
+}
+
+bool NetworkConnection::openConnection(const QString & host, const unsigned short port)
 {
 	boardDispatchRegistry = new BoardDispatchRegistry(this);
 	gameDialogDispatchRegistry = new GameDialogDispatchRegistry(this);
@@ -39,12 +58,11 @@ bool NetworkConnection::openConnection(const class ConnectionInfo & info)
 		return 0;
 	}
 	//remove asserts later
-	Q_ASSERT(info.host != 0);
-	Q_ASSERT(info.port != 0);
-	qDebug("Connecting to %s %d...\n", info.host, info.port);
+	Q_ASSERT(host != 0);
+	Q_ASSERT(port != 0);
+	qDebug("Connecting to %s %d...\n", host.toLatin1().constData(), port);
 	// assume info.host is clean
-	qsocket->connectToHost(info.host, (quint16) info.port);
-	connectionInfo = new ConnectionInfo(info);
+	qsocket->connectToHost(host, (quint16) port);
 	
 	/* If dispatch does not have a UI, the thing that sets the UI
 	 * will setupRoomAndConsole */
@@ -146,7 +164,6 @@ NetworkConnection::~NetworkConnection()
 	 * it from here */
 	//if(dispatch)
 	//	delete dispatch;
-	delete connectionInfo;
 	qDebug("Destroying connection\n");
 	//closeConnection();			//specific impl already calls this
 	/* Not sure where to delete qsocket.  Possible OnDelayClosedFinish() thing. */
@@ -172,10 +189,7 @@ void NetworkConnection::OnConnected()
 	/* Invalid read of size 1 here FIXME 
 	 * also prints garbage... */
 	if(console_dispatch)
-		console_dispatch->recvText(QString("Connected to ") + QString(connectionInfo->host) + " " + QString::number(connectionInfo->port));
-	
-	//sendTextToApp("Connected to " + qsocket->peerAddress().toString() + " " +
-	//	  QString::number(qsocket->peerPort()));
+		console_dispatch->recvText(QString("Connected to ") + qsocket->peerAddress().toString() + " " +  QString::number(qsocket->peerPort()));
 }
 
 void NetworkConnection::OnReadyRead()

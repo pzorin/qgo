@@ -9,9 +9,18 @@
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
 
-WingConnection::WingConnection(class NetworkDispatch * _dispatch, const class ConnectionInfo & info) :
-IGSConnection(_dispatch, info)
+WingConnection::WingConnection(class NetworkDispatch * _dispatch, const QString & user, const QString & pass) :
+IGSConnection()
 {
+	dispatch = _dispatch;
+	if(openConnection("wing.gr.jp", 1515))
+	{
+		connectionState = LOGIN;
+		username = user;
+		password = pass;
+	}
+	else
+		qDebug("Can't open Connection\n");	//throw error?
 	registerMsgHandlers();
 }
 
@@ -131,11 +140,13 @@ void WingConnection::sendMove(unsigned int game_id, MoveRecord * move)
 
 void WingConnection::onReady(void)
 {
-	static bool first_call = 1;
-	if(first_call)
+	if(firstonReadyCall)
 	{
-		first_call = 0;
-
+		if(connectionState != PASSWORD_SENT)
+			return;
+		firstonReadyCall = 0;
+		connectionState = CONNECTED;
+		
 		//getDefaultRoomDispatch()->setConnection(this);
 	
 		//getDefaultRoomDispatch()->setAccountName(username);

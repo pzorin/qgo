@@ -1,8 +1,8 @@
 #include "tomconnection.h"
 #include "serverlistdialog.h"
 
-TomConnection::TomConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info)
-: TygemConnection(_dispatch, info)
+TomConnection::TomConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass)
+: TygemConnection(_dispatch, user, pass, TypeTOM)
 {
 	serverCodec = QTextCodec::codecForName("GB2312");
 	requestServerInfo();
@@ -11,8 +11,7 @@ TomConnection::TomConnection(NetworkDispatch * _dispatch, const class Connection
 int TomConnection::requestServerInfo(void)
 {
 	qDebug("Requesting Tom Server Info");
-	ConnectionInfo server("61.135.158.147", 80, "", "", TypeNone);
-	if(!openConnection(server))
+	if(!openConnection("61.135.158.147", 80))
 	{
 		qDebug("Can't get server info");
 		return -1;
