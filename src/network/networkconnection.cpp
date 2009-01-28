@@ -28,6 +28,8 @@ int NetworkConnection::getConnectionState(void)
 			return ND_PROTOCOL_ERROR;
 		case CONNECTED:
 			return ND_CONNECTED;
+		case CANCELED:
+			return ND_USERCANCELED;
 		default:
 			return ND_WAITING;
 	}

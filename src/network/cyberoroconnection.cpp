@@ -441,10 +441,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
-		closeConnection(false);
 		connectionState = CANCELED;
-		if(dispatch)
-			dispatch->onError();	//not great... FIXME
 		return;
 	}
 }

@@ -123,6 +123,14 @@ void LoginDialog::slot_connect(void)
 			hostlist->append(h);
 		}
 	}
+	else if(connectionStatus == ND_USERCANCELED)
+	{
+		/* I think login is now responsible for mediating that
+		 * first connection netdispatch, calls mainwindow
+		 * which will close the connection.  FIXME, responsibilities
+		 * are not clear even if they work out. */
+		netdispatch->onError();
+	}
 	done(1);
 }
 

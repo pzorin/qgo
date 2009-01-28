@@ -163,9 +163,11 @@ int TygemConnection::requestServerInfo(void)
 		 "Host: service.tygem.com\r\n" \
 		 "Connection: Keep-Alive\r\n" \
 		 "Cache-Control: no-cache\r\n\r\n");
+#ifdef RE_DEBUG
 	for(int i = 0; i < length; i++)
 		printf("%02x", packet[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	if(write((const char *)packet, length) < 0)
 	{
 		qWarning("*** failed sending server info request");
@@ -454,6 +456,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 						if(reconnectToServer() < 0)
 						{
 							qDebug("User canceled");
+							connectionState = CANCELED;
 							return;
 						}
 						return;
@@ -620,13 +623,9 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
-		closeConnection(false);
 		connectionState = CANCELED;
-		if(dispatch)
-			dispatch->onError();	//not great... FIXME
 		return;
 	}
-	//sendLogin();
 }
 
 /* Response bit is also server change/reconnect bit */
