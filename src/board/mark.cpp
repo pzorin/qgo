@@ -232,6 +232,14 @@ MarkText::~MarkText()
 //	hide();
 }
 
+/* FIXME This changes the pen whenever any mark is "setSize"d for all
+ * marks.  It looks really bad for high numbers since they alter the
+ * low numbers and the low numbers keep that small size, even when
+ * one starts a new board.  Which is actually weird and likely because
+ * the old marks were not deleted and are still being drawn !!!!
+ * But I see the logic in having a common font size in general which
+ * means either changing it for text versus numbers or having it adjust.
+ * The deletion of marks though is a serious issue !!! */
 void MarkText::setSize(double x, double)
 {
 	curSize = x;
@@ -262,3 +270,17 @@ void MarkText::setSize(double x, double)
 
 
 }
+
+MarkSmallStoneTerr::MarkSmallStoneTerr(int x, int y, int s, StoneColor c, QList<QPixmap> * p, QGraphicsScene *canvas)
+	: Mark(x, y), QGraphicsPixmapItem(0, canvas), _x(x), _y(y), col(c), size(s)
+{
+	//FIXME the ZValue keeps the gatter and hoshi marks from messing with
+	//the territory marks, but I get the feeling that ZValues are inconsistently
+	//used and that the gatter drawing could be significantly sped up
+	setZValue(1);
+	if (p->count() <= 2)
+		setPixmap(p->at( col == stoneBlack ? 0 : 1));
+	else	
+		setPixmap(p->at( col == stoneBlack ? 0 : (rand() % (p->count() -2) ) + 1));
+}
+		

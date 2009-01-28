@@ -29,6 +29,7 @@ public:
 	static QPixmap *getBoardPixmap(QString ) ;
 	static QPixmap *getTablePixmap(QString ) ;
 	QList<QPixmap> *getStonePixmaps() const { return stonePixmaps; }
+	QList<QPixmap> *getSmallStonePixmaps() const { return smallStonePixmaps; }
 	QList<QPixmap> *getGhostPixmaps() const { return ghostPixmaps; }
 	static QList<QPixmap> * getAlternateGhostPixmaps() { return altGhostPixmaps; }
 	void ghostImage(QImage *img);
@@ -45,7 +46,7 @@ protected:
 	
 private:
 	bool isDisplayBoard;
-	QList<QPixmap> *stonePixmaps, *ghostPixmaps;
+	QList<QPixmap> *stonePixmaps, *ghostPixmaps, *smallStonePixmaps;
 	static QList<QPixmap> *altGhostPixmaps;
 	static QPixmap *tablePixmap;
 	static QPixmap *woodPixmap1;

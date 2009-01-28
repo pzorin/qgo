@@ -43,12 +43,19 @@ ImageHandler::ImageHandler()
 		tablePixmap =  new QPixmap(":/new/prefix1/ressources/pics/table.png");
 //	if (woodPixmap1 == NULL)
 		woodPixmap1 =  new QPixmap(":/new/prefix1/ressources/pics/wood.png");
+		/* I wanted to make it look like an old style go manual, but apparently
+		 * this is possible by changing the stone type to "Ugly 2d" and I 
+		 * made this little paper graphic with some speckle... but I'll add a
+		 * comment here in case someone else has the same bright idea for a
+		 * "classic" mode */
+		//paperPixmap =  new QPixmap(":/new/prefix1/ressources/pics/paper.png");
 
 //    if (tablePixmap == NULL || tablePixmap->isNull())
 //		qFatal("Could not load pixmaps.");
  
 	stonePixmaps = NULL;
 	ghostPixmaps = NULL;
+	smallStonePixmaps = NULL;
 	
     // Init the alternate ghost pixmaps
 	if (altGhostPixmaps == NULL)
@@ -97,6 +104,7 @@ ImageHandler::~ImageHandler()
 	
 //	TODO delete stonePixmaps;
 //	delete ghostPixmaps;
+//	delete smallStonePixmaps;
 
 }
 
@@ -463,11 +471,12 @@ void ImageHandler::init(int size, bool isDisplay)
 		size = size * 9 / 10;
 	
 	int stone_look = ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
-
+	bool smallstones = settings.value("TERR_STONE_MARK").toInt();
+	
 	stonePixmaps = new QList<QPixmap>();//::QList();
-
+	smallStonePixmaps = new QList<QPixmap>();
 	QList<QPixmap> list, ghostlist;
-	QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
+	QImage iw1, iws;
 	QList<QPoint> hotspots, ghotspots ;
 	QPoint point(size/2, size/2);
 
@@ -488,6 +497,19 @@ void ImageHandler::init(int size, bool isDisplay)
 	ghostlist.append( QPixmap::fromImage(gb));
 	ghotspots.append(point);
 
+	//small black stone
+	if(smallstones)
+	{
+		QImage ibs = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
+	
+		paintBlackStone(ibs, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+	
+		smallStonePixmaps->append(QPixmap::fromImage(ibs, 
+				     Qt::PreferDither | 
+				     Qt::DiffuseAlphaDither | 
+				     Qt::DiffuseDither) );
+	}
+	
 	// white stones	
 	for (int i=1 ;	i<=WHITE_STONES_NB;	i++)
 	{
@@ -504,6 +526,16 @@ void ImageHandler::init(int size, bool isDisplay)
 		ghostImage(&gw1);
 		ghostlist.append(QPixmap::fromImage(gw1));
 		ghotspots.append(point);
+		
+		if(smallstones)
+		{
+			iws = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
+			paintWhiteStone(iws, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+			smallStonePixmaps->append(QPixmap::fromImage(iws, 
+					     	Qt::PreferDither | 
+						Qt::DiffuseAlphaDither | 
+				  		Qt::DiffuseDither)   );
+		}
 	}
 	
 	//shadow under the stones
@@ -524,6 +556,8 @@ void ImageHandler::init(int size, bool isDisplay)
 	ghostPixmaps =  new QList<QPixmap>(ghostlist); //::QList(ghostlist);
 }
 
+/* Why does this code differ from that in init and why doesn't init
+ * just call rescale? */
 void ImageHandler::rescale(int size)//, bool smallerStones)
 {
 	QSettings settings;
@@ -532,14 +566,16 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	Q_CHECK_PTR(ghostPixmaps);
 
 	size = size + 1;
-
+	
 	int stone_look =  ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
-
+	bool smallstones = settings.value("TERR_STONE_MARK").toInt();
 	stonePixmaps->clear();
 	ghostPixmaps->clear();
+	smallStonePixmaps->clear();
 
 	//repaint black stones
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
+	QImage iws;
 //	ib.setAlphaBuffer(TRUE);
 	paintBlackStone(ib, size, stone_look);
 	stonePixmaps->append(QPixmap::fromImage(ib));//, 
@@ -552,9 +588,21 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	ghostImage(&gb);
 	ghostPixmaps->append(QPixmap::fromImage(gb));
 
+	//small black stone
+	if(smallstones)
+	{
+		QImage ibs = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
+		paintBlackStone(ibs, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+		smallStonePixmaps->append(QPixmap::fromImage(ibs));
+		
+		// small white stones
+		iws = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
+	}
 	// white stones	
 	QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
 
+	
+	
 	for (int i=1 ;	i<=WHITE_STONES_NB;	i++)
 	{
 		paintWhiteStone(iw1, size, stone_look);
@@ -563,6 +611,12 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 		QImage gw1(iw1);
 		ghostImage(&gw1);
 		ghostPixmaps->append(QPixmap::fromImage(gw1));
+		
+		if(smallstones)
+		{
+			paintWhiteStone(iws, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+			smallStonePixmaps->append(QPixmap::fromImage(iws));
+		}
 	}
 	
 	// shadow

@@ -576,7 +576,17 @@ void Board::resizeBoard(int w, int h)
 			case RTTI_MARK_TERR: m = (MarkTerr*)item; break;
 			default: continue;
 			}
-			m->setSize(square_size, square_size);
+			if(item->type() == RTTI_MARK_TERR && preferences.terr_stone_mark)
+			{
+				QGraphicsItem * olditem = item;
+				item = new MarkSmallStoneTerr(static_cast<MarkSmallStoneTerr *>(item)->getX(),
+							       static_cast<MarkSmallStoneTerr *>(item)->getY(), 
+								square_size / SMALL_STONE_TERR_DIVISOR, (static_cast<MarkSmallStoneTerr *>(item)->getType() == markTerrBlack ? stoneBlack : stoneWhite) , imageHandler->getSmallStonePixmaps(), canvas);
+				delete olditem;
+				m = (MarkSmallStoneTerr *)item;
+			}
+			else
+				m->setSize(square_size, square_size);
 			m->setPos(offsetX + square_size * (m->posX() - 1) - m->getSizeX()/2.0,
 				offsetY + square_size * (m->posY() - 1) - m->getSizeY()/2.0);
 		 }
@@ -584,6 +594,9 @@ void Board::resizeBoard(int w, int h)
 
 //	boardHandler->gotoMove(m_save);
 
+	/* FIXME sometimes this draws the lines after/on top of the marks.
+	 * moving it earlier doesn't fix anything */
+	
 	// Redraw the board
 	drawBackground();
 	drawGatter();
@@ -996,12 +1009,17 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 			n = txt.toInt() - 1;
 		numberPool[n] = true;
 		m = new MarkNumber(x, y, square_size, n, canvas, col, false);
-		setMarkText(x, y, txt);
+		//FIXME why do we call "setMarkText" here and not in markText case above??
+		//I'm commenting it out, doesn't seem to change anything
+		//setMarkText(x, y, txt);
 		gatter->hide(x,y);
 		break;
 		
 	case markTerrBlack:
-		m = new MarkTerr(x, y, square_size, stoneBlack, canvas);
+		if(!preferences.terr_stone_mark)
+			m = new MarkTerr(x, y, square_size, stoneBlack, canvas);
+		else
+			m = new MarkSmallStoneTerr(x, y, square_size / SMALL_STONE_TERR_DIVISOR, stoneBlack, imageHandler->getSmallStonePixmaps(), canvas);
 		if (hasStone(x, y) == 1)
 		{
 			getStoneAt(x, y)->setDead(true);
@@ -1013,7 +1031,10 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 		break;
 		
 	case markTerrWhite:
-		m = new MarkTerr(x, y, square_size, stoneWhite, canvas);
+		if(!preferences.terr_stone_mark)
+			m = new MarkTerr(x, y, square_size, stoneWhite, canvas);
+		else
+			m = new MarkSmallStoneTerr(x, y, square_size / SMALL_STONE_TERR_DIVISOR, stoneWhite, imageHandler->getSmallStonePixmaps(), canvas);
 		if (hasStone(x, y) == 1)
 		{
 			getStoneAt(x, y)->setDead(true);
@@ -1204,10 +1225,18 @@ void Board::removeLastMoveMark()
 	else if(move->isHandicapMove()) {}	// no last move marks on handicaps
 	else if (c != stoneNone && x != -1 && y != -1 && x <= board_size && y <= board_size)
 	{
-//		lastMoveMark = new MarkText(imageHandler, x, y, square_size, "+", canvas,
-		// true = plus sign
-		lastMoveMark = new MarkCross(x, y, square_size, canvas,
-			c == stoneBlack ? Qt::white : Qt::black, true);
+		
+		if(preferences.number_current_move)
+		{
+			//possible FIXME, MarkNumber adds 1 in mark.h to the move number ?!
+			lastMoveMark = new MarkNumber(x, y, square_size, move->getMoveNumber() - 1, canvas, 
+					c == stoneBlack ? Qt::white : Qt::black, false);
+		}
+		else
+		{
+			lastMoveMark = new MarkCross(x, y, square_size, canvas,
+					c == stoneBlack ? Qt::white : Qt::black, true);
+		}
 		Q_ASSERT(lastMoveMark);
 //		lastMoveMark = new MarkCircle(x, y, square_size, canvas,
 //			c == stoneBlack ? white : black, setting->readBoolEntry("SMALL_STONES"));

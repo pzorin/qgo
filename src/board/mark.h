@@ -200,4 +200,27 @@ private:
 	StoneColor col;
 };
 
+class MarkSmallStoneTerr : public Mark, public QGraphicsPixmapItem
+{
+	public: 
+		MarkSmallStoneTerr(int x, int y, int s, StoneColor c, QList<QPixmap> * p, QGraphicsScene *canvas);
+		virtual ~MarkSmallStoneTerr() {};
+		virtual int type() const { return RTTI_MARK_TERR; }
+		virtual MarkType getType() const { if (col == stoneBlack) return markTerrBlack; else return markTerrWhite; }
+		int getX() const { return _x; };
+		int getY() const { return _y; };
+		virtual void setPos(double x, double y) { QGraphicsPixmapItem::setPos((qreal)x , (qreal)y); }
+		virtual void setSize(double, double ) {};
+		virtual int getSizeX() const { return size; }
+		virtual int getSizeY() const { return size; }
+		virtual void show() { QGraphicsPixmapItem::show(); };
+		virtual void hide() { QGraphicsPixmapItem::hide(); };
+		virtual void setColor(const QColor &) {};
+		virtual const QColor getColor() { return QColor(0, 0, 0);}
+	private:
+		int _x, _y;
+		StoneColor col;
+		int size;
+};
+
 #endif
