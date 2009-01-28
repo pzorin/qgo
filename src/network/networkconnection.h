@@ -33,6 +33,7 @@ class NetworkConnection : public QObject
 	public:
 		NetworkConnection();
 		~NetworkConnection();
+		int getConnectionState();
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
 		virtual void sendDisconnect(void) = 0;
@@ -89,11 +90,11 @@ class NetworkConnection : public QObject
 		const QString & getUsername(void) { return username; };
 		virtual const PlayerListing & getOurListing(void) = 0;
 		virtual unsigned short getRoomNumber(void) { return 0; };
-		ConnectionType getConnectionType(void) { if(connectionInfo) return connectionInfo->type; else return TypeNone; };
 		virtual void requestGameInfo(unsigned int game_id) = 0;
 		virtual void requestGameStats(unsigned int game_id) = 0;
 		virtual unsigned int rankToScore(QString rank) = 0;
 		virtual unsigned long getGameDialogFlags(void) { return 0; };
+		virtual bool playerTrackingByID(void) { return false; };
 		virtual bool supportsMultipleUndo(void) { return false; };
 		virtual bool supportsObserveOutside(void) { return false; };
 		virtual bool supportsServerChange(void) { return false; };
@@ -101,6 +102,7 @@ class NetworkConnection : public QObject
 		virtual bool startTimerOnOpen(void) { return false; };	//name?? no "supports"?
 		virtual bool clientCountsTime(void) { return true; };
 		virtual bool clientSendsTime(void) { return false; };
+		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
 		virtual bool supportsSeek(void) { return false; };
 		virtual unsigned long getPlayerListColumns(void) { return 0; };
 		#define PL_NOWINSLOSSES		0x01
@@ -146,7 +148,7 @@ class NetworkConnection : public QObject
 		NetworkDispatch * dispatch;
 		RoomDispatch * default_room_dispatch;
 		ConsoleDispatch * console_dispatch;
-		bool openConnection(const class ConnectionInfo & info);
+		bool openConnection(const QString & host, const unsigned short port);
 		
 		newline_pipe <unsigned char> pending;
 		newline_pipe <unsigned char> send_buffer;	//not always used
@@ -155,9 +157,21 @@ class NetworkConnection : public QObject
 		GameDialogDispatchRegistry * gameDialogDispatchRegistry;
 		TalkDispatchRegistry * talkDispatchRegistry;
 
-		class ConnectionInfo * connectionInfo;
 		QString username;
 		QString password;
+		
+		enum {
+			LOGIN,
+   			PASSWORD,
+                  	PASSWORD_SENT,
+   			AUTH_FAILED,
+      			PASS_FAILED,
+      			INFO,
+     			CONNECTED,
+     			RECONNECTING,
+     			CANCELED,
+			PROTOCOL_ERROR
+		} connectionState;
 		
 	private:
 		QTcpSocket * qsocket;	
