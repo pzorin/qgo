@@ -31,14 +31,24 @@ unsigned char * temp_packet;
 #define PLAYERLIST_SKIPNUMBER_UNSET	0xffff
 
 //#define RE_DEBUG 
-CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const class ConnectionInfo & info)
+CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const QString & user, const QString & pass)
 {
+
+	/* ui.LineEdit_address->setText("211.38.95.204");
+			//ui.LineEdit_port->setText("7002");
+	//Note that this is not world.cyberoro.com
+	//which right now is 91.91.
+	//This is gateway server which is sent login
+	//information and authenticates us to other
+	//servers that are provided on a list. */
+	/* FIXME, we need to contact some dns listed server
+	 * to get official ip in case it changes */
 	dispatch = _dispatch;
-	if(openConnection(info))
+	if(openConnection("211.113.91.78", 7447))
 	{
 		connectionState = LOGIN;
-		username = QString(info.user);
-		password = QString(info.pass);
+		username = user;
+		password = pass;
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
@@ -300,6 +310,8 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			{
 				c = new unsigned char[bytes];
 				p->read(c, bytes);
+				//0004064d
+
 #ifdef RE_DEBUG
 				for(int i = 0; i < bytes; i++)
 					printf("%02x", c[i]);
@@ -341,6 +353,9 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
 		/*case AUTH_FAILED:
 			qDebug("Auth failed\n");
 			break;*/
+		default:
+			qDebug("connection state not handled by ORO");
+			break;
 	}
 }
 
@@ -480,14 +495,10 @@ int CyberOroConnection::reconnectToServer(void)
 	 * somewhere, like on the main window. */
 	
 	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), current_server_addr);
-	ConnectionInfo * newCI = new ConnectionInfo(current_server_addr,
-						    7002,
-						   connectionInfo->user,
-						   connectionInfo->pass,
-						   connectionInfo->type);
+	
 	if(connectionState == CONNECTED)
 		closeConnection(false);
-	if(openConnection(*newCI))
+	if(openConnection(current_server_addr, 7002))
 	{
 		qDebug("Reconnected");
 		connectionState = CONNECTED;
@@ -502,7 +513,6 @@ int CyberOroConnection::reconnectToServer(void)
 	roomlist_observers = 0;
 	playerlist_roomnumber = 1;
 	playerlist_observernumber = 0;
-	delete newCI;
 
 	if(server_i == 0)
 		serverCodec = QTextCodec::codecForName("Shift-JIS");
@@ -2621,13 +2631,6 @@ Outgoing:
 
 void CyberOroConnection::handlePassword(QString msg)
 {
-	qDebug(":%d %s\n", msg.size(), msg.toLatin1().constData());
-	if(msg.contains("Password:") > 0 || msg.contains("1 1") > 0)
-	{
-		qDebug("Password or 1 1 found\n");
-		sendText(password.toLatin1().constData());	
-		//authState = SESSION;
-	}
 }
 
 bool CyberOroConnection::isReady(void)
@@ -5318,6 +5321,7 @@ void CyberOroConnection::handleMsg2(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("Its msg2: e461\n");
 #endif //RE_DEBUG
+	playerlist_inorder.clear();	//hopefully this is a good place
 	//each record is 18 bytes;
 	while(records--)
 	{

@@ -12,7 +12,7 @@ class TalkDispatch;
 class CyberOroConnection : public NetworkConnection
 {
 	public:
-		CyberOroConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info);
+		CyberOroConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
 		~CyberOroConnection();
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);
@@ -59,6 +59,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual void requestGameStats(unsigned int game_id);
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
+		virtual bool playerTrackingByID(void) { return true; };
 		virtual bool supportsMultipleUndo(void) { return true; };
 		virtual bool supportsObserveOutside(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
@@ -211,12 +212,6 @@ class CyberOroConnection : public NetworkConnection
 		std::vector <MoveRecord> deadStonesList;
 		bool receivedOppDone;
 		
-		enum {
-			LOGIN,
-			CONNECTED,
-			RECONNECTING,
-			CANCELED
-		} connectionState;
 	private slots:
 		virtual void OnConnected();
 };
