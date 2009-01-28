@@ -23,7 +23,7 @@
 
 class HostList;
 class RoomListing;
-
+class LoginDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -59,11 +59,6 @@ public slots:
 	void slot_computerPathChanged(const QString &);
 
 	//preferences tabs slots
-	void slot_addServer();
-	void slot_deleteServer();
-	void slot_clickedListView(QTreeWidgetItem *lvi ,  int i);
-	void slot_new();
-	void slot_serverChanged( const QString &server);
 	void slot_cancelPressed();
 	void slot_currentChanged(int );
 	void slot_getGobanPath();
@@ -106,15 +101,13 @@ public slots:
 	void slot_removeDialog(const QString &, const QString &);
 	void slot_msgBox(const QString&);
 	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
-
+	
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
 	void saveSettings();
 
 private:
-	ConnectionType serverStringToConnectionType(const QString & s);  //FIXME move to settings
-	QString connectionTypeToServerString(const ConnectionType c);
 	void setupConnection(void);
 	void closeConnection(void);
 	
@@ -149,6 +142,7 @@ private:
 	bool	tn_ready;
 	bool	tn_wait_for_tn_ready;
 	HostList hostlist;
+	LoginDialog * logindialog;
 	NetworkDispatch * netdispatch;		//bad place for this to be!!!
 
 	//QList<sendBuf*>  sendBuffer;

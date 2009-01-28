@@ -115,12 +115,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	
 	// connecting the server tab buttons
-	connect(ui.pb_add,SIGNAL(pressed()),SLOT(slot_addServer()));
-	connect(ui.pb_delete,SIGNAL(pressed()),SLOT(slot_deleteServer()));
-	connect(ui.ListView_hosts, SIGNAL(itemClicked ( QTreeWidgetItem * , int )),SLOT(slot_clickedListView(QTreeWidgetItem * ,  int)));
-	connect(ui.pb_new,SIGNAL(pressed()),SLOT(slot_new()));	
-	connect(ui.comboBox_server,SIGNAL(currentIndexChanged ( const QString &)),
-		SLOT(slot_serverChanged( const QString &)));
 	connect( ui.setQuietMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
 	connect( ui.setOpenMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
 	connect( ui.setLookingMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
@@ -141,6 +135,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	//sound
 	connectSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/static.wav" );
 	
+	
+	logindialog = 0;
+	netdispatch = 0;
 
 }
 

@@ -24,17 +24,24 @@
 //#include "parser.h"
 #include "talk.h"
 #include "gamedialog.h"
+#include "login.h"
 #include "listviews.h"
 #include "playergamelistings.h"		//FIXME should be moved out
 
 /*
  * return pressed in edit line -> command to send
  */
+ 
+unsigned long mi_flags = 0x01010101;
+unsigned long mo_flags = 0x00000201;
+unsigned long send_flags = 0x0102ffff;
 void MainWindow::slot_cmdactivated(const QString &cmd)
 {
+	unsigned long flags;
 	if (cmd.trimmed().isEmpty())
 		return;
-
+	char * command = (char *)cmd.toLatin1().constData();
+	
 	netdispatch->sendConsoleText(cmd.toLatin1().constData());
 	ui.cb_cmdLine->clearEditText();
 	return;
@@ -86,9 +93,11 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
  */
 void MainWindow::slot_connect(bool b)
 {
+	//if(logindialog)
+	//	return;		//already doing something
 	if (b)
 	{
-		bool found = FALSE;
+		/*bool found = FALSE;
 		Host *h;
 		for (int i=0; i < hostlist.count() && !found ; i++)
 		{
@@ -97,15 +106,33 @@ void MainWindow::slot_connect(bool b)
 			{
 				found = true;
 			}
+		}*/
+		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
+		if(logindialog->exec())
+		{
+			netdispatch = logindialog->getNetworkDispatch();
+			netdispatch->setMainWindow(this);
+			ui.pb_connect->setChecked(true);
+			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
+			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
+			setupConnection();
+			
+			/* FIXME shouldn't say ONLINE here but tired of it saying
+			* OFFLINE and not ready to fix it */
+			statusServer->setText(" ONLINE ");
 		}
-	
-		if (!found)
+		else
+			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
+		//delete logindialog;	//not supposed to delete?
+		logindialog = 0;
+		qDebug("after new logindialog");
+		/*if (!found)
 		{
 			qDebug("Problem in hostlist : did not find list title : %s" , ui.cb_connect->currentText().toLatin1().constData());
 			ui.pb_connect->setChecked(FALSE);
 			return;
-		}
-		
+		}*/
+#ifdef OLD
 		netdispatch = new NetworkDispatch(ConnectionInfo(
 						h->address().toLatin1().constData(), 
 						h->port(),
@@ -122,12 +149,9 @@ void MainWindow::slot_connect(bool b)
 		}
 		else
 		{
-			netdispatch->setMainWindow(this);
-			ui.pb_connect->setChecked(true);
-			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
-			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
-			setupConnection();
+			
 		}
+#endif //OLD
 	}
 	else	// toggled off
 	{
@@ -728,7 +752,8 @@ void MainWindow::showOpen(bool show)
 void MainWindow::slot_roomListClicked(const QString& text)
 {
 	qDebug("slot_roomListClicked\n");
-	
+	if(!netdispatch)
+		return;	
 	std::vector <const RoomListing *>::iterator it = roomList.begin();
 	while(it != roomList.end())
 	{
@@ -1434,6 +1459,16 @@ void MainWindow::slot_cblooking()
 	if (val)
 		// if looking then set open
 		set_sessionparameter("open", true);
+	
+	/* This shouldn't be here or in slot_cbopen.  Writing to a file
+	 * every time a checkbox is clicked is too slow.  We should really
+	 * do it only on exit or disconnect.  But right now stuff does
+	 * crash a lot so maybe this is okay.  Either FIXME later or
+	 * remove this comment. */
+	QSettings settings;
+	settings.setValue("LOOKING_FOR_GAMES", val);
+	if(val)
+		settings.setValue("OPEN_FOR_GAMES", true);
 }
 
 
@@ -1448,6 +1483,11 @@ void MainWindow::slot_cbopen()
 	if (!val)
 		// if not open then set close
 		set_sessionparameter("looking", false);
+	/* See above comment. */
+	QSettings settings;
+	settings.setValue("OPEN_FOR_GAMES", val);
+	if(!val)
+		settings.setValue("LOOKING_FOR_GAMES", false);
 }
 
 /*
