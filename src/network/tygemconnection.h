@@ -14,7 +14,7 @@ class TalkDispatch;
 class TygemConnection : public NetworkConnection
 {
 	public:
-		TygemConnection(NetworkDispatch * _dispatch, const class ConnectionInfo & info);
+		TygemConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass, ConnectionType = TypeTYGEM);
 		~TygemConnection();
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);
@@ -61,10 +61,11 @@ class TygemConnection : public NetworkConnection
 		virtual void requestGameStats(unsigned int game_id);
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
-		virtual bool supportsMultipleUndo(void) { return true; };
+		virtual bool supportsMultipleUndo(void) { return false; };	//for now
 		virtual bool supportsObserveOutside(void) { return false; };
 		virtual bool clientCountsTime(void) { return false; };
 		virtual bool clientSendsTime(void) { return true; };
+		virtual bool unmarkUnmarksAllDeadStones(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
 		virtual bool supportsRematch(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
@@ -83,13 +84,6 @@ class TygemConnection : public NetworkConnection
 						//awkward ConnectionInfo messages
 		int current_server_index;	//as with ORO FIXME, remove above for this?
 
-		enum {
-			INFO,
-			LOGIN,
-			CONNECTED,
-			RECONNECTING,
-			CANCELED
-		} connectionState;
 	private:
 		void sendObserve(unsigned short game_number);	//FIXME awkward with other sendObserve
 		void sendMatchMsg1(const PlayerListing & player, unsigned short game_number);
@@ -122,6 +116,7 @@ class TygemConnection : public NetworkConnection
 		void sendRemoveStones(unsigned int game_code, const MoveRecord * move);
 		void sendEnterScoring(unsigned int game_code);
 		void sendDoneScoring(unsigned int game_id, unsigned short opp_id);
+		void sendCountMsg(const class GameData * r, enum MIVersion version);
 		void sendResign(unsigned int game_code);
 		void sendMatchResult(unsigned short game_code);
 		void sendNigiri(unsigned short game_code, bool odd);
@@ -210,7 +205,7 @@ class TygemConnection : public NetworkConnection
 		unsigned char invite_byte;
 		bool opponent_is_challenger;
 		bool previous_opponent_move_pass;
-		int move_message_number;
+		int move_message_number;	//FIXME can't use if more than one game
 		PlayerListing * player_accepted_match;
 		QTextCodec * textCodec;
 		class SetPhrasePalette * setphrasepalette;
