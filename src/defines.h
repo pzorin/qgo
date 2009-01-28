@@ -58,6 +58,8 @@
 #define MX_STONEDEAD	0x8000
 #define MX_STONEEDIT	0x4000
 
+//3 looked a little small
+#define SMALL_STONE_TERR_DIVISOR	2.5
 
 /*
 * GNUgo default level
@@ -73,6 +75,15 @@
 #define GD_INVALID_PARAMETERS		5
 #define GD_OPP_NO_NMATCH		6
 #define GD_RESET			7
+
+/* NetworkDispatch codes */
+#define ND_CONNECTED			1
+#define ND_WAITING			0
+#define ND_BADLOGIN			-1
+#define ND_BADPASSWORD			-2
+#define ND_BADHOST			-3
+#define ND_BADCONNECTION		-4		//something of a default
+#define ND_PROTOCOL_ERROR		-5
 
 /*
 * Enum definitions
@@ -102,7 +113,9 @@ enum InfoType {PLAYER, GAME, MESSAGE, YOUHAVEMSG, SERVERNAME,
 		PLAYER27, PLAYER27_START, PLAYER27_END, GAME7, GAME7_START,
 		PLAYER42, PLAYER42_START, PLAYER42_END, WS};
 /* ConnectionType in line with ui comboBox_server entry. FIXME to make more securely connected */
-enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS, TypeORO, TypeTYGEM,
+enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS,
+			 TypeORO,
+			 TypeTYGEM, TypeEWEIQI, TypeTOM,
 			TypeUNKNOWN, TypeNNGS, TypeCTN, TypeCWS, TypeDEFAULT };
 /* TypeCyberORO?? just IGS, and CyberORO, instead of with Type?? FIXME 
  * and reconcile with mainwindow_settings.h */
@@ -216,6 +229,8 @@ struct _preferences
 	bool nmatch_nigiri;
 	QString nmatch_handicap;
 	bool draw_ko_marker;
+	bool number_current_move;
+	bool terr_stone_mark;
 	bool observe_outside_on_doubleclick;
 	int default_size;
 	int default_komi;
@@ -239,6 +254,8 @@ struct _preferences
 		nmatch_handicap = settings.value("NMATCH_HANDICAP").toString();
 		
 		draw_ko_marker = (settings.value("KOMARKER") == 1);
+		number_current_move = (settings.value("NUMBER_CURRENT_MOVE") == 1);
+		terr_stone_mark = (settings.value("TERR_STONE_MARK") == 1);
 		observe_outside_on_doubleclick = (settings.value("OBSERVEOUTSIDE") == 1);
 		
 		default_size = settings.value("DEFAULT_SIZE").toInt();
