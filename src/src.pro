@@ -3,6 +3,7 @@
 # Sous dossier relatif au dossier principal du projet : ./src
 # Cible : une application??:  ../bin/qgo2
 
+#message($${CONFIG})
 RESOURCES = application.qrc  \
 board/board.qrc
 QT = core gui \
@@ -14,6 +15,12 @@ CONFIG += warn_on \
           qtestlib \
           stl \
           debug
+#Because I can't figureout how to turn console and exceptions off:
+win32 {
+	QMAKE_LFLAGS = -static -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,windows
+	QMAKE_LFLAGS_CONSOLE =
+	QMAKE_LFLAGS_EXCEPTIONS_ON =
+}
 TEMPLATE = app 
 OBJECTS_DIR = objects
 TRANSLATIONS = translations/qgo2_cz.ts \
