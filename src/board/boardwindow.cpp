@@ -134,24 +134,14 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	
 }
 
-/*QSize BoardWindow::sizeHint() const
-{
-	QSize size = QSize(407, 606);
-	
-	qDebug("Size hint called\n");
-	return size;
-}*/
-
 BoardWindow::~BoardWindow()
 {
 	qDebug("Deleting BoardWindow\n");
 	QSettings settings;
-	if(settings.value("SAVE_WINDOW_SIZES").toBool())
-	{
-		qDebug("Saving window sizes: %d %d\n", width(), height());
-		settings.setValue("BOARD_WINDOW_SIZE_X", width());
-		settings.setValue("BOARD_WINDOW_SIZE_Y", height());
-	}
+	
+	settings.setValue("BOARD_WINDOW_SIZE_X", width());
+	settings.setValue("BOARD_WINDOW_SIZE_Y", height());
+	settings.setValue("BOARD_SIZES", ui.boardSplitter->saveState());
 	
 	delete tree;	//okay?
 	
@@ -179,8 +169,9 @@ void BoardWindow::closeEvent(QCloseEvent *e)
 		{
 			dispatch->closeBoard();
 		}
-		//FIXME delete
-		//deleteLater();
+		//FIXME delete, make sure there's no canvas destruction
+		//crashes
+		deleteLater();
 	}
 	else
 		e->ignore();
@@ -236,13 +227,11 @@ void BoardWindow::setupUI(void)
 	// creates the board handler for navigating in the tree
 	boardHandler = new BoardHandler(this, tree, boardSize);
 
-	if(settings.value("SAVE_WINDOW_SIZES").toBool())
-	{
-		int window_x, window_y;
-		window_x = settings.value("BOARD_WINDOW_SIZE_X").toInt();
-		window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
-		resize(window_x, window_y);
-	}
+	int window_x, window_y;
+	window_x = settings.value("BOARD_WINDOW_SIZE_X").toInt();
+	window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
+	resize(window_x, window_y);
+	ui.boardSplitter->restoreState(settings.value("BOARD_SIZES").toByteArray());
 
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));

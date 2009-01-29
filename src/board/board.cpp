@@ -49,30 +49,7 @@ void Board::init(int size)
 	Q_CHECK_PTR(imageHandler);
 	
 	// Init the canvas
-	/* We can't set the board size like this because even if it worked
-	 * this code is used for the miniboard in the open dialog as well
-	 * but it doesn't anyway... its set someplace else. 
-	 * But these two seem to always be 500x500 so I'm thinking this
-	 * is an initial default and the resize code is relied on
-	 * for everything else.  Still weird though.*/
-	int board_x, board_y;
-	/*if(settings.value("SAVE_WINDOW_SIZES").toInt())
-	{
-		board_x = settings.value("BOARD_SIZE_X").toInt();
-		board_y = settings.value("BOARD_SIZE_Y").toInt();
-		//quick sanity check
-		if(board_x > board_y * 1.5 || board_y > board_x * 1.5)
-		{
-			board_x = BOARD_X;
-			board_y = BOARD_Y;
-		}
-	}
-	else
-	{*/
-		board_x = BOARD_X;
-		board_y = BOARD_Y;
-	//}
-	canvas = new QGraphicsScene(0,0, board_x, board_y,this);
+	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
 	Q_CHECK_PTR(canvas);
 
 	setScene(canvas);
@@ -161,16 +138,7 @@ void Board::init(int size)
 
 Board::~Board()
 {
-	QSettings settings;
-	qDebug("Board size: %d, %d.", width(), height());
-
-	if(settings.value("SAVE_WINDOW_SIZES").toBool())
-	{
-		settings.setValue("BOARD_SIZE_X", width());
-		settings.setValue("BOARD_SIZE_Y", height());
-	}
-
-	qDeleteAll(*stones);
+ 	qDeleteAll(*stones);
 	qDeleteAll(*ghosts);
 	qDeleteAll(*marks);
 	

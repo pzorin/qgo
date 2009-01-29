@@ -36,7 +36,7 @@
      <number>6</number>
     </property>
     <item row="0" column="0" >
-     <widget class="QSplitter" name="splitter_2" >
+     <widget class="QSplitter" name="boardSplitter" >
       <property name="minimumSize" >
        <size>
         <width>16</width>
@@ -6045,7 +6045,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
         </item>
        </layout>
       </widget>
-      <widget class="QSplitter" name="splitter" >
+      <widget class="QSplitter" name="boardSplitter2" >
        <property name="minimumSize" >
         <size>
          <width>16</width>
