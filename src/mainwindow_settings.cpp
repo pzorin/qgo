@@ -287,7 +287,9 @@ void MainWindow::saveSettings()
 
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
 //	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
-
+	settings.setValue("COMPUTER_PLAYS_WHITE", ui.computerPlaysWhite->isChecked());
+	settings.setValue("COMPUTER_HANDICAP", ui.newComputer_Handicap->text().toInt());
+	settings.setValue("COMPUTER_KOMI", ui.newComputer_Komi->text().toInt());
 	settings.setValue("SKIN", ui.LineEdit_goban->text()); 
 	settings.setValue("SKIN_TABLE", ui.LineEdit_table->text()); 
 
@@ -386,7 +388,14 @@ void MainWindow::loadSettings()
 
 	ui.comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
 	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
-	//computer plays FIXME black white
+	if(settings.value("COMPUTER_PLAYS_WHITE").toBool())
+		ui.computerPlaysWhite->setChecked(TRUE);
+	else
+		ui.computerPlaysBlack->setChecked(TRUE);
+	ui.newComputer_Handicap->setValue(settings.value("COMPUTER_HANDICAP").toInt());
+	/* Why is this komi text and other default komi is value?  FIXME */
+	ui.newComputer_Komi->setText(settings.value("COMPUTER_KOMI").toString());
+	
 	ui.radioButtonStones_real->setChecked(TRUE);
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
 	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
@@ -417,16 +426,6 @@ void MainWindow::loadSettings()
 				settings.value("loginName").toString(),
 				settings.value("password").toString());
 		hostlist.append(h);
-		
-		/*QStringList sl;
-		sl	<< settings.value("server").toString()
-			<< settings.value("loginName").toString()
-			<< (h->password().isEmpty() ? "" : "***");
-
-		new QTreeWidgetItem(ui.ListView_hosts, sl);	*/	
-
-		//ui.cb_connect->addItem(h->title());
-
 	}
  	settings.endArray();
 
