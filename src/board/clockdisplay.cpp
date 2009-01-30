@@ -28,9 +28,9 @@ ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _pe
 	
 	pb_timeBlack = boardwindow->getUi().pb_timeBlack;
 	pb_timeWhite = boardwindow->getUi().pb_timeWhite;
-#ifdef Q_WS_WIN
+#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
 	/* Otherwise windows XP style makes time buttons ugly white on white.
-	 * Note, this may also be an issue on mac?  and it could interfere
+	 * Same issue on mac.  and it could interfere
 	 * with blinking warning. */
 	pb_timeBlack->setStyleSheet("background-color: black; color: white");
 	pb_timeWhite->setStyleSheet("background-color: black; color: white");
