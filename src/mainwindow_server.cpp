@@ -312,7 +312,10 @@ void MainWindow::slot_changeServer(void)
 
 void MainWindow::slot_createRoom(void)
 {
+	QMessageBox::information(this, tr("Not available"), tr("This feature will be in a later version"));
+#ifdef FIXME
 	netdispatch->createRoom();
+#endif //FIXME
 }
 
 // used for singleShot actions
