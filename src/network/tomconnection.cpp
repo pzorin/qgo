@@ -1,10 +1,16 @@
 #include "tomconnection.h"
 #include "serverlistdialog.h"
+#include "codecwarndialog.h"
 
 TomConnection::TomConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass)
 : TygemConnection(_dispatch, user, pass, TypeTOM)
 {
 	serverCodec = QTextCodec::codecForName("GB2312");
+	if(!serverCodec)
+	{
+		new CodecWarnDialog("GB2312");
+		serverCodec = QTextCodec::codecForLocale();
+	}
 	requestServerInfo();
 }
 

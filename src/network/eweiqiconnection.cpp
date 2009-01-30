@@ -1,10 +1,15 @@
 #include "eweiqiconnection.h"
+#include "codecwarndialog.h"
 
 EWeiQiConnection::EWeiQiConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass)
 : TygemConnection(_dispatch, user, pass, TypeEWEIQI)
 {
 	serverCodec = QTextCodec::codecForName("GB2312");
-	//error handling!
+	if(!serverCodec)
+	{
+		new CodecWarnDialog("GB2312");
+		serverCodec = QTextCodec::codecForLocale();
+	}
 	requestServerInfo();
 }
 

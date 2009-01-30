@@ -93,6 +93,7 @@ talk.h \
 gamedialog.h \
 displayboard.h \
  network/serverlistdialog.h \
+ network/codecwarndialog.h \
  network/matchinvitedialog.h \
  network/gamedialogflags.h \
  network/orosetphrasechat.h \
@@ -155,6 +156,7 @@ SOURCES += main.cpp \
            game_interfaces/qgoboard_match.cpp \
            game_interfaces/qgoboard_review.cpp \
  	   network/serverlistdialog.cpp \
+	   network/codecwarndialog.cpp \
  	   network/matchinvitedialog.cpp \
  	   network/orosetphrasechat.cpp \
  	   network/setphrasepalette.cpp \ 

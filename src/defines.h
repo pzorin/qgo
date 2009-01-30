@@ -235,6 +235,7 @@ struct _preferences
 	bool observe_outside_on_doubleclick;
 	int default_size;
 	int default_komi;
+	bool warn_about_codecs;
 	
 	int default_stonesmaintime;
 	int default_stonestime;
@@ -262,6 +263,8 @@ struct _preferences
 		default_size = settings.value("DEFAULT_SIZE").toInt();
 		default_komi = settings.value("DEFAULT_KOMI").toInt();
 		
+		warn_about_codecs = !settings.value("DONT_WARN_ABOUT_CODECS").toBool();
+		
 		default_stonesmaintime = settings.value("DEFAULT_STONESMAIN").toInt();
 		default_stonestime = settings.value("DEFAULT_STONEST").toInt();
 		default_stones = settings.value("DEFAULT_STONES").toInt();
@@ -277,6 +280,8 @@ struct _preferences
 	void save(void)
 	{
 		QSettings settings;
+		
+		settings.setValue("DONT_WARN_ABOUT_CODECS", !warn_about_codecs);
 		
 		settings.setValue("DEFAULT_STONESMAIN", default_stonesmaintime);
 		settings.setValue("DEFAULT_STONEST", default_stonestime);

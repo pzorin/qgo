@@ -10,6 +10,7 @@
 #include "talkdispatch.h"
 #include "dispatchregistries.h"
 #include "serverlistdialog.h"
+#include "codecwarndialog.h"
 #include "matchinvitedialog.h"
 #include "gamedialogflags.h"
 #include "orosetphrasechat.h"
@@ -143,6 +144,11 @@ TygemConnection::TygemConnection(class NetworkDispatch * _dispatch, const QStrin
 	if(connType == TypeTYGEM)
 	{
 		serverCodec = QTextCodec::codecForName("eucKR");
+		if(!serverCodec)
+		{
+			new CodecWarnDialog("eucKR");
+			serverCodec = QTextCodec::codecForLocale();
+		}
 		requestServerInfo();
 	}
 }
@@ -4184,9 +4190,9 @@ unsigned int TygemConnection::rankToScore(QString rank)
 	if(rank.contains("k"))
 		rp = (19 - ordinal) * 1000;
 	else if(rank.contains("d"))
-		rp = 17000 + (ordinal * 1000);
+		rp = 18000 + (ordinal * 1000);
 	else if(rank.contains("p"))
-		rp = 27000 + (ordinal * 1000);	
+		rp = 28000 + (ordinal * 1000);	
 	else
 		return 0;
 	

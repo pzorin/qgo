@@ -9,6 +9,7 @@
 #include "talkdispatch.h"
 #include "dispatchregistries.h"
 #include "serverlistdialog.h"
+#include "codecwarndialog.h"
 #include "matchinvitedialog.h"
 #include "gamedialogflags.h"
 #include "orosetphrasechat.h"
@@ -511,16 +512,22 @@ int CyberOroConnection::reconnectToServer(void)
 	playerlist_roomnumber = 1;
 	playerlist_observernumber = 0;
 
+	char name[15];
 	if(server_i == 0)
-		serverCodec = QTextCodec::codecForName("Shift-JIS");
+		sprintf(name, "Shift-JIS");
 	else if(server_i == 1 || server_i == 2 || server_i == 3)
-		serverCodec = QTextCodec::codecForName("eucKR");
+		sprintf(name, "eucKR");
 	else if(server_i == 4 || server_i == 5)
-		serverCodec = QTextCodec::codecForName("GB2312");
+		sprintf(name, "GB2312");
 	else
 		qDebug("Please don't try to connect to the voice, we don't know what that is");
-	
-	
+
+	serverCodec = QTextCodec::codecForName(name);
+	if(!serverCodec)
+	{
+		new CodecWarnDialog((const char *)name);
+		serverCodec = QTextCodec::codecForLocale();
+	}
 	
 	// this is the initial packet
 	char packet[8] = { 0x0a, 0xfa, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
