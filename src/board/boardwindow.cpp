@@ -228,11 +228,17 @@ void BoardWindow::setupUI(void)
 	boardHandler = new BoardHandler(this, tree, boardSize);
 
 	int window_x, window_y;
-	window_x = settings.value("BOARD_WINDOW_SIZE_X").toInt();
-	window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
-	resize(window_x, window_y);
-	ui.boardSplitter->restoreState(settings.value("BOARD_SIZES").toByteArray());
-
+	QVariant board_window_size_x = settings.value("BOARD_WINDOW_SIZE_X");
+	if(board_window_size_x != QVariant())
+	{	
+		window_x = board_window_size_x.toInt();
+		window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
+		resize(window_x, window_y);
+	}
+	QVariant board_sizes_for_splitter = settings.value("BOARD_SIZES");
+	if(board_sizes_for_splitter != QVariant())
+		ui.boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
+	
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
 	connect(ui.navBackward,SIGNAL(pressed()), boardHandler, SLOT(slotNavBackward()));

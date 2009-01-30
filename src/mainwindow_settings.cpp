@@ -385,7 +385,8 @@ void MainWindow::saveSettings()
 void MainWindow::loadSettings()
 {
 	QSettings settings;
-
+	QVariant var;
+	
 	ui.comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
 	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
 	if(settings.value("COMPUTER_PLAYS_WHITE").toBool())
@@ -393,8 +394,11 @@ void MainWindow::loadSettings()
 	else
 		ui.computerPlaysBlack->setChecked(TRUE);
 	ui.newComputer_Handicap->setValue(settings.value("COMPUTER_HANDICAP").toInt());
-	/* Why is this komi text and other default komi is value?  FIXME */
-	ui.newComputer_Komi->setText(settings.value("COMPUTER_KOMI").toString());
+	/* Why is this komi text and other default komi is value?  FIXME,
+	 * Spin versus LineEdit, but inconsistent */
+	if((var = settings.value("COMPUTER_KOMI")) == QVariant())
+		var = 5.5;
+	ui.newComputer_Komi->setText(var.toString());
 	
 	ui.radioButtonStones_real->setChecked(TRUE);
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
@@ -410,8 +414,11 @@ void MainWindow::loadSettings()
 	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
 	ui.komarkerCB->setChecked((settings.value("KOMARKER") == 1));
 	ui.numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
-	ui.terrCrossRB->setChecked((settings.value("TERR_STONE_MARK") == 0));
-	ui.terrStoneRB->setChecked((settings.value("TERR_STONE_MARK") == 1));
+	if(settings.value("TERR_STONE_MARK").toBool())
+		ui.terrStoneRB->setChecked(true);
+	else
+		ui.terrCrossRB->setChecked(true);
+	
 	ui.observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
 	
 	//server list
@@ -433,8 +440,12 @@ void MainWindow::loadSettings()
 
 
 	//server games default values
-	ui.komiSpinDefault->setValue(settings.value("DEFAULT_KOMI").toInt());
-	ui.boardSizeSpin->setValue(settings.value("DEFAULT_SIZE").toInt());
+	if((var = settings.value("DEFAULT_KOMI")) == QVariant())
+		var = 5.5;
+	ui.komiSpinDefault->setValue(var.toInt());
+	if((var = settings.value("DEFAULT_SIZE")) == QVariant())
+		var = 19;
+	ui.boardSizeSpin->setValue(var.toInt());
 	ui.timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
 	ui.BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
 
@@ -454,9 +465,13 @@ void MainWindow::loadSettings()
 	
 	
 	//SGF edition tab default values
-	ui.newFile_Size->setValue(settings.value("EDIT_SIZE").toInt());
+	if((var = settings.value("EDIT_SIZE")) == QVariant())
+		var = 19;
+	ui.newFile_Size->setValue(var.toInt());
 	ui.newFile_Handicap->setValue(settings.value("EDIT_HANDICAP").toInt());
-	ui.newFile_Komi->setText(settings.value("EDIT_KOMI").toString());
+	if((var = settings.value("EDIT_KOMI")) == QVariant())
+		var = 5.5;
+	ui.newFile_Komi->setText(var.toString());
 
 	preferences.fill();
 
