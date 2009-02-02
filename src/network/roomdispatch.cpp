@@ -187,6 +187,9 @@ void RoomDispatch::recvPlayerListing(PlayerListing * player)
 #endif //FIXME
 				b->recvObserver(player, false);
 			}
+			/* This is safe if there's no talk dispatch open and
+			 * necessary if there is */
+			connection->closeTalkDispatch(*player);
 		}
 	}
 	if(playerListingIDRegistry)
