@@ -48,6 +48,11 @@ void LoginDialog::slot_connect(void)
 	/* Its awkward to do this here FIXME, just make sure that, for instance
 	 * the connection has the mainwindow set within the network dispatch so its
 	 * not passing information into nothing */
+	/* Another possibility, if we always want netdispatch and mainwindow
+	 * connected, setMainWindow should setNetworkDispatch... but maybe
+	 * there should be at least the possibility of multiple netdispatches
+	 * somehow and we still need to fix the closeConnection stuff
+	 * maybe?  Figure out what should logically close what, and when */
 	mainwindow->setNetworkDispatch(netdispatch);
 	netdispatch->setMainWindow(mainwindow);
 	/* We need to wait here to get authorization confirm, no errors,
@@ -130,6 +135,8 @@ void LoginDialog::slot_connect(void)
 		 * which will close the connection.  FIXME, responsibilities
 		 * are not clear even if they work out. */
 		netdispatch->onError();
+		//done(0);
+		return;
 	}
 	done(1);
 }
