@@ -2,7 +2,6 @@
 #define TYGEMCONNECTION_H
 #include <QtNetwork>
 #include "networkconnection.h"
-#include "networkdispatch.h"
 #include "messages.h"
 #include "newline_pipe.h"
 #include <vector>
@@ -14,8 +13,10 @@ class TalkDispatch;
 class TygemConnection : public NetworkConnection
 {
 	public:
-		TygemConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass, ConnectionType = TypeTYGEM);
+		TygemConnection(const QString & user, const QString & pass, ConnectionType = TypeTYGEM);
 		~TygemConnection();
+		/* Protocols are way similar so probably most of these don't have to be
+		 * virtual FIXME */
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);
@@ -32,13 +33,22 @@ class TygemConnection : public NetworkConnection
 		virtual void adjournGame(const GameListing & game);
 		virtual void sendTime(BoardDispatch * boarddispatch);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
+		
+		//EndgameMsg should probably be protected or even private
+		enum EGVersion {pass, done_scoring, accept_count, reject_count};
+		virtual void sendEndgameMsg(const class GameData * game, enum EGVersion version);
+		virtual void sendStopTime(BoardDispatch * boarddispatch, enum EGVersion version);
+		
 		virtual void sendTimeLoss(unsigned int game_id);
+		virtual void sendResult(class GameData * game, class GameResult * result);
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void sendRematchRequest(void);
 		virtual void sendRematchAccept(void);
 		virtual void declineMatchOffer(const PlayerListing & opponent);
 		virtual void cancelMatchOffer(const PlayerListing & opponent);
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr);
+		virtual void sendRejectCount(class GameData * data);
+		virtual void sendAcceptCount(class GameData * data);
 		virtual void sendAdjournRequest(void);
 		virtual void sendAdjourn(void);
 		virtual void sendRefuseAdjourn(void);
@@ -66,6 +76,8 @@ class TygemConnection : public NetworkConnection
 		virtual bool clientCountsTime(void) { return false; };
 		virtual bool clientSendsTime(void) { return true; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return true; };
+		virtual bool cantMarkOppStonesDead(void) { return true; };
+		virtual bool twoPassesEndsGame(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
 		virtual bool supportsRematch(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
@@ -76,18 +88,23 @@ class TygemConnection : public NetworkConnection
 		virtual int requestServerInfo(void);
 		virtual void handleServerInfo(unsigned char * msg, unsigned int length);
 		int reconnectToServer(void);
-
+		//FIXME secondsToDate obviously should not be here
+		void secondsToDate(unsigned short & year, unsigned char & month, unsigned char & day, unsigned char & hour, unsigned char & minute, unsigned char & second);
+		virtual QString getTygemGameRecordQString(class GameData * game);
+		enum TimeFlags { BLACK_LOSES, WHITE_LOSES, GAME_ON };
+		enum TimeFlags handleTimeChunk(BoardDispatch * boarddispatch, unsigned char chunk[8], bool black_first);
+		void fillTimeChunk(BoardDispatch * boarddispatch, unsigned char * packet);
 		/* FIXME */
 		QTextCodec * serverCodec;
 		std::vector <class ServerItem *> serverList;
-		char * current_server_addr;	//must be here in order to remain for
-						//awkward ConnectionInfo messages
-		int current_server_index;	//as with ORO FIXME, remove above for this?
+		int current_server_index;
+		
+		ConnectionType connectionType;
 
 	private:
 		void sendObserve(unsigned short game_number);	//FIXME awkward with other sendObserve
 		void sendMatchMsg1(const PlayerListing & player, unsigned short game_number);
-		void sendLogin(bool response_bit = false);
+		void sendLogin(bool response_bit = false, bool change_server = false);
 		void handleLogin(unsigned char * msg, unsigned int length);
 		void sendLoginConfirm(void);
 		void sendName(void);
@@ -98,13 +115,13 @@ class TygemConnection : public NetworkConnection
 		friend class SetPhrasePalette;
 		void sendSetChatMsg(unsigned short phrase_id);
 		void sendJoin(unsigned short game_number);
+		void sendResume(unsigned short game_number);
 		void sendFinishObserving(unsigned short game_number);
 		void sendObserversRequest(unsigned short game_number);
 		void sendLeave(const GameListing & game);
 		void sendGameUpdate(unsigned short game_code);
 		void sendServerKeepAlive(void);
 		void sendKeepAlive(const GameListing & game);
-		void sendRequestKeepAlive(const GameListing & game);
 		enum MIVersion {offer, accept, decline, create, acknowledge};
 		void sendMatchInvite(const PlayerListing & player, enum MIVersion version = offer, unsigned short room_number = 0xffff);
 		void sendMatchOffer(const MatchRequest & mr, enum MIVersion version = offer);
@@ -117,8 +134,10 @@ class TygemConnection : public NetworkConnection
 		void sendEnterScoring(unsigned int game_code);
 		void sendDoneScoring(unsigned int game_id, unsigned short opp_id);
 		void sendCountMsg(const class GameData * r, enum MIVersion version);
+		void sendOpponentDisconnectTimer(unsigned int game_number);
 		void sendResign(unsigned int game_code);
 		void sendMatchResult(unsigned short game_code);
+		void sendLongMatchResult(unsigned short game_code);
 		void sendNigiri(unsigned short game_code, bool odd);
 		void sendDisconnectMsg(void);
 		void encode(unsigned char * h, unsigned int cycle_size);
@@ -131,7 +150,6 @@ class TygemConnection : public NetworkConnection
 		QString rating_pointsToRank(unsigned int rp);
 		QString getCountryFromCode(unsigned char code);
 		void handleRoomList(unsigned char * msg, unsigned int size);
-		void handleBroadcastGamesList(unsigned char * msg, unsigned int size);
 		int getPhase(unsigned char byte);
 		QString getRoomTag(unsigned char byte);
 		void handleGamesList(unsigned char * msg, unsigned int size);
@@ -144,12 +162,8 @@ class TygemConnection : public NetworkConnection
 		void handleGameChat(unsigned char * msg, unsigned int size);
 		void handleSetPhraseChatMsg(unsigned char * msg, unsigned int size);
 		void handleNewGame(unsigned char * msg, unsigned int size);
-		void handleGameEnded(unsigned char * msg, unsigned int size);
-		void handleNewRoom(unsigned char * msg, unsigned int size);
-		void handleGameMsg(unsigned char * msg, unsigned int size);
 		void handleBettingMatchStart(unsigned char * msg, unsigned int size);
 		void handleBettingMatchResult(unsigned char * msg, unsigned int size);
-		void handleTimeLoss(unsigned char * msg, unsigned int size);
 		void handleTime(unsigned char * msg, unsigned int size);
 		void handleMove(unsigned char * msg, unsigned int size);
 		void handlePass(unsigned char * msg, unsigned int size, int pass_number);
@@ -162,7 +176,6 @@ class TygemConnection : public NetworkConnection
 		void handleBoardOpened(unsigned char * msg, unsigned int size);
 		void handleMatchOpened(unsigned char * msg, unsigned int size);
 		void handleResumeMatch(unsigned char * msg, unsigned int size);
-		void handleObserveAfterJoining(unsigned char * msg, unsigned int size);
 		void handleInvitationSettings(unsigned char * msg, unsigned int size);
 		QString getStatusFromCode(unsigned char code, QString rank);
 		int compareRanks(QString rankA, QString rankB);
@@ -181,12 +194,12 @@ class TygemConnection : public NetworkConnection
 		void handleMatchRoomOpen(unsigned char * msg, unsigned int size);
 		//FIXME
 		void handleScoreMsg1(unsigned char * msg, unsigned int size);
-		void handleScoreMsg2(unsigned char * msg, unsigned int size);
+		void handleEndgameMsg(unsigned char * msg, unsigned int size);
+		void handleRequestCount(unsigned char * msg, unsigned int size);
 		void handleEnterScoring(unsigned char * msg, unsigned int size);
 		void handleRemoveStones(unsigned char * msg, unsigned int size);
 		void handleGameResult(unsigned char * msg, unsigned int size);
 		void handleStonesDone(unsigned char * msg, unsigned int size);
-		void handleScore(unsigned char * msg, unsigned int size);
 		void handleGamePhaseUpdate(unsigned char * msg, unsigned int size);
 		void handleMsg3(unsigned char * msg, unsigned int size);
 		void handleMsg2(unsigned char * msg, unsigned int size);
@@ -196,7 +209,6 @@ class TygemConnection : public NetworkConnection
 		void killActiveMatchTimers(void);
 		void startMatchTimers(bool ourTurn);
 		void setRoomNumber(unsigned short number);
-		void clearRoomsWithoutGames(unsigned short game_id);
 		void setAttachedGame(PlayerListing * const player, unsigned short game_id);
 		
 		/* We should really just have the player listing for ourself FIXME */
@@ -228,11 +240,15 @@ class TygemConnection : public NetworkConnection
 		int matchKeepAliveTimerID, matchRequestKeepAliveTimerID;
 		int serverKeepAliveTimerID;
 		int retryLoginTimerID;
-		int observing_game_count;
+		int opponentDisconnectTimerID;
 		//unsigned short opp_requests_undo_move_number;
 		unsigned short done_response;
 		std::vector <MoveRecord> deadStonesList;
+		/* FIXME, below are awkward, we should just do some kind of state thing */
 		bool receivedOppDone;
+		bool sentDone;
+		bool receivedOppAccept;
+		bool receivedOppReject;
 		
 	private slots:
 		virtual void OnConnected();
