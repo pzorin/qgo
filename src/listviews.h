@@ -61,13 +61,13 @@ class GamesListItem : public ListItem
 class PlayerListItem : public ListItem
 {
 	public:
-		PlayerListItem(const PlayerListing * l);
+		PlayerListItem(PlayerListing * const l);
 		virtual QVariant data(int column) const;
 		int columnCount() const;
-		const PlayerListing * getListing(void) const { return listing; };
+		PlayerListing * getListing(void) const { return listing; };
 		virtual int compare(const ListItem &, int column) const;
 	private:
-		const PlayerListing * listing;
+		PlayerListing * const listing;
 };
 
 class ListModel : public QAbstractItemModel	//QAbstractItemModel??
@@ -75,7 +75,7 @@ class ListModel : public QAbstractItemModel	//QAbstractItemModel??
 	 public:
 	 	ListModel();
 		~ListModel();
-		void insertListing(const ListItem & item);
+		void insertListing(ListItem & item);
 		//void updateListing(const ListItem & item);
 		//void removeListing(const ListItem & item);
 		int priorityCompare(const ListItem & i, const ListItem & j);
@@ -91,7 +91,7 @@ class ListModel : public QAbstractItemModel	//QAbstractItemModel??
 		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 	protected:
 		ListItem * headerItem;
-		QList <const ListItem *> items;	//try it with the one list
+		QList <ListItem *> items;	//try it with the one list
 		QList <int> sort_priority;
 		Qt::SortOrder list_sort_order;
 	private:
@@ -118,12 +118,12 @@ class PlayerListModel : public ListModel
 	public:
 		PlayerListModel();
 		~PlayerListModel();
-		void insertListing(const PlayerListing * l);
-		void updateListing(const PlayerListing * l);
-		void removeListing(const PlayerListing * l);
+		void insertListing(PlayerListing * const l);
+		void updateListing(PlayerListing * const l);
+		void removeListing(PlayerListing * const l);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
-		const PlayerListing * playerListingFromIndex(const QModelIndex &);
+		PlayerListing * playerListingFromIndex(const QModelIndex &);
 		void setAccountName(QString name) { account_name = name; };
 	private:
 		QString account_name;

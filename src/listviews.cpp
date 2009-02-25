@@ -2,6 +2,15 @@
 #include "network/messages.h"
 #include "playergamelistings.h"
 
+//#define LISTVIEW_ICONS
+#define QUICKQUICKSORT
+
+#ifdef LISTVIEW_ICONS
+QPixmap * testIcon;
+QIcon * stoneWhiteIcon;
+QIcon * stoneBlackIcon;
+#endif //LISTVIEW_ICONS
+
 ObserverListModel::ObserverListModel()
 {
 	QList <QVariant> rootData;
@@ -99,21 +108,21 @@ PlayerListModel::~PlayerListModel()
 	delete headerItem;
 }
 
-void PlayerListModel::insertListing(const PlayerListing * l)
+void PlayerListModel::insertListing(PlayerListing * const l)
 {
 	PlayerListItem * item = new PlayerListItem(l);	
 	ListModel::insertListing(*item);	
 	//sort(P_TOTALCOLUMNS);	//too slow?	FIXME
 }
 
-void PlayerListModel::updateListing(const PlayerListing * l)
+void PlayerListModel::updateListing(PlayerListing * const l)
 {
 	//if(!l)
 	//	return;	//nothing to update
 	//removeListing(l);
 	for(int i = 0; i < items.count(); i++)
 	{
-		if(static_cast<const PlayerListItem *>(items[i])->getListing() == l)
+		if(static_cast<PlayerListItem const *>(items[i])->getListing() == l)
 		{
 			//this listing needs to be reloaded
 			emit dataChanged(createIndex(i,0), createIndex(i, headerItem->columnCount() - 1)); 
@@ -123,11 +132,11 @@ void PlayerListModel::updateListing(const PlayerListing * l)
 	insertListing(l);
 }
 
-void PlayerListModel::removeListing(const PlayerListing * l)
+void PlayerListModel::removeListing(PlayerListing * const l)
 {
 	for(int i = 0; i < items.count(); i++)
 	{
-		const PlayerListItem * item = static_cast<const PlayerListItem *>(items[i]);
+		PlayerListItem * item = static_cast<PlayerListItem *>(items[i]);
 		if(item->getListing() == l)
 		{
 			emit beginRemoveRows(QModelIndex(), i, i);
@@ -161,6 +170,15 @@ QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 		return QVariant();
 
 	PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
+#ifdef LISTVIEW_ICONS
+	if(index.column() == PC_STATUS)
+	{
+		if(role == Qt::DisplayRole)
+			return QVariant();
+		else if(role == Qt::DecorationRole)
+			return item->data(index.column());
+	}
+#endif //LISTVIEW_ICONS
 	if(role == Qt::DisplayRole)
 		return item->data(index.column());
 	else if(role == Qt::ForegroundRole)
@@ -174,7 +192,7 @@ QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 		return QVariant();
 }
 
-const PlayerListing * PlayerListModel::playerListingFromIndex(const QModelIndex & index)
+PlayerListing * PlayerListModel::playerListingFromIndex(const QModelIndex & index)
 {
 	PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
 	return item->getListing();
@@ -279,6 +297,15 @@ QVariant GamesListModel::data(const QModelIndex & index, int role) const
 		return QVariant();
 	
 	GamesListItem * item = static_cast<GamesListItem*>(index.internalPointer());
+#ifdef LISTVIEW_ICONS
+	if(index.column() == GC_FLAGS)
+	{
+		if(role == Qt::DisplayRole)
+			return QVariant();
+		else if(role == Qt::DecorationRole)
+			return item->data(index.column());
+	}
+#endif //LISTVIEW_ICONS
 	if(role == Qt::DisplayRole)
 		return item->data(index.column());
 	else if(role == Qt::ForegroundRole)
@@ -343,7 +370,7 @@ void ListModel::quicksort(int b, int e)
 
 int ListModel::qs_partition(int b, int e)
 {
-	const ListItem * item, * pivot_item;
+	ListItem * item, * pivot_item;
 	pivot_item = items[e];
 	int i, j;
 	i = b - 1;
@@ -367,7 +394,7 @@ int ListModel::qs_partition(int b, int e)
 	return i + 1;
 }
 
-void ListModel::insertListing(const ListItem & item)
+void ListModel::insertListing(ListItem & item)
 {
 	//for(int j = 0; j < G_TOTALCOLUMNS; j++)
 	//{
@@ -376,12 +403,19 @@ void ListModel::insertListing(const ListItem & item)
 		for(int i = 0; i < items.count(); i++)
 		{
 			int result = priorityCompare(item, *(items[i]));
-			if(result == GREATERTHAN || result == EQUALTO)
+			/* FIXME as with the notes about having a
+			 * list_sort_order for each column, this
+			 * GREATERTHAN does not respect the sort order
+			 * meaning it just shoves stuff in there 
+			 * BIG FIXME */
+			if((list_sort_order == Qt::AscendingOrder && result == GREATERTHAN) || (list_sort_order == Qt::DescendingOrder && result == LESSTHAN) || result == EQUALTO)
 			{
 				emit beginInsertRows(QModelIndex(), i + 1, i + 1);
 				items.insert(i, &item); 
 				//emit beginInsertRows(QModelIndex(), i, i);
 				emit endInsertRows();
+				emit dataChanged(createIndex(i - 1, 0),
+					createIndex(i, headerItem->columnCount() - 1));
 				return;
 			}
 		}
@@ -389,6 +423,8 @@ void ListModel::insertListing(const ListItem & item)
 		items.append(&item);
 		//emit beginInsertRows(QModelIndex(), items.count() - 1, items.count() - 1);
 		emit endInsertRows();
+		emit dataChanged(createIndex(items.count(), 0),
+			createIndex(items.count() - 1, headerItem->columnCount() - 1));
 	//}
 }
 
@@ -398,7 +434,11 @@ int ListModel::priorityCompare(const ListItem & i, const ListItem & j)
 	int columns = columnCount(QModelIndex());
 	int result;
 	result = i.compare(j, sort_priority[k]);
+#ifdef QUICKQUICKSORT
+	if(result == EQUALTO && k < 3 && k < columns - 1)
+#else
 	if(result == EQUALTO && k < columns - 1)
+#endif //QUICKQUICKSORT
 	{
 		k++;
 		result = priorityCompare(i, j);
@@ -630,7 +670,29 @@ QVariant GamesListItem::data(int column) const
 			return QVariant(listing->By);
 			break;
 		case GC_FLAGS:
+#ifdef LISTVIEW_ICONS
+			/*switch(listing->flags)
+			{
+				case GameListing::Flags::BLACK_WON:
+					return blackStoneIcon;
+					break;
+				case GameListing::Flags::WHITE_WON:
+					return whiteStoneIcon;
+					break;
+				case GameListing::Flags::IN_PROGRESS:
+					return QVariant();
+					break;
+				case GameListing::Flags::LOOKING:
+					return QVariant();
+					break;
+				default:
+					return QVariant();
+					break;
+			}*/
+            		return QVariant(listing->FR);
+#else
 			return QVariant(listing->FR);
+#endif //LISTVIEW_ICONS
 			break;
 		case GC_OBSERVERS: 
 			return QVariant(listing->observers);
@@ -646,7 +708,7 @@ int GamesListItem::columnCount(void) const
 	return G_TOTALCOLUMNS;
 }
 
-PlayerListItem::PlayerListItem(const PlayerListing * l) : listing(l)
+PlayerListItem::PlayerListItem(PlayerListing * const l) : listing(l)
 {
 }
 
@@ -660,7 +722,15 @@ QVariant PlayerListItem::data(int column) const
 	switch(column)
 	{
 		case PC_STATUS:
+#ifdef LISTVIEW_ICONS
+			if(listing->info.contains("X"))
+				return QIcon(testIcon->scaled(20, 20,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            else
+            	return QVariant();
+#else
 			return QVariant(listing->info);
+#endif //LISTVIEW_ICONS
 			break;
 		case PC_NAME:
 			return QVariant(listing->name);
@@ -825,7 +895,29 @@ int ListItem::compareNames(const QString & name1, const QString & name2) const
 
 ListModel::ListModel()
 {
-
+#ifdef LISTVIEW_ICONS
+	QPixmap * pix;
+	testIcon = new QPixmap(":/new/prefix1/board/ressources/pics/coord.png");
+	if(testIcon->isNull())
+		exit(0);
+	pix = new QPixmap(":/new/prefix1/board/ressources/pics/stone_white.png");
+	if(pix->isNull())
+		{ qDebug("Can't load list view icons\n"); return; }
+	stoneWhiteIcon = new QIcon(pix->scaled(20, 20,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	delete pix;
+	pix = new QPixmap(":/new/prefix1/board/ressources/pics/stone_black.png");
+	if(pix->isNull())
+		{ qDebug("Can't load list view icons\n"); return; }
+	stoneBlackIcon = new QIcon(pix->scaled(20, 20,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	delete pix;
+	//we need stonewhite and stone black for game victory flags
+	//and then a board for inplay and a white board for review or study
+	//an eye of some kind would be nice for a player 
+	//or room looking for a game
+	//and a fancy X would be nice for a player not open for a game
+#endif //LISTVIEW_ICONS
 }
 
 ListModel::~ListModel()
@@ -836,6 +928,10 @@ ListModel::~ListModel()
 		item = items[i];
 		delete item;
 	}
+#ifdef LISTVIEW_ICONS
+	delete stoneWhiteIcon;
+	delete stoneBlackIcon;
+#endif //LISTVIEW_ICONS
 }
 
 /* parent is necessary */
@@ -869,6 +965,7 @@ QModelIndex ListModel::index(int row, int column, const QModelIndex & /*parent*/
 		return QModelIndex();
 }
 
+/* This is overridden */
 QVariant ListModel::data(const QModelIndex & index, int role) const
 {
 	if(!index.isValid())
@@ -905,7 +1002,7 @@ void PlayerSortProxy::setFilter(int rn, int rm)
 	// stuff FIXME
 	rankMin = rn;
 	rankMax = rm;
-	qDebug("player sort: %d - %d\n", rn, rm);
+	qDebug("player sort: %d - %d", rn, rm);
 	sort(P_TOTALCOLUMNS);	//resort as current
 }
 
@@ -940,4 +1037,3 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 		return false;
 	return true;
 }
-
