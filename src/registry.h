@@ -27,6 +27,7 @@ class Registry
 		object * getIfEntry(key);
 		void setEntry(key, object *);
 		void deleteEntry(key);
+		int getSize(void) { return registry.size(); };
 	protected:
 		virtual object * getNewEntry(key) { return 0; };
 		virtual void initEntry(object *) {};
