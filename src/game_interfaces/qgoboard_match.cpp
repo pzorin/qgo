@@ -91,6 +91,8 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 		if(!boarddispatch->clientCountsTime() && boarddispatch->clientSendsTime())
 			boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
 		
+		/* FIXME, probably don't want to send time and time loss... even if
+		 * network protocols are exclusive with these... */
 		if(!boardwindow->getClockDisplay()->warning(getBlackTurn()))
 			boarddispatch->sendTimeLoss();
 		
@@ -145,11 +147,25 @@ void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &b
  */
 void qGoBoardMatchInterface::enterScoreMode()
 {
+	stopTime();
 	qGoBoard::enterScoreMode();
 
 	//boardwindow->getUi().doneButton->setEnabled(true);
 
 	kibitzReceived(tr("SCORE MODE: click on a stone to mark as dead..."));
+}
+
+void qGoBoardMatchInterface::leaveScoreMode()
+{
+	qGoBoard::leaveScoreMode();
+	/* Make sure this doesn't conflict with game result stuff */
+	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 
+		   (boardwindow->getBoardDispatch()->clientCountsTime() || boardwindow->getBoardDispatch()->clientSendsTime()))
+		boardTimerId = startTimer(1000);
+
+	//boardwindow->getUi().doneButton->setEnabled(true);
+
+	kibitzReceived(tr("LEAVING SCORE MODE"));	//awkward text FIXME
 }
 
 /*
