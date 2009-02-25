@@ -3,8 +3,14 @@
 
 #include <QtGui>
 
-class RoomDispatch;
-class TalkDispatch;
+class NetworkConnection;
+class BoardDispatch;
+class PlayerListing;
+class GameListing;
+class GameListingRegistry;
+class PlayerListingRegistry;
+class PlayerListingIDRegistry;
+class Talk;
 class PlayerListModel;
 class PlayerSortProxy;
 class GamesListModel;
@@ -16,22 +22,33 @@ class Room : public QObject
 
 	public:
 		Room();
-		void onConnectionAssignment(QString username);
+		void setConnection(NetworkConnection * c);
 		virtual ~Room();
-		RoomDispatch * getDispatch(void) { return dispatch; };
 		void onError(void);
 		void updateRoomStats(void);
 		void clearPlayerList(void);
 		void clearGamesList(void);
-		void recvExtPlayerListing(class PlayerListing * player);
-		void talkOpened(TalkDispatch * d);
+		void talkOpened(Talk * d);
 		void recvToggle(int type, bool val);
+		PlayerListing * getPlayerListing(const QString & name);
+		PlayerListing * getPlayerListing(const unsigned int id);
+		GameListing * getGameListing(unsigned int key);
+		BoardDispatch * getNewBoardDispatch(unsigned int key);
+		void recvPlayerListing(class PlayerListing * g);
+		void recvExtPlayerListing(class PlayerListing * player);
+		void recvGameListing(class GameListing * g);
+		void sendStatsRequest(PlayerListing & opponent);
 	protected:
 		void setupUI(void);
+		GameListing * registerGameListing(GameListing * l);
+		void unRegisterGameListing(unsigned int key);
+		
 		unsigned int players;
 		unsigned int games;
+		GameListingRegistry * gameListingRegistry;
+		PlayerListingRegistry * playerListingRegistry;
+		PlayerListingIDRegistry * playerListingIDRegistry;
 	private:
-		friend class RoomDispatch;
 		PlayerListModel * playerListModel;
 		PlayerSortProxy * playerSortProxy;
 		GamesListModel * gamesListModel;
@@ -40,7 +57,7 @@ class Room : public QObject
 		QToolButton * refreshGamesButton, * refreshPlayersButton;
 		QComboBox * whoBox1, * whoBox2;
 		QCheckBox * whoOpenCheckBox;
-		RoomDispatch * dispatch;
+		NetworkConnection * connection;
 		QModelIndex popup_item;
 	private slots:
 		void slot_playersDoubleClicked(const QModelIndex &);
