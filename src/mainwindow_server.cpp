@@ -22,6 +22,7 @@
 #include "defines.h"
 #include "mainwindow.h"
 //#include "parser.h"
+#include "network/networkconnection.h"
 #include "talk.h"
 #include "gamedialog.h"
 #include "login.h"
@@ -34,12 +35,11 @@
  
 void MainWindow::slot_cmdactivated(const QString &cmd)
 {
-	unsigned long flags;
 	if (cmd.trimmed().isEmpty())
 		return;
-	char * command = (char *)cmd.toLatin1().constData();
+	//char * command = (char *)cmd.toLatin1().constData();
 	
-	netdispatch->sendConsoleText(cmd.toLatin1().constData());
+	connection->sendConsoleText(cmd.toLatin1().constData());
 	ui.cb_cmdLine->clearEditText();
 	return;
 	qDebug("cmd_valid: %i", (int)cmd_valid);
@@ -90,21 +90,12 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
  */
 void MainWindow::slot_connect(bool b)
 {
-	//if(logindialog)
-	//	return;		//already doing something
+	if(logindialog)	//because b is unreliable
+		return;		//already doing something
 	if (b)
 	{
-		/*bool found = FALSE;
-		Host *h;
-		for (int i=0; i < hostlist.count() && !found ; i++)
-		{
-			h= hostlist.at(i);
-			if (h->title() == ui.cb_connect->currentText())
-			{
-				found = true;
-			}
-		}*/
-		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist, this);
+		qDebug("Creating login dialog!");
+		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
 		if(logindialog->exec())
 		{
 			ui.pb_connect->setChecked(true);
@@ -120,36 +111,25 @@ void MainWindow::slot_connect(bool b)
 			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
 		//delete logindialog;	//not supposed to delete?
 		logindialog = 0;
-		// FIXME needs to be cleaned up here
-		/*if (!found)
-		{
-			qDebug("Problem in hostlist : did not find list title : %s" , ui.cb_connect->currentText().toLatin1().constData());
-			ui.pb_connect->setChecked(FALSE);
-			return;
-		}*/
-#ifdef OLD
-		netdispatch = new NetworkDispatch(ConnectionInfo(
-						h->address().toLatin1().constData(), 
-						h->port(),
-						h->loginName().toLatin1().constData(),
-						h->password().toLatin1().constData(), h->host()));
-		// check for errors here
-		if(netdispatch->checkForErrors() < 0)
-		{
-			// we need to have the errors drive this... so remove
-			// it here FIXME
-			delete netdispatch;
-			netdispatch = 0;	//necessary? probably
-			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
-		}
-		else
-		{
-			
-		}
-#endif //OLD
 	}
 	else	// toggled off
 	{
+		if(logindialog)
+		{
+			/* There was definitely a crash from disconnecting
+			 * with a logindialog open because the logindialog kept
+			 * calling network connection code.  What doesn't make
+			 * sense is that the logindialog is modal, so its like
+			 * the server list allowed the hitting of the connect
+			 * button, breaking the modality of the logindialog and
+			 * allowing a crash here... FIXME But we should never
+			 * get here. */
+			/* We can't delete it like this... */
+			qDebug("Shouldn't be here, mainwindow_server line %d", __LINE__);
+			//delete logindialog;
+			//logindialog->deleteLater();
+			logindialog = 0;
+		}
 		closeConnection();
 	}
 }
@@ -161,7 +141,7 @@ void MainWindow::slot_connect(bool b)
  * be a bit tricky.  We'll leave it here for now. */
 void MainWindow::setupConnection(void)
 {
-	unsigned long rs_flags = netdispatch->getRoomStructureFlags();
+	unsigned long rs_flags = connection->getRoomStructureFlags();
 	if(rs_flags & RS_NOROOMLIST)
 	{
 		ui.RoomList->hide();
@@ -180,7 +160,7 @@ void MainWindow::setupConnection(void)
 		* different rooms */
 	}
 	
-	if(netdispatch->supportsServerChange())
+	if(connection->supportsServerChange())
 	{
 		ui.changeServerPB->show();
 		connect(ui.changeServerPB, SIGNAL(clicked()), SLOT(slot_changeServer()));
@@ -189,7 +169,7 @@ void MainWindow::setupConnection(void)
 	{
 		ui.changeServerPB->hide();
 	}
-	if(netdispatch->supportsCreateRoom())
+	if(connection->supportsCreateRoom())
 	{
 		ui.createRoomPB->show();
 		connect(ui.createRoomPB, SIGNAL(clicked()), SLOT(slot_createRoom()));
@@ -199,7 +179,7 @@ void MainWindow::setupConnection(void)
 		ui.createRoomPB->hide();
 	}
 	
-	if(netdispatch->supportsSeek())
+	if(connection->supportsSeek())
 	{
 		ui.toolSeek->show();
 		ui.seekHandicapList->show();
@@ -209,7 +189,7 @@ void MainWindow::setupConnection(void)
 		ui.toolSeek->hide();
 		ui.seekHandicapList->hide();
 	}
-	if(netdispatch->supportsChannels())
+	if(connection->supportsChannels())
 	{
 		ui.channelsLabel->show();
 		ui.channelsCB->show();
@@ -219,7 +199,7 @@ void MainWindow::setupConnection(void)
 		ui.channelsLabel->hide();
 		ui.channelsCB->hide();
 	}
-	netdispatch->setKeepAlive(600);		//600 seconds okay? FIXME
+	connection->setKeepAlive(600);		//600 seconds okay? FIXME
 	/* FIXME Also need away message and maybe game/player refresh */
 #ifdef FIXME	
 	// quiet mode? if yes do clear table before refresh
@@ -254,12 +234,19 @@ void MainWindow::onConnectionError(void)
 
 void MainWindow::closeConnection(void)
 {
-	if(netdispatch)
+	if(connection)
 	{
+		//below also can cause crash so...commenting it out
+		//FIXME also, wherever this is called from... looks like
+		//login can call this and netdispatch isn't cleared so it
+		//thinks there is one and crashes, its a big mess and everything
+		//needs to go through login!
 		ui.pb_connect->setChecked(false);	//doesn't matter
-		delete netdispatch;
-		netdispatch = 0;
+		delete connection;
+		connection = 0;
 	}
+	
+	
 	connectSound->play();
 
 	// show current Server name in status bar
@@ -298,8 +285,6 @@ void MainWindow::slot_connexionClosed()
 //	qDebug("slot_connclosed()");
 //	qDebug(QString("%1 -> slot_connclosed()").arg(statusOnlineTime->text()));
 
-	//delete netdispatch;	//connection has deleted the network dispatch
-	//netdispatch = 0;
 }
 
 /* We need a separate server panel class with changeServer and maybe seek and the room and channel
@@ -307,14 +292,14 @@ void MainWindow::slot_connexionClosed()
  * room specific and also to the network dispatch */
 void MainWindow::slot_changeServer(void)
 {
-	netdispatch->changeServer();
+	connection->changeServer();
 }
 
 void MainWindow::slot_createRoom(void)
 {
 	QMessageBox::information(this, tr("Not available"), tr("This feature will be in a later version"));
 #ifdef FIXME
-	netdispatch->createRoom();
+	connection->createRoom();
 #endif //FIXME
 }
 
@@ -555,12 +540,12 @@ int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 		{
 			// send buffer cmd first; then put current cmd to buffer
 			//igsConnection->sendTextToHost(s->get_txt());
-			if(!netdispatch)
+			if(!connection)
 			{
-				qDebug("No network dispatch\n");
+				qDebug("No network connection\n");
 				return 0;
 			}
-			netdispatch->sendText(s->get_txt().toLatin1().constData());
+			connection->sendText(s->get_txt().toLatin1().constData());
 			qDebug("SENDBUFFER send: %s", s->get_txt().toLatin1().constData());
 
 			// hold the line if cmd is sent; 'ayt' is autosend cmd
@@ -586,12 +571,12 @@ int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 		{
 			// buffer empty -> send direct
 			//igsConnection->sendTextToHost(txt);
-			if(!netdispatch)
+			if(!connection)
 			{
-				qDebug("No network dispatch\n");
+				qDebug("No network connection\n");
 				return 0;
 			}
-			netdispatch->sendText(txt.toLatin1().constData());
+			connection->sendText(txt.toLatin1().constData());
       //currentCommand->txt = txt;
       
 //TODO			if (!txt.contains("ayt"))
@@ -620,21 +605,21 @@ int MainWindow::sendTextFromApp(const QString &txt, bool localecho)
 void MainWindow::set_sessionparameter(QString par, bool val)
 {
 	QString value;
-	if(!netdispatch)
+	if(!connection)
 		return;
 	
 
-	//netdispatch->sendText("toggle " + par + value);
-	netdispatch->sendToggle(par, val);
+	//connection->sendText("toggle " + par + value);
+	connection->sendToggle(par, val);
 	/*switch(myAccount->get_gsname())
 	{
 		// only toggling...
 		case IGS:
-			netdispatch->sendText("toggle " + par + value);
+			connection->sendText("toggle " + par + value);
 			break;
 			
 		default:
-			netdispatch->sendText("set " + par + value);
+			connection->sendText("set " + par + value);
 			break;
 	}*/
 }
@@ -750,14 +735,14 @@ void MainWindow::showOpen(bool show)
 void MainWindow::slot_roomListClicked(const QString& text)
 {
 	qDebug("slot_roomListClicked\n");
-	if(!netdispatch)
+	if(!connection)
 		return;	
 	std::vector <const RoomListing *>::iterator it = roomList.begin();
 	while(it != roomList.end())
 	{
 		if((*it)->name == text)
 		{
-			netdispatch->sendJoinRoom((**it));
+			connection->sendJoinRoom((**it));
 			return;
 		}
 		it++;
@@ -985,8 +970,8 @@ void MainWindow::slot_seek(bool b)
 	//if the button was just pressed on, we have already used the popup menu : nothing to do
 	if (b)
 		return;
-	if(netdispatch)
-		netdispatch->sendSeekCancel();
+	if(connection)
+		connection->sendSeekCancel();
 }
 
 
@@ -1030,7 +1015,7 @@ void MainWindow::slot_seek(QAction *act)
 			s->strength_wished = "9 0 0";
 			break ;
 	}
-	netdispatch->sendSeek(s);
+	connection->sendSeek(s);
 	delete s;
 }
 
@@ -1043,7 +1028,7 @@ void MainWindow::slot_seek(QAction *act)
  */
 void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 {
-	unsigned long rf = netdispatch->getRoomStructureFlags();
+	unsigned long rf = connection->getRoomStructureFlags();
 	/* FIXME, either way, we should keep a list of RoomListings
 	 * some where */
 	qDebug("Recv room listing %d %s", room.number, room.name.toLatin1().constData());
@@ -1309,6 +1294,8 @@ void MainWindow::slot_talk(const QString &name, const QString &text, bool /*ispl
 */
 }
 
+/* I think we still use this, it needs to move moved to somewhere
+ * or kept here but... reconciled with new code or something FIXME */
 void MainWindow::talkOpened(Talk * d)
 {
 	talkList.insert(0, d);     
@@ -1512,6 +1499,7 @@ void MainWindow::matchRequest(MatchRequest * mr)
 {
 	GameDialog *dlg = NULL;
 	qDebug("Match has been Requested");
+	qDebug("IS ANYTHING CALLING THIS? FIXME");
 
 	for (int i=0; i < matchList.count(); i++)
 	{
@@ -1695,7 +1683,7 @@ void MainWindow::slot_talkTo(QString &receiver, QString &txt)
  */
 void MainWindow::slot_removeDialog(GameDialog *dlg)
 {
-
+	qDebug("IS ANYTHING CALLING THIS FIXME");
 	int i = matchList.indexOf(dlg);
 
 	if (i == -1)
@@ -1714,7 +1702,7 @@ void MainWindow::slot_removeDialog(GameDialog *dlg)
 void MainWindow::slot_removeDialog(const QString & /*nr*/, const QString & opp)
 {
 	GameDialog * dlg;
-
+	qDebug("IS ANYTHING CALLING THIS FIXME");
 	int i;
 	for ( i=0; i < matchList.count(); i++)
 	{
@@ -1739,7 +1727,7 @@ void MainWindow::slot_matchCanceled(const QString& opp)
 	// We now look the dialogs up in a common place
 	// and not open is a message on the dialog box
 	GameDialog *dlg=NULL;
-	
+	qDebug("IS ANYTHING CALLING THIS FIXME");
 	for (int i=0; i < matchList.count(); i++)
 	{
 		if (matchList.at(i)->getUi().playerOpponentEdit->text() == opp)
