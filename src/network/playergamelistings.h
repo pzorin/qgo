@@ -6,7 +6,7 @@ struct PlayerListing
 	unsigned short id;
 	bool online;
 	QString name;
-	QString ascii_name;	//in case two names supplied
+	QString ascii_name;	//in case two names supplied, really its nickname FIXME
 	QString info;
 	QString idletime;	
 	unsigned int seconds_idle;		//for sorting
@@ -14,6 +14,7 @@ struct PlayerListing
 	QString rank;
 	unsigned int rank_score;		//for sorting, rating points
 	QString country;
+	unsigned char country_id;
 	unsigned int wins;
 	unsigned int losses;
 	unsigned int rated_games;
@@ -36,6 +37,8 @@ struct PlayerListing
 	int nmatch_handicapMin, nmatch_handicapMax;
 	unsigned char specialbyte;		//ORO weirdness personalchat FIXME
 	bool pro;
+	bool dialog_opened;
+	bool game_dialog_opened;
 	PlayerListing() : id(0), 
 	online(0), 
 	name(0), 
@@ -54,7 +57,9 @@ struct PlayerListing
 	extInfo(0),
 	email_address(0),
 	specialbyte(0),
-	pro(false){};
+	pro(false),
+	dialog_opened(false),
+	game_dialog_opened(false) {};
 	// there's also some setttings as well as match requirements
 	//PlayerListing(const QString* n, const char * i, const char * r, const char * c, unsigned int w, unsigned int l, unsigned o) : name(n), idletime(i), rank(r), country(c), wins(w), losses(l), observing_str() {};
 	//~PlayerListing();
@@ -129,6 +134,9 @@ struct GameListing
 	GameMode gameType;		//this needs to be consistent
 	QString By;			//these two need to be changed somehow
 	QString FR;
+	/* Other possibilities for flags:
+	 * NO_FLAG, BROADCAST, CHAT_ROOM */
+	enum Flags { BLACK_WON, WHITE_WON, IN_PROGRESS, REVIEW, LOOKING } flags;
 	bool rated;
 	unsigned short owner_id;	//this is if we're treating them as rooms
 	bool isRoomOnly;
@@ -152,7 +160,8 @@ struct GameListing
 	_white_rank_score(0), 
 	_black_rank_score(0), 
 	observers(0), 
-	result(0), 
+	result(0),
+	flags(IN_PROGRESS),
 	rated(0), 
 	owner_id(0), 
 	isRoomOnly(false),
