@@ -75,6 +75,25 @@ class newline_pipe
 			else
 				return i + 1;
 		};
+		unsigned int canReadHTTPLine(void)
+		{
+			unsigned int i = 3;
+			if(q.size() < 4)
+				return 0;
+			while(i < q.size())
+			{
+				if(q[i - 3] == '\r' &&
+				   q[i - 2] == '\n' &&
+				   q[i - 1] == '\r' &&
+				   q[i] == '\n')	
+					break;
+				i++;
+			}
+			if(i == q.size())
+				return 0;
+			else
+				return i + 1;
+		};
 		unsigned int canRead(void)
 		{
 			return q.size();
