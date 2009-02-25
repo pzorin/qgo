@@ -9,29 +9,29 @@ class BoardDispatchRegistry : public Registry <unsigned int, BoardDispatch>
 		std::map<unsigned int, BoardDispatch *> * getRegistryStorage(void);
 	private:
 		virtual BoardDispatch * getNewEntry(unsigned int game_id);
-		virtual void initEntry(BoardDispatch *);
+		//virtual void initEntry(BoardDispatch *);
 		virtual void onErase(BoardDispatch *);
 		NetworkConnection * _c;
 };
 
-class GameDialogDispatchRegistry : public Registry <const PlayerListing *, GameDialogDispatch>
+class GameDialogRegistry : public Registry <const PlayerListing *, GameDialog>
 {
 	public:
-		GameDialogDispatchRegistry(NetworkConnection * c) : _c(c) {};
+		GameDialogRegistry(NetworkConnection * c) : _c(c) {};
 	private:
-		virtual GameDialogDispatch * getNewEntry(const PlayerListing * opponent);
-		virtual void initEntry(GameDialogDispatch *);
-		virtual void onErase(GameDialogDispatch *);
+		virtual GameDialog * getNewEntry(const PlayerListing * opponent);
+		//virtual void initEntry(GameDialog *);
+		virtual void onErase(GameDialog *);
 		NetworkConnection * _c;
 };
 
-class TalkDispatchRegistry : public Registry <const PlayerListing *, TalkDispatch>
+class TalkRegistry : public Registry <PlayerListing *, Talk>
 {
 	public:
-		TalkDispatchRegistry(NetworkConnection * c) : _c(c) {};
+		TalkRegistry(NetworkConnection * c) : _c(c) {};
 	private:
-		virtual TalkDispatch * getNewEntry(const PlayerListing * opponent);
-		virtual void initEntry(TalkDispatch *);
+		virtual Talk * getNewEntry(PlayerListing * opponent);
+		//virtual void initEntry(Talk *);
 		NetworkConnection * _c;
 };
 
