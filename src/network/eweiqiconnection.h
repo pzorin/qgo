@@ -3,8 +3,9 @@
 class EWeiQiConnection : public TygemConnection
 {
 	public:
-		EWeiQiConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
+		EWeiQiConnection(const QString & user, const QString & pass);
 		//~EWeiQiConnection();
 	private:
 		virtual int requestServerInfo(void);
+		virtual QString getTygemGameRecordQString(class GameData *);
 };
