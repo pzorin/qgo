@@ -17,13 +17,14 @@
 #include "talk.h"
 #include "gamedialog.h"
 #include "audio.h"
-#include "network/networkdispatch.h"
 
 #include <QtGui>
 
 class HostList;
 class RoomListing;
 class LoginDialog;
+class NetworkConnection;
+class ServerListStorage;
 
 class MainWindow : public QMainWindow
 {
@@ -41,7 +42,9 @@ public:
 	void recvSeekCondition(class SeekCondition * s);
 	void recvSeekCancel(void);
 	void recvSeekPlayer(QString player, QString condition);
-	
+
+	/* This is awkward here but has the same life as mainwindow */
+	ServerListStorage & getServerListStorage(void) { return *serverliststorage; };
 public slots:
 	void slot_expanded(const QModelIndex & i);
 	// sfg slots
@@ -101,8 +104,7 @@ public slots:
 	void slot_removeDialog(const QString &, const QString &);
 	void slot_msgBox(const QString&);
 	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
-	void setNetworkDispatch(NetworkDispatch * n) { netdispatch = n; };	//awkward
-	
+	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
@@ -144,8 +146,8 @@ private:
 	bool	tn_wait_for_tn_ready;
 	HostList hostlist;
 	LoginDialog * logindialog;
-	NetworkDispatch * netdispatch;		//bad place for this to be!!!
-
+	NetworkConnection * connection;
+	ServerListStorage * serverliststorage;
 	//QList<sendBuf*>  sendBuffer;
 	//sendBuf		*currentCommand;
 	QMenu 		*seekMenu;

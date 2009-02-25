@@ -27,6 +27,7 @@
 #include "tree.h"
 #include "listviews.h"
 //#include "oldparser.h"
+#include "network/serverliststorage.h"
 
 #include <QtGui>
 
@@ -43,7 +44,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		
 	initStatusBar();
 	/* FIXME, really need a list of such things, 0s */
-	netdispatch = 0;
+	connection = 0;
+	logindialog = 0;
 
 	/* We need to integrate this room list with the new room code FIXME */
 	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
@@ -131,18 +133,17 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
+	
+	// for saving server ip lists
+	serverliststorage = new ServerListStorage();
 
 	//sound
 	connectSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/static.wav" );
-	
-	
-	logindialog = 0;
-	netdispatch = 0;
-
 }
 
 MainWindow::~MainWindow()
 {
+	delete serverliststorage;
 }
 
 
