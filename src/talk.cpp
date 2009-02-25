@@ -4,8 +4,8 @@
  */
 
 #include "talk.h"
-#include "network/talkdispatch.h"
-#include "network/gamedialogdispatch.h"
+#include "network/networkconnection.h"
+#include "gamedialog.h"
 #include "network/messages.h"
 #include "network/playergamelistings.h"
 /* I wonder if we could somehow generalize this class to handle
@@ -20,10 +20,11 @@
 
 int Talk::counter = 0;
 
-Talk::Talk(TalkDispatch * dis, const PlayerListing & player) : TalkGui(), dispatch(dis), opponent(player)
+Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connection(conn), opponent(player)
 {
 	qDebug("Creating Talk for %s", opponent.name.toLatin1().constData());
 	ui.setupUi(this);
+	opponent.dialog_opened = true;
 
 	// create a new tab
 	QString s = "MultiLineEdit1_" + QString::number(++counter);
@@ -50,8 +51,9 @@ Talk::Talk(TalkDispatch * dis, const PlayerListing & player) : TalkGui(), dispat
 
 Talk::~Talk()
 {
-	if(dispatch)
-		dispatch->closeDispatchFromDialog();
+	if(connection)
+		connection->closeTalk(opponent);
+	opponent.dialog_opened = false;
 }
 
 QString Talk::get_name() const
@@ -67,15 +69,15 @@ void Talk::slot_returnPressed()
 {
 	// read tab
 	QString txt = ui.LineEdit1->text();
-	dispatch->sendTalk(txt);
-	QString our_name = dispatch->getUsername();
+	connection->sendMsg(opponent, txt);
+	QString our_name = connection->getUsername();
 	ui.MultiLineEdit1->append(our_name + ": " + txt);
 	ui.LineEdit1->clear();
 }
 
 void Talk::slot_match()
 {
-	dispatch->sendMatchInvite(opponent);
+	connection->sendMatchInvite(opponent);
 }
 
 // write to txt field in dialog
@@ -105,6 +107,12 @@ void Talk::write(const QString &text) const
 
 	// Scroll at bottom of text, set cursor to end of line
 	ui.MultiLineEdit1->append(txt); 
+}
+
+//FIXME really same as write?
+void Talk::recvTalk(QString text)
+{
+	write(opponent.name + ": " + text);
 }
 
 /* FIXME We apparently don't need the below since

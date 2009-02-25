@@ -23,7 +23,7 @@
 #include "ui_talk_gui.h"
 #include <QtGui>
 
-class TalkDispatch;
+class NetworkConnection;
 class PlayerListing;
 
 class Talk : public QDialog, public Ui::TalkGui
@@ -31,7 +31,7 @@ class Talk : public QDialog, public Ui::TalkGui
 Q_OBJECT
 
 public:
-	Talk(TalkDispatch * dis, const PlayerListing & player);
+	Talk(NetworkConnection * conn, PlayerListing & player);
 	virtual ~Talk();
 	QTextEdit      *get_mle() const { return ui.MultiLineEdit1; } 
 	QLineEdit      *get_le() const {return ui.LineEdit1; }
@@ -39,11 +39,11 @@ public:
 	QString        get_name() const;
 	//void           set_name(QString &n) { name = n; }
 	void           write(const QString &text = QString()) const;
+	void recvTalk(QString text);
 	void	       updatePlayerListing(void);
 	bool           pageActive;
 	void           setTalkWindowColor(QPalette pal);
 	Ui::TalkGui	getUi() 		{return ui;}
-	void setDispatch(TalkDispatch * dis) { dispatch = dis; };
 public slots:
 	void slot_returnPressed();
 	void slot_pbRelTab();
@@ -58,8 +58,8 @@ signals:
 private:
 	Ui::TalkGui ui;
 	static int     counter;
-	TalkDispatch * dispatch;
-	const PlayerListing & opponent;
+	NetworkConnection * connection;
+	PlayerListing & opponent;
 
 };
 
