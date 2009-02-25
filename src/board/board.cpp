@@ -190,8 +190,7 @@ void Board::calculateSize()
 	const int 	margin = 1,              
 		w = (int)canvas->width() - margin * 2,  
 		h = (int)canvas->height() - margin * 2;
-		qDebug("c %d %d\n", (int)canvas->width(), (int)canvas->height());
-
+		
 	int table_size = (w < h ? w : h );
 
 	// distance from edge of wooden board to playing area (grids + space for stones on 1st & last line)
@@ -455,8 +454,6 @@ void Board::resizeEvent(QResizeEvent*)
 	if (!lockResize)
 		changeSize();
 #endif
-	qDebug("Board resize event\n");
-	qDebug("Board size: %d, %d.", width(), height());
 }
 
 
