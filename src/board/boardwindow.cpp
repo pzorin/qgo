@@ -342,7 +342,6 @@ void BoardWindow::setupBoardUI(void)
 
 void BoardWindow::resizeEvent(QResizeEvent *)
 {
-	qDebug("boardwindow resize event\n");
 }
 
 int BoardWindow::checkModified(bool /*interactive*/)
@@ -627,7 +626,11 @@ void BoardWindow::slotDuplicate()
 	BoardWindow *b = new BoardWindow(gd, TRUE, TRUE);
 
 	b->loadSGF(0,sgf);
-	b->getBoardHandler()->slotNthMove(tree->getCurrent()->getMoveNumber());
+	/* Why is this an issue, whats weird about 0 move? */
+	int mn = tree->getCurrent()->getMoveNumber();
+	if(mn > 0)
+		mn--;
+	b->getBoardHandler()->slotNthMove(mn);
 }
 
 
