@@ -36,6 +36,16 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 	dontsend = true;
 	if(boardwindow->getGamePhase() == phaseScore)
 	{
+		/* A little awkward... FIXME, why is there no getMyColor()
+		 * function ?!?! */
+		//also "c" refers most likely to player color, not the stone clicked on
+		if(((tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneBlack && boardwindow->getMyColorIsWhite()) ||
+		   (tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneWhite && boardwindow->getMyColorIsBlack()))
+		   && boardwindow->getBoardDispatch()->cantMarkOppStonesDead())
+		{
+			dontsend = false;	//ready to send again
+			return;
+		}
 		MoveRecord * m = new MoveRecord();
 		if(tree->getCurrent()->getMatrix()->isStoneDead(x, y))
 		{
@@ -53,6 +63,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 					if (mb.exec() == QMessageBox::No)
 					{
 						dontsend = false;	//ready to send again
+						delete m;
 						return;
 					}
 			}
@@ -254,10 +265,20 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			/* If there's three passes, we should stop the clock,
 			 * although some servers might have two pass models
 			 * and we need a flag for that */
-			if(tree->getCurrent()->parent &&
-			   tree->getCurrent()->isPassMove() &&
-			   tree->getCurrent()->parent->isPassMove())
-				boardwindow->setGamePhase ( phaseScore );	//okay?
+			//if(!boardwindow->getMyColorIsBlack())	//if we're white
+			if(boardwindow->getBoardDispatch()->twoPassesEndsGame())
+			{
+				if(tree->getCurrent()->isPassMove())	
+					enterScoreMode();
+			}
+			else
+			{
+				if(tree->getCurrent()->parent &&
+				   tree->getCurrent()->isPassMove() &&
+				   tree->getCurrent()->parent->isPassMove())
+					enterScoreMode();
+					//boardwindow->setGamePhase ( phaseScore );	//okay?	
+			}
 			doPass();
 			break;
 		case MoveRecord::HANDICAP:
@@ -282,7 +303,34 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			//FIXME
 			if(boardwindow->getBoardDispatch()->unmarkUnmarksAllDeadStones())
 			{
-				/* Not sure where we get the dead groups from, FIXME */
+				/* Not sure where we get the dead groups from, FIXME 
+				 * okay, really, we should have a list of dead groups
+				 * for each player that can be checked on here.
+				 * The thing is, ORO also has such a list that it tracks
+				 * and I don't want duplication of that code but right
+				 * now I have other things on my mind and I just want to
+				 * get this done, so I'm going to do something really
+				 * quick, dirty, and awkward here and I'll fix it in
+				 * a later version... ignoring the stitch in time
+				 * thing.  So cut this out soon.  Note also that it
+				 * might make sense to have an evaluation function
+				 * in the board code, to do something to every
+				 * stone of a type... maybe not.*/
+				int boardsize = tree->getCurrent()->getMatrix()->getSize();
+				for(int i = 1; i < boardsize + 1; i++)
+				{
+					for(int j = 1; j < boardsize + 1; j++)
+					{
+						if(tree->getCurrent()->getMatrix()->isStoneDead(i, j))
+						{
+							if(tree->getCurrent()->getMatrix()->getStoneAt(i, j) == m->color)
+							{
+								boardwindow->qgoboard->markDeadArea(i, j, true);
+							}
+						}
+					}
+				}
+				
 			}
 			else
 				boardwindow->qgoboard->markDeadArea(m->x, m->y, true);
