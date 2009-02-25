@@ -1,6 +1,5 @@
 #include <QtNetwork>
 #include "networkconnection.h"
-#include "networkdispatch.h"
 #include "messages.h"
 #include "newline_pipe.h"
 #include <vector>
@@ -12,7 +11,7 @@ class TalkDispatch;
 class CyberOroConnection : public NetworkConnection
 {
 	public:
-		CyberOroConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
+		CyberOroConnection(const QString & user, const QString & pass);
 		~CyberOroConnection();
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);
@@ -179,9 +178,7 @@ class CyberOroConnection : public NetworkConnection
 		class SetPhrasePalette * setphrasepalette;
 		/* FIXME */
 		std::vector <class ServerItem *> serverList;
-		char * current_server_addr;	//must be here in order to remain for
-						//awkward ConnectionInfo messages
-		int current_server_index;	//FIXME keep only this instead of above
+		int current_server_index;
 		unsigned char * challenge_response;
 		unsigned char * codetable;
 		unsigned int codetable_IV, codetable_IV2;

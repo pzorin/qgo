@@ -3,10 +3,10 @@
 #include "cyberoroconnection.h"
 #include "cyberoroprotocolcodes.h"
 #include "consoledispatch.h"
-#include "roomdispatch.h"
+#include "../room.h"
 #include "boarddispatch.h"
-#include "gamedialogdispatch.h"
-#include "talkdispatch.h"
+#include "../gamedialog.h"
+#include "../talk.h"
 #include "dispatchregistries.h"
 #include "serverlistdialog.h"
 #include "codecwarndialog.h"
@@ -31,8 +31,9 @@ unsigned char * temp_packet;
 
 #define PLAYERLIST_SKIPNUMBER_UNSET	0xffff
 
+#define NO_PLAYING
 //#define RE_DEBUG 
-CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const QString & user, const QString & pass)
+CyberOroConnection::CyberOroConnection(const QString & user, const QString & pass)
 {
 
 	/* ui.LineEdit_address->setText("211.38.95.204");
@@ -44,7 +45,6 @@ CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const 
 	//servers that are provided on a list. */
 	/* FIXME, we need to contact some dns listed server
 	 * to get official ip in case it changes */
-	dispatch = _dispatch;
 	if(openConnection("211.113.91.78", 7447))
 	{
 		connectionState = LOGIN;
@@ -61,7 +61,6 @@ CyberOroConnection::CyberOroConnection(class NetworkDispatch * _dispatch, const 
 	
 	current_server_index = -1;
 	challenge_response = 0;
-	current_server_addr = 0;
 	codetable = 0;
 	
 	room_were_in = 0;	//lobby?
@@ -83,13 +82,11 @@ CyberOroConnection::~CyberOroConnection()
 {
 	if(setphrasepalette)
 		delete setphrasepalette;
-	qDebug("Destroying CyberORO connection\n");
+	qDebug("Destroying CyberORO connection");
 	closeConnection();
 	std::vector<ServerItem*>::iterator iter;
 	for(iter = serverList.begin(); iter != serverList.end(); iter++)
 		delete *iter;
-	if(current_server_addr)
-		delete[] current_server_addr;
 	if(challenge_response)
 		delete[] challenge_response;
 	if(codetable)
@@ -101,31 +98,31 @@ void CyberOroConnection::OnConnected()
 	/* Likely client version info */
 	if(connectionState == LOGIN)
 	{
-		unsigned char init_code[4] = { 0x6e, 0xe2, 0x1a, 0x00 };
+		//term code could be version
 		unsigned char term_code[2] = { 0x5b, 0x02 };
 		/* We send login and password */
 		// no hard coding!! FIXME
-		int length = username.length() + password.length() + 10;
+		int length = 0x1a;	//10 + user and pass padded to 10
 		qDebug("CyberOro::OnConnected() \n");
 		unsigned char * packet = new unsigned char[length];
 		unsigned char * p = packet;
 		int i;
 		
-		for(i = 0; i < 4; i++)
-			p[i] = init_code[i];
+		p[0] = 0x6e;
+		p[1] = 0xe2;
+		p[2] = length;
+		p[3] = 0x00;
 		p += 4;
 		for(i = 0; i < username.length(); i++)
 			p[i] = username.toLatin1().data()[i];
-		p += username.length();
-		p[0] = 0x00;
-		p[1] = 0x00;
-		p += 2;
+		for(i = username.length(); i < 10; i++)
+			p[i] = 0x00;
+		p += 10;
 		for(i = 0; i < password.length(); i++)
 			p[i] = password.toLatin1().data()[i];
-		p += password.length();
-		p[0] = 0x00;
-		p[1] = 0x00;
-		p += 2;
+		for(i = password.length(); i < 10; i++)
+			p[i] = 0x00;
+		p += 10;
 		for(i = 0; i < 2; i++)
 			p[i] = term_code[i];
 #ifdef RE_DEBUG
@@ -218,7 +215,7 @@ void CyberOroConnection::closeBoardDispatch(unsigned int game_id)
 	* we close a window, but its not necessarily an adjournGame.
 	* At the same time, I think dispatch needs to remain open
 	* after game like a room, to talk in */
-	GameListing * g = getDefaultRoomDispatch()->getGameListing(game_id);
+	GameListing * g = getDefaultRoom()->getGameListing(game_id);
 	if(!g)
 	{
 		/* There may not be a game listing, for instance if we've removed it
@@ -318,8 +315,18 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
 					printf("%02x", c[i]);
 				printf("\n");
 #endif //RE_DEBUG
+				//1f27080015270000
+				if(c[0] == 0x1f)
+				{
+					qDebug("Bad password or login");
+					connectionState = PASS_FAILED;
+					delete[] c;
+					//closeConnection();
+					return;
+				}
 				/* First packet is list of servers and ips */
-				handleServerList(c);
+				else if(c[0] == 0x24)			   
+					handleServerList(c);
 				delete[] c;
 			}
 			break;
@@ -432,7 +439,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	
 	/* FIXME We may not get this whole message in one shot... we need
 	 * to make sure we do.  Its exactly 1046 bytes every time.*/
-	current_server_addr = new char[16];
+	
 	/* We close here because this first time, its going to close
 	 * anyway, and if we don't close here, we'll get an error
 	 * and lose the object */
@@ -449,6 +456,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 
 void CyberOroConnection::changeServer(void)
 {
+	qDebug("changeServer called");
 	if(connectionState != CONNECTED)
 		return;
 	if(reconnectToServer() < 0)
@@ -469,7 +477,6 @@ void CyberOroConnection::createRoom(void)
  * and safely. */
 int CyberOroConnection::reconnectToServer(void)
 {
-	//current_server_addr[0] = '\0';
 	/* FIXME, we need to add something to specify the server we're
 	 * currently on */
 	/* FIXME, why does the serverReconnectDialog disappear the ui
@@ -485,18 +492,17 @@ int CyberOroConnection::reconnectToServer(void)
 		qDebug("Waited too long to connect");
 		return -1;
 	}
-	strncpy(current_server_addr, serverList[server_i]->ipaddress, 16);
 	current_server_index = server_i;
 	
 	/* FIXME
 	 * Might be neat if we listed the server that one was currently on
 	 * somewhere, like on the main window. */
 	
-	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), current_server_addr);
+	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), serverList[server_i]->ipaddress);
 	
 	if(connectionState == CONNECTED)
 		closeConnection(false);
-	if(openConnection(current_server_addr, 7002))
+	if(openConnection(serverList[server_i]->ipaddress, 7002))
 	{
 		qDebug("Reconnected");
 		connectionState = CONNECTED;
@@ -540,7 +546,7 @@ int CyberOroConnection::reconnectToServer(void)
 const PlayerListing & CyberOroConnection::getOurListing(void)
 {
 	PlayerListing * p;
-	p = getDefaultRoomDispatch()->getPlayerListing(our_player_id);
+	p = getDefaultRoom()->getPlayerListing(our_player_id);
 	return *p;
 }
 
@@ -942,6 +948,9 @@ void CyberOroConnection::sendCreateRoom(RoomCreate * room)
 
 void CyberOroConnection::sendMatchInvite(const PlayerListing & player)
 {
+#ifdef NO_PLAYING
+	return;
+#endif //NO_PLAYING
 	qDebug("room were in %d room there in %d", room_were_in, player.observing);
 	/* We'll need to check that they're in the same room as we
 	 * are, in which case, we could just popup the dialog */
@@ -1161,8 +1170,8 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 {
 	unsigned int length = 0xa0;
 	unsigned char * packet = new unsigned char[length];
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
-	PlayerListing * opponent = roomdispatch->getPlayerListing(mr.opponent_id);
+	Room * room = getDefaultRoom();
+	PlayerListing * opponent = room->getPlayerListing(mr.opponent_id);
 	if(!opponent)
 	{
 		qDebug("Can't get opponent listing for match request\n");
@@ -1538,8 +1547,8 @@ void CyberOroConnection::timerEvent(QTimerEvent * event)
 	if(event->timerId() == matchKeepAliveTimerID ||
 		  event->timerId() == matchRequestKeepAliveTimerID)
 	{
-		RoomDispatch * roomdispatch = getDefaultRoomDispatch();
-		GameListing * listing = roomdispatch->getGameListing(our_game_being_played);
+		Room * room = getDefaultRoom();
+		GameListing * listing = room->getGameListing(our_game_being_played);
 		if(!listing)
 		{
 			qDebug("Can't send keepalive, no listing");
@@ -1554,7 +1563,7 @@ void CyberOroConnection::timerEvent(QTimerEvent * event)
 
 void CyberOroConnection::sendMove(unsigned int game_id, MoveRecord * move)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch = getIfBoardDispatch(game_id);
 	if(!boarddispatch)
 	{
@@ -1608,7 +1617,7 @@ void CyberOroConnection::sendMove(unsigned int game_id, MoveRecord * move)
 	packet[7] = (our_player_id >> 8);
 	/* I've seen black moves sent with this... could be that non
 	 * challenger sends 0101?, or maybe challenger does... */
-	if(r->white_name == roomdispatch->getPlayerListing(our_player_id)->name)
+	if(r->white_name == room->getPlayerListing(our_player_id)->name)
 	{
 		packet[8] = 0x01;		//both ones?
 		packet[9] = 0x01;
@@ -2474,6 +2483,9 @@ void CyberOroConnection::sendInvitationSettings(bool invite)
 	packet[5] = (our_player_id >> 8);
 	packet[6] = 0x00;
 	packet[7] = 0x00;
+#ifdef NO_PLAYING
+	invite = false;
+#endif //NO_PLAYING
 	packet[8] = (invite ? ALLOW_ALL_INVITES : IGNORE_ALL_INVITES);
 	packet[9] = 0x00;
 	packet[10] = 0x00;
@@ -2968,7 +2980,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 		case 0x20cb:
 		{
 #ifdef RE_DEBUG
-			PlayerListing * p = getDefaultRoomDispatch()->getPlayerListing(msg[0] + (msg[1] << 8));
+			PlayerListing * p = getDefaultRoom()->getPlayerListing(msg[0] + (msg[1] << 8));
 			printf("0x20cb %s: ", (p ? p->name.toLatin1().constData() : "-"));
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
@@ -3041,7 +3053,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 		case 0x39cb: 
 		{
 #ifdef RE_DEBUG
-			PlayerListing * p = getDefaultRoomDispatch()->getPlayerListing(msg[0] + (msg[1] << 8));
+			PlayerListing * p = getDefaultRoom()->getPlayerListing(msg[0] + (msg[1] << 8));
 			printf("0x39cb %s: ", (p ? p->name.toLatin1().constData() : "-"));
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
@@ -3154,7 +3166,9 @@ void CyberOroConnection::handleConnected(unsigned char * msg, unsigned int size)
 	if(size != 10)
 		qDebug("handleConnected size: %d", size);
 	our_player_id = p[0] + (p[1] << 8);
+#ifdef RE_DEBUG
 	qDebug("our id: %02x%02x %02x\n", p[0], p[1], p[2]);
+#endif //RE_DEBUG
 	our_special_byte = p[2];
 	p += 6;
 	
@@ -3176,7 +3190,7 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 	unsigned char rankbyte, invitebyte;
 	int i;
 	unsigned short id;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	PlayerListing * newPlayer = new PlayerListing();
 	PlayerListing * aPlayer;
 	PlayerListing * backPlayer;
@@ -3206,7 +3220,7 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 #endif //RE_DEBUG
 		p += 10;
 		id = p[0] + (p[1] << 8);
-		aPlayer = roomdispatch->getPlayerListing(id);
+		aPlayer = room->getPlayerListing(id);
 		if(!aPlayer)
 		{
 			aPlayer = newPlayer;
@@ -3259,7 +3273,7 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 #endif //RE_DEBUG
 		p += 3;
 		p++;
-		roomdispatch->recvPlayerListing(aPlayer);
+		room->recvPlayerListing(aPlayer);
 		
 		playerlist_received++;
 		if(playerlist_skipnumber != PLAYERLIST_SKIPNUMBER_UNSET
@@ -3269,13 +3283,13 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 			printf("Playerlist received %d skip number %d\n", playerlist_received, playerlist_skipnumber);
 #endif //RE_DEBUG
 			/* get next room with observers */
-			GameListing * gamelisting = roomdispatch->getGameListing(playerlist_roomnumber);
+			GameListing * gamelisting = room->getGameListing(playerlist_roomnumber);
 			if(!gamelisting)
 				goto label_playerlist_nogame;
 			if(gamelisting->observers > 0 && playerlist_observernumber == gamelisting->observers)
 			{
 				playerlist_observernumber = 0;
-				gamelisting = roomdispatch->getGameListing(++playerlist_roomnumber);
+				gamelisting = room->getGameListing(++playerlist_roomnumber);
 				if(!gamelisting)
 					goto label_playerlist_nogame;
 			}
@@ -3288,12 +3302,12 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 				while(gamelisting->observers == 0)
 				{
 					playerlist_roomnumber++;
-					gamelisting = roomdispatch->getGameListing(playerlist_roomnumber);
+					gamelisting = room->getGameListing(playerlist_roomnumber);
 					if(!gamelisting)
 						goto label_playerlist_nogame;
 				}
 			}
-			backPlayer = roomdispatch->getPlayerListing(aPlayer->id);
+			backPlayer = room->getPlayerListing(aPlayer->id);
 			/* add room to player, ORO is one room per player */
 			backPlayer->observing = playerlist_roomnumber;
 			/* add player to room */
@@ -3317,7 +3331,7 @@ label_playerlist_was_observer:
 		/* This also seems necessary... once we get this working, we should
 		 * think about how to clean this mess up... its just cause I've
 		 * written it all so piecemeal */
-		backPlayer = roomdispatch->getPlayerListing(aPlayer->id);
+		backPlayer = room->getPlayerListing(aPlayer->id);
 		playerlist_inorder.push_back(backPlayer);
 	}
 	//FIXME test without this
@@ -3431,7 +3445,7 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 	PlayerListing * player;
 	GameListing * aGameListing;
 	GameListing * newGameListing = new GameListing();
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	PlayerListing temp;
 	bool be_adding_observers;
 
@@ -3482,7 +3496,7 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 			p += 16;
 			continue;
 		}
-		aGameListing = roomdispatch->getGameListing(number);
+		aGameListing = room->getGameListing(number);
 		if(!aGameListing)
 		{
 			aGameListing = newGameListing;
@@ -3513,14 +3527,16 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 		if(aGameListing->moves == -1)
 			aGameListing->moves = 0;
 		aGameListing->owner_id = p[8] + (p[9] << 8);
-		player = roomdispatch->getPlayerListing(aGameListing->owner_id);
+		player = room->getPlayerListing(aGameListing->owner_id);
 		if(!player)
 		{
 			temp.id = aGameListing->owner_id;
 			temp.name = QString("No name");
 			temp.playing = 0;
-			roomdispatch->recvPlayerListing(&temp);
-			player = roomdispatch->getPlayerListing(aGameListing->owner_id);
+			/* FIXME we add and remove a lot of these, too many I think
+			 * doublecheck, inefficient anyway */
+			room->recvPlayerListing(&temp);
+			player = room->getPlayerListing(aGameListing->owner_id);
 		}
 		aGameListing->white = player;
 		
@@ -3534,14 +3550,14 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 			aGameListing->_black_name = getRoomTag(p[4]);
 			aGameListing->isRoomOnly = true;
 		}
-		roomdispatch->recvGameListing(aGameListing);
+		room->recvGameListing(aGameListing);
 		if(player)
 		{
 			//after recv
 			//FIXME
 			setAttachedGame(player, aGameListing->number);
 		}
-		aGameListing = roomdispatch->getGameListing(aGameListing->number);
+		aGameListing = room->getGameListing(aGameListing->number);
 		aGameListing->observer_list.clear();	
 		p += 16;
 #ifdef RE_DEBUG
@@ -3665,7 +3681,7 @@ void CyberOroConnection::handleBroadcastGamesList(unsigned char * msg, unsigned 
 	name[10] = 0x00;
 	int i;
 	
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	GameListing * aGameListing;
 	GameListing * ag = new GameListing();
 	ag->running = true;
@@ -3678,7 +3694,7 @@ void CyberOroConnection::handleBroadcastGamesList(unsigned char * msg, unsigned 
 	while(number_of_games--)
 	{
 		number = p[0] + (p[1] << 8);
-		aGameListing = roomdispatch->getGameListing(number);
+		aGameListing = room->getGameListing(number);
 		if(!aGameListing)
 			aGameListing = ag;
 		aGameListing->number = number;
@@ -3749,7 +3765,7 @@ void CyberOroConnection::handleBroadcastGamesList(unsigned char * msg, unsigned 
 		aGameListing->isRoomOnly = false;
 		aGameListing->isBroadcast = true;	
 		//to prevent broadcast games from closing FIXME
-		roomdispatch->recvGameListing(aGameListing);
+		room->recvGameListing(aGameListing);
 		clearRoomsWithoutGames(aGameListing->number);
 	}
 	//FIXME try without
@@ -3772,7 +3788,7 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	unsigned int id;
 	int i;
 	
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	PlayerListing * white, * black;
 	GameListing * aGameListing;
 	GameListing * ag = new GameListing();
@@ -3801,7 +3817,7 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	while(number_of_games-- && p < (msg + size - 9))	//check probably unnecessary FIXME
 	{
 		number = p[0] + (p[1] << 8);
-		aGameListing = roomdispatch->getGameListing(number);
+		aGameListing = room->getGameListing(number);
 		if(!aGameListing)
 			aGameListing = ag;
 		aGameListing->number = number;
@@ -3817,14 +3833,14 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		p += 2;
 		
 		id = p[0] + (p[1] << 8);
-		black = roomdispatch->getPlayerListing(id);
+		black = room->getPlayerListing(id);
 		if(!black)
 		{
 			temp.id = id;
 			temp.name = QString("No name");
 			temp.playing = 0;
-			roomdispatch->recvPlayerListing(&temp);
-			black = roomdispatch->getPlayerListing(id);
+			room->recvPlayerListing(&temp);
+			black = room->getPlayerListing(id);
 		}
 		/*if(!black)
 		{
@@ -3837,14 +3853,14 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		//}
 		p += 2;
 		id = p[0] + (p[1] << 8);
-		white = roomdispatch->getPlayerListing(id);
+		white = room->getPlayerListing(id);
 		if(!white)
 		{
 			temp.id = id;
 			temp.name = QString("No name");
 			temp.playing = 0;
-			roomdispatch->recvPlayerListing(&temp);
-			white = roomdispatch->getPlayerListing(id);
+			room->recvPlayerListing(&temp);
+			white = room->getPlayerListing(id);
 		}
 		/*if(!white)
 		{
@@ -3864,7 +3880,7 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 		aGameListing->isRoomOnly = false;
 		//aGameListing->observers = 2;	//the players
-		roomdispatch->recvGameListing(aGameListing);
+		room->recvGameListing(aGameListing);
 		//after recv
 		setAttachedGame(black, aGameListing->number);
 		setAttachedGame(white, aGameListing->number);
@@ -3886,7 +3902,7 @@ void CyberOroConnection::handlePlayerConnect(unsigned char * msg, unsigned int s
 	name2[10] = 0x00;
 	unsigned char rankbyte;
 	unsigned short id;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	PlayerListing * newPlayer = new PlayerListing();
 	PlayerListing * aPlayer;
 	newPlayer->online = true;
@@ -3914,7 +3930,7 @@ void CyberOroConnection::handlePlayerConnect(unsigned char * msg, unsigned int s
 	printf("id: %02x%02x\n", p[0], p[1]);
 #endif //RE_DEBUG
 	id = p[0] + (p[1] << 8);
-	aPlayer = roomdispatch->getPlayerListing(id);
+	aPlayer = room->getPlayerListing(id);
 	if(!aPlayer)
 		aPlayer = newPlayer;
 	aPlayer->id = id;
@@ -3966,7 +3982,7 @@ void CyberOroConnection::handlePlayerConnect(unsigned char * msg, unsigned int s
 	p += 8;	//other data;
 	aPlayer->observing = 0;		//necessary?
 	//aPlayer->playing = 0;	//necessary?
-	roomdispatch->recvPlayerListing(aPlayer);
+	room->recvPlayerListing(aPlayer);
 	//FIXME test without this
 	//delete newPlayer;
 }
@@ -3987,7 +4003,7 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 {
 	if(player->playing && player->playing != game_id)
 	{
-		GameListing * g = getDefaultRoomDispatch()->getGameListing(player->playing);
+		GameListing * g = getDefaultRoom()->getGameListing(player->playing);
 		if(g)
 		{
 			if(g->white == player)
@@ -4011,7 +4027,7 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 				//issues here
 				qDebug("Closing game %d, no observers", g->number);
 				g->running = false;
-				getDefaultRoomDispatch()->recvGameListing(g);	
+				getDefaultRoom()->recvGameListing(g);	
 			}*/
 		}
 	}
@@ -4036,7 +4052,7 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 	unsigned short id = p[0] + (p[1] << 8);
 	unsigned short directed_id;
 	unsigned short setphrase_code;
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(id);
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(id);
 	if(!player)
 	{
 		qDebug("Can't get player for set chat msg\n");
@@ -4148,14 +4164,14 @@ void CyberOroConnection::handleServerRoomChat(unsigned char * msg, unsigned int 
 	//there's two encoding bytes here... 00 86 looks like ascii
 	
 	p += 2;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch(); //3
+	Room * room = getDefaultRoom(); //3
 	strncpy((char *)text, (char *)p, size - 4); text[size - 4] = 0x00;
 	/*for(i = 0; i < text_size; i++)
 	{
 		text[i] = p[0] + (p[1] << 8);
 		p += 2;
 	}*/
-	PlayerListing * player = roomdispatch->getPlayerListing(player_id);
+	PlayerListing * player = room->getPlayerListing(player_id);
 	if(player)
 	{
 #ifdef RE_DEBUG
@@ -4192,8 +4208,8 @@ void CyberOroConnection::handleRoomChat(unsigned char * msg, unsigned int size)
 	for(i = 0; i < (int)size; i++)
 		printf("%02x", p[i]);
 	printf("\n");*/
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
-	const PlayerListing * player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	Room * room = getDefaultRoom();
+	const PlayerListing * player = room->getPlayerListing(p[0] + (p[1] << 8));
 	p += 2;
 
 	//these two bytes are font or something 
@@ -4241,9 +4257,9 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	p += 4;
-	const PlayerListing * player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	PlayerListing * player = room->getPlayerListing(p[0] + (p[1] << 8));
 	p += 2;
 	p += 2;
 	strncpy((char *)text, (char *)p, size - 8); text[size - 8] = 0x00;
@@ -4255,7 +4271,7 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 			printf("%02x", text[i]);
 		printf("\n");
 #endif //RE_DEBUG
-		TalkDispatch * talk = getTalkDispatch(*player);
+		Talk * talk = getTalk(*player);
 		if(talk)
 		{
 			talk->recvTalk(QString((char *)text));
@@ -4280,7 +4296,7 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 // FIXME
 void CyberOroConnection::handlePlayerRoomJoin(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	unsigned int id;
 	unsigned short room_number;
@@ -4290,7 +4306,7 @@ void CyberOroConnection::handlePlayerRoomJoin(unsigned char * msg, unsigned int 
 	if(size != 4)
 		qDebug("handlePlayerRoomJoin of size: %d\n", size);
 	id = p[0] + (p[1] << 8);
-	PlayerListing * aPlayer = roomdispatch->getPlayerListing(id);
+	PlayerListing * aPlayer = room->getPlayerListing(id);
 	if(!aPlayer)
 	{
 		printf("Can't find room switching player %02x%02x\n", p[0], p[1]);
@@ -4328,7 +4344,7 @@ void CyberOroConnection::handlePlayerRoomJoin(unsigned char * msg, unsigned int 
 	aPlayer->observing = room_number;
 	if(room_number)			//0 is lobby
 	{
-		game = roomdispatch->getGameListing(room_number);
+		game = room->getGameListing(room_number);
 		if(game)
 		{
 			game->observers++;
@@ -4338,17 +4354,17 @@ void CyberOroConnection::handlePlayerRoomJoin(unsigned char * msg, unsigned int 
 	/* We set to 0 here with the idea that they aren't entering
 	 * their own game, but its a little weird */
 	setAttachedGame(aPlayer, 0);
-	roomdispatch->recvPlayerListing(aPlayer);
+	room->recvPlayerListing(aPlayer);
 	// This can definitely be the number of a game, not the game_code
 	
 	//aPlayer->online = false;
-	//roomdispatch->recvPlayerListing(aPlayer);
+	//room->recvPlayerListing(aPlayer);
 }
 
 void CyberOroConnection::removeObserverFromGameListing(const PlayerListing * p)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
-	GameListing * game = roomdispatch->getGameListing(p->observing);
+	Room * room = getDefaultRoom();
+	GameListing * game = room->getGameListing(p->observing);
 	if(!game)
 		return;
 #ifdef RE_DEBUG
@@ -4378,14 +4394,14 @@ void CyberOroConnection::removeObserverFromGameListing(const PlayerListing * p)
 		* think there's another message that does it FIXME (but this
 		* requires accurate observer counts. */
 		game->running = false;
-		roomdispatch->recvGameListing(game);
+		room->recvGameListing(game);
 	}
 }
 
 //4a9c likely real disconnect or maybe not!!!
 void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	GameListing * game;
 	unsigned char * p = msg;
 	unsigned int id;
@@ -4393,7 +4409,7 @@ void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned i
 	if(size != 4)
 		qDebug("handlePlayerDisconnect of size: %d\n", size);
 	id = p[0] + (p[1] << 8);
-	PlayerListing * aPlayer = roomdispatch->getPlayerListing(id);
+	PlayerListing * aPlayer = room->getPlayerListing(id);
 	if(!aPlayer)
 	{
 		printf("Can't find msg player %02x%02x\n", p[0], p[1]);
@@ -4413,7 +4429,7 @@ void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned i
 		//way too many
 		//QMessageBox::information(0 , tr("disconnecting"), aPlayer->name);
 
-		roomdispatch->recvPlayerListing(aPlayer);
+		room->recvPlayerListing(aPlayer);
 		
 	}
 	BoardDispatch * boarddispatch = getIfBoardDispatch(room_id);
@@ -4431,7 +4447,7 @@ void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned i
 // they could also be player updates I guess, but that's doubtful
 void CyberOroConnection::handleNewGame(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * player;
 	unsigned short player_id = p[0] + (p[1] << 8);
@@ -4441,7 +4457,7 @@ void CyberOroConnection::handleNewGame(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("Game result msg?: ");
 #endif //RE_DEBUG
-	player = roomdispatch->getPlayerListing(player_id);
+	player = room->getPlayerListing(player_id);
 #ifdef RE_DEBUG
 	if(player)
 		printf("%s ", player->name.toLatin1().constData());
@@ -4460,9 +4476,9 @@ void CyberOroConnection::handleNewGame(unsigned char * msg, unsigned int size)
 	// we probably don't send these during pass?
 	if(player_id == our_player_id)
 		killActiveMatchTimers();
-	//GameListing * g = roomdispatch->getGameListing();
+	//GameListing * g = room->getGameListing();
 	//g->running = false;
-	//roomdispatch->recvGameListing(g);
+	//room->recvGameListing(g);
 }
 
 /* Below might not be observer list at all.... 
@@ -4476,7 +4492,7 @@ void CyberOroConnection::handleObserverList(unsigned char * msg, unsigned int si
 	unsigned short id;
 	unsigned short observer_list_index;
 	GameListing * game;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	PlayerListing * aPlayer;
 	if(!room_were_in)
@@ -4511,7 +4527,7 @@ void CyberOroConnection::handleObserverList(unsigned char * msg, unsigned int si
 	{
 		p += 8;
 		id = p[0] + (p[1] << 8);
-		/*aPlayer = roomdispatch->getPlayerListing(id);
+		/*aPlayer = room->getPlayerListing(id);
 		if(aPlayer)
 			boarddispatch->recvObserver(aPlayer, true);
 		else*/
@@ -4528,7 +4544,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 	unsigned short game_code;
 	unsigned int game_number;
 	GameListing * game;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	if(size != 10)
 	{
 		qDebug("GameEnded of strange size: %d", size);
@@ -4538,7 +4554,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 	game_number = p[2] + (p[3] << 8);
 	p += 4;
 	//DOUBLECHECK
-	game = roomdispatch->getGameListing(game_number);
+	game = room->getGameListing(game_number);
 	if(!game)
 	{
 		qDebug("e1af for no game\n");
@@ -4561,7 +4577,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 		game->black = 0;	//just in case
 	}
 	game->running = false;
-	roomdispatch->recvGameListing(game);
+	room->recvGameListing(game);
 	game_code_to_number.erase(game_number);	// good?
 	/* To help clear out 0a7d records */
 	clearRoomsWithoutGames(game_number);	//this is where it was to start with
@@ -4579,7 +4595,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 //0a7d
 void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * black;
 	PlayerListing * white;
@@ -4599,7 +4615,7 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 	number = p[0] + (p[1] << 8);
 	if(!number)
 		qDebug("0a7d on number 0");
-	aGameListing = roomdispatch->getGameListing(number);
+	aGameListing = room->getGameListing(number);
 	if(!aGameListing)
 		aGameListing = newGameListing;
 	aGameListing->number = number;
@@ -4618,7 +4634,7 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 	 * on board dispatches... what's changed here ??? FIXME */
 	aGameListing->owner_id = p[0] + (p[1] << 8);
 	aGameListing->observers = 0;	//okay?
-	white = roomdispatch->getPlayerListing(aGameListing->owner_id);
+	white = room->getPlayerListing(aGameListing->owner_id);
 	if(!white)
 	{
 		printf("can't get white player: %02x%02x\n", p[0], p[1]);
@@ -4636,7 +4652,7 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 	}
 	p += 2;
 	id = p[0] + (p[1] << 8);
-	black = roomdispatch->getPlayerListing(id);
+	black = room->getPlayerListing(id);
 	if(!black)
 	{
 		printf("can't get black player: %02x%02x\n", p[0], p[1]);
@@ -4656,16 +4672,16 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("0a7d for game with no game code: %d %s %s\n", aGameListing->number, white->name.toLatin1().constData(), black->name.toLatin1().constData());
 #endif //RE_DEBUG
-	roomdispatch->recvGameListing(aGameListing);
+	room->recvGameListing(aGameListing);
 	//FIXME test without delete
 	//delete newGameListing;
-	aGameListing = roomdispatch->getGameListing(number);
+	aGameListing = room->getGameListing(number);
 }
 
 //1a81
 void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	unsigned short game_code;
 	unsigned int handicap;
@@ -4694,13 +4710,13 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	byte = p[2];
 	p += 2;
 	
-	black = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	black = room->getPlayerListing(p[0] + (p[1] << 8));
 #ifdef RE_DEBUG
 	if(black)
 		printf("} game of %s %02x%02x", black->name.toLatin1().constData(), p[0], p[1]);
 #endif //RE_DEBUG
 	p += 2;
-	white = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	white = room->getPlayerListing(p[0] + (p[1] << 8));
 #ifdef RE_DEBUG
 	if(white)
 		printf(" and %s %02x%02x", white->name.toLatin1().constData(), p[0], p[1]);
@@ -4718,7 +4734,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	 * the "attachedgame" to get the number */
 	if(black->observing)
 	{
-		aGameListing = roomdispatch->getGameListing(black->observing);
+		aGameListing = room->getGameListing(black->observing);
 #ifdef RE_DEBUG
 		if(aGameListing)
 			printf("Found %d for this game\n", aGameListing->number);
@@ -4726,7 +4742,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	}
 	if(white->observing && !aGameListing)
 	{
-		aGameListing = roomdispatch->getGameListing(white->observing);
+		aGameListing = room->getGameListing(white->observing);
 #ifdef RE_DEBUG
 		if(aGameListing)
 			printf("Found %d for this game\n", aGameListing->number);
@@ -4734,7 +4750,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	}
 	if(black->playing && !aGameListing)
 	{
-		aGameListing = roomdispatch->getGameListing(black->playing);
+		aGameListing = room->getGameListing(black->playing);
 #ifdef RE_DEBUG
 		if(aGameListing)
 			printf("Found %d for this game\n", aGameListing->number);
@@ -4742,7 +4758,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	}
 	if(white->playing && !aGameListing)
 	{
-		aGameListing = roomdispatch->getGameListing(white->playing);
+		aGameListing = room->getGameListing(white->playing);
 #ifdef RE_DEBUG
 		if(aGameListing)
 			printf("Found %d for this game\n", aGameListing->number);
@@ -4763,7 +4779,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	else
 	{
 		//detach owner if any, players are reattached
-		owner = roomdispatch->getPlayerListing(aGameListing->owner_id);
+		owner = room->getPlayerListing(aGameListing->owner_id);
 		if(owner && owner != black && owner != white)
 			setAttachedGame(owner, 0);
 		/* FIXME we may want to swap the colors? if they're now
@@ -4781,7 +4797,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 	aGameListing->isRoomOnly = false;
 	
 	//how is it necessary to do recv here if we got the listing previously?
-	//roomdispatch->recvGameListing(aGameListing);
+	//room->recvGameListing(aGameListing);
 	//FIXME test without delete
 	//delete aGameListing;
 }
@@ -4808,7 +4824,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
  * as well. */
 void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * black;
 	PlayerListing * white;
@@ -4937,7 +4953,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		strncpy((char *)name, (char *)p, 10);
 		p += 10;
 		/* First two names often seem to choke? FIXME, try second two */
-		/*aGameListing->black = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+		/*aGameListing->black = room->getPlayerListing(p[0] + (p[1] << 8));
 		if(!aGameListing->black)
 		{*/
 			//aGameListing->_black_name = QString((char *)name);
@@ -4946,7 +4962,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		p += 2;*/
 		strncpy((char *)name, (char *)p, 10);
 		p += 10;
-		/*aGameListing->white = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+		/*aGameListing->white = room->getPlayerListing(p[0] + (p[1] << 8));
 		if(!aGameListing->white)
 		{*/
 			//aGameListing->_white_name = QString((char *)name);
@@ -4998,7 +5014,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 #endif //RE_DEBUG
 		//aGameListing->game_code = aGameData->game_code;
 		aGameListing->isRoomOnly = false;
-		roomdispatch->recvGameListing(aGameListing);
+		room->recvGameListing(aGameListing);
 		clearRoomsWithoutGames(aGameListing->number);
 		//FIXME test without delete
 		//delete aGameListing;
@@ -5009,7 +5025,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	else
 		p += 24;
 	
-	aGameListing = roomdispatch->getGameListing(game_number);
+	aGameListing = room->getGameListing(game_number);
 	if(!aGameListing)
 	{
 		qDebug("Can't get game listing for %02x %02x", p[0], p[1]);
@@ -5029,7 +5045,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	
 	/* We get this upon opening a betting match */
 	/* And observers: */
-	GameListing * game = roomdispatch->getGameListing(game_number);
+	GameListing * game = room->getGameListing(game_number);
 	if(game && room_were_in == game_number)		//no observing outside
 	{
 		//sanity check: for DEBUG ing
@@ -5045,14 +5061,14 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 //this could potentially also be a join room
 void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * aPlayer;
 	unsigned short room_number;
 	unsigned char room_type;
 	int i;
 	
-	aPlayer = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	aPlayer = room->getPlayerListing(p[0] + (p[1] << 8));
 #ifdef RE_DEBUG
 	if(aPlayer)
 		qDebug("player %s %02x%02x chat room/match\n", aPlayer->name.toLatin1().constData(), p[0], p[1]);
@@ -5135,14 +5151,14 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 	
 	
 	
-	roomdispatch->recvGameListing(aGameListing);
+	room->recvGameListing(aGameListing);
 	
 	/* Set the attachment right after the game list is recvd */
 	if(aPlayer)
 		setAttachedGame(aPlayer, aGameListing->number);
 	//FIXME test without delete
 	delete aGameListing;
-	aGameListing = roomdispatch->getGameListing(room_number);
+	aGameListing = room->getGameListing(room_number);
 	//printf("Pushing back %p with %d\n", aGameListing, aGameListing->number);
 }
 
@@ -5152,8 +5168,8 @@ void CyberOroConnection::handleBettingMatchResult(unsigned char * msg, unsigned 
 	unsigned short game_code = msg[0] + (msg[1] << 8);
 	unsigned short game_id = game_code_to_number[game_code];
 	int i;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
-	GameListing * aGameListing = roomdispatch->getGameListing(game_id);
+	Room * room = getDefaultRoom();
+	GameListing * aGameListing = room->getGameListing(game_id);
 	
 #ifdef RE_DEBUG
 	printf("56f4: likely betting match result: %d\n", game_id);
@@ -5178,14 +5194,14 @@ void CyberOroConnection::handleBettingMatchResult(unsigned char * msg, unsigned 
 	
 	/* Sure they never hang around with the game over thing ? */
 	//aGameListing->running = false;
-	//roomdispatch->recvGameListing(aGameListing);
+	//room->recvGameListing(aGameListing);
 	//game_code_to_number.erase(game_id);
 }
 
 //5ac3
 void CyberOroConnection::handleGamePhaseUpdate(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	GameListing * aGameListing;
 	int i;
@@ -5202,11 +5218,11 @@ void CyberOroConnection::handleGamePhaseUpdate(unsigned char * msg, unsigned int
 #endif //RE_DEBUG
 	// maybe first byte is game number?, and then update?
 	/* I'm going to pretend these are game phase status messages */
-	aGameListing = roomdispatch->getGameListing(p[0] + (p[1] << 8));
+	aGameListing = room->getGameListing(p[0] + (p[1] << 8));
 	if(aGameListing)
 	{
 		aGameListing->moves = getPhase(p[2]);
-		roomdispatch->recvGameListing(aGameListing);
+		room->recvGameListing(aGameListing);
 	}
 	else
 	{
@@ -5219,7 +5235,7 @@ void CyberOroConnection::handleGamePhaseUpdate(unsigned char * msg, unsigned int
 //50c3
 void CyberOroConnection::handleMsg3(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * player;
 	int i;
@@ -5237,7 +5253,7 @@ void CyberOroConnection::handleMsg3(unsigned char * msg, unsigned int size)
 //f5af
 void CyberOroConnection::handleNigiri(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * player;
 	unsigned char thebyte;
@@ -5316,7 +5332,7 @@ void CyberOroConnection::handleNigiri(unsigned char * msg, unsigned int size)
  * if that's okay?  Otherwise on connect is fine too. */
 void CyberOroConnection::handleMsg2(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * player;
 	int i;
@@ -5475,7 +5491,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 		return;
 	}
 	p += 2;
-	player = getDefaultRoomDispatch()->getPlayerListing(p[0] + (p[1] << 8));
+	player = getDefaultRoom()->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		printf("Can't find player for id %02x%02x for match decline\n", p[0], p[1]);
@@ -5486,7 +5502,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 #ifdef RE_DEBUG
 	printf("0x327d: unexplained bytes: %02x %02x\n", p[0], p[1]);
 #endif //RE_DEBUG
-	GameDialogDispatch * gameDialogDispatch = getIfGameDialogDispatch(*player);
+	GameDialog * gameDialogDispatch = getIfGameDialog(*player);
 	if(!gameDialogDispatch)
 	{
 		qDebug("Got 327d but we don't have a game dialog for %s", player->name.toLatin1().constData());
@@ -5506,7 +5522,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 //b0b3
 void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	GameData * gr;
 	unsigned char * p = msg;
@@ -5516,7 +5532,7 @@ void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 		qDebug("Resign message of strange size: %d", size);
 		return;
 	}
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		printf("Can't find player for id %02x%02x for resign\n", p[0], p[1]);
@@ -5557,11 +5573,11 @@ void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 //c9b30c00 c801 ea0c 000000f1
 void CyberOroConnection::handleEnterScoring(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 #ifdef RE_DEBUG
 	printf("c9b3 size: %d\n", size);
 #endif //RE_DEBUG
@@ -5629,14 +5645,14 @@ void CyberOroConnection::startMatchTimers(bool ourTurn)
 //e2b31200 2f05 640b 2f05 2863 0201 1106 0804
 void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	int i;
 	unsigned char * p = msg;
 	bool unremove;
 	int number_of_marks;
 	PlayerListing * player;
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		printf("Can't find player for id %02x%02x for enterscoremode\n", p[0], p[1]);
@@ -5723,13 +5739,13 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int si
  * msg, not that that means anything to us until we hit done */
 void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	int i;
 	unsigned char * p = msg;
 	int number_of_marks;
 	PlayerListing * player;
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		printf("Can't find player for id %02x%02x for enterscoremode\n", p[0], p[1]);
@@ -5793,14 +5809,14 @@ void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int size
 //e7b3
 void CyberOroConnection::handleScore(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	int i;
 	unsigned char * p = msg;
 	unsigned short game_id, game_code;
 	int number_of_marks;
 	PlayerListing * player;
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		printf("Can't find player for id %02x%02x for enterscoremode\n", p[0], p[1]);
@@ -5852,11 +5868,11 @@ void CyberOroConnection::handleScore(unsigned char * msg, unsigned int size)
 	boarddispatch->recvResult(0);
 	
 	//double check, this appropriate here? FIXME, we need a func for it
-	GameListing * aGameListing = roomdispatch->getGameListing(game_id);
+	GameListing * aGameListing = room->getGameListing(game_id);
 	if(aGameListing)
 	{
 		aGameListing->running = false;
-		roomdispatch->recvGameListing(aGameListing);
+		room->recvGameListing(aGameListing);
 		game_code_to_number.erase(game_id);
 		our_game_being_played = 0;
 		/* Can't imagine how but... */
@@ -5883,7 +5899,7 @@ void CyberOroConnection::clearRoomsWithoutGames(unsigned short game_id)
 //f6b3
 void CyberOroConnection::handleTimeLoss(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
@@ -5891,7 +5907,7 @@ void CyberOroConnection::handleTimeLoss(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("f6b3 size: %d\n", size);	
 #endif //RE_DEBUG
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		qDebug("No player for %02x %02x for time loss!!\n", p[0], p[1]);
@@ -5939,7 +5955,7 @@ void CyberOroConnection::handleTimeLoss(unsigned char * msg, unsigned int size)
 //dcaf
 void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	GameData * gr;
@@ -5972,7 +5988,7 @@ void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 		return;
 	}
 	player_id = p[0] + (p[1] << 8);
-	player = roomdispatch->getPlayerListing(player_id);
+	player = room->getPlayerListing(player_id);
 	if(!player)
 	{
 		printf("No player for %02x %02x\n", p[0], p[1]);
@@ -6086,7 +6102,7 @@ void CyberOroConnection::handleUndo(unsigned char * msg, unsigned int size)
 		qDebug("no board dispatch for undo");
 		return;
 	}
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(player_id);
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(player_id);
 	if(!player)
 	{
 		qDebug("No player listing for our supposed opponent");
@@ -6133,7 +6149,7 @@ void CyberOroConnection::handleDeclineUndo(unsigned char * msg, unsigned int siz
 		qDebug("no board dispatch for decline undo");
 		return;
 	}
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(player_id);
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(player_id);
 	if(!player)
 	{
 		qDebug("No player listing for our supposed opponent");
@@ -6165,7 +6181,7 @@ void CyberOroConnection::handleAcceptUndo(unsigned char * msg, unsigned int size
 		qDebug("no board dispatch for decline undo");
 		return;
 	}
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(player_id);
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(player_id);
 	if(!player)
 	{
 		qDebug("No player listing for our supposed opponent");
@@ -6231,7 +6247,7 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("Move List!!!!\n");
 #endif //RE_DEBUG
-	//player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	//player = room->getPlayerListing(p[0] + (p[1] << 8));
 	aMove->flags = MoveRecord::NONE;
 	//for(i = (gr->handicap ? 1 : 0) ; i < number_of_moves + (gr->handicap ? 1 : 0); i++)
 	/* We're sending these starting with 1 because moves after
@@ -6279,7 +6295,7 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 * Broadcast is extremely likely.  May also start with that 38f4 betting message */
 void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	BoardDispatch * boarddispatch;
 	int number_of_moves;
@@ -6290,7 +6306,7 @@ void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 	p += 2;
 	game_id = p[0] + (p[1] << 8);
 	
-	GameListing * listing = roomdispatch->getGameListing(connecting_to_game_number);
+	GameListing * listing = room->getGameListing(connecting_to_game_number);
 	if(!listing)
 	{
 		qDebug("Can't get listing for game number %d", connecting_to_game_number);
@@ -6301,7 +6317,7 @@ void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 	game_code_to_number[listing->game_code] = listing->number;
 	boarddispatch = getBoardDispatch(listing->number);
 	
-	roomdispatch->recvGameListing(listing);	//okay?
+	room->recvGameListing(listing);	//okay?
 	
 
 	connecting_to_game_number = 0;
@@ -6316,7 +6332,7 @@ void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("Move List Broadcast/Special %d %d!!!!\n", listing->number, listing->game_code);
 #endif //RE_DEBUG
-	//player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	//player = room->getPlayerListing(p[0] + (p[1] << 8));
 	aMove->flags = MoveRecord::NONE;
 	//for(i = (aGameData->handicap ? 1 : 0) ; i < number_of_moves + (aGameData->handicap ? 1 : 0); i++)
 	for(i = 1; i < number_of_moves + 1; i++)
@@ -6346,7 +6362,7 @@ void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 //9a65 maybe?!?!? not a result... probably invitation allowed!!!
 void CyberOroConnection::handleInvitationSettings(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	int i;
 	unsigned char * p = msg;
 	PlayerListing * player;
@@ -6354,7 +6370,7 @@ void CyberOroConnection::handleInvitationSettings(unsigned char * msg, unsigned 
 	printf("0x9a65: ");
 #endif //RE_DEBUG
 	
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		printf("no player for %02x%02x\n", p[0], p[1]);
@@ -6379,7 +6395,7 @@ QString CyberOroConnection::getStatusFromCode(unsigned char code, QString rank)
 	// rank versus the target and adjusts an open flag, just one
 	// based on that.
 	// game dialog needed something more specific so
-	PlayerListing * us = getDefaultRoomDispatch()->getPlayerListing(our_player_id);
+	PlayerListing * us = getDefaultRoom()->getPlayerListing(our_player_id);
 	if(!us)
 		return "??";
 	int ret_val = compareRanks(us->rank, rank);
@@ -6491,7 +6507,7 @@ int CyberOroConnection::compareRanks(QString rankA, QString rankB)
  * on this. */
 void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
@@ -6520,7 +6536,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	/* FIXME I'm not sure this is the current players turn,
 	 * it might just be the challenger or something */
 	player_id = p[0] + (p[1] << 8);
-	player = roomdispatch->getPlayerListing(player_id);
+	player = room->getPlayerListing(player_id);
 #ifdef RE_DEBUG
 	if(player)
 		printf("Currently %s's turn...\n", player->name.toLatin1().constData());
@@ -6547,7 +6563,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	else if(playing_game_number)
 	{
 		//careful, could be rematch !!!
-		getAndCloseGameDialogDispatch(*player);	//FIXME okay?
+		getAndCloseGameDialog(*player);	//FIXME okay?
 		game_number = playing_game_number;
 		our_game_being_played = game_number;
 		setRoomNumber(game_number);
@@ -6559,7 +6575,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 #endif //RE_DEBUG
 		return;
 	}
-	/*game = roomdispatch->getGameListing(game_number);
+	/*game = room->getGameListing(game_number);
 	if(!game)
 	{
 		qDebug("Can't get game listing for %d %02x %02x", game_number, p[0], p[1]);
@@ -6579,7 +6595,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	/* Consider adding our name to observer list here: */
 	if(room_were_in == game_number)
 	{
-		PlayerListing * our_player = roomdispatch->getPlayerListing(our_player_id);
+		PlayerListing * our_player = room->getPlayerListing(our_player_id);
 		boarddispatch->recvObserver(our_player, true);
 	}
 	
@@ -6688,7 +6704,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	p += 23;
 	p++;
 	p += 10;
-	playerA = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	playerA = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!playerA)
 	{
 		printf("Can't find playerA: %02x%02x\n", p[0], p[1]);
@@ -6699,7 +6715,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	printf("PlayerA is %s %s\n", playerA->name.toLatin1().constData(), playerA->rank.toLatin1().constData());
 #endif //RE_DEBUG
 	p += 10;
-	playerB = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	playerB = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!playerB)
 	{
 		printf("Can't find playerB: %02x%02x\n", p[0], p[1]);
@@ -6757,7 +6773,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	playing_game_number = 0;
 	
 	/* And observers: */
-	GameListing * game = roomdispatch->getGameListing(game_number);
+	GameListing * game = room->getGameListing(game_number);
 	if(game && room_were_in == game_number)		//no observing outside
 	{
 		//sanity check: for DEBUG ing
@@ -6786,7 +6802,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
  * lodged in there. */
 void CyberOroConnection::handleObserveAfterJoining(unsigned char * msg, unsigned int size)
 {
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	//BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
@@ -6801,7 +6817,7 @@ void CyberOroConnection::handleObserveAfterJoining(unsigned char * msg, unsigned
 	bool send_handicap_move = false;
 	bool white_in_byoyomi, black_in_byoyomi;*/
 	
-	player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(p[0] + (p[1] << 8));
 #ifdef FIXME
 	if(player)
 		printf("Currently %s's turn...\n", player->name.toLatin1().constData());
@@ -6882,7 +6898,7 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size
 	bool undo, memo, review, estimate;
 	bool nigiri = false;
 	MatchRequest mr;
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	unsigned short id = p[0] + (p[1] << 8);
 	
 	if(id == our_player_id)
@@ -6893,8 +6909,8 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size
 		mr.opponent_is_challenger = true;
 	}
 	
-	PlayerListing * player = roomdispatch->getPlayerListing(mr.opponent_id);
-	PlayerListing * ourplayer = roomdispatch->getPlayerListing(our_player_id);
+	PlayerListing * player = room->getPlayerListing(mr.opponent_id);
+	PlayerListing * ourplayer = room->getPlayerListing(our_player_id);
 	
 	mr.opponent = player->name;
 	mr.their_rank = player->rank;
@@ -7099,7 +7115,7 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	GameDialogDispatch * gameDialogDispatch = getGameDialogDispatch(*player);
+	GameDialog * gameDialogDispatch = getGameDialog(*player);
 	gameDialogDispatch->recvRequest(&mr, getGameDialogFlags());
 	
 	/* In the interests of debugging, we'll just try passing this straight back */
@@ -7230,8 +7246,8 @@ void CyberOroConnection::handleMatchInvite(unsigned char * msg, unsigned int siz
 		qDebug("MatchInvite of size %d\n", size);
 		// probably should print it out and exit FIXME
 	}
-	RoomDispatch * roomdispatch = getDefaultRoomDispatch();
-	PlayerListing * player = roomdispatch->getPlayerListing(p[0] + (p[1] << 8));
+	Room * room = getDefaultRoom();
+	PlayerListing * player = room->getPlayerListing(p[0] + (p[1] << 8));
 	//22 79 10 00 FC 08 27 00 00 08 09 00 00 00 00 7B
 	p += 2;
 	// the 00 08 is our id, 9 could be special byte but the 27 changes
@@ -7262,7 +7278,7 @@ void CyberOroConnection::handleAcceptMatchInvite(unsigned char * msg, unsigned i
 		qDebug("MatchInviteAccept of size %d\n", size);
 		// probably should print it out and exit FIXME
 	}
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(p[0] + (p[1] << 8));
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		qDebug("MatchInviteAccept from unknown player");
@@ -7293,7 +7309,7 @@ void CyberOroConnection::handleDeclineMatchInvite(unsigned char * msg, unsigned 
 		qDebug("MatchInviteDecline of size %d\n", size);
 		// probably should print it out and exit FIXME
 	}
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(p[0] + (p[1] << 8));
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		qDebug("MatchInviteDecline from unknown player");
@@ -7335,7 +7351,7 @@ void CyberOroConnection::handleMatchRoomOpen(unsigned char * msg, unsigned int s
 		return;
 	}
 	p += 2;
-	PlayerListing * player = getDefaultRoomDispatch()->getPlayerListing(p[0] + (p[1] << 8));
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
 		qDebug("MatchInviteAccept from unknown player");
@@ -7345,7 +7361,7 @@ void CyberOroConnection::handleMatchRoomOpen(unsigned char * msg, unsigned int s
 	// no idea what this is
 	//setRoomNumber(p[0] + (p[1] << 8));
 	
-	GameDialogDispatch * gd = getGameDialogDispatch(*player);
+	GameDialog * gd = getGameDialog(*player);
 	gd->recvRequest(0, getGameDialogFlags());
 }
 
