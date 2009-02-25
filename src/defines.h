@@ -85,6 +85,7 @@
 #define ND_BADCONNECTION		-4		//something of a default
 #define ND_PROTOCOL_ERROR		-5
 #define ND_USERCANCELED			-6
+#define ND_ALREADYLOGGEDIN		-7
 
 /*
 * Enum definitions

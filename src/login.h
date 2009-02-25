@@ -4,24 +4,25 @@
 
 class HostList;
 class MainWindow;
-class NetworkDispatch;
+class NetworkConnection;
 
 class LoginDialog : public QDialog, Ui::LoginDialog
 {
 	Q_OBJECT
 	public:
-		LoginDialog(const QString &, HostList * h, MainWindow * m);
+		LoginDialog(const QString &, HostList * h);
 	private slots:		//or can these be private?
 		void slot_connect(void);
 		void slot_cancel(void);
 		void slot_editTextChanged(const QString &);
 	private:
 		ConnectionType serverStringToConnectionType(const QString & s);
+		NetworkConnection * newConnection(ConnectionType connType, QString username, QString password);
 		QString connectionTypeToServerString(const ConnectionType c);
 		Ui::LoginDialog ui;
 		ConnectionType connType;
-		NetworkDispatch * netdispatch;
+		NetworkConnection * connection;
 		HostList * hostlist;
 		QString connectionName;
-		MainWindow * mainwindow;
+		bool serverlistdialog_open;
 };

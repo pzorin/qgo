@@ -2,15 +2,20 @@
 #include "login.h"
 #include "mainwindow.h"
 #include "mainwindow_settings.h"		//for hostlist
-#include "network/networkdispatch.h"
+#include "network/igsconnection.h"
+#include "network/wing.h"
+#include "network/lgs.h"
+#include "network/cyberoroconnection.h"
+#include "network/tygemconnection.h"
+#include "network/eweiqiconnection.h"
+#include "network/tomconnection.h"
 
-LoginDialog::LoginDialog(const QString & s, HostList * h, MainWindow * m)
+LoginDialog::LoginDialog(const QString & s, HostList * h)
 {
 	ui.setupUi(this);
 	connectionName = s;
-	mainwindow = m;		//awkward, but otherwise can connect faster than it gets set
+	serverlistdialog_open = false;
 	
-	connType = serverStringToConnectionType(connectionName);
 	setWindowTitle(connectionName);
 	
 	connect(ui.connectPB, SIGNAL(clicked()), this, SLOT(slot_connect()));
@@ -39,12 +44,16 @@ LoginDialog::LoginDialog(const QString & s, HostList * h, MainWindow * m)
 
 void LoginDialog::slot_connect(void)
 {
+	//if(ui.connectPB->isDown())	//wth?  unreliable?
+	if(serverlistdialog_open)
+		return;
 	if(ui.loginEdit->currentText() == QString())
 	{
 		QMessageBox::information(this, tr("Empty Login"), tr("You must enter a username"));
 		return;
 	}
-	netdispatch = new NetworkDispatch(connType, ui.loginEdit->currentText(), ui.passwordEdit->text());	
+	serverlistdialog_open = true;
+	connection = newConnection(serverStringToConnectionType(connectionName), ui.loginEdit->currentText(), ui.passwordEdit->text());
 	/* Its awkward to do this here FIXME, just make sure that, for instance
 	 * the connection has the mainwindow set within the network dispatch so its
 	 * not passing information into nothing */
@@ -53,35 +62,38 @@ void LoginDialog::slot_connect(void)
 	 * there should be at least the possibility of multiple netdispatches
 	 * somehow and we still need to fix the closeConnection stuff
 	 * maybe?  Figure out what should logically close what, and when */
-	mainwindow->setNetworkDispatch(netdispatch);
-	netdispatch->setMainWindow(mainwindow);
+	mainwindow->setNetworkConnection(connection);
+	//netdispatch->setMainWindow(mainwindow);
 	/* We need to wait here to get authorization confirm, no errors,
 	   maybe popup either "please wait" dialog, which we'd annoyingly
 	   have to handle and then close which might require a separate
 	   dialog class, or just have the connect button grayed out or down.*/
 	int connectionStatus;
-	while((connectionStatus = netdispatch->checkForErrors()) == ND_WAITING)
+	while((connectionStatus = connection->getConnectionState()) == ND_WAITING)
 		QApplication::processEvents(QEventLoop::AllEvents, 300);
+	serverlistdialog_open = false;
 	
 	if(connectionStatus == ND_BADPASSWORD)
 	{
 		QMessageBox::information(this, tr("Bad Password"), tr("Invalid Password"));
-		return;	
 	}
 	else if(connectionStatus == ND_BADLOGIN)
 	{
 		QMessageBox::information(this, tr("Bad Login"), tr("Invalid Login"));
-		return;	
+	}
+	else if(connectionStatus == ND_ALREADYLOGGEDIN)
+	{
+		/* FIXME possibly either here or in network specific code, we want to
+		 * prompt to disconnect the other account, or just do it automatically */
+		QMessageBox::information(this, tr("Already Logged In"), tr("Are you logged in somewhere else?"));
 	}
 	else if(connectionStatus == ND_BADCONNECTION)
 	{
 		QMessageBox::information(this, tr("Can't connect"), tr("Can't connect to host!"));
-		return;	
 	}
 	else if(connectionStatus == ND_PROTOCOL_ERROR)
 	{
 		QMessageBox::information(this, tr("Protocol Error"), tr("Notify Developer!"));
-		return;	
 	}
 	else if(connectionStatus == ND_CONNECTED)
 	{
@@ -127,6 +139,9 @@ void LoginDialog::slot_connect(void)
 					     (ui.savepasswordCB->isChecked() ? ui.passwordEdit->text() : QString()));
 			hostlist->append(h);
 		}
+		//SUCCESS
+		done(1);
+		return;
 	}
 	else if(connectionStatus == ND_USERCANCELED)
 	{
@@ -134,15 +149,19 @@ void LoginDialog::slot_connect(void)
 		 * first connection netdispatch, calls mainwindow
 		 * which will close the connection.  FIXME, responsibilities
 		 * are not clear even if they work out. */
-		netdispatch->onError();
-		//done(0);
-		return;
+		
 	}
-	done(1);
+	//connection->onError();
+	mainwindow->setNetworkConnection(0);
+	delete connection;
+	connection = 0;
+	
 }
 
 void LoginDialog::slot_cancel(void)
 {
+	if(connection)
+		connection->userCanceled();
 	done(0);
 }
 
@@ -169,6 +188,7 @@ void LoginDialog::slot_editTextChanged(const QString & text)
 			}
 		}
 	}
+	ui.passwordEdit->setText(QString());
 }
 
 ConnectionType LoginDialog::serverStringToConnectionType(const QString & s)
@@ -219,5 +239,30 @@ QString LoginDialog::connectionTypeToServerString(const ConnectionType c)
 		default:
 			return "Unknown";
 			break;
+	}
+}
+
+NetworkConnection * LoginDialog::newConnection(ConnectionType connType, QString username, QString password)
+{
+	switch(connType)	
+	{
+		case TypeIGS:
+			return new IGSConnection(username, password);
+		case TypeORO:
+			return new CyberOroConnection(username, password);
+		case TypeWING:
+			return new WingConnection(username, password);
+		case TypeLGS:
+			return new LGSConnection(username, password);
+		case TypeTYGEM:
+			return new TygemConnection(username, password);
+		case TypeEWEIQI:
+			return new EWeiQiConnection(username, password);
+		case TypeTOM:
+			return new TomConnection(username, password);
+		default:
+			qDebug("Bad connection Type");
+			// ERROR handling???
+			return 0;
 	}
 }
