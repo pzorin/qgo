@@ -9,18 +9,19 @@
 
 class GameListing;
 class PlayerListing;
-
 class NetworkDispatch;
 class ConsoleDispatch;
-class RoomDispatch;
 class BoardDispatch;
-class GameDialogDispatch;
-class TalkDispatch;
+
+class GameDialog;
+class Talk;
 
 class NetworkConnection;
 class BoardDispatchRegistry;
-class GameDialogDispatchRegistry;
-class TalkDispatchRegistry;
+class GameDialogRegistry;
+class TalkRegistry;
+
+class Room;
 
 /* I think this needs to inherit from QObject so that it can pick up signals, if those
  * are still necessary */
@@ -33,9 +34,13 @@ class NetworkConnection : public QObject
 	public:
 		NetworkConnection();
 		~NetworkConnection();
-		int getConnectionState();
+		int getConnectionState();	//should probably return enum
+		void userCanceled(void) { connectionState = CANCELED; /* anything else? */};
+		void setupRoomAndConsole(void);
+		void onClose(void);	//so far private?
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
+		void sendConsoleText(const char * text);
 		virtual void sendDisconnect(void) = 0;
 		virtual void sendMsg(unsigned int game_id, QString text) = 0;
 		virtual void sendMsg(const PlayerListing & player, QString text) = 0;
@@ -52,40 +57,42 @@ class NetworkConnection : public QObject
 		virtual void sendTime(BoardDispatch *) {};
 		virtual void sendMove(unsigned int game_id, class MoveRecord * m) = 0;
 		virtual void sendTimeLoss(unsigned int) {};	//overwrite or not
+		virtual void sendResult(class GameData *, class GameResult *) {};	//optional
 		virtual void sendMatchRequest(class MatchRequest * mr) = 0;
 		virtual void sendRematchRequest(void) {};	//optional
 		virtual void sendRematchAccept(void) {};
 		virtual void declineMatchOffer(const PlayerListing & opponent) = 0;
 		virtual void cancelMatchOffer(const PlayerListing & ) {};
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr) = 0;
+		virtual void sendRejectCount(class GameData *) {};
+		virtual void sendAcceptCount(class GameData *) {};
 		virtual void sendAdjournRequest(void) = 0;
 		virtual void sendAdjourn(void) = 0;
 		virtual void sendRefuseAdjourn(void) = 0;
 		int write(const char * packet, unsigned int size);
 		void setConsoleDispatch(ConsoleDispatch * c);
-		void setDefaultRoomDispatch(RoomDispatch * r) { default_room_dispatch = r; };
+		void setDefaultRoom(Room * r) { default_room = r; };
 		ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; };
-		RoomDispatch * getDefaultRoomDispatch(void) { return default_room_dispatch; };
-		NetworkDispatch * getDefaultDispatch(void) { return dispatch; };
+		Room * getDefaultRoom(void) { return default_room; };
 		virtual bool isReady(void) = 0;
 		virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
-		virtual void onReady(void) = 0;
 		virtual void setKeepAlive(int) {};
 		virtual void changeServer(void) {};
 		virtual void createRoom(void) {};
 		virtual void sendCreateRoom(class RoomCreate *) {};
-		virtual void sendJoinRoom(const RoomListing &, const char *) {};
+		virtual void sendJoinRoom(const RoomListing &, const char * = 0) {};
 		
 		// FIXME Not certain but maybe this chunk below should be protected:??
 		BoardDispatch * getBoardDispatch(unsigned int game_id);
 		BoardDispatch * getIfBoardDispatch(unsigned int game_id);
 		virtual void closeBoardDispatch(unsigned int game_id);
-		GameDialogDispatch * getGameDialogDispatch(const PlayerListing & opponent);
-		GameDialogDispatch * getIfGameDialogDispatch(const PlayerListing & opponent);
-		void closeGameDialogDispatch(const PlayerListing & opponent);
-		class MatchRequest * getAndCloseGameDialogDispatch(const PlayerListing & opponent);
-		TalkDispatch * getTalkDispatch(const PlayerListing & opponent);
-		void closeTalkDispatch(const PlayerListing & opponent);
+		int getBoardDispatches(void);
+		GameDialog * getGameDialog(const PlayerListing & opponent);
+		GameDialog * getIfGameDialog(const PlayerListing & opponent);
+		void closeGameDialog(const PlayerListing & opponent);
+		class MatchRequest * getAndCloseGameDialog(const PlayerListing & opponent);
+		Talk * getTalk(PlayerListing & opponent);
+		void closeTalk(PlayerListing & opponent);
 		
 		const QString & getUsername(void) { return username; };
 		virtual const PlayerListing & getOurListing(void) = 0;
@@ -103,6 +110,8 @@ class NetworkConnection : public QObject
 		virtual bool clientCountsTime(void) { return true; };
 		virtual bool clientSendsTime(void) { return false; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
+		virtual bool cantMarkOppStonesDead(void) { return false; };
+		virtual bool twoPassesEndsGame(void) { return false; };
 		virtual bool supportsSeek(void) { return false; };
 		virtual unsigned long getPlayerListColumns(void) { return 0; };
 		#define PL_NOWINSLOSSES		0x01
@@ -130,23 +139,16 @@ class NetworkConnection : public QObject
 		 * We need to have just one way that things get disconnected,
 		 * error or not... not a bunch of ways from different places */
 		void closeConnection(bool send_disconnect = true);
-		/* These are ugly but we need them for IGS and maybe WING
-		 * FIXME if possible Note that these are here rather than
-		 * on the IGS class because they have to be accessed
-		 * by IGS handlers which are not part of IGS class,
-		 * maybe they should be or something... FIXME*/
-		QString protocol_save_string;
-		int protocol_save_int;
-		QString match_playerName;	//again, this should be moved FIXME
 	protected:
 		virtual bool readyToWrite(void) { return true; };
 		virtual void setReadyToWrite(void) {};
+		virtual void onReady(void);
 		void writeFromBuffer(void);
+		class ServerListStorage & getServerListStorage(void);
 		bool firstonReadyCall;
-		friend class GameDialogDispatchRegistry;
-		friend class TalkDispatchRegistry;
-		NetworkDispatch * dispatch;
-		RoomDispatch * default_room_dispatch;
+		friend class GameDialogRegistry;
+		friend class TalkRegistry;
+		Room * default_room;
 		ConsoleDispatch * console_dispatch;
 		bool openConnection(const QString & host, const unsigned short port);
 		
@@ -154,8 +156,8 @@ class NetworkConnection : public QObject
 		newline_pipe <unsigned char> send_buffer;	//not always used
 
 		BoardDispatchRegistry * boardDispatchRegistry;
-		GameDialogDispatchRegistry * gameDialogDispatchRegistry;
-		TalkDispatchRegistry * talkDispatchRegistry;
+		GameDialogRegistry * gameDialogRegistry;
+		TalkRegistry * talkRegistry;
 
 		QString username;
 		QString password;
@@ -163,18 +165,22 @@ class NetworkConnection : public QObject
 		enum {
 			LOGIN,
    			PASSWORD,
-                  	PASSWORD_SENT,
+            		PASSWORD_SENT,
    			AUTH_FAILED,
       			PASS_FAILED,
       			INFO,
      			CONNECTED,
      			RECONNECTING,
      			CANCELED,
-			PROTOCOL_ERROR
+			PROTOCOL_ERROR,
+   			ALREADY_LOGGED_IN
 		} connectionState;
 		
 	private:
 		QTcpSocket * qsocket;	
+		
+		Room * mainwindowroom;
+		ConsoleDispatch * consoledispatch;
 		
 	protected slots:
 		virtual void OnConnected();

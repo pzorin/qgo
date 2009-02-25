@@ -1,21 +1,25 @@
 #include "networkconnection.h"
 #include "consoledispatch.h"
-#include "roomdispatch.h"
 #include "boarddispatch.h"
-#include "gamedialogdispatch.h"
-#include "talkdispatch.h"
+#include "../talk.h"
+#include "../gamedialog.h"
+#include "../room.h"
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
+#include "mainwindow.h"			//don't like so much
 
 NetworkConnection::NetworkConnection() :
-dispatch(0), default_room_dispatch(0), console_dispatch(0), qsocket(0)
+default_room(0), console_dispatch(0), qsocket(0)
 {
-	protocol_save_int = -1;
 	firstonReadyCall = 1;
 }
 
 /* Maybe this should return an enum, but I'm feeling lazy at the moment,
  * and don't want to define two different connectionState like enums */
+ /* FIXME there's a bug here.  If we're waiting for a connection and
+  * we have a login dialog open and then we hit disconnect, the login
+  * window, even if canceled, can try to call this function, thus
+  * crashing */
 int NetworkConnection::getConnectionState(void)
 {
 	switch(connectionState)
@@ -30,6 +34,8 @@ int NetworkConnection::getConnectionState(void)
 			return ND_CONNECTED;
 		case CANCELED:
 			return ND_USERCANCELED;
+		case ALREADY_LOGGED_IN:
+			return ND_ALREADYLOGGEDIN;
 		default:
 			return ND_WAITING;
 	}
@@ -38,8 +44,8 @@ int NetworkConnection::getConnectionState(void)
 bool NetworkConnection::openConnection(const QString & host, const unsigned short port)
 {
 	boardDispatchRegistry = new BoardDispatchRegistry(this);
-	gameDialogDispatchRegistry = new GameDialogDispatchRegistry(this);
-	talkDispatchRegistry = new TalkDispatchRegistry(this);
+	gameDialogRegistry = new GameDialogRegistry(this);
+	talkRegistry = new TalkRegistry(this);
 	
 	qsocket = new QTcpSocket();	//try with no parent passed for now
 	if(!qsocket)
@@ -68,8 +74,9 @@ bool NetworkConnection::openConnection(const QString & host, const unsigned shor
 	
 	/* If dispatch does not have a UI, the thing that sets the UI
 	 * will setupRoomAndConsole */
-	if(dispatch->hasUI())
-		dispatch->setupRoomAndConsole();
+	/* Tricky now without dispatches... who sets up the UI?
+	 * there's always a mainwindow... but maybe things aren't setup? */
+	setupRoomAndConsole();
 	/* connectionInfo as a message with those pointers is probably a bad idea */
 	return (qsocket->state() != QTcpSocket::UnconnectedState);
 }
@@ -115,6 +122,12 @@ void NetworkConnection::writeFromBuffer(void)
 	}
 }
 
+class ServerListStorage & NetworkConnection::getServerListStorage(void)
+{
+	return mainwindow->getServerListStorage(); 
+}
+		
+
 void NetworkConnection::closeConnection(bool send_disconnect)
 {
 	if(!qsocket)		//when can this happen?  this function shouldn't be
@@ -128,8 +141,11 @@ void NetworkConnection::closeConnection(bool send_disconnect)
 	* good stuff we should move into somewhere
 	* nearby., also what about onError?*/
 	delete boardDispatchRegistry;
-	delete gameDialogDispatchRegistry;
-	delete talkDispatchRegistry;
+	delete gameDialogRegistry;
+	delete talkRegistry;
+	boardDispatchRegistry = 0;
+	gameDialogRegistry = 0;
+	talkRegistry = 0;
 	
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
@@ -155,28 +171,51 @@ void NetworkConnection::closeConnection(bool send_disconnect)
 	//delete qsocket;
 	qsocket->deleteLater();		//for safety
 	qsocket = 0;
-	dispatch->onClose();
-	//dispatch = 0;			//don't set this here, screws up ORO reconnect
+	onClose();
+	
 	return;
+}
+
+void NetworkConnection::onClose(void)
+{
+	/* This is from old netdispatch, fix me */
+	//RoomDispatch * room;
+	/* This needs to close all open dispatches */
+	/*room = connection->getDefaultRoomDispatch();
+	if(room)
+	{
+	connection->setDefaultRoomDispatch(0);
+	delete room;
+		//FIXME mainwindowroom = 0;
+}*/
+	if(mainwindowroom)
+	{
+		delete mainwindowroom;
+		mainwindowroom = 0;
+	}
+	if(consoledispatch)
+	{
+		delete consoledispatch;
+		consoledispatch = 0;
+	}
 }
 
 NetworkConnection::~NetworkConnection()
 {
-	/* Dispatch creates the connection so we definitely don't want to delete
-	 * it from here */
-	//if(dispatch)
-	//	delete dispatch;
+	//feels a little sparse so far... this should probably be super close FIXME
 	qDebug("Destroying connection\n");
 	//closeConnection();			//specific impl already calls this
 	/* Not sure where to delete qsocket.  Possible OnDelayClosedFinish() thing. */
 	//delete qsocket;
+	//In case these still exist
+	delete boardDispatchRegistry;
+	delete gameDialogRegistry;
+	delete talkRegistry;
 }
 
 void NetworkConnection::setConsoleDispatch(class ConsoleDispatch * c)
 {
 	console_dispatch = c;
-	if(c)
-		console_dispatch->setConnection(this);
 }
 
 /* Slots */
@@ -192,6 +231,32 @@ void NetworkConnection::OnConnected()
 	 * also prints garbage... */
 	if(console_dispatch)
 		console_dispatch->recvText(QString("Connected to ") + qsocket->peerAddress().toString() + " " +  QString::number(qsocket->peerPort()));
+}
+
+void NetworkConnection::onReady(void)
+{
+	QSettings settings;
+	
+	if(settings.value("LOOKING_FOR_GAMES").toBool())
+	{
+		sendToggle("looking", true);
+		mainwindow->getUi()->setLookingMode->setChecked(true);
+	}
+	else
+	{
+		sendToggle("looking", false);
+		mainwindow->getUi()->setLookingMode->setChecked(false);
+	}
+	if(settings.value("OPEN_FOR_GAMES").toBool())
+	{
+		sendToggle("open", true);
+		mainwindow->getUi()->setOpenMode->setChecked(true);
+	}
+	else
+	{
+		sendToggle("open", false);
+		mainwindow->getUi()->setOpenMode->setChecked(false);
+	}
 }
 
 void NetworkConnection::OnReadyRead()
@@ -211,6 +276,10 @@ void NetworkConnection::OnReadyRead()
 void NetworkConnection::OnConnectionClosed() 
 {
 	qDebug("OnConnectionClosed");
+	/* Without networkdispatch, this now needs to do something
+	 * except FIXME only if there's actually been an error.  like
+	 * if we change servers and get disconnected, versus if we
+	 * disconnect ourself.*/
 
 	// read last data that could be in the buffer WHY??
 	//OnReadyRead();
@@ -235,13 +304,6 @@ void IGSConnection::OnDelayedCloseFinish()
 	
 	authState = LOGIN;
 	sendTextToApp("Connection closed.\n");
-}
-*/
-/*
-void IGSConnection::OnBytesWritten(qint64 nbytes)
-{
-//	qDebug("%d BYTES WRITTEN", nbytes);
-//	emit signal_setBytesOut(nbytes);
 }
 */
 
@@ -278,43 +340,69 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	qDebug("Socket Error\n");
 	//OnReadyRead();
 	/* We need to toggle the connection flag, close things up, etc.. */
-	
-	/* This order is a little iffy.  But the main network dispatch, we're
-	 * thinking its best to close that last and that the network connection
-	 * can close the other dispatches of which it is aware */
-	/* Actually, I think the boarddispatches should be killed by
-	 * the boardDispatchRegistry end... which they are... the problem
-	 * is setting the connection to 0.*/
-	if(dispatch)
-		dispatch->onError();
+#ifdef OLD
+	/* netdispatch onError used to call:*/
+	if(mainwindowroom)
+		mainwindowroom->onError();
+	/* We could also have the rooms deleted here. */
+	//delete this;
+	if(mainwindow)
+		mainwindow->onConnectionError();
+#endif //OLD
+	connectionState = PROTOCOL_ERROR;
 }
 
+void NetworkConnection::setupRoomAndConsole(void)
+{
+	qDebug("setupRoomAndConsole");
+	mainwindowroom = new Room();
+	mainwindowroom->setConnection(this);
+	setDefaultRoom(mainwindowroom);
+	
+	consoledispatch = new ConsoleDispatch(this);
+	setConsoleDispatch(consoledispatch);	
+}
+
+void NetworkConnection::sendConsoleText(const char * text)
+{
+	//FIXME issue
+	if(consoledispatch) 
+		consoledispatch->sendText(text);
+}
+
+/* I was thinking about breakng up the seeks and rooms by room dispatch, etc.
+ * originally, but if we're getting rid of the dispatches and we haven't
+ * yet seen anymore interesting use for a room dispatch then, we'll just
+ * let the network connection handle it for now. */
+ /* Also, I'm not in a hurry to have the sub connections calling mainwindow
+  * functions, but it is global and it is awkward to call recvRoomListing within
+  * the subconnection FIXME */
 void NetworkConnection::recvRoomListing(class RoomListing * r)
 { 
-	if(dispatch) 
-		dispatch->recvRoomListing(r);
+	if(mainwindow) 
+		mainwindow->recvRoomListing(*r, true);
 	else
 		delete r;
 }
 				
 void NetworkConnection::recvSeekCondition(class SeekCondition * s)
 {
-	if(dispatch)
-		dispatch->recvSeekCondition(s);
+	if(mainwindow)
+		mainwindow->recvSeekCondition(s);
 	else
 		delete s;
 }
 
 void NetworkConnection::recvSeekCancel(void)
 {
-	if(dispatch)
-		dispatch->recvSeekCancel();
+	if(mainwindow)
+		mainwindow->recvSeekCancel();
 }
 
 void NetworkConnection::recvSeekPlayer(QString player, QString condition)
 {
-	if(dispatch)
-		dispatch->recvSeekPlayer(player, condition);
+	if(mainwindow)
+		mainwindow->recvSeekPlayer(player, condition);
 }
 
 /* FIXME These are really more like netdispatch type functions, but the registries
@@ -335,55 +423,55 @@ void NetworkConnection::closeBoardDispatch(unsigned int game_id)
 	boardDispatchRegistry->deleteEntry(game_id);
 }
 
-GameDialogDispatch * NetworkConnection::getGameDialogDispatch(const PlayerListing & opponent)
+int NetworkConnection::getBoardDispatches(void)
 {
-	return gameDialogDispatchRegistry->getEntry(&opponent);
+	return boardDispatchRegistry->getSize();
 }
 
-GameDialogDispatch * NetworkConnection::getIfGameDialogDispatch(const PlayerListing & opponent)
+GameDialog * NetworkConnection::getGameDialog(const PlayerListing & opponent)
 {
-	return gameDialogDispatchRegistry->getIfEntry(&opponent);
+	return gameDialogRegistry->getEntry(&opponent);
 }
 
-void NetworkConnection::closeGameDialogDispatch(const PlayerListing & opponent)
+GameDialog * NetworkConnection::getIfGameDialog(const PlayerListing & opponent)
 {
-	gameDialogDispatchRegistry->deleteEntry(&opponent);
+	return gameDialogRegistry->getIfEntry(&opponent);
 }
 
-MatchRequest * NetworkConnection::getAndCloseGameDialogDispatch(const PlayerListing & opponent)
+void NetworkConnection::closeGameDialog(const PlayerListing & opponent)
 {
-	GameDialogDispatch * gd = getIfGameDialogDispatch(opponent);
+	gameDialogRegistry->deleteEntry(&opponent);
+}
+
+MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing & opponent)
+{
+	GameDialog * gd = getIfGameDialog(opponent);
 	MatchRequest * new_mr = 0;
 	if(gd)
 	{
 		MatchRequest * mr = gd->getMatchRequest();
 		new_mr = new MatchRequest(*mr);
-		closeGameDialogDispatch(opponent);
+		closeGameDialog(opponent);
 	}
 	else
 		qDebug("Couldn't find gamedialog for opponent: %s", opponent.name.toLatin1().constData());
 	return new_mr;
 }
 
-TalkDispatch * NetworkConnection::getTalkDispatch(const PlayerListing & opponent)
+Talk * NetworkConnection::getTalk(PlayerListing & opponent)
 {
-	return talkDispatchRegistry->getEntry(&opponent);
+	return talkRegistry->getEntry(&opponent);
 }
 
-void NetworkConnection::closeTalkDispatch(const PlayerListing & opponent)
+void NetworkConnection::closeTalk(PlayerListing & opponent)
 {
 	qDebug("deleting %s\n", opponent.name.toLatin1().constData());
-	talkDispatchRegistry->deleteEntry(&opponent);
+	talkRegistry->deleteEntry(&opponent);
 }
 
 BoardDispatch * BoardDispatchRegistry::getNewEntry(unsigned int game_id)
 {
-	return _c->getDefaultRoomDispatch()->getNewBoardDispatch(game_id);
-}
-
-void BoardDispatchRegistry::initEntry(BoardDispatch * boarddispatch)
-{
-	boarddispatch->setConnection(_c);
+	return _c->getDefaultRoom()->getNewBoardDispatch(game_id);
 }
 
 void BoardDispatchRegistry::onErase(BoardDispatch * boarddispatch)
@@ -404,28 +492,27 @@ std::map<unsigned int, BoardDispatch *> * BoardDispatchRegistry::getRegistryStor
 	return getStorage();
 }
 
-GameDialogDispatch * GameDialogDispatchRegistry::getNewEntry(const PlayerListing * opponent)
+GameDialog * GameDialogRegistry::getNewEntry(const PlayerListing * opponent)
 {
-	/* FIXME by moving the registries of dispatches to the dispatch?? */
-	return _c->dispatch->_getGameDialogDispatch(*opponent);  //turn to ref FIXME?
+	return new GameDialog(_c, *opponent);
 }
 
-void GameDialogDispatchRegistry::initEntry(GameDialogDispatch * dlg)
-{
-	dlg->setConnection(_c);
-}
-
-void GameDialogDispatchRegistry::onErase(GameDialogDispatch * dlg)
+void GameDialogRegistry::onErase(GameDialog * dlg)
 {
 	delete dlg;
 }
 
-TalkDispatch * TalkDispatchRegistry::getNewEntry(const PlayerListing * opponent)
+Talk * TalkRegistry::getNewEntry(PlayerListing * opponent)
 {
-	return _c->dispatch->getTalkDispatch(*opponent);
-}
-
-void TalkDispatchRegistry::initEntry(TalkDispatch * talk)
-{
-	talk->setConnection(_c);
+	/* I don't want the talk windows to be slaved to a room, 
+	* but at the same time, currently its done in the mainwindow,
+	* so we'll have two different functions with a possible
+	* room dispatch that can be notified by the talkdispatch */
+	/* Since we got rid of the dispatches... I don't know if this
+	 * is an issue anymore */
+	/*Room * room = _c->getDefaultRoom();
+	if(room)
+		return new Talk(_c, *opponent, room);
+	else*/
+		return new Talk(_c, *opponent);
 }
