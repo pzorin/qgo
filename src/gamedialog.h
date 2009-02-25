@@ -11,24 +11,24 @@
 //#include "misc.h"
 #include <QtGui>
 
-class GameDialogDispatch;
+class NetworkConnection;
+class PlayerListing;
 
 class GameDialog : public QDialog,/*public NewGameDialog,*/public Ui::GameDialog //, public Misc<QString>
 { 
 	Q_OBJECT
 
 public:
-	GameDialog(GameDialogDispatch * dis);//QWidget* parent = 0, const char* name = 0, bool modal = true, WFlags fl = 0);
+	GameDialog(NetworkConnection * conn, const PlayerListing & opp);//QWidget* parent = 0, const char* name = 0, bool modal = true, WFlags fl = 0);
 	~GameDialog();
 	void set_oppRk(QString &rk) 	{ oppRk = rk; qDebug("oppRk: %s",  rk.toLatin1().constData()); }
 	void set_myRk(QString &rk) 	{ myRk = rk; qDebug("myRk: %s",  rk.toLatin1().constData()); }
 	void set_myName(QString &name) 	{ myName = name; }
 	void set_is_nmatch (bool b) 	{ is_nmatch = b; }
 	Ui::GameDialog	getUi() 	{return ui;}
-	void recvRequest(class MatchRequest * mr, unsigned long flags);
+	void recvRequest(class MatchRequest * mr, unsigned long flags = 0);
 	void recvRefuseMatch(int motive = 0);
 	class MatchRequest * getMatchRequest(void);
-	void setDispatch(GameDialogDispatch * d) { dispatch = d; };
 protected:
 	void closeEvent(QCloseEvent *e);
 
@@ -102,8 +102,9 @@ private:
 	QString myName;
 	bool komi_request;
 	bool is_nmatch;
-	GameDialogDispatch * dispatch;
+	NetworkConnection * connection;
 	class MatchRequest * current_match_request;
+	const PlayerListing & opponent;
 	class Sound * gameSound;
 	bool offered_and_unrefused;
 	unsigned long flags;

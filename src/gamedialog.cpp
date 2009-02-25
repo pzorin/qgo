@@ -9,14 +9,14 @@
 //#include "misc.h"
 #include "defines.h"
 //#include "komispinbox.h"
-#include "network/gamedialogdispatch.h"
+#include "network/networkconnection.h"
 #include "network/messages.h"
 #include "network/gamedialogflags.h"
 #include "network/playergamelistings.h"
 
 
-GameDialog::GameDialog(GameDialogDispatch * dis)
-	: QDialog() , Ui::GameDialog()
+GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
+	: QDialog(), Ui::GameDialog(), connection(conn), opponent(opp)
 {
 	ui.setupUi(this);
 	gameSound = SoundFactory::newSound( "/usr/share/qgo2/sounds/blip.wav" );
@@ -56,8 +56,6 @@ GameDialog::GameDialog(GameDialogDispatch * dis)
 	connect(ui.ASIAPeriodTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIAPeriodTimeSpin(const QTime &)));
 	connect(ui.ASIAPeriodsSpin, SIGNAL(valueChanged(int)), SLOT(slot_ASIAPeriodsSpin(int)));
 	
-	
-	dispatch = dis;
 	current_match_request = new MatchRequest();
 	/* FIXME, what about size 38 and larger boards ?? */
 	ui.boardSizeSpin->setRange(1,19);
@@ -94,13 +92,18 @@ GameDialog::GameDialog(GameDialogDispatch * dis)
 	 
 }
 
+/* This is way way after the fact... but is there someway we could make
+ * all of the below template functions?  They're very similar with the
+ * exception of time checks, but we could have a verify virtual function
+ * to be called each time to check, and we're going to have to do 
+ * that anyway for different services and their different time settings */
 void GameDialog::slot_play_black_button(void)
 {
 	if(current_match_request->color_request == MatchRequest::BLACK)
 	{
 		dialog_changed--;
 		color_request_changed = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else if(!color_request_changed)
@@ -120,7 +123,7 @@ void GameDialog::slot_play_white_button(void)
 	{
 		dialog_changed--;
 		color_request_changed = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else
@@ -140,7 +143,7 @@ void GameDialog::slot_play_nigiri_button(void)
 	{
 		dialog_changed--;
 		color_request_changed = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else
@@ -163,7 +166,7 @@ void GameDialog::ratedCB_changed(bool checked)
 	{
 		dialog_changed--;
 		ratedchanged = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else if(!ratedchanged)
@@ -204,7 +207,7 @@ void GameDialog::slot_boardSizeSpin(int value)
 	{
 		dialog_changed--;
 		boardSizechanged = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else if(!boardSizechanged)
@@ -222,7 +225,7 @@ void GameDialog::slot_handicapSpin(int value)
 	{
 		dialog_changed--;
 		handicapchanged = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else if(!handicapchanged)
@@ -253,7 +256,7 @@ void GameDialog::slot_komiSpin(int value)
 	{
 		dialog_changed--;
 		komichanged = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else if(!komichanged)
@@ -283,7 +286,7 @@ void GameDialog::slot_timeTab(int value)
 	{
 		dialog_changed--;
 		ttchanged = false;
-		if(dialog_changed == 0)
+		if(dialog_changed == 0 && !current_match_request->first_offer)
 			ui.buttonOffer->setText(tr("Accept"));
 	}
 	else if(!ttchanged)
@@ -312,7 +315,7 @@ void GameDialog::slot_timeSpin(const QTime & v)
 		{
 			dialog_changed--;
 			timechanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!timechanged)
@@ -337,7 +340,7 @@ void GameDialog::slot_stonesTimeSpin(const QTime & v)
 		if(current_match_request->periodtime == seconds)
 		{
 			dialog_changed--;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 			stonesTimechanged = false;
 		}
@@ -358,7 +361,7 @@ void GameDialog::slot_stonesSpin(int v)
 		{
 			dialog_changed--;
 			stoneschanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!stoneschanged)
@@ -389,7 +392,7 @@ void GameDialog::slot_BYTimeSpin(const QTime & v)
 		{
 			dialog_changed--;
 			timechanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!timechanged)
@@ -410,7 +413,7 @@ void GameDialog::slot_BYPeriodTimeSpin(const QTime & v)
 		{
 			dialog_changed--;
 			BYPeriodTimechanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!BYPeriodTimechanged)
@@ -430,7 +433,7 @@ void GameDialog::slot_BYPeriodsSpin(int v)
 		{
 			dialog_changed--;
 			BYPeriodschanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!BYPeriodschanged)
@@ -451,7 +454,7 @@ void GameDialog::slot_ASIATimeSpin(const QTime & v)
 		{
 			dialog_changed--;
 			ASIATimechanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!ASIATimechanged)
@@ -472,7 +475,7 @@ void GameDialog::slot_ASIAPeriodTimeSpin(const QTime & v)
 		{
 			dialog_changed--;
 			ASIAPeriodTimechanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!ASIAPeriodTimechanged)
@@ -492,7 +495,7 @@ void GameDialog::slot_ASIAPeriodsSpin(int v)
 		{
 			dialog_changed--;
 			ASIAPeriodschanged = false;
-			if(dialog_changed == 0)
+			if(dialog_changed == 0 && !current_match_request->first_offer)
 				ui.buttonOffer->setText(tr("Accept"));
 		}
 		else if(!ASIAPeriodschanged)
@@ -527,8 +530,8 @@ void GameDialog::clearChangedFlags(void)
 GameDialog::~GameDialog()
 {
 	qDebug("deconstructing GameDialog");
-	if(dispatch)
-		dispatch->closeDispatchFromDialog();
+	if(connection)
+		connection->closeGameDialog(opponent);
 	delete current_match_request;
 }
 
@@ -583,9 +586,9 @@ void GameDialog::slot_offer(bool active)
 	if(!dialog_changed)
 	{
 		if(current_match_request->first_offer)
-			dispatch->sendRequest(current_match_request);
+			connection->sendMatchRequest(current_match_request);
 		else
-			dispatch->acceptOffer(current_match_request);
+			connection->acceptMatchOffer(opponent, current_match_request);
 		qDebug("Match request unchanged\n");
 		return;
 	}
@@ -602,7 +605,7 @@ void GameDialog::slot_offer(bool active)
 		ui.buttonOffer->setText(tr("Offer"));
 
 		//emit accept();
-		dispatch->acceptOffer(current_match_request);
+		connection->acceptMatchOffer(opponent, current_match_request);
 		return;
 	}
 
@@ -674,7 +677,7 @@ void GameDialog::slot_offer(bool active)
 	}
 		
 	qDebug("Match request changed %d\n", dialog_changed);
-	dispatch->sendRequest(current_match_request);
+	connection->sendMatchRequest(current_match_request);
 	/* FIXME
 	 * I'm pretty sure that we want to SetPalette on all the mutable ui
 	 * elements to the app default when we hit offer. But we should
@@ -697,7 +700,7 @@ void GameDialog::slot_decline()
 {
 	qDebug("#### GameDialog::slot_decline()");
 	
-	QString opponent = ui.playerOpponentEdit->text();//(playerWhiteEdit->isReadOnly() ? playerBlackEdit->text():playerWhiteEdit->text());
+	//QString opponent = ui.playerOpponentEdit->text();//(playerWhiteEdit->isReadOnly() ? playerBlackEdit->text():playerWhiteEdit->text());
 	
 #ifdef FIXME
 	if (ui.buttonOffer->isDown())
@@ -718,7 +721,7 @@ void GameDialog::slot_decline()
 	 * on the button as well, but then what exactly is the flag for...
 	 * confusing...*/
 	if(offered_and_unrefused)	//FIXME decline button shouldn't be possible otherwise
-		dispatch->declineOffer();
+		connection->declineMatchOffer(opponent);
 	
 	close();
 }
@@ -729,9 +732,9 @@ void GameDialog::slot_decline()
 void GameDialog::slot_cancel()
 {
 	if(offered_and_unrefused)
-		dispatch->declineOffer();
+		connection->declineMatchOffer(opponent);
 	else if(ui.buttonOffer->isEnabled() && ui.buttonOffer->text() == tr("Offer"))
-		dispatch->cancelOffer();
+		connection->cancelMatchOffer(opponent);
 	close();
 }
 
@@ -773,7 +776,6 @@ void GameDialog::slot_changed()
 
 void GameDialog::recvRefuseMatch(int motive)
 {
-	const PlayerListing & opponent = dispatch->getOpponent();
 	if (motive == GD_REFUSE_NOTOPEN)
 		ui.refusedLabel->setText(tr("%1 not open for matches").arg(opponent.name));
 	else if (motive == GD_REFUSE_DECLINE) 
@@ -958,18 +960,17 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		//etc...
 		// FIXME
 		mr = new MatchRequest();
-		PlayerListing opp = dispatch->getOpponent();
-		PlayerListing us = dispatch->getOurListing();
-		mr->opponent = opp.name;
-		mr->opponent_id = opp.id;
-		mr->their_rank = opp.rank;
+		PlayerListing us = connection->getOurListing();
+		mr->opponent = opponent.name;
+		mr->opponent_id = opponent.id;
+		mr->their_rank = opponent.rank;
 		mr->our_name = us.name;
 		mr->our_rank = us.rank;	//us.rank sounds like bad grammar
 		mr->timeSystem = canadian;
 		mr->maintime = 600;
 		mr->periodtime = 600;
 		mr->stones_periods = 25;
-		if(getProperKomiHandicap(us.rank, opp.rank, &(mr->komi), &(mr->handicap)))
+		if(getProperKomiHandicap(us.rank, opponent.rank, &(mr->komi), &(mr->handicap)))
 		{
 			//challenger is black is a mystery byte
 			//I'm thinking it might be whether the request is
@@ -991,7 +992,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		/* FIXME, a lot of stuff to fill in here, defaults and the
 		 * like to make it kosher across the board */
 		mr->flags = 0xf0;	//FIXME for now
-		mr->number = dispatch->getRoomNumber();
+		mr->number = connection->getRoomNumber();
 		mr->opponent_is_challenger = false;
 		mr->first_offer = true;
 		mr->free_rated = FREE;
