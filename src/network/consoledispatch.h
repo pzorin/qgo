@@ -1,18 +1,18 @@
 #ifndef CONSOLEDISPATCH_H
 #define CONSOLEDISPATCH_H
-#include "networkdispatch.h"
 
-class MainWindow;
+class QString;
+class NetworkConnection;
 
-class ConsoleDispatch : public NetworkDispatch
+class ConsoleDispatch
 {
 	public:
-		ConsoleDispatch(MainWindow * m);
+		ConsoleDispatch(NetworkConnection * conn);
 		~ConsoleDispatch();
 		void recvText(const char * text);
 		void recvText(QString text);
 		void sendText(const char * text);
 	private:
-		MainWindow * mainwindow;
+		NetworkConnection * connection;
 };
 #endif //CONSOLEDISPATCH_H

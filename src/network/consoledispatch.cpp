@@ -1,10 +1,12 @@
 #include "consoledispatch.h"
 #include "../mainwindow.h"
+#include "networkconnection.h"
+/* Probably want to just remove this file FIXME*/
 
 /* All consoles need somewhere to write to... so... MainWindow */
-ConsoleDispatch::ConsoleDispatch(MainWindow * m)
+ConsoleDispatch::ConsoleDispatch(NetworkConnection * conn)
 {
-	mainwindow = m;
+	connection = conn;
 }
 
 ConsoleDispatch::~ConsoleDispatch()
