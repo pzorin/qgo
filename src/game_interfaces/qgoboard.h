@@ -57,7 +57,8 @@ public:
 	class TimeRecord getOurTimeRecord(void);		//awkward
 	class TimeRecord getTheirTimeRecord(void);
 	//virtual void deleteNode();
-	virtual void enterScoreMode() ;
+	virtual void enterScoreMode();
+	virtual void leaveScoreMode();
 	virtual void markDeadStone(int x, int y);
 	virtual void markDeadArea(int x, int y, bool alive = false);
 
@@ -210,8 +211,7 @@ protected:
 	virtual bool doMove(StoneColor c, int x, int y, bool dontplayyet = false);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
 //	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
-//	virtual void enterScoreMode() ;
-	virtual void leaveScoreMode();//= 0;
+	
 };
 
 /* We can override the virtuals above with nulls below if the option
@@ -327,6 +327,7 @@ public:
 	void setModified(bool)	{} //we don't modify a match game
 	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
 	void enterScoreMode();
+	void leaveScoreMode();
 	void timerEvent(QTimerEvent*);
 	virtual void requestAdjournDialog(void);
 	virtual void recvRefuseAdjourn(void);
