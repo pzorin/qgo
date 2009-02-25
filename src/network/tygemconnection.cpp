@@ -2460,10 +2460,12 @@ void TygemConnection::sendTime(BoardDispatch * boarddispatch)
 	packet[17] = 0x00;
 	packet[18] = 0x00;
 	packet[19] = 0x00;
+#ifdef RE_DEBUG
 	printf("TIME SENT: ");
 	for(i = 0; i < 20; i++)
 		printf("%02x ", packet[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	encode(packet, (length / 4) - 2);
 	
 	if(write((const char *)packet, length) < 0)
@@ -5265,6 +5267,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		aGameListing->number = id;
 		if(p[2] == 0x01)
 		{
+#ifdef RE_DEBUG
 			// might mean new game?  seems to follow the record
 			// for that id, or might mean game over
 			// they come up fast but I'm pretty sure this
@@ -5278,6 +5281,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 				printf("%c", p[i]);
 			printf("\n");
 //#endif //GAMELIST_DEBUG
+#endif //RE_DEBUG
 			p += 4;
 			aGameListing->running = false;
 			room->recvGameListing(aGameListing);
@@ -7688,10 +7692,12 @@ void TygemConnection::handleTime(unsigned char * msg, unsigned int size)
 		qDebug("Can't get game record for board: %d", game_number);
 		return;
 	}
+#ifdef RE_DEBUG
 	printf("TIME: ");
 	for(i = 0; i < size; i++)
 		printf("%02x", p[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	//000f0101032b0b4003100480  blacks time first
 	//000f00010311048003300b40  whites time first
 	
@@ -7872,10 +7878,12 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 		qDebug("Move of strange size: %d", size);
 		return;
 	}*/
+#ifdef RE_DEBUG
 	printf("Move msg:\n");
 	for(i = 0; i < size; i++)
 		printf("%02x ", p[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
 	{
