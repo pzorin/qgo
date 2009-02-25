@@ -1,18 +1,16 @@
 #include <string.h>
 #include "wing.h"
-#include "msghandler.h"
 #include "consoledispatch.h"
-#include "roomdispatch.h"
+#include "../room.h"
 #include "boarddispatch.h"
-#include "gamedialogdispatch.h"
-#include "talkdispatch.h"
+#include "../gamedialog.h"
+#include "../talk.h"
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
 
-WingConnection::WingConnection(class NetworkDispatch * _dispatch, const QString & user, const QString & pass) :
+WingConnection::WingConnection(const QString & user, const QString & pass) :
 IGSConnection()
 {
-	dispatch = _dispatch;
 	if(openConnection("wing.gr.jp", 1515))
 	{
 		connectionState = LOGIN;
@@ -21,7 +19,6 @@ IGSConnection()
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
-	registerMsgHandlers();
 }
 
 void WingConnection::sendPlayersRequest(void)
@@ -147,9 +144,9 @@ void WingConnection::onReady(void)
 		firstonReadyCall = 0;
 		connectionState = CONNECTED;
 		
-		//getDefaultRoomDispatch()->setConnection(this);
+		//getDefaultRoom()->setConnection(this);
 	
-		//getDefaultRoomDispatch()->setAccountName(username);
+		//getDefaultRoom()->setAccountName(username);
 	
 		sendText("toggle client on\r\n");		//adds type codes
 	
@@ -161,27 +158,13 @@ void WingConnection::onReady(void)
 	writeFromBuffer();
 }
 
-#define WING_INFO		9
-#define WING_KIBITZ		11
-void WingConnection::registerMsgHandlers(void)
-{
-	qDebug("WING registering msghandlers");
-	/* Additional changes, etc. */
-	/* WING has a similar msg style to IGS but appears to use
-	 * different codes */
-	/* In addition, I'm not totally confident that we can just
-	 * overwrite some handlers... we need to really work on that */
-	msgHandlerRegistry->setEntry(WING_INFO, new WING_info(this));
-	msgHandlerRegistry->setEntry(WING_KIBITZ, new WING_kibitz(this));
-}
-
-void WING_info::handleMsg(QString line)
+void WingConnection::handle_info(QString line)
 {
 	//PlayerListing * aPlayer;
 	static PlayerListing * statsPlayer;
 	BoardDispatch * boarddispatch;
 	GameResult * aGameResult;
-	RoomDispatch * roomdispatch = connection->getDefaultRoomDispatch();
+	Room * room = getDefaultRoom();
 	static QString memory_str;
 	static int memory = 0;
 	qDebug("9: %s", line.toLatin1().constData());
@@ -190,20 +173,20 @@ void WING_info::handleMsg(QString line)
 	if (line.contains("Set open to be"))
 	{
 		bool val = (line.indexOf("False") == -1);
-		roomdispatch->recvToggle(0, val);
+		room->recvToggle(0, val);
 	}
 	else if (line.contains("Setting you open for matches"))
-		roomdispatch->recvToggle(0, true);
+		room->recvToggle(0, true);
 	else if (line.contains("Set looking to be"))
 	{
 		bool val = (line.indexOf("False") == -1);
-		roomdispatch->recvToggle(1, val);
+		room->recvToggle(1, val);
 	}
 			// 9 Set quiet to be False.
 	else if (line.contains("Set quiet to be"))
 	{
 		bool val = (line.indexOf("False") == -1);
-		roomdispatch->recvToggle(2, val);
+		room->recvToggle(2, val);
 	}
 	else if (line.indexOf("Channel") == 0) 
 	{
@@ -346,7 +329,7 @@ void WING_info::handleMsg(QString line)
 	{
 		if (line.contains("restarted"))
 					// memory_str -> see case 15 for continuation
-			connection->protocol_save_string = element(line, 0, " ");
+			protocol_save_string = element(line, 0, " ");
 	}
 	else if (line.contains("I suggest that"))
 	{
@@ -430,8 +413,8 @@ void WING_info::handleMsg(QString line)
 			aMatch->periodtime = line.section(" ",5,5).toInt();
 			aMatch->nmatch = false;
 		//}
-		PlayerListing * p = roomdispatch->getPlayerListing(aMatch->opponent);
-		PlayerListing * us = roomdispatch->getPlayerListing(connection->getUsername());
+		PlayerListing * p = room->getPlayerListing(aMatch->opponent);
+		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
 		{	
 			aMatch->our_name = us->name;
@@ -445,7 +428,7 @@ void WING_info::handleMsg(QString line)
 			delete aMatch;
 			return;
 		}
-		GameDialogDispatch * gameDialogDispatch = connection->getGameDialogDispatch(*p);
+		GameDialog * gameDialogDispatch = getGameDialog(*p);
 		gameDialogDispatch->recvRequest(aMatch);
 		delete aMatch;
 	}
@@ -459,13 +442,13 @@ void WING_info::handleMsg(QString line)
 		QString opp = element(dummy, 1, " ");
 
 				// We let the 15 game record message create the board
-				//GameDialogDispatch * gameDialogDispatch = connection->getGameDialogDispatch(opp);
+				//GameDialog * gameDialogDispatch = getGameDialog(opp);
 				//gameDialogDispatch->closeAndCreate();
-				//GameDialogDispatch * gameDialogDispatch = 
-				//		connection->getGameDialogDispatch(opp);
+				//GameDialog * gameDialogDispatch = 
+				//		getGameDialog(opp);
 				//MatchRequest * mr = gameDialogDispatch->getMatchRequest();
 				//created_match_request = new MatchRequest(*mr);
-				//connection->closeGameDialogDispatch(opp);
+				//closeGameDialog(opp);
 				////emit signal_matchCreate(nr, opp);
         			// automatic opening of a dialog tab for further conversation
         			////emit signal_talk(opp, "", true);
@@ -483,8 +466,8 @@ void WING_info::handleMsg(QString line)
 			line.contains("withdraws the match offer"))
 	{
 		QString opp = element(line, 0, " ");
-		PlayerListing * p = roomdispatch->getPlayerListing(opp);
-		GameDialogDispatch * gameDialogDispatch = connection->getGameDialogDispatch(*p);
+		PlayerListing * p = room->getPlayerListing(opp);
+		GameDialog * gameDialogDispatch = getGameDialog(*p);
 		gameDialogDispatch->recvRefuseMatch(1);
 	}
 			//9 yfh2test declines undo
@@ -517,14 +500,14 @@ void WING_info::handleMsg(QString line)
 		QString pt = element(line, 2, " ");
 		//emit signal_removeStones(pt, 0);
 	}*/
-		if(connection->protocol_save_int < 0)
+		if(protocol_save_int < 0)
 		{
 			qDebug("Received stone removal message without game in scoring mode");
 			return;
 		}
 		else
 		{
-			boarddispatch = connection->getBoardDispatch(connection->protocol_save_int);
+			boarddispatch = getBoardDispatch(protocol_save_int);
 			GameData * r = boarddispatch->getGameData();
 			if(!r)
 			{
@@ -551,8 +534,8 @@ void WING_info::handleMsg(QString line)
 	else if (line.contains("check your score with the score command"))
 	{
 		// FIXME: I guess we're only playing one game at a time?
-		qDebug("Getting boarddispatch from memory: %d", connection->protocol_save_int);
-		boarddispatch = connection->getBoardDispatch(connection->protocol_save_int);
+		qDebug("Getting boarddispatch from memory: %d", protocol_save_int);
+		boarddispatch = getBoardDispatch(protocol_save_int);
 		boarddispatch->recvEnterScoreMode();
 		memory_str = QString("rmv@");		
 	}
@@ -570,7 +553,7 @@ void WING_info::handleMsg(QString line)
 		/* FIXME The fix me is to make sure that this gets sent
 		 * to the game we're actually playing!!! WING only allows the
 		 * playing of one game.  */
-		boarddispatch = connection->getBoardDispatch(memory);
+		boarddispatch = getBoardDispatch(memory);
 		boarddispatch->recvRequestAdjourn();
 	}
 			// 9 frosla requests to pause the game.
@@ -590,11 +573,11 @@ void WING_info::handleMsg(QString line)
 		/* There's several after the fact server INFO messages about
 		 * games adjourning so we only need to close for one of them
 		 * The 21 message might actually be better FIXME*/
-		boarddispatch = connection->getIfBoardDispatch(memory);
+		boarddispatch = getIfBoardDispatch(memory);
 		if(boarddispatch)
 		{
 			boarddispatch->adjournGame();
-			connection->closeBoardDispatch(memory);
+			closeBoardDispatch(memory);
 		}	
 	}
 			// 9 Game 22: frosla vs frosla has adjourned.
@@ -614,7 +597,7 @@ void WING_info::handleMsg(QString line)
 #endif //OLD
 				// No need to get existing listing because
 				// this is just to falsify the listing
-		roomdispatch->recvGameListing(aGame);
+		room->recvGameListing(aGame);
 		delete aGame;
 	}
 			// 9 Removing game 30 from observation list.
@@ -632,9 +615,9 @@ void WING_info::handleMsg(QString line)
 	else if (line.contains("to observation list"))
 	{
 		/* Create the board dispatch to recv info */
-		connection->getBoardDispatch(element(line, 2, " ").toInt());
+		getBoardDispatch(element(line, 2, " ").toInt());
 		/* We could also use the below */
-		connection->protocol_save_int = -1;
+		protocol_save_int = -1;
 		return;
 	}
 			// 9 Games currently being observed:  31, 36, 45.
@@ -690,7 +673,7 @@ void WING_info::handleMsg(QString line)
 #ifdef FIXME
 		int t = element(line, 4, " ").toInt();
 
-		if (line.contains(connection->getUsername()))
+		if (line.contains(getUsername()))
 			emit signal_timeAdded(t, true);
 		else
 			emit signal_timeAdded(t, false);
@@ -733,7 +716,7 @@ void WING_info::handleMsg(QString line)
 		GameListing * aGame = new GameListing();
 					// re game from list
 		int number = element(line, 0, " ", ":").toInt();
-		GameListing * l = roomdispatch->getGameListing(number);
+		GameListing * l = room->getGameListing(number);
 		if(l)
 			*aGame = *l;
 		aGame->number = number;
@@ -741,7 +724,7 @@ void WING_info::handleMsg(QString line)
 					// for information
 		aGame->result = element(line, 4, " ", "}");
 
-		boarddispatch = connection->getBoardDispatch(aGame->number);
+		boarddispatch = getBoardDispatch(aGame->number);
 		/* FIXME: This shouldn't create a new board if
 		 * we're not watching it.
 		 * Also WING sometimes sends 9 and sometimes sends 21 perhaps
@@ -855,7 +838,7 @@ void WING_info::handleMsg(QString line)
 			 * result msg kibitz */
 			boarddispatch->recvKibitz("", line);
 		}
-		roomdispatch->recvGameListing(aGame);
+		room->recvGameListing(aGame);
 		delete aGame;
 		return;
 	}
@@ -877,7 +860,7 @@ void WING_info::handleMsg(QString line)
 				// remove cmd nr
 		line = line.trimmed();
 		line = line.remove(0, 2);
-		connection->getConsoleDispatch()->recvText(line.toLatin1().constData());
+		getConsoleDispatch()->recvText(line.toLatin1().constData());
 		return;
 	}
 			// 9 Observing game  2 (chmeng vs. myao) :
@@ -912,7 +895,7 @@ void WING_info::handleMsg(QString line)
 	{
 		QString name =  element(line, 0, " ");
 		QString rank;
-		boarddispatch = connection->getBoardDispatch(memory);
+		boarddispatch = getBoardDispatch(memory);
 		if(!boarddispatch)
 		{
 			qDebug("No boarddispatch for observer list\n");
@@ -924,7 +907,7 @@ void WING_info::handleMsg(QString line)
 			rank = element(line, i, " ");
 			fixRankString(&rank);
 					// send as kibitz from "0"
-			PlayerListing * p = roomdispatch->getPlayerListing(name);
+			PlayerListing * p = room->getPlayerListing(name);
 			boarddispatch->recvObserver(p, true);
 			name = element(line, ++i , " ");
 		}
@@ -942,7 +925,7 @@ void WING_info::handleMsg(QString line)
 		rs->players = element(line, 1, " ").toInt();
 		rs->games = element(line, 3, " ").toInt();
 #ifdef OLD
-		roomdispatch->recvRoomStats(rs);
+		room->recvRoomStats(rs);
 #endif //OLD
 		delete rs;
 				// maybe last line of a 'user' cmd
@@ -986,7 +969,7 @@ void WING_info::handleMsg(QString line)
 			aGame->number = gameListA->at(i);	
 			qDebug("Game id down: %d", aGame->number);
 			aGame->running = false;
-			roomdispatch->recvGameListing(aGame);
+			room->recvGameListing(aGame);
 		}
 
 				/* Swap the lists so that the B filled
@@ -1009,7 +992,7 @@ void WING_info::handleMsg(QString line)
 	{
 		/* If this is our game, there's a 21 message maybe later that
 		* should be handling it FIXME */
-		boarddispatch = connection->getIfBoardDispatch(memory);
+		boarddispatch = getIfBoardDispatch(memory);
 		if(!boarddispatch)
 		{
 			qDebug("No board dispatch for \"resigned the game\"\n");
@@ -1029,7 +1012,7 @@ void WING_info::handleMsg(QString line)
 	}
 	else if	(line.contains("has run out of time"))
 	{
-		boarddispatch = connection->getBoardDispatch(connection->protocol_save_int);
+		boarddispatch = getBoardDispatch(protocol_save_int);
 		if(!boarddispatch)
 		{
 			qDebug("No board dispatch for \"has run out of time\"\n");
@@ -1069,7 +1052,7 @@ void WING_info::handleMsg(QString line)
 	else if (line.contains("Player:"))
 	{
 		QString name = element(line, 1, " ");
-		statsPlayer = roomdispatch->getPlayerListing(name);
+		statsPlayer = room->getPlayerListing(name);
 #ifdef FIXME
 				/* So this would have cleared the structure, but
 		* we're just creating a new empty object later.
@@ -1095,7 +1078,7 @@ void WING_info::handleMsg(QString line)
 				// not sure it is the best way : above code seem to make use of "signal"
 				// but we don't need this apparently for handling stats
 #endif //FIXME
-		connection->protocol_save_string = "STATS";
+		protocol_save_string = "STATS";
 		return;
 	}
 			
@@ -1116,7 +1099,7 @@ void WING_info::handleMsg(QString line)
 	{
 		statsPlayer->rank = element(line, 1, " ");
 		fixRankString(&(statsPlayer->rank));
-		statsPlayer->rank_score = connection->rankToScore(statsPlayer->rank);
+		statsPlayer->rank_score = rankToScore(statsPlayer->rank);
 		return;
 	}
 			
@@ -1191,7 +1174,7 @@ void WING_info::handleMsg(QString line)
 		if(statsPlayer)
 		{
 			qDebug("talk name: %s", statsPlayer->name.toLatin1().constData());
-			TalkDispatch * talk = connection->getTalkDispatch(*statsPlayer);
+			Talk * talk = getTalk(*statsPlayer);
 			if(talk)
 				talk->updatePlayerListing();
 			statsPlayer = 0;
@@ -1210,11 +1193,11 @@ void WING_info::handleMsg(QString line)
 	else if(line.contains("File"))
 		return;
 	
-	if (connection->protocol_save_string != "STATS")
-		connection->getConsoleDispatch()->recvText(line.toLatin1().constData());
+	if (protocol_save_string != "STATS")
+		getConsoleDispatch()->recvText(line.toLatin1().constData());
 }
 
-void WING_kibitz::handleMsg(QString line)
+void WingConnection::handle_kibitz(QString line)
 {
 	static QString memory_str;
 	static int memory = 0;
@@ -1241,13 +1224,13 @@ void WING_kibitz::handleMsg(QString line)
 			qDebug("%s %s joining", name.toLatin1().constData(), rank.toLatin1().constData());
 					// send as kibitz from "0"
 			
-			boarddispatch = connection->getBoardDispatch(memory);
+			boarddispatch = getBoardDispatch(memory);
 			if(!boarddispatch)
 			{
 				qDebug("No board dispatch for this game!");
 				return;
 			}
-			PlayerListing * p = connection->getDefaultRoomDispatch()->getPlayerListing(name);
+			PlayerListing * p = getDefaultRoom()->getPlayerListing(name);
 			boarddispatch->recvObserver(p, true);
 			memory = 0;
 			memory_str.clear();
@@ -1268,7 +1251,7 @@ void WING_kibitz::handleMsg(QString line)
 		{
 			if(line.contains("dead @"))
 			{
-				boarddispatch = connection->getBoardDispatch(memory);
+				boarddispatch = getBoardDispatch(memory);
 				if(!boarddispatch)
 				{
 					qDebug("No board dispatch for this game!");
@@ -1286,7 +1269,7 @@ void WING_kibitz::handleMsg(QString line)
 				aMove->x -= 'A';
 				point.remove(0,1);
 				aMove->y = element(point, 0, " ").toInt();
-				GameListing * l = connection->getDefaultRoomDispatch()->getGameListing(memory);
+				GameListing * l = getDefaultRoom()->getGameListing(memory);
 				if(!l)
 				{
 					qDebug("Move for unlisted game");
@@ -1309,9 +1292,9 @@ void WING_kibitz::handleMsg(QString line)
 		/* FIXME: Kibitz has this ugly little "->" which we might
 		 * want to cut off */
 		//emit signal_kibitz(memory, memory_str, line);
-		if(!memory_str.contains(connection->getUsername()))
+		if(!memory_str.contains(getUsername()))
 		{
-			boarddispatch = connection->getBoardDispatch(memory);
+			boarddispatch = getBoardDispatch(memory);
 			if(boarddispatch)
 				boarddispatch->recvKibitz(memory_str, line);
 		}

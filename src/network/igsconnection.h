@@ -2,20 +2,18 @@
 #define IGSCONNECTION_H
 #include <QtNetwork>
 #include "networkconnection.h"
-#include "networkdispatch.h"
-#include "msghandler.h"
 #include "messages.h"
 #include "newline_pipe.h"
 #include "gamedata.h"
 
 class BoardDispatch;
-class GameDialogDispatch;
-class TalkDispatch;
+class GameDialog;
+class Talk;
 
 class IGSConnection : public NetworkConnection
 {
 	public:
-		IGSConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
+		IGSConnection(const QString & user, const QString & pass);
 		IGSConnection();
 		~IGSConnection();
 		virtual void sendText(QString text);
@@ -70,17 +68,53 @@ class IGSConnection : public NetworkConnection
 	protected:
 		virtual bool readyToWrite(void);
 		virtual void setReadyToWrite(void) { writeReady = true; };
-		MsgHandler * getMsgHandler(unsigned int type);
 		void handleLogin(QString msg);
 		void handlePassword(QString msg);
 		void handleMessage(QString msg);
+
+		void handle_loginmsg(QString line);
+		void handle_prompt(QString line);
+		void handle_beep(QString line);
+		void handle_down(QString line);
+		void handle_error(QString line);
+		void handle_games(QString line);
+		void handle_file(QString line);
+		virtual void handle_info(QString line);
+		virtual void handle_kibitz(QString line);
+		void handle_messages(QString line);
+		void handle_move(QString line);
+		void handle_say(QString line);
+		void handle_score_m(QString line);
+		void handle_shout(QString line);
+		void handle_status(QString line);
+		void handle_stored(QString line);
+		void handle_tell(QString line);
+		void handle_thist(QString line);
+		void handle_who(QString line);
+		void handle_undo(QString line);
+		void handle_yell(QString line);
+		void handle_automatch(QString line);
+		void handle_serverinfo(QString line);
+		void handle_dot(QString line);
+		void handle_userlist(QString line);
+		void handle_removed(QString line);
+		void handle_ingamesay(QString line);
+		void handle_adjourndeclined(QString line);
+		void handle_seek(QString line);
+		void handle_review(QString line);
 		
-		MsgHandlerRegistry * msgHandlerRegistry;
-		virtual void registerMsgHandlers(void);
+		QString element(const QString &line, int index, const QString &del1, const QString &del2="", bool killblanks=FALSE);
+		unsigned int idleTimeToSeconds(QString time);
+		void fixRankString(QString * rank);
 		
 		bool writeReady;
 		int keepAliveTimer;
 		
+		QString protocol_save_string;
+		int protocol_save_int;
+		QString match_playerName;
+		TimeRecord * btime, * wtime;
+	
 	//private:
 		int time_to_seconds(const QString & time);
 		
@@ -88,6 +122,7 @@ class IGSConnection : public NetworkConnection
 		
 		virtual void timerEvent(QTimerEvent*);
 	private:
+		void init(void);
 		void sendNmatchParameters(void);
 		/* I'm thinking of a map or a hash table here
 		 * mapping room and game/board ids to particular
@@ -138,196 +173,4 @@ class IGSConnection : public NetworkConnection
 		 * just support an overriden common destructor... */
 };
 
-/* I'm still not certain about this.  It seems like all these objects
- * are a huge amount of overhead when we could just have them as 
- * functions that could be overridden by the subclassed WING.
- * The reason to do them as objects is so that we can have a registry
- * and a single handler for WING and IGS and NNGS although that's
- * now defunct.  So doing it this way gives us flexibility in both
- * the msg handlers as well as the msg handler dispatcher but
- * it does seem like more overhead than necessary for only a slightly
- * more elegant or readable design */
- class IGS_loginmsg : public MsgHandler 
-{ 
-	public:
-		IGS_loginmsg(NetworkConnection * c) : MsgHandler(c) {};				
-		virtual void handleMsg(QString); 
-};
-class IGS_prompt : public MsgHandler 
-{ 
-	public:
-		IGS_prompt(NetworkConnection * c) : MsgHandler(c) {};				
-		virtual void handleMsg(QString); 
-};
-class IGS_beep : public MsgHandler
-{
-	public:
-		IGS_beep(NetworkConnection * c) : MsgHandler(c) {};	
-		virtual void handleMsg(QString);
-};
-class IGS_down : public MsgHandler
-{
-	public:
-		IGS_down(NetworkConnection * c) : MsgHandler(c) {};	
-		virtual void handleMsg(QString);
-};
-class IGS_error : public MsgHandler
-{ 
-	public:
-		IGS_error(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_games : public MsgHandler
-{ 
-	public:
-		IGS_games(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_file : public MsgHandler
-{ 
-	public:
-		IGS_file(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_info : public MsgHandler
-{ 
-	public:
-		IGS_info(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_kibitz : public MsgHandler
-{ 
-	public:
-		IGS_kibitz(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_messages : public MsgHandler
-{ 
-	public:
-		IGS_messages(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_move : public MsgHandler
-{ 
-	public:
-		IGS_move(NetworkConnection * c) : MsgHandler(c)
-		{
-			btime = new TimeRecord();
-			wtime = new TimeRecord();
-		};
-		~IGS_move() { delete btime; delete wtime; };
-		virtual void handleMsg(QString);
-	private:
-		/* FIXME, maybe these should just be on stack or whatever,
-		 * why allocate and deallocte explicitly? */
-		TimeRecord * btime, * wtime;
-};
-class IGS_say : public MsgHandler
-{ 
-	public:
-		IGS_say(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_score_m : public MsgHandler
-{ 
-	public:
-		IGS_score_m(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_shout : public MsgHandler
-{ 
-	public:
-		IGS_shout(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_status : public MsgHandler
-{ 
-	public:
-		IGS_status(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_stored : public MsgHandler
-{ 
-	public:
-		IGS_stored(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_tell : public MsgHandler
-{ 
-	public:
-		IGS_tell(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_thist : public MsgHandler
-{ 
-	public:
-		IGS_thist(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_who : public MsgHandler
-{ 
-	public:
-		IGS_who(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_undo : public MsgHandler
-{ 
-	public:
-		IGS_undo(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_yell : public MsgHandler
-{ 
-	public:
-		IGS_yell(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_automatch : public MsgHandler
-{ 
-	public:
-		IGS_automatch(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_serverinfo : public MsgHandler
-{ 
-	public:
-		IGS_serverinfo(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_dot : public MsgHandler
-{ 
-	public:
-		IGS_dot(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_userlist : public MsgHandler
-{ 
-	public:
-		IGS_userlist(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_removed : public MsgHandler
-{ 
-	public:
-		IGS_removed(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_adjourndeclined : public MsgHandler
-{ 
-	public:
-		IGS_adjourndeclined(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_review : public MsgHandler
-{ 
-	public:
-		IGS_review(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
-class IGS_seek : public MsgHandler
-{ 
-	public:
-		IGS_seek(NetworkConnection * c) : MsgHandler(c) {};
-		virtual void handleMsg(QString);
-};
 #endif //IGSCONNECTION_H
