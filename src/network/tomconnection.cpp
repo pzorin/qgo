@@ -1,9 +1,11 @@
 #include "tomconnection.h"
+#include "../room.h"
 #include "serverlistdialog.h"
+#include "serverliststorage.h"
 #include "codecwarndialog.h"
 
-TomConnection::TomConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass)
-: TygemConnection(_dispatch, user, pass, TypeTOM)
+TomConnection::TomConnection(const QString & user, const QString & pass)
+: TygemConnection(user, pass, TypeTOM)
 {
 	serverCodec = QTextCodec::codecForName("GB2312");
 	if(!serverCodec)
@@ -11,7 +13,17 @@ TomConnection::TomConnection(NetworkDispatch * _dispatch, const QString & user, 
 		new CodecWarnDialog("GB2312");
 		serverCodec = QTextCodec::codecForLocale();
 	}
-	requestServerInfo();
+	if(!getServerListStorage().restoreServerList(TypeTOM, serverList))
+			requestServerInfo();
+	else
+	{
+		if(reconnectToServer() < 0)
+		{
+			qDebug("User canceled");
+			connectionState = CANCELED;
+			return;
+		}
+	}
 }
 
 int TomConnection::requestServerInfo(void)
@@ -46,6 +58,7 @@ int TomConnection::requestServerInfo(void)
 	return 0;
 }
 
+/* We need to write a tygem parser that doesn't need to be different for tom FIXME */
 void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 {
 	char * p = (char *)msg;
@@ -57,12 +70,7 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 		printf("%c", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	if(strncmp(p, "HTTP/1.1 200 OK\r\n", 17) != 0)
-	{
-		qDebug("Server info response not OK!");
-		closeConnection();
-		return;
-	}
+	
 	while(p < ((char *)msg + length))
 	{
 		while(p < ((char *)msg + length - 1) && (p[0] != '\r' || p[1] != '\n'))
@@ -132,7 +140,6 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 			//[encode] [on]	
 		}
 	}
-	current_server_addr = new char[16];
 	/* We close here because this first time, its going to close
 	* anyway, and if we don't close here, we'll get an error
 	* and lose the object */
@@ -144,8 +151,8 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 		qDebug("User canceled");
 		closeConnection(false);
 		connectionState = CANCELED;
-		if(dispatch)
-			dispatch->onError();	//not great... FIXME
+		//if(dispatch)
+		//	dispatch->onError();	//not great... FIXME
 		return;
 	}
 	//sendLogin();

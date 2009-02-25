@@ -3,7 +3,7 @@
 class TomConnection : public TygemConnection
 {
 	public:
-		TomConnection(NetworkDispatch * _dispatch, const QString & user, const QString & pass);
+		TomConnection(const QString & user, const QString & pass);
 		//~TomConnection();
 	private:
 		virtual int requestServerInfo(void);
