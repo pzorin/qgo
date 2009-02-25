@@ -1,7 +1,4 @@
-# Fichier généré par le module QMake de KDevelop. 
-# -------------------------------------------------- 
-# Sous dossier relatif au dossier principal du projet : ./src
-# Cible : une application??:  ../bin/qgo2
+#qmake file
 
 #message($${CONFIG})
 RESOURCES = application.qrc  \
@@ -20,6 +17,8 @@ win32 {
 	QMAKE_LFLAGS = -static -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,windows
 	QMAKE_LFLAGS_CONSOLE =
 	QMAKE_LFLAGS_EXCEPTIONS_ON =
+	# also
+	RC_FILE = qgo.rc
 }
 TEMPLATE = app 
 OBJECTS_DIR = objects
@@ -35,132 +34,126 @@ TRANSLATIONS = translations/qgo2_cz.ts \
 		translations/qgo2_tr.ts \
 		translations/qgo2_zh_cn.ts \
 		translations/qgo2_zh.ts
-FORMS += mainwindow.ui \
-board/boardwindow.ui \
-talk_gui.ui \
-gamedialog.ui \
-login.ui \
-board/gameinfo.ui \
-network/createroomdialog.ui
-HEADERS += mainwindow.h \
-board/boardwindow.h \
-board/board.h \
-defines.h \
+FORMS += gamedialog.ui \
+	 login.ui \
+	 mainwindow.ui \
+	 talk_gui.ui \
+	 board/boardwindow.ui \
+	 board/gameinfo.ui \
+	 network/createroomdialog.ui
+
+HEADERS += defines.h \
+displayboard.h \
 gamedata.h \
-sgf/sgfparser.h \
-#globals.h \
+gamedialog.h \
+listviews.h \
+login.h \
+registry.h \
+mainwindow.h \
+mainwindow_settings.h \
+room.h \
+roomregistries.h \
+talk.h \
+audio/audio.h \
+game_tree/group.h \
 game_tree/matrix.h \
 game_tree/move.h \
 game_tree/tree.h \
-game_tree/group.h \
-board/imagehandler.h \
-board/stone.h \
-board/gatter.h \
+board/board.h \
 board/boardhandler.h \
+board/boardwindow.h \
+board/clockdisplay.h \
+board/gatter.h \
+board/imagehandler.h \
 board/interfacehandler.h \
 board/mark.h \
-gtp/qgtp.h \
+board/stone.h \
+game_interfaces/countdialog.h \
 game_interfaces/qgoboard.h \
-audio/audio.h \
-mainwindow_settings.h \
-room.h \
-listviews.h \
-network/playergamelistings.h \
-network/networkconnection.h \
-network/networkdispatch.h \
-network/messages.h \
-network/msghandler.h \
-network/roomdispatch.h\
-network/boarddispatch.h \
-network/consoledispatch.h \
-network/gamedialogdispatch.h \
-network/talkdispatch.h \
-#network/parser.h \
-roomregistries.h \
-network/dispatchregistries.h \
-registry.h \
-network/igsconnection.h \
-network/wing.h \
-network/lgs.h \
-network/cyberoroconnection.h \
-network/tygemconnection.h \
-network/eweiqiconnection.h \
-network/tomconnection.h \
-game_interfaces/undoprompt.h \
 game_interfaces/resultdialog.h \
-board/clockdisplay.h \
-talk.h \
-gamedialog.h \
-displayboard.h \
- network/serverlistdialog.h \
- network/codecwarndialog.h \
- network/matchinvitedialog.h \
- network/gamedialogflags.h \
- network/orosetphrasechat.h \
- network/setphrasepalette.h \
- network/createroomdialog.h \
- network/cyberoroprotocolcodes.h \
- network/tygemprotocolcodes.h \
- login.h
+game_interfaces/undoprompt.h \
+gtp/qgtp.h \
+network/boarddispatch.h \
+network/codecwarndialog.h \
+network/consoledispatch.h \
+network/createroomdialog.h \
+network/cyberoroconnection.h \
+network/cyberoroprotocolcodes.h \
+network/dispatchregistries.h \
+network/eweiqiconnection.h \
+network/gamedialogflags.h \
+network/igsconnection.h \
+network/lgs.h \
+network/matchinvitedialog.h \
+network/messages.h \
+network/networkconnection.h \
+network/orosetphrasechat.h \
+network/playergamelistings.h \
+network/serverlistdialog.h \
+network/serverliststorage.h \
+network/setphrasepalette.h \
+network/tomconnection.h \
+network/tygemconnection.h \
+network/tygemprotocolcodes.h \
+network/wing.h \
+sgf/sgfparser.h
 
-SOURCES += main.cpp \
+SOURCES += displayboard.cpp \
+           gamedialog.cpp \
+           listviews.cpp \
+ 	   login.cpp \
+ 	   main.cpp \
            mainwindow.cpp \
-           board/boardwindow.cpp \
+           mainwindow_server.cpp \
+           mainwindow_settings.cpp \
+ 	   newline_pipe.h \
+ 	   room.cpp \
+ 	   talk.cpp \
+           audio/audio.cpp \
            board/board.cpp \
-           sgf/sgfparser.cpp \
+           board/boardhandler.cpp \
+           board/boardwindow.cpp \
+           board/clockdisplay.cpp \
+           board/gatter.cpp \
+           board/imagehandler.cpp \
+           board/interfacehandler.cpp \
+           board/mark.cpp \
+           board/stone.cpp \
+	   game_interfaces/countdialog.cpp \
+	   game_interfaces/qgoboard.cpp \
+           game_interfaces/qgoboard_computer.cpp \
+           game_interfaces/qgoboard_match.cpp \
+	   game_interfaces/qgoboard_network.cpp \
+           game_interfaces/qgoboard_observe.cpp \
+           game_interfaces/qgoboard_review.cpp \
+           game_interfaces/resultdialog.cpp \
+           game_interfaces/undoprompt.cpp \
            game_tree/matrix.cpp \
            game_tree/move.cpp \
            game_tree/tree.cpp \
            game_tree/group.cpp \
-           board/imagehandler.cpp \
-           board/stone.cpp \
-           board/gatter.cpp \
-           board/boardhandler.cpp \
-           board/interfacehandler.cpp \
-           board/mark.cpp \
            gtp/qgtp.cpp \
-           game_interfaces/qgoboard.cpp \
-           game_interfaces/qgoboard_computer.cpp \
-	   game_interfaces/undoprompt.cpp \
-	   game_interfaces/resultdialog.cpp \
-           audio/audio.cpp \
-           mainwindow_settings.cpp \
-	   network/networkconnection.cpp \
- 	   network/msghandler.cpp \
-	   network/igsconnection.cpp \
-	   network/wing.cpp \
-	   network/lgs.cpp \
-	   network/cyberoroconnection.cpp \
-	   network/tygemconnection.cpp \
-	   network/eweiqiconnection.cpp \
-	   network/tomconnection.cpp \
-	   network/networkdispatch.cpp \
-	   network/messages.h \
-	   network/networkconnection.h \
-	   network/roomdispatch.cpp \
-	   network/boarddispatch.cpp \
-	   network/gamedialogdispatch.cpp \
-	   network/talkdispatch.cpp \
-	   network/consoledispatch.cpp \
-	   newline_pipe.h \
-	   room.cpp \
-           mainwindow_server.cpp \
-	   listviews.cpp \
-           board/clockdisplay.cpp \
-           talk.cpp \
-           gamedialog.cpp \
- 	   login.cpp \
-           displayboard.cpp \
-	   game_interfaces/qgoboard_network.cpp \
-           game_interfaces/qgoboard_observe.cpp \
-           game_interfaces/qgoboard_match.cpp \
-           game_interfaces/qgoboard_review.cpp \
- 	   network/serverlistdialog.cpp \
+       	   network/boarddispatch.cpp \
 	   network/codecwarndialog.cpp \
- 	   network/matchinvitedialog.cpp \
- 	   network/orosetphrasechat.cpp \
- 	   network/setphrasepalette.cpp \ 
-	   network/createroomdialog.cpp
+	   network/consoledispatch.cpp \
+	   network/createroomdialog.cpp \
+	   network/cyberoroconnection.cpp \
+	   network/eweiqiconnection.cpp \
+	   network/igsconnection.cpp \
+	   network/lgs.cpp \
+	   network/matchinvitedialog.cpp \
+	   network/messages.h \
+	   network/networkconnection.cpp \
+	   network/networkconnection.h \
+	   network/orosetphrasechat.cpp \
+	   network/serverlistdialog.cpp \
+	   network/serverliststorage.cpp \
+	   network/setphrasepalette.cpp \
+	   network/tomconnection.cpp \
+	   network/tygemconnection.cpp \
+	   network/wing.cpp \
+	   sgf/sgfparser.cpp
+	   
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp""""""
 macx {
