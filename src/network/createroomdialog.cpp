@@ -68,6 +68,7 @@ CreateRoomDialog::CreateRoomDialog(NetworkConnection * conn) : connection(conn)
 
 void CreateRoomDialog::slot_privateCB(bool checked)
 {
+	checked = false; //for the warning
 #ifdef THISISQT44ONLY
 	ui.passwordLabel->setEnabled(checked);
 	ui.passwordEdit->setEnabled(checked);

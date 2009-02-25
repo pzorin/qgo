@@ -72,7 +72,7 @@
         <property name="title" >
          <string>Wished Opponent</string>
         </property>
-        <widget class="QWidget" name="layoutWidget" >
+        <widget class="QWidget" name="layoutWidget2" >
          <property name="geometry" >
           <rect>
            <x>21</x>
@@ -119,7 +119,7 @@
         <property name="title" >
          <string>Time Limits</string>
         </property>
-        <widget class="QWidget" name="layoutWidget" >
+        <widget class="QWidget" name="layoutWidget3" >
          <property name="geometry" >
           <rect>
            <x>20</x>
@@ -163,7 +163,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget" >
+    <widget class="QWidget" name="layoutWidget4" >
      <property name="geometry" >
       <rect>
        <x>304</x>
@@ -199,7 +199,7 @@
     <attribute name="title" >
      <string>Chat</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget" >
+    <widget class="QWidget" name="layoutWidget5" >
      <property name="geometry" >
       <rect>
        <x>66</x>
@@ -419,7 +419,7 @@
     <attribute name="title" >
      <string>Review</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget" >
+    <widget class="QWidget" name="layoutWidget6" >
      <property name="geometry" >
       <rect>
        <x>64</x>
@@ -605,7 +605,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget" >
+    <widget class="QWidget" name="layoutWidget7" >
      <property name="geometry" >
       <rect>
        <x>74</x>
@@ -684,7 +684,7 @@
     <attribute name="title" >
      <string>Multi(1:N)</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget" >
+    <widget class="QWidget" name="layoutWidget8" >
      <property name="geometry" >
       <rect>
        <x>84</x>
