@@ -1,9 +1,9 @@
-#include "networkdispatch.h"
+#include "networkconnection.h"
 
-class BoardDispatch : public NetworkDispatch
+class BoardDispatch
 {
 	public:
-		BoardDispatch(class GameListing * l);
+		BoardDispatch(NetworkConnection * conn, class GameListing * l);
 		~BoardDispatch();
 		void closeBoard(void);
 		void recvMove(class MoveRecord * m);
@@ -18,6 +18,15 @@ class BoardDispatch : public NetworkDispatch
 		void recvKibitz(QString name, QString text);
 		void sendKibitz(QString text);
 		void recvEnterScoreMode(void);
+		void createCountDialog(void);
+		void recvRequestCount(void);
+		void clearCountDialog(void) { countdialog = 0; };
+		void recvRejectCount(void);
+		void recvAcceptCount(void);
+		void sendRejectCount(void);
+		void sendAcceptCount(void);
+		void sendResult(class GameResult * r);
+		
 		void recvRequestAdjourn(void);
 		void sendAdjournRequest(void);
 		void sendAdjourn(void);
@@ -39,18 +48,22 @@ class BoardDispatch : public NetworkDispatch
 		class TimeRecord getOurTimeRecord(void);
 		class TimeRecord getTheirTimeRecord(void);
 		QString getOpponentName(void);
-		bool supportsMultipleUndo(void) { if(connection) return connection->supportsMultipleUndo(); return false; };
+		QString getUsername(void) { return connection->getUsername(); };
+		bool supportsMultipleUndo(void) { return connection->supportsMultipleUndo(); };
 		bool supportsRematch(void);
-		bool startTimerOnOpen(void) { if(connection) return connection->startTimerOnOpen(); else return false; };
-		bool clientCountsTime(void) { if(connection) return connection->clientCountsTime(); else return false; };
-		bool clientSendsTime(void) { if(connection) return connection->clientSendsTime(); else return false; };
-		bool unmarkUnmarksAllDeadStones(void) { if(connection) return connection->unmarkUnmarksAllDeadStones(); else return false; };
+		bool startTimerOnOpen(void) {return connection->startTimerOnOpen(); };
+		bool clientCountsTime(void) { return connection->clientCountsTime(); };
+		bool clientSendsTime(void) { return connection->clientSendsTime(); };
+		bool twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); };
+		bool unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); };
+		bool cantMarkOppStonesDead(void) { return connection->cantMarkOppStonesDead(); };
 	private:
 		void mergeListingIntoRecord(class GameData * r, class GameListing * l);
 		class MainWindow * mainwindow;
 		class BoardWindow * boardwindow;
-		NetworkDispatch * networkdispatch;
+		NetworkConnection * connection;
 		class GameData * gameData;
 		class GameListing * gameListing;
 		class ResultDialog * resultdialog;
+		class CountDialog * countdialog;
 };

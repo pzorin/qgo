@@ -3,8 +3,10 @@
 #include "messages.h"
 #include "listviews.h"
 #include "../game_interfaces/resultdialog.h"
+#include "../game_interfaces/countdialog.h"
 #include "gamedata.h"
 #include "playergamelistings.h"
+#include "networkconnection.h"
 
 /* It would be difficult to create a board without a connection,
  * but we need to either be certain and not test at all, or assign
@@ -13,13 +15,14 @@
 /* Also the !boardwindow things?  I mean its pretty damn hard
  * to get these messages without them, we just just need to be sure */
 
-BoardDispatch::BoardDispatch(GameListing * l)
+BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 {
 	qDebug("Creating new Board Dispatch\n");
 	
-	//networkdispatch = n;
+	connection = conn;
 	boardwindow = 0;
 	resultdialog = 0;
+	countdialog = 0;
 	/* New rules.  The boarddispatch creates the game data or
 	 * whatever loads the game data before passing it to the
 	 * boardwindow creates it.  The boardwindow deletes it.
@@ -47,6 +50,7 @@ BoardDispatch::~BoardDispatch()
 	/* Clear dispatch so boardwindow doesn't try to close it */
 	if(boardwindow)
 	{
+		clearObservers();
 		if(boardwindow->getGamePhase() != phaseEnded)
 		{
 			boardwindow->qgoboard->stopTime();
@@ -56,6 +60,8 @@ BoardDispatch::~BoardDispatch()
 	}
 	if(resultdialog)
 		delete resultdialog;
+	if(countdialog)
+		delete countdialog;
 	
 	delete gameListing;
 }
@@ -146,9 +152,10 @@ void BoardDispatch::openBoard(void)
 		
 		bool imWhite = false;
 		bool imBlack = false;
+		QString myName = connection->getUsername();
 		if(gameData->gameMode == modeUndefined)
 		{
-			QString myName = connection->getUsername();
+			
 			imWhite = (gameData->white_name == myName);
 			imBlack = (gameData->black_name == myName);		
 			if ( imWhite && imBlack )
@@ -161,6 +168,7 @@ void BoardDispatch::openBoard(void)
 		//else, something else has set it ahead of time
 		
 		boardwindow = new BoardWindow(gameData, imBlack, imWhite, this);
+		boardwindow->observerListModel->setAccountName(myName);
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 	}
@@ -234,6 +242,11 @@ void BoardDispatch::recvResult(GameResult * r)
 	//connection->sendRematchRequest(gameData->number);
 }
 
+void BoardDispatch::sendResult(GameResult * r)
+{
+	connection->sendResult(gameData, r);	
+}
+
 void BoardDispatch::recvObserver(PlayerListing * p, bool present)
 {
 	if(!boardwindow)
@@ -267,11 +280,56 @@ void BoardDispatch::sendKibitz(QString text)
 		connection->sendMsg(gameData->number, text);	
 }
 
+/* FIXME: is this legitimate?  doesn't qgoboard_network handle
+ * entering score mode within set_move?  why would we do it here?
+ * find out who calls this and why.  Could be for special cases
+ * but... Okay... looks like everyone calls it... not sure
+ * what to say about that... might be redundant with set_move
+ * or perhaps we've been letting server tell us when to enter
+ * score mode and maybe set_move code should go*/
 void BoardDispatch::recvEnterScoreMode(void)
 {
 	if(!boardwindow)
 		return;
 	boardwindow->qgoboard->enterScoreMode();
+}
+
+void BoardDispatch::recvRequestCount(void)
+{
+	//this is those count messages before passes
+	//FIXME
+	//we need to copy the matchinvite file to a
+	//RequestCountDialog, etc.
+}
+
+void BoardDispatch::createCountDialog(void)
+{
+	// pretty sure we need to get the game result from the boardwindow
+	// without triggering an end game result dialog or something like
+	// that FIXME
+	countdialog = new CountDialog(boardwindow, this, gameData->number);	
+}
+
+void BoardDispatch::recvRejectCount(void)
+{
+	if(countdialog)
+		countdialog->recvRejectCount();	
+}
+
+void BoardDispatch::recvAcceptCount(void)
+{
+	if(countdialog)
+		countdialog->recvAcceptCount();	
+}
+
+void BoardDispatch::sendRejectCount(void)
+{
+	connection->sendRejectCount(gameData);
+}
+
+void BoardDispatch::sendAcceptCount(void)
+{
+	connection->sendAcceptCount(gameData);	
 }
 
 void BoardDispatch::recvRequestAdjourn(void)
@@ -383,6 +441,9 @@ void BoardDispatch::mergeListingIntoRecord(GameData * r, GameListing * l)
 	/* FIXME, no komi in ORO listing... and
 	 * what is this function for again?  Maybe we shouldn't
 	 * always do this?? FIXME FIXME */
+
+	/* FIXME we get here from IGS without white or black names somehow.
+	 * also if game list has changed before refresh there's other issues */
 	
 	//FIXME, trying not overwriting komi for now
 	//r->komi = l->komi;
