@@ -771,7 +771,8 @@ void BoardHandler::updateVariationGhosts(Move *move)
 void BoardHandler::slotWheelEvent(QWheelEvent *e)
 {
 	// leave if not editing
-	if (boardwindow->getGameMode() != modeNormal)
+	if (boardwindow->getGameMode() != modeNormal &&
+		boardwindow->getGameMode() != modeObserve)	//or observing
 		return;
 
 	if (boardwindow->getGamePhase() != phaseOngoing)
@@ -782,7 +783,7 @@ void BoardHandler::slotWheelEvent(QWheelEvent *e)
 		return;
 	
 	// Needs an extra check on variable mouseState as state() does not work on Windows.
-	if (e->delta() == 120)
+	if (e->delta() > 0)
 	{
 		if (e->buttons() == Qt::RightButton || e-> modifiers() ==  Qt::ShiftModifier)
 			slotNavNextVar();
