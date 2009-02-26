@@ -1076,6 +1076,7 @@ int TygemConnection::reconnectToServer(void)
 		//sendLogin(reconnecting, reconnecting);
 		fflush(stdout);
 		fflush(stderr);
+		onAuthenticationNegotiated();
 	}
 	else
 		qDebug("Can't open Connection!!");
@@ -4302,19 +4303,19 @@ void TygemConnection::sendDisconnectMsg(void)
 void TygemConnection::encode(unsigned char * p, unsigned int cycles)
 {
 	int i;
-	unsigned long a, b, c = 0;
-	unsigned long header = *(unsigned long *)p;
+	uint32_t a, b, c = 0;
+	uint32_t header = *(uint32_t *)p;
 	header ^= encode_offset;
 	p += 4;
 	while(cycles--)
 	{
-		b = *(unsigned long *)p;
+		b = *(uint32_t *)p;
 		c ^= b;
 		b ^= header;
-		*(unsigned long *)p = b;
+		*(uint32_t *)p = b;
 		p += 4;
 	}
-	*(unsigned long *)p = c;
+	*(uint32_t *)p = c;
 }
 
 void TygemConnection::handlePassword(QString msg)
@@ -4663,18 +4664,6 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 
 void TygemConnection::handleConnected(unsigned char * msg, unsigned int size)
 {
-	unsigned char * p = msg;
-	if(size != 10)
-		qDebug("handleConnected size: %d", size);
-	our_player_id = p[0] + (p[1] << 8);
-	qDebug("our id: %02x%02x %02x\n", p[0], p[1], p[2]);
-	our_special_byte = p[2];
-	p += 6;
-	
-	//try this here
-	//sendInvitationSettings(true);	//for now
-	// FIXME, toggle is doing this now, but is it kosher with initial state?
-	// i.e., when we first join what happens? where does that get checked?
 }
 
 #ifdef RE_DEBUG
@@ -9392,6 +9381,7 @@ void TygemConnection::onReady(void)
 {
 	//sendInvitationSettings(true);	//for now
 	qDebug("Ready!\n");
+	NetworkConnection::onReady();
 }
 
 
