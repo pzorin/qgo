@@ -507,6 +507,7 @@ int CyberOroConnection::reconnectToServer(void)
 		qDebug("Reconnected");
 		connectionState = CONNECTED;
 		game_code_to_number.clear();
+		onAuthenticationNegotiated();
 	}
 	else
 		qDebug("Can't open Connection!!");
@@ -3171,6 +3172,8 @@ void CyberOroConnection::handleConnected(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 	our_special_byte = p[2];
 	p += 6;
+	
+	onReady();		//is this okay?
 	
 	//try this here
 	//sendInvitationSettings(true);	//for now
@@ -7391,22 +7394,7 @@ void CyberOroConnection::onReady(void)
 {
 	//sendInvitationSettings(true);	//for now
 	qDebug("Ready!\n");
-	
-	/*
-	/* Below should be some place more general, not even in igs code maybe
-	* FIXME (Also, we should add to WING and LGS code.) FIXME FIXME*/
-#ifdef FIXME
-	QSettings settings;
-	
-	if(settings.value("LOOKING_FOR_GAMES").toBool())
-		sendText("toggle looking true\r\n");
-	else
-		sendText("toggle looking false\r\n");
-	if(settings.value("OPEN_FOR_GAMES").toBool())
-		sendText("toggle open true\r\n");
-	else
-		sendText("toggle open false\r\n");
-#endif //FIXME
+	NetworkConnection::onReady();
 }
 
 

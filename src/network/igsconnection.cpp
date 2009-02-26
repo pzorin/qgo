@@ -533,6 +533,7 @@ void IGSConnection::onReady(void)
 	sendText(v.toLatin1().constData());
 	//sendText("toggle newrating\r\n");
 	
+	onAuthenticationNegotiated();
 	NetworkConnection::onReady();
 	
 	sendText("toggle newundo on\r\n");

@@ -12,6 +12,7 @@ NetworkConnection::NetworkConnection() :
 default_room(0), console_dispatch(0), qsocket(0)
 {
 	firstonReadyCall = 1;
+	mainwindowroom = 0;
 }
 
 /* Maybe this should return an enum, but I'm feeling lazy at the moment,
@@ -76,7 +77,7 @@ bool NetworkConnection::openConnection(const QString & host, const unsigned shor
 	 * will setupRoomAndConsole */
 	/* Tricky now without dispatches... who sets up the UI?
 	 * there's always a mainwindow... but maybe things aren't setup? */
-	setupRoomAndConsole();
+	
 	/* connectionInfo as a message with those pointers is probably a bad idea */
 	return (qsocket->state() != QTcpSocket::UnconnectedState);
 }
@@ -193,10 +194,10 @@ void NetworkConnection::onClose(void)
 		delete mainwindowroom;
 		mainwindowroom = 0;
 	}
-	if(consoledispatch)
+	if(console_dispatch)
 	{
-		delete consoledispatch;
-		consoledispatch = 0;
+		delete console_dispatch;
+		console_dispatch = 0;
 	}
 }
 
@@ -231,6 +232,11 @@ void NetworkConnection::OnConnected()
 	 * also prints garbage... */
 	if(console_dispatch)
 		console_dispatch->recvText(QString("Connected to ") + qsocket->peerAddress().toString() + " " +  QString::number(qsocket->peerPort()));
+}
+
+void NetworkConnection::onAuthenticationNegotiated(void)
+{
+	setupRoomAndConsole();
 }
 
 void NetworkConnection::onReady(void)
@@ -359,15 +365,15 @@ void NetworkConnection::setupRoomAndConsole(void)
 	mainwindowroom->setConnection(this);
 	setDefaultRoom(mainwindowroom);
 	
-	consoledispatch = new ConsoleDispatch(this);
-	setConsoleDispatch(consoledispatch);	
+	console_dispatch = new ConsoleDispatch(this);
+	setConsoleDispatch(console_dispatch);	
 }
 
 void NetworkConnection::sendConsoleText(const char * text)
 {
 	//FIXME issue
-	if(consoledispatch) 
-		consoledispatch->sendText(text);
+	if(console_dispatch) 
+		console_dispatch->sendText(text);
 }
 
 /* I was thinking about breakng up the seeks and rooms by room dispatch, etc.

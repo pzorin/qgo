@@ -142,6 +142,7 @@ class NetworkConnection : public QObject
 	protected:
 		virtual bool readyToWrite(void) { return true; };
 		virtual void setReadyToWrite(void) {};
+		void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
 		void writeFromBuffer(void);
 		class ServerListStorage & getServerListStorage(void);
@@ -180,7 +181,6 @@ class NetworkConnection : public QObject
 		QTcpSocket * qsocket;	
 		
 		Room * mainwindowroom;
-		ConsoleDispatch * consoledispatch;
 		
 	protected slots:
 		virtual void OnConnected();
