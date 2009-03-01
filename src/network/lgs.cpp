@@ -26,6 +26,13 @@ void LGSConnection::sendPlayersRequest(void)
 	sendText("who\r\n");	//no userlist, user gives simple info
 }
 
+void LGSConnection::sendToggle(const QString & param, bool val)
+{
+	if(param == "looking" || param == "open")
+		return;  //FIXME
+	IGSConnection::sendToggle(param, val);
+}
+
 void LGSConnection::requestGameInfo(unsigned int game_id)
 {
 	char string[20];
@@ -43,8 +50,6 @@ void LGSConnection::onReady(void)
 			return;
 		firstonReadyCall = 0;
 		connectionState = CONNECTED;
-	
-		sendText("toggle client on\r\n");		//adds type codes
 
 		sendPlayersRequest();
 		sendGamesRequest();

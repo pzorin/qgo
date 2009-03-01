@@ -36,6 +36,8 @@ void IGSConnection::init(void)
 	btime = new TimeRecord();
 	wtime = new TimeRecord();
 	protocol_save_int = -1;
+	guestAccount = false;
+	needToSendClientToggle = true;
 }
 
 IGSConnection::~IGSConnection()
@@ -404,6 +406,12 @@ void IGSConnection::sendSeekCancel(void)
 		
 }*/
 
+/* So server sends type codes */
+void IGSConnection::sendToggleClientOn(void)
+{
+	sendText("toggle client on\r\n");
+}
+
 void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 {
 	char * c;
@@ -484,11 +492,25 @@ void IGSConnection::handlePassword(QString msg)
 	qDebug(":%d %s\n", msg.size(), msg.toLatin1().constData());
 	if(msg.contains("Password:") > 0 || msg.contains("1 1") > 0)
 	{
-		qDebug("Password or 1 1 found\n");
+		qDebug("Password prompt or 1 1 found");
 		writeReady = true;
-		QString p = password + "\r\n";
-		sendText(p.toLatin1().constData());	
+		if(password == QString())
+		{
+			onAuthenticationNegotiated();
+		}
+		else
+		{
+			QString p = password + "\r\n";
+			sendText(p.toLatin1().constData());
+		}	
 		connectionState = PASSWORD_SENT;
+	}
+	else if(msg.contains("guest"))
+	{
+		qDebug("Guest account");
+		writeReady = true;
+		connectionState = PASSWORD_SENT;
+		guestAccount = true;
 	}
 }
 
@@ -498,6 +520,18 @@ bool IGSConnection::isReady(void)
 		return 1;
 	else
 		return 0;
+}
+
+void IGSConnection::onAuthenticationNegotiated(void)
+{
+	needToSendClientToggle = false;
+	sendToggleClientOn();
+	writeReady = true;		//are both necessary?
+	writeFromBuffer();
+	NetworkConnection::onAuthenticationNegotiated();
+	NetworkConnection::onReady();
+	writeReady = true;
+	writeFromBuffer();
 }
 
 void IGSConnection::onReady(void)
@@ -533,21 +567,25 @@ void IGSConnection::onReady(void)
 	sendText(v.toLatin1().constData());
 	//sendText("toggle newrating\r\n");
 	
-	onAuthenticationNegotiated();
-	NetworkConnection::onReady();
+	//onAuthenticationNegotiated();
 	
-	sendText("toggle newundo on\r\n");
-	sendText("toggle client on\r\n");		//adds type codes
-	sendText("toggle nmatch on\r\n");		//allows nmatch
-	sendText("toggle seek on\r\n");
+	if(!guestAccount)
+	{
+		sendText("toggle newundo on\r\n");
+		//sendText("toggle client on\r\n");		//adds type codes, done earlier
+		sendText("toggle nmatch on\r\n");		//allows nmatch
+		sendText("toggle seek on\r\n");
 
-	sendPlayersRequest();
+		sendPlayersRequest();
+		
+		sendText("seek config_list\r\n");
+		sendNmatchParameters();
+	}
+	
 	sendGamesRequest();
 	recvRoomListing(new RoomListing(0, "Lobby"));
 	sendRoomListRequest();
 	
-	sendText("seek config_list\r\n");
-	sendNmatchParameters();
 	qDebug("Ready!\n");
 	}
 	writeReady = true;
@@ -768,14 +806,15 @@ bool IGSConnection::readyToWrite(void)
 void IGSConnection::handleMessage(QString msg)
 {
 	unsigned int type = 0;
-	//qDebug(msg.toLatin1().constData());	
+	qDebug(msg.toLatin1().constData());
+	
 	/*if(sscanf(msg.toLatin1().constData(), "%d", &type) != 1)
 	{
 		  qDebug("No number");
 		  return;
 	}*/
-	if(msg[0].toLatin1() == '\n')
-		return;
+	//if(msg[0].toLatin1() == '\n')
+		//return;
 	if(msg[0].toLatin1() >= '0' && msg[0].toLatin1() <= '9')
 	{
 		type = (int)msg[0].toLatin1() - '0';
@@ -785,8 +824,18 @@ void IGSConnection::handleMessage(QString msg)
 		type *= 10;
 		type += (int)msg[1].toLatin1() - '0';
 	}
-	if(!type)
+	
+	if(needToSendClientToggle)
+		onAuthenticationNegotiated();
+	if(msg.contains("You have logged in as a guest"))	//WING, doesn't work, plus ugly
 	{
+		qDebug("here\n");
+		guestAccount = true;
+		connectionState = PASSWORD_SENT;
+	}
+	if(!type)
+	{	
+		
 		//line = line.remove(0, 2).trimmed();
 		//if(msg.size() > 4)
 		//	qDebug("***%02x %02x %02x %02x", msg[msg.size() - 1].toLatin1(), msg[msg.size() - 2].toLatin1(), msg[msg.size() -3].toLatin1(), msg[msg.size() -4].toLatin1());
@@ -2601,22 +2650,6 @@ void IGSConnection::handle_messages(QString line)
 		// 15 144(B): B12
 		// IGS: teaching game:
 		// 15 Game 167 I: qGoDev (0 0 -1) vs qGoDev (0 0 -1)
-#ifdef OLD
-class IGS_move : public MsgHandler
-{ 
-	public:
-		IGS_move(NetworkConnection * c) : MsgHandler(c)
-		{
-			
-		};
-		~IGS_move() { delete btime; delete wtime; };
-		virtual void handleMsg(QString);
-	private:
-		/* FIXME, maybe these should just be on stack or whatever,
-		 * why allocate and deallocte explicitly? */
-		
-};
-#endif //OLD
 void IGSConnection::handle_move(QString line)
 {
 	BoardDispatch * boarddispatch;

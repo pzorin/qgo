@@ -144,12 +144,6 @@ void WingConnection::onReady(void)
 		firstonReadyCall = 0;
 		connectionState = CONNECTED;
 		
-		//getDefaultRoom()->setConnection(this);
-	
-		//getDefaultRoom()->setAccountName(username);
-	
-		sendText("toggle client on\r\n");		//adds type codes
-	
 		sendPlayersRequest();
 		sendGamesRequest();
 		qDebug("Ready!");

@@ -68,6 +68,7 @@ class IGSConnection : public NetworkConnection
 	protected:
 		virtual bool readyToWrite(void);
 		virtual void setReadyToWrite(void) { writeReady = true; };
+		virtual void onAuthenticationNegotiated(void);
 		void handleLogin(QString msg);
 		void handlePassword(QString msg);
 		void handleMessage(QString msg);
@@ -103,6 +104,8 @@ class IGSConnection : public NetworkConnection
 		void handle_seek(QString line);
 		void handle_review(QString line);
 		
+		void sendToggleClientOn(void);
+		
 		QString element(const QString &line, int index, const QString &del1, const QString &del2="", bool killblanks=FALSE);
 		unsigned int idleTimeToSeconds(QString time);
 		void fixRankString(QString * rank);
@@ -124,53 +127,8 @@ class IGSConnection : public NetworkConnection
 	private:
 		void init(void);
 		void sendNmatchParameters(void);
-		/* I'm thinking of a map or a hash table here
-		 * mapping room and game/board ids to particular
-		 * NetworkDispatches.  Then we probably need
-		 * some kind of abstract message class so that we can
-		 * pass whatever message along to the proper network
-		 * dispatch.  This would be so that the networkconnection
-		 * doesn't have to be statically aware of the different
-		 * types of network dispatches although we do already
-		 * have a console dispatch. */
-		/* We have to look at what the program assumes is there
-		 * like boards or rooms and that's what the network
-		 * connection interface should support.  We could then
-		 * subclass the dispatch for different types room/board
-		 * or we could just create a different type for each,
-		 * inheritance would only be useful if we didn't want
-		 * to know the type of dispatch before sending it
-		 * data.  The thing is, the specific connection is
-		 * reading packets and constructing messages to dispatches
-		 * so it does really know the type of dispatch.  The
-		 * ability to open multiple boards is probably supported
-		 * by connections and commands so this is tricky, and each
-		 * map of open boards might use a different value as a key
-		 * so that needs to be stored on the specific subclass of
-		 * NC and we can't add NC routines for adding dispatches
-		 * to maps I don't think... but we don't want the app
-		 * to know the connection type... a new board is called
-		 * by some command through the dispatch, so we can just
-		 * have the dispatch create new dispatches as necessary and
-		 * associate them with created boards.  If the connection
-		 * doesn't support that, dispatch can kill the old board.
-		 * But then dispatch is coupled with the connection...
-		 * well we can just have dispatch query the connection
-		 * somehow... or actually I guess the type information for
-		 * keys has to be pretty standard anyway. So this all
-		 * kind of a moot point.*/
-		/* We do have to subclass dispatch for different room/board
-		 * objects because each has to implment specific routines
-		 * for handling messages.  But they're probably all the
-		 * same in that we can just pass an initialization
-		 * pointer to the board or room app interface to be
-		 * used in those routines.  The real question still
-		 * is whether or not the different dispatches should inherit
-		 * from a common class?  It might just make things easier,
-		 * like if we wanted to do something with all of them.  But
-		 * at the same time, connection is aware of the different types
-		 * and there's no real list of dispatches either.  They might
-		 * just support an overriden common destructor... */
+		bool guestAccount;
+		bool needToSendClientToggle;
 };
 
 #endif //IGSCONNECTION_H
