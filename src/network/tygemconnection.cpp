@@ -22,8 +22,8 @@
 #include "serverliststorage.h"
 #include <QMessageBox>
 
-//#define RE_DEBUG
-#define NO_PLAYING
+#define RE_DEBUG
+//#define NO_PLAYING
 
 #define FIRST_BYTE(x)	(x >> 24) & 0x000000ff
 #define SECOND_BYTE(x)	(x >> 16) & 0x000000ff
@@ -827,6 +827,7 @@ void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 	sendPlayersRequest();
 	//53
 	//11 ae 14 name(91) 95 53
+	onReady();		//sends invite settings as well
 }
 
 void TygemConnection::sendLoginConfirm(void)
@@ -4241,7 +4242,7 @@ void TygemConnection::sendLeave(const GameListing & game)
 }*/
 
 /* This really needs to be a whole packet of stuff but for now,
- * since the full thing reqiures some chinese translation: */
+ * since the full thing requires some chinese translation: */
 void TygemConnection::sendInvitationSettings(bool invite)
 {
 	unsigned int length = 0x0c;
@@ -4320,13 +4321,6 @@ void TygemConnection::encode(unsigned char * p, unsigned int cycles)
 
 void TygemConnection::handlePassword(QString msg)
 {
-	qDebug(":%d %s\n", msg.size(), msg.toLatin1().constData());
-	if(msg.contains("Password:") > 0 || msg.contains("1 1") > 0)
-	{
-		qDebug("Password or 1 1 found\n");
-		sendText(password.toLatin1().constData());	
-		//authState = SESSION;
-	}
 }
 
 bool TygemConnection::isReady(void)
@@ -4388,19 +4382,23 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			break;
 		case 0x0618:
 			/* I got one of these on windows shortly before a server disconnect! weird FIXME */
+#ifdef RE_DEBUG
 			printf("0x0618: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			break;
 		case 0x0637:
 			handleCreateRoomResponse(msg, size);
 			break;
 		case 0x0638:
+#ifdef RE_DEBUG
 			printf("0x0638: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			//break;
 		case 0x0639:	//in response to 0638
 			handleBoardOpened(msg, size);
@@ -4613,10 +4611,12 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 		
 		case 0x0692:
 			//possibly related to match opening or negotiation
+#ifdef RE_DEBUG
 			printf("0x0692: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			break;
 		case 0x0696:
 			//some kind of code  0695 requests
@@ -6167,10 +6167,12 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 	p += 2;
 	number_of_observers = (p[0] << 8) + p[1];
 	p += 2;
+#ifdef RE_DEBUG
 	printf("observers %d:\n", number_of_observers);
 	for(int i = 0; i < size; i++)
 		printf("%02x", p[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	/* FIXME possible issue with country name which is not included in
 	 * 0x34 */
 	//0002 ffff bbfe c5ac 0000 0000 0000 0000
@@ -6277,9 +6279,11 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 		{
 			printf("%02x%02x\n", p[0], p[1]);
 		}
+#ifdef RE_DEBUG
 		for(int i = 0; i < 0x34; i++)
 			printf("%c", p[i]);
 		printf("\n");
+#endif //RE_DEBUG
 		p += 2;
 		p++;
 		if(!p[0])
