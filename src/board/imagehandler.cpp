@@ -435,7 +435,8 @@ QPixmap *ImageHandler::getBoardPixmap(QString filename)
 {
 	if (! QFile::exists (QString(filename)))
 	{
-		qDebug("Can't open board picture: \"%s\"", filename.toLatin1().constData());
+		if(filename != QString())
+			qDebug("Can't open board picture: \"%s\"", filename.toLatin1().constData());
 		return woodPixmap1;
 	}
 
@@ -452,7 +453,8 @@ QPixmap *ImageHandler::getTablePixmap(QString filename)
 {
 	if (! QFile::exists (QString(filename)))
 	{
-		qDebug("Can't open table picture: \"%s\"", filename.toLatin1().constData());
+		if(filename != QString())
+			qDebug("Can't open table picture: \"%s\"", filename.toLatin1().constData());
 		return tablePixmap;
 	}
 	

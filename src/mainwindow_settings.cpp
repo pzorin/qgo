@@ -496,7 +496,7 @@ void MainWindow::slot_getComputerPath()
  */
 void MainWindow::slot_getGobanPath()
 {
-	QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"), "",
+	QString fileName(QFileDialog::getOpenFileName(this, tr("Goban picture"), "",
 		tr("All Files (*)")));
 	if (fileName.isEmpty())
 		return;
@@ -509,7 +509,7 @@ void MainWindow::slot_getGobanPath()
  */
 void MainWindow::slot_getTablePath()
 {
-	QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"), "",
+	QString fileName(QFileDialog::getOpenFileName(this, tr("Table picture"), "",
 		tr("All Files (*)")));
 	if (fileName.isEmpty())
 		return;
