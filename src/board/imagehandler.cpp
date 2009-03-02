@@ -433,10 +433,11 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 
 QPixmap *ImageHandler::getBoardPixmap(QString filename)
 {
-	
-
 	if (! QFile::exists (QString(filename)))
+	{
+		qDebug("Can't open board picture: \"%s\"", filename.toLatin1().constData());
 		return woodPixmap1;
+	}
 
 	QPixmap *p =  new QPixmap(filename) ;
 
@@ -450,8 +451,11 @@ QPixmap *ImageHandler::getBoardPixmap(QString filename)
 QPixmap *ImageHandler::getTablePixmap(QString filename) 
 {
 	if (! QFile::exists (QString(filename)))
+	{
+		qDebug("Can't open table picture: \"%s\"", filename.toLatin1().constData());
 		return tablePixmap;
-
+	}
+	
 	QPixmap *p =  new QPixmap(filename) ;
 
 	if (p->isNull())
