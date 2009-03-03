@@ -8,6 +8,7 @@
 #include "gamedialog.h"
 #include "network/messages.h"
 #include "network/playergamelistings.h"
+#include "mainwindow.h"		//for talkOpened
 /* I wonder if we could somehow generalize this class to handle
  * all message/windows even if they're part of larger windows.
  * We could even do it for the console, specifying a special
@@ -47,6 +48,13 @@ Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connec
 */
 	connect (ui.pb_releaseTalkTab, SIGNAL(pressed()),SLOT(slot_pbRelTab()));
 	connect (ui.pb_match, SIGNAL(pressed()),SLOT(slot_match()));
+	
+	/* Here's how the talk stuff works for future reference. FIXME.
+	 * double clicking on a name or typing a console command (maybe) opens
+	 * a talk dialog through the room which also, at that time, might request
+	 * stats from the network connection.  Then the talk dialog here notifies
+	 * the mainwindow to add it to the list of talk dialogs */
+	mainwindow->talkOpened(this);
 }
 
 Talk::~Talk()
