@@ -352,9 +352,10 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 		mainwindowroom->onError();
 	/* We could also have the rooms deleted here. */
 	//delete this;
+	
+#endif //OLD
 	if(mainwindow)
 		mainwindow->onConnectionError();
-#endif //OLD
 	connectionState = PROTOCOL_ERROR;
 }
 

@@ -226,8 +226,11 @@ void MainWindow::setupConnection(void)
 }
 
 /* Shouldn't be here. FIXME */
+/* Maybe it should be here? */
 void MainWindow::onConnectionError(void)
 {
+	if(logindialog)
+		return;
 	qDebug("onConnectionError");
 	closeConnection();
 }
@@ -292,7 +295,8 @@ void MainWindow::slot_connexionClosed()
  * room specific and also to the network dispatch */
 void MainWindow::slot_changeServer(void)
 {
-	connection->changeServer();
+	if(connection)
+		connection->changeServer();
 }
 
 void MainWindow::slot_createRoom(void)
