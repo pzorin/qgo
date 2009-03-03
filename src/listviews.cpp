@@ -394,12 +394,18 @@ int ListModel::qs_partition(int b, int e)
 	return i + 1;
 }
 
+/* With a large list, if you're looking at the middle of it and its
+ * changing quickly, then all those new entries are shifting the list
+ * around.  Even if the selection stays where it is, its hard to
+ * even double click.  I might change this back later, but for
+ * now, let's see what it looks like with just, essentially, appends */
 void ListModel::insertListing(ListItem & item)
 {
 	//for(int j = 0; j < G_TOTALCOLUMNS; j++)
 	//{
 		//int sortColumn = sort_priority[0];
 		//list = &(items[sortColumn]);
+#ifdef ONLISTINSERT_SORT
 		for(int i = 0; i < items.count(); i++)
 		{
 			int result = priorityCompare(item, *(items[i]));
@@ -419,6 +425,17 @@ void ListModel::insertListing(ListItem & item)
 				return;
 			}
 		}
+#else
+		if(list_sort_order == Qt::AscendingOrder)
+		{
+			emit beginInsertRows(QModelIndex(), 0, 0);
+			items.insert(0, &item);
+			emit endInsertRows();
+			emit dataChanged(createIndex(0, 0),
+				createIndex(0, headerItem->columnCount() - 1));
+			return;
+		}
+#endif //ONLISTINSERT_SORT
 		emit beginInsertRows(QModelIndex(), items.count(), items.count());
 		items.append(&item);
 		//emit beginInsertRows(QModelIndex(), items.count() - 1, items.count() - 1);
