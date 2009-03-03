@@ -981,6 +981,16 @@ void IGSConnection::handleMessage(QString msg)
 /* We want two functions, the tokenizer, and then something that's just a list of std::map adds 
  * the tokens can be an abstract class with the type within... I got to stop writing things and just
  * program them like I used to, but I shouldn't be working on this right now*/
+ 
+ /* I'm having second thoughts about this idea.  First, it doesn't make anything faster.  We could try to remove
+  * some of the regular expressions, that would make things a bit faster but that's hardly an issue anyway.
+  * Second, it does take the text strings out of the function, but we just replace them with "IGS_" defines and a lot
+  * of token handling and parsing stuff.  It might look kind of clean to have a list of text strings with their
+  * associated defines in another file but... its a significant amount of effort and I'm not sure I can 
+  * see how it would improve the code all that much.  I certainly like the idea... I could even return the multiple
+  * functions to the original parser's giant case statement, except instead of hard coded numbers it would be defines
+  * all over the place.  I think some of the game/move code and updates need to be fixed up but...
+  * I guess this is just a really low priority.*/
 #ifdef FIXME
 returnsomekindoflist IGSConnection::tokenize(QString msg)
 {
@@ -2751,8 +2761,19 @@ void IGSConnection::handle_move(QString line)
 				}
 					//requestGameInfo(game_number);
 					//delete aGame;
+				return;
 			}
-			return;
+			else
+			{
+				/* In order to allow observing by console
+				 * This all needs to be cleaned up,
+				 * FIXME, like the above should be moved below, I think
+				 * we only added it haphazardly because we were half working
+				 * with the old code and half making allowances for things
+				 * like restores.*/
+				boarddispatch = getBoardDispatch(number);
+			}
+			//return;
 		}
 		
 		GameData * aGameData = boarddispatch->getGameData();
