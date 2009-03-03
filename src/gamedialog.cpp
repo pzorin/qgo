@@ -538,8 +538,6 @@ GameDialog::~GameDialog()
 void GameDialog::closeEvent(QCloseEvent *)
 {
 	qDebug("GameDialog::closeEvent");
-
-	this->deleteLater();	//hopefully more like deleteImmediately
 }
 
 /*
