@@ -456,7 +456,7 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 			z = getStoneAt(i + 1, j + 1);
 			if (z != 0)
 				z= 0;
-			if(!(matrix[i][j] | MX_STONEEDIT))
+			if(!(matrix[i][j] & MX_STONEEDIT))
 				continue;
 			switch (getStoneAt(i + 1, j + 1))
 			{
