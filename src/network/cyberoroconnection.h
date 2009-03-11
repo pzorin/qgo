@@ -167,7 +167,6 @@ class CyberOroConnection : public NetworkConnection
 		void killActiveMatchTimers(void);
 		void startMatchTimers(bool ourTurn);
 		void setRoomNumber(unsigned short number);
-		void clearRoomsWithoutGames(unsigned short game_id);
 		void setAttachedGame(PlayerListing * const player, unsigned short game_id);
 		
 		/* We should really just have the player listing for ourself FIXME */
@@ -186,7 +185,6 @@ class CyberOroConnection : public NetworkConnection
 		/* Since 0a7d comes before 1a81 and one has the number for human
 		 * consumption and the other the game_code necessary for joinging,
 		 * etc., we'll just combine them both at 1a81, checking names */
-		std::vector <GameListing *> rooms_without_games;
 		std::vector <GameListing *> rooms_without_owners;
 		std::map <unsigned short, unsigned short> game_code_to_number;
 		unsigned short playerlist_skipnumber;

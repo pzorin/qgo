@@ -345,15 +345,6 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
 				handleMessage(c, packet_size);
 				delete[] c;
 			}
-			/*while((bytes = p->canReadLine()))
-			{
-				c = new char[bytes + 1];
-				bytes = p->readLine((unsigned char *)c, bytes);
-				QString unicodeLine = textCodec->toUnicode(c);
-				//unicodeLine.truncate(unicodeLine.length() - 1);
-				handleMessage(unicodeLine);
-				delete[] c;
-			}*/
 			break;
 		case CANCELED:
 		case RECONNECTING:
@@ -401,6 +392,9 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	p += 2;
 	for(i = 0; i < servers; i++)
 	{
+		/* If the first byte is 0x0a, right before the ip, that
+		 * might indicate full, the byte before that then might
+		 * be the language of the previous server entry. */
 		si = new ServerItem();
 		ip_string_length = 0;
 		server_name_length = 0;
@@ -497,6 +491,11 @@ int CyberOroConnection::reconnectToServer(void)
 	/* FIXME
 	 * Might be neat if we listed the server that one was currently on
 	 * somewhere, like on the main window. */
+	if(serverList.size() <= server_i)
+	{
+		qDebug("serverList has probably been freed when you weren't looking");
+		return -1;
+	}
 	
 	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), serverList[server_i]->ipaddress);
 	
@@ -524,7 +523,7 @@ int CyberOroConnection::reconnectToServer(void)
 		sprintf(name, "Shift-JIS");
 	else if(server_i == 1 || server_i == 2 || server_i == 3)
 		sprintf(name, "eucKR");
-	else if(server_i == 4 || server_i == 5)
+	else if(server_i == 4 || server_i == 5 || server_i == 6)	//Taiwan?
 		sprintf(name, "GB2312");
 	else
 		qDebug("Please don't try to connect to the voice, we don't know what that is");
@@ -3071,6 +3070,14 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 			break;
 		case 0x482b: 	//bad challenge response response?
+			/* I think this might indicate a full server */
+			QMessageBox::information(0, tr("Server full"), tr("Server full, try another"));
+			if(reconnectToServer() < 0)
+			{
+				qDebug("User canceled");
+				connectionState = CANCELED;
+				return;
+			}
 #ifdef RE_DEBUG
 			printf("0x482b: ");
 			for(i = 0; i < (int)size; i++)
@@ -3769,7 +3776,6 @@ void CyberOroConnection::handleBroadcastGamesList(unsigned char * msg, unsigned 
 		aGameListing->isBroadcast = true;	
 		//to prevent broadcast games from closing FIXME
 		room->recvGameListing(aGameListing);
-		clearRoomsWithoutGames(aGameListing->number);
 	}
 	//FIXME try without
 	//delete ag;
@@ -3887,7 +3893,6 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		//after recv
 		setAttachedGame(black, aGameListing->number);
 		setAttachedGame(white, aGameListing->number);
-		clearRoomsWithoutGames(aGameListing->number);
 	}
 	//FIXME try without
 	//delete ag;
@@ -4390,7 +4395,7 @@ void CyberOroConnection::removeObserverFromGameListing(const PlayerListing * p)
 			break;
 		}
 	}
-	if(game->observers == 0)
+	if(game->observers == 0 && !game->isBroadcast)
 	{
 		/* We should probably increment an observer count here, and
 		* decrement, and if it gets to 0, remove the room.  I don't
@@ -4582,8 +4587,6 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 	game->running = false;
 	room->recvGameListing(game);
 	game_code_to_number.erase(game_number);	// good?
-	/* To help clear out 0a7d records */
-	clearRoomsWithoutGames(game_number);	//this is where it was to start with
 #endif //NOTREALLY
 	//the rest are pretty repetitive, non-specific FIXME
 #ifdef RE_DEBUG
@@ -5018,7 +5021,6 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		//aGameListing->game_code = aGameData->game_code;
 		aGameListing->isRoomOnly = false;
 		room->recvGameListing(aGameListing);
-		clearRoomsWithoutGames(aGameListing->number);
 		//FIXME test without delete
 		//delete aGameListing;
 		//FIXME below delete causes crash
@@ -5878,25 +5880,7 @@ void CyberOroConnection::handleScore(unsigned char * msg, unsigned int size)
 		room->recvGameListing(aGameListing);
 		game_code_to_number.erase(game_id);
 		our_game_being_played = 0;
-		/* Can't imagine how but... */
-		clearRoomsWithoutGames(game_id);
 	}
-}
-
-/* This is really ugly, but we have to try everything to fix this bug */
-void CyberOroConnection::clearRoomsWithoutGames(unsigned short game_id)
-{
-	//FIXME
-	return;
-	std::vector<GameListing *>::iterator pl_i;
-	for(pl_i = rooms_without_games.begin(); pl_i != rooms_without_games.end(); pl_i++)
-	{
-		if((*pl_i)->number == game_id)
-		{
-			rooms_without_games.erase(pl_i);
-			break;
-		}
-	}	
 }
 
 //f6b3
