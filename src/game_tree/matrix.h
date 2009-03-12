@@ -49,7 +49,11 @@ public:
 	Group* assembleAreaGroups(MatrixStone *stone);
 	bool checkFalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
+	void markGroupDead(int x, int y);
+	void markGroupAlive(int x, int y);
 	void toggleAreaAt( int x, int y );
+	void markAreaDead(int x, int y);
+	void markAreaAlive(int x, int y);
 	void updateDeadMarks(int &black, int &white);
 
 	static long coordsToKey(int x, int y)

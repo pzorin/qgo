@@ -968,6 +968,20 @@ void Matrix::toggleGroupAt( int x, int y)
 
 }
 
+void Matrix::markGroupDead(int x, int y)
+{
+	if(isStoneDead(x, y))
+		return;
+	toggleGroupAt(x, y);
+}
+
+void Matrix::markGroupAlive(int x, int y)
+{
+	if(!isStoneDead(x, y))
+		return;
+	toggleGroupAt(x, y);
+}
+
 /* Any stones connected to this xy stone by empty
  * vertices are to be marked dead */
 void Matrix::toggleAreaAt( int x, int y)
@@ -990,6 +1004,20 @@ void Matrix::toggleAreaAt( int x, int y)
 		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
 	}
 
+}
+
+void Matrix::markAreaDead(int x, int y)
+{
+	if(isStoneDead(x, y))
+		return;
+	toggleAreaAt(x, y);
+}
+
+void Matrix::markAreaAlive(int x, int y)
+{
+	if(!isStoneDead(x, y))
+		return;
+	toggleAreaAt(x, y);
 }
 
 /*
