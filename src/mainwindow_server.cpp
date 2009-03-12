@@ -249,7 +249,7 @@ void MainWindow::closeConnection(void)
 {
 	if(connection)
 	{
-		NetworkConnection * c;
+		NetworkConnection * c = connection;
 		connection = 0;
 		/* setChecked(false) might trigger this again so... */ 
 		ui.pb_connect->setChecked(false);	//doublecheck all this?
