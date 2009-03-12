@@ -48,7 +48,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	boardSize = gd->board_size;
 	qDebug("Boardsize: %d handicap %d", boardSize, gd->handicap);
 	//Creates the game tree
-	tree = new Tree(boardSize);
+	tree = new Tree(&boardSize);
 
 	observerListModel = 0;
 	setupUI();
@@ -225,7 +225,7 @@ void BoardWindow::setupUI(void)
 		interfaceHandler->updateCaption(gameData);
 
 	// creates the board handler for navigating in the tree
-	boardHandler = new BoardHandler(this, tree, boardSize);
+	boardHandler = new BoardHandler(this, tree, &boardSize);
 
 	int window_x, window_y;
 	QVariant board_window_size_x = settings.value("BOARD_WINDOW_SIZE_X");

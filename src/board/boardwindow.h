@@ -110,7 +110,7 @@ private:
 
 	Ui::BoardWindow ui;
 	Tree *tree;
-	int boardSize;
+	int boardSize;		//the true boardsize
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
 //	qGoBoard *qgoboard;

@@ -17,7 +17,7 @@ class BoardHandler : public QObject
 {
 	Q_OBJECT
 public:
-	BoardHandler(BoardWindow *bw, Tree *tree =NULL, int size=19);
+	BoardHandler(BoardWindow *bw, Tree *tree, int * board_size);
 	~BoardHandler();
 
 	void clearData();
@@ -60,7 +60,7 @@ private:
 	int terrBlack, terrWhite;
 	Move *lastValidMove;
 //	GameMode gameMode;
-	int boardSize;
+	int * boardSize;
 	
 	void updateVariationGhosts(Move *m);
 	bool navIntersectionStatus;
