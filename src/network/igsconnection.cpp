@@ -215,6 +215,7 @@ void IGSConnection::sendMatchInvite(const PlayerListing & player)
 			m->handicap = player.nmatch_handicapMin;
 		m->nmatch_handicapMax = player.nmatch_handicapMax;
 		m->opponent_is_challenger = false;
+		m->first_offer = true;		//because we're sending it!!
 		//mr->first_offer = false;	//because we don't want to toggle to match from nmatch
 		//mr->rated = false;
 	}
@@ -423,7 +424,8 @@ void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			bytes = p->canRead();
 			if(bytes)
 			{
-				c = new char[bytes];
+				c = new char[bytes + 1];
+				c[bytes] = '\0';
 				p->read((unsigned char *)c, bytes);
 				handleLogin(QString(c));
 				delete[] c;
@@ -433,7 +435,8 @@ void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			bytes = p->canRead();
 			if(bytes)
 			{
-				c = new char[bytes];
+				c = new char[bytes + 1];
+				c[bytes] = '\0';
 				p->read((unsigned char *)c, bytes);
 				handlePassword(QString(c));
 				delete[] c;
@@ -444,6 +447,7 @@ void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			while((bytes = p->canReadLine()))
 			{
 				c = new char[bytes + 1];
+				c[bytes] = '\0';
 				bytes = p->readLine((unsigned char *)c, bytes);
 				QString unicodeLine = textCodec->toUnicode(c);
 				//unicodeLine.truncate(unicodeLine.length() - 1);
@@ -806,7 +810,7 @@ bool IGSConnection::readyToWrite(void)
 void IGSConnection::handleMessage(QString msg)
 {
 	unsigned int type = 0;
-	qDebug(msg.toLatin1().constData());
+	//qDebug(msg.toLatin1().constData());
 	
 	/*if(sscanf(msg.toLatin1().constData(), "%d", &type) != 1)
 	{
@@ -829,7 +833,6 @@ void IGSConnection::handleMessage(QString msg)
 		onAuthenticationNegotiated();
 	if(msg.contains("You have logged in as a guest"))	//WING, doesn't work, plus ugly
 	{
-		qDebug("here\n");
 		guestAccount = true;
 		connectionState = PASSWORD_SENT;
 	}
@@ -1185,7 +1188,7 @@ void IGSConnection::handle_error(QString line)
 		// 5   eb5 wants Black on a 19x19 in 10 mins (12 byoyomi).
 	
 
-	else if (line.contains("request:"))
+	else if (line.contains("request:") || line.contains("wants"))
 	{
 		QString p = element(line, 0, " ");
 		if (p == getUsername())
@@ -1902,14 +1905,34 @@ void IGSConnection::handle_info(QString line)
 					////emit signal_restones(0, 0);
 					////emit signal_enterScoreMode();
 		qDebug("Getting boarddispatch from memory: %d", protocol_save_int);
-		boarddispatch = getBoardDispatch(protocol_save_int);
-		boarddispatch->recvEnterScoreMode();
-		//connection->protocol_save_string = QString("rmv@");		
+		boarddispatch = getIfBoardDispatch(protocol_save_int);
+		if(boarddispatch)
+		{
+			boarddispatch->recvEnterScoreMode();
+			//connection->protocol_save_string = QString("rmv@");	
+		}	
 	}
 			// IGS: 9 Board is restored to what it was when you started scoring
 	else if (line.contains("what it was when you"))
 	{
 		//emit signal_restoreScore();
+		qDebug("Getting boarddispatch from memory: %d", protocol_save_int);
+		boarddispatch = getIfBoardDispatch(protocol_save_int);
+		if(boarddispatch)
+		{
+			MoveRecord * move = new MoveRecord();
+			move->flags = MoveRecord::UNDO_TERRITORY;
+			boarddispatch->recvMove(move);
+			delete move;
+			boarddispatch->recvKibitz("", line);
+		}
+	}
+	else if(line.contains("has typed done"))
+	{
+		qDebug("Getting boarddispatch from memory: %d", protocol_save_int);
+		boarddispatch = getIfBoardDispatch(protocol_save_int);
+		if(boarddispatch)
+			boarddispatch->recvKibitz("", line);
 	}
 			// WING: 9 Use <adjourn> to adjourn, or <decline adjourn> to decline.
 	else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
@@ -2244,7 +2267,14 @@ void IGSConnection::handle_info(QString line)
 			memory_str = "observe";
 					// FIXME
 			//emit signal_clearObservers(memory); 
-
+			BoardDispatch * boarddispatch = getIfBoardDispatch(memory);
+			if(boarddispatch)
+			{
+				GameData * g = boarddispatch->getGameData();
+				g->white_name = element(line, 0, "(", " ");
+				g->black_name = element(line, 4, " ", ")");
+				boarddispatch->gameDataChanged();
+			}
 			return;
 		}
 	}
@@ -2682,7 +2712,6 @@ void IGSConnection::handle_move(QString line)
 		number = element(line, 1, " ").toInt();
 		white = element(line, 3, " ");
 		black = element(line, 8, " ");
-		
 		/* Check if we're reloading the game */
 		/* Other problem, with IGS, this might be all we get
 		* for a restarted game Is this okay here?  Maybe doesn't
@@ -2771,6 +2800,12 @@ void IGSConnection::handle_move(QString line)
 				 * we only added it haphazardly because we were half working
 				 * with the old code and half making allowances for things
 				 * like restores.*/
+				/* One FIXME major issue though, probably why
+				 * we added that thing to sendObserve in the first
+				 * place is because if we do this here, then closing
+				 * a board isn't enough, if it hits at the wrong
+				 * time, a move can pop the board back open again
+				 * and then nothing more. */
 				boarddispatch = getBoardDispatch(number);
 			}
 			//return;
@@ -2800,13 +2835,20 @@ void IGSConnection::handle_move(QString line)
 		}
 		else
 		{
-			//qDebug("igs: %s %s\n", l->white_name().toLatin1().constData(), l->black_name().toLatin1().constData());
+			
+#ifdef FIXME
+			qDebug("igs listing: %s %s\n", l->white_name().toLatin1().constData(), l->black_name().toLatin1().constData());
 			//we sometimes don't appear to have name here either
+			/* If this is our game, its likely there's no listing yet
+			 * or we haven't refreshed the listing yet, so this
+			 * can't be used there.  We may find we don't need
+			 * it at all */
 			aGameData->white_name = l->white_name();
 			aGameData->black_name = l->black_name();
 			aGameData->handicap = l->handicap;
 			aGameData->board_size = l->board_size;
 			aGameData->komi = l->komi;
+#endif //FIXME
 		}
 		protocol_save_int = number;
 				//aGameData->type = element(line, 1, " ", ":");
@@ -2882,10 +2924,13 @@ void IGSConnection::handle_move(QString line)
 			aGameData->black_name = element(line, 1, ":","(");
 			btime->time = (time1.toInt()==0 ? time2 : time1).toInt();
 			btime->stones_periods = (time1.toInt()==0 ? stones:"-1").toInt();
+			/* IGS seems to do W and then B, each time */
+			boarddispatch->recvTime(*wtime, *btime);
 		}
 		else //never know with IGS ...
 			return;
-		boarddispatch->recvTime(*wtime, *btime);
+		
+		//boarddispatch->recvTime(*wtime, *btime);
 		//gameDataChanged necessary if above white_name, black_name is issue
 		//FIXME
 		//boarddispatch->gameDataChanged();
@@ -2903,7 +2948,7 @@ void IGSConnection::handle_move(QString line)
 			 * or do we... */
 			//GAMERPROPS:86: 9 0 6.50
 			gd->board_size = element(line, 1, " ").toInt();
-			/* Is that middle one the handicap, FIXME ??? */
+			gd->handicap = element(line, 2, " ").toInt();
 			gd->komi = element(line, 3, " ").toFloat();
 		}
 		return;
@@ -2937,8 +2982,19 @@ void IGSConnection::handle_move(QString line)
 			* this is useful since sending
 			*  0 sets tree properly*/
 			aMove->flags = MoveRecord::HANDICAP;
-			aMove->x = element(point, 1, " ", "EOL").toInt();
-			//qDebug("handicap %d", aMove->x);
+			aMove->x = element(line, 1, " ", "EOL").toInt();
+			qDebug("handicap %d", aMove->x);
+			/*if(aMove->x != 0)
+			{
+				GameData * r  = boarddispatch->getGameData();
+				r->handicap = aMove->x;
+				boarddispatch->gameDataChanged();
+			}*/
+			/* Don't want to set this here because it will
+			 * prevent the handicap from being set here.
+			 * something in boardwindow, etc., code has to
+			 * prevent double setting the handicap so its
+			 * !handicap*/
 		}
 		else if(point.contains("Pass", Qt::CaseInsensitive))
 		{
@@ -3526,11 +3582,12 @@ void IGSConnection::handle_tell(QString line)
 	int pos;
 	BoardDispatch * boarddispatch;
 	Room * room = getDefaultRoom();
+#ifdef FIXME
 	if (((((pos = line.indexOf("*")) != -1) && (pos < 3)) || 
 		      (((pos = line.indexOf("-->")) != -1) && (pos < 3) &&
 		      line.contains("CLIENT:"))))
 	{
-#ifdef FIXME
+
 		line = line.simplified();
 		QString opp = element(line, 1, "*");
 		int offset = 0;
@@ -3557,9 +3614,9 @@ void IGSConnection::handle_tell(QString line)
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 
 		// it's tell, but don't open a window for that kind of message...
-#endif //FIXME
 		return;
 	}
+#endif //FIXME
       
       			//check for cancelled game offer
 	if (line.contains("*SYSTEM*"))
@@ -3622,10 +3679,14 @@ void IGSConnection::handle_tell(QString line)
 		room->recvPlayerListing(p);
 		p = room->getPlayerListing(e1);
 	}
-	Talk * talk = getTalk(*p);
+	Talk * talk = getIfTalk(*p);
+	if(!talk)
+	{
+		sendStatsRequest(*p);
+		talk = getTalk(*p);
+	}
 	if(talk)
 		talk->recvTalk(e2);
-			
 }
 
 
