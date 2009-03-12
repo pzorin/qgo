@@ -56,6 +56,7 @@ signals:
 
 
 private:
+	void closeEvent(QCloseEvent *e);
 	Ui::TalkGui ui;
 	static int     counter;
 	NetworkConnection * connection;

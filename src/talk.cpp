@@ -59,9 +59,13 @@ Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connec
 
 Talk::~Talk()
 {
+	opponent.dialog_opened = false;
+}
+
+void Talk::closeEvent(QCloseEvent *)
+{
 	if(connection)
 		connection->closeTalk(opponent);
-	opponent.dialog_opened = false;
 }
 
 QString Talk::get_name() const
