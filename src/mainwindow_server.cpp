@@ -29,6 +29,14 @@
 #include "listviews.h"
 #include "playergamelistings.h"		//FIXME should be moved out
 
+
+void MainWindow::cleanupServerData(void)
+{
+	//delete serverliststorage;	no header, done in mainwindow FIXME awkward
+	std::vector<const RoomListing *>::iterator r;
+	for(r = roomList.begin(); r != roomList.end(); r++)
+		delete *r;
+}
 /*
  * return pressed in edit line -> command to send
  */
@@ -114,6 +122,8 @@ void MainWindow::slot_connect(bool b)
 	}
 	else	// toggled off
 	{
+		if(!connection)
+			return;
 		if(logindialog)
 		{
 			/* There was definitely a crash from disconnecting
@@ -239,14 +249,11 @@ void MainWindow::closeConnection(void)
 {
 	if(connection)
 	{
-		//below also can cause crash so...commenting it out
-		//FIXME also, wherever this is called from... looks like
-		//login can call this and netdispatch isn't cleared so it
-		//thinks there is one and crashes, its a big mess and everything
-		//needs to go through login!
-		ui.pb_connect->setChecked(false);	//doesn't matter
-		delete connection;
+		NetworkConnection * c;
 		connection = 0;
+		/* setChecked(false) might trigger this again so... */ 
+		ui.pb_connect->setChecked(false);	//doublecheck all this?
+		delete c;
 	}
 	
 	
@@ -1436,7 +1443,6 @@ void MainWindow::slot_checkbox(int nr, bool val)
 			break;
 	}
 }
-
 
 /*
  * checkbox looking cklicked
