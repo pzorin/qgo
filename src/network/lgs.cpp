@@ -792,7 +792,10 @@ void LGSConnection::handle_info(QString line)
 			fixRankString(&rank);
 					// send as kibitz from "0"
 			PlayerListing * p = room->getPlayerListing(name);
-			boarddispatch->recvObserver(p, true);
+			if(p)
+				boarddispatch->recvObserver(p, true);
+			else
+				qDebug("No player listing for %s", name.toLatin1().constData());
 			name = element(line, ++i , " ");
 		}
 
