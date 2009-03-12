@@ -114,6 +114,8 @@ private:
 	void setupConnection(void);
 	void closeConnection(void);
 	
+	void cleanupServerData(void);
+	
 	friend class Room;	//FIXME awkward
 	Ui::MainWindow ui;
 	QDirModel *model;

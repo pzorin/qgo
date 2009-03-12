@@ -144,6 +144,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 MainWindow::~MainWindow()
 {
 	delete serverliststorage;
+	cleanupServerData();
 }
 
 
