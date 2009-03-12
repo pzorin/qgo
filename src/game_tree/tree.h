@@ -18,9 +18,9 @@ class Move;
 class Tree
 {
 public:
-	Tree(int board_size);
+	Tree(int * board_size);
 	~Tree();
-	void init(int board_size);
+	void init(int * board_size);
 	bool addBrother(Move *node);
 	bool addSon(Move *node);
 	int getNumBrothers();
@@ -80,7 +80,7 @@ protected:
 	
 private:
 	Move *root, *current;
-	int boardSize;
+	int * boardSize;
 	//QList<Group *> *groups;
 	QHash<int,MatrixStone *> *stones;
 	Matrix * checkPositionTags;
