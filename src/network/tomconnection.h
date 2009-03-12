@@ -8,4 +8,5 @@ class TomConnection : public TygemConnection
 	private:
 		virtual int requestServerInfo(void);
 		virtual void handleServerInfo(unsigned char *, unsigned int);
+		virtual QString getTygemGameRecordQString(class GameData *);
 };
