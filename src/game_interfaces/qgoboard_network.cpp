@@ -162,6 +162,12 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 				 * handicap after the board is created, then
 				 * we might set it here... */
 #ifdef OLD
+				/* This definitely was necessary for IGS
+				 * when we were doing !handicap. 
+				 * we don't have the handicap available but
+				 * we have it before the first move and
+				 * there's often a handicap move,
+				 * right now, we're relying on HANDICAP */
 				qDebug("Setting handicap to %d\n", handicap); 
 				setHandicap(handicap);
 				// FIXME do we need to test remember here like this?
@@ -195,6 +201,19 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			else
 				boardwindow->qgoboard->addMark(m->x, m->y, markTerrWhite);
 			break;
+		case MoveRecord::UNDO_TERRITORY:
+		{
+			int boardsize = tree->getCurrent()->getMatrix()->getSize();
+			for(int i = 1; i < boardsize + 1; i++)
+			{
+				for(int j = 1; j < boardsize + 1; j++)
+				{
+					if(tree->getCurrent()->getMatrix()->isStoneDead(i, j))
+						boardwindow->qgoboard->markLiveStone(i, j);
+				}
+			}
+			break;
+		}
 		case MoveRecord::REQUESTUNDO:
 		{
 			qDebug("Got undo message in network interface!!\n");
@@ -283,14 +302,14 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 			break;
 		case MoveRecord::HANDICAP:
 			handicap = boardwindow->getGameData()->handicap;
-			if(!handicap)
-			{
+			//if(!handicap)
+			//{
 				/* Double usage of x is a little ugly */
 				setHandicap(m->x);
-			}
+			//}
 			break;
 		case MoveRecord::REMOVE:
-			qDebug("md!! toggling life of %d %d", m->x, m->y);
+			//qDebug("md!! toggling life of %d %d", m->x, m->y);
 			boardwindow->qgoboard->markDeadStone(m->x, m->y);
 			//tree->getCurrent()->getMatrix()->toggleGroupAt(m->x, m->y);
 			//boardwindow->qgoboard->kibitzReceived("removing @ " + pt);
@@ -325,7 +344,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 						{
 							if(tree->getCurrent()->getMatrix()->getStoneAt(i, j) == m->color)
 							{
-								boardwindow->qgoboard->markDeadArea(i, j, true);
+								boardwindow->qgoboard->markLiveArea(i, j);
 							}
 						}
 					}
@@ -333,7 +352,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 				
 			}
 			else
-				boardwindow->qgoboard->markDeadArea(m->x, m->y, true);
+				boardwindow->qgoboard->markLiveArea(m->x, m->y);
 			break;
 		case MoveRecord::DONE_SCORING:
 			/* Not sure we can really use this.  terrBlack and terrWhite
@@ -385,7 +404,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 				* partly, this whole thing is screwy */
 				/* IGS, certain games have this remove a legit first
 				 * move */
-				qDebug("Repeat move after undo??");
+				qDebug("Repeat move after undo?? %d %d", move_number, move_counter);
 			}
 			/* This is for resetting the stones for canadian
 			 * timesystems, its awkward for it to be here...  but
