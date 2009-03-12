@@ -5,6 +5,7 @@
 class HostList;
 class MainWindow;
 class NetworkConnection;
+class QMessageBox;
 
 class LoginDialog : public QDialog, Ui::LoginDialog
 {
@@ -25,4 +26,6 @@ class LoginDialog : public QDialog, Ui::LoginDialog
 		HostList * hostlist;
 		QString connectionName;
 		bool serverlistdialog_open;
+		QMessageBox * connectingDialog;
+		QPushButton * cancelConnecting;
 };

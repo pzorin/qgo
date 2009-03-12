@@ -14,6 +14,7 @@ LoginDialog::LoginDialog(const QString & s, HostList * h)
 {
 	ui.setupUi(this);
 	connectionName = s;
+	connectingDialog = 0;
 	serverlistdialog_open = false;
 	
 	setWindowTitle(connectionName);
@@ -52,6 +53,15 @@ void LoginDialog::slot_connect(void)
 		QMessageBox::information(this, tr("Empty Login"), tr("You must enter a username"));
 		return;
 	}
+	hide();
+	connectingDialog = new QMessageBox(QMessageBox::NoIcon, tr("Please wait"), tr("Connecting..."));
+	//connectingDialog->setWindowTitle();
+	//connectingDialog->setText();
+	cancelConnecting = connectingDialog->addButton(QMessageBox::Cancel);
+	connect(cancelConnecting, SIGNAL(clicked()), this, SLOT(slot_cancel()));
+	connectingDialog->show();
+	connectingDialog->setFixedSize(180, 100);
+	
 	serverlistdialog_open = true;
 	connection = newConnection(serverStringToConnectionType(connectionName), ui.loginEdit->currentText(), ui.passwordEdit->text());
 	/* Its awkward to do this here FIXME, just make sure that, for instance
@@ -72,7 +82,11 @@ void LoginDialog::slot_connect(void)
 	while((connectionStatus = connection->getConnectionState()) == ND_WAITING)
 		QApplication::processEvents(QEventLoop::AllEvents, 300);
 	serverlistdialog_open = false;
-	
+	if(connectingDialog)
+	{
+		connectingDialog->deleteLater();
+		connectingDialog = 0;
+	}
 	if(connectionStatus == ND_BADPASSWORD)
 	{
 		QMessageBox::information(this, tr("Bad Password"), tr("Invalid Password"));
@@ -97,48 +111,21 @@ void LoginDialog::slot_connect(void)
 	}
 	else if(connectionStatus == ND_CONNECTED)
 	{
-		bool foundlogin = false;
 		for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
 		{
 			if((*hi)->host() == connectionName)
 			{
 				if((*hi)->loginName() == ui.loginEdit->currentText())
 				{
-					foundlogin = true;
-					if(ui.savepasswordCB->isChecked())
-					{
-						if((*hi)->password() == ui.passwordEdit->text())
-							break;
-						else
-						{
-							delete (*hi);
-							hostlist->erase(hi);
-							foundlogin = false;
-							break;
-						}
-					}
-					else
-					{
-						if((*hi)->password() == QString())
-							break;
-						else
-						{
-							delete (*hi);
-							hostlist->erase(hi);
-							foundlogin = false;
-							break;
-						}
-					}
+					delete (*hi);
+					hostlist->erase(hi);
 					break;
 				}
 			}
 		}
-		if(!foundlogin)
-		{
-			Host * h = new Host(connectionName, ui.loginEdit->currentText(), 
-					     (ui.savepasswordCB->isChecked() ? ui.passwordEdit->text() : QString()));
-			hostlist->append(h);
-		}
+		Host * h = new Host(connectionName, ui.loginEdit->currentText(), 
+			(ui.savepasswordCB->isChecked() ? ui.passwordEdit->text() : QString()));
+			hostlist->insert(0, h);
 		//SUCCESS
 		done(1);
 		return;
@@ -162,6 +149,12 @@ void LoginDialog::slot_cancel(void)
 {
 	if(connection)
 		connection->userCanceled();
+	if(connectingDialog)
+	{
+		connectingDialog->deleteLater();
+		connectingDialog = 0;
+		show();
+	}
 	done(0);
 }
 
