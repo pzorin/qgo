@@ -91,11 +91,11 @@ ImageHandler::~ImageHandler()
 	classCounter --;
 	if (classCounter == 0)
 	{
-//		delete woodPixmap1;
-//		woodPixmap1 = NULL;
+		delete woodPixmap1;
+		woodPixmap1 = NULL;
 
-//		delete tablePixmap;
-//		tablePixmap = NULL;
+		delete tablePixmap;
+		tablePixmap = NULL;
 
 		altGhostPixmaps->clear();
 //		delete altGhostPixmaps;
