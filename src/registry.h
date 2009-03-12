@@ -31,7 +31,7 @@ class Registry
 	protected:
 		virtual object * getNewEntry(key) { return 0; };
 		virtual void initEntry(object *) {};
-		virtual void onErase(object *) {};
+		virtual void onErase(object * o) { delete o; };
 		std::map <key, object *> * getStorage(void) { return &registry; };
 	private:
 		std::map <key, object *> registry;
@@ -42,7 +42,7 @@ Registry<key,object>::~Registry()
 {
 	typename std::map<key, object *>::iterator i;
 	for(i = registry.begin(); i != registry.end(); i++)
-		delete (i->second);	//per chance onErase??? FIXME
+		 onErase(i->second);
 	//registry.clear();
 }
 
