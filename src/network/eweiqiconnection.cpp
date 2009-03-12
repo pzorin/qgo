@@ -92,7 +92,10 @@ QString EWeiQiConnection::getTygemGameRecordQString(GameData * game)
 	else if(black_qualifier == 'p')
 		black_level = black_ordinal + 0x1a;
 	else
+	{
 		black_level = black_ordinal + 0x11;
+		black_qualifier_string = QString(0xB6CE);
+	}
 	sscanf(white->rank.toLatin1().constData(), "%d%c", &white_ordinal, &white_qualifier);
 	if(white_qualifier == 'k')
 	{
@@ -102,7 +105,10 @@ QString EWeiQiConnection::getTygemGameRecordQString(GameData * game)
 	else if(white_qualifier == 'p')
 		white_level = white_ordinal + 0x1a;
 	else
+	{
 		white_level = white_ordinal + 0x11;
+		white_qualifier_string = QString(0xB6CE);
+	}
 	/* What we thought was "ascii_name" is clearly a nick in addition to the username */
 
 	QString string;
