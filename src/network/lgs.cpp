@@ -754,7 +754,14 @@ void LGSConnection::handle_info(QString line)
 			memory_str = "observe";
 					// FIXME
 			//emit signal_clearObservers(memory); 
-
+			BoardDispatch * boarddispatch = getIfBoardDispatch(memory);
+			if(boarddispatch)
+			{
+				GameData * g = boarddispatch->getGameData();
+				g->white_name = element(line, 0, "(", " ");
+				g->black_name = element(line, 4, " ", ")");
+				boarddispatch->gameDataChanged();
+			}
 			return;
 		}
 	}
