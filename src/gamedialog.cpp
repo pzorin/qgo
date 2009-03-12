@@ -56,6 +56,8 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	connect(ui.ASIAPeriodTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIAPeriodTimeSpin(const QTime &)));
 	connect(ui.ASIAPeriodsSpin, SIGNAL(valueChanged(int)), SLOT(slot_ASIAPeriodsSpin(int)));
 	
+	dialog_changed = 0;
+	clearChangedFlags();
 	current_match_request = new MatchRequest();
 	/* FIXME, what about size 38 and larger boards ?? */
 	ui.boardSizeSpin->setRange(1,19);
@@ -89,7 +91,6 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	ui.ASIAPeriodsSpin->setValue(preferences.default_asiaperiods);
 
 //	cb_free->setChecked(true);
-	 
 }
 
 /* This is way way after the fact... but is there someway we could make
@@ -530,14 +531,14 @@ void GameDialog::clearChangedFlags(void)
 GameDialog::~GameDialog()
 {
 	qDebug("deconstructing GameDialog");
-	if(connection)
-		connection->closeGameDialog(opponent);
 	delete current_match_request;
 }
 
 void GameDialog::closeEvent(QCloseEvent *)
 {
 	qDebug("GameDialog::closeEvent");
+	if(connection)
+		connection->closeGameDialog(opponent);
 }
 
 /*
