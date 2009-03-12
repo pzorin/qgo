@@ -147,6 +147,8 @@ void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &b
  */
 void qGoBoardMatchInterface::enterScoreMode()
 {
+	if(boardwindow->getGamePhase() == phaseScore)
+		return;
 	stopTime();
 	qGoBoard::enterScoreMode();
 
@@ -157,6 +159,8 @@ void qGoBoardMatchInterface::enterScoreMode()
 
 void qGoBoardMatchInterface::leaveScoreMode()
 {
+	if(boardwindow->getGamePhase() != phaseScore)
+		return;
 	qGoBoard::leaveScoreMode();
 	/* Make sure this doesn't conflict with game result stuff */
 	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 

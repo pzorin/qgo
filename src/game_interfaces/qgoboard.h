@@ -60,7 +60,9 @@ public:
 	virtual void enterScoreMode();
 	virtual void leaveScoreMode();
 	virtual void markDeadStone(int x, int y);
-	virtual void markDeadArea(int x, int y, bool alive = false);
+	virtual void markLiveStone(int x, int y);
+	virtual void markDeadArea(int x, int y);
+	virtual void markLiveArea(int x, int y);
 
 	virtual void setNode(int , StoneColor , int , int ) {}
 	virtual void requestAdjournDialog(void) {};

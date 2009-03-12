@@ -441,7 +441,7 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 	tree->addMove(c, x, y, TRUE);
 
 	// Is the move valid ?
-	if ( tree->addStoneSGF(c,x,y,TRUE,dontplayyet) < 0)
+	if ( tree->addStoneSGF(c,x,y,true,dontplayyet) < 0)
 	{
 		qDebug ("QGoboard:doMove - This move does not seem to be valid : %d %d",x,y);
 		tree->deleteNode(); 
@@ -449,7 +449,7 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 	}
 	if(dontplayyet && validMove)	//i.e., we didn't go into last conditional
 	{
-		qDebug("not playing...");
+		qDebug("not playing yet but valid...");
 		tree->deleteNode();
 		/* Ugly, we need to figure out why there's
 		 * an addMove, and an addStoneSGF and why its called
@@ -536,6 +536,8 @@ bool qGoBoard::getBlackTurn(bool time)
  */
 void qGoBoard::enterScoreMode()
 {
+	if(boardwindow->getGamePhase() == phaseScore)
+		return;
 	qDebug("qgb::enterScoreMode()");
 	boardwindow->setGamePhase ( phaseScore );
 	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
@@ -549,6 +551,8 @@ void qGoBoard::enterScoreMode()
  */
 void qGoBoard::leaveScoreMode()
 {
+	if(boardwindow->getGamePhase() != phaseScore)
+		return;
 	qDebug("leaving score mode");
 	boardwindow->getUi().tabDisplay->setCurrentIndex(0);
 	boardwindow->setGamePhase ( phaseOngoing );
@@ -563,25 +567,39 @@ void qGoBoard::markDeadStone(int x, int y)
 {
 	// is the click on a stone ?
 	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
-		return ;
-
-	tree->getCurrent()->getMatrix()->toggleGroupAt(x, y);
+		return;
+	
+	tree->getCurrent()->getMatrix()->markGroupDead(x, y);
 	boardwindow->getBoardHandler()->countScore();
 }
 
-/* ORO is the only thing that uses this right now */
-void qGoBoard::markDeadArea(int x, int y, bool alive)
+void qGoBoard::markLiveStone(int x, int y)
 {
 	// is the click on a stone ?
 	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
-		return ;
+		return;
+
+	tree->getCurrent()->getMatrix()->markGroupAlive(x, y);
+	boardwindow->getBoardHandler()->countScore();
+}
+
+void qGoBoard::markDeadArea(int x, int y)
+{
+	// is the click on a stone ?
+	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
+		return;
 	
-	// Don't toggle it if its already dead or already alive
-	if(alive && !tree->getCurrent()->getMatrix()->isStoneDead(x, y)) 
+	tree->getCurrent()->getMatrix()->markAreaDead(x, y);
+	boardwindow->getBoardHandler()->countScore();
+}
+
+void qGoBoard::markLiveArea(int x, int y)
+{
+	// is the click on a stone ?
+	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
 		return;
-	if(!alive && tree->getCurrent()->getMatrix()->isStoneDead(x, y))
-		return;
-	tree->getCurrent()->getMatrix()->toggleAreaAt(x, y);
+	
+	tree->getCurrent()->getMatrix()->markAreaAlive(x, y);
 	boardwindow->getBoardHandler()->countScore();
 }
 
