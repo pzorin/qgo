@@ -27,7 +27,7 @@ struct MoveRecord
 	StoneColor color;	//maybe we update this with mark class or something later
 	// having accept and refuse undo here is a little weird but its almost a kind
 	// of move... we'll see how other protocols handle this stuff
-	enum Flags { NONE, HANDICAP, PASS, RESIGN, REMOVE, UNREMOVE, UNDO, REQUESTUNDO, REFUSEUNDO, TERRITORY, REMOVE_AREA, UNREMOVE_AREA, DONE_SCORING } flags;
+	enum Flags { NONE, HANDICAP, PASS, RESIGN, REMOVE, UNREMOVE, UNDO, REQUESTUNDO, REFUSEUNDO, TERRITORY, UNDO_TERRITORY, REMOVE_AREA, UNREMOVE_AREA, DONE_SCORING } flags;
 	MoveRecord() : color(stoneNone), flags(NONE) {};
 	MoveRecord(Flags f) : flags(f) {};
 	MoveRecord(unsigned int n, Flags f) : number(n), flags(f) {};
@@ -160,12 +160,15 @@ struct MatchRequest
 	unsigned short last_game_code;
 	bool rematch;
 	bool first_offer;
-	MatchRequest() : opponent(""), 
-		color_request(WHITE), 
+	MatchRequest() : opponent(""),
+		color_request(WHITE),
+		timeSystem(byoyomi), 
 		handicap(0), 
-		board_size(19), 
+		board_size(19),
+		komi(6.5),
 		maintime(0), 
-		periodtime(0), 
+		periodtime(0),
+		stones_periods(0), 
 		nmatch(0), 
 		nmatch_timeMax(0), 
 		nmatch_BYMax(0), 
