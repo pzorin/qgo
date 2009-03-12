@@ -92,6 +92,7 @@ class NetworkConnection : public QObject
 		void closeGameDialog(const PlayerListing & opponent);
 		class MatchRequest * getAndCloseGameDialog(const PlayerListing & opponent);
 		Talk * getTalk(PlayerListing & opponent);
+		Talk * getIfTalk(PlayerListing & opponent);
 		void closeTalk(PlayerListing & opponent);
 		
 		const QString & getUsername(void) { return username; };

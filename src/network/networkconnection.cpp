@@ -209,9 +209,13 @@ NetworkConnection::~NetworkConnection()
 	/* Not sure where to delete qsocket.  Possible OnDelayClosedFinish() thing. */
 	//delete qsocket;
 	//In case these still exist
+	//probably unnecessary?
 	delete boardDispatchRegistry;
 	delete gameDialogRegistry;
 	delete talkRegistry;
+	boardDispatchRegistry = 0;
+	gameDialogRegistry = 0;
+	talkRegistry = 0;
 }
 
 void NetworkConnection::setConsoleDispatch(class ConsoleDispatch * c)
@@ -346,15 +350,8 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	qDebug("Socket Error\n");
 	//OnReadyRead();
 	/* We need to toggle the connection flag, close things up, etc.. */
-#ifdef OLD
-	/* netdispatch onError used to call:*/
-	if(mainwindowroom)
-		mainwindowroom->onError();
-	/* We could also have the rooms deleted here. */
-	//delete this;
 	
-#endif //OLD
-	if(mainwindow)
+	if(mainwindow)	//mainwindow can ignore if loginDialog is open
 		mainwindow->onConnectionError();
 	connectionState = PROTOCOL_ERROR;
 }
@@ -467,7 +464,13 @@ MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing & op
 
 Talk * NetworkConnection::getTalk(PlayerListing & opponent)
 {
+	qDebug("getTalk %s\n", opponent.name.toLatin1().constData());
 	return talkRegistry->getEntry(&opponent);
+}
+
+Talk * NetworkConnection::getIfTalk(PlayerListing & opponent)
+{
+	return talkRegistry->getIfEntry(&opponent);
 }
 
 void NetworkConnection::closeTalk(PlayerListing & opponent)
@@ -506,7 +509,7 @@ GameDialog * GameDialogRegistry::getNewEntry(const PlayerListing * opponent)
 
 void GameDialogRegistry::onErase(GameDialog * dlg)
 {
-	delete dlg;
+	dlg->deleteLater();
 }
 
 Talk * TalkRegistry::getNewEntry(PlayerListing * opponent)
@@ -522,4 +525,9 @@ Talk * TalkRegistry::getNewEntry(PlayerListing * opponent)
 		return new Talk(_c, *opponent, room);
 	else*/
 		return new Talk(_c, *opponent);
+}
+
+void TalkRegistry::onErase(Talk * dlg)
+{
+	dlg->deleteLater();
 }
