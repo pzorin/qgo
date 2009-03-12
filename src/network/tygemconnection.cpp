@@ -22,8 +22,8 @@
 #include "serverliststorage.h"
 #include <QMessageBox>
 
-#define RE_DEBUG
-//#define NO_PLAYING
+//#define RE_DEBUG
+#define NO_PLAYING
 
 #define FIRST_BYTE(x)	(x >> 24) & 0x000000ff
 #define SECOND_BYTE(x)	(x >> 16) & 0x000000ff
@@ -485,7 +485,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			bytes = p->canReadHTTPLine();
 			if(bytes)
 			{
-				c = new unsigned char[bytes];
+				c = new unsigned char[bytes + 1];
 				p->read(c, bytes);
 				int i;
 				
@@ -665,7 +665,7 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	}*/
 	while(p < ((char *)msg + length))
 	{
-		while(p < ((char *)msg + length - 1) && (p[0] != '\r' || p[1] != '\n'))
+		while(p < ((char *)msg + length - 9) && (p[0] != '\r' || p[1] != '\n'))
 			p++;
 		p += 2;
 		//FIXME, check for size
@@ -915,7 +915,7 @@ void TygemConnection::sendName(void)
 	packet[2] = 0x06;
 	packet[3] = 0x91;
 	our_name = (char *)getUsername().toLatin1().constData();
-	for(i = 0; i < strlen(our_name); i++)
+	for(i = 0; i < getUsername().length(); i++)
 		packet[i + 4] = our_name[i];
 	for(i = strlen(our_name) + 4; i < 24; i++) 	  
 		packet[i] = 0x00;
@@ -3783,6 +3783,20 @@ void TygemConnection::sendLongMatchResult(unsigned short game_code)
 }
 
 /* FIXME convert from the tygem packets */
+/* Okay, I think this also happens to be the ".gib" gibo game file format
+ * and further, I think you can request listings of players games.  Now while
+ * that latter requires some other windows to display and track games which
+ * might even warrant a thumbnail explorer type window, etc., etc., which
+ * basically puts it behind the "watch/fans/friends" list windows and
+ * features for me, although I still might want to get the protocol
+ * part down... but anyway, the point is, we might eventually change these
+ * to a more generic function where the virtuals would just return the
+ * specific labels somehow, or fill those labels in, for the different
+ * servers and places 
+ * Actually, I think we should investigate the gamerecord retrieve protocols
+ * because that might hint at what sort of info is used where and also
+ * allow us to more precisely pin down the differences between the three
+ * servers.*/
 QString TygemConnection::getTygemGameRecordQString(GameData * game)
 {
 	Room * room = getDefaultRoom();
@@ -6169,7 +6183,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 	p += 2;
 #ifdef RE_DEBUG
 	printf("observers %d:\n", number_of_observers);
-	for(int i = 0; i < size; i++)
+	for(int i = 0; i < size - 4; i++)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -7922,7 +7936,9 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	//WIT 0 10 2
 	//WIT 0 11 1
 	//WIT 0 12 2
+#ifdef RE_DEBUG
 	printf("%d %s\n", player_number2, (char *)p);
+#endif //RE_DEBUG
 	if(strncmp((char *)p, "STO ", 4) == 0)
 	{
 		MoveRecord * aMove = new MoveRecord();
