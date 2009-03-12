@@ -1,10 +1,10 @@
-#include <QDialog>
+#include <QToolBar>
 
 class QAction;
-class QDialogButtonBox;
 class CyberOroConnection;
+class QPushButton;
 
-class SetPhrasePalette : public QDialog
+class SetPhrasePalette : public QToolBar
 {
 	Q_OBJECT
 	public:
@@ -24,6 +24,5 @@ class SetPhrasePalette : public QDialog
 		QPushButton * button8;
 		QPushButton * button9;
 		std::vector<QAction *> actions;
-		QDialogButtonBox * buttonBox;
 		CyberOroConnection * connection;
 };

@@ -8,7 +8,7 @@
  * one easily accessible and hopefully it doesn't matter.*/
 
 SetPhrasePalette::SetPhrasePalette(CyberOroConnection * con) : 
-QDialog(0, Qt::Tool | Qt::WindowStaysOnTopHint | Qt::WindowShadeButtonHint), connection(con)
+QToolBar(tr("Chat Phrases"), /*Qt::Tool | Qt::WindowStaysOnTopHint | Qt::WindowShadeButtonHint*/0), connection(con)
 {
 	std::map<unsigned short, QString>::iterator it;
 	
@@ -107,18 +107,23 @@ QDialog(0, Qt::Tool | Qt::WindowStaysOnTopHint | Qt::WindowShadeButtonHint), con
 	menu9->addAction(*actions_it); //actions_it++;
 	button9->setMenu(menu9);
 	
+	addWidget(button0);
+	addWidget(button1);
+	addWidget(button2);
+	addWidget(button3);
+	addWidget(button4);
+	addWidget(button5);
+	addWidget(button6);
+	addWidget(button7);
+	addWidget(button8);
+	addWidget(button9);
 	
-	buttonBox = new QDialogButtonBox(Qt::Horizontal);
-	buttonBox->addButton(button0, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button1, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button2, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button3, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button4, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button5, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button6, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button7, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button8, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(button9, QDialogButtonBox::ActionRole);
+	setFloatable(true);
+	setMovable(true);
+	/* Don't like setting size like this, would prefer buttons to be
+	 * smaller... also need a window bar that's collapsible... maybe we
+	 * should have stuck with the normal dialog FIXME */
+	resize(825, 30);
 
 	connect(menu0, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
 	connect(menu1, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
@@ -131,13 +136,13 @@ QDialog(0, Qt::Tool | Qt::WindowStaysOnTopHint | Qt::WindowShadeButtonHint), con
 	connect(menu8, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
 	connect(menu9, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
 	
-	QGridLayout * mainLayout = new QGridLayout;
+	/*QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 	mainLayout->addWidget(buttonBox, 1, 0);
-	setLayout(mainLayout);
+	setLayout(mainLayout);*/
 	
 	// or no title?
-	//setWindowTitle(tr("Set Phrases"));
+	setWindowTitle(tr("Set Phrases"));
 	
 	//really this should take into account a parent window
 	//screen size, something, and this should be hideable, minimizable,
@@ -157,7 +162,6 @@ SetPhrasePalette::~SetPhrasePalette()
 	delete button7;
 	delete button8;
 	delete button9;
-	delete buttonBox;
 	
 	std::vector<QAction *>::iterator it;
 	for(it = actions.begin(); it != actions.end(); it++)
