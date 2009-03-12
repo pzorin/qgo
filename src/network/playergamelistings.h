@@ -39,6 +39,7 @@ struct PlayerListing
 	bool pro;
 	bool dialog_opened;
 	bool game_dialog_opened;
+	bool amigo, watched;	//"friend" is keyword
 	PlayerListing() : id(0), 
 	online(0), 
 	name(0), 
@@ -56,10 +57,13 @@ struct PlayerListing
 	playing(0), 
 	extInfo(0),
 	email_address(0),
+	nmatch_handicapMin(0),
 	specialbyte(0),
 	pro(false),
 	dialog_opened(false),
-	game_dialog_opened(false) {};
+	game_dialog_opened(false),
+	amigo(false),
+	watched(false) {};
 	// there's also some setttings as well as match requirements
 	//PlayerListing(const QString* n, const char * i, const char * r, const char * c, unsigned int w, unsigned int l, unsigned o) : name(n), idletime(i), rank(r), country(c), wins(w), losses(l), observing_str() {};
 	//~PlayerListing();
