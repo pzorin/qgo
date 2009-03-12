@@ -32,6 +32,7 @@ class TalkRegistry : public Registry <PlayerListing *, Talk>
 	private:
 		virtual Talk * getNewEntry(PlayerListing * opponent);
 		//virtual void initEntry(Talk *);
+		virtual void onErase(Talk *);
 		NetworkConnection * _c;
 };
 
