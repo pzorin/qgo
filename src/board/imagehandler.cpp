@@ -56,9 +56,11 @@ ImageHandler::ImageHandler()
 	stonePixmaps = NULL;
 	ghostPixmaps = NULL;
 	smallStonePixmaps = NULL;
+#ifdef DONTREDRAWSTONES
 	stonePixmapsScaled = NULL;
 	ghostPixmapsScaled = NULL;
 	smallStonePixmapsScaled = NULL;
+#endif //DONTREDRAWSTONES
 #define STONEIMAGE_MAXSIZE	400
 	painting_buffer = new int[STONEIMAGE_MAXSIZE*STONEIMAGE_MAXSIZE];
 	
@@ -110,12 +112,13 @@ ImageHandler::~ImageHandler()
 	delete stonePixmaps;
 	delete ghostPixmaps;
 	delete smallStonePixmaps;
+#ifdef DONTREDRAWSTONES
 	delete stonePixmapsScaled;
 	delete ghostPixmapsScaled;
 	delete smallStonePixmapsScaled;
+#endif //DONTREDRAWSTONES
 	
 	delete[] painting_buffer;
-
 }
 
 

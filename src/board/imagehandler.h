@@ -11,13 +11,19 @@
 
 #include <QtGui>
 
+/* DONTREDRAWSTONES lets Qt do the scaling rather than redrawing them
+ * to scale.  I'm not convinced it improves the speed all that much
+ * but I do know that it removes the border on the white stones in 2d
+ * mode so until that's fixed or until another solution is found, I'll
+ * comment this out */
+
+//#define DONTREDRAWSTONES
 typedef struct WhiteDesc_struct  {
 	double cosTheta, sinTheta;
 	double stripeWidth, xAdd;
 	double stripeMul, zMul;
 } WhiteDesc;
 
-#define DONTREDRAWSTONES
 class ImageHandler
 {
 public:
