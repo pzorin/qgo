@@ -56,11 +56,16 @@ ImageHandler::ImageHandler()
 	stonePixmaps = NULL;
 	ghostPixmaps = NULL;
 	smallStonePixmaps = NULL;
+	stonePixmapsScaled = NULL;
+	ghostPixmapsScaled = NULL;
+	smallStonePixmapsScaled = NULL;
+#define STONEIMAGE_MAXSIZE	400
+	painting_buffer = new int[STONEIMAGE_MAXSIZE*STONEIMAGE_MAXSIZE];
 	
     // Init the alternate ghost pixmaps
 	if (altGhostPixmaps == NULL)
 	{
-	altGhostPixmaps = new QList<QPixmap>();//::QList();
+		altGhostPixmaps = new QList<QPixmap>();//::QList();
 
 		QPixmap alt1 = QPixmap::QPixmap(":/new/prefix1/ressources/pics/alt_ghost_black.png");
 		QPixmap alt2 = QPixmap:: QPixmap(":/new/prefix1/ressources/pics/alt_ghost_white.png");
@@ -102,9 +107,14 @@ ImageHandler::~ImageHandler()
 		altGhostPixmaps = NULL;
 	}
 	
-//	TODO delete stonePixmaps;
-//	delete ghostPixmaps;
-//	delete smallStonePixmaps;
+	delete stonePixmaps;
+	delete ghostPixmaps;
+	delete smallStonePixmaps;
+	delete stonePixmapsScaled;
+	delete ghostPixmapsScaled;
+	delete smallStonePixmapsScaled;
+	
+	delete[] painting_buffer;
 
 }
 
@@ -181,15 +191,13 @@ double ImageHandler::getStripe(WhiteDesc &white, double bright, double z, int x,
 }
 
 void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render) 
-{
-	
+{	
 	const double pixel=0.8;//,shadow=0.99;
 
 	
 	bool Alias=true;
 	
 	// these are the images
-	int *pb=new int[d*d];
 	int i, j, g,g1,g2, k;
 	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
 	double x, y, z, xr,xr1, xr2, xg1,xg2,hh;
@@ -230,30 +238,26 @@ void ImageHandler::paintBlackStone (QImage &bi, int d, int stone_render)
 					//g=(int)1/ (1/g1 + 1/g2);
 				
 					if (hh>pixel || !Alias) {
-						pb[k]=(255<<24)|(g<<16)|(g<<8)|g;
+						painting_buffer[k]=(255<<24)|(g<<16)|(g<<8)|g;
 					}
 					else {			
-						pb[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;
+						painting_buffer[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;
 					}
 
 				}
 				else //code for flat stones
 				{
 					g=0;
-					pb[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;	
+					painting_buffer[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;	
 				}
 			}
-			else pb[k]=0;
+			else painting_buffer[k]=0;
 			k++;
 			
 		}
 		
 		// now copy the result in QImages
-		icopy(pb, bi, d, d);
-		
-		// free memory
-		delete[] pb;
-
+		icopy(painting_buffer, bi, d, d);
 }
 
 // shadow under stones
@@ -262,7 +266,6 @@ void ImageHandler::paintShadowStone (QImage &si, int d) {
 	//const double pixel=0.8,shadow=0.99;
 
 	// these are the images
-	int *pw=new int[d*d];
 	int i, j,  k;
 	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1;
 	double hh;
@@ -280,19 +283,15 @@ void ImageHandler::paintShadowStone (QImage &si, int d) {
 				hh=2*hh/r ;
 				if (hh> 1)  hh=1;
 				
-				pw[k]=((int)(255*hh)<<24)|(1<<16)|(1<<8)|(1);
+				painting_buffer[k]=((int)(255*hh)<<24)|(1<<16)|(1<<8)|(1);
 			}
-			else pw[k]=0;
+			else painting_buffer[k]=0;
 			k++;
 			
 		}
 		
 		// now copy the result in QImages
-		icopy(pw, si, d, d);
-		
-		// free memory
-		delete[] pw;
-
+		icopy(painting_buffer, si, d, d);
 }
 
 
@@ -314,7 +313,6 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 	bool Alias=true;
 	
 	// these are the images
-	int *pw=new int[d*d];
 	int i, j, g, g1,g2,k;
 	double di, dj, d2=(double)d/2.0-5e-1, r=d2-2e-1, f=sqrt(3.0);
 	double x, y, z, xr, xr1, xr2, xg1,xg2, hh;
@@ -377,7 +375,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					
 						if (stone_render == 0) //stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
-						pw[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
+						painting_buffer[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
 					}
 					else if (( hh > pixel ) || (!Alias) )
 					{
@@ -387,7 +385,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					
 						if (stone_render == 0)//stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
-						pw[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
+						painting_buffer[k]=(255<<24)|(g<<16)|((g)<<8)|(g);
 					}
 					else {
 					
@@ -399,7 +397,7 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 						if (stone_render == 0)//stripes)
 							g = (int)getStripe(desc, g, xr1/7.0, i, j);
 				
-						pw[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;				
+						painting_buffer[k]=((int)(hh/pixel*255)<<24)|(g<<16)|(g<<8)|g;				
 					}
 				}
 				else // Code for flat stones
@@ -408,26 +406,22 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					if ((hh>=-1)&&(hh<=1))
 					{
 						g=0;
-						pw[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
+						painting_buffer[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
 					}	
 					else if (hh>0)
 					{
 						g=255;
-						pw[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
+						painting_buffer[k]=((int)(255)<<24)|(g<<16)|(g<<8)|g;
 					}
 				}	
 				
 			}
-			else pw[k]=0;
+			else painting_buffer[k]=0;
 			k++;
 		}
 
 	// now copy the result in QImages
-	icopy(pw, wi, d, d);
-
-	// free memory
-	delete[] pw;
-
+	icopy(painting_buffer, wi, d, d);
 }
 
 
@@ -476,15 +470,41 @@ void ImageHandler::init(int size, bool isDisplay)
 	if (!isDisplayBoard)
 		size = size * 9 / 10;
 	
-	int stone_look = ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
-	bool smallstones = settings.value("TERR_STONE_MARK").toInt();
-	
 	stonePixmaps = new QList<QPixmap>();//::QList();
-	smallStonePixmaps = new QList<QPixmap>();
-	QList<QPixmap> list, ghostlist;
+	if(preferences.terr_stone_mark)
+		smallStonePixmaps = new QList<QPixmap>();
+	ghostPixmaps = new QList<QPixmap>();
+#ifdef DONTREDRAWSTONES
+	stonePixmapsScaled = new QList<QPixmap>();
+	if(preferences.terr_stone_mark)
+		smallStonePixmapsScaled = new QList<QPixmap>();
+	ghostPixmapsScaled = new QList<QPixmap>();
+	
+	for(int i = 0; i < WHITE_STONES_NB + 2; i++)
+	{
+		stonePixmapsScaled->append(QPixmap());
+		if(preferences.terr_stone_mark)
+			smallStonePixmapsScaled->append(QPixmap());
+		ghostPixmapsScaled->append(QPixmap());
+	}
+		
+#define STONEPIXMAP_BASESIZE	300
+	Q_ASSERT(STONEPIXMAP_BASESIZE < STONEIMAGE_MAXSIZE - 5);
+	generateStonePixmaps(STONEPIXMAP_BASESIZE);
+#endif //DONTREDRAWSTONES
+	//because rescale adds 1
+	rescale(size - 1);
+
+	/*int stone_look = ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
+	bool smallstones = settings.value("TERR_STONE_MARK").toInt();
+	int smallstones_size;	
+	if(smallstones)
+		smallstones_size = (int)(size / SMALL_STONE_TERR_DIVISOR);	
+	
+	//QList<QPixmap> list;
 	QImage iw1, iws;
-	QList<QPoint> hotspots, ghotspots ;
-	QPoint point(size/2, size/2);
+	//QList<QPoint> hotspots, ghotspots ;
+	//QPoint point(size/2, size/2);
 
 	//black stone
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
@@ -495,20 +515,21 @@ void ImageHandler::init(int size, bool isDisplay)
 			Qt::PreferDither | 
 			Qt::DiffuseAlphaDither | 
 			Qt::DiffuseDither) );
-	hotspots.append(point);
+	//hotspots.append(point);
 
 	QImage gb(ib);
 	ghostImage(&gb);
 
-	ghostlist.append( QPixmap::fromImage(gb));
-	ghotspots.append(point);
+	//ghostlist.append( QPixmap::fromImage(gb));
+	ghostPixmaps->append(QPixmap::fromImage(gb));
+	//ghotspots.append(point);
 
 	//small black stone
 	if(smallstones)
 	{
-		QImage ibs = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
+		QImage ibs = QImage(smallstones_size, smallstones_size, QImage::Format_ARGB32);
 	
-		paintBlackStone(ibs, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+		paintBlackStone(ibs, smallstones_size, stone_look);
 	
 		smallStonePixmaps->append(QPixmap::fromImage(ibs, 
 				     Qt::PreferDither | 
@@ -526,17 +547,18 @@ void ImageHandler::init(int size, bool isDisplay)
 			Qt::PreferDither | 
 			Qt::DiffuseAlphaDither | 
 			Qt::DiffuseDither)   );
-		hotspots.append(point);
+		//hotspots.append(point);
 
 		QImage gw1(iw1);
 		ghostImage(&gw1);
-		ghostlist.append(QPixmap::fromImage(gw1));
-		ghotspots.append(point);
+		//ghostlist.append(QPixmap::fromImage(gw1));
+		ghostPixmaps->append(QPixmap::fromImage(gw1));
+		//ghotspots.append(point);
 		
 		if(smallstones)
 		{
-			iws = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
-			paintWhiteStone(iws, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+			iws = QImage(smallstones_size, smallstones_size, QImage::Format_ARGB32);
+			paintWhiteStone(iws, smallstones_size, stone_look);
 			smallStonePixmaps->append(QPixmap::fromImage(iws, 
 					     	Qt::PreferDither | 
 						Qt::DiffuseAlphaDither | 
@@ -555,16 +577,18 @@ void ImageHandler::init(int size, bool isDisplay)
 	stonePixmaps->append(QPixmap::fromImage(is, 
 			Qt::PreferDither | 
 			Qt::DiffuseAlphaDither | 
-			Qt::DiffuseDither)  );
-	hotspots.append(point);
+			Qt::DiffuseDither)  );*/
+	//hotspots.append(point);
 
 	// Assemble the data in a list
-	ghostPixmaps =  new QList<QPixmap>(ghostlist); //::QList(ghostlist);
+	//ghostPixmaps =  new QList<QPixmap>(ghostlist); //::QList(ghostlist);
 }
 
-/* Why does this code differ from that in init and why doesn't init
- * just call rescale? */
-void ImageHandler::rescale(int size)//, bool smallerStones)
+#ifdef DONTREDRAWSTONES
+void ImageHandler::generateStonePixmaps(int size)//, bool smallerStones)
+#else
+void ImageHandler::rescale(int size)
+#endif //DONTREDRAWSTONES
 {
 	QSettings settings;
 
@@ -574,35 +598,44 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	size = size + 1;
 	
 	int stone_look =  ( isDisplayBoard ? 1 : settings.value("STONES_LOOK").toInt());
-	bool smallstones = settings.value("TERR_STONE_MARK").toInt();
+	int smallstones_size;	
+	
 	stonePixmaps->clear();
 	ghostPixmaps->clear();
-	smallStonePixmaps->clear();
+	if(preferences.terr_stone_mark)
+	{
+		smallstones_size = (int)(size / SMALL_STONE_TERR_DIVISOR);
+		smallStonePixmaps->clear();
+	}
 
 	//repaint black stones
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
 	QImage iws;
 //	ib.setAlphaBuffer(TRUE);
 	paintBlackStone(ib, size, stone_look);
-	stonePixmaps->append(QPixmap::fromImage(ib));//, 
+	//stonePixmaps->append(QPixmap::fromImage(ib));//, 
 //		Qt::PreferDither | 
 //		Qt::DiffuseAlphaDither | 
 //		Qt::DiffuseDither) );
 //	stonePixmaps->image(0)->setOffset(size/2, size/2);
-
+	stonePixmaps->append(QPixmap::fromImage(ib, 
+			Qt::PreferDither | 
+			Qt::DiffuseAlphaDither | 
+			Qt::DiffuseDither) );
+	
 	QImage gb(ib);
 	ghostImage(&gb);
 	ghostPixmaps->append(QPixmap::fromImage(gb));
 
 	//small black stone
-	if(smallstones)
+	if(preferences.terr_stone_mark)
 	{
-		QImage ibs = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
-		paintBlackStone(ibs, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+		QImage ibs = QImage(smallstones_size, smallstones_size, QImage::Format_ARGB32);
+		paintBlackStone(ibs, smallstones_size, stone_look);
 		smallStonePixmaps->append(QPixmap::fromImage(ibs));
-		
+
 		// small white stones
-		iws = QImage(size / SMALL_STONE_TERR_DIVISOR, size / SMALL_STONE_TERR_DIVISOR, QImage::Format_ARGB32);
+		iws = QImage(smallstones_size, smallstones_size, QImage::Format_ARGB32);
 	}
 	// white stones	
 	QImage iw1 = QImage(size, size, QImage::Format_ARGB32);
@@ -612,16 +645,24 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	for (int i=1 ;	i<=WHITE_STONES_NB;	i++)
 	{
 		paintWhiteStone(iw1, size, stone_look);
-		stonePixmaps->append(QPixmap::fromImage(iw1));
-
+		//stonePixmaps->append(QPixmap::fromImage(iw1));
+		stonePixmaps->append(QPixmap::fromImage(iw1, 
+			Qt::PreferDither | 
+			Qt::DiffuseAlphaDither | 
+			Qt::DiffuseDither)   );
 		QImage gw1(iw1);
 		ghostImage(&gw1);
 		ghostPixmaps->append(QPixmap::fromImage(gw1));
 		
-		if(smallstones)
+		if(preferences.terr_stone_mark)
 		{
-			paintWhiteStone(iws, size / SMALL_STONE_TERR_DIVISOR, stone_look);
+			paintWhiteStone(iws, smallstones_size, stone_look);
 			smallStonePixmaps->append(QPixmap::fromImage(iws));
+			
+			/*smallStonePixmaps->append(QPixmap::fromImage(iws, 
+					     	Qt::PreferDither | 
+						Qt::DiffuseAlphaDither | 
+				  		Qt::DiffuseDither)   );*/
 		}
 	}
 	
@@ -633,8 +674,42 @@ void ImageHandler::rescale(int size)//, bool smallerStones)
 	else
 		is.fill(0);
 
-	stonePixmaps->append(QPixmap::fromImage(is));
+	//stonePixmaps->append(QPixmap::fromImage(is));
+	stonePixmaps->append(QPixmap::fromImage(is, 
+			Qt::PreferDither | 
+			Qt::DiffuseAlphaDither | 
+			Qt::DiffuseDither)  );
 }
+
+#ifdef DONTREDRAWSTONES
+void ImageHandler::rescale(int size)
+{
+	int i;
+	QPixmap p;
+	int smallstones_size;	
+	if(preferences.terr_stone_mark)
+		smallstones_size = (int)(size / SMALL_STONE_TERR_DIVISOR);
+	
+	for(i = 0; i < stonePixmaps->size(); i++)
+	{
+		p = (*stonePixmaps)[i].scaled(size, size);
+		(*stonePixmapsScaled)[i] = p;
+	}
+	if(preferences.terr_stone_mark)
+	{
+		for(i = 0; i < smallStonePixmaps->size(); i++)
+		{
+			p = (*smallStonePixmaps)[i].scaled(smallstones_size, smallstones_size);
+			(*smallStonePixmapsScaled)[i] = p;
+		}
+	}
+	for(i = 0; i < ghostPixmaps->size(); i++)
+	{
+		p = (*ghostPixmaps)[i].scaled(size, size);
+		(*ghostPixmapsScaled)[i] = p;
+	}
+}
+#endif //DONTREDRAWSTONES
 
 void ImageHandler::ghostImage(QImage *img)
 {

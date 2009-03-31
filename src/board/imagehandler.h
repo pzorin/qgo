@@ -28,23 +28,37 @@ public:
 	void rescale(int size);
 	static QPixmap *getBoardPixmap(QString ) ;
 	static QPixmap *getTablePixmap(QString ) ;
+#ifdef DONTREDRAWSTONES
+	QList<QPixmap> *getStonePixmaps() const { return stonePixmapsScaled; }
+	QList<QPixmap> *getSmallStonePixmaps() const { return smallStonePixmapsScaled; }
+	QList<QPixmap> *getGhostPixmaps() const { return ghostPixmapsScaled; }
+#else
 	QList<QPixmap> *getStonePixmaps() const { return stonePixmaps; }
 	QList<QPixmap> *getSmallStonePixmaps() const { return smallStonePixmaps; }
 	QList<QPixmap> *getGhostPixmaps() const { return ghostPixmaps; }
+#endif //DONTREDRAWSTONES
 	static QList<QPixmap> * getAlternateGhostPixmaps() { return altGhostPixmaps; }
 	void ghostImage(QImage *img);
 
 	void icopy(int *im, QImage &qim, int w, int h);
 	void decideAppearance(WhiteDesc *desc, int size);
 	double getStripe(WhiteDesc &white, double bright, double z, int x, int y);
-	void paintBlackStone (QImage &bi, int d, int stone_render);
-	void paintShadowStone (QImage &si, int d);
-	void paintWhiteStone (QImage &wi, int d, int stone_render);
+	
 
 protected:
 	void scaleBoardPixmap(QPixmap *pix, int size);
 	
 private:
+#define DONTREDRAWSTONES
+#ifdef DONTREDRAWSTONES
+	void generateStonePixmaps(int size);
+	QList<QPixmap> *stonePixmapsScaled, *ghostPixmapsScaled, *smallStonePixmapsScaled;
+#endif //DONTREDRAWSTONES
+	void paintBlackStone (QImage &bi, int d, int stone_render);
+	void paintShadowStone (QImage &si, int d);
+	void paintWhiteStone (QImage &wi, int d, int stone_render);
+	int * painting_buffer;	
+
 	bool isDisplayBoard;
 	QList<QPixmap> *stonePixmaps, *ghostPixmaps, *smallStonePixmaps;
 	static QList<QPixmap> *altGhostPixmaps;
