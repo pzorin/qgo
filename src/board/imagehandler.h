@@ -17,7 +17,7 @@ typedef struct WhiteDesc_struct  {
 	double stripeMul, zMul;
 } WhiteDesc;
 
-
+#define DONTREDRAWSTONES
 class ImageHandler
 {
 public:
@@ -49,7 +49,7 @@ protected:
 	void scaleBoardPixmap(QPixmap *pix, int size);
 	
 private:
-#define DONTREDRAWSTONES
+
 #ifdef DONTREDRAWSTONES
 	void generateStonePixmaps(int size);
 	QList<QPixmap> *stonePixmapsScaled, *ghostPixmapsScaled, *smallStonePixmapsScaled;
