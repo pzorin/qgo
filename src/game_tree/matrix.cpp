@@ -6,6 +6,7 @@
 //#include <stdlib.h>
 //#ifndef NO_DEBUG
 #include <iostream>
+#include <algorithm>		//some versions of g++ require this, some do not
 //#endif
 
 Matrix::Matrix(int s)
