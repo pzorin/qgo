@@ -23,12 +23,10 @@ Mark::~Mark()
 * MarkSquare
 */
 
-MarkSquare::MarkSquare(int x, int y, int size, QGraphicsScene *canvas, QColor col)
+MarkSquare::MarkSquare(int x, int y, double size, QGraphicsScene *canvas, QColor col)
 : QGraphicsRectItem(0,canvas),
 Mark(x, y)
 {
-	double size_d = (double)size;
-
 //	if (setting->readBoolEntry("SMALL_MARKS"))
 //		size_d *= 0.85;
 
@@ -36,7 +34,7 @@ Mark(x, y)
 		setPen(QPen(col, 2));
 //	else
 //		setPen(QPen(col, 1));
-	setSize(size_d, size_d);
+	setSize(size, size);
 	setZValue(10);
 }
 
@@ -44,7 +42,7 @@ Mark(x, y)
 * MarkCircle
 */
 
-MarkCircle::MarkCircle(int x, int y, int size,QGraphicsScene *canvas, QColor col, bool s)
+MarkCircle::MarkCircle(int x, int y, double size,QGraphicsScene *canvas, QColor col, bool s)
 : QGraphicsEllipseItem(0,canvas),
 Mark(x, y),
 small(s)
@@ -53,7 +51,7 @@ small(s)
 		setPen(QPen(col, 2));
 //	else
 //		setPen(QPen(col, 1));
-	setSize((double)size, (double)size);
+	setSize(size, size);
 	setZValue(10);
 }
 /*
@@ -90,7 +88,7 @@ void MarkCircle::setSize(double x, double y)
 /*
 * MarkTriangle
 */
-MarkTriangle::MarkTriangle(int x, int y, int s,QGraphicsScene *canvas, QColor col)
+MarkTriangle::MarkTriangle(int x, int y, double s, QGraphicsScene *canvas, QColor col)
 : QGraphicsPolygonItem(0,canvas),
 Mark(x, y)
 {
@@ -101,7 +99,7 @@ Mark(x, y)
 	pa = QPolygon::QPolygon(3);
 
 //		setPen(QPen(col, 1));
-	setSize((double)s, (double)s);
+	setSize(s, s);
 //	setPolygon(pa);
 	setZValue(10);
 }
@@ -117,15 +115,15 @@ void MarkTriangle::setSize(double w, double)
 //	if (setting->readBoolEntry("SMALL_MARKS"))
 //		size = (int)(w*0.45);
 //	else
-		size = (int)(w*0.55);
+		size = (w*0.55);
 	
 //	QPolygon pa(3);
 //	pa[0] = QPoint(0, 0);
 //	pa[1] = QPoint(size/2, -size);
 //	pa[2] = QPoint(size, 0);
-	pa.setPoint(0,size/2, 0);
-	pa.setPoint(1,0, size);
-	pa.setPoint(2,size, size);
+	pa.setPoint(0,(int)(size/2), 0);
+	pa.setPoint(1,0, (int)size);
+	pa.setPoint(2,(int)size, (int)size);
 	setPolygon(pa);
 }
 
@@ -133,7 +131,7 @@ void MarkTriangle::setSize(double w, double)
 * MarkCross
 */
 
-MarkCross::MarkCross(int x, int y, int s, QGraphicsScene *canvas, QColor col, bool plus)
+MarkCross::MarkCross(int x, int y, double s, QGraphicsScene *canvas, QColor col, bool plus)
 : QGraphicsLineItem(0,canvas),
 Mark(x, y), size(s)
 {
@@ -147,7 +145,7 @@ Mark(x, y), size(s)
 //		penWidth = 1;
 
 	setPen(QPen(col, penWidth));
-	setSize((double)s, (double)s);
+	setSize(s, s);
 	setZValue(10);
 	
 	ol = new MarkOtherLine(canvas);
@@ -174,7 +172,7 @@ MarkCross::~MarkCross()
 void MarkCross::setSize(double w, double)
 {
 //	if (setting->readBoolEntry("SMALL_MARKS"))
-		size = (int)(w*0.45);
+		size = (w*0.45);
 //	else
 //		size = (int)(w*0.55);
 	
@@ -206,7 +204,7 @@ void MarkCross::setColor(const QColor &col)
 bool MarkText::useBold = false;
 int MarkText::maxLength = 1;
 
-MarkText::MarkText( int x, int y, int size, const QString &txt,
+MarkText::MarkText( int x, int y, double size, const QString &txt,
 			 QGraphicsScene *canvas, QColor col, short c, bool bold, bool  /*overlay*/)
 			 : QGraphicsSimpleTextItem(txt,0, canvas),
 			 Mark(x, y), curSize(size), counter(c)
@@ -271,7 +269,7 @@ void MarkText::setSize(double x, double)
 
 }
 
-MarkSmallStoneTerr::MarkSmallStoneTerr(int x, int y, int s, StoneColor c, QList<QPixmap> * p, QGraphicsScene *canvas)
+MarkSmallStoneTerr::MarkSmallStoneTerr(int x, int y, double s, StoneColor c, QList<QPixmap> * p, QGraphicsScene *canvas)
 	: Mark(x, y), QGraphicsPixmapItem(0, canvas), _x(x), _y(y), col(c), size(s)
 {
 	//FIXME the ZValue keeps the gatter and hoshi marks from messing with
