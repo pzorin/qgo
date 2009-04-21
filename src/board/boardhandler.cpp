@@ -36,7 +36,7 @@ BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int * board_size)
 
 	capturesBlack = capturesWhite = 0;
 	markedDead = false;
-	
+	updateAll_updateAll = false;
 	// initialises the timer
 	wheelTime = QTime::currentTime();
 
@@ -83,7 +83,6 @@ void BoardHandler::slotNavForward()
 	Move *m = tree->nextMove();
 	if (m != NULL)
 		updateMove(m);
-	
 }
 
 
@@ -117,8 +116,10 @@ void BoardHandler::slotNavFirst()
 	tree->setToFirstMove();  // Set move to root
 	Move *m = tree->getCurrent();
 	if (m != NULL)
+	{
+		updateAll_updateAll = true;
 		updateMove(m);
-
+	}
 }
 
 void BoardHandler::slotNavLast()
@@ -136,7 +137,10 @@ void BoardHandler::slotNavLast()
 		m = tree->nextMove();
 	
 	if (m != NULL)
+	{
+		updateAll_updateAll = true;
 		updateMove(m);
+	}
 }
 
 void BoardHandler::slotNavPrevComment()
@@ -162,6 +166,7 @@ void BoardHandler::slotNavPrevComment()
 	if (m != NULL)
 	{
 		tree->setCurrent(m);
+		updateAll_updateAll = true;
 		updateMove(m);
 	}
 }
@@ -191,6 +196,7 @@ void BoardHandler::slotNavNextComment()
 	if (m != NULL)
 	{
 		tree->setCurrent(m);
+		updateAll_updateAll = true;
 		updateMove(m);
 	}
 }
@@ -220,6 +226,8 @@ void BoardHandler::slotNavIntersection()
 void BoardHandler::findMoveByPos(int x, int y)
 {
 	Move *m = tree->findMoveInMainBranch(x, y);
+	if(!m)
+		tree->findMoveInCurrentBranch(x, y);
 	
 	//if (boardwindow->getGamePhase() == phaseNavTo)
 	boardwindow->setGamePhase ( phaseOngoing );
@@ -227,6 +235,7 @@ void BoardHandler::findMoveByPos(int x, int y)
 	if (m != NULL)
 	{
 		tree->setCurrent(m);
+		updateAll_updateAll = true;
 		updateMove(m);
 	}
 	else
@@ -297,6 +306,7 @@ void BoardHandler::slotNavStartVar()
 	// If found, set current to the first move inside the variation
 	Q_CHECK_PTR(tmp);
 	tree->setCurrent(tmp);
+	updateAll_updateAll = true;
 	updateMove(tmp);
 }
 
@@ -315,6 +325,7 @@ void BoardHandler::slotNavNextBranch()
 	if (tree->getNumSons() > 1)
 	{
 		m = tree->nextMove();
+		updateAll_updateAll = true;
 		updateMove(m);
 		return;
 	}
@@ -327,6 +338,7 @@ void BoardHandler::slotNavNextBranch()
 	{
 		if (m->son != NULL)
 			m = tree->nextMove();
+		updateAll_updateAll = true;
 		updateMove(m);
 	}
 	else
@@ -372,6 +384,7 @@ void BoardHandler::slotNavMainBranch()
 	lastOddNode->marker = NULL;  
 
 	tree->setCurrent(lastOddNode);
+	updateAll_updateAll = true;
 	updateMove(lastOddNode);
 }
 
@@ -422,6 +435,7 @@ void BoardHandler::gotoMove(Move *m)
 {
 	Q_CHECK_PTR(m);
 	tree->setCurrent(m);
+	updateAll_updateAll = true;
 	updateMove(m);
 }
 
@@ -579,8 +593,8 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //	}
 //	else if (m->getTimeinfo())
 //		board->getInterfaceHandler()->setTimes(!getBlackTurn(), m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves());
-
-//	board->updateCanvas();
+	
+	//board->updateCanvas();
 }
 
 bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
@@ -618,15 +632,15 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 			 * We could say that the handicap stones aren't
 			 * edits, but this is what they've been set up
 			 * as so that's more tricky. */
-			
+			if(!updateAll_updateAll && !m->isStoneDirty(x,y))
+				continue;
 			dead = (m->isStoneDead(x, y)) & (move->getMoveNumber() != 0);
 			color = m->getStoneAt(x, y);
 			
 			if (boardwindow->getGameData()->oneColorGo && color == stoneBlack)
 				color = stoneWhite;
 			board->updateStone(color,x,y, dead);
-
-			
+			m->stoneUpdated(x,y);
 			// Skip mark drawing when reading sgf
 //			if (!toDraw)
 //				continue;
@@ -685,7 +699,7 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 
 		}
 	}
-
+	
 	return modified;
 }
 
@@ -821,7 +835,7 @@ void BoardHandler::countScore(void)
 	// Do some cleanups, we only need stones
 	//m->absMatrix();
 	
-	m->clearAllMarks();
+	m->clearAllMarks();		//why different from exit score and absMatrix?? FIXME
 	
 	// Mark all dead stones in the matrix with negative number
 	int i=0, j=0;

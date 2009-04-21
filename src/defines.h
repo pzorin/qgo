@@ -58,6 +58,8 @@
 #define MX_STONEDEAD	0x8000
 #define MX_STONEEDIT	0x4000
 
+#define MX_STONEDIRTY	0x2000
+
 //3 looked a little small
 #define SMALL_STONE_TERR_DIVISOR	2.5
 
@@ -148,6 +150,8 @@ struct MatrixStone
 {
 	int x, y;
 	StoneColor c;
+	MatrixStone() {};
+	MatrixStone(int _x, int _y, StoneColor _c) : x(_x), y(_y), c(_c) {};
 };
 
 struct Position { int x, y; };

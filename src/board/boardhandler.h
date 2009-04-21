@@ -56,6 +56,7 @@ private:
 	Tree *tree;
 	BoardWindow * boardwindow;
 
+	bool updateAll_updateAll;
 	int capturesBlack, capturesWhite, caps_black, caps_white;
 	int terrBlack, terrWhite;
 	Move *lastValidMove;
