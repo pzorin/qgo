@@ -250,12 +250,13 @@ void Board::drawBackground()
 		h = (int)canvas->height();
 	
 	// Create pixmap of appropriate size
-	QPixmap all(w, h);
+	//QPixmap all(w, h);
+	QImage image(w, h, QImage::Format_RGB32);
 
 	// Paint table and board on the pixmap
 	QPainter painter;
 
-	painter.begin(&all);
+	painter.begin(&image);
 	painter.setPen(Qt::NoPen);
 
 
@@ -270,7 +271,7 @@ void Board::drawBackground()
 
 	painter.end();
 
-	QImage image = all.toImage();
+	//QImage image = all.toImage();
 	int lighter=20;
 	int darker=60;
 	int width = 3; 
@@ -492,7 +493,6 @@ void Board::resizeBoard(int w, int h)
 
 	// Rescale the pixmaps in the ImageHandler
 	imageHandler->rescale(square_size);
-	
 
 	// Delete gatter lines and update stones positions
 	QList<QGraphicsItem *> list = canvas->items();
@@ -571,7 +571,7 @@ void Board::resizeBoard(int w, int h)
   // Redraw the mark on the last played stone                             
 //  updateLastMove(m_save->getColor(), m_save->getX(), m_save->getY()); 
   
-	canvas->update();
+	//canvas->update();
 }
 
 /*
@@ -830,7 +830,8 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 		qWarning("Bad data <%d> at %d/%d in board::updateStone !",
 			c, x, y);
 	}
-
+	
+	//its always modified I think FIXME
 	return modified;
 }
 
@@ -1302,7 +1303,7 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 */
 	curStone->show();
     
-	canvas->update();
+	//canvas->update();
 }
 
 
@@ -1375,7 +1376,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 */
 	    // Check delay
     	bool delay = (QTime::currentTime() > clickTime);
-
+	//note that apparently nothing uses delay at the moment
 	emit signalClicked(delay, x , y , mouseState);
 }
 
