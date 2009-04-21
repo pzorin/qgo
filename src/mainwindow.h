@@ -14,8 +14,6 @@
 #include "igsconnection.h"
 //#include "oldparser.h"
 //#include "qgo_interface.h"
-#include "talk.h"
-#include "gamedialog.h"
 #include "audio.h"
 
 #include <QtGui>
@@ -25,6 +23,8 @@ class RoomListing;
 class LoginDialog;
 class NetworkConnection;
 class ServerListStorage;
+class Talk;
+class GameDialog;
 
 class MainWindow : public QMainWindow
 {
