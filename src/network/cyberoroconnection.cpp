@@ -4073,6 +4073,9 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 	directed_id = p[0] + (p[1] << 8);
 	p += 4;
 	p += 4;
+#ifdef RE_DEBUG
+	printf("Directed id %d, room_were_in %d\n", directed_id, room_were_in);
+#endif //RE_DEBUG
 /* They translated a lot more phrases, but these are the major ones
  * it looks like */
 //p[1] byte is category? and then p[0] is specific msg	
