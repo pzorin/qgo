@@ -624,12 +624,25 @@ void BoardWindow::slotDuplicate()
 	gd->gameMode = modeNormal;
 	gd->fileName = "";
 	BoardWindow *b = new BoardWindow(gd, TRUE, TRUE);
+	//b->setGamePhase(this->getGamePhase());				//maybe?
 
 	b->loadSGF(0,sgf);
 	/* Why is this an issue, whats weird about 0 move? */
+	/* This isn't an issue for all services, I think ORO is now
+	 * broken and IGS is broken separately, we need to fix set_move
+	 * and then come back here and fix this FIXME */
+	/* Note also that this does not duplicate any ui.board->marks
+	 * that are on the original board.  I think score marks qualify
+	 * but come up some other way as well */
+	/* Note also that this thing below is broken for duplicating edit
+	 * boards which should be the default!! */
+	/* Also duplicating edit boards removes score marks, so I'm wondering
+	 * what the network code does to keep the score marks on the duplicated
+	 * board and lose the rest */
 	int mn = tree->getCurrent()->getMoveNumber();
-	if(mn > 0)
-		mn--;
+	/* Removing, may not be broken at all */
+	//if(mn > 0)
+	//	mn--;
 	b->getBoardHandler()->slotNthMove(mn);
 }
 
