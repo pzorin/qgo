@@ -3,13 +3,11 @@
  */
 
 #include "group.h"
-//#include "stone.h"
 #include "../defines.h"
 
 Group::Group()
 {
     liberties = 0;
-//    setAutoDelete(FALSE);
 }
 
 Group::~Group()
@@ -33,6 +31,18 @@ int Group::compareItems(MatrixStone *s1, MatrixStone *s2)
 		return 0;
 
 	return 1;
+}
+
+void Group::remove(MatrixStone * m)
+{
+	for (int i=0; i<count(); i++)
+	{
+		if(at(i)->x == m->x && at(i)->y == m->y)
+		{
+			removeAt(i);
+			break;
+		}
+	}
 }
 
 bool Group::isAttachedTo(MatrixStone *s)
@@ -60,9 +70,6 @@ bool Group::isAttachedTo(MatrixStone *s)
 			return true;
     }    
     
-    return false;
-
-
     return false;
 }
 

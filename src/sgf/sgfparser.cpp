@@ -28,6 +28,14 @@
 // It probably does all the stuff books tell you never ever to do.
 // But it speeds up sgf reading of large files (Kogo) significantly.
 
+/* And another note.  I mentioned the use of QChar::unicode() below
+ * this whole thing needs to be removed.  No QStrings and no classes
+ * in the file loade.  Its just unnecessarily slow.  We can use QStrings
+ * for comments and names that might be in foreign languages, but
+ * otherwise this whole sgfparser class can be convered to do char *
+ * byte by byte and stop allocating all this garbage everywhere.
+ * It looks like someone started to do that below with MySimpleString
+ * but maybe there were problems because its unused */
 class MyString
 {
 public:
@@ -70,7 +78,7 @@ public:
 		do {
 			found = i = 0;
 			do {
-				if (Str.at(index+i) != c[i])
+				if (Str.data()[index+i] != c[i])			//calls QChar::unicode() which is slow
 					break;
 				found ++;
 				if (found == cl)
@@ -90,7 +98,7 @@ public:
 		// Offset. Hope that is enough. TODO Long comments check?
 		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength;
 		
-		while (Str.at(index) != c && index++ < l-1) {};
+		while (Str.data()[index] != c && index++ < l-1) {};			//calls QChar::unicode() which is slow
 		if (index == l)
 			return -1;
 		return index;
@@ -103,11 +111,12 @@ public:
 	
 	unsigned int strLength;
 	
-	char * getStr() {return (char *)Str.toLatin1().constData();}
+	char * getStr() const {return (char *)Str.toLatin1().constData();}
 //private:
 	QString Str;
 };
 
+#ifdef UNUSED
 class MySimpleString : public MyString
 {
 public:
@@ -173,6 +182,7 @@ public:
 private:
 	const char* Str;    
 };
+#endif //UNUSED
 // End dirty ugly hack. :*)
 
 SGFParser::SGFParser(Tree * _tree)
@@ -545,7 +555,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 /////////////////////		boardHandler->createMoveSGF();
 //				qDebug("############### Before creating move ####################");
 //				qDebug(toParse->Str.toLatin1().constData());
-				tree->createMoveSGF();
+				//tree->createMoveSGF();
 				/* This does happen, why??? FIXME */
 //				qDebug("###############                      ####################");
 //				qDebug(toParse->Str.toLatin1().constData());
@@ -767,7 +777,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 							/* Something is screwy here, inconsistencies
 							 * in the way SGF's are treated. Like the below:
 							 * the whole point of "remember_root", FIXME*/
-							tree->createMoveSGF();
+							tree->createEmptyMove();
 							isRoot = false;
 							unknownProperty = QString();
 							if (tree->getCurrent()->getTimeinfo())
@@ -831,7 +841,11 @@ bool SGFParser::doParse(const QString &toParseStr)
 										//tree->getCurrent()->setMoveNumber(0);
 										//tree->getCurrent()->setColor(stoneBlack);
 									}
-									tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, setup ? false : new_node);
+									if(setup)
+										tree->addStoneToCurrentMove(black ? stoneBlack : stoneWhite, i, j);
+									else
+										tree->addMove(black ? stoneBlack : stoneWhite, i, j);
+									//tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, setup ? false : new_node);
 									
 									/*else	//fastload
 									{

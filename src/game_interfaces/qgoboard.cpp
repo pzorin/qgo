@@ -75,13 +75,13 @@ void qGoBoard::setHandicap(int handicap)
 		switch (handicap)
 		{
 		case 13:  // Hehe, this is nuts... :)
-			tree->addStoneSGF(stoneBlack, 17, 17,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, 17, 17);
 		case 12:
-			tree->addStoneSGF(stoneBlack, 3, 3,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, 3, 3);
 		case 11:
-			tree->addStoneSGF(stoneBlack, 3, 17,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, 3, 17);
 		case 10:
-			tree->addStoneSGF(stoneBlack, 17, 3,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, 17, 3);
 			
 		default:
 			handicap = 9;
@@ -95,32 +95,32 @@ void qGoBoard::setHandicap(int handicap)
 		switch (handicap)
 		{
 		case 9:
-			tree->addStoneSGF(stoneBlack, middle, middle,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, middle, middle);
 		case 8:
 		case 7:
 			if (handicap >= 8)
 			{
-				tree->addStoneSGF(stoneBlack, middle, low,FALSE);
-				tree->addStoneSGF(stoneBlack, middle, high,FALSE);
+				tree->addStoneToCurrentMove(stoneBlack, middle, low);
+				tree->addStoneToCurrentMove(stoneBlack, middle, high);
 			}
 			else
-				tree->addStoneSGF(stoneBlack, middle, middle,FALSE);
+				tree->addStoneToCurrentMove(stoneBlack, middle, middle);
 		case 6:
 		case 5:
 			if (handicap >= 6)
 			{
-				tree->addStoneSGF(stoneBlack, low, middle,FALSE);
-				tree->addStoneSGF(stoneBlack, high, middle,FALSE);
+				tree->addStoneToCurrentMove(stoneBlack, low, middle);
+				tree->addStoneToCurrentMove(stoneBlack, high, middle);
 			}
 			else
-				tree->addStoneSGF(stoneBlack, middle, middle,FALSE);
+				tree->addStoneToCurrentMove(stoneBlack, middle, middle);
 		case 4:
-			tree->addStoneSGF(stoneBlack, high, high,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, high, high);
 		case 3:
-			tree->addStoneSGF(stoneBlack, low, low,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, low, low);
 		case 2:
-			tree->addStoneSGF(stoneBlack, high, low,FALSE);
-			tree->addStoneSGF(stoneBlack, low, high,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, high, low);
+			tree->addStoneToCurrentMove(stoneBlack, low, high);
 		case 1:
 //			if (store != modeObserve && store != modeMatch &&  store != modeTeach)
 //				gameData->komi = 0.5;
@@ -136,12 +136,12 @@ void qGoBoard::setHandicap(int handicap)
 		switch (handicap)
 		{
 		case 4:
-			tree->addStoneSGF(stoneBlack, high, high,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, high, high);
 		case 3:
-			tree->addStoneSGF(stoneBlack, low, low,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, low, low);
 		case 2:
-			tree->addStoneSGF(stoneBlack, high, low,FALSE);
-			tree->addStoneSGF(stoneBlack, low, high,FALSE);
+			tree->addStoneToCurrentMove(stoneBlack, high, low);
+			tree->addStoneToCurrentMove(stoneBlack, low, high);
 		case 1:
 //			if (store != modeObserve && store != modeMatch &&  store != modeTeach)
 //				gameData->komi = 0.5;
@@ -204,7 +204,7 @@ void qGoBoard::removeMark( int x, int y)
  */
 void qGoBoard::addStone(StoneColor c, int x, int y)
 {
-	tree->addStoneSGF(c,x,y,FALSE);
+	tree->addStone(c,x,y);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	setModified();
 }
@@ -337,7 +337,6 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 		{
 			switch (boardwindow->getEditMark())
 			{
-				//adds a stone (or remove if present)
 				case markNone:
 				{
 					if(tree->getCurrent()->getMatrix()->getStoneAt(x,y) == stoneNone)
@@ -364,7 +363,6 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 
 		case phaseScore:
 		{
-//			markDeadStone(x,y);
 			localMarkDeadRequest(x,y);
 			return;
 		}
@@ -375,6 +373,7 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 
 			if (!blackToPlay && boardwindow->getMyColorIsWhite())
 				localMoveRequest(stoneWhite,x,y);
+			return;
 	}
 }
 
@@ -426,8 +425,30 @@ void qGoBoard::doPass()
 bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 {
 	bool validMove = TRUE;
+	static bool dontCheckValidity = false;
 	static QTime lastSound = QTime(0,0,0);
 
+	if(dontplayyet && !tree->checkMoveIsValid(c, x, y))
+		validMove = false;
+	else if(!dontplayyet)
+	{
+		if(dontCheckValidity)
+		{
+			dontCheckValidity = false;
+			validMove = true;
+		}
+		else if(!tree->checkMoveIsValid(c, x, y))
+			validMove = false;
+		else
+			validMove = true;
+		if(validMove)
+			tree->addStoneOrLastValidMove();
+	}
+	else
+	{
+		dontCheckValidity = true;
+	}
+#ifdef OLD
 	// does the matrix have already a stone there ?
 	if (tree->getCurrent()->getMatrix()->getStoneAt(x,y) != stoneNone)
 	{
@@ -436,27 +457,30 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 	}
 
 	/* FIXME, I don't understand this, why is there addMove and addStoneSGF?? */
-	
+	/* Its possible that the addMove can add anything valid or not and addStoneSGF
+ 	 * adds and calls checkPosition, but then that should be a flag or we should
+	 * name it differently */
 	//The move is added to the tree. if it exists already, it becomes the current move
-	tree->addMove(c, x, y, TRUE);
+	//tree->addMove(c, x, y, TRUE);
 
 	// Is the move valid ?
 	if ( tree->addStoneSGF(c,x,y,true,dontplayyet) < 0)
 	{
 		qDebug ("QGoboard:doMove - This move does not seem to be valid : %d %d",x,y);
-		tree->deleteNode(); 
+		//tree->deleteNode(); 
 		validMove = FALSE;
 	}
 	if(dontplayyet && validMove)	//i.e., we didn't go into last conditional
 	{
 		qDebug("not playing yet but valid...");
-		tree->deleteNode();
+		//tree->deleteNode();
 		/* Ugly, we need to figure out why there's
 		 * an addMove, and an addStoneSGF and why its called
 		 * SGF, and clear out both of those, and then here...
 		 * we shouldn't be adding a bad node, and then deleting it
 		 * if its bad, we shouldn't add it if its bad... FIXME */
 	}
+#endif //OLD
 	/* Non trivial here.  We don't want to play a sound as we get all
 	 * the moves from an observed game.  But there's no clean way
 	 * to tell when the board has stopped loading, particularly for IGS.
@@ -539,6 +563,8 @@ void qGoBoard::enterScoreMode()
 	if(boardwindow->getGamePhase() == phaseScore)
 		return;
 	qDebug("qgb::enterScoreMode()");
+	//FIXME crash somewhere here if score button hit on dupped
+	//game that's already finished or maybe in score mode
 	boardwindow->setGamePhase ( phaseScore );
 	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
 	boardwindow->getBoardHandler()->updateCursor();

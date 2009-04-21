@@ -13,6 +13,7 @@ class Matrix
 public:
 	Matrix(int s=DEFAULT_BOARD_SIZE);
 	Matrix(const Matrix &m);
+	Matrix(const Matrix &m, bool cleanup);
 	Matrix & operator=(const Matrix &m);
 	~Matrix();
 	int getSize() const { return size; }
@@ -22,6 +23,9 @@ public:
 	void eraseStone(int x, int y);
 	StoneColor getStoneAt(int x, int y);
 	bool isStoneDead(int x, int y);
+	bool isStoneDirty(int x, int y);
+	void stoneUpdated(int x, int y);
+	void markChangesDirty(Matrix & m);
 	MarkType getMarkAt(int x, int y);
 	QString getFirstTextAvailable(MarkType t);
 
@@ -39,14 +43,21 @@ public:
 	const QString printMe(ASCII_Import *charset);
 
 	void checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties);
-	Group* checkNeighbour(int x, int y, StoneColor color, Group *group);
+	Group* checkNeighbour(int x, int y, StoneColor color, Group *group, Group *** groupMatrix = NULL);
 	int countLiberties(Group *group);
 	int countScoredLiberties(Group *group);
 	void traverseTerritory( int x, int y, StoneColor &col);
 	bool checkNeighbourTerritory( const int &x, const int &y, StoneColor &col);
 	void checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties);
-	Group* assembleGroup(MatrixStone *stone);
+	Group* assembleGroup(MatrixStone *stone, Group *** groupMatrix = NULL);
 	Group* assembleAreaGroups(MatrixStone *stone);
+	int checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4]);
+	void replaceGroup(Group * replaceme, Group * with, Group *** groupMatrix);
+	void removeGroup(Group * g, Group *** groupMatrix, Group * killer);
+	void removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix);
+	void invalidateAdjacentGroups(MatrixStone m, Group *** gm);
+	void invalidateAllGroups(Group *** gm);
+
 	bool checkFalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
 	void markGroupDead(int x, int y);
@@ -77,9 +88,13 @@ protected:
 	QStringList::Iterator getMarkTextIterator(int x, int y);
 	
 private:
+	void findInvalidAdjacentGroups(Group * g, Group *** gm, std::vector<Group*> & groupList);
+	int sharedLibertyWithGroup(int x, int y, Group * g, Group *** gm);
+
 	unsigned short **matrix;
 	int size;
 	QStringList *markTexts;
+	std::vector<unsigned short>tempLibertyList;
 };
 
 #endif

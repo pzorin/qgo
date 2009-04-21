@@ -246,12 +246,12 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 				 * that should be netcode side */
 				while(move_counter > move_number + (offset_1 ? 1 : 0))
 				{
-					tree->deleteNode();
+					tree->undoMove();
 					move_counter--;
 				}
 			}
 			else
-				tree->deleteNode();
+				tree->undoMove();
 			/* I've turned off multiple undo for tygem, just for now... 
 			 * since NOMOVENUMBER FIXME */
 			qDebug("Undoing move %d = %d - 1", move_number, move_counter);
@@ -274,7 +274,7 @@ void qGoBoardNetworkInterface::set_move(MoveRecord * m)
 				 * glGo client we've been using to test this
 				 * doesn't handle undo from score very well.  I've
 				 * seen some bugs in it before. */
-				tree->deleteNode();
+				tree->undoMove();
 				leaveScoreMode();
 			}
 			}

@@ -34,15 +34,16 @@ public:
 	bool hasPrevBrother(Move *m=0);
 	bool hasNextBrother();
 	void clear();
-	static void traverseClear(Move *m);
+	void traverseClear(Move *m);
 	int count();
 	Move* getCurrent() const { return current; }
-	void setCurrent(Move *m) { current = m; }
+	void setCurrent(Move *m);
 	void setToFirstMove();
 	Move* getRoot() const { return root; }
 	void setRoot(Move *m) { root = m; }
 	int mainBranchSize();
 	Move* findMoveInMainBranch(int x, int y) { return findMove(root, x, y, false); }
+	Move * findMoveInCurrentBranch(int x, int y) { return findMove(root, x, y, true); }
 	Move* findMoveInBranch(int x, int y) { return findMove(current, x, y, true); }
 	Move* findLastMoveInMainBranch();
 	Move* findNode(Move *m, int node);
@@ -52,19 +53,27 @@ public:
  * Former Boardhandler functions called by SGF parser
  */
 
-	void createMoveSGF(bool brother =false);
+	void createEmptyMove(bool brother =false);
 	void removeStoneSGF(int x, int y, bool hide=false, bool new_node=true);
 	void updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase = phaseOngoing);
- 	void addMove(StoneColor c, int x, int y, bool clearMarks = true);
+ 	//void addMove(StoneColor c, int x, int y, bool clearMarks = true);
+	//void addMove(StoneColor c, int x, int y, Matrix * mat, bool clearMarks = true);
 	void doPass(bool sgf, bool fastLoad = false);
+	
 	void editMove(StoneColor c, int x, int y);
-	int addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayyet = false);
+	//int addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayyet = false);
+	void addStoneToCurrentMove(StoneColor c, int x, int y);
 	void deleteNode();
 
 /*
  * Former Stonehandler functions called by addStoneSGF
  * Those functions are used when adding a stone, and check all Go issues : libertes, death, ...
  */
+	bool checkMoveIsValid(StoneColor c, int x, int y);
+	void addStone(StoneColor c, int x, int y);
+	void addMove(StoneColor c, int x, int y);
+	void addStoneOrLastValidMove(StoneColor c = stoneNone, int x = -1, int y = -1);
+	void undoMove(void);
 
 	int checkPosition(MatrixStone *s, Matrix *m);
 //	Group* assembleGroup(MatrixStone *stone, Matrix *m);
@@ -79,11 +88,24 @@ protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
 private:
-	Move *root, *current;
+	Move * assignCurrent(Move * & o, Move * & n);
+	void invalidateAdjacentCheckPositionGroups(MatrixStone m);
+	void invalidateCheckPositionGroups(void);
+	bool isInMainBranch(Move * m) const;
+	void updateMatrix(Matrix * m, StoneColor c, int x, int y, GamePhase gamephase = phaseOngoing);
+	void deleteGroupMatrices(void);
+	Move *root, *current, *lastMoveInMainBranch;
 	int * boardSize;
 	//QList<Group *> *groups;
 	QHash<int,MatrixStone *> *stones;
 	Matrix * checkPositionTags;
+	Group *** groupMatrixView;
+	Group *** groupMatrixCurrent;
+
+	int koStoneX;
+	int koStoneY;
+	int lastCaptures;
+	Move * lastValidMoveChecked;
 };
 
 #endif

@@ -13,7 +13,19 @@ Matrix::Matrix(int s)
 {
 	Q_ASSERT(size > 0 && size <= 36);
 	
-	init();
+	matrix = new unsigned short*[size];
+	Q_CHECK_PTR(matrix);
+	
+	for (int i=0; i<size; i++)
+	{
+		matrix[i] = new unsigned short[size];
+		Q_CHECK_PTR(matrix[i]);
+		
+		for (int j=0; j<size; j++)
+			matrix[i][j] = stoneNone;
+	}
+	
+	markTexts = NULL;
 }
 
 Matrix::Matrix(const Matrix &m)
@@ -21,11 +33,46 @@ Matrix::Matrix(const Matrix &m)
 	size = m.getSize();
 	Q_ASSERT(size > 0 && size <= 36);
 	
-	init();
+	matrix = new unsigned short*[size];
+	Q_CHECK_PTR(matrix);
 	
 	for (int i=0; i<size; i++)
+	{
+		matrix[i] = new unsigned short[size];
+		Q_CHECK_PTR(matrix[i]);
+		
 		for (int j=0; j<size; j++)
 			matrix[i][j] = m.at(i, j);
+	}
+	
+	markTexts = NULL;
+}
+
+Matrix::Matrix(const Matrix &m, bool cleanup)
+{
+	size = m.getSize();
+	Q_ASSERT(size > 0 && size <= 36);
+	
+	matrix = new unsigned short*[size];
+	Q_CHECK_PTR(matrix);
+	
+	for (int i=0; i<size; i++)
+	{
+		matrix[i] = new unsigned short[size];
+		Q_CHECK_PTR(matrix[i]);
+		
+		for (int j=0; j<size; j++)
+		{
+				
+			if(cleanup)
+				matrix[i][j] = m.at(i, j) & (0x000f | MX_STONEDEAD);	//clearAllMarks
+			else
+				matrix[i][j] = m.at(i, j) & 0x2fff;			//absMatrix
+			matrix[i][j] |= MX_STONEDIRTY;
+		}
+	}
+
+	markTexts = NULL;
 }
 
 Matrix & Matrix::operator=(const Matrix &m)
@@ -54,19 +101,7 @@ Matrix::~Matrix()
 
 void Matrix::init()
 {
-	matrix = new unsigned short*[size];
-	Q_CHECK_PTR(matrix);
 	
-	for (int i=0; i<size; i++)
-	{
-		matrix[i] = new unsigned short[size];
-		Q_CHECK_PTR(matrix[i]);
-		
-		for (int j=0; j<size; j++)
-			matrix[i][j] = stoneNone;
-	}
-	
-	markTexts = NULL;
 }
 
 void Matrix::initMarkTexts()
@@ -157,6 +192,7 @@ void Matrix::insertStone(int x, int y, StoneColor c, GamePhase phase)
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] = (matrix[x-1][y-1] & 0xfff0) | c;
+	matrix[x-1][y-1] |= MX_STONEDIRTY;
 	if (phase == phaseEdit)
 		matrix[x-1][y-1] |= MX_STONEEDIT;
 }
@@ -167,6 +203,7 @@ void Matrix::removeStone(int x, int y)
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] &= 0xfff0;
+	matrix[x-1][y-1] |= MX_STONEDIRTY;
 }
 
 void Matrix::eraseStone(int x, int y)
@@ -175,6 +212,7 @@ void Matrix::eraseStone(int x, int y)
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] = (matrix[x-1][y-1] & 0xfff0) | stoneErase | MX_STONEDEAD;
+	matrix[x-1][y-1] |= MX_STONEDIRTY;
 }
 
 unsigned short Matrix::at(int x, int y) const
@@ -183,7 +221,7 @@ unsigned short Matrix::at(int x, int y) const
 	Q_ASSERT(x >= 0 && x < size &&
 		y >= 0 && y < size);
 	
-	return matrix[x][y];
+	return (matrix[x][y] & ~MX_STONEDIRTY);
 }
 
 StoneColor Matrix::getStoneAt(int x, int y)
@@ -203,6 +241,26 @@ bool Matrix::isStoneDead(int x, int y)
 	return (matrix[x - 1][y -1] & MX_STONEDEAD);
 }
 
+bool Matrix::isStoneDirty(int x, int y)
+{	
+	return (matrix[x - 1][y -1] & MX_STONEDIRTY);
+}
+
+void Matrix::stoneUpdated(int x, int y)
+{	
+	matrix[x-1][y-1] &= ~MX_STONEDIRTY;
+}
+
+void Matrix::markChangesDirty(Matrix & m)
+{
+	for (int i=0; i<size; i++)
+		for (int j=0; j<size; j++)
+		{
+			if((matrix[i][j] & 0x00ff) != (m.matrix[i][j] & 0x00ff))
+				matrix[i][j] |= MX_STONEDIRTY;
+		}
+}
+
 MarkType Matrix::getMarkAt(int x, int y)
 {	
 	Q_ASSERT(x > 0 && x <= size &&
@@ -217,14 +275,16 @@ void Matrix::set(int x, int y, int n)
 		y >= 0 && y < size);
 	
 	matrix[x][y] = n;
+	matrix[x][y] |= MX_STONEDIRTY;
 }
 
 void Matrix::insertMark(int x, int y, MarkType t)
 {
-	//Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
-	if (!(x > 0 && x <= size && y > 0 && y <= size))
-		return;
+	Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
+	//if (!(x > 0 && x <= size && y > 0 && y <= size))
+	//	return;
 	matrix[x-1][y-1] |= (t << 4);
+	matrix[x-1][y-1] |= MX_STONEDIRTY;
 }
 
 void Matrix::removeMark(int x, int y)
@@ -233,7 +293,8 @@ void Matrix::removeMark(int x, int y)
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] &= 0xff0f;
-	
+	matrix[x-1][y-1] |= MX_STONEDIRTY;
+
 	if (markTexts != NULL && !markTexts->isEmpty())
 	{
 		QStringList::Iterator it = getMarkTextIterator(x, y);
@@ -248,13 +309,15 @@ void Matrix::clearAllMarks()
 	
 	for (int i=0; i<size; i++)
 		for (int j=0; j<size; j++)
-			matrix[i][j] &= (0x000f | MX_STONEDEAD);
-		
-		if (markTexts != NULL)
 		{
-			delete markTexts;
-			markTexts = NULL;
+			matrix[i][j] &= (0x000f | MX_STONEDEAD);
+			matrix[i][j] |= MX_STONEDIRTY;
 		}
+	if (markTexts != NULL)
+	{
+		delete markTexts;
+		markTexts = NULL;
+	}
 }
 
 void Matrix::clearTerritoryMarks()
@@ -267,9 +330,13 @@ void Matrix::clearTerritoryMarks()
 		for (int j=0; j<size; j++)
 			if ((data = getMarkAt(i + 1, j + 1)) == markTerrBlack ||
 				data == markTerrWhite)
+			{
 				matrix[i][j] &= (0x000f | MX_STONEDEAD);
+				matrix[i][j] |= MX_STONEDIRTY;
+			}
 }
 
+// Called when leaving score mode
 void Matrix::absMatrix()
 {
 	Q_ASSERT(size > 0 && size <= 36);
@@ -282,6 +349,7 @@ void Matrix::absMatrix()
 			matrix[i][j] &= 0x2fff;		//remove dead and edit?
 			if (getStoneAt(i + 1, j + 1) == stoneErase)
 				insertStone(i + 1, j + 1, stoneNone, phaseOngoing);
+			matrix[i][j] |= MX_STONEDIRTY;
 		}
 	}
 }
@@ -630,14 +698,27 @@ void Matrix::checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, i
  * checks wether the positions x,y holds a stone 'color'.
  * if yes, appends the stone and returns the group
  */
-Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group) 
+Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group, Group *** groupMatrix) 
 {
 	// Are we into the board, and is the tentative stone present in the matrix ?
 //	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (at(x - 1, y - 1) != color))
-	if (x == 0 || x == size + 1  || y == 0 || y == size + 1 ||  (getStoneAt(x, y ) != color))
+	if (x == 0 || x == size + 1  || y == 0 || y == size + 1)
+		return group;
+	StoneColor c = getStoneAt(x, y);
+	if(groupMatrix && c == stoneNone)
+	{
+		std::vector<unsigned short>::iterator i = std::find(tempLibertyList.begin(), tempLibertyList.end(), (x << 8) + y);
+		if(i == tempLibertyList.end())
+		{
+			tempLibertyList.push_back((x << 8) + y);
+			group->liberties++;
+		}
+		return group;
+	}
+	else if(c != color)
 		return group;
 
-	MatrixStone *tmp= new MatrixStone ;
+	MatrixStone *tmp= new MatrixStone;
 	tmp->x = x;
 	tmp->y = y;	
 	tmp->c =  color;
@@ -656,7 +737,13 @@ Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group)
 	
 	// if not, we add it to the group
 	if (!found)
-		group->append(tmp);
+	{
+		
+		if(groupMatrix)
+			group->append(tmp, groupMatrix);
+		else
+			group->append(tmp);
+	}
 
 	return group;
 }
@@ -793,13 +880,19 @@ bool Matrix::checkNeighbourTerritory(const int &x, const int &y, StoneColor &col
 /*
  * Returns the group (QList) of matrix stones adjacent to the 'stone'
  */
-Group* Matrix::assembleGroup(MatrixStone *stone)
+Group* Matrix::assembleGroup(MatrixStone *stone, Group *** groupMatrix)
 {
 	Group *group = new Group();
-	Q_CHECK_PTR(group);
-	
+	Group *tmp;
+	Q_CHECK_PTR(group);	
 
-	group->append(stone);
+	if(groupMatrix)
+	{
+		tempLibertyList.clear();
+		group->append(stone, groupMatrix);
+	}
+	else
+		group->append(stone);
 	
 	int mark = 0;
 	
@@ -809,25 +902,616 @@ Group* Matrix::assembleGroup(MatrixStone *stone)
 	{
 		stone = group->at(mark);
 		
-		if (getStoneAt(stone->x, stone->y) != stoneNone )
+		if (getStoneAt(stone->x, stone->y) != stoneNone )		//FIXME how can this be stoneNone?
 		{
 			int 	stoneX = stone->x,
 				stoneY = stone->y;
 			StoneColor col = stone->c;
 			
 			// North
-			group = checkNeighbour(stoneX, stoneY-1, col, group);
+			tmp = checkNeighbour(stoneX, stoneY-1, col, group, groupMatrix);
 			// West
-			group = checkNeighbour(stoneX-1, stoneY, col, group);
+			tmp = checkNeighbour(stoneX-1, stoneY, col, group, groupMatrix);
 			// South
-			group = checkNeighbour(stoneX, stoneY+1, col, group);
+			tmp = checkNeighbour(stoneX, stoneY+1, col, group, groupMatrix);
 			// East
-			group = checkNeighbour(stoneX+1, stoneY, col, group);
+			tmp = checkNeighbour(stoneX+1, stoneY, col, group, groupMatrix);
 		}
 		mark ++;
 	}
 	
 	return group;
+}
+
+int Matrix::sharedLibertyWithGroup(int x, int y, Group * g, Group *** gm)
+{
+	if(x > 0 && gm[x - 1][y] == g)
+		return 1;
+	if(x < size - 1 && gm[x + 1][y] == g)
+		return 1;
+	if(y > 0 && gm[x][y - 1] == g)
+		return 1;
+	if(y < size - 1 && gm[x][y + 1] == g)
+		return 1;
+	return 0;
+}
+
+/* This does a number of things and it does them all well.  Pay attention.
+ * It checks just the four adjacent vertices to the stone its passed and tracks
+ * the liberties for that stone or for the group that stone is in.
+ * It also puts groups that the stone connects into joins and groups that the
+ * stone captures into captures.
+ * It also assembles new groups where necessary and stores them in the groupMatrix
+ * but besides this it does nothing permanent so the caller can check if the
+ * move is legal before playing it */
+int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4])
+{
+	int & x = stone->x;
+	int & y = stone->y;
+	StoneColor ourColor = stone->c;
+	StoneColor theirColor = (ourColor == stoneWhite ? stoneBlack : stoneWhite);
+	StoneColor c;
+	Group * g = NULL;
+	Group * tmp = NULL;
+	int i, j, k;
+	int liberties;
+	bool N = false, S = false, W = false, E = false;
+
+	for(i = 0; i < 4; i++)
+	{
+		joins[i] = NULL;
+		enemyGroups[i] = NULL;
+	}
+
+	if(x > 1)
+	{
+		c = getStoneAt(x - 1, y);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x - 2][y - 1];
+			if(!g)
+				g = assembleGroup(new MatrixStone(x - 1, y, c), groupMatrix);
+			joins[0] = g;
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x - 2][y - 1];
+			if(!tmp)
+				tmp = assembleGroup(new MatrixStone(x - 1, y, c), groupMatrix);
+			enemyGroups[0] = tmp;
+		}
+		else
+			W = true;
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(g)
+		printf("Group west with %d liberties\n", g->liberties);
+	else if(tmp)
+		printf("Enemy west with %d liberties\n", tmp->liberties);
+#endif //CHECKPOSITION_DEBUG
+	if(g)
+		liberties = g->liberties - 1;
+	else if(tmp || x < 2)
+		liberties = 0;
+	/*else if((tmp && tmp->liberties > 1) || x < 2)
+		liberties = 0;*/
+	else
+		liberties = 1;
+	if(x < size)
+	{
+		c = getStoneAt(x + 1, y);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x][y - 1];
+			if(!g)
+				g = assembleGroup(new MatrixStone(x + 1, y, c), groupMatrix);
+			if(g != joins[0])
+			{
+				joins[1] = g;
+				liberties += g->liberties - 1;
+			}
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x][y - 1];
+			if(!tmp)
+				tmp = assembleGroup(new MatrixStone(x + 1, y, c), groupMatrix);
+			enemyGroups[1] = tmp;
+			//if(tmp->liberties == 1)
+			//	liberties++;
+		}
+		else
+		{
+			liberties++;
+			E = true;
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(joins[1])
+		printf("Group east with %d liberties\n", joins[1]->liberties);
+	else if(enemyGroups[1])
+		printf("Enemy east with %d liberties\n", enemyGroups[1]->liberties);
+#endif //CHECKPOSITION_DEBUG
+	if(y > 1)
+	{
+		c = getStoneAt(x, y - 1);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x - 1][y - 2];
+			if(!g)
+				g = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
+			if(g != joins[1] && g != joins[0])
+			{
+				joins[2] = g;
+				liberties += g->liberties - 1;
+			}
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x - 1][y - 2];
+			if(!tmp)
+				tmp = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
+			enemyGroups[2] = tmp;
+			//if(tmp->liberties == 1)
+			//	liberties++;
+		}
+		else
+		{
+			liberties++;
+			N = true;
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(joins[2])
+		printf("Group north with %d liberties\n", joins[2]->liberties);
+	else if(enemyGroups[2])
+		printf("Enemy north with %d liberties\n", enemyGroups[2]->liberties);
+#endif //CHECKPOSITION_DEBUG
+	if(y < size)
+	{
+		c = getStoneAt(x, y + 1);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x - 1][y];
+			if(!g)
+				g = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
+			if(g != joins[2] && g != joins[1] && g != joins[0])
+			{
+				joins[3] = g;
+				liberties += g->liberties - 1;
+			}
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x - 1][y];
+			if(!tmp)
+				tmp = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
+			enemyGroups[3] = tmp;
+			//if(tmp->liberties == 1)
+				//liberties++;
+		}
+		else
+		{
+			liberties++;
+			S = true;
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(joins[3])
+		printf("Group south with %d liberties\n", joins[3]->liberties);
+	else if(enemyGroups[3])
+		printf("Enemy south with %d liberties\n", enemyGroups[3]->liberties);
+#endif //CHECKPOSITION_DEBUG
+	insertStone(x, y, ourColor, phaseOngoing);
+	for(i = 0; i < 4; i++)
+	{
+		if(!joins[i])
+			continue;
+		for(k = 0; k < i; k++)
+			if(joins[k] == joins[i])
+				break;
+		if(k != i)
+			continue;
+		for(j = 0; j < joins[i]->count(); j++)
+		{
+			for(k = i + 1; k < 4; k++)
+			{
+				if(!joins[k])
+					continue;
+				int _x = joins[i]->at(j)->x;
+				int _y = joins[i]->at(j)->y;
+				if(_x == x && _y == y)
+					continue;
+				if(_y < size && getStoneAt(_x, _y + 1) == stoneNone)
+					liberties -= sharedLibertyWithGroup(_x - 1, _y, joins[k], groupMatrix);
+				if(_y > 1 && getStoneAt(_x, _y - 1) == stoneNone)
+					liberties -= sharedLibertyWithGroup(_x - 1, _y - 2, joins[k], groupMatrix);
+				if(_x > 1 && getStoneAt(_x - 1, _y) == stoneNone)
+					liberties -= sharedLibertyWithGroup(_x - 2, _y - 1, joins[k], groupMatrix);
+				if(_x < size && getStoneAt(_x + 1, _y) == stoneNone)
+					liberties -= sharedLibertyWithGroup(_x, _y - 1, joins[k], groupMatrix);
+				
+			}
+		}
+		if(S)
+			liberties -= sharedLibertyWithGroup(x - 1, y, joins[i], groupMatrix);
+		if(N)
+			liberties -= sharedLibertyWithGroup(x - 1, y - 2, joins[i], groupMatrix);
+		if(W)
+			liberties -= sharedLibertyWithGroup(x - 2, y - 1, joins[i], groupMatrix);
+		if(E)
+			liberties -= sharedLibertyWithGroup(x, y - 1, joins[i], groupMatrix);
+	}
+#ifdef CHECKPOSITION_DEBUG
+	printf("New stone liberties %d\n", liberties);
+#endif //CHECKPOSITION_DEBUG
+	return liberties;
+}
+
+void Matrix::replaceGroup(Group * replaceme, Group * with, Group *** groupMatrix)
+{
+	int i;
+	for(i = 0; i < replaceme->count(); i++)
+	{
+		with->append(replaceme->at(i), groupMatrix);
+		(*replaceme)[i] = NULL;		//safe because we immediately delete replaceme
+	}
+	with->liberties += replaceme->liberties;
+	delete replaceme;
+}
+
+/* Note that checkStoneWithGroups would be called before this meaning that
+ * their could be no adjacent stones not in groups */
+void Matrix::removeGroup(Group * g, Group *** groupMatrix, Group * killer)
+{
+	int i;
+	int x, y;
+	Group * enemyGroup;
+	Group * libertines[3];
+	killer = NULL;			//FIXME remove me
+
+	for(i = 0; i < g->count(); i++)
+	{
+		x = (*g)[i]->x;
+		y = (*g)[i]->y;
+		if(x > 1)
+		{
+			enemyGroup = groupMatrix[x - 2][y - 1];
+			if(enemyGroup && enemyGroup != g && enemyGroup != killer)
+			{
+				enemyGroup->liberties++;
+				libertines[0] = enemyGroup;
+			}
+			else
+				libertines[0] = NULL;
+		}
+		else
+				libertines[0] = NULL;
+		if(x < size)
+		{
+			enemyGroup = groupMatrix[x][y - 1];
+			if(enemyGroup && enemyGroup != g && enemyGroup != killer && 
+				enemyGroup != libertines[0])
+			{
+				enemyGroup->liberties++;
+				libertines[1] = enemyGroup;
+			}
+			else
+				libertines[1] = NULL;
+		}
+		else
+			libertines[1] = NULL;
+		if(y > 1)
+		{
+			enemyGroup = groupMatrix[x - 1][y - 2];
+			if(enemyGroup && enemyGroup != g && enemyGroup != killer && 
+				enemyGroup != libertines[0] && enemyGroup != libertines[1])
+			{
+				enemyGroup->liberties++;
+				libertines[2] = enemyGroup;
+			}
+			else
+				libertines[2] = NULL;
+		}
+		else
+			libertines[2] = NULL;
+		if(y < size)
+		{
+			enemyGroup = groupMatrix[x - 1][y];
+			if(enemyGroup && enemyGroup != g && enemyGroup != killer &&
+				enemyGroup != libertines[0] && enemyGroup != libertines[1] && enemyGroup != libertines[2])
+				enemyGroup->liberties++;
+		}
+				
+		groupMatrix[x - 1][y - 1] = NULL;
+		removeStone(x, y);
+	}
+	delete g;
+}
+
+void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
+{
+	int & x = stone->x;
+	int & y = stone->y;
+	StoneColor ourColor = stone->c;
+	StoneColor theirColor = (ourColor == stoneWhite ? stoneBlack : stoneWhite);
+	StoneColor c;
+	Group * g = NULL;
+	Group * tmp = NULL;
+	int i;
+	Group * joins[4];
+	Group * enemyGroups[4];
+	
+	for(i = 0; i < 4; i++)
+	{
+		joins[i] = NULL;
+		enemyGroups[i] = NULL;
+	}
+
+	eraseStone(x, y);
+	if(x > 1)
+	{
+		c = getStoneAt(x - 1, y);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x - 2][y - 1];
+			if(g)
+			{
+				g->remove(stone);
+				g->liberties++;
+				joins[0] = g;
+			}
+			if(!g)
+				joins[0] = assembleGroup(new MatrixStone(x - 1, y, c), groupMatrix);
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x - 2][y - 1];
+			if(tmp)
+			{
+				tmp->liberties++;
+				enemyGroups[0] = tmp;
+			}
+			else
+				enemyGroups[0] = assembleGroup(new MatrixStone(x - 1, y, c), groupMatrix);
+			
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(g)
+		printf("Group west with %d liberties\n", g->liberties);
+	else if(tmp)
+		printf("Enemy west with %d liberties\n", tmp->liberties);
+#endif //CHECKPOSITION_DEBUG
+	if(x < size)
+	{
+		c = getStoneAt(x + 1, y);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x][y - 1];
+			if(g && g != joins[0])
+			{
+				g->remove(stone);
+				g->liberties++;
+				joins[1] = g;
+			}
+			if(!g)
+				joins[1] = assembleGroup(new MatrixStone(x + 1, y, c), groupMatrix);			
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x][y - 1];
+			if(tmp && tmp != enemyGroups[0])
+			{
+				tmp->liberties++;
+				enemyGroups[1] = tmp;
+			}
+			if(!tmp)
+				enemyGroups[1] = assembleGroup(new MatrixStone(x + 1, y, c), groupMatrix);
+			
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(joins[1])
+		printf("Group east with %d liberties\n", joins[1]->liberties);
+	else if(enemyGroups[1])
+		printf("Enemy east with %d liberties\n", enemyGroups[1]->liberties);
+#endif //CHECKPOSITION_DEBUG
+	if(y > 1)
+	{
+		c = getStoneAt(x, y - 1);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x - 1][y - 2];
+			if(g && g != joins[1] && g != joins[0])
+			{
+				g->remove(stone);
+				g->liberties++;
+				joins[2] = g;
+			}
+			if(!g)
+				joins[2] = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x - 1][y - 2];
+			if(tmp && tmp != enemyGroups[0] && tmp != enemyGroups[1])
+			{
+				tmp->liberties++;
+				enemyGroups[2] = tmp;
+			}
+			if(!tmp)
+				enemyGroups[2] = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(joins[2])
+		printf("Group north with %d liberties\n", joins[2]->liberties);
+	else if(enemyGroups[2])
+		printf("Enemy north with %d liberties\n", enemyGroups[2]->liberties);
+#endif //CHECKPOSITION_DEBUG
+	if(y < size)
+	{
+		c = getStoneAt(x, y + 1);
+		if(c == ourColor)
+		{
+			g = groupMatrix[x - 1][y];
+			if(g && g != joins[2] && g != joins[1] && g != joins[0])
+			{
+				g->remove(stone);
+				g->liberties++;
+				joins[3] = g;
+			}
+			if(!g)
+				joins[3] = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
+		}
+		else if(c == theirColor)
+		{
+			tmp = groupMatrix[x - 1][y];
+			if(tmp && tmp != enemyGroups[0] && tmp != enemyGroups[1] && tmp != enemyGroups[2])
+			{
+				tmp->liberties++;
+				enemyGroups[3] = tmp;	//FIXME unnecessary for debug
+			}
+			if(!tmp)
+				enemyGroups[3] = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
+		}
+	}
+#ifdef CHECKPOSITION_DEBUG
+	if(joins[3])
+		printf("Group south with %d liberties\n", joins[3]->liberties);
+	else if(enemyGroups[3])
+		printf("Enemy south with %d liberties\n", enemyGroups[3]->liberties);
+#endif //CHECKPOSITION_DEBUG
+}
+
+void Matrix::invalidateAdjacentGroups(MatrixStone m, Group *** gm)
+{
+	std::vector<Group*> groupList;
+	std::vector<Group*>::iterator j, k;
+	Group * g;
+	int i;
+
+	if(m.x > 1 && (g = gm[m.x - 2][m.y - 1]))
+	{
+		j = std::find(groupList.begin(), groupList.end(), g);
+		if(j == groupList.end())
+		{
+			groupList.push_back(g);
+			findInvalidAdjacentGroups(g, gm, groupList);
+		}
+	}
+	if(m.x < size && (g = gm[m.x][m.y - 1]))
+	{
+		j = std::find(groupList.begin(), groupList.end(), g);
+		if(j == groupList.end())
+		{
+			groupList.push_back(g);
+			findInvalidAdjacentGroups(g, gm, groupList);
+		}
+	}
+	if(m.y > 1 && (g = gm[m.x - 1][m.y - 2]))
+	{
+		j = std::find(groupList.begin(), groupList.end(), g);
+		if(j == groupList.end())
+		{
+			groupList.push_back(g);
+			findInvalidAdjacentGroups(g, gm, groupList);
+		}
+	}
+	if(m.y < size && (g = gm[m.x - 1][m.y]))
+	{
+		j = std::find(groupList.begin(), groupList.end(), g);
+		if(j == groupList.end())
+		{
+			groupList.push_back(g);
+			findInvalidAdjacentGroups(g, gm, groupList);
+		}
+	}
+	for(k = groupList.begin(); k != groupList.end(); k++)
+	{
+		for(i = 0; i < (*k)->count(); i++)
+			gm[(*k)->at(i)->x - 1][(*k)->at(i)->y - 1] = NULL;
+		delete *k;
+	}
+}
+
+void Matrix::findInvalidAdjacentGroups(Group * g, Group *** gm, std::vector<Group*> & groupList)
+{
+	int i;
+	MatrixStone * m;
+	Group * f;
+	std::vector<Group*>::iterator j;
+
+	for(i = 0; i < g->count(); i++)
+	{
+		m = g->at(i);
+		if(m->x > 1)
+		{
+			if((f = gm[m->x - 2][m->y - 1]) && f != g)
+			{
+				j = std::find(groupList.begin(), groupList.end(), f);
+				if(j == groupList.end())
+					groupList.push_back(f);
+			}
+		}
+		if(m->x < size)
+		{
+			if((f = gm[m->x][m->y - 1]) && f != g)
+			{
+				j = std::find(groupList.begin(), groupList.end(), f);
+				if(j == groupList.end())
+					groupList.push_back(f);
+			}
+		}
+		if(m->y > 1)
+		{
+			if((f = gm[m->x - 1][m->y - 2]) && f != g)
+			{
+				j = std::find(groupList.begin(), groupList.end(), f);
+				if(j == groupList.end() && f != g)
+					groupList.push_back(f);
+			}
+		}
+		if(m->y < size)
+		{
+			if((f = gm[m->x - 1][m->y]) && f != g)
+			{
+				j = std::find(groupList.begin(), groupList.end(), f);
+				if(j == groupList.end())
+					groupList.push_back(f);
+			}
+		}
+	}
+}
+
+/* FIXME A little confusing here is that "markChangesDirty" is called usually with an invalidateAllGroups
+ * but really seems like the two could be combined somehow. 
+ * On second thought, I feel like markChangesDirty might not be called from setCurrent calls but that the
+ * solution is to hide it somewhere, to wrap any change to current... yes...*/
+void Matrix::invalidateAllGroups(Group *** gm)
+{
+	int i, j;
+#ifdef CHECKPOSITION_DEBUG
+	qDebug("invalidating %p", gm);
+#endif //CHECKPOSITION_DEBUG
+	std::vector<Group*> groupList;
+	std::vector<Group*>::iterator k;
+	for(i = 0; i < size; i++)
+	{
+		for(j = 0; j < size; j++)
+		{
+			if(gm[i][j])
+			{
+				k = std::find(groupList.begin(), groupList.end(), gm[i][j]);
+				if(k == groupList.end())
+					groupList.push_back(gm[i][j]);
+				gm[i][j] = NULL;
+			}
+		}
+	}
+	for(k = groupList.begin(); k != groupList.end(); k++)
+		delete *k;
 }
 
 
@@ -958,12 +1642,13 @@ void Matrix::toggleGroupAt( int x, int y)
 	s->y = y;
 	s->c = col;
 
-	Group *g = assembleGroup(s);
+	Group *g = assembleGroup(s);			//FIXME use the view
 
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
 		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
+		matrix[s->x -1][s->y -1] |= MX_STONEDIRTY;
 	}
 
 }
@@ -1002,6 +1687,7 @@ void Matrix::toggleAreaAt( int x, int y)
 	{
 		s = g->at(i);
 		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
+		matrix[s->x -1][s->y -1] |= MX_STONEDIRTY;
 	}
 
 }

@@ -26,7 +26,7 @@ Move::Move(int board_size)
 	matrix = new Matrix(board_size);
 }
 
-Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &mat, const QString &s)
+Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &mat, bool clearAllMarks, const QString &s)
 : stoneColor(c), x(mx), y(my), moveNum(n), gamePhase(phase), comment(s)
 {
 	brother = NULL;
@@ -41,9 +41,9 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &m
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
 	handicapMove = FALSE;
-	matrix = new Matrix(mat);
+	matrix = new Matrix(mat, clearAllMarks);
 	// Make all matrix values positive
-	matrix->absMatrix();
+	//matrix->absMatrix();
 }
 
 Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &s)

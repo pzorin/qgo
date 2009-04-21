@@ -16,7 +16,12 @@ Tree::Tree(int * board_size)
 {
 	root = NULL;
 	checkPositionTags = NULL;
+	groupMatrixView = NULL;
+	groupMatrixCurrent = NULL;
 	init(board_size);
+	lastValidMoveChecked = NULL;
+	koStoneX = 0;
+	koStoneY = 0;
 	
 /* 
  * This initialisation is from stonehandler
@@ -33,22 +38,54 @@ void Tree::init(int * board_size)
 	root = new Move(*boardSize);
 	// node index used for IGS review
 	root->setNodeIndex(1);
-	current = root;
+	lastMoveInMainBranch = current = root;
 	
 	if(checkPositionTags)
 		delete checkPositionTags;
 	checkPositionTags = new Matrix(*boardSize);
+
+	deleteGroupMatrices();		//just in case
+
+	int i, j;
+	groupMatrixView = new Group** [*boardSize];
+	for(i = 0; i < *boardSize; i++)
+	{
+		groupMatrixView[i] = new Group* [*boardSize];
+		for(j = 0; j < *boardSize; j++)
+			groupMatrixView[i][j] = NULL;
+	}
+	groupMatrixCurrent = new Group** [*boardSize];
+	for(i = 0; i < *boardSize; i++)
+	{
+		groupMatrixCurrent[i] = new Group* [*boardSize];
+		for(j = 0; j < *boardSize; j++)
+			groupMatrixCurrent[i][j] = NULL;
+	}
 }
 
 Tree::~Tree()
 {
 	
 	delete checkPositionTags;
+	deleteGroupMatrices();
 	
 	qDeleteAll(*stones);
 	stones->clear();
 
 	clear();
+}
+
+void Tree::deleteGroupMatrices(void)
+{
+	if(!groupMatrixView)
+		return;
+	for(int i = 0; i < *boardSize; i++)
+	{
+		delete[] groupMatrixView[i];
+		delete[] groupMatrixCurrent[i];
+	}
+	delete[] groupMatrixView;
+	delete[] groupMatrixCurrent;
 }
 
 /*
@@ -106,10 +143,16 @@ bool Tree::addSon(Move *node)
 		// current node has no son?
 		if (current->son == NULL)
 		{
+			if(current == node)
+			{
+				qDebug("Attempting to add move as its own son!");
+				return false;
+			}
 			current->son = node;
 			node->parent = current;
 			node->setTimeinfo(false);
 			current = node;
+			lastMoveInMainBranch = current;
 			return false;
 		}
 		// A son found. Add the new node as farest right brother of that son
@@ -225,11 +268,13 @@ Move* Tree::nextMove()
 		return NULL;
 	
 	if (current->marker == NULL)  // No marker, simply take the main son
-		current = current->son;
+		assignCurrent(current, current->son);
 	else
-		current = current->marker;  // Marker set, use this to go the remembered path in the tree
+		assignCurrent(current, current->marker);  // Marker set, use this to go the remembered path in the tree
 	
 	current->parent->marker = current;  // Parents remembers this move we went to
+	//current->getMatrix()->invalidateAdjacentGroups(, groupMatrixView);
+	invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 	return current;
 }
 
@@ -239,7 +284,10 @@ Move* Tree::previousMove()
 		return NULL;
 	
 	current->parent->marker = current;  // Remember the son we came from
-	current = current->parent;          // Move up in the tree
+	assignCurrent(current, current->parent);
+	//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
+	//current->getMatrix()->invalidateAllGroups(groupMatrixView);
+	invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 	return current;
 }
 
@@ -248,7 +296,10 @@ Move* Tree::nextVariation()
 	if (root == NULL || current == NULL || current->brother == NULL)
 		return NULL;
 	
-	current = current->brother;
+	assignCurrent(current, current->brother);
+	//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
+	//current->getMatrix()->invalidateAllGroups(groupMatrixView);
+	invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 	return current;
 }
 
@@ -274,7 +325,12 @@ Move* Tree::previousVariation()
 	while ((tmp = tmp->brother) != NULL)
 	{
 		if (tmp == current)
-			return current = old;
+		{
+			//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
+			//current->getMatrix()->invalidateAllGroups(groupMatrixView);
+			invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
+			return assignCurrent(current, old);
+		}
 		old = tmp;
 	}
 	
@@ -315,7 +371,7 @@ void Tree::clear()
 }
 
 /*
- * Traverse the tree and deletes all moves after the given move
+ * Traverse the tree and deletes all moves after the given move (including the move)
  */
 void Tree::traverseClear(Move *m)
 {
@@ -324,7 +380,9 @@ void Tree::traverseClear(Move *m)
 	QStack<Move*> trash;
 
 	Move *t = NULL;
-	
+
+	if(isInMainBranch(m))
+		lastMoveInMainBranch = m->parent;
 	//drop every node into stack trash	
 	stack.push(m);
 	
@@ -344,6 +402,17 @@ void Tree::traverseClear(Move *m)
 	// QT doc advises this code instead of the above
 	while (!trash.isEmpty())
 		delete trash.pop();
+}
+
+/* This is slower than it could be, but traverseClear I think is seldom called */
+bool Tree::isInMainBranch(Move * m) const
+{
+	while(m->parent && m->parent->son == m)
+		m = m->parent;
+	if(m == root)
+		return true;
+	else
+		return false;
 }
 
 /*
@@ -394,9 +463,6 @@ Move* Tree::findMove(Move *start, int x, int y, bool checkmarker)
 	
 	return NULL;
 }
-
-
-
 
 /*
  * Find a move starting from the given in the argument in the 
@@ -456,12 +522,23 @@ int Tree::count()
 	return counter;
 }
 
+void Tree::setCurrent(Move *m)
+{
+	if(m == lastMoveInMainBranch)
+		current = m;
+	else
+	{
+		assignCurrent(current, m);
+		invalidateCheckPositionGroups();
+	}
+}
+
 void Tree::setToFirstMove()
 {
 	if (root == NULL)
 		qFatal("Error: No root!");
-	
-	current = root;
+	assignCurrent(current, root);
+	invalidateCheckPositionGroups();
 }
 
 int Tree::mainBranchSize()
@@ -478,9 +555,9 @@ int Tree::mainBranchSize()
 	return counter;    
 }
 
-
 Move *Tree::findLastMoveInMainBranch()
 {
+#ifdef OLD
 	Move *m = root;
 	Q_CHECK_PTR(m);
 
@@ -492,19 +569,18 @@ Move *Tree::findLastMoveInMainBranch()
 		m = m->son;
 
 	return m;
+#endif //OLD
+	return lastMoveInMainBranch;
 }
 
-/*
- * This creates an empty move in the tree
- */
-void Tree::createMoveSGF( bool /*brother*/)
+void Tree::createEmptyMove( bool /*brother*/)
 {
 	// qDebug("BoardHandler::createMoveSGF() - %d", mode);
 	
 	Move *m;
 	
 	Matrix *mat = current->getMatrix();
-	m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing, *mat);
+	m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing, *mat, true);
 	/*else	//fastload
 	{
 		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing);
@@ -523,8 +599,6 @@ void Tree::createMoveSGF( bool /*brother*/)
 		return;
 	}
 #endif //FIXME	
-	//if (!fastLoad ) // mode is ALWAYS normal && mode == modeNormal)
-	m->getMatrix()->clearAllMarks();
 	
 	/* Below removed since brother never used */
 	//if (!brother)
@@ -562,7 +636,35 @@ void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 //	return res;
 }
 
+Move * Tree::assignCurrent(Move * & o, Move * & n) 
+{
+	n->getMatrix()->markChangesDirty(*o->getMatrix());
+	o = n;
+	return o;
+}
 
+void Tree::invalidateAdjacentCheckPositionGroups(MatrixStone m)
+{
+	if(current == root)
+		return;
+	if(current == findLastMoveInMainBranch())
+		current->getMatrix()->invalidateAdjacentGroups(m, groupMatrixCurrent);
+	else
+		current->getMatrix()->invalidateAdjacentGroups(m, groupMatrixView);
+}
+
+void Tree::invalidateCheckPositionGroups(void)
+{
+	if(current == root)
+		return;
+	if(current == findLastMoveInMainBranch())
+		current->getMatrix()->invalidateAllGroups(groupMatrixCurrent);
+	else
+		current->getMatrix()->invalidateAllGroups(groupMatrixView);
+}
+
+/* These two functions are a little awkward here, just done to minimize
+ * issues with qgoboard edit FIXME */
 void Tree::updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase)
 {
 	// Passing?
@@ -578,15 +680,21 @@ void Tree::updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase)
 	
 	Q_CHECK_PTR(current->getMatrix());
 	
+	updateMatrix(current->getMatrix(), c, x, y, gamePhase);
+}
+
+void Tree::updateMatrix(Matrix * m, StoneColor c, int x, int y, GamePhase gamePhase)
+{
 	if (c == stoneNone)
-		current->getMatrix()->removeStone(x, y);
+		m->removeStone(x, y);
 	else if (c == stoneErase)
-		current->getMatrix()->eraseStone(x, y);
+		m->eraseStone(x, y);
 	else
-		current->getMatrix()->insertStone(x, y, c, gamePhase);
+		m->insertStone(x, y, c, gamePhase);
 }
 
 
+#ifdef OLD
 /*
  * This function is called by the SGF parser for adding pass moves or a 'StoneNone'
  */
@@ -597,7 +705,7 @@ void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
  	Matrix *mat = current->getMatrix();
 	Q_CHECK_PTR(mat);
 	 
-	Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat);
+	Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, clearMarks);
 	Q_CHECK_PTR(m);
 	
 	if (hasSon(m))
@@ -607,12 +715,25 @@ void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
 		return;
 	}
 	
-	// Remove all marks from this new move. We dont do that when creating
-	// a new variation in edit mode.
-	if (clearMarks)
+	addSon(m);
+//	if (tree->addSon(m) && setting->readIntEntry("VAR_GHOSTS") && getNumBrothers())
+//		updateVariationGhosts();
+//	lastValidMove = m;
+}
+
+
+void Tree::addMove(StoneColor c, int x, int y, Matrix * mat, bool clearMarks)
+{
+	Q_CHECK_PTR(mat);
+	 
+	Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, clearMarks);
+	Q_CHECK_PTR(m);
+	
+	if (hasSon(m))
 	{
-		m->getMatrix()->clearAllMarks();
-//		board->hideAllMarks();
+		// qDebug("*** HAVE THIS SON ALREADY! ***");
+		delete m;
+		return;
 	}
 	
 	addSon(m);
@@ -620,7 +741,9 @@ void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
 //		updateVariationGhosts();
 //	lastValidMove = m;
 }
+#endif //OLD
 
+/* FIXME double check and remove editMove, unnecessary */
 void Tree::doPass(bool sgf, bool fastLoad)
 {
 //	if (lastValidMove == NULL)
@@ -669,7 +792,263 @@ void Tree::editMove(StoneColor c, int x, int y)
 
 }
 
+bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
+{
+	MatrixStone *s = new MatrixStone(x, y, c);
+	lastCaptures = 0;
+	lastValidMoveChecked = NULL;
 
+	if ((x < 1 || x > *boardSize || y < 1 || y > *boardSize) && x != 20 && y != 20)		//because 20,20 is pass, but ugly/unnecessary here FIXME
+	{
+		qWarning("Invalid position: %d/%d", x, y);
+		return false;
+	}
+
+	/* special case, we're erasing a stone */
+	if(c == stoneErase)
+	{
+		if(current->getMatrix()->getStoneAt(x,y) == stoneNone)
+		{
+			qDebug("Trying to erase a stone that doesn't exist: %d %d", x, y);
+			return false;
+		}
+		/* FIXME I don't think this is right.  First of all, it needs to be fixed in deleteNode() as well which is called as an undo
+		 * as well as as a tree edit.  But here, I don't think we want a new move added as a son to erase a move, I think we just
+		 * want to erase it... or maybe not because it makes sense to add it as a tree when its an undo in a game.
+		 * another point is that its not like a move in order, its like a separate tree, so addMove(stoneErase seems singularly
+		 * useless since we have to do something special with the tree anyway, i.e., no addSon, but maybe we go backwards and
+		 * delete some marker */
+		lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
+		checkPosition(s, lastValidMoveChecked->getMatrix());
+		return true;
+	}
+
+	if (current->getMatrix()->getStoneAt(x,y) != stoneNone)
+	{
+		qDebug ("We seem to have already a stone at this place : %d %d", x, y);
+		return false;
+	}
+
+	bool koStone = 0;
+	if (current->getMoveNumber() > 1)
+		koStone = (current->parent->getMatrix()->at(x-1, y-1) == c);
+
+	//check for ko
+	if(koStone && x == koStoneX && y == koStoneY)
+		return false;
+
+	lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
+	if((lastCaptures = checkPosition(s, lastValidMoveChecked->getMatrix())) < 0)
+	{
+		delete lastValidMoveChecked;
+		lastValidMoveChecked = NULL;
+		return false;
+	}
+
+	return true;
+}
+
+void Tree::addMove(StoneColor c, int x, int y)
+{
+	/* special case: pass */
+	if(x == 20 && y == 20)
+	{
+		Matrix *mat = current->getMatrix();
+		Q_CHECK_PTR(mat);
+	 
+		Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
+		Q_CHECK_PTR(m);
+	
+		if (hasSon(m))
+		{
+			// qDebug("*** HAVE THIS SON ALREADY! ***");
+			delete m;
+			return;
+		}
+		addSon(m);
+		return;
+	}
+
+	if(checkMoveIsValid(c, x, y))
+		addStoneOrLastValidMove();
+}
+
+void Tree::addStone(StoneColor c, int x, int y)
+{
+	addStoneOrLastValidMove(c, x, y);
+}
+
+void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
+{
+	koStoneX = 0;
+	koStoneY = 0;
+	if(lastValidMoveChecked)
+	{
+		c = lastValidMoveChecked->getColor();
+		x = lastValidMoveChecked->getX();
+		y = lastValidMoveChecked->getY();
+	
+		if (hasSon(lastValidMoveChecked))
+		{
+			/* This happens a lot if we add a move that's already there
+			 * when really we're just playing along with the tree. 
+			 * This would be the place to add any kind of tesuji testing
+			 * code */
+			delete lastValidMoveChecked;
+			lastValidMoveChecked = NULL;
+			return;
+		}
+		addSon(lastValidMoveChecked);
+	}
+	else if(c != stoneNone)
+	{
+		Matrix *mat = current->getMatrix();
+		Q_CHECK_PTR(mat);
+	 
+		Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
+		Q_CHECK_PTR(m);
+	
+		if (hasSon(m))
+		{
+			// qDebug("*** HAVE THIS SON ALREADY! ***");
+			delete m;
+			return;
+		}
+		addSon(m);
+		/* FIXME updateMatrix calls should be concealed within new Move.  updateCurrentMatrix should also not be called from
+		 * qgoboard. Except, now we call "insertStone" in the middle of checkStoneWithGroups. I think right now I'll just
+ 		 * try to simplify the tree code and then later worry about making it cleaner and clearer. */
+		updateCurrentMatrix(c, x, y);
+	}
+	else
+		return;
+	lastValidMoveChecked = NULL;
+
+	int capturesBlack, capturesWhite;
+	if (current->parent != NULL)
+	{
+		capturesBlack = current->parent->getCapturesBlack();
+		capturesWhite = current->parent->getCapturesWhite();
+	}
+	else
+		capturesBlack = capturesWhite = 0;
+
+	/* Add ko mark */
+	if(lastCaptures == 1)
+	{
+		StoneColor opp = (c == stoneBlack ? stoneWhite : stoneBlack);
+		Matrix * trix = current->getMatrix();
+		StoneColor testcolor;
+		int sides = 3;
+		if(x < trix->getSize())
+		{
+			testcolor = trix->getStoneAt(x + 1, y);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x + 1;
+				koStoneY = y;
+			}
+		}
+		else
+			sides--;
+		
+		if(x > 1)
+		{
+			testcolor = trix->getStoneAt(x - 1, y);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x - 1;
+				koStoneY = y;
+			}
+		}
+		else
+			sides--;
+		if(y < trix->getSize())
+		{
+			testcolor = trix->getStoneAt(x, y + 1);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x;
+				koStoneY = y + 1;
+			}
+		}
+		else
+			sides--;
+		
+		if(y > 1)
+		{
+			testcolor = trix->getStoneAt(x, y - 1);
+			if(testcolor == opp)
+				sides--;
+			else if(testcolor == stoneNone)
+			{
+				koStoneX = x;
+				koStoneY = y - 1;
+			}
+		}
+		else
+			sides--;
+		
+		if(sides != 0)
+		{
+			koStoneX = 0;
+			koStoneY = 0;
+		}
+		else
+		{
+			/* Don't save to file */
+			if(preferences.draw_ko_marker)
+				trix->insertMark(koStoneX, koStoneY, markKoMarker);
+		}
+	}
+	
+
+	if (c == stoneBlack)
+		capturesBlack += lastCaptures;
+	else if (c == stoneWhite)
+		capturesWhite += lastCaptures;
+	current->setCaptures(capturesBlack, capturesWhite);
+}
+
+void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
+{
+	if (current->parent == root || current == root)
+	{
+		qDebug("setting that first weird move line %d", __LINE__);
+		if(current->parent == root)
+			qDebug("current parent root no new node %d %d", x, y);
+		current->setMoveNumber(0); //TODO : make sure this is the proper way
+		current->setX(-1);//-1
+		current->setY(-1);//-1
+		/* SGF submits handicap edit moves as root, they need to be
+		 * given a color so that that color can flip over the cursor
+		 * this is ugly, the cursor should be set by who's turn it
+		 * is, by whatever means that's found, NOT by the color
+		 * of the last move, to unify it.  Regardless, here's our
+		 * solution.  Took me a while to find it because I assumed
+		 * that the cursor and the move color we're linked when they're
+		 * not.  Note also that this color is different from the
+		 * individual colors of the matrix positions for this move */
+		current->setColor(stoneBlack);
+	}
+	updateCurrentMatrix(c, x, y, phaseEdit);
+	//editMove(c, x, y);
+}
+
+void Tree::undoMove(void)
+{
+	previousMove();
+	current->marker = current->son;
+	current->son = NULL;
+}
+
+#ifdef OLD
 /*
  * This function updates the matrix with a stones at coords x,y and color c
  * Since the addMove reproduces the matrix of the previous move, it is updated here
@@ -690,6 +1069,8 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayye
 #endif //DIFFERING_ADJACENT_PLAY_FIX
 	static Matrix * last_move_matrix = 0;
 	static int last_captures;
+	qDebug("Something calls addStoneSGF!!!!!!!!!!!");
+	return 0;
 //	bool shown = false;
 	
 	/* qDebug("BoardHandler::addStoneSGF(StoneColor c, int x, int y) - %d %d/%d %d",
@@ -823,7 +1204,9 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayye
 	{
 		Matrix *m = current->getMatrix();
 		checkPosition_matrix = new Matrix(*m);
+#ifdef OLD
 		checkPosition_matrix->insertStone(x, y, c, phaseOngoing);
+#endif //OLD
 #ifdef DIFFERING_ADJACENT_PLAY_FIX
 		dpyX = x;
 		dpyY = y;
@@ -889,6 +1272,8 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayye
 		last_move_matrix = checkPosition_matrix;
 		return captures;
 	}
+	else
+		addMove(c, x, y, checkPosition_matrix, TRUE);
 	
 	/* Add ko mark */
 	if(captures == 1)
@@ -965,7 +1350,6 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayye
 		}
 	}
 	
-	
 
 	if (c == stoneBlack)
 		capturesBlack += captures;
@@ -978,8 +1362,14 @@ int Tree::addStoneSGF(StoneColor c, int x, int y, bool new_node, bool dontplayye
 //	lastValidMove = tree->getCurrent();
 	return captures;
 }
+#endif //OLD
 
-
+#ifdef NOGROUPSCHECKPOSITION
+/* I'm not really sure why I wrote this function now.  I mean its clean and nice
+ * but I think its slow.  The old groups code did break when you looked at another
+ * move during a game, but then I could have just had a current groups and a current
+ * looked at groups and updated each independently.  Maybe I'll feel different
+ * later but I feel like an idiot about this. */
 int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 {
 	StoneColor c;
@@ -1405,7 +1795,94 @@ int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 	}
 	//qDebug("%d captures", captures);
 	return captures;
-}	
+}
+#endif //NOGROUPSCHECKPOSITION
+
+
+int Tree::checkPosition(MatrixStone * stone, Matrix * m)
+{
+	Group *** gm;
+	int liberties;
+	Group * joins[4];
+	Group * enemyGroups[4];
+	Group * highgroup;
+	int capturedStones;
+	int i, j;
+
+	if(current == findLastMoveInMainBranch())
+		gm = groupMatrixCurrent;
+	else
+		gm = groupMatrixView;
+#ifdef CHECKPOSITION_DEBUG
+	qDebug("Checking position on %p", gm);
+#endif //CHECKPOSITION_DEBUG
+	if(stone->c == stoneErase)
+	{
+		m->removeStoneFromGroups(stone, gm);
+		return 0;
+	}
+	liberties = m->checkStoneWithGroups(stone, gm, joins, enemyGroups);
+	if(liberties == 0 && 
+		(!enemyGroups[0] || enemyGroups[0]->liberties != 1) && 
+		(!enemyGroups[1] || enemyGroups[1]->liberties != 1) && 
+		(!enemyGroups[2] || enemyGroups[2]->liberties != 1) && 
+		(!enemyGroups[3] || enemyGroups[3]->liberties != 1))
+		return -1;	//suicide
+	else
+	{
+		highgroup = NULL;
+		for(i = 0; i < 4; i++)
+		{
+			if(!joins[i])
+				continue;
+			if(!highgroup)
+				highgroup = joins[i];
+			else if(joins[i]->count() > highgroup->count())
+				highgroup = joins[i];
+		}
+		if(highgroup)
+		{
+			for(i = 0; i < 4; i++)
+			{
+				if(joins[i] && joins[i] != highgroup)
+					m->replaceGroup(joins[i], highgroup, gm);
+		
+			}
+			
+		}
+		else
+			highgroup = new Group();
+		highgroup->append(stone, gm);
+		highgroup->liberties = liberties;
+		capturedStones = 0;
+		for(i = 0; i < 4; i++)
+		{
+			if(enemyGroups[i])
+			{
+				if(enemyGroups[i]->liberties == 1)
+				{
+					capturedStones += enemyGroups[i]->count();
+					for(j = i + 1; j < 4; j++)
+					{
+						if(enemyGroups[j] == enemyGroups[i])
+							enemyGroups[j] = NULL;
+					}
+					m->removeGroup(enemyGroups[i], gm, highgroup);
+				}
+				else
+				{
+					for(j = i + 1; j < 4; j++)
+					{
+						if(enemyGroups[j] == enemyGroups[i])
+							enemyGroups[j] = NULL;
+					}
+					enemyGroups[i]->liberties--;
+				}
+			}
+		}
+		return capturedStones;
+	}
+}
 
 bool Tree::removeStone(int x, int y, bool hide)
 {
@@ -1458,9 +1935,69 @@ int Tree::hasMatrixStone(int x, int y)
 	return -1;
 }
 
+#ifdef OLD
+/*
+ * This is used by the sgfparser when reverting to the previous node after the end of a branch
+ * It is only used to recalculates all the groups according to the matrix
+ */
+bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
+{
+	// qDebug("StoneHandler::updateAll(Matrix *m) - toDraw = %d", toDraw);
+	
+	Q_CHECK_PTR(m);
+	
+//	m->debug();
+	
+//	Stone *stone;
+	bool modified = false;
+//	bool fake = false;
+//	short data;
+
+	short color;	
+
+	/*
+	* Recalculates all the groups according to the matrix
+	*/
+
+	// First we remove verything from the group list
+	// This also delete ALL the MatrixStones
+	while (! groups->isEmpty())
+		delete groups->takeFirst();
+	//Might not be needed
+	groups->clear();
+	qDebug("updateAll: %p %p", this, m);
+/*
+	for (int y=1; y<=boardSize; y++)
+	{
+		for (int x=1; x<=boardSize; x++)
+		{
+			// Extract the data for the stone from the matrix
+//			data = abs(m->at(x-1, y-1) % 10);
+			color=m->at(x-1, y-1);
+
+			if (color == stoneBlack || color ==stoneWhite)
+			{
+				MatrixStone *s = new MatrixStone;
+				s->x=x;
+				s->y=y;
+				s->c= (color == stoneBlack ? stoneBlack : stoneWhite) ;
+
+				checkPosition(s,m);
+			}
+		}
+	}
+*/
+	return modified;
+}
+#endif //OLD
 /*
  * this deletes the current node an all its sons
  */
+/* FIXME this should certainly invalidate something to move us to the previous matrix or the like.
+ * and its called straight out of the network code so... basically we need to think through
+ * how we want to do the two different views and how to transition between them, almost shouldn't
+ * be an issue, like its the current view matrix that changes, and then we switch to the current
+ * as we scroll... but I want to write the invalidate that works locally... */
 void Tree::deleteNode()
 {
 	Move *m = getCurrent(),
@@ -1533,6 +2070,10 @@ void Tree::deleteNode()
 	remember->son = remSon;           // Reset son pointer
 	remember->marker = NULL;          // Forget marker
 	
+	if(current == findLastMoveInMainBranch())
+		current->getMatrix()->invalidateAllGroups(groupMatrixCurrent);
+	else
+		current->getMatrix()->invalidateAllGroups(groupMatrixView);
 //	updateMove(tree->getCurrent(), !display_incoming_move);
 	
 //	board->setModified();

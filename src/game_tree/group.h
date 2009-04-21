@@ -7,24 +7,22 @@
 
 #include "defines.h"
 
-//class Stone;
-
 class Group : public QList<MatrixStone *>
 {
 public:
 	Group();
-	virtual ~Group();// {}
+	~Group();
 	
-	int getLiberties() const { return liberties; }
-	void setLiberties(int l) { liberties = l; }
-	virtual int compareItems(MatrixStone *d1, MatrixStone *d2);
+	/*virtual*/ void append(MatrixStone * m) { QList<MatrixStone *>::append(m); };
+	/*virtual*/ void append(MatrixStone * m, Group *** groupMatrix) { QList<MatrixStone *>::append(m); groupMatrix[m->x - 1][m->y - 1] = this; };
+	/*virtual*/ int compareItems(MatrixStone *d1, MatrixStone *d2);
+	void remove(MatrixStone * m);
 	bool isAttachedTo(MatrixStone *s);
+	int liberties;
+
 #ifndef NO_DEBUG
 	void debug();
 #endif
-	
-private:
-	int liberties;
 };
 
 #endif

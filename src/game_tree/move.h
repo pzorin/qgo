@@ -15,7 +15,7 @@ class Move
 {
 public:
 	Move(int board_size);
-	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const Matrix &mat, const QString &s=NULL);
+	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const Matrix &mat, bool clearAllMarks=false, const QString &s=NULL);
 	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const QString &s=NULL);
 	~Move();
 	
