@@ -88,6 +88,7 @@ protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
 private:
+	void checkAddKoMark(StoneColor c, int x, int y, Move * m = NULL);
 	Move * assignCurrent(Move * & o, Move * & n);
 	void invalidateAdjacentCheckPositionGroups(MatrixStone m);
 	void invalidateCheckPositionGroups(void);

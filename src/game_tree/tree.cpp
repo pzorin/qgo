@@ -151,8 +151,9 @@ bool Tree::addSon(Move *node)
 			current->son = node;
 			node->parent = current;
 			node->setTimeinfo(false);
-			current = node;
-			lastMoveInMainBranch = current;
+			assignCurrent(current, node);
+			if(isInMainBranch(current->parent))
+				lastMoveInMainBranch = current;
 			return false;
 		}
 		// A son found. Add the new node as farest right brother of that son
@@ -164,7 +165,7 @@ bool Tree::addSon(Move *node)
 				qFatal("Failed to add a brother.");
 				return false;
 			}
-			current = node;
+			assignCurrent(current, node);
 			return true;
 		}
 	}
@@ -274,7 +275,7 @@ Move* Tree::nextMove()
 	
 	current->parent->marker = current;  // Parents remembers this move we went to
 	//current->getMatrix()->invalidateAdjacentGroups(, groupMatrixView);
-	invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
+	//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 	return current;
 }
 
@@ -287,7 +288,7 @@ Move* Tree::previousMove()
 	assignCurrent(current, current->parent);
 	//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
 	//current->getMatrix()->invalidateAllGroups(groupMatrixView);
-	invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
+	//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 	return current;
 }
 
@@ -299,7 +300,7 @@ Move* Tree::nextVariation()
 	assignCurrent(current, current->brother);
 	//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
 	//current->getMatrix()->invalidateAllGroups(groupMatrixView);
-	invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
+	//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 	return current;
 }
 
@@ -328,7 +329,7 @@ Move* Tree::previousVariation()
 		{
 			//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
 			//current->getMatrix()->invalidateAllGroups(groupMatrixView);
-			invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
+			//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
 			return assignCurrent(current, old);
 		}
 		old = tmp;
@@ -347,7 +348,7 @@ bool Tree::hasSon(Move *m)
 	do {
 		if (m->equals(tmp))
 		{
-			current = tmp;
+			assignCurrent(current, tmp);
 			return true;
 		}
 	} while ((tmp = tmp->brother) != NULL);
@@ -638,6 +639,44 @@ void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 
 Move * Tree::assignCurrent(Move * & o, Move * & n) 
 {
+	if(n != root)  //not an issue anymore
+	{
+		if(n == o->son)
+		{
+			if(n == findLastMoveInMainBranch())
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixCurrent);
+			else
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixView);
+		}
+		else if(o == n->son)
+		{
+			if(n == findLastMoveInMainBranch())
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixCurrent);
+			else
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixView);
+		}
+		else if(o->parent == n->parent)
+		{
+			if(n == findLastMoveInMainBranch())
+			{
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixCurrent);
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixCurrent);
+			}
+			else
+			{
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixView);
+				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixView);
+			}
+		}
+		else
+		{
+			if(n == findLastMoveInMainBranch())
+				n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), groupMatrixCurrent);
+			else
+				n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), groupMatrixView);
+		}
+	}
+	checkAddKoMark(n->getColor(), n->getX(), n->getY(), n);
 	n->getMatrix()->markChangesDirty(*o->getMatrix());
 	o = n;
 	return o;
@@ -895,10 +934,9 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 			 * This would be the place to add any kind of tesuji testing
 			 * code */
 			delete lastValidMoveChecked;
-			lastValidMoveChecked = NULL;
-			return;
 		}
-		addSon(lastValidMoveChecked);
+		else
+			addSon(lastValidMoveChecked);
 	}
 	else if(c != stoneNone)
 	{
@@ -912,13 +950,15 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 		{
 			// qDebug("*** HAVE THIS SON ALREADY! ***");
 			delete m;
-			return;
 		}
-		addSon(m);
-		/* FIXME updateMatrix calls should be concealed within new Move.  updateCurrentMatrix should also not be called from
-		 * qgoboard. Except, now we call "insertStone" in the middle of checkStoneWithGroups. I think right now I'll just
- 		 * try to simplify the tree code and then later worry about making it cleaner and clearer. */
-		updateCurrentMatrix(c, x, y);
+		else
+		{
+			addSon(m);
+			/* FIXME updateMatrix calls should be concealed within new Move.  updateCurrentMatrix should also not be called from
+			 * qgoboard. Except, now we call "insertStone" in the middle of checkStoneWithGroups. I think right now I'll just
+ 			 * try to simplify the tree code and then later worry about making it cleaner and clearer. */
+			updateCurrentMatrix(c, x, y);
+		}
 	}
 	else
 		return;
@@ -931,13 +971,55 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 		capturesWhite = current->parent->getCapturesWhite();
 	}
 	else
-		capturesBlack = capturesWhite = 0;
+		capturesBlack = capturesWhite = 0;	
 
-	/* Add ko mark */
+	if (c == stoneBlack)
+		capturesBlack += lastCaptures;
+	else if (c == stoneWhite)
+		capturesWhite += lastCaptures;
+	current->setCaptures(capturesBlack, capturesWhite);
+}
+
+void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
+{
+	if (current->parent == root || current == root)
+	{
+		qDebug("setting that first weird move line %d", __LINE__);
+		if(current->parent == root)
+			qDebug("current parent root no new node %d %d", x, y);
+		current->setMoveNumber(0); //TODO : make sure this is the proper way
+		current->setX(-1);//-1
+		current->setY(-1);//-1
+		/* SGF submits handicap edit moves as root, they need to be
+		 * given a color so that that color can flip over the cursor
+		 * this is ugly, the cursor should be set by who's turn it
+		 * is, by whatever means that's found, NOT by the color
+		 * of the last move, to unify it.  Regardless, here's our
+		 * solution.  Took me a while to find it because I assumed
+		 * that the cursor and the move color we're linked when they're
+		 * not.  Note also that this color is different from the
+		 * individual colors of the matrix positions for this move */
+		current->setColor(stoneBlack);
+	}
+	updateCurrentMatrix(c, x, y, phaseEdit);
+	//editMove(c, x, y);
+}
+
+void Tree::undoMove(void)
+{
+	previousMove();
+	current->marker = current->son;
+	current->son = NULL;
+}
+
+void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
+{
+	if(!m)
+		m = current;
 	if(lastCaptures == 1)
 	{
 		StoneColor opp = (c == stoneBlack ? stoneWhite : stoneBlack);
-		Matrix * trix = current->getMatrix();
+		Matrix * trix = m->getMatrix();
 		StoneColor testcolor;
 		int sides = 3;
 		if(x < trix->getSize())
@@ -1007,45 +1089,6 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 				trix->insertMark(koStoneX, koStoneY, markKoMarker);
 		}
 	}
-	
-
-	if (c == stoneBlack)
-		capturesBlack += lastCaptures;
-	else if (c == stoneWhite)
-		capturesWhite += lastCaptures;
-	current->setCaptures(capturesBlack, capturesWhite);
-}
-
-void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
-{
-	if (current->parent == root || current == root)
-	{
-		qDebug("setting that first weird move line %d", __LINE__);
-		if(current->parent == root)
-			qDebug("current parent root no new node %d %d", x, y);
-		current->setMoveNumber(0); //TODO : make sure this is the proper way
-		current->setX(-1);//-1
-		current->setY(-1);//-1
-		/* SGF submits handicap edit moves as root, they need to be
-		 * given a color so that that color can flip over the cursor
-		 * this is ugly, the cursor should be set by who's turn it
-		 * is, by whatever means that's found, NOT by the color
-		 * of the last move, to unify it.  Regardless, here's our
-		 * solution.  Took me a while to find it because I assumed
-		 * that the cursor and the move color we're linked when they're
-		 * not.  Note also that this color is different from the
-		 * individual colors of the matrix positions for this move */
-		current->setColor(stoneBlack);
-	}
-	updateCurrentMatrix(c, x, y, phaseEdit);
-	//editMove(c, x, y);
-}
-
-void Tree::undoMove(void)
-{
-	previousMove();
-	current->marker = current->son;
-	current->son = NULL;
 }
 
 #ifdef OLD
