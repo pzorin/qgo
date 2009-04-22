@@ -21,6 +21,7 @@
 
 #include "defines.h"
 #include "mainwindow.h"
+#include "sgfparser.h"
 //#include "parser.h"
 #include "network/networkconnection.h"
 #include "talk.h"

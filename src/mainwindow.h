@@ -9,7 +9,6 @@
 #include "ui_mainwindow.h"
 #include "mainwindow_settings.h"
 #include "defines.h"
-#include "sgfparser.h"
 #include "boardwindow.h"
 #include "igsconnection.h"
 //#include "oldparser.h"
@@ -25,6 +24,7 @@ class NetworkConnection;
 class ServerListStorage;
 class Talk;
 class GameDialog;
+class SGFParser;
 
 class MainWindow : public QMainWindow
 {
