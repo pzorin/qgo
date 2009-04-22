@@ -1386,6 +1386,37 @@ void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
 #endif //CHECKPOSITION_DEBUG
 }
 
+void Matrix::invalidateChangedGroups(Matrix & m, Group *** gm)
+{
+	std::vector<Group*> groupList;
+	std::vector<Group*>::iterator k;
+	Group * g;
+	int i, j;
+
+	for (i=0; i<size; i++)
+		for (j=0; j<size; j++)
+		{
+			if((matrix[i][j] & 0x00ff) != (m.matrix[i][j] & 0x00ff))
+			{
+				g = gm[i][j];
+				if(!g)
+					continue;
+				k = std::find(groupList.begin(), groupList.end(), g);
+				if(k == groupList.end())
+				{
+					groupList.push_back(g);
+					findInvalidAdjacentGroups(g, gm, groupList);
+				}
+			}
+		}
+	for(k = groupList.begin(); k != groupList.end(); k++)
+	{
+		for(i = 0; i < (*k)->count(); i++)
+			gm[(*k)->at(i)->x - 1][(*k)->at(i)->y - 1] = NULL;
+		delete *k;
+	}
+}
+
 void Matrix::invalidateAdjacentGroups(MatrixStone m, Group *** gm)
 {
 	std::vector<Group*> groupList;

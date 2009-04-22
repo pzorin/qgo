@@ -55,6 +55,7 @@ public:
 	void replaceGroup(Group * replaceme, Group * with, Group *** groupMatrix);
 	void removeGroup(Group * g, Group *** groupMatrix, Group * killer);
 	void removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix);
+	void invalidateChangedGroups(Matrix & m, Group *** gm);
 	void invalidateAdjacentGroups(MatrixStone m, Group *** gm);
 	void invalidateAllGroups(Group *** gm);
 
