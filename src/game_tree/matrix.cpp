@@ -1423,7 +1423,8 @@ void Matrix::invalidateAdjacentGroups(MatrixStone m, Group *** gm)
 	std::vector<Group*>::iterator j, k;
 	Group * g;
 	int i;
-
+	if(m.x == 20 && m.y == 20)		//awkward passing check FIXME
+		return;
 	if(m.x > 1 && (g = gm[m.x - 2][m.y - 1]))
 	{
 		j = std::find(groupList.begin(), groupList.end(), g);

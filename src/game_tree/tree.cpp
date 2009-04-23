@@ -654,6 +654,7 @@ Move * Tree::assignCurrent(Move * & o, Move * & n)
 				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixCurrent);
 			else
 				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixView);
+			lastCaptures = getLastCaptures(n);
 		}
 		else if(o->parent == n->parent)
 		{
@@ -945,7 +946,6 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 	 
 		Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
 		Q_CHECK_PTR(m);
-	
 		if (hasSon(m))
 		{
 			// qDebug("*** HAVE THIS SON ALREADY! ***");
@@ -977,6 +977,7 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 		capturesBlack += lastCaptures;
 	else if (c == stoneWhite)
 		capturesWhite += lastCaptures;
+	lastCaptures = 0;
 	current->setCaptures(capturesBlack, capturesWhite);
 }
 
@@ -1014,6 +1015,11 @@ void Tree::undoMove(void)
 
 void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
 {
+	if(x == 20 && y == 20)	//awkward passing check FIXME
+	{
+		koStoneX = 0; koStoneY = 0; 	//necessary?? FIXME
+		return;
+	}
 	if(!m)
 		m = current;
 	if(lastCaptures == 1)
@@ -1089,6 +1095,18 @@ void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
 				trix->insertMark(koStoneX, koStoneY, markKoMarker);
 		}
 	}
+}
+
+int Tree::getLastCaptures(Move * m)
+{
+	if(!m->parent)
+		return 0;
+	if(m->getColor() == stoneWhite)
+		return m->getCapturesWhite() - m->parent->getCapturesWhite();
+	else if(m->getColor() == stoneBlack)
+		return m->getCapturesBlack() - m->parent->getCapturesBlack();
+	else
+		return 0;
 }
 
 #ifdef OLD
