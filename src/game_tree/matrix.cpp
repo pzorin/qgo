@@ -1425,6 +1425,8 @@ void Matrix::invalidateAdjacentGroups(MatrixStone m, Group *** gm)
 	int i;
 	if(m.x == 20 && m.y == 20)		//awkward passing check FIXME
 		return;
+	if(m.x == -1 || m.y == -1)		//can happen from sgf, FIXME, probably related to assignCurrent call from setCurrent
+		return;
 	if(m.x > 1 && (g = gm[m.x - 2][m.y - 1]))
 	{
 		j = std::find(groupList.begin(), groupList.end(), g);
