@@ -59,6 +59,7 @@ Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connec
 
 Talk::~Talk()
 {
+	qDebug("Talk destroyed");
 	opponent.dialog_opened = false;
 }
 
@@ -70,6 +71,9 @@ void Talk::closeEvent(QCloseEvent *)
 
 QString Talk::get_name() const
 { return opponent.name; }
+
+PlayerListing & Talk::get_opponent() const
+{ return opponent; }
 
 // release current Tab
 void Talk::slot_pbRelTab()

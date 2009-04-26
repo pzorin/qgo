@@ -37,6 +37,7 @@ public:
 	QLineEdit      *get_le() const {return ui.LineEdit1; }
 	QWidget        *get_tabWidget()  { return this; }
 	QString        get_name() const;
+	PlayerListing & get_opponent() const;
 	//void           set_name(QString &n) { name = n; }
 	void           write(const QString &text = QString()) const;
 	void recvTalk(QString text);
