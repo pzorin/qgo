@@ -5,6 +5,7 @@ class PlayerListing;
 #define LESSTHAN	-1
 #define EQUALTO		0
 #define GREATERTHAN	1
+
 /* ListItem can't have pure virtual functions because
  * we do actually use it for the header items */
 class ListItem
@@ -22,18 +23,6 @@ class ListItem
 		QList <QVariant> itemData;
 };
 
-enum ObserverListingColumn { OC_NAME=0, OC_RANK, O_TOTALCOLUMNS };
-
-enum PlayerListingColumn { PC_STATUS=0, PC_NAME, PC_RANK, PC_PLAYING,
-				PC_OBSERVING, PC_WINS, PC_LOSSES, PC_IDLE, PC_COUNTRY,
-				PC_MATCHPREFS, P_TOTALCOLUMNS};
-
-enum GameListingColumn { GC_ID=0, GC_WHITENAME, GC_WHITERANK, GC_BLACKNAME,
-				GC_BLACKRANK,
-				GC_MOVES, GC_SIZE, GC_HANDICAP, GC_KOMI,
-				GC_BYOMI, GC_FLAGS,
-				GC_OBSERVERS, G_TOTALCOLUMNS };
-
 class ObserverListItem : public ListItem
 {
 	public:
@@ -49,13 +38,13 @@ class ObserverListItem : public ListItem
 class GamesListItem : public ListItem
 {
 	public:
-		GamesListItem(const GameListing * l);
+		GamesListItem(GameListing * const l);
 		virtual QVariant data(int column) const;
 		int columnCount() const;
-		const GameListing * getListing(void) const { return listing; };
+		GameListing * getListing(void) const { return listing; };
 		virtual int compare(const ListItem &, int column) const;
 	private:
-		const GameListing * listing;
+		GameListing * const listing;
 };
 
 class PlayerListItem : public ListItem
@@ -129,32 +118,42 @@ class PlayerListModel : public ListModel
 		QString account_name;
 };
 
+class SimplePlayerListModel: public PlayerListModel
+{
+	public:
+		SimplePlayerListModel(bool _notify_column);
+		virtual QVariant data(const QModelIndex & index, int role) const;
+	private:
+		bool notify_column;
+};
+
 class GamesListModel : public ListModel
 {
 	public:
 		GamesListModel();
 		~GamesListModel();
-		void insertListing(const GameListing * l);
-		void updateListing(const GameListing * l);
-		void removeListing(const GameListing * l);
+		void insertListing(GameListing * const l);
+		void updateListing(GameListing * const l);
+		void removeListing(GameListing * const l);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
-		const GameListing * gameListingFromIndex(const QModelIndex &);
+		GameListing * gameListingFromIndex(const QModelIndex &);
 };
 
 class PlayerSortProxy : public QSortFilterProxyModel
 {
 	/* IGS ranks probably up to 10000, but ORO would need 100000 so... */
 	public:
-		PlayerSortProxy() : rankMin(0), rankMax(100000), openOnly(0) {};
+		PlayerSortProxy() : rankMin(0), rankMax(100000), flags(none) {};
 		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 		bool filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const;
 		void setFilter(int rn, int rm);
-		void setFilter(bool oo);
+		enum PlayerSortFlags { none = 0x0, open = 0x1, friends = 0x2, fans = 0x4, noblock = 0x8 };
+		void setFilter(enum PlayerSortFlags f);
 	private:
 		int rankMin;
 		int rankMax;
-		bool openOnly;
+		unsigned char flags;
 };
 
 extern std::map<class PlayerListing *, unsigned short> removed_player;

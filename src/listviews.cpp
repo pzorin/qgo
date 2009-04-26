@@ -11,6 +11,20 @@ QIcon * stoneWhiteIcon;
 QIcon * stoneBlackIcon;
 #endif //LISTVIEW_ICONS
 
+enum ObserverListingColumn { OC_NAME=0, OC_RANK, O_TOTALCOLUMNS };
+
+enum PlayerListingColumn { PC_STATUS=0, PC_NAME, PC_RANK, PC_PLAYING,
+				PC_OBSERVING, PC_WINS, PC_LOSSES, PC_IDLE, PC_COUNTRY,
+				PC_MATCHPREFS, P_TOTALCOLUMNS, PC_NOTIFY};
+				
+enum SimplePlayerListingColumn { SPC_NAME=0, SPC_NOTIFY };
+
+enum GameListingColumn { GC_ID=0, GC_WHITENAME, GC_WHITERANK, GC_BLACKNAME,
+				GC_BLACKRANK,
+				GC_MOVES, GC_SIZE, GC_HANDICAP, GC_KOMI,
+				GC_BYOMI, GC_FLAGS,
+				GC_OBSERVERS, G_TOTALCOLUMNS };
+
 ObserverListModel::ObserverListModel()
 {
 	QList <QVariant> rootData;
@@ -198,6 +212,42 @@ PlayerListing * PlayerListModel::playerListingFromIndex(const QModelIndex & inde
 	return item->getListing();
 }
 
+SimplePlayerListModel::SimplePlayerListModel(bool _notify_column)
+{
+	QList <QVariant> rootData;
+	if((notify_column = _notify_column))
+		rootData << "Name" << "Notify";
+	else
+		rootData << "Name";
+	headerItem = new ListItem(rootData);
+	list_sort_order = Qt::DescendingOrder;	//initially unsorted
+}
+
+QVariant SimplePlayerListModel::data(const QModelIndex & index, int role) const
+{
+	if(!index.isValid())
+		return QVariant();
+
+	PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
+	if(role == Qt::DisplayRole)
+	{
+		switch(index.column())
+		{
+			case SPC_NAME:
+				return item->data(PC_NAME);
+				break;
+			case SPC_NOTIFY:
+				return item->data(PC_NOTIFY);
+				break;
+			default:
+				return QVariant();
+				break;
+		}
+	}
+	else
+		return QVariant();
+}
+
 GamesListModel::GamesListModel()
 {
 	QList <QVariant> rootData;
@@ -216,7 +266,7 @@ GamesListModel::~GamesListModel()
 	delete headerItem;
 }
 
-void GamesListModel::insertListing(const GameListing * l)
+void GamesListModel::insertListing(GameListing * const l)
 {
 	GamesListItem * item = new GamesListItem(l);	
 	ListModel::insertListing(*item);	
@@ -225,7 +275,7 @@ void GamesListModel::insertListing(const GameListing * l)
 	*/
 }
 
-void GamesListModel::updateListing(const GameListing * l)
+void GamesListModel::updateListing(GameListing * const l)
 {
 	//if(!l)
 	//	return;	//nothing to update
@@ -253,11 +303,11 @@ void GamesListModel::updateListing(const GameListing * l)
 	insertListing(l);
 }
 
-void GamesListModel::removeListing(const GameListing * l)
+void GamesListModel::removeListing(GameListing * const l)
 {
 	for(int i = 0; i < items.count(); i++)
 	{
-		const GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
+		GamesListItem * const item = static_cast<const GamesListItem *>(items[i]);
 		if(item->getListing() == l)
 		{
 			/* Really this is supposed to be not QModelIndex() but the
@@ -316,7 +366,7 @@ QVariant GamesListModel::data(const QModelIndex & index, int role) const
 		return QVariant();
 }
 
-const GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
+GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
 {
 	GamesListItem * item = static_cast<GamesListItem*>(index.internalPointer());
 	return item->getListing();
@@ -511,7 +561,7 @@ int ObserverListItem::compare(const ListItem & i, int column) const
 	return EQUALTO;
 }
 
-GamesListItem::GamesListItem(const GameListing * l) : listing(l)
+GamesListItem::GamesListItem(GameListing * const l) : listing(l)
 {
 }
 
@@ -782,6 +832,9 @@ QVariant PlayerListItem::data(int column) const
 			//is this right?  FIXME takes up too much space, should go with simple numbers, abbrev.
 			return QVariant(listing->nmatch_settings);
 			break;
+		case PC_NOTIFY:		//awkward, but used for SimplePlayerListModel
+			return QVariant(listing->notify);
+			break;
 		default:
 			return QVariant();
 			break;
@@ -1023,10 +1076,10 @@ void PlayerSortProxy::setFilter(int rn, int rm)
 	sort(P_TOTALCOLUMNS);	//resort as current
 }
 
-void PlayerSortProxy::setFilter(bool oo)
+void PlayerSortProxy::setFilter(enum PlayerSortFlags f)
 {
 	// might be worth calling sort here ??? FIXME
-	openOnly = oo;
+	flags ^= f;
 	sort(P_TOTALCOLUMNS);	//resort as current
 }
 
@@ -1044,12 +1097,37 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 	QModelIndex playingIndex = sourceModel()->index(sourceRow, PC_PLAYING, sourceParent);
 	const PlayerListing * p = dynamic_cast<PlayerListModel *>(sourceModel())->playerListingFromIndex(flagIndex);
 
-	if(openOnly)
+	if(!(flags & noblock))
+	{
+		if(p->friendFanType == PlayerListing::blocked)
+			return false;
+	}
+	if(flags & friends)
+	{
+		if(!p->friendFanType == PlayerListing::friended)
+		{
+			if(flags & fans)
+			{
+					if(!p->friendFanType == PlayerListing::watched)
+						return false;
+			}
+			else
+				return false;
+		}
+	}
+	else if(flags & fans)
+	{
+		if(!p->friendFanType == PlayerListing::watched)
+			return false;	
+	}
+	
+	if(flags & open)
 	{
 		if(sourceModel()->data(flagIndex).toString().contains("X") ||
 			p->playing != 0)
 			return false;
 	}
+	
 	if(p->rank_score > (unsigned int)rankMax || p->rank_score + 1 < (unsigned int)rankMin)
 		return false;
 	return true;
