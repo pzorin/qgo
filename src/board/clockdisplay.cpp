@@ -26,8 +26,8 @@ ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _pe
 	periodtime = _periodtime;
 	//outOfMainTime = false;
 	
-	pb_timeBlack = boardwindow->getUi().pb_timeBlack;
-	pb_timeWhite = boardwindow->getUi().pb_timeWhite;
+	pb_timeBlack = boardwindow->getUi()->pb_timeBlack;
+	pb_timeWhite = boardwindow->getUi()->pb_timeWhite;
 #if defined(Q_WS_WIN) || defined(Q_WS_MAC)
 	/* Otherwise windows XP style makes time buttons ugly white on white.
 	 * Same issue on mac.  and it could interfere
@@ -84,7 +84,6 @@ void ClockDisplay::setTimeInfo(int btime, int bstones_periods, int wtime, int ws
  */
 void ClockDisplay::setTimeStep(bool black)
 {
-	/* Why would this ever be anything besides -1?? */
 	if (black)
 	{
 		b_time--;
@@ -103,7 +102,7 @@ void ClockDisplay::setTimeStep(bool black)
 			 * combined and such... FIXME*/
 			if(timeSystem == byoyomi || (timeSystem == tvasia && b_stones_periods != -1))
 			{
-				printf("b by: %d %d %d %d\n", b_time, b_stones_periods, periodtime, periods);
+				//printf("b by: %d %d %d %d\n", b_time, b_stones_periods, periodtime, periods);
 				if(b_stones_periods > -1 || timeSystem == tvasia)
 					b_stones_periods--;
 				else
@@ -127,6 +126,9 @@ void ClockDisplay::setTimeStep(bool black)
 			else
 				printf("other timesystem\n");
 		}
+		/* FIXME
+		 * major thing, we need to get time to switch
+		 * over into byoyomi time on IGS */
 	}
 	else
 	{
