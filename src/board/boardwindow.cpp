@@ -50,7 +50,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//Creates the game tree
 	tree = new Tree(&boardSize);
 
-	observerListModel = 0;
 	setupUI();
 
 	//Loads the sgf file if any
@@ -144,9 +143,6 @@ BoardWindow::~BoardWindow()
 	settings.setValue("BOARD_SIZES", ui.boardSplitter->saveState());
 	
 	delete tree;	//okay?
-	
-	if(observerListModel)
-		delete observerListModel;
 	
 	delete gameData;
 	/* FIXME I'm not totally certain we want to delete the dispatch
@@ -275,11 +271,6 @@ void BoardWindow::setupUI(void)
 	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
 	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
 
-	if(gameData->gameMode == modeObserve || gameData->gameMode == modeMatch || gameData->gameMode == modeReview)
-	{
-		observerListModel = new ObserverListModel();
-		ui.observerView->setModel(observerListModel);
-	}
 	/* Set column widths ?? */
 }
 

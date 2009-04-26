@@ -52,7 +52,7 @@ public:
 	Tree *getTree() 			{return tree;}
 	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
 	BoardHandler *getBoardHandler() 	{return boardHandler;}
-	Ui::BoardWindow getUi() 		{return ui;}
+	Ui::BoardWindow * getUi() 		{return &ui;}
 	GameMode getGameMode() 			{return gameData->gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
@@ -79,8 +79,6 @@ public:
 	 * going to be everywhere */
 	class BoardDispatch * getBoardDispatch(void) { return dispatch; };
 	void setBoardDispatch(BoardDispatch * d);
-	/* Doesn't really belong here !!! FIXME */
-	class ObserverListModel * observerListModel;
 
 protected:
 	void closeEvent(QCloseEvent *e);
