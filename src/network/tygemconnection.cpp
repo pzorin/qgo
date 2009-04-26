@@ -2632,7 +2632,7 @@ void TygemConnection::sendTime(BoardDispatch * boarddispatch)
 	packet[19] = 0x00;
 #ifdef RE_DEBUG
 	printf("TIME SENT: ");
-	for(i = 0; i < 20; i++)
+	for(int i = 0; i < 20; i++)
 		printf("%02x ", packet[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -5321,7 +5321,7 @@ QString TygemConnection::getRoomTag(unsigned char byte)
 }
 
 #ifdef RE_DEBUG
-//#define GAMELIST_DEBUG
+#define GAMELIST_DEBUG
 #endif //RE_DEBUG
 //0612
 void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
@@ -5411,7 +5411,8 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		aGameListing->observers = (p[0] << 8) + p[1];
 		//We have an issue here I think FIXME with observer numbers
 		p += 2;
-		if(p[0] == 0xff && p[1] == 0xff)
+		int some_number = (p[0] << 8) + p[1];
+		if(some_number != 0)
 		{
 			different_game_record = true;
 		}
