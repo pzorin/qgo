@@ -1,7 +1,7 @@
 #include <string.h>
 #include "igsconnection.h"
 #include "consoledispatch.h"
-#include "../room.h"
+#include "room.h"
 #include "boarddispatch.h"
 #include "../gamedialog.h"
 #include "../talk.h"
@@ -36,6 +36,7 @@ void IGSConnection::init(void)
 	btime = new TimeRecord();
 	wtime = new TimeRecord();
 	protocol_save_int = -1;
+	game_were_playing = 0;
 	guestAccount = false;
 	needToSendClientToggle = true;
 }
@@ -120,8 +121,36 @@ void IGSConnection::sendMsg(unsigned int game_id, QString text)
 
 void IGSConnection::sendMsg(const PlayerListing & player, QString text)
 {
-	/* Taken from MainWindow::slot_talkTo */
 	sendText("tell " + player.name + " " + text + "\r\n");
+	/* Taken from MainWindow::slot_talkTo */
+	//FIXME
+	/*case IGS:
+			{
+				bool ok;
+				// test if it's a number -> channel
+				receiver.toInt(&ok);
+				if (ok)
+					// yes, channel talk
+					sendcommand("yell " + txt, false);
+//				else if (receiver.contains('*'))
+//					sendcommand("shout " + txt, false);
+				else
+					sendcommand("tell " + receiver + " " + txt, false);
+			}
+				break;
+
+			default:
+				// send tell command w/o echo
+				if (receiver.contains('*'))
+					sendcommand("shout " + txt, false);
+				else
+					sendcommand("tell " + receiver + " " + txt, false);
+				break;
+		}
+
+		// lokal echo in talk window
+		slot_talk(receiver, "-> " + txt, true);
+	*/
 }
 
 void IGSConnection::sendToggle(const QString & param, bool val)
@@ -180,7 +209,9 @@ void IGSConnection::sendJoinRoom(const RoomListing & room, const char * /*passwo
 {
 	sendText("join " + QString::number(room.number) + "\r\n");
 	qDebug("Joining %d", room.number);
-	
+	setCurrentRoom(room);	//FIXME unless we get a message after joining?
+							//but then the other send requests should
+							//be there
 	Room * roomhandle = getDefaultRoom();
 	roomhandle->clearPlayerList();
 	roomhandle->clearGamesList();
@@ -365,6 +396,63 @@ void IGSConnection::acceptMatchOffer(const PlayerListing & /*opponent*/, MatchRe
 	sendMatchRequest(mr);
 }
 
+QTime IGSConnection::checkMainTime(TimeSystem s, QTime & t)
+{
+	// match settings are between 1 and 530 with seemingly
+	// infinite byo yomi time
+	// nmatch is 0 to 3600 for byotime
+	// byomoves 0 to 25
+	// koryotimecount 0 - 100
+	// koryosec 0 - 600
+	// preboyoyomi 0 - 10
+	// no handicap nigiri
+	// if byomoves is not 1 koryo count must be 0
+	// if koryosec is not zero koryo count must not be 0
+	// time mod 60, but they're all like that
+	// note that we currently have match settings preventing
+	// pre byoyomi as well as koryo
+	QTime c = NetworkConnection::checkMainTime(s, t);
+	int seconds = (c.minute() * 60) + c.second();
+	int minutes = c.minute();
+	switch(s)
+	{
+		case canadian:
+			if(minutes < 1)
+				return QTime(0, 1, 0);
+			else if(minutes > 530)
+				return QTime(8, 50, 0);
+			break;
+		case byoyomi:
+			
+			break;
+		default:
+			qDebug("unsupported IGS time type");
+			break;
+	}
+	return c;
+}
+
+QTime IGSConnection::checkPeriodTime(TimeSystem s, QTime & t)
+{
+	int seconds = (t.minute() * 60) + t.second();
+	switch(s)
+	{
+		case canadian:
+			if(seconds < 300)
+				return QTime(0, 5, 0);
+			break;
+		case byoyomi:
+			if(seconds > 299)
+				return QTime(0, 4, 59);
+			break;
+		default:
+			qDebug("unsupported IGS time type");
+			break;
+	}
+	return t;
+}
+
+
 /* Perhaps IGS does not allow multiple games, but this here will be trickier
  * possibly, with other services that might since there's no game id here */
 void IGSConnection::sendAdjournRequest(void)
@@ -491,6 +579,8 @@ void IGSConnection::handleLogin(QString msg)
 		console_dispatch->recvText(msg.toLatin1().constData());
 }
 
+/* FIXME onAuthenticationNegotiated may need to
+ * be called earlier */
 void IGSConnection::handlePassword(QString msg)
 {
 	qDebug(":%d %s\n", msg.size(), msg.toLatin1().constData());
@@ -1161,10 +1251,10 @@ void IGSConnection::handle_error(QString line)
 
 	else if (line.contains("You cannot undo") || line.contains("client does not support undoplease")) 
 	{
-				// not the cleanest way : we should send this to a messagez box
-#ifdef FIXME
-		//emit signal_kibitz(0, 0, line);
-#endif //FIXME
+		BoardDispatch * boarddispatch = getIfBoardDispatch(game_were_playing);
+		if(boarddispatch)
+			boarddispatch->recvKibitz(0, line);
+		//maybe should be a message box?  FIXME
 	}
 	else if(line.contains("There is no such game") || line.contains("Invalid game number"))
 	{
@@ -1219,7 +1309,7 @@ void IGSConnection::handle_error(QString line)
 			QString s = element(line, 5, " ");
 			
 			aMatch->board_size = element(s, 0, "x").toInt();
-			aMatch->maintime = element(line, 7, " ").toInt();
+			aMatch->maintime = element(line, 7, " ").toInt() * 60;
 			s = element(line, 9, " ");
 			aMatch->periodtime = element(s, 1, "(").toInt();
 			aMatch->stones_periods = 25;	// I assume IGS assumes this is always 25
@@ -1731,8 +1821,11 @@ void IGSConnection::handle_info(QString line)
 		line = element(line, 0, "<", ">");
 		MatchRequest * aMatch = new MatchRequest();
 		unsigned long flags = 0;
-		/* All games are rated except for ones in free room on IGS FIXME */
-		aMatch->free_rated = RATED;
+		/* All games are rated except for ones in free room on IGS */
+		if(getCurrentRoom()->name.contains("No rated"))
+			aMatch->free_rated = FREE;
+		else
+			aMatch->free_rated = RATED;
 		aMatch->opponent = line.section(" ", 1, 1);
 		if(line.contains("as White"))
 			aMatch->color_request = MatchRequest::BLACK;
@@ -2730,6 +2823,7 @@ void IGSConnection::handle_move(QString line)
 					* boardsize can get lost, etc. */
 					protocol_save_string = "restoring";
 					protocol_save_int = number;
+					game_were_playing = number;
 				}
 				else
 				{
@@ -2784,6 +2878,7 @@ void IGSConnection::handle_move(QString line)
 							need_time = true;
 						}
 						protocol_save_int = number;
+						game_were_playing = number;
 					}
 					/* We probably just accepted a match */
 						
@@ -2966,11 +3061,10 @@ void IGSConnection::handle_move(QString line)
 			qDebug("Possible move messages received but no board dispatch");
 			return;
 		}
-		/* FIXME if two moves are sent on the same line, then
-		* I think the last one is real and the one before is
-		* an undo, this is when we get a move list initially.
-		* I'd rather actually send an undo, so that it can
-		* create an undo tree?  But maybe that's unnecessary */
+		/* Not sure what undos look like anymore FIXME */
+		
+		/* If there's multiple moves on a line, the ones
+		 * after the first are captures */
 		MoveRecord * aMove = new MoveRecord();
 		aMove->flags = MoveRecord::NONE;
 		aMove->number = element(line, 0, "(").toInt();
@@ -3114,6 +3208,7 @@ void IGSConnection::handle_score_m(QString line)
 			aGameResult->winner_name = getUsername();
 	}
 	boarddispatch->recvResult(aGameResult);
+	game_were_playing = 0;
 	delete aGameResult;
 }	
 			
@@ -4458,6 +4553,7 @@ void IGSConnection::handle_seek(QString line)
 	}
 	else if ((line.contains("ENTRY_LIST ")) )
 	{	
+		//FIXME what does this do??? what does it mean?  who am I?
 		QString player = element(line, 1, " ");
 		QString condition = 
 				element(line, 7, " ")+"x"+element(line, 7, " ")+" - " +

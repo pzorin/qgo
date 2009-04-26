@@ -35,6 +35,8 @@ class IGSConnection : public NetworkConnection
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void declineMatchOffer(const PlayerListing & opponent);
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr);
+		virtual QTime checkMainTime(TimeSystem, QTime & t);
+		virtual QTime checkPeriodTime(TimeSystem, QTime & t);
 		virtual void sendAdjournRequest(void);
 		virtual void sendAdjourn(void);
 		virtual void sendRefuseAdjourn(void);
@@ -115,6 +117,7 @@ class IGSConnection : public NetworkConnection
 		
 		QString protocol_save_string;
 		int protocol_save_int;
+		int game_were_playing;
 		QString match_playerName;
 		TimeRecord * btime, * wtime;
 	
@@ -127,8 +130,12 @@ class IGSConnection : public NetworkConnection
 	private:
 		void init(void);
 		void sendNmatchParameters(void);
+		void setCurrentRoom(const RoomListing & room) { currentRoom = &room; };
+		const RoomListing * getCurrentRoom(void) { return currentRoom; };
+		
 		bool guestAccount;
 		bool needToSendClientToggle;
+		const RoomListing * currentRoom;
 };
 
 #endif //IGSCONNECTION_H
