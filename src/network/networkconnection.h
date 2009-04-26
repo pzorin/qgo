@@ -36,7 +36,6 @@ class NetworkConnection : public QObject
 		~NetworkConnection();
 		int getConnectionState();	//should probably return enum
 		void userCanceled(void) { connectionState = CANCELED; /* anything else? */};
-		void setupRoomAndConsole(void);
 		void onClose(void);	//so far private?
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
@@ -64,6 +63,8 @@ class NetworkConnection : public QObject
 		virtual void declineMatchOffer(const PlayerListing & opponent) = 0;
 		virtual void cancelMatchOffer(const PlayerListing & ) {};
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr) = 0;
+		virtual QTime checkMainTime(TimeSystem &, const QTime & t);
+		virtual QTime checkPeriodTime(TimeSystem &, const QTime & t) { return t; };
 		virtual void sendRejectCount(class GameData *) {};
 		virtual void sendAcceptCount(class GameData *) {};
 		virtual void sendAdjournRequest(void) = 0;
@@ -74,6 +75,7 @@ class NetworkConnection : public QObject
 		void setDefaultRoom(Room * r) { default_room = r; };
 		ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; };
 		Room * getDefaultRoom(void) { return default_room; };
+		class PlayerListing * getPlayerListingFromFriendFanListing(class FriendFanListing & f);
 		virtual bool isReady(void) = 0;
 		virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
 		virtual void setKeepAlive(int) {};
@@ -81,6 +83,24 @@ class NetworkConnection : public QObject
 		virtual void createRoom(void) {};
 		virtual void sendCreateRoom(class RoomCreate *) {};
 		virtual void sendJoinRoom(const RoomListing &, const char * = 0) {};
+		
+		
+		virtual char * sendRequestAccountInfo(int *, void *) { return NULL;} ;
+		virtual void handleAccountInfoMsg(int, char *) {};
+		
+		virtual void addFriend(PlayerListing & player);
+		virtual void removeFriend(PlayerListing & player);
+		virtual void addFan(PlayerListing & player);
+		virtual void removeFan(PlayerListing & player);
+		virtual void addBlock(PlayerListing & player);
+		virtual void removeBlock(PlayerListing & player);
+		virtual char * sendAddFriend(int *, void *) { return NULL;};
+		virtual void recvFriendResponse(int, char *) {};
+		virtual char * sendRemoveFriend(int *, void *) { return NULL;};
+		
+		std::vector<class FriendFanListing *> & getFriendsList(void) { return friendedList; };
+		std::vector<class FriendFanListing *> & getFansList(void) { return watchedList; };
+		std::vector<class FriendFanListing *> & getBlockedList(void) { return blockedList; };
 		
 		// FIXME Not certain but maybe this chunk below should be protected:??
 		BoardDispatch * getBoardDispatch(unsigned int game_id);
@@ -102,6 +122,11 @@ class NetworkConnection : public QObject
 		virtual void requestGameStats(unsigned int game_id) = 0;
 		virtual unsigned int rankToScore(QString rank) = 0;
 		virtual unsigned long getGameDialogFlags(void) { return 0; };
+		virtual void getAndSetFriendFanType(PlayerListing & player);
+		virtual void checkGameWatched(GameListing & game);
+		
+		virtual bool gd_verifyBoardSize(int v) { return v; };
+		
 		virtual bool playerTrackingByID(void) { return false; };
 		virtual bool supportsMultipleUndo(void) { return false; };
 		virtual bool supportsObserveOutside(void) { return false; };
@@ -112,7 +137,10 @@ class NetworkConnection : public QObject
 		virtual bool clientSendsTime(void) { return false; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
 		virtual bool cantMarkOppStonesDead(void) { return false; };
-		virtual bool twoPassesEndsGame(void) { return false; };
+		virtual bool twoPassesEndsGame(void) { return false; };		//used?? FIXME
+		virtual bool supportsFriendList(void) { return false; };
+		virtual bool supportsFanList(void) { return false; };
+		virtual bool supportsBlockList(void) { return false; };
 		virtual bool supportsSeek(void) { return false; };
 		virtual unsigned long getPlayerListColumns(void) { return 0; };
 		#define PL_NOWINSLOSSES		0x01
@@ -145,7 +173,9 @@ class NetworkConnection : public QObject
 		virtual void setReadyToWrite(void) {};
 		virtual void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
+		QTcpSocket * getQSocket(void) { return qsocket; };
 		void writeFromBuffer(void);
+		void writeZeroPaddedString(char * dst, const QString & src, int size);
 		class ServerListStorage & getServerListStorage(void);
 		bool firstonReadyCall;
 		friend class GameDialogRegistry;
@@ -178,8 +208,19 @@ class NetworkConnection : public QObject
    			ALREADY_LOGGED_IN
 		} connectionState;
 		
+		bool friendfan_notify_default;
+		
+		std::vector<FriendFanListing *> friendedList;
+		std::vector<FriendFanListing *> watchedList;
+		std::vector<FriendFanListing *> blockedList;
+		
 	private:
-		QTcpSocket * qsocket;	
+		void setupRoomAndConsole(void);
+		void tearDownRoomAndConsole(void);
+		void loadfriendsfans(void);
+		void savefriendsfans(void);
+		
+		QTcpSocket * qsocket;	//unnecessary?
 		
 		Room * mainwindowroom;
 		
@@ -192,5 +233,15 @@ class NetworkConnection : public QObject
 		//OnDelayedCloseFinish();
 		//OnBytesWritten(int);
 		void OnError(QAbstractSocket::SocketError);
+};
+
+struct FriendFanListing
+{
+	FriendFanListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {};
+	FriendFanListing(QString n) : name(n), id(0), notify(false), online(false) {};		//blocked has no notify
+	QString name;
+	unsigned short id;		//if necessary
+	bool notify;
+	bool online;
 };
 #endif //NETWORKCONNECTION_H

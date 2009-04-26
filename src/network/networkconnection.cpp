@@ -3,16 +3,22 @@
 #include "boarddispatch.h"
 #include "../talk.h"
 #include "../gamedialog.h"
-#include "../room.h"
+#include "room.h"
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
 #include "mainwindow.h"			//don't like so much
+
+#define FRIENDFAN_NOTIFY_DEFAULT	1
 
 NetworkConnection::NetworkConnection() :
 default_room(0), console_dispatch(0), qsocket(0)
 {
 	firstonReadyCall = 1;
 	mainwindowroom = 0;
+	friendfan_notify_default = FRIENDFAN_NOTIFY_DEFAULT;
+	boardDispatchRegistry = 0;
+	gameDialogRegistry = 0;
+	talkRegistry = 0;
 }
 
 /* Maybe this should return an enum, but I'm feeling lazy at the moment,
@@ -43,11 +49,7 @@ int NetworkConnection::getConnectionState(void)
 }
 
 bool NetworkConnection::openConnection(const QString & host, const unsigned short port)
-{
-	boardDispatchRegistry = new BoardDispatchRegistry(this);
-	gameDialogRegistry = new GameDialogRegistry(this);
-	talkRegistry = new TalkRegistry(this);
-	
+{	
 	qsocket = new QTcpSocket();	//try with no parent passed for now
 	if(!qsocket)
 		return 0;
@@ -123,6 +125,16 @@ void NetworkConnection::writeFromBuffer(void)
 	}
 }
 
+void NetworkConnection::writeZeroPaddedString(char * dst, const QString & src, int size)
+{
+	int i;
+	Q_ASSERT(src.length() <= size);
+	for(i = 0; i < src.length(); i++)
+		dst[i] = src.toLatin1().constData()[i];
+	for(i = src.length(); i < size; i++)
+		dst[i] = 0x00;
+}
+
 class ServerListStorage & NetworkConnection::getServerListStorage(void)
 {
 	return mainwindow->getServerListStorage(); 
@@ -141,12 +153,6 @@ void NetworkConnection::closeConnection(bool send_disconnect)
 	* there's a MainWindow::connexionClosed that does
 	* good stuff we should move into somewhere
 	* nearby., also what about onError?*/
-	delete boardDispatchRegistry;
-	delete gameDialogRegistry;
-	delete talkRegistry;
-	boardDispatchRegistry = 0;
-	gameDialogRegistry = 0;
-	talkRegistry = 0;
 	
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
@@ -189,16 +195,7 @@ void NetworkConnection::onClose(void)
 	delete room;
 		//FIXME mainwindowroom = 0;
 }*/
-	if(mainwindowroom)
-	{
-		delete mainwindowroom;
-		mainwindowroom = 0;
-	}
-	if(console_dispatch)
-	{
-		delete console_dispatch;
-		console_dispatch = 0;
-	}
+	tearDownRoomAndConsole();
 }
 
 NetworkConnection::~NetworkConnection()
@@ -210,17 +207,211 @@ NetworkConnection::~NetworkConnection()
 	//delete qsocket;
 	//In case these still exist
 	//probably unnecessary?
-	delete boardDispatchRegistry;
-	delete gameDialogRegistry;
-	delete talkRegistry;
-	boardDispatchRegistry = 0;
-	gameDialogRegistry = 0;
-	talkRegistry = 0;
+	if(boardDispatchRegistry)
+		qDebug("board dispatch registry unfreed!");
 }
 
 void NetworkConnection::setConsoleDispatch(class ConsoleDispatch * c)
 {
 	console_dispatch = c;
+}
+
+QTime NetworkConnection::checkMainTime(TimeSystem & s, const QTime & t)
+{
+	if(s == canadian)
+	{
+		int seconds = (t.minute() * 60) + t.second();
+		if(t.second())
+		{
+			seconds = (t.minute() * 60);
+			return QTime(0, t.minute(), 0);
+		}
+	}
+	return t;
+}
+
+PlayerListing * NetworkConnection::getPlayerListingFromFriendFanListing(FriendFanListing & f)
+{
+	if(!default_room) 
+		return NULL;
+	else
+	{
+		if(playerTrackingByID())
+		{
+			if(f.id == 0)
+			{
+				PlayerListing * p = default_room->getPlayerListing(f.name);
+				if(p)
+					f.id = p->id;
+				return p;
+			}
+			else
+				return default_room->getPlayerListing(f.id);
+		}
+		else
+			return default_room->getPlayerListing(f.name);
+	}
+}
+
+/* This will often be overridden by the specific connection but
+ * otherwise this will handle local lists.  There's also the
+ * possibility of a sync option? But that's almost useless */
+/* As far as I can tell IGS has no support for on server lists,
+ * so that will be the first add */
+/* Note that these can't be called if the listing already has
+ * the bit set and server side friends lists will have a
+ * separate interface */
+void NetworkConnection::addFriend(PlayerListing & player)
+{
+	if(player.friendFanType == PlayerListing::blocked)
+		removeBlock(player);
+	else if(player.friendFanType == PlayerListing::watched)
+		removeFan(player);
+	player.friendFanType = PlayerListing::friended;
+	//FIXME presumably they're not already on the list because
+	//the popup checked that in constructing the popup menu but...
+	friendedList.push_back(new FriendFanListing(player.name, friendfan_notify_default));
+}
+
+void NetworkConnection::removeFriend(PlayerListing & player)
+{
+	player.friendFanType = PlayerListing::none;
+	std::vector<FriendFanListing * >::iterator i;
+	for(i = friendedList.begin(); i != friendedList.end(); i++)
+	{
+		if((*i)->name == player.name)
+		{
+			delete *i;
+			friendedList.erase(i);
+			break;
+		}
+	}
+}
+
+void NetworkConnection::addFan(PlayerListing & player)
+{
+	if(player.friendFanType == PlayerListing::friended)
+		removeFriend(player);
+	else if(player.friendFanType == PlayerListing::blocked)
+		removeBlock(player);
+	player.friendFanType = PlayerListing::watched;
+	watchedList.push_back(new FriendFanListing(player.name, friendfan_notify_default));
+}
+
+void NetworkConnection::removeFan(PlayerListing & player)
+{
+	player.friendFanType = PlayerListing::none;
+	std::vector<FriendFanListing * >::iterator i;
+	for(i = watchedList.begin(); i != watchedList.end(); i++)
+	{
+		if((*i)->name == player.name)
+		{
+			delete *i;
+			watchedList.erase(i);
+			break;
+		}
+	}
+}
+
+void NetworkConnection::addBlock(PlayerListing & player)
+{
+	if(player.friendFanType == PlayerListing::friended)
+		removeFriend(player);
+	else if(player.friendFanType == PlayerListing::watched)
+		removeFan(player);
+	player.friendFanType = PlayerListing::blocked;
+	blockedList.push_back(new FriendFanListing(player.name));
+}
+
+void NetworkConnection::removeBlock(PlayerListing & player)
+{
+	player.friendFanType = PlayerListing::none;
+	std::vector<FriendFanListing * >::iterator i;
+	for(i = blockedList.begin(); i != blockedList.end(); i++)
+	{
+		if((*i)->name == player.name)
+		{
+			delete *i;
+			blockedList.erase(i);
+			break;
+		}
+	}
+}
+
+/* This function checks the local lists for a name and sets
+ * appropriate flags.  We may also have it do notifications.
+ * Other protocol types can override it to, for instance
+ * do nothing or just notify, assuming the flags are
+ * set when the player is received, rather than looking them
+ * up */
+/* Another issue: recvPlayerListing is used to change
+ * the status of a player, as in which room they're in
+ * we don't want it to say "signed on" every time with
+ * that.  So we probably need to have an online flag
+ * on the friends listing to see if we've already flagged
+ * them FIXME */
+void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
+{
+	std::vector<FriendFanListing * >::iterator i;
+	
+	for(i = friendedList.begin(); i != friendedList.end(); i++)
+	{
+		if((*i)->name == player.name)
+		{
+			if(!(*i)->online)
+			{
+				(*i)->online = true;
+				player.friendFanType = PlayerListing::friended;
+				/* We may want to put this somewhere else or have it be dialog
+				 * with options, like talk or match.  We might also want
+			 	 * to block all notifies while one is in a game FIXME 
+			 	 * Also, these messages should be nonblocking !?!?!!!!! FIXME*/
+			 	/* And actually, its a big enough deal, i.e., we might want console
+			 	 * messages, game blocks, etc., that it makes sense to have some separate
+			 	 * class for it that handles the notifications... a notification class... */
+				if((*i)->notify)
+					QMessageBox::information(0, tr("Signed on"), tr("%1 has signed on").arg(player.name));
+				return;
+			}
+			else if(!player.online)
+			{
+				(*i)->online = false;
+				//they are disconnecting
+			}
+		}
+	}
+	for(i = watchedList.begin(); i != watchedList.end(); i++)
+	{
+		if((*i)->name == player.name)
+		{
+			player.friendFanType = PlayerListing::watched;
+			return;
+		}
+	}
+	for(i = blockedList.begin(); i != blockedList.end(); i++)
+	{
+		if((*i)->name == player.name)
+		{
+			player.friendFanType = PlayerListing::blocked;
+			return;
+		}
+	}
+	player.friendFanType = PlayerListing::none;
+	return;
+}
+
+void NetworkConnection::checkGameWatched(GameListing & game)
+{
+	std::vector<FriendFanListing * >::iterator i;
+	for(i = watchedList.begin(); i != watchedList.end(); i++)
+	{
+		if((*i)->name == game.white_name() || (*i)->name == game.black_name())
+		{
+			if((*i)->notify)
+				QMessageBox::information(0, tr("Match Started!"), tr("Match has started between %1 and %2").arg(game.white_name()).arg(game.black_name()));
+			return;
+		}
+	}
 }
 
 /* Slots */
@@ -365,6 +556,129 @@ void NetworkConnection::setupRoomAndConsole(void)
 	
 	console_dispatch = new ConsoleDispatch(this);
 	setConsoleDispatch(console_dispatch);	
+	
+	boardDispatchRegistry = new BoardDispatchRegistry(this);
+	gameDialogRegistry = new GameDialogRegistry(this);
+	talkRegistry = new TalkRegistry(this);
+	loadfriendsfans();
+}
+
+void NetworkConnection::tearDownRoomAndConsole(void)
+{
+	savefriendsfans();
+	delete boardDispatchRegistry;
+	delete gameDialogRegistry;
+	delete talkRegistry;
+	boardDispatchRegistry = 0;
+	gameDialogRegistry = 0;
+	talkRegistry = 0;
+	
+	if(mainwindowroom)
+	{
+		delete mainwindowroom;
+		mainwindowroom = 0;
+	}
+	if(console_dispatch)
+	{
+		delete console_dispatch;
+		console_dispatch = 0;
+	}
+}
+
+/* Edit friends/fans list window is created when needed.
+ * but we might consider having it always existing and then
+ * show hide it?  That's ugly though.  But like these functions
+ * should probably be part of a friendsfan class instead of
+ * the network connection awkward but perhaps minor FIXME */
+void NetworkConnection::loadfriendsfans(void)
+{
+	QSettings settings;
+	int size, i;
+	if(!supportsFriendList())
+	{
+		size = settings.beginReadArray("FRIENDEDLIST");
+		for (i = 0; i < size; ++i) 
+		{
+			settings.setArrayIndex(i);
+			friendedList.push_back(new FriendFanListing(
+							settings.value("name").toString(),
+							settings.value("notify").toBool()));
+		}
+ 		settings.endArray();
+	}
+	if(!supportsFanList())
+	{
+		size = settings.beginReadArray("WATCHEDLIST");
+		for (i = 0; i < size; ++i) 
+		{
+			settings.setArrayIndex(i);
+			watchedList.push_back(new FriendFanListing(
+							settings.value("name").toString(),
+							settings.value("notify").toBool()));
+		}
+ 		settings.endArray();
+	}
+	if(!supportsBlockList())
+	{
+		size = settings.beginReadArray("BLOCKEDLIST");
+		for (i = 0; i < size; ++i) 
+		{
+			settings.setArrayIndex(i);
+			blockedList.push_back(new FriendFanListing(
+							settings.value("name").toString()));
+		}
+ 		settings.endArray();
+	}
+}
+
+void NetworkConnection::savefriendsfans(void)
+{
+	QSettings settings;
+	int index;
+	if(!supportsFriendList())
+	{
+		settings.beginWriteArray("FRIENDEDLIST");
+		std::vector<FriendFanListing * >::iterator i;
+		index = 0;
+		for (i = friendedList.begin(); i != friendedList.end(); i++) 
+		{
+			settings.setArrayIndex(index);
+			settings.setValue("name", (*i)->name);
+			settings.setValue("notify", (*i)->notify);
+			delete (*i);
+			index++;
+		}
+		settings.endArray();
+	}
+	if(!supportsFanList())
+	{
+		settings.beginWriteArray("WATCHEDLIST");
+		std::vector<FriendFanListing * >::iterator i;
+		index = 0;
+		for (i = watchedList.begin(); i != watchedList.end(); i++) 
+		{
+			settings.setArrayIndex(index);
+			settings.setValue("name", (*i)->name);
+			settings.setValue("notify", (*i)->notify);
+			delete (*i);
+			index++;
+		}
+		settings.endArray();	
+	}
+	if(!supportsBlockList())
+	{
+		settings.beginWriteArray("BLOCKEDLIST");
+		std::vector<FriendFanListing * >::iterator i;
+		index = 0;
+		for (i = blockedList.begin(); i != blockedList.end(); i++) 
+		{
+			settings.setArrayIndex(index);
+			settings.setValue("name", (*i)->name);
+			delete (*i);
+			index++;
+		}
+		settings.endArray();
+	}
 }
 
 void NetworkConnection::sendConsoleText(const char * text)
