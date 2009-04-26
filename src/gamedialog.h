@@ -72,7 +72,9 @@ public slots:
 
 private:
 	void save_to_preferences(void);
+	QTime qtimeFromSeconds(int);
 	unsigned int timeToSeconds(QString time);	//duplicated in connect code FIXME
+	unsigned int timeToSeconds(const QTime & t);
 	void clearChangedFlags(void);
 	bool getProperKomiHandicap(QString rankA, QString rankB, float * komi, unsigned int * handicap);
 	bool we_are_challenger;	//FIXME, do we need this?

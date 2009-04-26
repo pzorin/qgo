@@ -80,7 +80,8 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	ui.boardSizeSpin->setValue(preferences.default_size);
 	ui.komiSpin->setValue(preferences.default_komi);
 	
-	ui.timeSpin->setTime(QTime(0, preferences.default_stonesmaintime/60, preferences.default_stonesmaintime%60));
+	ui.timeSpin->setDisplayFormat("h:mm:ss");
+	ui.timeSpin->setTime(qtimeFromSeconds(preferences.default_stonesmaintime));
 	ui.stonesTimeSpin->setTime(QTime(0, preferences.default_stonestime/60, preferences.default_stonestime%60));
 	ui.stonesSpin->setValue(preferences.default_stones);
 	ui.BYTimeSpin->setTime(QTime(0, preferences.default_byomaintime/60, preferences.default_byomaintime%60));
@@ -93,11 +94,6 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 //	cb_free->setChecked(true);
 }
 
-/* This is way way after the fact... but is there someway we could make
- * all of the below template functions?  They're very similar with the
- * exception of time checks, but we could have a verify virtual function
- * to be called each time to check, and we're going to have to do 
- * that anyway for different services and their different time settings */
 void GameDialog::slot_play_black_button(void)
 {
 	if(current_match_request->color_request == MatchRequest::BLACK)
@@ -204,6 +200,12 @@ void GameDialog::ratedCB_changed(bool checked)
 
 void GameDialog::slot_boardSizeSpin(int value)
 {
+	int bs = connection->gd_verifyBoardSize(value);
+	if(bs != value)
+	{
+		value = bs;
+		ui.boardSizeSpin->setValue(value);
+	}
 	if((int)current_match_request->board_size == value)	//must have changed to get here
 	{
 		dialog_changed--;
@@ -303,15 +305,12 @@ void GameDialog::slot_timeSpin(const QTime & v)
 	//can't have seconds... ?
 	//if(v.seconds() > 0)
 	//	ui.timeSpin->setTime(QTime(v.minutes(), 0);
-	
-	if(current_match_request->timeSystem == canadian)
-	{
+	QTime check = connection->checkMainTime(current_match_request->timeSystem, v);
+	if(check != v)
+		ui.timeSpin->setTime(check);
+	/*if(current_match_request->timeSystem == canadian)
+	{*/
 		int seconds = (v.minute() * 60) + v.second();
-		if((flags & GDF_BY_CAN_MAIN_MIN) && v.second())
-		{
-			seconds = (v.minute() * 60);
-			ui.timeSpin->setTime(QTime(0, v.minute(), 0));
-		}
 		if(current_match_request->maintime == seconds)
 		{
 			dialog_changed--;
@@ -325,19 +324,17 @@ void GameDialog::slot_timeSpin(const QTime & v)
 			ui.buttonOffer->setText(tr("Offer"));
 			timechanged = true;
 		}
-	}
+	//}
 }
 
 void GameDialog::slot_stonesTimeSpin(const QTime & v)
 {
+	QTime check = connection->checkPeriodTime(current_match_request->timeSystem, v);
+	if(check != v)
+		ui.timeSpin->setTime(check);
 	if(current_match_request->timeSystem == canadian)
 	{
-		int seconds = (v.minute() * 60) + v.second();
-		if((flags & GDF_CANADIAN300) && seconds < 300)
-		{
-			ui.stonesTimeSpin->setTime(QTime(0, 5, 0));
-			seconds = 300;
-		}
+		int seconds = timeToSeconds(check);
 		if(current_match_request->periodtime == seconds)
 		{
 			dialog_changed--;
@@ -644,9 +641,7 @@ void GameDialog::slot_offer(bool active)
 		//opponent does as well
 		//current_match_request->nmatch = false;
 		current_match_request->nmatch = true;
-		current_match_request->maintime = (ui.timeSpin->time().minute() * 60);
-		if(!(flags & GDF_BY_CAN_MAIN_MIN))	//ugly FIXME
-			current_match_request->maintime += ui.timeSpin->time().second();
+		current_match_request->maintime = timeToSeconds(ui.timeSpin->time());
 		current_match_request->periodtime = (ui.stonesTimeSpin->time().minute() * 60);
 		current_match_request->periodtime += ui.stonesTimeSpin->time().second();
 		current_match_request->stones_periods = ui.stonesSpin->value();
@@ -655,7 +650,7 @@ void GameDialog::slot_offer(bool active)
 	else if(ui.timeTab->currentIndex() == 1)	//byo yomi IGS nmatch
 	{
 		current_match_request->nmatch = true;
-		current_match_request->maintime = (ui.BYTimeSpin->time().minute() * 60);
+		current_match_request->maintime = timeToSeconds(ui.BYTimeSpin->time());
 		if(!(flags & GDF_BY_CAN_MAIN_MIN))	//ugly FIXME
 			current_match_request->maintime += ui.BYTimeSpin->time().second();
 		current_match_request->periodtime = (ui.BYPeriodTimeSpin->time().minute() * 60);
@@ -667,8 +662,8 @@ void GameDialog::slot_offer(bool active)
 	{
 		current_match_request->maintime = timeToSeconds(ui.ASIATimeSpin->text());
 		/* We can have more than 60 seconds... like 300 FIXME */
-		current_match_request->maintime = (ui.ASIATimeSpin->time().minute() * 60);
-		current_match_request->maintime += ui.ASIATimeSpin->time().second();
+		//current_match_request->maintime = (ui.ASIATimeSpin->time().minute() * 60);
+		//current_match_request->maintime += ui.ASIATimeSpin->time().second();
 		current_match_request->periodtime = (ui.ASIAPeriodTimeSpin->time().minute() * 60);
 		current_match_request->periodtime += ui.ASIAPeriodTimeSpin->time().second();
 		current_match_request->stones_periods = ui.ASIAPeriodsSpin->value();
@@ -877,7 +872,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 			ui.timeTab->removeTab(2);
 		
 		if(!(flags & GDF_FREE_RATED_CHOICE))
-			ui.ratedCB->hide();	//works?
+			ui.ratedCB->setEnabled(false);
 		if(flags & GDF_STONES25_FIXED)
 		{
 			ui.stonesSpin->setValue(25);
@@ -930,12 +925,16 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		}
 		if(mr)
 		{
+#ifdef FIXME
 			if(mr->timeSystem == canadian)
 			{
+				//is min 0 or is it the current ? FIXME
 				if(mr->nmatch_timeMax)
-					ui.timeSpin->setTimeRange(QTime(0, mr->maintime/60, 0), QTime(0, mr->nmatch_timeMax/60, 0));
+					ui.timeSpin->setTimeRange(qtimeFromSeconds(0), qtimeFromSeconds(mr->nmatch_timeMax));
+					//ui.timeSpin->setTimeRange(qtimeFromSeconds(mr->maintime), qtimeFromSeconds(mr->nmatch_timeMax));
 				if(mr->nmatch_BYMax)
-					ui.stonesTimeSpin->setTimeRange(QTime(0, mr->periodtime/60, 0), QTime(0, mr->nmatch_BYMax/60, 0));
+					ui.stonesTimeSpin->setTimeRange(qtimeFromSeconds(0), qtimeFromSeconds(mr->nmatch_BYMax));
+					//ui.stonesTimeSpin->setTimeRange(qtimeFromSeconds(mr->periodtime), qtimeFromSeconds(mr->nmatch_BYMax));
 			}
 			else if(mr->timeSystem == byoyomi)
 			{
@@ -946,6 +945,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 			}
 			if(mr->nmatch_handicapMax)
 				ui.handicapSpin->setRange(mr->handicap, mr->nmatch_handicapMax);	
+#endif //FIXME
 			//not necessarily: !!! FIXME
 			//we_are_challenger = true;
 			//this_is_offer = true;
@@ -1145,11 +1145,11 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		qDebug("no nmatch");
 		set_is_nmatch(false);
 		
-		ui.timeSpin->setTime(QTime(0, mr->maintime/60, mr->maintime%60));
+		ui.timeSpin->setTime(qtimeFromSeconds(mr->maintime));
 		if(mr->maintime != current_match_request->maintime)
 			ui.timeSpin->setPalette(p);
 		
-		ui.stonesTimeSpin->setTime(QTime(0, mr->periodtime/60, mr->periodtime%60));
+		ui.stonesTimeSpin->setTime(qtimeFromSeconds(mr->periodtime));
 		if(mr->periodtime != current_match_request->periodtime)
 			ui.stonesTimeSpin->setPalette(p);
 		
@@ -1174,8 +1174,6 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 			ui.timeTab->setTabEnabled(2, false);
 		}
 	}
-	
-	
 	
 	
 	qDebug("set-up accept");
@@ -1210,7 +1208,7 @@ void GameDialog::save_to_preferences(void)
 	preferences.default_size = ui.boardSizeSpin->value();
 	//preferences.default_komi = ui.komiSpin->value();
 	
-	preferences.default_stonesmaintime = (ui.timeSpin->time().minute() * 60) + ui.timeSpin->time().second();
+	preferences.default_stonesmaintime = timeToSeconds(ui.timeSpin->time());
 	preferences.default_stonestime = (ui.stonesTimeSpin->time().minute() * 60) + ui.stonesTimeSpin->time().second();
 	preferences.default_stones = ui.stonesSpin->value();
 	preferences.default_byomaintime = (ui.BYTimeSpin->time().minute() * 60) + ui.BYTimeSpin->time().second();
@@ -1227,6 +1225,23 @@ MatchRequest * GameDialog::getMatchRequest(void)
 	return current_match_request;
 }
 
+QTime GameDialog::qtimeFromSeconds(int seconds)
+{
+	if(seconds == 0)
+		return QTime(0, 0, 0);
+	int minutes = seconds / 60;
+	int hours;
+	seconds %= 60;
+	if(minutes == 0)
+		hours = 0;
+	else
+	{
+		hours = minutes / 60;
+		minutes %= 60;
+	}
+	return QTime(hours, minutes, seconds);	
+}
+
 unsigned int GameDialog::timeToSeconds(QString time)
 {
 	QRegExp re = QRegExp("([0-9]{1,3}):([0-9]{1,2})");
@@ -1241,6 +1256,11 @@ unsigned int GameDialog::timeToSeconds(QString time)
 		qDebug("Bad time string");
 	
 	return (60 * min) + sec;
+}
+
+unsigned int GameDialog::timeToSeconds(const QTime & t)
+{
+	return ((t.hour() * 3600) + (t.minute() * 60) + t.second());	
 }
 
 //we just assume that white has the higher rank
