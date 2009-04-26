@@ -40,7 +40,7 @@ public:
 	virtual void startGame() {};
 	virtual void stopTime() {};
 	virtual void set_move(StoneColor , QString , QString ) {};
-	virtual void set_move(class MoveRecord *) {}; 
+	virtual void handleMove(class MoveRecord *) {}; 
 	virtual void set_statedMoveCount(int n) 	{ stated_mv_count = n;}
 	int getMoveNumber(void);
 	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
@@ -278,7 +278,7 @@ protected:
 	qGoBoardNetworkInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	virtual void sendMoveToInterface(StoneColor c,int x, int y);
 	virtual void sendPassToInterface(StoneColor c);
-	virtual void set_move(MoveRecord * m);
+	virtual void handleMove(MoveRecord * m);
 	virtual void adjournGame(void);
 	virtual void startGame(void) {};
 	virtual void stopTime(void);
@@ -311,7 +311,6 @@ signals:
 
 private:
 //	bool doMove(StoneColor c, int x, int y);
-	void enterScoreMode(void);
 	virtual void onFirstMove(void);
 
 	
