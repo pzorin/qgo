@@ -34,24 +34,22 @@ TRANSLATIONS = translations/qgo2_cz.ts \
 		translations/qgo2_tr.ts \
 		translations/qgo2_zh_cn.ts \
 		translations/qgo2_zh.ts
-FORMS += gamedialog.ui \
-	 mainwindow.ui \
-	 talk_gui.ui \
+FORMS += mainwindow.ui \
 	 board/boardwindow.ui \
 	 board/gameinfo.ui \
 	 network/createroomdialog.ui \
 	 network/friendslistdialog.ui \
-	 network/login.ui 
+	 network/gamedialog.ui \
+	 network/login.ui \
+	 network/talk_gui.ui
 
 HEADERS += defines.h \
 displayboard.h \
 gamedata.h \
-gamedialog.h \
 listviews.h \
 registry.h \
 mainwindow.h \
 mainwindow_settings.h \
-talk.h \
 audio/audio.h \
 game_tree/group.h \
 game_tree/matrix.h \
@@ -80,6 +78,7 @@ network/cyberoroprotocol.h \
 network/dispatchregistries.h \
 network/eweiqiconnection.h \
 network/friendslistdialog.h \
+network/gamedialog.h \
 network/gamedialogflags.h \
 network/igsconnection.h \
 network/lgs.h \
@@ -96,6 +95,7 @@ network/roomregistries.h \
 network/serverlistdialog.h \
 network/serverliststorage.h \
 network/setphrasepalette.h \
+network/talk.h \
 network/tomconnection.h \
 network/tygemconnection.h \
 network/tygemprotocol.h \
@@ -103,14 +103,12 @@ network/wing.h \
 sgf/sgfparser.h
 
 SOURCES += displayboard.cpp \
-           gamedialog.cpp \
            listviews.cpp \
  	   main.cpp \
            mainwindow.cpp \
            mainwindow_server.cpp \
            mainwindow_settings.cpp \
  	   newline_pipe.h \
- 	   talk.cpp \
            audio/audio.cpp \
            board/board.cpp \
            board/boardhandler.cpp \
@@ -142,6 +140,7 @@ SOURCES += displayboard.cpp \
 	   network/cyberoroconnection.cpp \
 	   network/eweiqiconnection.cpp \
 	   network/friendslistdialog.cpp \
+           network/gamedialog.cpp \
 	   network/igsconnection.cpp \
 	   network/lgs.cpp \
  	   network/login.cpp \
@@ -155,6 +154,7 @@ SOURCES += displayboard.cpp \
 	   network/serverlistdialog.cpp \
 	   network/serverliststorage.cpp \
 	   network/setphrasepalette.cpp \
+ 	   network/talk.cpp \
 	   network/tomconnection.cpp \
 	   network/tygemconnection.cpp \
 	   network/wing.cpp \

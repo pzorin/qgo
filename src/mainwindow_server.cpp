@@ -24,8 +24,8 @@
 #include "sgfparser.h"
 //#include "parser.h"
 #include "network/networkconnection.h"
-#include "talk.h"
-#include "gamedialog.h"
+#include "network/talk.h"
+#include "network/gamedialog.h"
 #include "network/login.h"
 #include "listviews.h"
 #include "playergamelistings.h"		//FIXME should be moved out

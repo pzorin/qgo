@@ -1,9 +1,9 @@
 #include "room.h"
 #include "../listviews.h"
 #include "roomregistries.h"
-#include "../talk.h"
+#include "talk.h"
 #include "messages.h"
-#include "../gamedialog.h"
+#include "gamedialog.h"
 #include "../mainwindow.h"
 #include "playergamelistings.h"
 #include "boarddispatch.h"	//so we can remove observers
