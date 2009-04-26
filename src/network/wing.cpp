@@ -1,7 +1,7 @@
 #include <string.h>
 #include "wing.h"
 #include "consoledispatch.h"
-#include "../room.h"
+#include "room.h"
 #include "boarddispatch.h"
 #include "../gamedialog.h"
 #include "../talk.h"

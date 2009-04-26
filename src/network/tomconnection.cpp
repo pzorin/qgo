@@ -1,5 +1,5 @@
 #include "tomconnection.h"
-#include "../room.h"
+#include "room.h"
 #include "playergamelistings.h"
 #include "gamedata.h"
 #include "serverlistdialog.h"

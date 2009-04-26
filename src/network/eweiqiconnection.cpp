@@ -2,7 +2,7 @@
 #include "codecwarndialog.h"
 #include "playergamelistings.h"
 #include "gamedata.h"
-#include "../room.h"
+#include "room.h"
 #include "serverliststorage.h"
 
 EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
