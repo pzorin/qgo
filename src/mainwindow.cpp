@@ -403,12 +403,14 @@ void MainWindow::loadSgfFile(QString fn)
 	new BoardWindow(new GameData(GameLoaded2), TRUE, TRUE);
 }
 
-void MainWindow::slot_expanded(const QModelIndex & i)
+void MainWindow::slot_expanded(const QModelIndex & /*i*/)
 {
 	//refresh file system info
 	//before I was calling it on "i" but it didn't like that
 	// in 4.4.1, catually still crashes on this.
 	//model->refresh(i);
+	//FIXME
+	//really would like a refresh here
 }
 
 /*
