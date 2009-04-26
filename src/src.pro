@@ -14,11 +14,11 @@ CONFIG += warn_on \
           debug
 #Because I can't figureout how to turn console and exceptions off:
 win32 {
-	QMAKE_LFLAGS = -static -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,windows
-	QMAKE_LFLAGS_CONSOLE =
-	QMAKE_LFLAGS_EXCEPTIONS_ON =
-	# also
-	RC_FILE = qgo.rc
+    QMAKE_LFLAGS = -static -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,windows
+    QMAKE_LFLAGS_CONSOLE =
+    QMAKE_LFLAGS_EXCEPTIONS_ON =
+    # also
+    RC_FILE = qgo.rc
 }
 TEMPLATE = app 
 OBJECTS_DIR = objects
@@ -35,24 +35,22 @@ TRANSLATIONS = translations/qgo2_cz.ts \
 		translations/qgo2_zh_cn.ts \
 		translations/qgo2_zh.ts
 FORMS += gamedialog.ui \
-	 login.ui \
 	 mainwindow.ui \
 	 talk_gui.ui \
 	 board/boardwindow.ui \
 	 board/gameinfo.ui \
-	 network/createroomdialog.ui
+	 network/createroomdialog.ui \
+	 network/friendslistdialog.ui \
+	 network/login.ui 
 
 HEADERS += defines.h \
 displayboard.h \
 gamedata.h \
 gamedialog.h \
 listviews.h \
-login.h \
 registry.h \
 mainwindow.h \
 mainwindow_settings.h \
-room.h \
-roomregistries.h \
 talk.h \
 audio/audio.h \
 game_tree/group.h \
@@ -78,36 +76,40 @@ network/codecwarndialog.h \
 network/consoledispatch.h \
 network/createroomdialog.h \
 network/cyberoroconnection.h \
-network/cyberoroprotocolcodes.h \
+network/cyberoroprotocol.h \
 network/dispatchregistries.h \
 network/eweiqiconnection.h \
+network/friendslistdialog.h \
 network/gamedialogflags.h \
 network/igsconnection.h \
 network/lgs.h \
+network/login.h \
 network/matchinvitedialog.h \
 network/messages.h \
 network/networkconnection.h \
 network/orosetphrasechat.h \
 network/playergamelistings.h \
+network/protocol.h \
+network/quickconnection.h \
+network/room.h \
+network/roomregistries.h \
 network/serverlistdialog.h \
 network/serverliststorage.h \
 network/setphrasepalette.h \
 network/tomconnection.h \
 network/tygemconnection.h \
-network/tygemprotocolcodes.h \
+network/tygemprotocol.h \
 network/wing.h \
 sgf/sgfparser.h
 
 SOURCES += displayboard.cpp \
            gamedialog.cpp \
            listviews.cpp \
- 	   login.cpp \
  	   main.cpp \
            mainwindow.cpp \
            mainwindow_server.cpp \
            mainwindow_settings.cpp \
  	   newline_pipe.h \
- 	   room.cpp \
  	   talk.cpp \
            audio/audio.cpp \
            board/board.cpp \
@@ -139,13 +141,17 @@ SOURCES += displayboard.cpp \
 	   network/createroomdialog.cpp \
 	   network/cyberoroconnection.cpp \
 	   network/eweiqiconnection.cpp \
+	   network/friendslistdialog.cpp \
 	   network/igsconnection.cpp \
 	   network/lgs.cpp \
+ 	   network/login.cpp \
 	   network/matchinvitedialog.cpp \
 	   network/messages.h \
 	   network/networkconnection.cpp \
 	   network/networkconnection.h \
 	   network/orosetphrasechat.cpp \
+ 	   network/quickconnection.cpp \
+ 	   network/room.cpp \
 	   network/serverlistdialog.cpp \
 	   network/serverliststorage.cpp \
 	   network/setphrasepalette.cpp \
@@ -153,7 +159,7 @@ SOURCES += displayboard.cpp \
 	   network/tygemconnection.cpp \
 	   network/wing.cpp \
 	   sgf/sgfparser.cpp
-	   
+
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp""""""
 macx {
