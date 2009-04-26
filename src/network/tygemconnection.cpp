@@ -8936,7 +8936,6 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	aGameData->stones_periods = p[3];
 	printf("0671 TIME SETTINGS: %d %d %d %d %d %d\n", p[0], p[1], p[2], p[3], p[4], p[5]);
 	aGameData->handicap = p[4];
-	//FIXME we need to safely set handicap
 	p += 4;
 	p += 2;
 	/* This isn't white first flag I don't think, its first player
@@ -9012,6 +9011,20 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	//	qDebug("Strange color byte %d, line: %d", p[1], __LINE__);
 	p += 2;
 	boarddispatch->gameDataChanged();
+	if(aGameData->handicap)
+	{
+		/* This should really be cleaned up, done in some
+		 * general place.  Handicap games on tygem are
+		 * really rare and I don't know how to really
+		 * set them up yet in matches.  For all the
+		 * protocols this sohuld be setup better.
+		 * So this is just temporary. FIXME */
+		MoveRecord aMove;
+		aMove.number = NOMOVENUMBER;
+		aMove.x = aGameData->handicap;
+		aMove.flags = MoveRecord::HANDICAP;
+		boarddispatch->recvMove(&aMove);
+	}
 	if(playing_game_number == game_number)
 	{
 		if(encoded_nameA == getUsername())
