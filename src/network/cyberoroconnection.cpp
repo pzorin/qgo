@@ -1,9 +1,9 @@
 #include <string.h>
 #include <math.h>
 #include "cyberoroconnection.h"
-#include "cyberoroprotocolcodes.h"
+#include "cyberoroprotocol.h"
 #include "consoledispatch.h"
-#include "../room.h"
+#include "room.h"
 #include "boarddispatch.h"
 #include "../gamedialog.h"
 #include "../talk.h"
@@ -17,8 +17,14 @@
 #include "createroomdialog.h"
 #include "gamedata.h"
 #include "playergamelistings.h"
+#include "quickconnection.h"
 #include <QMessageBox>
-
+/* We need to eventually clean all the code up with some
+ * c++ "syntactic sugar" but it just seems like a pain in
+ * the ass right now with no real benefit */
+#ifdef NEWPROTOCOL
+#include "protocol.h"
+#endif //NEWPROTOCOL
 
 unsigned char * temp_packet;
 
@@ -33,6 +39,8 @@ unsigned char * temp_packet;
 
 #define NO_PLAYING
 //#define RE_DEBUG 
+
+#define CYBERORO_METASERVER			"211.113.91.78"
 CyberOroConnection::CyberOroConnection(const QString & user, const QString & pass)
 {
 
@@ -45,7 +53,7 @@ CyberOroConnection::CyberOroConnection(const QString & user, const QString & pas
 	//servers that are provided on a list. */
 	/* FIXME, we need to contact some dns listed server
 	 * to get official ip in case it changes */
-	if(openConnection("211.113.91.78", 7447))
+	if(openConnection(CYBERORO_METASERVER, 7447))
 	{
 		connectionState = LOGIN;
 		username = user;
@@ -98,41 +106,8 @@ void CyberOroConnection::OnConnected()
 	/* Likely client version info */
 	if(connectionState == LOGIN)
 	{
-		//term code could be version
-		unsigned char term_code[2] = { 0x5b, 0x02 };
-		/* We send login and password */
-		// no hard coding!! FIXME
-		int length = 0x1a;	//10 + user and pass padded to 10
 		qDebug("CyberOro::OnConnected() \n");
-		unsigned char * packet = new unsigned char[length];
-		unsigned char * p = packet;
-		int i;
-		
-		p[0] = 0x6e;
-		p[1] = 0xe2;
-		p[2] = length;
-		p[3] = 0x00;
-		p += 4;
-		for(i = 0; i < username.length(); i++)
-			p[i] = username.toLatin1().data()[i];
-		for(i = username.length(); i < 10; i++)
-			p[i] = 0x00;
-		p += 10;
-		for(i = 0; i < password.length(); i++)
-			p[i] = password.toLatin1().data()[i];
-		for(i = password.length(); i < 10; i++)
-			p[i] = 0x00;
-		p += 10;
-		for(i = 0; i < 2; i++)
-			p[i] = term_code[i];
-#ifdef RE_DEBUG
-		for(i = 0; i < length; i++)
-			printf("%02x ", packet[i]);
-		printf("\n");
-#endif //RE_DEBUG
-		if(write((const char *)packet, length) < 0)
-			qWarning("*** failed sending login packet to host");
-		delete[] packet;
+		sendLogin();
 	}
 }
 
@@ -424,12 +399,6 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	}
 	/* We should really check for overflows here so that we don't run out
 	 * of packet.  FIXME FIXME FIXME */
-	/* FIXME: obviously we should pass it an ip from the server list, 
-	 * maybe bringing up a menu to select a server.  Since we need
-	 * such a menu later (this isn't the only time we can reconnect,
-	 * we'll add it then. */
-	
-	
 	
 	/* FIXME We may not get this whole message in one shot... we need
 	 * to make sure we do.  Its exactly 1046 bytes every time.*/
@@ -437,9 +406,12 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	/* We close here because this first time, its going to close
 	 * anyway, and if we don't close here, we'll get an error
 	 * and lose the object */
-	connectionState = RECONNECTING;
-	closeConnection(false);
 	
+	
+	//requestAccountInfo();		//this will close this connection	
+	closeConnection(false);
+	connectionState = RECONNECTING;
+	requestAccountInfo();
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
@@ -491,7 +463,7 @@ int CyberOroConnection::reconnectToServer(void)
 	/* FIXME
 	 * Might be neat if we listed the server that one was currently on
 	 * somewhere, like on the main window. */
-	if(serverList.size() <= server_i)
+	if(serverList.size() <= (unsigned)server_i)
 	{
 		qDebug("serverList has probably been freed when you weren't looking");
 		return -1;
@@ -501,12 +473,16 @@ int CyberOroConnection::reconnectToServer(void)
 	
 	if(connectionState == CONNECTED)
 		closeConnection(false);
+	/* Though connection isn't really negotiated yet,
+	 * we can get here without a playerListingIDRegistry as soon
+	 * as the connection is opened, so we're going to do this
+	 * first.  FIXME for other protocols */
+	onAuthenticationNegotiated();
 	if(openConnection(serverList[server_i]->ipaddress, 7002))
 	{
 		qDebug("Reconnected");
 		connectionState = CONNECTED;
 		game_code_to_number.clear();
-		onAuthenticationNegotiated();
 	}
 	else
 		qDebug("Can't open Connection!!");
@@ -2471,6 +2447,112 @@ void CyberOroConnection::sendLeave(const GameListing & game)
 	setRoomNumber(0);
 }*/
 
+void CyberOroConnection::requestAccountInfo(void)
+{
+	//QuickConnection * c = new QuickConnection(getQSocket(), NULL, this, QuickConnection::sendRequestAccountInfo);
+	metaserverQC = new QuickConnection(CYBERORO_METASERVER, 7447, NULL, this, QuickConnection::sendRequestAccountInfo);
+}
+
+char * CyberOroConnection::sendRequestAccountInfo(int * size, void *)
+{
+	//8827 1a00 4000 6769 616e 7463 6174 0000
+	//4300 120f dc02 0000 0000
+	//88271a0040006c6f7374736f756c00004300120fdc0200000000
+	*size = 0x1a;
+	char * packet = new char[*size];
+	packet[0] = 0x88;
+	packet[1] = 0x27;
+	packet[2] = 0x1a;
+	packet[3] = 0x00;
+	
+	packet[4] = 0x40;
+	packet[5] = 0x00;
+	writeZeroPaddedString(&(packet[6]), getUsername(), 10);
+	packet[16] = 0x43;
+	packet[17] = 0x00;
+	packet[18] = 0x12;
+	packet[19] = 0x0f;
+	packet[20] = 0xdc;
+	packet[21] = 0x02;
+	for(int i= 22; i < *size; i++)
+		packet[i] = 0x00;
+#ifdef RE_DEBUG
+	printf("requesting account info:\n");
+	for(int i = 0; i < (int)*size; i++)
+		printf("%02x", packet[i]);
+	printf("\n");
+#endif //RE_DEBUG
+	return packet;
+}
+
+void CyberOroConnection::handleAccountInfoMsg(int size, char * msg)
+{
+	unsigned short message_type = msg[1] + (msg[0] << 8);
+	
+	msg += 4;
+	size -=4;
+	switch(message_type)
+	{
+		case 0x8129:
+			handleFriends((unsigned char *)msg, size);
+			metaserverQC->deleteLater();
+			metaserverQC = 0;
+			break;
+		case 0x7c29:
+			//7c29 1a00 789e 0800 8800 b502 e0b0 887c
+			//78de 0800 0100 0000 709e
+		default:
+#ifdef RE_DEBUG
+			msg -= 4;	//FIXME
+			printf("Strange account info: %02x%02x: \n", msg[0], msg[1]);
+			for(int i = 2; i < (int)size + 4; i++)
+				printf("%02x", msg[i]);
+			printf("\n");
+#endif //RE_DEBUG
+			break;
+	}
+}
+
+void CyberOroConnection::sendLogin(void)
+{
+	//term code could be version
+		unsigned char term_code[2] = { 0x5b, 0x02 };
+		/* We send login and password */
+		// no hard coding!! FIXME
+		int length = 0x1a;	//10 + user and pass padded to 10
+		unsigned char * packet = new unsigned char[length];
+		unsigned char * p = packet;
+		int i;
+		
+		p[0] = 0x6e;
+		p[1] = 0xe2;
+		p[2] = length;
+		p[3] = 0x00;
+		p += 4;
+		/*for(i = 0; i < username.length(); i++)
+			p[i] = username.toLatin1().data()[i];
+		for(i = username.length(); i < 10; i++)
+			p[i] = 0x00;*/
+		writeZeroPaddedString((char *)p, username, 10);
+		p += 10;
+		/*for(i = 0; i < password.length(); i++)
+			p[i] = password.toLatin1().data()[i];
+		for(i = password.length(); i < 10; i++)
+			p[i] = 0x00;*/
+		writeZeroPaddedString((char *)p, password, 10);
+		p += 10;
+		for(i = 0; i < 2; i++)
+			p[i] = term_code[i];
+#ifdef RE_DEBUG
+		for(i = 0; i < length; i++)
+			printf("%02x ", packet[i]);
+		printf("\n");
+#endif //RE_DEBUG
+		if(write((const char *)packet, length) < 0)
+			qWarning("*** failed sending login packet to host");
+		delete[] packet;
+}
+
 void CyberOroConnection::sendInvitationSettings(bool invite)
 {
 	unsigned int length = 0x0c;
@@ -2502,6 +2584,108 @@ void CyberOroConnection::sendInvitationSettings(bool invite)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending invitation settings");
 	delete[] packet;
+}
+
+/* These four require separate connection to meta
+ * server! */
+void CyberOroConnection::addFriend(PlayerListing & player)
+{
+	if(metaserverQC)
+	{
+		qDebug("Already connected to accounts server, please wait.");
+		//silent no error might be okay
+		return;
+	}
+	//FIXME check for metaserverQC and deleteLater on recv
+	metaserverQC = new QuickConnection(CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendAddFriend);
+	return;
+	//1329 1a00 0100
+	//6c6f 7374 736f 756c 0000
+	//6368 7569 6e73 6569 3236
+	unsigned int length = 0x1a;
+	unsigned char * packet = new unsigned char[length];
+	packet[0] = 0x13;
+	packet[1] = 0x29;
+	packet[2] = (length & 0xff);
+	packet[3] = (length >> 8);
+	packet[4] = 0x01;//0x01 for friend 0x02 for block
+	packet[5] = 0x00;
+	//our name
+	//their name
+	qDebug("Sending friend change\n");
+	if(write((const char *)packet, length) < 0)
+		qWarning("*** failed sending friend change");
+	delete[] packet;
+	
+	/* We also need to do connection->addFriend FIXME */
+}
+
+char * CyberOroConnection::sendAddFriend(int * size, void * p)
+{
+	PlayerListing * player = (PlayerListing *)p; 
+	//1329 1a00 0100
+	//6c6f 7374 736f 756c 0000
+	//6368 7569 6e73 6569 3236
+	*size = 0x1a;
+	char * packet = new char[*size];
+	packet[0] = 0x13;
+	packet[1] = 0x29;
+	packet[2] = (*size & 0xff);
+	packet[3] = (*size >> 8);
+	packet[4] = 0x01;//0x01 for friend 0x02 for block
+	packet[5] = 0x00;
+	writeZeroPaddedString((char *)&(packet[6]), getUsername(), 10);
+	writeZeroPaddedString((char *)&(packet[16]), player->name, 10);
+	return packet;
+}
+
+void CyberOroConnection::recvFriendResponse(int size, char * msg)
+{
+#ifdef RE_DEBUG
+	int i;
+	printf("recvFriendResponse:\n");
+	for(i = 0; i < size; i++)
+		printf("%02x", msg[i]);
+	printf("\n");
+#endif //RE_DEBUG
+	metaserverQC->deleteLater();
+	metaserverQC = 0;
+}
+
+void CyberOroConnection::removeFriend(PlayerListing & player)
+{
+	if(metaserverQC)
+	{
+		qDebug("Already connected to accounts server, please wait.");
+		//silent no error might be okay
+		return;
+	}
+	metaserverQC = new QuickConnection(CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendRemoveFriend);
+}
+
+char * CyberOroConnection::sendRemoveFriend(int * size, void * p)
+{
+	PlayerListing * player = (PlayerListing *)p; 
+	*size = 0x1a;
+	char * packet = new char[*size];
+	packet[0] = 0x77;
+	packet[1] = 0x29;
+	packet[2] = (*size & 0xff);
+	packet[3] = (*size >> 8);
+	packet[4] = 0x01;//0x01 for friend 0x02 for block
+	packet[5] = 0x00;
+	writeZeroPaddedString((char *)&(packet[6]), getUsername(), 10);
+	writeZeroPaddedString((char *)&(packet[16]), player->name, 10);
+	return packet;
+}
+
+void CyberOroConnection::addBlock(PlayerListing & player)
+{
+}
+
+void CyberOroConnection::removeBlock(PlayerListing & player)
+{
+	
 }
 
 void CyberOroConnection::sendDisconnectMsg(void)
@@ -2684,7 +2868,6 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 		printf("\n");
 #endif //RE_DEBUG
 	/*}*/
-		
 	msg += 4;
 	size -=4;
 	switch(message_type)
@@ -3187,6 +3370,176 @@ void CyberOroConnection::handleConnected(unsigned char * msg, unsigned int size)
 	// FIXME, toggle is doing this now, but is it kosher with initial state?
 	// i.e., when we first join what happens? where does that get checked?
 }
+
+#ifdef NEWPROTOCOL
+/*OROPlayerListPacket::OROPlayerListPacket(char * p)
+{
+	data = p;
+}*/
+
+//void * ZeroPaddedString::operator new[] (size_t s) { size = s; };
+
+void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size)
+{
+	unsigned char * p = msg;
+	unsigned char name[11];
+	int players;
+	unsigned char rankbyte, invitebyte;
+	int i;
+	unsigned short id;
+	OROPlayerListPacket packet((char *)msg);
+	Room * room = getDefaultRoom();
+	PlayerListing * newPlayer = new PlayerListing();
+	PlayerListing * aPlayer;
+	PlayerListing * backPlayer;
+	newPlayer->online = true;
+	newPlayer->info = "??";
+	newPlayer->playing = 0;
+	newPlayer->observing = 0;
+	newPlayer->idletime = "-";
+	
+	players = p[2];
+
+#ifdef RE_DEBUG
+	printf("%02x%02x\n", p[0], p[1]);	
+#endif //RE_DEBUG	
+	printf("new players: %d\n", packet.h.playerRecords);
+	p += 2;
+	//676c696c696e6e000000 770a 16a4 02c3 0000 9b72 e607 e407 0000 0056
+	while(p < (msg + size))
+	{
+#ifdef RE_DEBUG
+		for(i = 0; i < 28; i++)
+			printf("%02x", p[i]);
+		printf("\n");
+#endif //RE_DEBUG
+		strncpy((char *)name, (char *)p, 10); name[10] = 0x00;
+#ifdef RE_DEBUG
+		printf("%s ", name);
+#endif //RE_DEBUG
+		p += 10;
+		id = p[0] + (p[1] << 8);
+		aPlayer = room->getPlayerListing(id);
+		if(!aPlayer)
+		{
+			aPlayer = newPlayer;
+			newPlayer->playing = 0;
+		}
+		aPlayer->id = id;
+		//aPlayer->name = QString((char*)name);
+		aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
+		
+		p += 2;
+		//a byte here seems to be a send msg byte, or something
+		aPlayer->specialbyte = p[0];
+		//p++;
+#ifdef RE_DEBUG
+		for(i = 0; i < 8; i++)
+			printf("%02x", p[i]);
+#endif //RE_DEBUG
+		// That's right, its the pro bit 
+		rankbyte = p[1];
+		if(rankbyte & 0x40)
+		{
+			aPlayer->pro = true;
+		}
+		
+		//lost interest, its not the game
+		//aPlayer->observing = p[2];	//FIXME, what is this?
+		//this fourth byte here is country I think.
+		// but its really unreliable, almost like its something
+		// that clients from these countries have as a setting
+		// or maybe part of a bit field.
+		aPlayer->country = getCountryFromCode(p[3]);
+		//fifth byte is their open status
+		invitebyte = p[4];
+		aPlayer->nmatch_settings = QString::number(p[0]) + QString(" ") + QString::number((p[1])) + QString(" ") + QString::number(p[2]) + QString(" ") + QString::number(p[3]);
+		p += 6;
+		aPlayer->rank_score = p[0] + (p[1] << 8); 
+		if(aPlayer->pro)
+			aPlayer->rank = QString::number(rankbyte & 0x1f) + QString("dp");
+		else
+			aPlayer->rank = rating_pointsToRank(aPlayer->rank_score);
+		aPlayer->info = getStatusFromCode(invitebyte, aPlayer->rank);
+		aPlayer->wins = p[2] + (p[3] << 8);
+		aPlayer->losses = p[4] + (p[5] << 8);
+		p += 6;
+#ifdef RE_DEBUG
+		printf(" RP: %d W/L: %d/%d ", aPlayer->rank_score, aPlayer->wins, aPlayer->losses);
+		for(i = 0; i < 4; i++)
+			printf("%02x", p[i]);
+		printf("\n");
+#endif //RE_DEBUG
+		p += 3;
+		p++;
+		room->recvPlayerListing(aPlayer);
+		
+		playerlist_received++;
+		if(playerlist_skipnumber != PLAYERLIST_SKIPNUMBER_UNSET
+				 && playerlist_skipnumber < playerlist_received)
+		{
+#ifdef RE_DEBUG
+			printf("Playerlist received %d skip number %d\n", playerlist_received, playerlist_skipnumber);
+#endif //RE_DEBUG
+			/* get next room with observers */
+			GameListing * gamelisting = room->getGameListing(playerlist_roomnumber);
+			if(!gamelisting)
+				goto label_playerlist_nogame;
+			if(gamelisting->observers > 0 && playerlist_observernumber == gamelisting->observers)
+			{
+				playerlist_observernumber = 0;
+				gamelisting = room->getGameListing(++playerlist_roomnumber);
+				if(!gamelisting)
+					goto label_playerlist_nogame;
+			}
+			else if(gamelisting->observers > 0)
+			{
+				playerlist_observernumber++;
+			}
+			else
+			{
+				while(gamelisting->observers == 0)
+				{
+					playerlist_roomnumber++;
+					gamelisting = room->getGameListing(playerlist_roomnumber);
+					if(!gamelisting)
+						goto label_playerlist_nogame;
+				}
+			}
+			backPlayer = room->getPlayerListing(aPlayer->id);
+			/* add room to player, ORO is one room per player */
+			backPlayer->observing = playerlist_roomnumber;
+			/* add player to room */
+			gamelisting->observer_list.push_back(backPlayer);
+#ifdef RE_DEBUG
+			printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
+#endif //RE_DEBUG
+			goto label_playerlist_was_observer;
+		}
+label_playerlist_nogame:
+		/* If the game can't be found it either means that the player is not in a room
+		* or it means we don't have the room yet because that list hasn't come in.*/
+		
+		/* FIXME.  Why do we do this here?  So that we can reuse same
+		* object?  Why does this bit have to be cleared?  Its ugly here,
+		* and we can't use "continue" above, instead we have to use
+		* gotos and labels because of this...*/
+label_playerlist_was_observer:
+		aPlayer->pro = false;
+		
+		/* This also seems necessary... once we get this working, we should
+		 * think about how to clean this mess up... its just cause I've
+		* written it all so piecemeal */
+		backPlayer = room->getPlayerListing(aPlayer->id);
+		playerlist_inorder.push_back(backPlayer);
+	}
+	//FIXME test without this
+	delete newPlayer;
+#ifdef RE_DEBUG
+	printf("*** Players %d\n", players);
+#endif //RE_DEBUG
+}
+#endif //NEWPROTOCOL
 
 /* I've finally realized how ORO does this safely.  It waits until its received
  * everything, before it displays anything.  Worries me a bit, the way we do it but...
@@ -4404,8 +4757,9 @@ void CyberOroConnection::removeObserverFromGameListing(const PlayerListing * p)
 		* decrement, and if it gets to 0, remove the room.  I don't
 		* think there's another message that does it FIXME (but this
 		* requires accurate observer counts. */
-		game->running = false;
-		room->recvGameListing(game);
+		//game->running = false;
+		//room->recvGameListing(game);
+		/* No, oro tells us elsewhere to delete game */
 	}
 }
 
@@ -5089,13 +5443,7 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 	aGameListing->running = true;
 	aGameListing->number = room_number;
 	aGameListing->owner_id = aPlayer->id;
-	aGameListing->white = aPlayer;
 	
-	aGameListing->black = 0;
-	aGameListing->_black_name = QString::number(room_type, 16);
-	aGameListing->observers = 1;	//the person who created it
-	
-	aGameListing->isRoomOnly = true;
 #ifdef RE_DEBUG
 	printf("room number on that chat: %d\n", room_number);
 #endif //RE_DEBUG
@@ -5117,6 +5465,13 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 			break;
 	}
 	room_type = p[0];
+	aGameListing->white = aPlayer;
+	
+	aGameListing->black = 0;
+	aGameListing->_black_name = QString::number(room_type, 16);
+	aGameListing->observers = 1;	//the person who created it
+	
+	aGameListing->isRoomOnly = true;
 	//p[1] here is time and strength wished as per create room code
 	p += 2;
 	p += 8;
@@ -5335,6 +5690,43 @@ void CyberOroConnection::handleNigiri(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 }
 
+/* This comes before we've gotten the ids */
+void CyberOroConnection::handleFriends(unsigned char * msg, unsigned int size)
+{
+	unsigned short friend_records;
+	unsigned char * p = msg;
+	unsigned char name[11];
+	PlayerListing * player;
+	Room * room = getDefaultRoom();
+	int i;
+	
+	friend_records = p[0] + (p[1] << 8);
+	p += 2;
+	//check msg size???! FIXME
+	for(i = 0; i < friend_records; i++)
+	{
+		//name padded to 10, plus two bytes for flags	
+		strncpy((char *)name, (char *)p, 10);
+		p += 10;
+#ifdef RE_DEBUG
+		printf("friend or foe? %s, %02x%02x", name, p[0], p[1]);
+#endif //RE_DEBUG
+		//first byte is 01, they're probably friend
+		//first byte is 02, probably block
+		if(p[0] == 0x01)
+			friendedList.push_back(new FriendFanListing(QString((const char *)name), friendfan_notify_default));
+		else if(p[0] == 0x02)
+			blockedList.push_back(new FriendFanListing(QString((const char *)name), friendfan_notify_default));
+		p += 2;
+	}
+	//the rest is a mystery for right now
+#ifdef RE_DEBUG
+	printf("0x8129: ");
+	for(i = 0; i < (int)size; i++)
+		printf("%02x", msg[i]);
+	printf("\n");
+#endif //RE_DEBUG
+}
 /* We think this is the last, always the last of the connection lists
  * so we might want to clear the playerlist_inorder vector here,
  * if that's okay?  Otherwise on connect is fine too. */
@@ -5563,14 +5955,14 @@ void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 		if(gr->black_name == player->name)
 		{
 			aGameResult.winner_color = stoneWhite;
-			aGameResult.winner_name = gr->black_name;
-			aGameResult.loser_name = gr->white_name;  //necessary FIXME???
+			aGameResult.winner_name = gr->white_name;
+			aGameResult.loser_name = gr->black_name; //necessary FIXME???
 		}
 		else
 		{
 			aGameResult.winner_color = stoneBlack;
-			aGameResult.winner_name = gr->white_name;
-			aGameResult.loser_name = gr->black_name;
+			aGameResult.winner_name = gr->black_name;
+			aGameResult.loser_name = gr->white_name;
 		}
 		boarddispatch->recvResult(&aGameResult);
 		if(game_number == our_game_being_played)

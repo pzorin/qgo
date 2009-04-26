@@ -7,6 +7,7 @@
 class BoardDispatch;
 class GameDialogDispatch;
 class TalkDispatch;
+class QuickConnection;
 
 class CyberOroConnection : public NetworkConnection
 {
@@ -47,6 +48,19 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendCreateRoom(class RoomCreate * room);
 		virtual void sendJoinRoom(const RoomListing & room, const char * password = 0);
 		
+		virtual char * sendRequestAccountInfo(int * size, void * p);
+		virtual void handleAccountInfoMsg(int size, char * msg);
+		
+		virtual void addFriend(PlayerListing & player);
+		virtual void removeFriend(PlayerListing & player);
+		virtual char * sendAddFriend(int * size, void * p);
+		virtual void recvFriendResponse(int size, char * msg);
+		virtual char * sendRemoveFriend(int * size, void * p);
+		//virtual void addFan(PlayerListing & player);
+		//virtual void removeFan(PlayerListing & player);
+		virtual void addBlock(PlayerListing & player);
+		virtual void removeBlock(PlayerListing & player);
+		
 		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		BoardDispatch * getBoardFromOurOpponent(QString opponent);
 		virtual const PlayerListing & getOurListing(void);
@@ -63,6 +77,8 @@ class CyberOroConnection : public NetworkConnection
 		virtual bool supportsObserveOutside(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
 		virtual bool supportsRematch(void) { return true; };
+		virtual bool supportsFriendList(void) { return true; };
+		virtual bool supportsBlockList(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
 		virtual bool supportsCreateRoom(void) { return true; };
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
@@ -73,6 +89,8 @@ class CyberOroConnection : public NetworkConnection
 		void sendPersonalChat(const PlayerListing & player, const char * text);
 		void sendRoomChat(const char * text);
 		friend class SetPhrasePalette;
+		void requestAccountInfo(void);
+		void sendLogin(void);
 		void sendSetChatMsg(unsigned short phrase_id);
 		void sendObserveAfterJoining(const GameListing & game);
 		void sendFinishObserving(const GameListing & game);
@@ -160,6 +178,7 @@ class CyberOroConnection : public NetworkConnection
 		void handleScore(unsigned char * msg, unsigned int size);
 		void handleGamePhaseUpdate(unsigned char * msg, unsigned int size);
 		void handleMsg3(unsigned char * msg, unsigned int size);
+		void handleFriends(unsigned char * msg, unsigned int size);
 		void handleMsg2(unsigned char * msg, unsigned int size);
 		void handleNigiri(unsigned char * msg, unsigned int size);
 		class GameData * getGameData(unsigned int game_id);
@@ -181,6 +200,8 @@ class CyberOroConnection : public NetworkConnection
 		unsigned char * challenge_response;
 		unsigned char * codetable;
 		unsigned int codetable_IV, codetable_IV2;
+		
+		QuickConnection * metaserverQC;
 		
 		/* Since 0a7d comes before 1a81 and one has the number for human
 		 * consumption and the other the game_code necessary for joinging,
