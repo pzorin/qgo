@@ -563,11 +563,10 @@ void qGoBoard::enterScoreMode()
 	if(boardwindow->getGamePhase() == phaseScore)
 		return;
 	qDebug("qgb::enterScoreMode()");
-	//FIXME crash somewhere here if score button hit on dupped
-	//game that's already finished or maybe in score mode
-	boardwindow->setGamePhase ( phaseScore );
-	boardwindow->getUi().tabDisplay->setCurrentIndex(1);
-	boardwindow->getBoardHandler()->updateCursor();
+	boardwindow->setGamePhase (phaseScore);
+	boardwindow->getUi()->tabDisplay->setCurrentIndex(1);
+	if(boardwindow->getGameMode() != modeObserve)
+		boardwindow->getBoardHandler()->updateCursor();
 	boardwindow->getBoardHandler()->countScore();
 }
 
@@ -580,7 +579,7 @@ void qGoBoard::leaveScoreMode()
 	if(boardwindow->getGamePhase() != phaseScore)
 		return;
 	qDebug("leaving score mode");
-	boardwindow->getUi().tabDisplay->setCurrentIndex(0);
+	boardwindow->getUi()->tabDisplay->setCurrentIndex(0);
 	boardwindow->setGamePhase ( phaseOngoing );
 	boardwindow->getBoardHandler()->exitScore();
 }
@@ -654,7 +653,7 @@ void qGoBoard::slotDonePressed(void)
  */
 void qGoBoard::slotUpdateComment()
 {
-	QString s = boardwindow->getUi().commentEdit->toPlainText();
+	QString s = boardwindow->getUi()->commentEdit->toPlainText();
 
 	// case where the text has 'really' been altered, versus text changed
 	// because we traverse moves
@@ -684,11 +683,11 @@ void qGoBoard::kibitzReceived(const QString& text)
 	txt.append(k);
 	tree->getCurrent()->setComment(txt);
 
-//	if (!boardwindow->getUi().commentEdit->toPlainText().isEmpty())
-//		boardwindow->getUi().commentEdit->append("\n");
+//	if (!boardwindow->getUi()->commentEdit->toPlainText().isEmpty())
+//		boardwindow->getUi()->commentEdit->append("\n");
 
 	
-	boardwindow->getUi().commentEdit->append(k);
+	boardwindow->getUi()->commentEdit->append(k);
 	//qDebug("kibitzReceived: %s\n", text.toLatin1().constData());
 }
 
@@ -778,7 +777,7 @@ TimeRecord qGoBoard::getTheirTimeRecord(void)
 qGoBoardNormalInterface::qGoBoardNormalInterface(BoardWindow *bw, Tree * t, GameData *gd) 
 	: qGoBoard(bw, t, gd)
 {
-	boardwindow->getUi().board->clearData();
+	boardwindow->getUi()->board->clearData();
 
 	// If we have handicap, but not from a loaded file, we have to set the handicap move
 	if (gameData->handicap && gameData->fileName.isEmpty())

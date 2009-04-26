@@ -27,7 +27,7 @@ qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, Game
 {
 	game_Id = QString::number(gd->number);
 
-	boardwindow->getUi().board->clearData();
+	boardwindow->getUi()->board->clearData();
 
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
@@ -137,19 +137,3 @@ void qGoBoardReviewInterface::slotUndoPressed()
 {
 
 }
-
-#ifdef OLD
-/*
- * Comment line - return sent
- */
-void qGoBoardReviewInterface::slotSendComment()
-{
-	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi().commentEdit2->text());
-	
-	emit signal_sendCommandFromBoard("say " + boardwindow->getUi().commentEdit2->text() , FALSE);
-	// again, like kibitz, this should be our username FIXME
-	boardwindow->getUi().commentEdit->append("-> " + boardwindow->getUi().commentEdit2->text());
-
-	boardwindow->getUi().commentEdit2->clear();
-}
-#endif //OLD

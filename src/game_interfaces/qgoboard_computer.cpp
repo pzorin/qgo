@@ -154,7 +154,7 @@ void qGoBoardComputerInterface::sendMoveToInterface(StoneColor c,int x, int y)
 	int c2 = boardwindow->getBoardSize()  + 1 - y;
 	
 	
-	boardwindow->getUi().resignButton->setEnabled(false);
+	boardwindow->getUi()->resignButton->setEnabled(false);
 //	mv_counter++;
   
 	switch (c)
@@ -275,7 +275,7 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &comput
 	 * way to check who the current player is since the computer
 	 * moves are done with a function call rather than based on
 	 * some check of who's turn it is */
-	boardwindow->getUi().resignButton->setEnabled(true);
+	boardwindow->getUi()->resignButton->setEnabled(true);
 }
 
 /*

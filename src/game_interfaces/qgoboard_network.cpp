@@ -9,7 +9,7 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 {
 	game_Id = QString::number(gd->number);
 
-	bw->getUi().board->clearData();
+	bw->getUi()->board->clearData();
 
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
@@ -95,8 +95,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 	}
 }
 
-/* Horrible name, FIXME */
-void qGoBoardNetworkInterface::set_move(MoveRecord * m)
+void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 {
 	bool move_alteration = false;
 	int move_number, move_counter, handicap;
@@ -444,7 +443,7 @@ void qGoBoardNetworkInterface::sendPassToInterface(StoneColor /*c*/)
 void qGoBoardNetworkInterface::slotSendComment()
 {
 	QString our_name = boardwindow->getBoardDispatch()->getUsername();
-	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi().commentEdit2->text());
+	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi()->commentEdit2->text());
 
 	// why isn't this added to SGF files?? FIXME
 	// qGoBoard::kibitzReceived has the code for adding this
@@ -463,8 +462,8 @@ void qGoBoardNetworkInterface::slotSendComment()
 	 * void observer chat from us kibitz*/
 	/* Again, this is redundant in an ORO observer game, don't know
 	 * about match */
-	boardwindow->getUi().commentEdit->append(our_name + ": " + boardwindow->getUi().commentEdit2->text());
-	boardwindow->getUi().commentEdit2->clear();
+	boardwindow->getUi()->commentEdit->append(our_name + ": " + boardwindow->getUi()->commentEdit2->text());
+	boardwindow->getUi()->commentEdit2->clear();
 }
 
 void qGoBoardNetworkInterface::slotUndoPressed()
@@ -494,7 +493,7 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 void qGoBoardNetworkInterface::slotDonePressed()
 {
 	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(MoveRecord::DONE_SCORING));
-	boardwindow->getUi().doneButton->setEnabled(false);		//FIXME okay? don't want to send done twice
+	boardwindow->getUi()->doneButton->setEnabled(false);		//FIXME okay? don't want to send done twice
 }
 
 void qGoBoardNetworkInterface::slotResignPressed()
@@ -511,7 +510,7 @@ void qGoBoardNetworkInterface::slotResignPressed()
 	if (mb.exec() == QMessageBox::Yes)
 	{
 		boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
-		boardwindow->getUi().resignButton->setEnabled(false);		//FIXME okay? don't want to send resign twice
+		boardwindow->getUi()->resignButton->setEnabled(false);		//FIXME okay? don't want to send resign twice
 	}
 }
 
@@ -531,7 +530,7 @@ void qGoBoardNetworkInterface::adjournGame(void)
 	}
 	else
 		QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("Game with ") + opp_name + tr(" has been adjourned."));
-	boardwindow->getUi().adjournButton->setEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
+	boardwindow->getUi()->adjournButton->setEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
 }
 
 /* Might look nicer if we just set the game phase to ended or

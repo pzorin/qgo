@@ -28,14 +28,14 @@ InterfaceHandler::InterfaceHandler(BoardWindow *bw)
 //    buttonState = new ButtonState;
 	scored_flag = false;
 
-	tabPlay  = boardwindow->getUi().tabTools->widget(0); 
-	tabEdit = boardwindow->getUi().tabTools->widget(1) ;
+	tabPlay  = boardwindow->getUi()->tabTools->widget(0); 
+	tabEdit = boardwindow->getUi()->tabTools->widget(1) ;
 
 	GameMode mode = boardwindow->getGameMode();
 
 
 	if (mode == modeNormal || mode == modeComputer)
-		boardwindow->getUi().commentEdit2->setDisabled(true);
+		boardwindow->getUi()->commentEdit2->setDisabled(true);
 
 }
 
@@ -100,7 +100,7 @@ void InterfaceHandler::updateCaption(GameData *gd)
 
 
 	bool simple = gd->white_rank.length() == 0 && gd->black_rank.length() == 0;
-	QGroupBox *gb = boardwindow->getUi().whiteFrame;
+	QGroupBox *gb = boardwindow->getUi()->whiteFrame;
 
 	QString player = gd->white_name;
 	if (simple && player == QObject::tr("White"))
@@ -118,7 +118,7 @@ void InterfaceHandler::updateCaption(GameData *gd)
 		gb->setTitle(player);
 	}
 
-	gb = boardwindow->getUi().blackFrame;
+	gb = boardwindow->getUi()->blackFrame;
 
 	player = gd->black_name;
 	if (simple && player == QObject::tr("Black"))
@@ -139,15 +139,15 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	//TODO set  clock
 	
 	if(gd->free_rated == RATED)
-		boardwindow->getUi().freeratedLabel->setText("Rated");
+		boardwindow->getUi()->freeratedLabel->setText("Rated");
 	else if(gd->free_rated == FREE)
-		boardwindow->getUi().freeratedLabel->setText("Free");
+		boardwindow->getUi()->freeratedLabel->setText("Free");
 	else if(gd->free_rated == TEACHING)
-		boardwindow->getUi().freeratedLabel->setText("Teaching");
+		boardwindow->getUi()->freeratedLabel->setText("Teaching");
 	
 	qDebug("Komi: %f captures %d\n", gd->komi, gd->handicap);
-	boardwindow->getUi().komi->setText(QString().setNum(gd->komi));
-	boardwindow->getUi().handicap->setText(QString().setNum(gd->handicap));
+	boardwindow->getUi()->komi->setText(QString().setNum(gd->komi));
+	boardwindow->getUi()->handicap->setText(QString().setNum(gd->handicap));
 }
 
 /*
@@ -176,16 +176,16 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(" " + QObject::tr("Pass") + ")");
 	}
 
-	boardwindow->getUi().moveNumLabel->setText(s);
+	boardwindow->getUi()->moveNumLabel->setText(s);
 //	statusTurn->setText(" " + s.right(s.length() - 5) + " ");  // Without 'Move '
 	
 //	statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
 
 	// set turn information (and color on the edit button)
 	s = black ? QObject::tr("Black to play") : QObject::tr("White to play");
-	boardwindow->getUi().turnLabel->setText(s);
+	boardwindow->getUi()->turnLabel->setText(s);
 	
-	boardwindow->getUi().colorButton->setIcon(black ? QIcon(":/new/prefix1/ressources/pics/stone_black.png") : QIcon(":/new/prefix1/ressources/pics/stone_white.png") );
+	boardwindow->getUi()->colorButton->setIcon(black ? QIcon(":/new/prefix1/ressources/pics/stone_black.png") : QIcon(":/new/prefix1/ressources/pics/stone_white.png") );
 
 	// sons and variatons display
 	s = "";
@@ -200,26 +200,26 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(" " + QObject::tr("son"));
 	else
 		s.append(" " + QObject::tr("sons"));
-	boardwindow->getUi().varLabel->setText(s);
+	boardwindow->getUi()->varLabel->setText(s);
 	
 	if (boardwindow->getGameMode() == modeNormal || boardwindow->getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
 	{
 		// Update the toolbar buttons
-		boardwindow->getUi().navPrevVar->setEnabled(hasPrev);
-		boardwindow->getUi().navNextVar->setEnabled(hasNext);
-		boardwindow->getUi().navBackward->setEnabled(hasParent);
-		boardwindow->getUi().navForward->setEnabled(sons);
-		boardwindow->getUi().navFirst->setEnabled(hasParent);
-		boardwindow->getUi().navStartVar->setEnabled(hasParent);
-		boardwindow->getUi().navMainBranch->setEnabled(hasParent);
-		boardwindow->getUi().navLast->setEnabled(sons);
-		boardwindow->getUi().navNextBranch->setEnabled(sons);
-		boardwindow->getUi().swapVarButton->setEnabled(hasPrev);
-		boardwindow->getUi().navPrevComment->setEnabled(hasParent);
-		boardwindow->getUi().navNextComment->setEnabled(sons);
-    		boardwindow->getUi().navIntersection->setEnabled(true);
+		boardwindow->getUi()->navPrevVar->setEnabled(hasPrev);
+		boardwindow->getUi()->navNextVar->setEnabled(hasNext);
+		boardwindow->getUi()->navBackward->setEnabled(hasParent);
+		boardwindow->getUi()->navForward->setEnabled(sons);
+		boardwindow->getUi()->navFirst->setEnabled(hasParent);
+		boardwindow->getUi()->navStartVar->setEnabled(hasParent);
+		boardwindow->getUi()->navMainBranch->setEnabled(hasParent);
+		boardwindow->getUi()->navLast->setEnabled(sons);
+		boardwindow->getUi()->navNextBranch->setEnabled(sons);
+		boardwindow->getUi()->swapVarButton->setEnabled(hasPrev);
+		boardwindow->getUi()->navPrevComment->setEnabled(hasParent);
+		boardwindow->getUi()->navNextComment->setEnabled(sons);
+    	boardwindow->getUi()->navIntersection->setEnabled(true);
 		
-		boardwindow->getUi().slider->setEnabled(true);
+		boardwindow->getUi()->slider->setEnabled(true);
 	}
 /*	else  if (board->getGameMode() == modeObserve)
 	{
@@ -241,12 +241,12 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		slider->setDisabled(true);
 */	
 	// Update slider
-	boardwindow->getUi().slider->blockSignals (TRUE);
+	boardwindow->getUi()->slider->blockSignals (TRUE);
 
-//	int mv = boardwindow->getUi().slider->maximum();
-//	int v = boardwindow->getUi().slider->value();
+//	int mv = boardwindow->getUi()->slider->maximum();
+//	int v = boardwindow->getUi()->slider->value();
 
-	if (boardwindow->getUi().slider->maximum() < n)
+	if (boardwindow->getUi()->slider->maximum() < n)
 		  setSliderMax(n);
 
 	// we need to be carefull with the slider :
@@ -256,9 +256,9 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 //	(board->getGameMode() == modeObserve && mv >= n) ||
 	// observing, but at the last move, and an incoming move occurs 
 //	(board->getGameMode() == modeObserve && mv < n && v==n-1))
-		boardwindow->getUi().slider->setValue(n);
+		boardwindow->getUi()->slider->setValue(n);
 
-	boardwindow->getUi().slider->blockSignals (FALSE);
+	boardwindow->getUi()->slider->blockSignals (FALSE);
 }
 
 
@@ -270,9 +270,9 @@ void InterfaceHandler::displayComment(const QString &c)
 //	if (board->get_isLocalGame())
 //	{
 		if (c.isEmpty())
-			boardwindow->getUi().commentEdit->clear();
+			boardwindow->getUi()->commentEdit->clear();
 		else
-			boardwindow->getUi().commentEdit->setText(c);
+			boardwindow->getUi()->commentEdit->setText(c);
 //	}
 //	else if (!c.isEmpty())
 //			commentEdit->append(c);
@@ -296,8 +296,8 @@ void InterfaceHandler::setSliderMax(int n)
 	if (n < 0)
 		n = 0;
 
-	boardwindow->getUi().slider->setMaximum(n);
-    	boardwindow->getUi().sliderRightLabel->setText(QString::number(n));
+	boardwindow->getUi()->slider->setMaximum(n);
+    	boardwindow->getUi()->sliderRightLabel->setText(QString::number(n));
 }
 
 /*
@@ -306,8 +306,8 @@ void InterfaceHandler::setSliderMax(int n)
 void InterfaceHandler::setCaptures(float black, float white)
 {
 
-	boardwindow->getUi().capturesBlack->setText(QString::number(black));
-	boardwindow->getUi().capturesWhite->setText(QString::number(white));
+	boardwindow->getUi()->capturesBlack->setText(QString::number(black));
+	boardwindow->getUi()->capturesWhite->setText(QString::number(white));
 }
 
 /*
@@ -322,18 +322,18 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeNormal:
 //		modeButton->setEnabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
-		boardwindow->getUi().actionPlay->setEnabled(TRUE);
-		boardwindow->getUi().tabTools->setCurrentIndex(0) ;//setVisible(false);
-		boardwindow->getUi().scoreButton->setEnabled(TRUE);
+		boardwindow->getUi()->actionPlay->setEnabled(TRUE);
+		boardwindow->getUi()->tabTools->setCurrentIndex(0) ;//setVisible(false);
+		boardwindow->getUi()->scoreButton->setEnabled(TRUE);
 //		scoreButton->setText(QObject::tr("Score", "button label"));
-		boardwindow->getUi().passButton_2->setEnabled(TRUE);
-//		boardwindow->getUi().refreshButton_2->setDisabled(TRUE);
+		boardwindow->getUi()->passButton_2->setEnabled(TRUE);
+//		boardwindow->getUi()->refreshButton_2->setDisabled(TRUE);
 //		undoButton->setDisabled(true);
 //		resignButton->setDisabled(true);
 //		adjournButton->setDisabled(true);
 //		refreshButton->setDisabled(true);
-		boardwindow->getUi().commentEdit->setReadOnly(FALSE);
-		boardwindow->getUi().commentEdit2->setDisabled(TRUE);
+		boardwindow->getUi()->commentEdit->setReadOnly(FALSE);
+		boardwindow->getUi()->commentEdit2->setDisabled(TRUE);
 //		statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
 //		statusMark->setText(getStatusMarkText(board->getMarkType()));
 		return;
@@ -341,20 +341,20 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeObserve:
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-//		boardwindow->getUi().tabTools->removeTab(0) ;
-		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->setVisible(FALSE) ;
-//		boardwindow->getUi().toolFrame->layout()->addItem(new QSpacerItem()) ;
-//		boardwindow->getUi().scoreButton_2->setDisabled(TRUE);
+//		boardwindow->getUi()->tabTools->removeTab(0) ;
+		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->tabTools->setVisible(FALSE) ;
+//		boardwindow->getUi()->toolFrame->layout()->addItem(new QSpacerItem()) ;
+//		boardwindow->getUi()->scoreButton_2->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi().passButton_2->setDisabled(TRUE);
-//		boardwindow->getUi().undoButton->setDisabled(true);
-//		boardwindow->getUi().resignButton->setDisabled(true);
-//		boardwindow->getUi().adjournButton->setDisabled(true);
-//		boardwindow->getUi().refreshButton_2->setEnabled(TRUE);
-		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi().commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi().commentEdit2->setEnabled(TRUE);
+		boardwindow->getUi()->passButton_2->setDisabled(TRUE);
+//		boardwindow->getUi()->undoButton->setDisabled(true);
+//		boardwindow->getUi()->resignButton->setDisabled(true);
+//		boardwindow->getUi()->adjournButton->setDisabled(true);
+//		boardwindow->getUi()->refreshButton_2->setEnabled(TRUE);
+		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
+		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
+		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
 //		editCut->setEnabled(false);
 //		editDelete->setEnabled(false);
 //		fileNew->setEnabled(false);
@@ -367,21 +367,21 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeMatch : 
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
-		boardwindow->getUi().scoreButton->setDisabled(TRUE);
+		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
+		boardwindow->getUi()->scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi().passButton->setEnabled(TRUE);
+		boardwindow->getUi()->passButton->setEnabled(TRUE);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi().undoButton->setEnabled(TRUE);
-		boardwindow->getUi().resignButton->setEnabled(TRUE);
-		boardwindow->getUi().adjournButton->setEnabled(TRUE);
-		boardwindow->getUi().refreshButton->setEnabled(TRUE);
-		boardwindow->getUi().doneButton->setEnabled(FALSE);
-		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi().commentEdit2->setEnabled(TRUE);
-		boardwindow->getUi().commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi().navButtonsFrame->setEnabled(FALSE);
+		boardwindow->getUi()->undoButton->setEnabled(TRUE);
+		boardwindow->getUi()->resignButton->setEnabled(TRUE);
+		boardwindow->getUi()->adjournButton->setEnabled(TRUE);
+		boardwindow->getUi()->refreshButton->setEnabled(TRUE);
+		boardwindow->getUi()->doneButton->setEnabled(FALSE);
+		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
+		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
+		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
+		boardwindow->getUi()->navButtonsFrame->setEnabled(FALSE);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		fileNew->setEnabled(false);
@@ -394,21 +394,21 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case   modeComputer :
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
-		boardwindow->getUi().scoreButton->setDisabled(TRUE);
+		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
+		boardwindow->getUi()->scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi().passButton->setEnabled(TRUE);
+		boardwindow->getUi()->passButton->setEnabled(TRUE);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi().undoButton->setEnabled(TRUE);
-		boardwindow->getUi().resignButton->setEnabled(TRUE);
-		boardwindow->getUi().adjournButton->setEnabled(FALSE);
-		boardwindow->getUi().refreshButton->setEnabled(FALSE);
-		boardwindow->getUi().doneButton->setEnabled(FALSE);
-		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi().navButtonsFrame->setEnabled(FALSE);
-		boardwindow->getUi().commentEdit2->setDisabled(TRUE);
-		boardwindow->getUi().reviewButton->setDisabled(TRUE);
+		boardwindow->getUi()->undoButton->setEnabled(TRUE);
+		boardwindow->getUi()->resignButton->setEnabled(TRUE);
+		boardwindow->getUi()->adjournButton->setEnabled(FALSE);
+		boardwindow->getUi()->refreshButton->setEnabled(FALSE);
+		boardwindow->getUi()->doneButton->setEnabled(FALSE);
+		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
+		boardwindow->getUi()->navButtonsFrame->setEnabled(FALSE);
+		boardwindow->getUi()->commentEdit2->setDisabled(TRUE);
+		boardwindow->getUi()->reviewButton->setDisabled(TRUE);
 //		fileNew->setEnabled(false);
 //		fileNewBoard->setEnabled(false);
 //		fileOpen->setEnabled(false);
@@ -419,22 +419,22 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeTeach:
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
-		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
+		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi().scoreButton->setDisabled(true);
+		boardwindow->getUi()->scoreButton->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi().passButton->setEnabled(true);
+		boardwindow->getUi()->passButton->setEnabled(true);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi().undoButton->setEnabled(true);
-		boardwindow->getUi().resignButton->setEnabled(true);
-		boardwindow->getUi().adjournButton->setEnabled(true);
-		boardwindow->getUi().refreshButton->setEnabled(true);
-		boardwindow->getUi().doneButton->setEnabled(false);
-		boardwindow->getUi().commentEdit->setReadOnly(true);
-		boardwindow->getUi().navButtonsFrame->setEnabled(false);
-		boardwindow->getUi().commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi().commentEdit2->setEnabled(TRUE);
+		boardwindow->getUi()->undoButton->setEnabled(true);
+		boardwindow->getUi()->resignButton->setEnabled(true);
+		boardwindow->getUi()->adjournButton->setEnabled(true);
+		boardwindow->getUi()->refreshButton->setEnabled(true);
+		boardwindow->getUi()->doneButton->setEnabled(false);
+		boardwindow->getUi()->commentEdit->setReadOnly(true);
+		boardwindow->getUi()->navButtonsFrame->setEnabled(false);
+		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
+		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		fileNew->setEnabled(false);
@@ -447,21 +447,21 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeReview :
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
-		boardwindow->getUi().actionPlay->setDisabled(TRUE);
-		boardwindow->getUi().tabTools->setCurrentIndex(1) ;
+		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi().scoreButton->setDisabled(TRUE);
+		boardwindow->getUi()->scoreButton->setDisabled(TRUE);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi().passButton->setEnabled(TRUE);
+		boardwindow->getUi()->passButton->setEnabled(TRUE);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi().undoButton->setEnabled(TRUE);
-		boardwindow->getUi().resignButton->setEnabled(TRUE);
-		boardwindow->getUi().adjournButton->setEnabled(TRUE);
-		boardwindow->getUi().refreshButton->setEnabled(TRUE);
-		boardwindow->getUi().doneButton->setEnabled(FALSE);
-		boardwindow->getUi().commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi().commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi().commentEdit2->setEnabled(TRUE);
+		boardwindow->getUi()->undoButton->setEnabled(TRUE);
+		boardwindow->getUi()->resignButton->setEnabled(TRUE);
+		boardwindow->getUi()->adjournButton->setEnabled(TRUE);
+		boardwindow->getUi()->refreshButton->setEnabled(TRUE);
+		boardwindow->getUi()->doneButton->setEnabled(FALSE);
+		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
+		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
+		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
 //		fileNew->setEnabled(false);
 //		fileNewBoard->setEnabled(false);
 //		fileOpen->setEnabled(false);
@@ -481,28 +481,28 @@ void InterfaceHandler::toggleToolbarButtons(bool state)
 //    CHECK_PTR(buttonState);
 	
 //    buttonState->navPrevVar = navPrevVar->isEnabled();
-	boardwindow->getUi().navPrevVar->setEnabled(state);
+	boardwindow->getUi()->navPrevVar->setEnabled(state);
 	
 //    buttonState->navNextVar = navNextVar->isEnabled();
-	boardwindow->getUi().navNextVar->setEnabled(state);
+	boardwindow->getUi()->navNextVar->setEnabled(state);
 	
 //    buttonState->navBackward = navBackward->isEnabled();
-	boardwindow->getUi().navBackward->setEnabled(state);
+	boardwindow->getUi()->navBackward->setEnabled(state);
     
 //    buttonState->navForward = navForward->isEnabled();
-	boardwindow->getUi().navForward->setEnabled(state);
+	boardwindow->getUi()->navForward->setEnabled(state);
 	
 //    buttonState->navFirst = navFirst->isEnabled();
-	boardwindow->getUi().navFirst->setEnabled(state);
+	boardwindow->getUi()->navFirst->setEnabled(state);
 	
 //    buttonState->navStartVar = navStartVar->isEnabled();
-	boardwindow->getUi().navStartVar->setEnabled(state);
+	boardwindow->getUi()->navStartVar->setEnabled(state);
 	
 //    buttonState->navMainBranch = navMainBranch->isEnabled();
-	boardwindow->getUi().navMainBranch->setEnabled(state);
+	boardwindow->getUi()->navMainBranch->setEnabled(state);
 	
 //    buttonState->navLast = navLast->isEnabled();
-	boardwindow->getUi().navLast->setEnabled(state);
+	boardwindow->getUi()->navLast->setEnabled(state);
 	
     buttonState->navNextBranch = navNextBranch->isEnabled();
     navNextBranch->setEnabled(false);
@@ -545,17 +545,17 @@ void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, co
 	if (!btime.isEmpty())
 	{
 		if (bstones != QString("-1"))
-			boardwindow->getUi().pb_timeBlack->setText(btime + " / " + bstones);
+			boardwindow->getUi()->pb_timeBlack->setText(btime + " / " + bstones);
 		else
-			boardwindow->getUi().pb_timeBlack->setText(btime);
+			boardwindow->getUi()->pb_timeBlack->setText(btime);
 	}
 
 	if (!wtime.isEmpty())
 	{
 		if (wstones != QString("-1"))
-			boardwindow->getUi().pb_timeWhite->setText(wtime + " / " + wstones);
+			boardwindow->getUi()->pb_timeWhite->setText(wtime + " / " + wstones);
 		else
-			boardwindow->getUi().pb_timeWhite->setText(wtime);
+			boardwindow->getUi()->pb_timeWhite->setText(wtime);
 	}
 }
 
@@ -564,11 +564,11 @@ void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, co
  */
 void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float komi)
 {
-	boardwindow->getUi().komiScore->setText(QString::number(komi));
-	boardwindow->getUi().terrWhite->setText(QString::number(terrW));
-	boardwindow->getUi().capturesWhiteScore->setText(QString::number(capW));
-	boardwindow->getUi().totalWhite->setText(QString::number((float)terrW + (float)capW + komi));
-	boardwindow->getUi().terrBlack->setText(QString::number(terrB));
-	boardwindow->getUi().capturesBlackScore->setText(QString::number(capB));
-	boardwindow->getUi().totalBlack->setText(QString::number(terrB + capB));
+	boardwindow->getUi()->komiScore->setText(QString::number(komi));
+	boardwindow->getUi()->terrWhite->setText(QString::number(terrW));
+	boardwindow->getUi()->capturesWhiteScore->setText(QString::number(capW));
+	boardwindow->getUi()->totalWhite->setText(QString::number((float)terrW + (float)capW + komi));
+	boardwindow->getUi()->terrBlack->setText(QString::number(terrB));
+	boardwindow->getUi()->capturesBlackScore->setText(QString::number(capB));
+	boardwindow->getUi()->totalBlack->setText(QString::number(terrB + capB));
 }
