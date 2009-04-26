@@ -26,7 +26,7 @@
 #include "network/networkconnection.h"
 #include "talk.h"
 #include "gamedialog.h"
-#include "login.h"
+#include "network/login.h"
 #include "listviews.h"
 #include "playergamelistings.h"		//FIXME should be moved out
 
@@ -1359,12 +1359,8 @@ void MainWindow::slot_pbRelOneTab(QWidget *w)
 //		dlg = talkList.takeAt(i);
 		ui.talkTabs->removeTab(ui.talkTabs->currentIndex()) ;
 		dlg->pageActive = false;
-		/* Something is seriously buggy here and I think it
-		 * can even cause the game dialog match crashes. FIXME
-		 * FIXME FIXME */
-		/* If we don't delete here, then one can never open this
-		 * dialog again. */
-		dlg->deleteLater();		//right? 
+		
+		connection->closeTalk(dlg->get_opponent());
 	}
 
 }
@@ -1646,49 +1642,6 @@ void MainWindow::matchRequest(MatchRequest * mr)
 	}
 }
 
-#ifdef FIXME
-/* PRobably just remove */
-/*
- * talk dialog -> return pressed
- */
-void MainWindow::slot_talkTo(QString &receiver, QString &txt)
-{
-	qDebug("MW::slot_talkTo deprecated");
-	// echo
-	if (txt.length())
-	{
-		switch (myAccount->get_gsname())
-		{
-			case IGS:
-			{
-				bool ok;
-				// test if it's a number -> channel
-				/*int nr =*/ receiver.toInt(&ok);
-				if (ok)
-					// yes, channel talk
-					sendcommand("yell " + txt, false);
-//				else if (receiver.contains('*'))
-//					sendcommand("shout " + txt, false);
-				else
-					sendcommand("tell " + receiver + " " + txt, false);
-			}
-				break;
-
-			default:
-				// send tell command w/o echo
-				if (receiver.contains('*'))
-					sendcommand("shout " + txt, false);
-				else
-					sendcommand("tell " + receiver + " " + txt, false);
-				break;
-		}
-
-		// lokal echo in talk window
-		slot_talk(receiver, "-> " + txt, true);
-	}
-}
-
-#endif //FIXME
 /*
  * A game dialog has sent a 'remove' signal
  */
