@@ -61,7 +61,7 @@ bool QAlsaSound::initialise()
 	u_long  databytes ;
 	snd_pcm_format_t format;
 	snd_pcm_hw_params_t *params;
-
+	
         int err;
 
 	/*
@@ -80,17 +80,17 @@ bool QAlsaSound::initialise()
 
 	::read (fd, buffer, BUFFERSIZE) ;
 
-	if (findchunk (buffer, "RIFF", BUFFERSIZE) != buffer) {
+	if (findchunk (buffer, (char*)"RIFF", BUFFERSIZE) != buffer) {
 		qDebug("Bad format: Cannot find RIFF file marker\n");	/* wwg: Report error */
 		return  FALSE ;
 	}
 
-	if (! findchunk (buffer, "WAVE", BUFFERSIZE)) {
+	if (! findchunk (buffer, (char *)"WAVE", BUFFERSIZE)) {
 		qDebug("Bad format: Cannot find WAVE file marker\n");	/* wwg: report error */
 		return  FALSE ;
 	}
 
-	ptr = findchunk (buffer, "fmt ", BUFFERSIZE) ;
+	ptr = findchunk (buffer, (char *)"fmt ", BUFFERSIZE) ;
 
 	if (! ptr) {
 		qDebug("Bad format: Cannot find 'fmt' file marker\n");	/* wwg: report error */
@@ -108,7 +108,7 @@ bool QAlsaSound::initialise()
 //	waveformat.wBitsPerSample = SwapLE16(waveformat.wBitsPerSample) ;
 
 	
-	ptr = findchunk (buffer, "data", BUFFERSIZE) ;
+	ptr = findchunk (buffer, (char *)"data", BUFFERSIZE) ;
 
 	if (! ptr) {
 		qDebug("Bad format: unable to find 'data' file marker\n");	/* wwg: report error */
@@ -247,7 +247,7 @@ void QAlsaSound::run()
   //      		snd_pcm_prepare(handle);
 		int written=0;
 		while (f > 0) {
-
+			//FIXME valgrind says this has uninitialized bytes
 			frames = snd_pcm_writei(handle, buffer2+written, f);
 
 			if (frames == -EPIPE)
