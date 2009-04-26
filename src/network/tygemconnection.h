@@ -60,6 +60,17 @@ class TygemConnection : public NetworkConnection
 		virtual void sendCreateRoom(class RoomCreate * room);
 		virtual void sendJoinRoom(const RoomListing & room, const char * password = 0);
 		
+		virtual void addFriend(PlayerListing & player);
+		virtual void removeFriend(PlayerListing & player);
+		virtual void addFan(PlayerListing & player);
+		virtual void removeFan(PlayerListing & player);
+		virtual void addBlock(PlayerListing & player);
+		virtual void removeBlock(PlayerListing & player);
+
+		//FIXME these are unused right now:
+		virtual void requestLongInfo(PlayerListing & player);
+		virtual void requestShortInfo(PlayerListing & player);
+
 		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		BoardDispatch * getBoardFromOurOpponent(QString opponent);
 		virtual const PlayerListing & getOurListing(void);
@@ -80,6 +91,8 @@ class TygemConnection : public NetworkConnection
 		virtual bool twoPassesEndsGame(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
 		virtual bool supportsRematch(void) { return true; };
+		virtual bool supportsFriendList(void) { return true; };
+		virtual bool supportsBlockList(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
 		virtual bool supportsCreateRoom(void) { return true; };
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
@@ -112,8 +125,6 @@ class TygemConnection : public NetworkConnection
 		void handleServerList(unsigned char * msg);
 		void sendPersonalChat(const PlayerListing & player, const char * text);
 		void sendServerChat(QString text);
-		friend class SetPhrasePalette;
-		void sendSetChatMsg(unsigned short phrase_id);
 		void sendJoin(unsigned short game_number);
 		void sendResume(unsigned short game_number);
 		void sendFinishObserving(unsigned short game_number);
@@ -220,7 +231,6 @@ class TygemConnection : public NetworkConnection
 		int move_message_number;	//FIXME can't use if more than one game
 		PlayerListing * player_accepted_match;
 		QTextCodec * textCodec;
-		class SetPhrasePalette * setphrasepalette;
 		unsigned long encode_offset;
 		
 		/* Since 0a7d comes before 1a81 and one has the number for human
