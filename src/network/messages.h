@@ -59,7 +59,7 @@ struct GameResult
 	float winner_score;
 	float loser_score;
 	enum ResultType { SCORE, RESIGN, TIME, FORFEIT } result;
-	GameResult() :  winner_color(stoneNone), winner_name(QString()), loser_name(QString()) {};
+	GameResult() :  winner_color(stoneNone), winner_name(QString()), loser_name(QString()), winner_score(0.0), loser_score(0.0) {};
 	GameResult(StoneColor c, ResultType r) : winner_color(c), result(r) {};
 	QString shortMessage(void)
 	{
@@ -95,29 +95,77 @@ struct GameResult
 		{
 			case FORFEIT:
 				if(winner_color == stoneWhite)
-					msg = "Black forfeits";
+				{
+					if(loser_name != QString())
+						msg = loser_name + "(B) forfeits";
+					else
+						msg = "Black forfeits";
+				}
 				else
-					msg = "White forfeits";
+				{
+					if(loser_name != QString())
+						msg = loser_name + "(W) forfeits";
+					else
+						msg = "White forfeits";
+				}
 				break;
 			case TIME:
 				if(winner_color == stoneWhite)
-					msg = "Black has lost on time";
+				{
+					if(loser_name != QString())
+						msg = loser_name + "(B) has lost on time";
+					else
+						msg = "Black has lost on time";
+				}
 				else
-					msg = "White has lost on time";
+				{
+					if(loser_name != QString())
+						msg = loser_name + "(W) has lost on time";
+					else
+						msg = "White has lost on time";
+				}
 				break;
 			case RESIGN:
 				if(winner_color == stoneWhite)
-					msg = "Black resigns";
+				{
+					if(loser_name != QString())
+						msg = loser_name + "(B) resigns";
+					else
+						msg = "Black resigns";
+				}
 				else
-					msg = "White resigns";
+				{
+					if(loser_name != QString())
+						msg = loser_name + "(W) resigns";
+					else
+						msg = "White resigns";
+				}
 				break;
 			case SCORE:
 				if(winner_color == stoneWhite)
-					msg = "White has won by " + \
-					QString::number(margin); 
+				{
+					if(winner_name != QString())
+						msg = winner_name + "(W)";
+					else
+						msg = "White";
+					if(margin)
+						msg += " wins by " + \
+						QString::number(margin);
+					else
+						msg += " wins";
+				}
 				else
-					msg = "Black has won by " + \
-					QString::number(margin); 
+				{
+					if(winner_name != QString())
+						msg = winner_name + "(B)";
+					else
+						msg = "Black";
+					if(margin)
+						msg = "Black wins by " + \
+						QString::number(margin);
+					else
+						msg += " wins";
+				}
 				break;
 		}
 		return msg;
