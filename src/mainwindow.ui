@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>959</width>
-    <height>652</height>
+    <width>986</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="font" >
@@ -202,28 +202,28 @@
              </item>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2" >
+           <item row="2" column="0" colspan="2" >
             <widget class="QCheckBox" name="setOpenMode" >
              <property name="text" >
               <string>Open for playing</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="0" colspan="2" >
+           <item row="3" column="0" colspan="2" >
             <widget class="QCheckBox" name="setLookingMode" >
              <property name="text" >
               <string>Looking for a game</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0" colspan="2" >
+           <item row="4" column="0" colspan="2" >
             <widget class="QCheckBox" name="setQuietMode" >
              <property name="text" >
               <string>No lists update</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0" >
+           <item row="5" column="0" >
             <widget class="QToolButton" name="toolSeek" >
              <property name="text" >
               <string>...</string>
@@ -246,7 +246,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1" >
+           <item row="5" column="1" >
             <widget class="QComboBox" name="seekHandicapList" >
              <property name="toolTip" >
               <string>Set the handicap range you want for seeking games</string>
@@ -283,24 +283,24 @@
              </item>
             </widget>
            </item>
-           <item row="5" column="0" >
+           <item row="6" column="0" >
             <widget class="QLabel" name="roomsLabel" >
              <property name="text" >
               <string>Rooms</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="1" >
+           <item row="6" column="1" >
             <widget class="QComboBox" name="RoomList" />
            </item>
-           <item row="6" column="0" >
+           <item row="7" column="0" >
             <widget class="QLabel" name="channelsLabel" >
              <property name="text" >
               <string>Channels</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="1" >
+           <item row="7" column="1" >
             <widget class="QComboBox" name="channelsCB" >
              <property name="enabled" >
               <bool>false</bool>
@@ -329,6 +329,13 @@
              </property>
              <property name="checkable" >
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" >
+            <widget class="QPushButton" name="changeServerPB" >
+             <property name="text" >
+              <string>Change Server</string>
              </property>
             </widget>
            </item>
@@ -434,24 +441,17 @@
            <attribute name="title" >
             <string>Lists</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_2" >
-            <item row="1" column="4" >
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0" >
-               <size>
-                <width>105</width>
-                <height>27</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="0" colspan="8" >
+           <layout class="QGridLayout" name="gridLayout_6" >
+            <item row="0" column="0" colspan="9" >
              <widget class="QTreeView" name="playerView" >
               <property name="contextMenuPolicy" >
                <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="rootIsDecorated" >
                <bool>false</bool>
@@ -770,7 +770,38 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="4" >
+             <widget class="QCheckBox" name="friendsCheck" >
+              <property name="text" >
+               <string>Friends</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5" >
+             <widget class="QCheckBox" name="fansCheck" >
+              <property name="text" >
+               <string>Fans</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6" >
+             <widget class="QPushButton" name="editFriendsFansPB" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>Edit Friends/Fans</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="7" >
+             <widget class="QPushButton" name="createRoomPB" >
+              <property name="text" >
+               <string>Create Room</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="8" >
              <widget class="QToolButton" name="pbRefreshGames" >
               <property name="text" >
                <string>...</string>
@@ -781,7 +812,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0" colspan="8" >
+            <item row="2" column="0" colspan="9" >
              <widget class="QTreeView" name="gamesView" >
               <property name="contextMenuPolicy" >
                <enum>Qt::CustomContextMenu</enum>
@@ -794,20 +825,6 @@
               </property>
               <property name="sortingEnabled" >
                <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="6" >
-             <widget class="QPushButton" name="createRoomPB" >
-              <property name="text" >
-               <string>Create Room</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="5" >
-             <widget class="QPushButton" name="changeServerPB" >
-              <property name="text" >
-               <string>Change Server</string>
               </property>
              </widget>
             </item>
