@@ -23,6 +23,7 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	boardwindow = 0;
 	resultdialog = 0;
 	countdialog = 0;
+	observerListModel = 0;
 	/* New rules.  The boarddispatch creates the game data or
 	 * whatever loads the game data before passing it to the
 	 * boardwindow creates it.  The boardwindow deletes it.
@@ -50,7 +51,9 @@ BoardDispatch::~BoardDispatch()
 	/* Clear dispatch so boardwindow doesn't try to close it */
 	if(boardwindow)
 	{
-		clearObservers();
+		//clearObservers();
+		if(observerListModel)
+			delete observerListModel;
 		if(boardwindow->getGamePhase() != phaseEnded)
 		{
 			boardwindow->qgoboard->stopTime();
@@ -112,7 +115,7 @@ void BoardDispatch::recvMove(MoveRecord * m)
 		qDebug("Board dispatch has no board window\n");
 		return;
 	}
-	boardwindow->qgoboard->set_move(m);
+	boardwindow->qgoboard->handleMove(m);
 }
 
 void BoardDispatch::sendMove(MoveRecord * m)
@@ -168,7 +171,12 @@ void BoardDispatch::openBoard(void)
 		//else, something else has set it ahead of time
 		
 		boardwindow = new BoardWindow(gameData, imBlack, imWhite, this);
-		boardwindow->observerListModel->setAccountName(myName);
+		if(!observerListModel)
+		{
+			observerListModel = new ObserverListModel();
+			observerListModel->setAccountName(myName);
+		}
+		boardwindow->getUi()->observerView->setModel(observerListModel);
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 	}
@@ -252,16 +260,16 @@ void BoardDispatch::recvObserver(PlayerListing * p, bool present)
 	if(!boardwindow)
 		return;
 	if(present)
-		boardwindow->observerListModel->insertListing(p);
+		observerListModel->insertListing(p);
 	else
-		boardwindow->observerListModel->removeListing(p);
+		observerListModel->removeListing(p);
 }
 
 void BoardDispatch::clearObservers(void)
 {
 	if(!boardwindow)
 		return;
-	boardwindow->observerListModel->clearList();
+	observerListModel->clearList();
 }
 
 void BoardDispatch::recvKibitz(QString name, QString text)
@@ -563,4 +571,18 @@ QString BoardDispatch::getOpponentName(void)
 		return gameData->black_name;
 	else
 		return QString();
+}
+
+class ObserverListModel * BoardDispatch::getObserverListModelForRematch(void)
+{
+	class ObserverListModel * olm = observerListModel;
+	observerListModel = 0;
+	return olm;
+}
+
+void BoardDispatch::setObserverListModel(class ObserverListModel * olm)
+{
+	if(observerListModel)
+		qDebug("warning: observer list model already set! overwriting");
+	observerListModel = olm;
 }

@@ -49,6 +49,8 @@ class BoardDispatch
 		class TimeRecord getTheirTimeRecord(void);
 		QString getOpponentName(void);
 		QString getUsername(void) { return connection->getUsername(); };
+		class ObserverListModel * getObserverListModelForRematch(void);
+		void setObserverListModel(class ObserverListModel * olm);
 		bool supportsMultipleUndo(void) { return connection->supportsMultipleUndo(); };
 		bool supportsRematch(void);
 		bool startTimerOnOpen(void) {return connection->startTimerOnOpen(); };
@@ -66,4 +68,5 @@ class BoardDispatch
 		class GameListing * gameListing;
 		class ResultDialog * resultdialog;
 		class CountDialog * countdialog;
+		class ObserverListModel * observerListModel;
 };
