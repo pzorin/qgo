@@ -250,3 +250,16 @@ bool Move::hasNextBrother()
 {
 	return (brother != NULL);
 }
+
+void Move::addBrother(Move * b)
+{
+	Move *tmp = this;
+		
+	// Find brother farest right
+	while (tmp->brother != NULL)
+		tmp = tmp->brother;
+		
+	tmp->brother = b;
+	b->parent = tmp->parent;
+	b->setTimeinfo(false);			//whats this for FIXME?
+}

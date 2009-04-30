@@ -68,6 +68,7 @@ public:
 	bool isHandicapMove()			{return handicapMove ;}
 	void setNodeIndex(int i)		{nodeIndex = i;}
 	int getNodeIndex()			{return nodeIndex;}
+	void addBrother(Move * b); 
 	
 	Move *brother, *son, *parent, *marker;
 	bool checked;
