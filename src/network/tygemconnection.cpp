@@ -23,7 +23,7 @@
 #include <QMessageBox>
 
 //#define RE_DEBUG
-//#define NO_PLAYING
+#define NO_PLAYING
 
 #define FIRST_BYTE(x)	(x >> 24) & 0x000000ff
 #define SECOND_BYTE(x)	(x >> 16) & 0x000000ff
@@ -618,7 +618,9 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			{
 				p->peek(header, 4);
 #ifdef RE_DEBUG
+#ifdef NOISY_DEBUG
 				printf("%02x%02x%02x%02x\n", header[0], header[1], header[2], header[3]);
+#endif //NOISY_DEBUG
 #endif //RE_DEBUG
 				packet_size = header[1] + (header[0] << 8);
 				if((unsigned)bytes < packet_size)
@@ -1064,6 +1066,10 @@ int TygemConnection::reconnectToServer(void)
 		sendDisconnectMsg();
 		closeConnection(false);
 		reconnecting = true;
+	}
+	else if(connectionState == LOGIN)
+	{
+		closeConnection(false);
 	}
 	else
 		reconnecting = false;
@@ -5149,106 +5155,6 @@ void TygemConnection::handleList(unsigned char * msg, unsigned int size)
 		//79bd 0915 0000 0004
 }
 
-//c661
-// this is looking like a room list
-void TygemConnection::handleRoomList(unsigned char * msg, unsigned int size)
-{
-	unsigned char * p = msg;
-	unsigned int number_of_games;
-	unsigned short number;
-	int i;
-	PlayerListing * player;
-	GameListing * aGameListing;
-	GameListing * newGameListing = new GameListing();
-	Room * room = getDefaultRoom();
-
-	number_of_games = p[0] + (p[1] << 8);
-	p += 4;
-#ifdef RE_DEBUG
-	printf("c661 Number of games in this list: %d\n", number_of_games);
-#endif //RE_DEBUG
-	// 4, 4 for one player, 4 for the second player, another 4
-	while(number_of_games--)
-	{
-		number = p[0] + (p[1] << 8);
-		if(number == 0)
-		{
-			/* There's no 0th record except maybe total number of
-			 * games and those 01 tagged records are weird, like
-			 * their either empty or they're for particular
-			 * players... they might be player stats but they
-			 * don't show up in official ORO app so who knows.*/
-			/* FIXME, these are probably important and I just
-			 * have no idea. */
-			p += 16;
-			continue;
-		}
-		aGameListing = room->getGameListing(number);
-		if(!aGameListing)
-		{
-			aGameListing = newGameListing;
-			newGameListing->black = 0;
-			newGameListing->white = 0;
-		}
-		aGameListing->number = number;	
-		aGameListing->running = true;
-		unsigned char * q = p;
-		for(i = 0; i < 4; i++)
-		{
-#ifdef RE_DEBUG
-			printf("%02x%02x%02x%02x ", q[0], q[1], q[2], q[3]);
-#endif //RE_DEBUG
-			q += 4;
-		}
-#ifdef RE_DEBUG
-		printf("\n");
-#endif //RE_DEBUG
-		if(p[4] & 0x70)
-			aGameListing->isLocked = true;
-		//p[4] & 0x70 = locked game password 
-		/* I think phase is or can be unreliable for broadcast
-		 * games, maybe others */
-		/*FIXME, setting observers here skews setAttached*/
-		aGameListing->observers = p[2];
-		aGameListing->moves = getPhase(p[6]);
-		if(aGameListing->moves == -1)
-			aGameListing->moves = 0;
-		aGameListing->owner_id = p[8] + (p[9] << 8);
-		player = room->getPlayerListing(aGameListing->owner_id);
-		if(player)
-			aGameListing->white = player;
-		
-		/* These are really like room owners */
-		if(!aGameListing->black)
-		{
-			//new sets this to 0
-			aGameListing->_black_name = getRoomTag(p[4]);
-			aGameListing->isRoomOnly = true;
-			//aGameListing->observers--;	//one attached
-		}
-		room->recvGameListing(aGameListing);
-		if(player)
-		{
-			//aGameListing->observers--;
-			//after recv
-			setAttachedGame(player, aGameListing->number);
-		}	
-		p += 16;
-		if(!player)
-		{
-			aGameListing = room->getGameListing(number);
-			rooms_without_owners.push_back(aGameListing);
-		}
-#ifdef RE_DEBUG
-		printf("Observers: %d\n", aGameListing->observers);
-#endif //RE_DEBUG
-	}
-	if(p != msg + size)
-		qDebug("handleRoomList: doesn't match size %d", size);
-	//FIXME try without
-	delete newGameListing;
-}
-
 /* We might FIXME replace the return on this with a QString
  * when we alter the list view to handle different columns.
  * But for now, moves is pretty accurate for the field */
@@ -5321,7 +5227,7 @@ QString TygemConnection::getRoomTag(unsigned char byte)
 }
 
 #ifdef RE_DEBUG
-#define GAMELIST_DEBUG
+//#define GAMELIST_DEBUG
 #endif //RE_DEBUG
 //0612
 void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
@@ -5360,17 +5266,15 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		aGameListing->number = id;
 		if(p[2] == 0x01)
 		{
-#ifdef RE_DEBUG
-//#ifdef GAMELIST_DEBUG
-#ifndef GAMELIST_DEBUG
+
+#ifdef GAMELIST_DEBUG
 			printf("Id: %d:\n", id);
-#endif // !GAMELIST_DEBUG
 			printf("is ended!!!\n");
 			for(i = 0; i < 4; i++)
 				printf("%c", p[i]);
 			printf("\n");
-//#endif //GAMELIST_DEBUG
-#endif //RE_DEBUG
+#endif //GAMELIST_DEBUG
+
 			p += 4;
 			aGameListing->running = false;
 			room->recvGameListing(aGameListing);
@@ -5423,7 +5327,10 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		flags = p[0];
 		//0000 0001 0001 ffff ff00 7479633435320000000000000000001274796334353200003800000200000000000000000000000000000000003337323
 		//13535380000000000000003
-		
+		//FIXME we need a flag parse function		
+		//but note that we might want a variable return value in the sense
+		//that maybe we want to get the flags, maybe we want to set the name of the black
+		//player to ** review ** or something...
 		if(flags & 0x80)
 		{
 			// Betting
@@ -7529,6 +7436,16 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 }
 
 //0x0683:	//clock stop? //enter score?
+/* As I recall, these are also used to set the time in professional games
+ * being broadcast 
+ * But on second thought, this is a 0683:
+	//018e 0b01 bfee bfb5 c0da 3832 0000 0000
+	//0000 0016 0000 0000 0000 0000 0000 0000
+	//0000 1a00 c1a6 3134 b1e2 2047 53c4 aec5
+	//d8bd bab9 e820 babb bcb1 b8ae b1d7 0000
+ * so not really sure what they are... that's got some names in there, could
+ * even be a comment of some kind
+*/
 void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int size)
 {
 	/* Change name FIXME, definitely not enter score, more likely
@@ -7538,14 +7455,18 @@ void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int size)
 	BoardDispatch * boarddispatch;
 	int i;
 	//0087 aa01 0101 0000 031e 00a0 0334 0040
+#ifdef RE_DEBUG
 	printf("0x0683: ");
 	for(i = 0; i < (int)size; i++)
 		printf("%02x", msg[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	boarddispatch = getIfBoardDispatch((msg[0] << 8) + msg[1]);
 	if(!boarddispatch)
 		return;
+#ifdef RE_DEBUG
 	boarddispatch->recvKibitz(0, "0x683");
+#endif //RE_DEBUG
 	//after this 7b
 	//0087 0101 6261 696e 6974 6500 0000 0000 
 	//0000 0011 6261 696e 6974 6500 0000 0002
@@ -7817,10 +7738,12 @@ void TygemConnection::handleTime(unsigned char * msg, unsigned int size)
 		return;
 	}
 #ifdef RE_DEBUG
+#ifdef NOISY_DEBUG
 	printf("TIME: ");
 	for(i = 0; i < size; i++)
 		printf("%02x", p[i]);
 	printf("\n");
+#endif //NOISY_DEBUG
 #endif //RE_DEBUG
 	//000f0101032b0b4003100480  blacks time first
 	//000f00010311048003300b40  whites time first
