@@ -5,10 +5,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "stone.h"
-#include "imagehandler.h"
-#include "gatter.h"
-#include "mark.h"
+#include "defines.h"
 
 #include <vector>
 
@@ -16,6 +13,9 @@
 
 class ImageHandler;
 class Move;
+class Mark;
+class Stone;
+class Gatter;
 
 class Board : public QGraphicsView
 {

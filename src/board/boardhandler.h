@@ -6,12 +6,12 @@
 #define BOARDHANDLER_H
 
 #include "../defines.h"
-#include "tree.h"
-#include "sgfparser.h"
-#include "board.h"
-#include "boardwindow.h"
 
 class BoardWindow;
+class Tree;
+class Board;
+class Move;
+class QWheelEvent;
 
 class BoardHandler : public QObject
 {

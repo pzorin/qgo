@@ -24,7 +24,6 @@
 #include "ui_boardwindow.h"
 #include "boardhandler.h"
 #include "interfacehandler.h"
-#include "tree.h"
 #include "qgoboard.h"
 #include "clockdisplay.h"
 #include "gamedata.h"
@@ -32,6 +31,7 @@
 class BoardHandler;
 class qGoBoard;
 class ClockDisplay;
+class Tree;
 
 class BoardWindow : public QMainWindow, public Ui::BoardWindow
 {
