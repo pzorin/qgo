@@ -12,6 +12,8 @@
 #include "interfacehandler.h"
 #include "qgoboard.h"
 #include "move.h"
+#include "tree.h"
+#include "sgf/sgfparser.h"
 #include "../network/boarddispatch.h"
 #include "listviews.h"
 #include "ui_gameinfo.h"
