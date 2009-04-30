@@ -89,6 +89,7 @@ void Tree::deleteGroupMatrices(void)
 /*
  *  Adds a brother at the end of the brother chain of current()
  */
+// may be kind of silly if we move it to the Move class FIXME
 bool Tree::addBrother(Move *node)
 {
 	if (root == NULL)
@@ -103,15 +104,7 @@ bool Tree::addBrother(Move *node)
 			return false;
 		}
 		
-		Move *tmp = current;
-		
-		// Find brother farest right
-		while (tmp->brother != NULL)
-			tmp = tmp->brother;
-		
-		tmp->brother = node;
-		node->parent = current->parent;
-		node->setTimeinfo(false);
+		current->addBrother(node);
 	}
 	
 	current = node;
@@ -147,11 +140,39 @@ bool Tree::addSon(Move *node)
 				return false;
 			}
 			current->son = node;
+			
 			node->parent = current;
 			node->setTimeinfo(false);
 			assignCurrent(current, node);
 			if(isInMainBranch(current->parent))
 				lastMoveInMainBranch = current;
+#ifdef NOTWORKING
+			// This is from an undo, but its awkward here
+			// presumably son would not have been null with a marker
+			// if this wasn't from undos or online review or the like
+			// we'll understand this better if we look into online
+			// review code FIXME
+			if(current->parent->marker)
+			{	
+				if(!addBrother(current->parent->marker))
+				{
+					qFatal("Failed to add undo brother.");
+					return false;
+				}
+				else
+				{
+					Move * m = current->parent->marker;
+					current->parent->marker = NULL;
+					//check for multiple undos in a row
+					while(m->marker && m->son == NULL)	//is son check right?
+					{
+						m->son = m->marker;
+						m->marker = NULL;
+						m = m->son;
+					}
+				}
+			}
+#endif //NOTWORKING
 			return false;
 		}
 		// A son found. Add the new node as farest right brother of that son
@@ -403,7 +424,8 @@ void Tree::traverseClear(Move *m)
 		delete trash.pop();
 }
 
-/* This is slower than it could be, but traverseClear I think is seldom called */
+/* This is slower than it could be, but traverseClear I think is seldom called
+ * we also use this in addSon though... */
 bool Tree::isInMainBranch(Move * m) const
 {
 	while(m->parent && m->parent->son == m)
@@ -611,7 +633,7 @@ void Tree::addEmptyMove( bool /*brother*/)
  * This is the code from boardhandler (as opposed to stonehandler::removestone)
  * It has been renamed to 'removeStoneSGF' because both boardhandler and stonehandler are here
  */
-void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
+void Tree::removeStoneSGF(int x, int y, bool /*hide*//*isalwaystrue*/, bool new_node)
 {
 #ifdef OLD
 	bool res = removeStone(x, y, hide);
@@ -637,9 +659,10 @@ void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 #endif //OLD
 }
 
+/* Really conflicting with setCurrent name, this is like a joke FIXME */
 Move * Tree::assignCurrent(Move * & o, Move * & n) 
 {
-	/*if(n->getX() == -1 || n->getY() == -1)
+	/*if(n->getX() == -1 || n->getY() == -1)		//root at least is -1 -1 so who cares? but this is probably from empty nodes FIXME cleanup somehow
 		qDebug("new move -1 -1");
 	if(o->getX() == -1 || o->getY() == -1)
 		qDebug("old move -1 -1");*/
@@ -1027,9 +1050,13 @@ void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
 
 void Tree::undoMove(void)
 {
+#ifdef NOTWORKING
 	previousMove();
+	
 	current->marker = current->son;
 	current->son = NULL;
+#endif //NOTWORKING
+	deleteNode();
 }
 
 void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
@@ -2087,12 +2114,14 @@ void Tree::deleteNode()
 //		updateMove(tree->getCurrent());
 		return;
 	}
-	
+	if(isInMainBranch(m))
+		lastMoveInMainBranch = remember;
 	if (m->son != NULL)
 		traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
+	assignCurrent(current, remember);
 	delete m;                         // Delete our move
-	setCurrent(remember);       // Set current move to previous move
-	remember->son = remSon;           // Reset son pointer
+	//setCurrent(remember);       // Set current move to previous move
+	remember->son = remSon;           // Reset son pointer, NULL
 	remember->marker = NULL;          // Forget marker
 	
 	/*if(current == findLastMoveInMainBranch())
