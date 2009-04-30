@@ -53,7 +53,7 @@ public:
  * Former Boardhandler functions called by SGF parser
  */
 
-	void createEmptyMove(bool brother =false);
+	void addEmptyMove(bool brother =false);
 	void removeStoneSGF(int x, int y, bool hide=false, bool new_node=true);
 	void updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase = phaseOngoing);
  	//void addMove(StoneColor c, int x, int y, bool clearMarks = true);

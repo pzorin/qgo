@@ -10,8 +10,6 @@
 
 #include <QtCore>
 
-//Class Move;
-
 Tree::Tree(int * board_size)
 {
 	root = NULL;
@@ -574,7 +572,7 @@ Move *Tree::findLastMoveInMainBranch()
 	return lastMoveInMainBranch;
 }
 
-void Tree::createEmptyMove( bool /*brother*/)
+void Tree::addEmptyMove( bool /*brother*/)
 {
 	// qDebug("BoardHandler::createMoveSGF() - %d", mode);
 	
@@ -615,11 +613,12 @@ void Tree::createEmptyMove( bool /*brother*/)
  */
 void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 {
-	
+#ifdef OLD
 	bool res = removeStone(x, y, hide);
 	
 	if (res)
 	{
+#endif //OLD
 		if ((current->getGamePhase() == phaseOngoing) && (current->getMoveNumber() > 0))//	currentMove > 0)
 		{
 			if (new_node)  // false, when reading sgf
@@ -628,21 +627,32 @@ void Tree::removeStoneSGF(int x, int y, bool hide, bool new_node)
 		}
 		else
 			updateCurrentMatrix(stoneErase, x, y);
-		
+#ifdef OLD
 //		board->checkLastMoveMark(x, y);
 	}
 	
 //	board->setModified();
 	
 //	return res;
+#endif //OLD
 }
 
 Move * Tree::assignCurrent(Move * & o, Move * & n) 
 {
+	/*if(n->getX() == -1 || n->getY() == -1)
+		qDebug("new move -1 -1");
+	if(o->getX() == -1 || o->getY() == -1)
+		qDebug("old move -1 -1");*/
 	if(n != root)  //not an issue anymore
 	{
 		if(n == o->son)
 		{
+			/* This may or may not be silly.  We call it from addSon which is ridiculous because we just ran
+			 * checkPosition.  So either we shouldn't call assignCurrent from addSon but then we have an issue
+			 * with the other two, or we need to have some kind of flag or check or maybe see if this new stone
+			 * has sons, etc. FIXME */
+			/* Also note that the way its currently done, lastMoveInMainBranch isn't set to n until AFTER
+			 * its checked for here FIXME */
 			if(n == findLastMoveInMainBranch())
 				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixCurrent);
 			else
@@ -784,7 +794,7 @@ void Tree::addMove(StoneColor c, int x, int y, Matrix * mat, bool clearMarks)
 #endif //OLD
 
 /* FIXME double check and remove editMove, unnecessary */
-void Tree::doPass(bool sgf, bool fastLoad)
+void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 {
 //	if (lastValidMove == NULL)
 //	{
@@ -795,7 +805,8 @@ void Tree::doPass(bool sgf, bool fastLoad)
 	StoneColor c = (current->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
 	
 //	currentMove++;
-	
+	addMove(c, 20, 20);
+#ifdef OLD
 	if (!sgf)
 		addMove(c, 20, 20);
 	else  // Sgf reading
@@ -807,7 +818,7 @@ void Tree::doPass(bool sgf, bool fastLoad)
 		if (!fastLoad)
 			editMove(c, 20, 20);
 	}
-	
+#endif //OLD
 	if (current->parent != NULL)
 		current->setCaptures(current->parent->getCapturesBlack(),
 		current->parent->getCapturesWhite());
@@ -863,8 +874,16 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 		return true;
 	}
 
-	if (current->getMatrix()->getStoneAt(x,y) != stoneNone)
+	/* I'm not sure what "stoneErase" is for.  If we find nothing uses it, we should remove it FIXME */
+	if (current->getMatrix()->getStoneAt(x,y) != stoneNone &&
+		current->getMatrix()->getStoneAt(x,y) != stoneErase)
 	{
+		if(current->getMatrix()->getStoneAt(x, y) == stoneBlack)
+			qDebug("black stone");
+		else if(current->getMatrix()->getStoneAt(x, y) == stoneWhite)
+			qDebug("white stone");
+		else
+			qDebug("question");
 		qDebug ("We seem to have already a stone at this place : %d %d", x, y);
 		return false;
 	}
@@ -1963,7 +1982,7 @@ bool Tree::removeStone(int x, int y, bool hide)
 	}
 	else
 	{
-		MatrixStone *s = NULL;
+		MatrixStone * s = NULL;
 		if (stones->find(Matrix::coordsToKey(x, y)) == stones->end()) 
 		{
 			qWarning("   ***   Key for stone %d, %d not found!   ***", x, y);
@@ -1976,7 +1995,7 @@ bool Tree::removeStone(int x, int y, bool hide)
 	return true;
 }
 
-
+/* Below is only used by removeStone and is similar to other code within removeStone FIXME */
 /*
  *  0 : no stone
  * -1 : hidden
@@ -1996,61 +2015,6 @@ int Tree::hasMatrixStone(int x, int y)
 	return -1;
 }
 
-#ifdef OLD
-/*
- * This is used by the sgfparser when reverting to the previous node after the end of a branch
- * It is only used to recalculates all the groups according to the matrix
- */
-bool Tree::updateAll(Matrix *m, bool /*toDraw*/)
-{
-	// qDebug("StoneHandler::updateAll(Matrix *m) - toDraw = %d", toDraw);
-	
-	Q_CHECK_PTR(m);
-	
-//	m->debug();
-	
-//	Stone *stone;
-	bool modified = false;
-//	bool fake = false;
-//	short data;
-
-	short color;	
-
-	/*
-	* Recalculates all the groups according to the matrix
-	*/
-
-	// First we remove verything from the group list
-	// This also delete ALL the MatrixStones
-	while (! groups->isEmpty())
-		delete groups->takeFirst();
-	//Might not be needed
-	groups->clear();
-	qDebug("updateAll: %p %p", this, m);
-/*
-	for (int y=1; y<=boardSize; y++)
-	{
-		for (int x=1; x<=boardSize; x++)
-		{
-			// Extract the data for the stone from the matrix
-//			data = abs(m->at(x-1, y-1) % 10);
-			color=m->at(x-1, y-1);
-
-			if (color == stoneBlack || color ==stoneWhite)
-			{
-				MatrixStone *s = new MatrixStone;
-				s->x=x;
-				s->y=y;
-				s->c= (color == stoneBlack ? stoneBlack : stoneWhite) ;
-
-				checkPosition(s,m);
-			}
-		}
-	}
-*/
-	return modified;
-}
-#endif //OLD
 /*
  * this deletes the current node an all its sons
  */
@@ -2131,10 +2095,10 @@ void Tree::deleteNode()
 	remember->son = remSon;           // Reset son pointer
 	remember->marker = NULL;          // Forget marker
 	
-	if(current == findLastMoveInMainBranch())
+	/*if(current == findLastMoveInMainBranch())
 		current->getMatrix()->invalidateAllGroups(groupMatrixCurrent);
 	else
-		current->getMatrix()->invalidateAllGroups(groupMatrixView);
+		current->getMatrix()->invalidateAllGroups(groupMatrixView);*/
 //	updateMove(tree->getCurrent(), !display_incoming_move);
 	
 //	board->setModified();

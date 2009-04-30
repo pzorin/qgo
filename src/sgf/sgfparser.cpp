@@ -415,6 +415,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 	MoveNum *moveNum;
 	QStack<Move*> stack;
 	QStack<MoveNum*> movesStack;
+	/* FIXME toRemove, et., al., appears unused Remove it */
 	QStack<Position*> toRemove;
 /*
 ////TODO	stack.setAutoDelete(FALSE);
@@ -431,6 +432,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 	bool cancel = false;
 	int progressCounter = 0;
 	QProgressDialog progress(QObject::tr("Reading sgf file..."), QObject::tr("Abort"),0, strLength);
+	//FIXME abort does nothing!!
 	
 	// qDebug("File length = %d", strLength);
 	
@@ -736,7 +738,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 				}
 				
 				//qDebug("Start do loop : FOUND PROP %d, pos at %d now", prop, pos);
-//				qDebug(toParse->getStr());
+				//qDebug(toParse->getStr());			//causes crash
 				// Next is one or more '[xx]'.
 				// Only one in a move property, several in a setup propery
 				do {
@@ -777,7 +779,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 							/* Something is screwy here, inconsistencies
 							 * in the way SGF's are treated. Like the below:
 							 * the whole point of "remember_root", FIXME*/
-							tree->createEmptyMove();
+							tree->addEmptyMove();
 							isRoot = false;
 							unknownProperty = QString();
 							if (tree->getCurrent()->getTimeinfo())
@@ -807,7 +809,6 @@ bool SGFParser::doParse(const QString &toParseStr)
 							y1 = y;
 							compressed_list = false;
 						}
-						
 /*								
 *						TODO Do we nned this when the tree is created from file ?
 *						boardHandler->setModeSGF(setup || compressed_list ? modeEdit : modeNormal);
@@ -842,7 +843,12 @@ bool SGFParser::doParse(const QString &toParseStr)
 										//tree->getCurrent()->setColor(stoneBlack);
 									}
 									if(setup)
+									{
+										//if this is first in branch we need to add an empty move
+										if(stack.top() == tree->getCurrent())
+											tree->addEmptyMove();
 										tree->addStoneToCurrentMove(black ? stoneBlack : stoneWhite, i, j);
+									}
 									else
 										tree->addMove(black ? stoneBlack : stoneWhite, i, j);
 									//tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, setup ? false : new_node);
@@ -919,8 +925,8 @@ bool SGFParser::doParse(const QString &toParseStr)
 								!(toParse->at(pos) == '\r'))
 								commentStr.append(toParse->at(pos));
 						}
-
-					 	//qDebug("Comment read: %s", commentStr.toLatin1().constData());
+						
+					 	//qDebug("Node name read: %s", commentStr.toLatin1().constData());
 						if (!commentStr.isEmpty())
 							// add comment; skip 'C[]'
 							tree->getCurrent()->setNodeName(commentStr);
