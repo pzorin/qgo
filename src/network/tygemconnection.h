@@ -160,7 +160,6 @@ class TygemConnection : public NetworkConnection
 		void handleList(unsigned char * msg, unsigned int size);
 		QString rating_pointsToRank(unsigned int rp);
 		QString getCountryFromCode(unsigned char code);
-		void handleRoomList(unsigned char * msg, unsigned int size);
 		int getPhase(unsigned char byte);
 		QString getRoomTag(unsigned char byte);
 		void handleGamesList(unsigned char * msg, unsigned int size);
