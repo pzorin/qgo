@@ -71,7 +71,7 @@ void ServerListDialog::slot_listDoubleClicked(QTreeWidgetItem * i, int)
 	int index = serverListView->indexOfTopLevelItem(i);
 	if(index < 0 || index == current_server)
 		return;
-	done(index);
+	done(index + 1);
 }
 
 void ServerListDialog::slot_connect(void)
@@ -83,12 +83,12 @@ void ServerListDialog::slot_connect(void)
 		return;
 	}
 	int index = serverListView->indexOfTopLevelItem(i);
-	done(index);
+	done(index + 1);
 }
 
 void ServerListDialog::slot_cancel(void)
 {
 	qDebug("Cancel");
 	deleteLater();
-	done(-1);
+	done(QDialog::Rejected);
 }

@@ -1044,8 +1044,9 @@ int TygemConnection::reconnectToServer(void)
 	 * elements in the server window ?!?!? */
 	ServerListDialog * serverReconnectDialog = new ServerListDialog(serverList, current_server_index);
 	int server_i = serverReconnectDialog->exec();
-	if(server_i < 0)
-		return server_i;
+	if(server_i < 0 || server_i == QDialog::Rejected)
+		return -1;
+	server_i--;
 	if(!this)
 	{
 		/* FIXME, this needs to be much better.  It should be,
