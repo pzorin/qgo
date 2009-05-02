@@ -907,6 +907,7 @@ void TygemConnection::sendRequest(void)
 }
 
 /* Its possible we're supposed to send only ascii or only encode here */
+/* Note that this is also a request for some 0692 information */
 void TygemConnection::sendName(void)
 {
 	unsigned int length = 24;
@@ -968,6 +969,39 @@ void TygemConnection::sendPlayersRequest(void)
 	*/
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending players list request");
+	delete[] packet;
+}
+
+void TygemConnection::sendFriendsBlocksRequest(void)
+{
+	unsigned int length = 8;
+	unsigned char * packet = new unsigned char[length];
+	int i;
+	
+	packet[0] = 0x00;
+	packet[1] = 0x08;
+	packet[2] = 0x06;
+	packet[3] = 0x95;
+	packet[4] = 0x00;
+	packet[5] = 0x00;
+	packet[6] = 0x00;
+	packet[7] = 0x00;
+	
+	//before encode
+#ifdef RE_DEBUG
+	for(i = 0; i < length; i++)
+		printf("%02x", packet[i]);
+	printf("\n");
+#endif //RE_DEBUG
+	
+	/*encode(packet, 0x8);
+	//after encode
+	for(i = 0; i < length; i++)
+	printf("%02x", packet[i]);
+	printf("\n");
+	*/
+	if(write((const char *)packet, length) < 0)
+		qWarning("*** failed sending friends/blocks list request");
 	delete[] packet;
 }
 
@@ -4535,6 +4569,10 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 
 			
 		case TYGEM_PLAYERSINIT:
+			handlePlayerList(msg, size);
+			sendFriendsBlocksRequest();
+			//0653 request should also be sent here FIXME
+			break;
 		case TYGEM_PLAYERSUPDATE:
 			handlePlayerList(msg, size);
 			break;
@@ -4732,7 +4770,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			 * at the time listed */
 			handleScoreMsg1(msg, size);
 			break;
-		case 0x0654:	//0653 requests maybe?
+		case 0x0654:	//0653 requests FIXME
 			handleList(msg, size);
 			//0100000c79bd091300000b9b79bd092d0000023c79bd0914000009e879bd09120000002279bd094b000008c679bd092c0000065b79bd0
 			//97d000004c179bd092f0000036a79bd094c000009c379bd09150000000179bd091100000a8c79bd092e00000050
@@ -4788,11 +4826,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 			break;
 		case 0x0696:
-			//some kind of code  0695 requests
-			printf("0x0696: ");
-			for(i = 0; i < (int)size; i++)
-				printf("%02x", msg[i]);
-			printf("\n");
+			handleFriendsBlocksList(msg, size);
 			break;
 		case 0x0698:
 			//maybe number of games/players?
@@ -4842,7 +4876,7 @@ void TygemConnection::handleConnected(unsigned char * msg, unsigned int size)
 void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
-	unsigned char name[11];
+	unsigned char name[14];
 	QString encoded_name, ascii_name, rank;
 	int players;
 	unsigned char rankbyte, invitebyte;
@@ -4890,7 +4924,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		if(p[0] == 0x01)
 		{
 			p += 4;
-			strncpy((char *)name, (char *)p, 11);
+			strncpy((char *)name, (char *)p, 14);
 			encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 			aPlayer = room->getPlayerListing(encoded_name);
 			if(aPlayer)
@@ -4933,10 +4967,9 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		/* I think p[0] is the flag icon, but it can be different
 		 * pictures too so... */
 		p++;
-		strncpy((char *)name, (char *)p, 11);
+		strncpy((char *)name, (char *)p, 14);
 		encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-		p += 14;
-		p++;
+		p += 15;
 		//rank byte
 		if(p[0] < 0x12)
 			rank = QString::number(0x12 - p[0]) + 'k';
@@ -5062,7 +5095,7 @@ unsigned int TygemConnection::rankToScore(QString rank)
 	return rp;
 }
 
-/* FIXME What are the other bits for ?!?!?!*/
+//FIXME this was oro code, but tygem has numbers for like 3 countries at least
 QString TygemConnection::getCountryFromCode(unsigned char code)
 {
 	code &= 0x0f;
@@ -5116,6 +5149,47 @@ QString TygemConnection::getCountryFromCode(unsigned char code)
 			break;
 	}
 	return QString("-");
+}
+
+/* FIXME I think this p++, p += n, stuff is a really
+ * bad idea now.  I need to get that other protocol
+ * idea working or just use the numbers somehow.  It would
+ * be better to have msg[n + offset + offset] then what we're
+ * doing now */
+void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int size)
+{
+	//0018 0696 
+	//0001 2066 696e 7472 7573 696f 6e00 6672 6965 6e00
+	unsigned char * p = msg;
+	unsigned char name[15];
+	unsigned char indicator;
+	QString encoded_name;
+	name[15] = 0x00;
+	int records = (p[0] << 8) + p[1];
+	p += 2;
+#ifdef RE_DEBUG
+	printf("FriendsBlocksList: %d\n", records);
+	for(int i = 0; i < size; i++)
+		printf("%02x", msg[i]);
+	printf("\n");
+#endif //RE_DEBUG
+	p += 2;		//2066
+	while(records--)
+	{
+		strncpy((char *)name, (char *)p, 14);
+		encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
+		p += 15;
+		if(*p == 0x00)
+			friendedList.push_back(new FriendFanListing(encoded_name, friendfan_notify_default));
+		else if(*p == 0xff)
+			blockedList.push_back(new FriendFanListing(encoded_name, friendfan_notify_default));
+		else
+			printf("unknown indicator: %02x\n", *p);
+#ifdef RE_DEBUG
+		printf("%02x %s %s\n", *p, encoded_name.toLatin1().constData(), name);
+#endif //RE_DEBUG
+		p++;
+	}
 }
 
 /* These are the number of players on the other servers !!! 
@@ -5237,7 +5311,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	unsigned int number_of_games;
 	unsigned int id;
 	unsigned int name_length;
-	unsigned char name[11];
+	unsigned char name[15];
 	unsigned char flags;
 	Room * room = getDefaultRoom();
 	int i;
@@ -5249,6 +5323,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	GameListing * ag = new GameListing();
 	
 	ag->running = true;
+	name[14] = 0x00;
 	/*printf("Gamelist message:\n");
 	for(i = 0; i < size; i++)
 		printf("%02x", msg[i]);
@@ -5346,7 +5421,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		p++;
 		
 		//name 1
-		strncpy((char *)name, (char *)p, 11);
+		strncpy((char *)name, (char *)p, 14);
 		encoded_nameA = serverCodec->toUnicode((char *)name, strlen((char *)name));
 		p += 15;
 		//rank byte
@@ -5372,7 +5447,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		}
 		else
 		{
-			strncpy((char *)name, (char *)p, 11);
+			strncpy((char *)name, (char *)p, 14);
 			encoded_nameB = serverCodec->toUnicode((char *)name, strlen((char *)name));
 			p += 15;
 			if(p[0] < 0x12)
@@ -5434,104 +5509,6 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		room->recvGameListing(aGameListing);
 	}
 	delete ag;
-}
-
-/* ORO old code FIXME */
-//0456
-void TygemConnection::handlePlayerConnect(unsigned char * msg, unsigned int size)
-{
-	unsigned char * p = msg;
-	unsigned char name[11];
-	name[10] = 0x00;
-	unsigned char name2[11];
-	name2[10] = 0x00;
-	unsigned char rankbyte;
-	unsigned short id;
-	Room * room = getDefaultRoom();
-	PlayerListing * newPlayer = new PlayerListing();
-	PlayerListing * aPlayer;
-	newPlayer->online = true;
-	newPlayer->info = "??";
-	newPlayer->playing = 0;
-	newPlayer->observing = 0;
-	newPlayer->idletime = "-";
-	
-	if(size != 42)
-		qDebug("handlePlayerConnect of size: %d\n", size);
-	strncpy((char *)name, (char *)p, 10);
-#ifdef RE_DEBUG
-	printf("0456 %s connected, ", name);
-#endif //RE_DEBUG
-	
-	p += 10;
-	strncpy((char *)name2, (char *)p, 10);
-#ifdef RE_DEBUG
-	printf("or player %s, ", name2);
-#endif //RE_DEBUG
-	
-	
-	p += 10;	//name again;
-#ifdef RE_DEBUG
-	printf("id: %02x%02x\n", p[0], p[1]);
-#endif //RE_DEBUG
-	id = p[0] + (p[1] << 8);
-	aPlayer = room->getPlayerListing(id);
-	if(!aPlayer)
-		aPlayer = newPlayer;
-	aPlayer->id = id;
-	//aPlayer->name = (char *)name;
-	aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
-	/* It actually looks like this catches more unicode foreign names, then the
-	* second name.  But I get the feeling that one is the text username or
-	* something... not sure */
-	/* Yeah, FIXME, the first name appears to allow asian characters, the second is just
-	 * username.  We might want an option to turn them on and off */
-	//aPlayer->name = (char *)name2;
-	//aPlayer->name = serverCodec->toUnicode((const char *)name2, strlen((const char *)name2));
-		
-	/* I think we want to take the first name if we take the second
-	* here, I think the second is allowed to be unicode or something...
-	* done FIXME, still not sure of this, we should
-	* really just add unicode support !!!*/
-	
-	
-	// are you my special msg byte??? FIXME
-	p += 2;
-	aPlayer->specialbyte = p[0];
-	p++;
-	rankbyte = p[0];
-	if(rankbyte & 0x40)
-		aPlayer->pro = true;
-	p++;
-	aPlayer->wins = p[0] + (p[1] << 8);
-	aPlayer->losses = p[2] + (p[3] << 8);
-	p += 4;
-	p += 4;
-	aPlayer->rank_score = p[0] + (p[1] << 8);
-	if(aPlayer->pro)
-		aPlayer->rank = QString::number(rankbyte & 0x1f) + QString("dp");
-	else
-		aPlayer->rank = rating_pointsToRank(aPlayer->rank_score);
-	/* player rank scores MUST Be normalized to be filtered in view properly !! */
-	//aPlayer->rank_score = rankToScore(aPlayer->rank);
-#ifdef RE_DEBUG
-	printf(" RP: %d W/L: %d/%d ", aPlayer->rank_score, aPlayer->wins, aPlayer->losses);
-#endif //RE_DEBUG
-	p += 2;
-#ifdef RE_DEBUG
-	for(int i = 0; i < 8; i++)
-		printf("%02x", p[i]);
-	printf("\n");
-#endif //RE_DEBUG
-	aPlayer->country = getCountryFromCode(p[2]);
-	aPlayer->info = getStatusFromCode(p[3], aPlayer->rank);
-	aPlayer->nmatch_settings = QString("-") + QString::number(msg[23]) + " " + QString::number(p[0]) + QString(" ") + QString::number((p[1])) + QString(" ") + QString::number(p[2]) + QString(" ") + QString::number(p[3]) + QString::number(p[4]) + QString(" ") + QString::number((p[5])) + QString(" ") + QString::number(p[6]) + QString(" ") + QString::number(p[7]);
-	p += 8;	//other data;
-	aPlayer->observing = 0;		//necessary?
-	//aPlayer->playing = 0;	//necessary?
-	room->recvPlayerListing(aPlayer);
-	//FIXME test without this
-	//delete newPlayer;
 }
 
 /* This is necessary as a safety precaution.  Maybe if we were sure
@@ -5716,7 +5693,8 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 {
 	unsigned char * p = msg;
 	unsigned char * text = new unsigned char[size - 0x23];
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	QString encoded_name;
 	//unsigned int text_size = (size - 2) / 2;
 	//unsigned short * text = new unsigned short[text_size];
@@ -5743,12 +5721,12 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
 	//		32 32 32 32 32 32 00 00                          222222..
 	p += 4;
-	strncpy((char *)name, (char *)p, 11); 
+	strncpy((char *)name, (char *)p, 14); 
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	// FIXME really should be encoded name here I think... not ascii
-	p += 0x0c;
+	p += 15;
 	strncpy((char *)name, (char *)p, 11); 
-	p += 0x14;
+	p += 0x11;
 	//don't know what that one byte is, but its not part of text
 	p++;
 	strncpy((char *)text, (char *)p, size - 0x24);
@@ -5797,7 +5775,8 @@ void TygemConnection::handleGameChat(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
 	unsigned char * text = new unsigned char[size - 3];
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	BoardDispatch * boarddispatch;
 	int room_number;
 	int size_of_message;
@@ -5820,10 +5799,9 @@ void TygemConnection::handleGameChat(unsigned char * msg, unsigned int size)
 		return;
 	}
 	p += 0x14;
-	strncpy((char *)name, (char *)p, 11); 
+	strncpy((char *)name, (char *)p, 14); 
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 14;
-	p++;
+	p += 15;
 	if(p[0] < 0x12)
 		rank = QString::number(0x12 - p[0]) + 'k';
 	else if(p[0] > 0x1a)
@@ -5881,7 +5859,8 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 	unsigned char * p = msg;
 	unsigned char * text = new unsigned char[size - 7];
 	int i;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	int subject_size, msg_size;
 	QString our_name, encoded_name, ascii_name, rank, subject;
 #ifdef RE_DEBUG
@@ -5890,13 +5869,13 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	our_name = QString((char *)name);
-	p += 0x10;
-	strncpy((char *)name, (char *)p, 11);
-	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 0xd;
+	p += 15;
 	p++;
+	strncpy((char *)name, (char *)p, 14);
+	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
+	p += 15;
 	//7065 7465 7269 7573 0000 0000 0000 0000
 	//696e 7472 7573 696f 6e00 0000 0000 0009
 	//696e 7472 7573 696f 6e00 0002 0003 6161
@@ -7514,7 +7493,8 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 	PlayerListing * player;
 	int i;
 	unsigned short game_number;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	QString encoded_name;
 	
 	//I"m thinking actually draw request
@@ -7555,7 +7535,7 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 	p += 2;
 	p += 2;
 	//this is name for not the player who hit done
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	/*player = getDefaultroom->getPlayerListing(encoded_name);
 	if(!player)
@@ -7621,7 +7601,8 @@ void TygemConnection::handleRequestCount(unsigned char * msg, unsigned int size)
 	PlayerListing * player;
 	int i;
 	unsigned short game_number;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	QString encoded_name;
 	
 	//0x066b: 00da0001c6f7bcbcc0ccb5b700000000000000166d696e676d696e67303100000100000000000000
@@ -7644,7 +7625,7 @@ void TygemConnection::handleRequestCount(unsigned char * msg, unsigned int size)
 	p += 2;
 	p += 2;
 	//this is name for not the player who hit done
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	/*player = getDefaultroom->getPlayerListing(encoded_name);
 	if(!player)
@@ -8204,19 +8185,20 @@ void TygemConnection::handlePass(unsigned char * msg, unsigned int size, int pas
 	else
 		white = p[0];
 	p += 2;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	QString encoded_name, ascii_name;
 	
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	//0669 0002 0101 7065 7465 7269 7573 0000 
 	//0000 0000 0008 6574 6572 6975 7300 0000
 	//0002 0000 0000 0000 0000
 
-	p += 14;
+	p += 15;
 	
 	//rank byte
-	p += 2;
+	p++;
 	strncpy((char *)name, (char *)p, 11);
 	ascii_name = QString((char *)name);
 	p += 10;
@@ -8704,7 +8686,8 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	unsigned short player_id;
 	unsigned short game_id;
 	unsigned short game_number;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	QString encoded_nameA, encoded_nameB;
 	QString rankA, rankB;
 	int handicap;
@@ -8818,10 +8801,9 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	}
 	p += 2;
 	//name and rank
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	encoded_nameA = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 14;
-	p++;
+	p += 15;
 	//rank byte
 	if(p[0] < 0x12)
 		rankA = QString::number(0x12 - p[0]) + 'k';
@@ -8831,10 +8813,9 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		rankA = QString::number(p[0] - 0x11) + 'd';
 	p++;
 	//name and rank		
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	encoded_nameB = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 14;
-	p++;
+	p += 15;
 	//rank byte
 	if(p[0] < 0x12)
 		rankB = QString::number(0x12 - p[0]) + 'k';
@@ -9011,7 +8992,8 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 
 	int i;
 	unsigned short game_number;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	QString encoded_name;
 	PlayerListing * opponent;
 	
@@ -9019,16 +9001,16 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 	for(i = 0; i < (int)size; i++)
 		printf("%02x", msg[i]);
 	printf("\n");
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	if(encoded_name != getUsername())
 		return;
 	if(version == acknowledge)
 		return;		//whatever... like TCP is lossy
-	p += 14;
-	//00 rank
-	p += 2;
-	strncpy((char *)name, (char *)p, 11);
+	p += 15;
+	//rank
+	p++;
+	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	opponent = getDefaultRoom()->getPlayerListing(encoded_name);
 	if(!opponent)
@@ -9036,9 +9018,9 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		qDebug("Match offer from unknown opponent");
 		return;
 	}
-	p += 14;
-	//00 rank
-	p += 2;
+	p += 15;
+	//rank
+	p++;
 	game_number = (p[0] << 8) + p[1];
 	p += 2;
 	//time settings
@@ -9218,7 +9200,8 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 	//0657465726975730000000202003000
 
 	unsigned char * p = msg;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	unsigned short room_number;
 	GameListing * gl;
 	if(size != 60)
@@ -9232,7 +9215,7 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 	p += 2;
 	p += 12;
 	/* Can't we make a special thing to do all these repetitive string copies? */
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	QString encoded_name = QString((char *)name);
 	//QString encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 			
@@ -9295,7 +9278,8 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 	//7573 696f 6e00 0002 0100 ffff
 			
 	unsigned char * p = msg;
-	unsigned char name[11];
+	unsigned char name[15];
+	name[14] = 0x00;
 	if(size != 60)
 	{
 		qDebug("MatchInvite of size %d\n", size);
@@ -9309,7 +9293,7 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 	Room * room = getDefaultRoom();
 	p += 28;
 	/* Can't we make a special thing to do all these repetitive string copies? */
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)p, 14);
 	QString encoded_name = QString((char *)name);
 	//QString encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	

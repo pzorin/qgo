@@ -122,6 +122,7 @@ class TygemConnection : public NetworkConnection
 		void sendLoginConfirm(void);
 		void sendName(void);
 		void sendRequest(void);
+		void sendFriendsBlocksRequest(void);
 		void handleServerList(unsigned char * msg);
 		void sendPersonalChat(const PlayerListing & player, const char * text);
 		void sendServerChat(QString text);
@@ -157,13 +158,13 @@ class TygemConnection : public NetworkConnection
 		void handleMessage(unsigned char * msg, unsigned int size);
 		void handleConnected(unsigned char * msg, unsigned int size);
 		void handlePlayerList(unsigned char * msg, unsigned int size);
+		void handleFriendsBlocksList(unsigned char * msg, unsigned int size);
 		void handleList(unsigned char * msg, unsigned int size);
 		QString rating_pointsToRank(unsigned int rp);
 		QString getCountryFromCode(unsigned char code);
 		int getPhase(unsigned char byte);
 		QString getRoomTag(unsigned char byte);
 		void handleGamesList(unsigned char * msg, unsigned int size);
-		void handlePlayerConnect(unsigned char * msg, unsigned int size);
 		void handlePlayerRoomJoin(unsigned char * msg, unsigned int size);
 		void handlePlayerDisconnect2(unsigned char * msg, unsigned int size);
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);
