@@ -36,7 +36,7 @@ class NetworkConnection : public QObject
 		~NetworkConnection();
 		int getConnectionState();	//should probably return enum
 		void userCanceled(void) { connectionState = CANCELED; /* anything else? */};
-		void onClose(void);	//so far private?
+		void onClose(void);	//so far private? we're going to have tygem use it...
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
 		void sendConsoleText(const char * text);
@@ -125,7 +125,7 @@ class NetworkConnection : public QObject
 		virtual void getAndSetFriendFanType(PlayerListing & player);
 		virtual void checkGameWatched(GameListing & game);
 		
-		virtual bool gd_verifyBoardSize(int v) { return v; };
+		virtual int gd_verifyBoardSize(int v) { return v; };
 		
 		virtual bool playerTrackingByID(void) { return false; };
 		virtual bool supportsMultipleUndo(void) { return false; };
