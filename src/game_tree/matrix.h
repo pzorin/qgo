@@ -25,6 +25,7 @@ public:
 	bool isStoneDead(int x, int y);
 	bool isStoneDirty(int x, int y);
 	void stoneUpdated(int x, int y);
+	void invalidateStone(int x, int y);
 	void markChangesDirty(Matrix & m);
 	MarkType getMarkAt(int x, int y);
 	QString getFirstTextAvailable(MarkType t);

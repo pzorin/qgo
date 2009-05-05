@@ -681,11 +681,15 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 			case markTerrBlack:
 				modified = true;
 				board->setMark(x, y, markTerrBlack, false);
+				if(m->getStoneAt(x,y) == stoneWhite)	//awkward but may have been ghosted
+					m->invalidateStone(x, y);
 				break;
 				
 			case markTerrWhite:
 				modified = true;
 				board->setMark(x, y, markTerrWhite, false);
+				if(m->getStoneAt(x,y) == stoneBlack)	//awkward but may have been ghosted
+					m->invalidateStone(x, y);
 				break;
 				
 			case markNone:
@@ -817,7 +821,6 @@ void BoardHandler::countScore(void)
 {
 	Matrix * current_matrix = tree->getCurrent()->getMatrix();
 	current_matrix->clearTerritoryMarks();
-
 	// capturesBlack -= caps_black;
 	// capturesWhite -= caps_white;
 	capturesBlack = tree->getCurrent()->getCapturesBlack();
@@ -860,7 +863,7 @@ void BoardHandler::countScore(void)
 					caps_black++;
 			}
 		}
-
+	
 	terrWhite = 0;
 	terrBlack = 0;
 	
@@ -945,7 +948,6 @@ void BoardHandler::countScore(void)
 	tree->getCurrent()->setTerritoryMarked(true);
 	// Paint the territory on the board
 	updateAll(tree->getCurrent());
-//	board->updateCanvas();
 	
 	// Update Interface
 	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack  + caps_black,

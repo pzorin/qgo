@@ -170,17 +170,29 @@ void qGoBoard::setHandicap(int handicap)
  */
 void qGoBoard::addMark( int x, int y, MarkType t )
 {
-	if (tree->getCurrent()->getMatrix()->getMarkAt(x,y) != markNone)
-		tree->getCurrent()->getMatrix()->removeMark(x,y);
+	Matrix * mat = tree->getCurrent()->getMatrix();
+	if (mat->getMarkAt(x,y) != markNone)
+		mat->removeMark(x,y);
 
 	if (t == markText || t == markNumber)
 	{
-		QString txt = tree->getCurrent()->getMatrix()->getFirstTextAvailable(t);
-		tree->getCurrent()->getMatrix()->setMarkText(x,y,txt);
+		QString txt = mat->getFirstTextAvailable(t);
+		mat->setMarkText(x,y,txt);
 	}
 
-	tree->getCurrent()->getMatrix()->insertMark(x,y,t);
-
+	mat->insertMark(x,y,t);
+	/* FIXME this is a bit awkward here, but markTerr does not
+	 * mark dead and they aren't ghosted immediately for some
+	 * reason unless they're dead.  Assuming this generally
+	 * comes through qgoboard network code, we'll mark them
+	 * dead here for now. 
+	 * I'm also still not certain if this is necessary, there
+	 * was another bug elsewhere, but it can't hurt. */
+	if(t == markTerrBlack && mat->getStoneAt(x,y) == stoneWhite)
+		mat->markStoneDead(x,y);
+	else if(t == markTerrWhite && mat->getStoneAt(x,y) == stoneBlack)
+		mat->markStoneDead(x,y);
+	
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	setModified();
 }

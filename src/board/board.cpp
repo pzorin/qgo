@@ -25,6 +25,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 : QGraphicsView(c,parent)
 {
 	isDisplayBoard = FALSE;
+	marks = NULL;
 }
 
 void Board::init(int size)
@@ -140,7 +141,7 @@ Board::~Board()
 {
  	qDeleteAll(*stones);
 	qDeleteAll(*ghosts);
-	qDeleteAll(*marks);
+	qDeleteAll(*marks);		//FIXME can still crash here as well as below
 	
 	delete gatter;
 	/* FIXME, can be a segmentation fault, when deleting canvas */
@@ -636,8 +637,6 @@ void Board::setCursorType(CursorType cur)
 	
 }
 
-
-
  /*
   *  0 : no stone
   * -1 : hidden
@@ -672,89 +671,7 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
 	}
 		
 	return FALSE;
-
 }
-
-
-/*
- * Adds a stone on the board at coords x,y and color c
- */
-/*
-Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool shown)
-{
-	if ((x < 1) || x > board_size || y < 1 || y > board_size)
-	{
-		qWarning("Board::addStoneSprite() - Invalid stone: %d %d", x, y);
-		return NULL;
-	}
-	
-	Stone *s=NULL;
-
-	switch (hasStone(x, y))
-	{
-	case 1:  // Stone exists and is visible
-		// qDebug("*** Already a stone at %d, %d.", x, y);
-//		if (boardHandler->display_incoming_move)
-//			return NULL;
-//		else
-//		{
-			s = stones->find(coordsToKey(x, y)).value();
-			Q_CHECK_PTR(s);
-			s->setColor(c);
-//			s->setPos(x, y);
-//			return s;
-//		}
-
-		break;
-
-	case 0:  // No stone existing. Create a new one
-		// qDebug("*** Did not find any stone at %d, %d.", x, y);
-			
- 		s = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,true);
-			
-//		if (boardHandler->getGameData()->oneColorGo)
-//			s->toggleOneColorGo(true);
-
-		Q_CHECK_PTR(s);
-			
-		s->setPos(offsetX + square_size * (x-1.5) ,offsetY + square_size/2 * (y-1.5));
-			
-		// Change color of a mark on this spot to white, if we have a black stone
-//		if (c == stoneBlack)
-//			updateMarkColor(stoneBlack, x, y);
-	
-//		return s;
-	
-		break;
-		
-	case -1:  // Stone exists, but is hidden. Show it and check correct color
-
-		s = stones->find(coordsToKey(x, y)).value();
-		Q_CHECK_PTR(s);
-		
-		// qDebug("*** Found a hidden stone at %d, %d (%s).", x, y,
-		
-		// Check if the color is correct
-		if (s->getColor() != c)
-			s->setColor(c);
-//		s->setPos(x, y);
-		s->show();
-//		shown = true;
-		
-		// Change color of a mark on this spot to white, if we have a black stone
-//		if (c == stoneBlack)
-//			updateMarkColor(stoneBlack, x, y);
-		
-//		return s;
-	break;
-
-	}
-
-	return s;
-
-}
-*/
-
 
 /*
  * Synchronize the board with the given stone color and coordinates
@@ -762,11 +679,9 @@ Stone* Board::addStoneSprite(StoneColor c, int x, int y, bool shown)
  */
 bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 {
-
 	Stone *stone;
 	QHash<int,Stone *>::iterator si;
-	bool modified = false;
-	
+	bool modified = false;	
 
 	if ((si = stones->find(coordsToKey(x, y))) == stones->end())
 		stone = NULL;
@@ -988,10 +903,11 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 			m = new MarkSmallStoneTerr(x, y, square_size / SMALL_STONE_TERR_DIVISOR, stoneBlack, imageHandler->getSmallStonePixmaps(), canvas);
 		if (hasStone(x, y) == 1)
 		{
-			getStoneAt(x, y)->setDead(true);
-			getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+			//getStoneAt(x, y)->setDead(true);
+			//getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
 //			getStoneAt(x, y)->shadow->hide();
 //			boardHandler->markedDead = true;
+			updateStone(stoneWhite, x, y, true);
 		}
 //		boardHandler->getTree()->getCurrent()->setScored(true);
 		break;
@@ -1003,10 +919,11 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 			m = new MarkSmallStoneTerr(x, y, square_size / SMALL_STONE_TERR_DIVISOR, stoneWhite, imageHandler->getSmallStonePixmaps(), canvas);
 		if (hasStone(x, y) == 1)
 		{
-			getStoneAt(x, y)->setDead(true);
-			getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+			//getStoneAt(x, y)->setDead(true);
+			//getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
 //			boardHandler->getStoneHandler()->getStoneAt(x, y)->shadow->hide();
 //			boardHandler->markedDead = true;
+			updateStone(stoneBlack, x, y, true);
 		}
 //		boardHandler->getTree()->getCurrent()->setScored(true);
 		break;
@@ -1143,6 +1060,8 @@ void Board::removeMark(int x, int y, bool /*update*/)
 		m=marks->at(i);
 		if (m->posX() == x && m->posY() == y)
 		{
+			/* FIXME bug here if we duplicate a board in score
+			 * mode and try to play on it */
 			if (m->getCounter() != -1)
 			{
 				if (m->getType() == markText)

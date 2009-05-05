@@ -252,6 +252,11 @@ void Matrix::stoneUpdated(int x, int y)
 	matrix[x-1][y-1] &= ~MX_STONEDIRTY;
 }
 
+void Matrix::invalidateStone(int x, int y)
+{
+	matrix[x-1][y-1] |= MX_STONEDIRTY;
+}
+
 void Matrix::markChangesDirty(Matrix & m)
 {
 	for (int i=0; i<size; i++)
@@ -1604,7 +1609,7 @@ void Matrix::toggleGroupAt( int x, int y)
 void Matrix::toggleStoneAt(int x, int y)
 {
 	matrix[x -1][y -1] ^= MX_STONEDEAD;
-	matrix[x -1][y -1] |= MX_STONEDIRTY;	
+	matrix[x -1][y -1] |= MX_STONEDIRTY;
 }
 
 void Matrix::markStoneDead(int x, int y)
@@ -1647,8 +1652,7 @@ void Matrix::toggleAreaAt( int x, int y)
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
-		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
-		matrix[s->x -1][s->y -1] |= MX_STONEDIRTY;
+		toggleStoneAt(s->x, s->y);
 	}
 
 }
