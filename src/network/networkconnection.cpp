@@ -43,6 +43,8 @@ int NetworkConnection::getConnectionState(void)
 			return ND_USERCANCELED;
 		case ALREADY_LOGGED_IN:
 			return ND_ALREADYLOGGEDIN;
+		case CONN_REFUSED:
+			return ND_CONN_REFUSED;
 		default:
 			return ND_WAITING;
 	}
@@ -518,6 +520,7 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 		case QTcpSocket::ConnectionRefusedError: qDebug("ERROR: connection refused...");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Connection refused!");
+			connectionState = CONN_REFUSED;
 			break;
 		case QTcpSocket::HostNotFoundError: qDebug("ERROR: host not found...");
 			if(console_dispatch)
@@ -544,7 +547,8 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	
 	if(mainwindow)	//mainwindow can ignore if loginDialog is open
 		mainwindow->onConnectionError();
-	connectionState = PROTOCOL_ERROR;
+	if(connectionState != CONN_REFUSED)
+		connectionState = PROTOCOL_ERROR;
 }
 
 void NetworkConnection::setupRoomAndConsole(void)

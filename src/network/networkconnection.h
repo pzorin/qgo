@@ -205,7 +205,8 @@ class NetworkConnection : public QObject
      			RECONNECTING,
      			CANCELED,
 			PROTOCOL_ERROR,
-   			ALREADY_LOGGED_IN
+   			ALREADY_LOGGED_IN,
+      			CONN_REFUSED
 		} connectionState;
 		
 		bool friendfan_notify_default;

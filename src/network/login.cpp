@@ -105,6 +105,10 @@ void LoginDialog::slot_connect(void)
 	{
 		QMessageBox::information(this, tr("Can't connect"), tr("Can't connect to host!"));
 	}
+	else if(connectionStatus == ND_CONN_REFUSED)
+	{
+		QMessageBox::information(this, tr("Connection Refused"), tr("Server may be down"));
+	}
 	else if(connectionStatus == ND_PROTOCOL_ERROR)
 	{
 		QMessageBox::information(this, tr("Protocol Error"), tr("Notify Developer!"));

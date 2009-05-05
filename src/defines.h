@@ -88,6 +88,7 @@
 #define ND_PROTOCOL_ERROR		-5
 #define ND_USERCANCELED			-6
 #define ND_ALREADYLOGGEDIN		-7
+#define ND_CONN_REFUSED			-8
 
 /*
 * Enum definitions
