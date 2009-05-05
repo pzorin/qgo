@@ -51,8 +51,7 @@ public:
 	void checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties);
 	Group* assembleGroup(MatrixStone *stone, Group *** groupMatrix = NULL);
 	Group* assembleAreaGroups(MatrixStone *stone);
-	int checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4]);
-	void replaceGroup(Group * replaceme, Group * with, Group *** groupMatrix);
+	Group* checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4]);
 	void removeGroup(Group * g, Group *** groupMatrix, Group * killer);
 	void removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix);
 	void invalidateChangedGroups(Matrix & m, Group *** gm);
@@ -61,6 +60,8 @@ public:
 
 	bool checkFalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
+	void toggleStoneAt(int x, int y);
+	void markStoneDead(int x, int y);
 	void markGroupDead(int x, int y);
 	void markGroupAlive(int x, int y);
 	void toggleAreaAt( int x, int y );

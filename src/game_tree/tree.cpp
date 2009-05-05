@@ -1909,10 +1909,9 @@ int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 {
 	Group *** gm;
-	int liberties;
 	Group * joins[4];
 	Group * enemyGroups[4];
-	Group * highgroup;
+	Group * newgroup;
 	int capturedStones;
 	int i, j;
 
@@ -1928,39 +1927,34 @@ int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 		m->removeStoneFromGroups(stone, gm);
 		return 0;
 	}
-	liberties = m->checkStoneWithGroups(stone, gm, joins, enemyGroups);
-	if(liberties == 0 && 
+	newgroup = m->checkStoneWithGroups(stone, gm, joins, enemyGroups);
+	if(newgroup->liberties == 0 && 
 		(!enemyGroups[0] || enemyGroups[0]->liberties != 1) && 
 		(!enemyGroups[1] || enemyGroups[1]->liberties != 1) && 
 		(!enemyGroups[2] || enemyGroups[2]->liberties != 1) && 
 		(!enemyGroups[3] || enemyGroups[3]->liberties != 1))
-		return -1;	//suicide
-	else
 	{
-		highgroup = NULL;
+		//reset joined groups
 		for(i = 0; i < 4; i++)
 		{
 			if(!joins[i])
 				continue;
-			if(!highgroup)
-				highgroup = joins[i];
-			else if(joins[i]->count() > highgroup->count())
-				highgroup = joins[i];
+			for(j = 0; j < joins[i]->count(); j++)
+				gm[joins[i]->at(j)->x - 1][joins[i]->at(j)->y - 1] = joins[i];
 		}
-		if(highgroup)
+		delete newgroup;
+		return -1;	//suicide
+	}
+	else
+	{
+		for(i = 0; i < 4; i++)
 		{
-			for(i = 0; i < 4; i++)
-			{
-				if(joins[i] && joins[i] != highgroup)
-					m->replaceGroup(joins[i], highgroup, gm);
-		
-			}
-			
+			if(!joins[i])
+				continue;
+			for(j = 0; j < joins[i]->count(); j++)
+				gm[joins[i]->at(j)->x - 1][joins[i]->at(j)->y - 1] = newgroup;
+			delete joins[i];
 		}
-		else
-			highgroup = new Group();
-		highgroup->append(stone, gm);
-		highgroup->liberties = liberties;
 		capturedStones = 0;
 		for(i = 0; i < 4; i++)
 		{
@@ -1974,7 +1968,7 @@ int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 						if(enemyGroups[j] == enemyGroups[i])
 							enemyGroups[j] = NULL;
 					}
-					m->removeGroup(enemyGroups[i], gm, highgroup);
+					m->removeGroup(enemyGroups[i], gm, newgroup);
 				}
 				else
 				{

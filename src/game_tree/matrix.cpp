@@ -945,7 +945,7 @@ int Matrix::sharedLibertyWithGroup(int x, int y, Group * g, Group *** gm)
  * It also assembles new groups where necessary and stores them in the groupMatrix
  * but besides this it does nothing permanent so the caller can check if the
  * move is legal before playing it */
-int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4])
+Group* Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4])
 {
 	int & x = stone->x;
 	int & y = stone->y;
@@ -954,9 +954,7 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 	StoneColor c;
 	Group * g = NULL;
 	Group * tmp = NULL;
-	int i, j, k;
-	int liberties;
-	bool N = false, S = false, W = false, E = false;
+	int i;
 
 	for(i = 0; i < 4; i++)
 	{
@@ -981,8 +979,6 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 				tmp = assembleGroup(new MatrixStone(x - 1, y, c), groupMatrix);
 			enemyGroups[0] = tmp;
 		}
-		else
-			W = true;
 	}
 #ifdef CHECKPOSITION_DEBUG
 	if(g)
@@ -990,14 +986,6 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 	else if(tmp)
 		printf("Enemy west with %d liberties\n", tmp->liberties);
 #endif //CHECKPOSITION_DEBUG
-	if(g)
-		liberties = g->liberties - 1;
-	else if(tmp || x < 2)
-		liberties = 0;
-	/*else if((tmp && tmp->liberties > 1) || x < 2)
-		liberties = 0;*/
-	else
-		liberties = 1;
 	if(x < size)
 	{
 		c = getStoneAt(x + 1, y);
@@ -1007,10 +995,7 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 			if(!g)
 				g = assembleGroup(new MatrixStone(x + 1, y, c), groupMatrix);
 			if(g != joins[0])
-			{
 				joins[1] = g;
-				liberties += g->liberties - 1;
-			}
 		}
 		else if(c == theirColor)
 		{
@@ -1018,13 +1003,6 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 			if(!tmp)
 				tmp = assembleGroup(new MatrixStone(x + 1, y, c), groupMatrix);
 			enemyGroups[1] = tmp;
-			//if(tmp->liberties == 1)
-			//	liberties++;
-		}
-		else
-		{
-			liberties++;
-			E = true;
 		}
 	}
 #ifdef CHECKPOSITION_DEBUG
@@ -1042,10 +1020,7 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 			if(!g)
 				g = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
 			if(g != joins[1] && g != joins[0])
-			{
 				joins[2] = g;
-				liberties += g->liberties - 1;
-			}
 		}
 		else if(c == theirColor)
 		{
@@ -1053,13 +1028,6 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 			if(!tmp)
 				tmp = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
 			enemyGroups[2] = tmp;
-			//if(tmp->liberties == 1)
-			//	liberties++;
-		}
-		else
-		{
-			liberties++;
-			N = true;
 		}
 	}
 #ifdef CHECKPOSITION_DEBUG
@@ -1077,10 +1045,7 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 			if(!g)
 				g = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
 			if(g != joins[2] && g != joins[1] && g != joins[0])
-			{
 				joins[3] = g;
-				liberties += g->liberties - 1;
-			}
 		}
 		else if(c == theirColor)
 		{
@@ -1088,13 +1053,6 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 			if(!tmp)
 				tmp = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
 			enemyGroups[3] = tmp;
-			//if(tmp->liberties == 1)
-				//liberties++;
-		}
-		else
-		{
-			liberties++;
-			S = true;
 		}
 	}
 #ifdef CHECKPOSITION_DEBUG
@@ -1104,61 +1062,11 @@ int Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Gro
 		printf("Enemy south with %d liberties\n", enemyGroups[3]->liberties);
 #endif //CHECKPOSITION_DEBUG
 	insertStone(x, y, ourColor, phaseOngoing);
-	for(i = 0; i < 4; i++)
-	{
-		if(!joins[i])
-			continue;
-		for(k = 0; k < i; k++)
-			if(joins[k] == joins[i])
-				break;
-		if(k != i)
-			continue;
-		for(j = 0; j < joins[i]->count(); j++)
-		{
-			for(k = i + 1; k < 4; k++)
-			{
-				if(!joins[k])
-					continue;
-				int _x = joins[i]->at(j)->x;
-				int _y = joins[i]->at(j)->y;
-				if(_x == x && _y == y)
-					continue;
-				if(_y < size && getStoneAt(_x, _y + 1) == stoneNone)
-					liberties -= sharedLibertyWithGroup(_x - 1, _y, joins[k], groupMatrix);
-				if(_y > 1 && getStoneAt(_x, _y - 1) == stoneNone)
-					liberties -= sharedLibertyWithGroup(_x - 1, _y - 2, joins[k], groupMatrix);
-				if(_x > 1 && getStoneAt(_x - 1, _y) == stoneNone)
-					liberties -= sharedLibertyWithGroup(_x - 2, _y - 1, joins[k], groupMatrix);
-				if(_x < size && getStoneAt(_x + 1, _y) == stoneNone)
-					liberties -= sharedLibertyWithGroup(_x, _y - 1, joins[k], groupMatrix);
-				
-			}
-		}
-		if(S)
-			liberties -= sharedLibertyWithGroup(x - 1, y, joins[i], groupMatrix);
-		if(N)
-			liberties -= sharedLibertyWithGroup(x - 1, y - 2, joins[i], groupMatrix);
-		if(W)
-			liberties -= sharedLibertyWithGroup(x - 2, y - 1, joins[i], groupMatrix);
-		if(E)
-			liberties -= sharedLibertyWithGroup(x, y - 1, joins[i], groupMatrix);
-	}
+	g = assembleGroup(stone, groupMatrix);
 #ifdef CHECKPOSITION_DEBUG
-	printf("New stone liberties %d\n", liberties);
+	printf("New stone liberties %d\n", g->liberties);
 #endif //CHECKPOSITION_DEBUG
-	return liberties;
-}
-
-void Matrix::replaceGroup(Group * replaceme, Group * with, Group *** groupMatrix)
-{
-	int i;
-	for(i = 0; i < replaceme->count(); i++)
-	{
-		with->append(replaceme->at(i), groupMatrix);
-		(*replaceme)[i] = NULL;		//safe because we immediately delete replaceme
-	}
-	with->liberties += replaceme->liberties;
-	delete replaceme;
+	return g;
 }
 
 /* Note that checkStoneWithGroups would be called before this meaning that
@@ -1682,10 +1590,28 @@ void Matrix::toggleGroupAt( int x, int y)
 	for (int i=0; i<g->count(); i++)
 	{
 		s = g->at(i);
-		matrix[s->x -1][s->y -1] ^= MX_STONEDEAD;
-		matrix[s->x -1][s->y -1] |= MX_STONEDIRTY;
+		toggleStoneAt(s->x, s->y);
 	}
 
+}
+
+/* These are all kind of redundant, some aren't used, etc..
+ * the other thing that bothers me is that the stone.cpp class
+ * should probably hold "dirty" and then we've considered before
+ * that matrix could be removed for something that takes up
+ * less space, but if this works for now, that's fine. FIXME */
+
+void Matrix::toggleStoneAt(int x, int y)
+{
+	matrix[x -1][y -1] ^= MX_STONEDEAD;
+	matrix[x -1][y -1] |= MX_STONEDIRTY;	
+}
+
+void Matrix::markStoneDead(int x, int y)
+{
+	if(isStoneDead(x, y))
+		return;
+	toggleStoneAt(x, y);
 }
 
 void Matrix::markGroupDead(int x, int y)
