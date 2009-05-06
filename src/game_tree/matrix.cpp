@@ -942,14 +942,13 @@ int Matrix::sharedLibertyWithGroup(int x, int y, Group * g, Group *** gm)
 	return 0;
 }
 
-/* This does a number of things and it does them all well.  Pay attention.
- * It checks just the four adjacent vertices to the stone its passed and tracks
- * the liberties for that stone or for the group that stone is in.
- * It also puts groups that the stone connects into joins and groups that the
+/* This puts groups that the stone connects into joins and groups that the
  * stone captures into captures.
  * It also assembles new groups where necessary and stores them in the groupMatrix
  * but besides this it does nothing permanent so the caller can check if the
- * move is legal before playing it */
+ * move is legal before playing it.
+ * checkPosition calls this and removes the joins or the new group depending
+ * on legality.*/
 Group* Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4])
 {
 	int & x = stone->x;
