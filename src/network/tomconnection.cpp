@@ -383,7 +383,7 @@ void TomConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	unsigned int number_of_games;
 	unsigned int id;
 	unsigned int name_length;
-	unsigned char name[11];
+	unsigned char name[15];
 	unsigned char flags;
 	Room * room = getDefaultRoom();
 	int i;
@@ -394,6 +394,7 @@ void TomConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	GameListing * ag = new GameListing();
 	
 	ag->running = true;
+	name[14] = 0x00;
 	
 	p += 4;
 	while(p < (msg + size - 0x48) || (p < (msg + size - 3) && p[2] == 0x01))
@@ -476,7 +477,7 @@ void TomConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		p++;
 		
 		//name 1
-		strncpy((char *)name, (char *)p, 11);
+		strncpy((char *)name, (char *)p, 14);
 		encoded_nameA = serverCodec->toUnicode((char *)name, strlen((char *)name));
 		p += 15;
 		//rank byte
@@ -502,7 +503,7 @@ void TomConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		}
 		else
 		{
-			strncpy((char *)name, (char *)p, 11);
+			strncpy((char *)name, (char *)p, 14);
 			encoded_nameB = serverCodec->toUnicode((char *)name, strlen((char *)name));
 			p += 15;
 			if(p[0] < 0x12)
