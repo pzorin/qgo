@@ -174,8 +174,7 @@ linux-g++ {
     LIBS += -lasound
 
 }
-INCLUDEPATH += server \
-network \
+INCLUDEPATH += network \
 audio \
 gtp \
 game_interfaces \
