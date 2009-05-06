@@ -1190,12 +1190,7 @@ void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
 			
 		}
 	}
-#ifdef CHECKPOSITION_DEBUG
-	if(g)
-		printf("Group west with %d liberties\n", g->liberties);
-	else if(tmp)
-		printf("Enemy west with %d liberties\n", tmp->liberties);
-#endif //CHECKPOSITION_DEBUG
+
 	if(x < size)
 	{
 		c = getStoneAt(x + 1, y);
@@ -1224,12 +1219,7 @@ void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
 			
 		}
 	}
-#ifdef CHECKPOSITION_DEBUG
-	if(joins[1])
-		printf("Group east with %d liberties\n", joins[1]->liberties);
-	else if(enemyGroups[1])
-		printf("Enemy east with %d liberties\n", enemyGroups[1]->liberties);
-#endif //CHECKPOSITION_DEBUG
+
 	if(y > 1)
 	{
 		c = getStoneAt(x, y - 1);
@@ -1257,12 +1247,7 @@ void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
 				enemyGroups[2] = assembleGroup(new MatrixStone(x, y - 1, c), groupMatrix);
 		}
 	}
-#ifdef CHECKPOSITION_DEBUG
-	if(joins[2])
-		printf("Group north with %d liberties\n", joins[2]->liberties);
-	else if(enemyGroups[2])
-		printf("Enemy north with %d liberties\n", enemyGroups[2]->liberties);
-#endif //CHECKPOSITION_DEBUG
+
 	if(y < size)
 	{
 		c = getStoneAt(x, y + 1);
@@ -1290,12 +1275,6 @@ void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
 				enemyGroups[3] = assembleGroup(new MatrixStone(x, y + 1, c), groupMatrix);
 		}
 	}
-#ifdef CHECKPOSITION_DEBUG
-	if(joins[3])
-		printf("Group south with %d liberties\n", joins[3]->liberties);
-	else if(enemyGroups[3])
-		printf("Enemy south with %d liberties\n", enemyGroups[3]->liberties);
-#endif //CHECKPOSITION_DEBUG
 }
 
 void Matrix::invalidateChangedGroups(Matrix & m, Group *** gm)
