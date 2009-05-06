@@ -20,6 +20,7 @@ Tree::Tree(int * board_size)
 	lastValidMoveChecked = NULL;
 	koStoneX = 0;
 	koStoneY = 0;
+	lastCaptures = 0;
 	
 /* 
  * This initialisation is from stonehandler
@@ -1942,6 +1943,8 @@ int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 			for(j = 0; j < joins[i]->count(); j++)
 				gm[joins[i]->at(j)->x - 1][joins[i]->at(j)->y - 1] = joins[i];
 		}
+		gm[stone->x-1][stone->y-1] = NULL;
+		m->removeStone(stone->x,stone->y);
 		delete newgroup;
 		return -1;	//suicide
 	}
