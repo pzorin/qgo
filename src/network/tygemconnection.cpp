@@ -1,5 +1,3 @@
-/* Actually this is eweiqi though I think they're all the same,
- * eventually we'll make tygem the super class */
 #include <string.h>
 #include <time.h>
 #include "tygemconnection.h"
@@ -4839,6 +4837,11 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			handlePersonalChat(msg, size);
 			break;
 		case 0x06b1:	//a name during game?  //maybe bets?
+			//0001 0700 b0fc 
+			//c3b6 b5bf bdc3 b4eb 0000 0000 0000 0000 01
+			//0000 0000 0000 0003
+			//e86f 6c64 6572 6100 0000 0000 00
+
 			printf("0x06b1: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);

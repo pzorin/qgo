@@ -101,6 +101,8 @@ class TygemConnection : public NetworkConnection
 		virtual int requestServerInfo(void);
 		virtual void handleServerInfo(unsigned char * msg, unsigned int length);
 		int reconnectToServer(void);
+		virtual void handleGamesList(unsigned char * msg, unsigned int size);
+		
 		//FIXME secondsToDate obviously should not be here
 		void secondsToDate(unsigned short & year, unsigned char & month, unsigned char & day, unsigned char & hour, unsigned char & minute, unsigned char & second);
 		virtual QString getTygemGameRecordQString(class GameData * game);
@@ -164,7 +166,6 @@ class TygemConnection : public NetworkConnection
 		QString getCountryFromCode(unsigned char code);
 		int getPhase(unsigned char byte);
 		QString getRoomTag(unsigned char byte);
-		void handleGamesList(unsigned char * msg, unsigned int size);
 		void handlePlayerRoomJoin(unsigned char * msg, unsigned int size);
 		void handlePlayerDisconnect2(unsigned char * msg, unsigned int size);
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);

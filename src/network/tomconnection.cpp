@@ -371,3 +371,182 @@ QString TomConnection::getTygemGameRecordQString(GameData * game)
 	*/
 	return string;
 }
+
+/* It looks like Tom doesn't have upgraded servers */
+#ifdef RE_DEBUG
+//#define GAMELIST_DEBUG
+#endif //RE_DEBUG
+//0612
+void TomConnection::handleGamesList(unsigned char * msg, unsigned int size)
+{
+	unsigned char * p = msg;
+	unsigned int number_of_games;
+	unsigned int id;
+	unsigned int name_length;
+	unsigned char name[11];
+	unsigned char flags;
+	Room * room = getDefaultRoom();
+	int i;
+	bool white_first;
+	QString nameA, nameB, rankA, rankB;
+	QString encoded_nameA, encoded_nameB;
+	GameListing * aGameListing;
+	GameListing * ag = new GameListing();
+	
+	ag->running = true;
+	
+	p += 4;
+	while(p < (msg + size - 0x48) || (p < (msg + size - 3) && p[2] == 0x01))
+	{
+		id = (p[0] << 8) + p[1];
+#ifdef GAMELIST_DEBUG
+		printf("Id: %d:\n", id);
+#endif //GAMELIST_DEBUG
+		aGameListing = room->getGameListing(id);
+		if(!aGameListing)
+			aGameListing = ag;
+		aGameListing->number = id;
+		if(p[2] == 0x01)
+		{
+#ifdef RE_DEBUG
+			// might mean new game?  seems to follow the record
+			// for that id, or might mean game over
+			// they come up fast but I'm pretty sure this
+			// means the game is ended.
+//#ifdef GAMELIST_DEBUG
+#ifndef GAMELIST_DEBUG
+			printf("Id: %d:\n", id);
+#endif // !GAMELIST_DEBUG
+			printf("is ended!!!\n");
+			for(i = 0; i < 4; i++)
+				printf("%c", p[i]);
+			printf("\n");
+//#endif //GAMELIST_DEBUG
+#endif //RE_DEBUG
+			p += 4;
+			aGameListing->running = false;
+			room->recvGameListing(aGameListing);
+			continue;
+		}
+#ifdef GAMELIST_DEBUG
+		for(i = 0; i < 0x48; i++)
+		{
+			printf("%c", p[i]);	
+		}
+		printf("\n");
+		for(i = 0; i < 0x48; i++)
+		{
+			printf("%02x", p[i]);	
+		}
+		printf("\n");
+#endif //GAMELIST_DEBUG
+		p += 2;
+		//0000 0001 0002 0000 ff00 7978 7973 7a00 
+		p += 2;
+		p++;
+		//impacts time
+		//there's also 0x30, I think 0x50, etc.. issues here
+		aGameListing->white_first_flag = p[0] & 0x01;
+		/* 04 means done, 06 is waiting room or looking, 01 and 00
+		 * probably mean playing */
+		aGameListing->FR = QString::number(p[0], 16);
+		p++;
+		aGameListing->observers = (p[0] << 8) + p[1];
+		//We have an issue here I think FIXME with observer numbers
+		p += 2;
+		p++;
+		//aGameListing->FR = "";
+		p += 2;
+		flags = p[0];
+		//0000 0001 0001 ffff ff00 7479633435320000000000000000001274796334353200003800000200000000000000000000000000000000003337323
+		//13535380000000000000003
+
+		
+		if(flags & 0x80)
+		{
+			// Betting
+			aGameListing->FR += "B";
+		}
+		if(flags & 0x20)
+		{
+			//probably broadcast, maybe as well as betting
+			aGameListing->FR += "R";
+		}
+		//ff00
+		p++;
+		
+		//name 1
+		strncpy((char *)name, (char *)p, 11);
+		encoded_nameA = serverCodec->toUnicode((char *)name, strlen((char *)name));
+		p += 15;
+		//rank byte
+		if(p[0] < 0x12)
+			rankA = QString::number(0x12 - p[0]) + 'k';
+		else if(p[0] > 0x1a)
+			rankA = QString::number(p[0] - 0x1a) + 'p';
+		else
+			rankA = QString::number(p[0] - 0x11) + 'd';
+		p++;
+		strncpy((char *)name, (char *)p, 11);
+#ifdef GAMELIST_DEBUG
+		printf("%s vs.", name);
+#endif //GAMELIST_DEBUG
+		nameA = QString((char *)name); 
+		p += 12;
+		if(p[0] == 0x00)
+		{
+			p += 16;
+			encoded_nameB = QString();
+			nameB = QString();
+			rankB = QString();
+		}
+		else
+		{
+			strncpy((char *)name, (char *)p, 11);
+			encoded_nameB = serverCodec->toUnicode((char *)name, strlen((char *)name));
+			p += 15;
+			if(p[0] < 0x12)
+				rankB = QString::number(0x12 - p[0]) + 'k';
+			else if(p[0] > 0x1a)
+				rankB = QString::number(p[0] - 0x1a) + 'p';
+			else
+				rankB = QString::number(p[0] - 0x11) + 'd';
+			p++;
+			strncpy((char *)name, (char *)p, 11);		//chinese
+#ifdef GAMELIST_DEBUG
+			printf(" %s\n", name);
+#endif //GAMELIST_DEBUG
+			nameB = QString((char *)name); 
+		}
+		p += 12;
+		p++;
+		//this p[0] should be game status
+		aGameListing->FR += QString::number(p[0], 16);
+		p++;
+		p++;
+		name_length = p[0];
+		p++;
+		p += name_length;
+		/* Don't remember why this can't get the info from the players? FIXME*/
+		if(aGameListing->white_first_flag)
+		{
+			aGameListing->_white_name = nameA;
+			aGameListing->_white_rank = rankA;
+			aGameListing->_white_rank_score = rankToScore(rankA);
+			aGameListing->_black_name = nameB;
+			aGameListing->_black_rank = rankB;
+			aGameListing->_black_rank_score = rankToScore(rankB);
+		}
+		else
+		{
+			aGameListing->_white_name = nameB;
+			aGameListing->_white_rank = rankB;
+			aGameListing->_white_rank_score = rankToScore(rankB);
+			aGameListing->_black_name = nameA;
+			aGameListing->_black_rank = rankA;
+			aGameListing->_black_rank_score = rankToScore(rankA);
+		}
+		room->recvGameListing(aGameListing);
+	}
+	delete ag;
+}
