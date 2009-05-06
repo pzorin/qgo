@@ -13,7 +13,9 @@
 #include <QtGui>
 
 #ifdef Q_WS_WIN
- #define M_PI 3.141592653
+ #ifndef M_PI
+  #define M_PI 3.141592653
+ #endif //M_PI
  double drand48() { return rand()*1.0/RAND_MAX; }
 #endif
 
