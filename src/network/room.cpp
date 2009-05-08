@@ -605,7 +605,6 @@ class BoardDispatch * Room::getNewBoardDispatch(unsigned int key)
 std::map<PlayerListing *, unsigned short> removed_player;
 void Room::recvPlayerListing(PlayerListing * player)
 {
-	PlayerListing * p = 0;	//unused ?
 	if(!player->online)
 	{
 		removed_player[player] = player->playing;
@@ -649,29 +648,30 @@ void Room::recvPlayerListing(PlayerListing * player)
 				connection->closeTalk(*player);
 		}
 		if(player->friendFanType != PlayerListing::none)
-			connection->getAndSetFriendFanType(*p);
+			connection->getAndSetFriendFanType(*player);  //removes
 	}
+	PlayerListing * registered_player = 0;
 	if(playerListingIDRegistry)
 	{
 		if(player->online)
-			p = playerListingIDRegistry->getEntry(player->id, player);
+			registered_player = playerListingIDRegistry->getEntry(player->id, player);
 		else
 			playerListingIDRegistry->deleteEntry(player->id);	
 	}
 	else
 	{
 		if(player->online)
-			p = playerListingRegistry->getEntry(player->name, player);
+			registered_player = playerListingRegistry->getEntry(player->name, player);
 		else
 			playerListingRegistry->deleteEntry(player->name);
 	}
 	
-	if(p && player->online)
+	if(registered_player && player->online)
 	{
 		/* We might possibly be able to set this before
 		 * the entry is inserted into Registry... but just
 		 * in case that would cause problems, we'll do it here. */
-			connection->getAndSetFriendFanType(*p);
+		connection->getAndSetFriendFanType(*registered_player);
 		/* FIXME consider changing name of getEntry with the object?
 		 * so that its more clear that it returns a new stored object
 		 * based on the one passed. (i.e., looking it up if
@@ -680,10 +680,10 @@ void Room::recvPlayerListing(PlayerListing * player)
 	
 	/* This is just for those listing bugs... its weird...remove it
 	 * soon */
-	if(p && player->online)
+	if(registered_player && player->online)
 	{
 		std::map<PlayerListing *, unsigned short>::iterator it;
-		it = removed_player.find(p);
+		it = removed_player.find(registered_player);
 		if(it != removed_player.end())
 			removed_player.erase(it);
 	}
