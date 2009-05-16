@@ -43,7 +43,8 @@ class GameData
 			 overtime(""),
 			 free_rated(noREQ),
 			 white_first_flag(false),
-			 our_invitation(false) {};
+			 our_invitation(false),
+			 opponentdropcount(0) {};
 		GameData(GameData *d)
 		{
 			if (d)
@@ -79,6 +80,7 @@ class GameData
 				nigiriToBeSettled = d->nigiriToBeSettled;
 				white_first_flag = d->white_first_flag;
 				our_invitation = d->our_invitation;
+				opponentdropcount = d->opponentdropcount;
 				game_code = d->game_code;
 				gameMode = d->gameMode;
 			}
@@ -133,6 +135,7 @@ class GameData
 		// apparently we also need this, we might later try to simplify this
 		// or take the one off...
 		bool our_invitation;
+		unsigned int opponentdropcount;
 };
 
 
