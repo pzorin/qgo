@@ -108,6 +108,7 @@ void MainWindow::slot_connect(bool b)
 		if(logindialog->exec())
 		{
 			ui.pb_connect->setChecked(true);
+			ui.cb_connect->setEnabled(false);
 			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
 			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
 			setupConnection();
@@ -142,6 +143,12 @@ void MainWindow::slot_connect(bool b)
 			logindialog = 0;
 		}
 		closeConnection();
+		ui.cb_connect->setEnabled(true);
+		/* FIXME
+		 * this looks ugly grayed out but it shouldn't be changeable...
+		 * we should really set some text or something somewhere, or the ONLINE
+		 * text and it should all be done in a central place. */
+		/* Also FIXME clear the rooms list on disconnect */
 	}
 }
 
