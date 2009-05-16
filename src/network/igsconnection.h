@@ -35,8 +35,9 @@ class IGSConnection : public NetworkConnection
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void declineMatchOffer(const PlayerListing & opponent);
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr);
-		virtual QTime checkMainTime(TimeSystem, QTime & t);
-		virtual QTime checkPeriodTime(TimeSystem, QTime & t);
+		virtual QTime gd_checkMainTime(TimeSystem s, QTime & t);
+		virtual QTime gd_checkPeriodTime(TimeSystem s, QTime & t);
+		virtual unsigned int gd_checkPeriods(TimeSystem s, unsigned int p);
 		virtual void sendAdjournRequest(void);
 		virtual void sendAdjourn(void);
 		virtual void sendRefuseAdjourn(void);
@@ -56,6 +57,7 @@ class IGSConnection : public NetworkConnection
 		virtual void requestGameInfo(unsigned int game_id);
 		virtual void requestGameStats(unsigned int game_id);
 		virtual unsigned int rankToScore(QString rank);
+		virtual bool supportsRequestAdjourn(void) { return true; };
 		virtual bool supportsSeek(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; };
 		virtual bool supportsChannels(void) { return true; };

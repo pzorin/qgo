@@ -29,6 +29,41 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	is_nmatch = false;
 	offered_and_unrefused = false;
   
+	dialog_changed = 0;
+	clearChangedFlags();
+	current_match_request = new MatchRequest();
+	/* FIXME, what about size 38 and larger boards ?? */
+	ui.boardSizeSpin->setRange(1,19);
+	ui.handicapSpin->setRange(1,9);
+	/* FIXME, just guessing on these ranges */
+	ui.stonesSpin->setRange(1, 100);
+	ui.BYPeriodsSpin->setRange(1, 60);
+	ui.ASIAPeriodsSpin->setRange(1, 60);
+	we_are_challenger = false;
+	
+	/* Not sure what to do with these.  It would make sense to
+	* just have a number instead of a time spin since no seconds are
+	* allowed in two of the settings... but it would probably be better
+	* to set something on the timeSpin so that it still has the :00
+	* seconds reminder.  Unless we want to have "seconds" in the text. */
+	// FIXME
+	//ui.timeSpin->setRange(0,1000);
+	//ui.stonesTimeSpin->setRange(0,100);
+	
+	ui.boardSizeSpin->setValue(preferences.default_size);
+	ui.komiSpin->setValue(preferences.default_komi);
+	
+	ui.timeSpin->setDisplayFormat("h:mm:ss");
+	ui.timeSpin->setTime(qtimeFromSeconds(preferences.default_stonesmaintime));
+	ui.stonesTimeSpin->setTime(QTime(0, preferences.default_stonestime/60, preferences.default_stonestime%60));
+	ui.stonesSpin->setValue(preferences.default_stones);
+	ui.BYTimeSpin->setTime(QTime(0, preferences.default_byomaintime/60, preferences.default_byomaintime%60));
+	ui.BYPeriodTimeSpin->setTime(QTime(0, preferences.default_byoperiodtime/60, preferences.default_byoperiodtime%60));
+	ui.BYPeriodsSpin->setValue(preferences.default_byoperiods);
+	ui.ASIATimeSpin->setTime(QTime(0, preferences.default_asiamaintime/60, preferences.default_asiamaintime%60));
+	ui.ASIAPeriodTimeSpin->setTime(QTime(0, preferences.default_asiaperiodtime/60, preferences.default_asiaperiodtime%60));
+	ui.ASIAPeriodsSpin->setValue(preferences.default_asiaperiods);
+	
 	connect(ui.buttonCancel,SIGNAL(pressed()), SLOT(slot_cancel()));
 	connect(ui.buttonDecline,SIGNAL(pressed()), SLOT(slot_decline()));
 	connect(ui.buttonOffer,SIGNAL(clicked(bool)),SLOT( slot_offer(bool)));
@@ -56,41 +91,6 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	connect(ui.ASIAPeriodTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIAPeriodTimeSpin(const QTime &)));
 	connect(ui.ASIAPeriodsSpin, SIGNAL(valueChanged(int)), SLOT(slot_ASIAPeriodsSpin(int)));
 	
-	dialog_changed = 0;
-	clearChangedFlags();
-	current_match_request = new MatchRequest();
-	/* FIXME, what about size 38 and larger boards ?? */
-	ui.boardSizeSpin->setRange(1,19);
-	ui.handicapSpin->setRange(1,9);
-	/* FIXME, just guessing on these ranges */
-	ui.stonesSpin->setRange(1, 100);
-	ui.BYPeriodsSpin->setRange(1, 60);
-	ui.ASIAPeriodsSpin->setRange(1, 60);
-	we_are_challenger = false;
-	
-	/* Not sure what to do with these.  It would make sense to
-	 * just have a number instead of a time spin since no seconds are
-	 * allowed in two of the settings... but it would probably be better
-	 * to set something on the timeSpin so that it still has the :00
-	 * seconds reminder.  Unless we want to have "seconds" in the text. */
-	// FIXME
-	//ui.timeSpin->setRange(0,1000);
-	//ui.stonesTimeSpin->setRange(0,100);
-	
-	ui.boardSizeSpin->setValue(preferences.default_size);
-	ui.komiSpin->setValue(preferences.default_komi);
-	
-	ui.timeSpin->setDisplayFormat("h:mm:ss");
-	ui.timeSpin->setTime(qtimeFromSeconds(preferences.default_stonesmaintime));
-	ui.stonesTimeSpin->setTime(QTime(0, preferences.default_stonestime/60, preferences.default_stonestime%60));
-	ui.stonesSpin->setValue(preferences.default_stones);
-	ui.BYTimeSpin->setTime(QTime(0, preferences.default_byomaintime/60, preferences.default_byomaintime%60));
-	ui.BYPeriodTimeSpin->setTime(QTime(0, preferences.default_byoperiodtime/60, preferences.default_byoperiodtime%60));
-	ui.BYPeriodsSpin->setValue(preferences.default_byoperiods);
-	ui.ASIATimeSpin->setTime(QTime(0, preferences.default_asiamaintime/60, preferences.default_asiamaintime%60));
-	ui.ASIAPeriodTimeSpin->setTime(QTime(0, preferences.default_asiaperiodtime/60, preferences.default_asiaperiodtime%60));
-	ui.ASIAPeriodsSpin->setValue(preferences.default_asiaperiods);
-
 //	cb_free->setChecked(true);
 }
 
@@ -305,7 +305,7 @@ void GameDialog::slot_timeSpin(const QTime & v)
 	//can't have seconds... ?
 	//if(v.seconds() > 0)
 	//	ui.timeSpin->setTime(QTime(v.minutes(), 0);
-	QTime check = connection->checkMainTime(current_match_request->timeSystem, v);
+	QTime check = connection->gd_checkMainTime(canadian, v);
 	if(check != v)
 		ui.timeSpin->setTime(check);
 	/*if(current_match_request->timeSystem == canadian)
@@ -329,9 +329,9 @@ void GameDialog::slot_timeSpin(const QTime & v)
 
 void GameDialog::slot_stonesTimeSpin(const QTime & v)
 {
-	QTime check = connection->checkPeriodTime(current_match_request->timeSystem, v);
+	QTime check = connection->gd_checkPeriodTime(canadian, v);
 	if(check != v)
-		ui.timeSpin->setTime(check);
+		ui.stonesTimeSpin->setTime(check);
 	if(current_match_request->timeSystem == canadian)
 	{
 		int seconds = timeToSeconds(check);
@@ -353,6 +353,9 @@ void GameDialog::slot_stonesTimeSpin(const QTime & v)
 
 void GameDialog::slot_stonesSpin(int v)
 {
+	unsigned int check = connection->gd_checkPeriods(canadian, v);
+	if(check != (unsigned)v)
+		ui.stonesSpin->setValue(check);
 	if(current_match_request->timeSystem == canadian)
 	{
 		if(current_match_request->stones_periods == v)
@@ -373,19 +376,12 @@ void GameDialog::slot_stonesSpin(int v)
 
 void GameDialog::slot_BYTimeSpin(const QTime & v)
 {
+	QTime check = connection->gd_checkMainTime(byoyomi, v);
+	if(check != v)
+		ui.BYTimeSpin->setTime(check);
 	if(current_match_request->timeSystem == byoyomi)
 	{
 		int seconds = (v.minute() * 60) + v.second();
-		if((flags & GDF_BY_CAN_MAIN_MIN) && v.second())
-		{
-			seconds = (v.minute() * 60);
-			ui.BYTimeSpin->setTime(QTime(0, v.minute(), 0));
-		}
-		if((flags & GDF_CANADIAN300) && seconds >= 300)
-		{
-			ui.stonesTimeSpin->setTime(QTime(0, 4, 59));
-			seconds = 299;
-		}
 		if(current_match_request->maintime == seconds)
 		{
 			dialog_changed--;
@@ -404,6 +400,9 @@ void GameDialog::slot_BYTimeSpin(const QTime & v)
 
 void GameDialog::slot_BYPeriodTimeSpin(const QTime & v)
 {
+	QTime check = connection->gd_checkPeriodTime(byoyomi, v);
+	if(check != v)
+		ui.BYPeriodTimeSpin->setTime(check);
 	if(current_match_request->timeSystem == byoyomi)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -425,6 +424,9 @@ void GameDialog::slot_BYPeriodTimeSpin(const QTime & v)
 
 void GameDialog::slot_BYPeriodsSpin(int v)
 {
+	unsigned int check = connection->gd_checkPeriods(byoyomi, v);
+	if(check != (unsigned)v)
+		ui.BYPeriodsSpin->setValue(check);
 	if(current_match_request->timeSystem == byoyomi)
 	{
 		if(current_match_request->stones_periods == v)
@@ -445,6 +447,9 @@ void GameDialog::slot_BYPeriodsSpin(int v)
 
 void GameDialog::slot_ASIATimeSpin(const QTime & v)
 {
+	QTime check = connection->gd_checkMainTime(tvasia, v);
+	if(check != v)
+		ui.ASIATimeSpin->setTime(check);
 	if(current_match_request->timeSystem == tvasia)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -466,6 +471,9 @@ void GameDialog::slot_ASIATimeSpin(const QTime & v)
 
 void GameDialog::slot_ASIAPeriodTimeSpin(const QTime & v)
 {
+	QTime check = connection->gd_checkPeriodTime(tvasia, v);
+	if(check != v)
+		ui.ASIAPeriodTimeSpin->setTime(check);
 	if(current_match_request->timeSystem == tvasia)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -487,6 +495,9 @@ void GameDialog::slot_ASIAPeriodTimeSpin(const QTime & v)
 
 void GameDialog::slot_ASIAPeriodsSpin(int v)
 {
+	unsigned int check = connection->gd_checkPeriods(tvasia, v);
+	if(check != (unsigned)v)
+		ui.ASIAPeriodsSpin->setValue(check);
 	if(current_match_request->timeSystem == tvasia)
 	{
 		if(current_match_request->stones_periods == v)
@@ -953,6 +964,11 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 	}
 	if(!mr)
 	{
+		/* FIXME FIXME FIXME
+		 * if this is the open of the dialog,
+		 * we need to fill out the current_match_request,
+		 * otherwise it gets sent as uninitialized garbage!!
+		 * at least sometimes */
 		//load defaults
 		//mr->time = preferences.default_maintime;
 		//mr->board_size = preferences.default_boardsize;

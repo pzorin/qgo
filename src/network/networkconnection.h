@@ -55,6 +55,13 @@ class NetworkConnection : public QObject
 		virtual void adjournGame(const GameListing &) = 0;
 		virtual void sendTime(BoardDispatch *) {};
 		virtual void sendMove(unsigned int game_id, class MoveRecord * m) = 0;
+		virtual void sendRequestCount(unsigned int) {};
+		virtual void sendAcceptCountRequest(class GameData *) {};
+		virtual void sendRefuseCountRequest(class GameData *) {};
+		virtual void sendRequestDraw(unsigned int) {};
+		virtual void sendAcceptDrawRequest(class GameData *) {};
+		virtual void sendRefuseDrawRequest(class GameData *) {};
+		virtual void sendRequestMatchMode(unsigned int) {};
 		virtual void sendTimeLoss(unsigned int) {};	//overwrite or not
 		virtual void sendResult(class GameData *, class GameResult *) {};	//optional
 		virtual void sendMatchRequest(class MatchRequest * mr) = 0;
@@ -63,8 +70,9 @@ class NetworkConnection : public QObject
 		virtual void declineMatchOffer(const PlayerListing & opponent) = 0;
 		virtual void cancelMatchOffer(const PlayerListing & ) {};
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr) = 0;
-		virtual QTime checkMainTime(TimeSystem &, const QTime & t);
-		virtual QTime checkPeriodTime(TimeSystem &, const QTime & t) { return t; };
+		virtual QTime gd_checkMainTime(TimeSystem, const QTime & t);
+		virtual QTime gd_checkPeriodTime(TimeSystem, const QTime & t) { return t; };
+		virtual unsigned int gd_checkPeriods(TimeSystem, unsigned int p) { return p; };
 		virtual void sendRejectCount(class GameData *) {};
 		virtual void sendAcceptCount(class GameData *) {};
 		virtual void sendAdjournRequest(void) = 0;
@@ -129,6 +137,10 @@ class NetworkConnection : public QObject
 		
 		virtual bool playerTrackingByID(void) { return false; };
 		virtual bool supportsMultipleUndo(void) { return false; };
+		virtual bool supportsRequestMatchMode(void) { return false; };
+		virtual bool supportsRequestAdjourn(void) { return false; };
+		virtual bool supportsRequestDraw(void) { return false; };
+		virtual bool supportsRequestCount(void) { return false; };
 		virtual bool supportsObserveOutside(void) { return false; };
 		virtual bool supportsServerChange(void) { return false; };
 		virtual bool supportsRematch(void) { return false; };

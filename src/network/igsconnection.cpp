@@ -396,7 +396,7 @@ void IGSConnection::acceptMatchOffer(const PlayerListing & /*opponent*/, MatchRe
 	sendMatchRequest(mr);
 }
 
-QTime IGSConnection::checkMainTime(TimeSystem s, QTime & t)
+QTime IGSConnection::gd_checkMainTime(TimeSystem s, QTime & t)
 {
 	// match settings are between 1 and 530 with seemingly
 	// infinite byo yomi time
@@ -411,7 +411,7 @@ QTime IGSConnection::checkMainTime(TimeSystem s, QTime & t)
 	// time mod 60, but they're all like that
 	// note that we currently have match settings preventing
 	// pre byoyomi as well as koryo
-	QTime c = NetworkConnection::checkMainTime(s, t);
+	QTime c = NetworkConnection::gd_checkMainTime(s, t);
 	int seconds = (c.minute() * 60) + c.second();
 	int minutes = c.minute();
 	switch(s)
@@ -423,7 +423,20 @@ QTime IGSConnection::checkMainTime(TimeSystem s, QTime & t)
 				return QTime(8, 50, 0);
 			break;
 		case byoyomi:
-			
+			/*if((flags & GDF_BY_CAN_MAIN_MIN) && v.second())
+			{
+				seconds = (v.minute() * 60);
+				ui.BYTimeSpin->setTime(QTime(0, v.minute(), 0));
+			}	
+			if((flags & GDF_CANADIAN300) && seconds >= 300)
+			{
+				ui.stonesTimeSpin->setTime(QTime(0, 4, 59));
+				seconds = 299;
+			}*/
+			if(seconds >= 300)
+				return QTime(0, 4, 0);
+			else
+				return QTime(0, c.minute(), 0);
 			break;
 		default:
 			qDebug("unsupported IGS time type");
@@ -432,7 +445,7 @@ QTime IGSConnection::checkMainTime(TimeSystem s, QTime & t)
 	return c;
 }
 
-QTime IGSConnection::checkPeriodTime(TimeSystem s, QTime & t)
+QTime IGSConnection::gd_checkPeriodTime(TimeSystem s, QTime & t)
 {
 	int seconds = (t.minute() * 60) + t.second();
 	switch(s)
@@ -446,10 +459,34 @@ QTime IGSConnection::checkPeriodTime(TimeSystem s, QTime & t)
 				return QTime(0, 4, 59);
 			break;
 		default:
-			qDebug("unsupported IGS time type");
+			qDebug("unsupported IGS time type p");
 			break;
 	}
 	return t;
+}
+
+unsigned int IGSConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
+{
+	switch(s)
+	{
+		case canadian:
+			if(p > 25)
+				return 25;
+			else
+				return p;
+			break;
+		case byoyomi:
+			// is this right? doublecheck
+			if(p > 100)
+				return 100;
+			else
+				return p;
+			break;
+		default:
+			qDebug("unsupported IGS time type");
+			break;
+	}
+	return p;
 }
 
 

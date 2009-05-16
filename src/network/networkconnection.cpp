@@ -218,7 +218,7 @@ void NetworkConnection::setConsoleDispatch(class ConsoleDispatch * c)
 	console_dispatch = c;
 }
 
-QTime NetworkConnection::checkMainTime(TimeSystem & s, const QTime & t)
+QTime NetworkConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 {
 	if(s == canadian)
 	{
@@ -371,8 +371,10 @@ void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
 			 	/* And actually, its a big enough deal, i.e., we might want console
 			 	 * messages, game blocks, etc., that it makes sense to have some separate
 			 	 * class for it that handles the notifications... a notification class... */
+#ifdef FIXME
 				if((*i)->notify)
 					QMessageBox::information(0, tr("Signed on"), tr("%1 has signed on").arg(player.name));
+#endif //FIXME
 				return;
 			}
 			else if(!player.online)
