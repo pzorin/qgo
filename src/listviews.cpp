@@ -183,7 +183,8 @@ QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 	if(!index.isValid())
 		return QVariant();
 
-	PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
+	//PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
+	PlayerListItem * item = playerListItemFromIndex(index);
 #ifdef LISTVIEW_ICONS
 	if(index.column() == PC_STATUS)
 	{
@@ -208,8 +209,16 @@ QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 
 PlayerListing * PlayerListModel::playerListingFromIndex(const QModelIndex & index)
 {
-	PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
-	return item->getListing();
+	//PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
+	return playerListItemFromIndex(index)->getListing();
+}
+
+PlayerListItem * PlayerListModel::playerListItemFromIndex(const QModelIndex & index) const
+{
+	if(list_sort_order == Qt::AscendingOrder)
+		return static_cast<PlayerListItem*>(items[index.row()]);
+	else
+		return static_cast<PlayerListItem*>(items[items.count() - index.row() - 1]);
 }
 
 SimplePlayerListModel::SimplePlayerListModel(bool _notify_column)
@@ -259,6 +268,7 @@ GamesListModel::GamesListModel()
 		sort_priority.append(i);
 	//list_sort_order = Qt::AscendingOrder;
 	list_sort_order = Qt::DescendingOrder;	//initially unsorted
+	isGamesListAwkwardVariable = true;
 }
 
 GamesListModel::~GamesListModel()
@@ -476,7 +486,10 @@ void ListModel::insertListing(ListItem & item)
 			}
 		}
 #else
-		if(list_sort_order == Qt::AscendingOrder)
+		//trying != here because of sort filter issues
+		// still doesn't work
+		if((list_sort_order != Qt::AscendingOrder && !isGamesListAwkwardVariable) ||
+		  (list_sort_order == Qt::AscendingOrder && isGamesListAwkwardVariable))
 		{
 			emit beginInsertRows(QModelIndex(), 0, 0);
 			items.insert(0, &item);
@@ -988,6 +1001,7 @@ ListModel::ListModel()
 	//or room looking for a game
 	//and a fancy X would be nice for a player not open for a game
 #endif //LISTVIEW_ICONS
+	isGamesListAwkwardVariable = false;
 }
 
 ListModel::~ListModel()
@@ -1089,7 +1103,6 @@ void PlayerSortProxy::sort(int column, Qt::SortOrder order)
 	invalidateFilter();
 }
 
-
 bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
 	QModelIndex flagIndex = sourceModel()->index(sourceRow, PC_STATUS, sourceParent);
@@ -1104,12 +1117,12 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 	}
 	if(flags & friends)
 	{
-		if(!p->friendFanType == PlayerListing::friended)
+		if(p->friendFanType != PlayerListing::friended)
 		{
 			if(flags & fans)
 			{
-					if(!p->friendFanType == PlayerListing::watched)
-						return false;
+				if(p->friendFanType != PlayerListing::watched)
+					return false;
 			}
 			else
 				return false;
@@ -1117,7 +1130,7 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 	}
 	else if(flags & fans)
 	{
-		if(!p->friendFanType == PlayerListing::watched)
+		if(p->friendFanType != PlayerListing::watched)
 			return false;	
 	}
 	

@@ -83,6 +83,7 @@ class ListModel : public QAbstractItemModel	//QAbstractItemModel??
 		QList <ListItem *> items;	//try it with the one list
 		QList <int> sort_priority;
 		Qt::SortOrder list_sort_order;
+		bool isGamesListAwkwardVariable;
 	private:
 		void quicksort(int b, int e);
 		int qs_partition(int b, int e);
@@ -113,6 +114,7 @@ class PlayerListModel : public ListModel
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
 		PlayerListing * playerListingFromIndex(const QModelIndex &);
+		PlayerListItem * playerListItemFromIndex(const QModelIndex &) const;
 		void setAccountName(QString name) { account_name = name; };
 	private:
 		QString account_name;
