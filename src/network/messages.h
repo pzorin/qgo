@@ -58,7 +58,7 @@ struct GameResult
 	 * is used !!!*/
 	float winner_score;
 	float loser_score;
-	enum ResultType { SCORE, RESIGN, TIME, FORFEIT } result;
+	enum ResultType { SCORE, RESIGN, TIME, FORFEIT, DRAW } result;
 	GameResult() :  winner_color(stoneNone), winner_name(QString()), loser_name(QString()), winner_score(0.0), loser_score(0.0) {};
 	GameResult(StoneColor c, ResultType r) : winner_color(c), result(r) {};
 	QString shortMessage(void)
@@ -82,6 +82,9 @@ struct GameResult
 				break;
 			case SCORE:
 				msg += QString::number(winner_score - loser_score); 
+				break;
+			case DRAW:
+				msg = "=";	//FIXME
 				break;
 		}
 		return msg;
@@ -166,6 +169,9 @@ struct GameResult
 					else
 						msg += " wins";
 				}
+				break;
+			case DRAW:
+				msg = "Draw";	//FIXME
 				break;
 		}
 		return msg;
