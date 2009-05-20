@@ -711,7 +711,7 @@ Move * Tree::assignCurrent(Move * & o, Move * & n)
 				n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), groupMatrixView);
 		}
 	}
-	checkAddKoMark(n->getColor(), n->getX(), n->getY(), n);
+	
 	n->getMatrix()->markChangesDirty(*o->getMatrix());
 	o = n;
 	return o;
@@ -980,7 +980,10 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 			delete lastValidMoveChecked;
 		}
 		else
+		{
 			addSon(lastValidMoveChecked);
+			checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
+		}
 	}
 	else if(c != stoneNone)
 	{
@@ -997,6 +1000,7 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 		else
 		{
 			addSon(m);
+			checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
 			/* FIXME updateMatrix calls should be concealed within new Move.  updateCurrentMatrix should also not be called from
 			 * qgoboard. Except, now we call "insertStone" in the middle of checkStoneWithGroups. I think right now I'll just
  			 * try to simplify the tree code and then later worry about making it cleaner and clearer. */
