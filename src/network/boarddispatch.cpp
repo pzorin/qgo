@@ -24,6 +24,8 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	resultdialog = 0;
 	countdialog = 0;
 	observerListModel = 0;
+	
+	clockStopped = false;
 	/* New rules.  The boarddispatch creates the game data or
 	 * whatever loads the game data before passing it to the
 	 * boardwindow creates it.  The boardwindow deletes it.
@@ -53,9 +55,17 @@ BoardDispatch::~BoardDispatch()
 	{
 		//clearObservers();
 		if(observerListModel)
+		{
+			boardwindow->getUi()->observerView->setModel(0);
 			delete observerListModel;
+		}
 		if(boardwindow->getGamePhase() != phaseEnded)
 		{
+			//got an oro crash here after return to match/rematch
+			//confusion, qgoboard was 0 FIXME
+			//and then after closing the window, apparently
+			//board dispatch was NOT cleared and got called after
+			//here on disconnect
 			boardwindow->qgoboard->stopTime();
 			boardwindow->qgoboard->kibitzReceived("Disconnected");
 		}
@@ -118,13 +128,57 @@ void BoardDispatch::recvMove(MoveRecord * m)
 	boardwindow->qgoboard->handleMove(m);
 }
 
+//FIXME should be another way to set the game moves
+//related directly to the board... then again, I don't
+//really want to access the tree from here
 void BoardDispatch::sendMove(MoveRecord * m)
 {
 	if(m->number && m->flags == MoveRecord::NONE)	//i.e., a move
 		gameData->moves = m->number;
-	qDebug("setting game moves: %d", gameData->moves);
+	//qDebug("setting game moves: %d", gameData->moves);
 	if(connection)
 		connection->sendMove(gameData->number, m);
+}
+
+/* FIXME
+ * note that after a request count is sent in tygem,
+ * NO other button can be hit until the response occurs,
+ * you can't even resign.
+ * Its also likely that you can only request one count
+ * per turn.
+ * But so this suggests maybe a lock buttons button.
+ * I don't like the placement of the request count
+ * button right now either.  Also, done button means
+ * nothing.  If it closes the window, that's one thing
+ * but otherwise, why have two buttons.  done is for
+ * score, should be disabled afterwards.
+ * Also, closing windows is generally not allowed.  It
+ * should always force a resign or prompt or maybe ask
+ * for an adjourn */
+void BoardDispatch::sendRequestCount(void)
+{
+	if(connection)
+	{
+		stopTime();	//protocol specific or not?
+		boardwindow->getUi()->countButton->setEnabled(false);
+		connection->sendRequestCount(gameData->number);
+	}
+}
+
+void BoardDispatch::sendRequestDraw(void)
+{
+	if(connection)
+	{
+		stopTime();	//protocol specific or not?
+		boardwindow->getUi()->drawButton->setEnabled(false);
+		connection->sendRequestDraw(gameData->number);
+	}
+}
+
+void BoardDispatch::sendRequestMatchMode(void)
+{
+	if(connection)
+		connection->sendRequestMatchMode(gameData->number);
 }
 
 void BoardDispatch::sendTimeLoss(void)
@@ -179,6 +233,7 @@ void BoardDispatch::openBoard(void)
 		boardwindow->getUi()->observerView->setModel(observerListModel);
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
+		boardwindow->gameDataChanged();	//necessary at least for cursor
 	}
 	else
 	{
@@ -197,7 +252,6 @@ void BoardDispatch::openBoard(void)
 		//gameData->black_prisoners = g->black_prisoners;
 		//gameData->white_prisoners = g->white_prisoners;
 	}
-	//boardwindow = bw;
 }
 
 void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)
@@ -206,7 +260,7 @@ void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)
 	 * if we recvTime, we should set it */
 	if(!boardwindow /*|| boardwindow->getGamePhase() != phaseOngoing*/)
 		return;
-	
+
 	boardwindow->getClockDisplay()->setTimeInfo(bt.time,
 						bt.stones_periods,
 						wt.time,
@@ -308,6 +362,51 @@ void BoardDispatch::recvRequestCount(void)
 	//FIXME
 	//we need to copy the matchinvite file to a
 	//RequestCountDialog, etc.
+	if(boardwindow)
+		boardwindow->qgoboard->requestCountDialog();
+}
+
+void BoardDispatch::recvAcceptCountRequest(void)
+{
+	recvEnterScoreMode();
+	//is this all?
+}
+		
+void BoardDispatch::recvRejectCountRequest(void)
+{
+	//so we can nag them endlessly:
+	//no, seriously, FIXME server protocol may have some limit
+	//on this
+	boardwindow->getUi()->countButton->setEnabled(true);	
+	if(boardwindow)
+		boardwindow->qgoboard->recvRefuseCount();
+}
+
+void BoardDispatch::recvRequestDraw(void)
+{
+	if(boardwindow)
+		boardwindow->qgoboard->requestDrawDialog();
+}
+
+void BoardDispatch::recvAcceptDrawRequest(void)
+{
+	//FIXME
+	//maybe we just draw?
+}
+		
+void BoardDispatch::recvRefuseDrawRequest(void)
+{
+	//FIXME
+	startTime();	//protocol specific or not
+	if(boardwindow)
+		boardwindow->qgoboard->recvRefuseDraw();
+}
+
+void BoardDispatch::recvRequestMatchMode(void)
+{
+	//this takes us out of the scorephase, for instance
+	//if borders are not defined
+	//FIXME
 }
 
 void BoardDispatch::createCountDialog(void)
@@ -363,6 +462,27 @@ void BoardDispatch::sendRefuseAdjourn(void)
 	connection->sendRefuseAdjourn();
 }
 
+void BoardDispatch::sendAcceptCountRequest(void)
+{
+	connection->sendAcceptCountRequest(gameData);
+}
+
+void BoardDispatch::sendRefuseCountRequest(void)
+{
+	startTime();		//protocol specific or not?
+	connection->sendRefuseCountRequest(gameData);
+}
+
+void BoardDispatch::sendAcceptDrawRequest(void)
+{
+	connection->sendAcceptDrawRequest(gameData);
+}
+
+void BoardDispatch::sendRefuseDrawRequest(void)
+{
+	connection->sendRefuseDrawRequest(gameData);
+}
+
 void BoardDispatch::adjournGame(void)
 {
 	// in case we get this after we've closed window
@@ -405,15 +525,6 @@ void BoardDispatch::startGame(void)
 	boardwindow->qgoboard->startGame();	
 }
 
-bool BoardDispatch::supportsRematch(void)
-{ 
-	/* A little tricky to have this check here but... */
-	if(!gameData || gameData->gameMode != modeMatch)
-		return false;
-	if(connection) 
-		return connection->supportsRematch(); 
-	return false;
-}
 void BoardDispatch::sendRematchAccept(void)
 {
 	connection->sendRematchAccept();
@@ -440,8 +551,16 @@ void BoardDispatch::mergeListingIntoRecord(GameData * r, GameListing * l)
 	 * has to supply it.*/
 	/* I'm thinking that we should just have the gamedialog create
 	 * the board.  It should know the room, all the info, etc. */
-	r->white_rank = l->white_rank();
-	r->black_rank = l->black_rank();
+	if(r->white_rank == QString())
+	{
+		r->white_rank = l->white_rank();
+		r->black_rank = l->black_rank();
+	}
+	if(r->white_name == QString())
+	{
+		r->white_name = l->white_name();
+		r->black_name = l->black_name();
+	}
 	/* FIXME Oro, second matches tend to lose the ranks.  Add rematch
 	 * and decline msgs and then fix this up.  Also nigiri cursor */
 	qDebug("bd::mlir %s %s vs %s %s", r->white_name.toLatin1().constData(), r->white_rank.toLatin1().constData(), 
@@ -517,19 +636,6 @@ bool BoardDispatch::isOpponentBoard(QString us, QString them)
 void BoardDispatch::swapColors(bool noswap)
 {
 	boardwindow->swapColors(noswap);
-	if(!noswap)
-	{
-		QString rank, name;
-		name = gameData->black_name;
-		rank = gameData->black_rank;
-		gameData->black_name = gameData->white_name;
-		gameData->black_rank = gameData->white_rank;
-		gameData->white_name = name;
-		gameData->white_rank = rank;
-		qDebug("bd:swapColors: %s %s vs %s %s", gameData->black_name.toLatin1().constData(), gameData->black_rank.toLatin1().constData(), gameData->white_name.toLatin1().constData(), gameData->white_rank.toLatin1().constData());
-	
-	}
-	gameData->nigiriToBeSettled = false;
 }
 
 void BoardDispatch::requestGameInfo(void)
@@ -573,12 +679,21 @@ QString BoardDispatch::getOpponentName(void)
 		return QString();
 }
 
+QString BoardDispatch::getUsername(void) { return connection->getUsername(); }
+
+bool BoardDispatch::getBlackTurn(void)
+{
+	if(boardwindow && boardwindow->qgoboard)
+		return boardwindow->qgoboard->getBlackTurn();
+	return false;
+}
+
 class ObserverListModel * BoardDispatch::getObserverListModelForRematch(void)
 {
 	class ObserverListModel * olm = observerListModel;
 	observerListModel = 0;
 	return olm;
-}
+}		
 
 void BoardDispatch::setObserverListModel(class ObserverListModel * olm)
 {
@@ -586,3 +701,25 @@ void BoardDispatch::setObserverListModel(class ObserverListModel * olm)
 		qDebug("warning: observer list model already set! overwriting");
 	observerListModel = olm;
 }
+
+bool BoardDispatch::supportsRematch(void)
+{ 
+	/* A little tricky to have this check here but... */
+	if(!gameData || gameData->gameMode != modeMatch)
+		return false;
+	if(connection) 
+		return connection->supportsRematch(); 
+	return false;
+}
+
+bool BoardDispatch::supportsMultipleUndo(void) { return connection->supportsMultipleUndo(); }
+bool BoardDispatch::supportsRequestMatchMode(void) { return connection->supportsRequestMatchMode(); };
+bool BoardDispatch::supportsRequestCount(void) { return connection->supportsRequestCount(); };
+bool BoardDispatch::supportsRequestDraw(void) { return connection->supportsRequestDraw(); };
+bool BoardDispatch::supportsRequestAdjourn(void) { return connection->supportsRequestAdjourn(); };
+bool BoardDispatch::startTimerOnOpen(void) {return connection->startTimerOnOpen(); }
+bool BoardDispatch::clientCountsTime(void) { return connection->clientCountsTime(); }
+bool BoardDispatch::clientSendsTime(void) { return connection->clientSendsTime(); }
+bool BoardDispatch::twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); }
+bool BoardDispatch::unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); }
+bool BoardDispatch::cantMarkOppStonesDead(void) { return connection->cantMarkOppStonesDead(); }

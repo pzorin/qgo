@@ -1,4 +1,5 @@
-#include "networkconnection.h"
+class NetworkConnection;
+class QString;
 
 class BoardDispatch
 {
@@ -8,6 +9,10 @@ class BoardDispatch
 		void closeBoard(void);
 		void recvMove(class MoveRecord * m);
 		void sendMove(class MoveRecord * m);
+		void sendRequestMatchMode();
+		bool isClockStopped(void) { return clockStopped; };
+		void stopTime(void) { clockStopped = true; };
+		void startTime(void) { clockStopped = false; };
 		void sendTimeLoss(void);
 		void gameDataChanged(void);
 		void openBoard(void);
@@ -19,7 +24,19 @@ class BoardDispatch
 		void sendKibitz(QString text);
 		void recvEnterScoreMode(void);
 		void createCountDialog(void);
+		void sendRequestCount(void);
 		void recvRequestCount(void);
+		void recvAcceptCountRequest(void);
+		void recvRejectCountRequest(void);
+		void sendAcceptCountRequest(void);
+		void sendRefuseCountRequest(void);
+		void recvAcceptDrawRequest(void);
+		void recvRefuseDrawRequest(void);
+		void sendRequestDraw(void);
+		void recvRequestDraw(void);
+		void sendAcceptDrawRequest(void);
+		void sendRefuseDrawRequest(void);
+		void recvRequestMatchMode(void);
 		void clearCountDialog(void) { countdialog = 0; };
 		void recvRejectCount(void);
 		void recvAcceptCount(void);
@@ -48,17 +65,22 @@ class BoardDispatch
 		class TimeRecord getOurTimeRecord(void);
 		class TimeRecord getTheirTimeRecord(void);
 		QString getOpponentName(void);
-		QString getUsername(void) { return connection->getUsername(); };
+		QString getUsername(void);
+		bool getBlackTurn(void);
 		class ObserverListModel * getObserverListModelForRematch(void);
 		void setObserverListModel(class ObserverListModel * olm);
-		bool supportsMultipleUndo(void) { return connection->supportsMultipleUndo(); };
+		bool supportsMultipleUndo(void);
+		bool supportsRequestMatchMode(void);
+		bool supportsRequestCount(void);
+		bool supportsRequestDraw(void);
+		bool supportsRequestAdjourn(void);
 		bool supportsRematch(void);
-		bool startTimerOnOpen(void) {return connection->startTimerOnOpen(); };
-		bool clientCountsTime(void) { return connection->clientCountsTime(); };
-		bool clientSendsTime(void) { return connection->clientSendsTime(); };
-		bool twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); };
-		bool unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); };
-		bool cantMarkOppStonesDead(void) { return connection->cantMarkOppStonesDead(); };
+		bool startTimerOnOpen(void);
+		bool clientCountsTime(void);
+		bool clientSendsTime(void);
+		bool twoPassesEndsGame(void);
+		bool unmarkUnmarksAllDeadStones(void);
+		bool cantMarkOppStonesDead(void);
 	private:
 		void mergeListingIntoRecord(class GameData * r, class GameListing * l);
 		class MainWindow * mainwindow;
@@ -69,4 +91,6 @@ class BoardDispatch
 		class ResultDialog * resultdialog;
 		class CountDialog * countdialog;
 		class ObserverListModel * observerListModel;
+		
+		bool clockStopped;
 };
