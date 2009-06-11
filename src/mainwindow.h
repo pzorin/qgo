@@ -133,8 +133,6 @@ private:
 	int	onlineCount;
 	bool	youhavemsg;
 	bool	playerListEmpty;
-	bool	playerListSteadyUpdate;
-	bool	gamesListSteadyUpdate;
 //	bool    gamesListEmpty;
 	bool	autoAwayMessage;
 	int 	mainServerTimer;
