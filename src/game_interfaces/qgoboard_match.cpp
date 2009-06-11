@@ -81,6 +81,11 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 		qDebug("Match timer event but no board dispatch");
 		return;
 	}
+	/* I added this clock stopping stuff but it seems unnecessary FIXME
+	 * we could leave it in just in case, actually
+	 * might still somehow be necessary for clientSendsTime()*/
+	if(boarddispatch->isClockStopped())
+		return;
 	if(boarddispatch->clientCountsTime())
 		boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
 	
@@ -177,8 +182,41 @@ void qGoBoardMatchInterface::leaveScoreMode()
  */
 void qGoBoardMatchInterface::slotReviewPressed()
 {
+#ifdef OLD
 	emit signal_sendCommandFromBoard("review create_prevgame", FALSE); 
+#endif //OLD
 }
+
+void qGoBoardMatchInterface::slotDrawPressed()
+{
+	QMessageBox mb(tr("Request Draw?"),
+			QString(tr("Ask %1 to end game in draw?\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+			QMessageBox::Question,
+	  		QMessageBox::Yes | QMessageBox::Default,
+   			QMessageBox::No | QMessageBox::Escape,
+   			QMessageBox::NoButton);
+	mb.raise();
+//	qgo->playPassSound();
+
+	if (mb.exec() == QMessageBox::Yes)
+		boardwindow->getBoardDispatch()->sendRequestDraw();
+}
+
+void qGoBoardMatchInterface::slotCountPressed()
+{
+	QMessageBox mb(tr("Request Count?"),
+			QString(tr("Ask %1 to end game?\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+			QMessageBox::Question,
+	  		QMessageBox::Yes | QMessageBox::Default,
+   			QMessageBox::No | QMessageBox::Escape,
+   			QMessageBox::NoButton);
+	mb.raise();
+//	qgo->playPassSound();
+
+	if (mb.exec() == QMessageBox::Yes)
+		boardwindow->getBoardDispatch()->sendRequestCount();
+}
+
 
 
 
@@ -238,4 +276,58 @@ void qGoBoardMatchInterface::requestAdjournDialog(void)
 	{
 		boardwindow->getBoardDispatch()->sendRefuseAdjourn();
 	}
+}
+
+void qGoBoardMatchInterface::requestCountDialog(void)
+{
+	QMessageBox mb(tr("End game?"),
+			QString(tr("%1 requests count\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+			QMessageBox::Question,
+   			QMessageBox::Yes | QMessageBox::Default,
+   			QMessageBox::No | QMessageBox::Escape,
+   			QMessageBox::NoButton);
+	mb.raise();
+//	qgo->playPassSound();
+
+	if (mb.exec() == QMessageBox::Yes)
+	{
+		boardwindow->getBoardDispatch()->sendAcceptCountRequest();
+		enterScoreMode();
+	}
+	else
+	{
+		boardwindow->getBoardDispatch()->sendRefuseCountRequest();
+	}
+}
+
+void qGoBoardMatchInterface::recvRefuseCount(void)
+{
+	QMessageBox::information(boardwindow, tr("Count Declined"), boardwindow->getBoardDispatch()->getOpponentName() + tr(" has declined to count and end the game."));
+}
+
+void qGoBoardMatchInterface::requestDrawDialog(void)
+{
+	QMessageBox mb(tr("End game?"),
+		 	QString(tr("%1 requests draw\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+			QMessageBox::Question,
+	  		QMessageBox::Yes | QMessageBox::Default,
+   			QMessageBox::No | QMessageBox::Escape,
+   			QMessageBox::NoButton);
+	mb.raise();
+//	qgo->playPassSound();
+
+	if (mb.exec() == QMessageBox::Yes)
+	{
+		boardwindow->getBoardDispatch()->sendAcceptDrawRequest();
+		//FIXME
+	}
+	else
+	{
+		boardwindow->getBoardDispatch()->sendRefuseDrawRequest();
+	}
+}
+
+void qGoBoardMatchInterface::recvRefuseDraw(void)
+{
+	QMessageBox::information(boardwindow, tr("Draw Declined"), boardwindow->getBoardDispatch()->getOpponentName() + tr(" has declined to draw the game."));
 }
