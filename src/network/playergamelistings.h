@@ -6,7 +6,7 @@ struct PlayerListing
 	unsigned short id;
 	bool online;
 	QString name;
-	QString ascii_name;	//in case two names supplied, really its nickname FIXME
+	QString notnickname;
 	QString info;
 	QString idletime;	
 	unsigned int seconds_idle;		//for sorting
@@ -44,7 +44,7 @@ struct PlayerListing
 	PlayerListing() : id(0), 
 	online(0), 
 	name(0), 
-	ascii_name(0),
+	notnickname(0),
 	info(0), 
 	idletime(0), 
 	seconds_idle(0),
