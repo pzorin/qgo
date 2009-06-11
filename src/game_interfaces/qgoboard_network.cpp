@@ -30,6 +30,11 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 
 void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 {
+	if(boardwindow->getGameData()->nigiriToBeSettled)
+	{
+		qDebug("Nigiri unsettled");
+		//return;
+	}
 	if(dontsend)
 		return;
 	// to prevent double clicking and upsetting servers...
@@ -100,7 +105,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	bool move_alteration = false;
 	int move_number, move_counter, handicap;
 	Move * remember, * last;
-	static bool offset_1 = false;
+	//static bool offset_1 = false;
 	
 	dontsend = false;		//clear the dontsend bit
 	
@@ -113,7 +118,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		m->flags == MoveRecord::PASS ||
 		m->flags == MoveRecord::HANDICAP ||
 	  	m->flags == MoveRecord::TERRITORY)*/
-		move_alteration = true;
+		move_alteration = true;	//FIXME
 	
 	if(move_alteration)	//paired with exit of function
 	{
@@ -131,23 +136,23 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		//bool hcp_move = tree->getCurrent()->isHandicapMove();
 		move_counter = tree->getCurrent()->getMoveNumber();
 		if(move_number == NOMOVENUMBER)	//not all services number
-			move_number = move_counter;
+			move_number = move_counter + 1;		//since we add one to move counter later
 		/* If move_counter == 0 even though a handicap has been set, there's
 		 * a problem */
 		//qDebug("MN: %d MC: %d", move_number, move_counter);
-		if(move_number > 1 && move_counter == 0)
-		{
+		/*if(move_number > 1 && move_counter == 0)
+		{*/
 			/* This is a bit ugly and I still want to rewrite this whole
 			 * function.  But basically, if we get a move before we've
 			 * retrieved the boardstate, then I guess, and this is
 			 * really the thing that should be fixed, not this, but
 			 * the offset_1 flag below gets screwed up
 			 * such that the first move is skipped if we don't return here*/
-			qDebug("Received move before move list, ignoring");
-			if (remember != last)
+			//qDebug("Received move before move list, ignoring");
+			/*if (remember != last)
 				tree->setCurrent(remember);
 			return;
-		}
+		}*/
 		//1 0
 		handicap = boardwindow->getGameData()->handicap;
 		/* Since we don't send the handicap move right now... */
@@ -180,8 +185,8 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			 * still set to 0 and presumably it would have
 			 * incremented, then we're just going to offset
 			 * everything starting here */
-			if(move_number == 1)
-				offset_1 = true;
+			//if(move_number == 1)
+			//	offset_1 = true;
 			//else if(move_counter == 0)
 			//	move_counter++;
 		}
@@ -189,8 +194,8 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		 * move counter */
 		//if(handicap)
 		//	move_counter++;
-		if(offset_1)
-			move_counter++;
+		//if(offset_1)
+		move_counter++;
 	}
 	switch(m->flags)
 	{
@@ -241,9 +246,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			BoardDispatch * dispatch = boardwindow->getBoardDispatch();
 			if(dispatch->supportsMultipleUndo())
 			{
-				/* FIXME, really hate the offset_1 thing... 
-				 * that should be netcode side */
-				while(move_counter > move_number + (offset_1 ? 1 : 0))
+				while(move_counter > move_number + 1)	//move_numbe r+ 1 if our turn?
 				{
 					tree->undoMove();
 					move_counter--;
@@ -382,6 +385,9 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				setResult(res);
 			}*/
 			break;
+		case MoveRecord::REFUSEUNDO:
+			//handled by protocol as a recvKibitz for whatever reason
+			break;
 		default:
 		case MoveRecord::NONE:
 			
@@ -468,6 +474,14 @@ void qGoBoardNetworkInterface::slotSendComment()
 
 void qGoBoardNetworkInterface::slotUndoPressed()
 {
+	if(boardwindow->getGamePhase() == phaseScore)
+	{
+		if(boardwindow->getBoardDispatch()->supportsRequestMatchMode())
+		{
+			boardwindow->getBoardDispatch()->sendRequestMatchMode();
+			return;
+		}
+	}
 	int moves = tree->getCurrent()->getMoveNumber();
 	//if its our turn - 2?
 	if ((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
@@ -505,7 +519,7 @@ void qGoBoardNetworkInterface::slotResignPressed()
 		      QMessageBox::No | QMessageBox::Escape,
 		      QMessageBox::NoButton);
 	mb.raise();
-//		qgo->playPassSound();
+//	qgo->playPassSound();
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
