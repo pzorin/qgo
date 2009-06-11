@@ -23,8 +23,18 @@ CountDialog::CountDialog(BoardWindow * parent, BoardDispatch * dis, unsigned int
 		return;
 	}
 	result = new GameResult(board->getBoardHandler()->retrieveScore());
-	
 	GameData * gamedata = board->getGameData();
+	if(result->winner_color == stoneWhite)
+	{
+		result->winner_name = gamedata->white_name;
+		result->loser_name = gamedata->black_name;
+	}
+	else
+	{
+		result->winner_name = gamedata->black_name;
+		result->loser_name = gamedata->white_name;
+	}
+	
 	mainlabel = new QLabel(result->longMessage() + 
 			      	"\nWhite has " + QString::number(gamedata->white_prisoners)
 				 + " captures\nBlack has " + 
@@ -95,8 +105,9 @@ void CountDialog::recvAcceptCount()
 	{
 		/* This means we notify network connection
 		 * to send any necessary game result messages FIXME */
+		dispatch->recvResult(result);
 		dispatch->sendResult(result);
-		board->qgoboard->setResult(*result);
+		//board->qgoboard->setResult(*result);
 		deleteLater();
 	}
 }
@@ -121,8 +132,9 @@ void CountDialog::slot_accept(void)
 	else if(oppAcceptsCount)
 	{
 		/* See above comment FIXME */
+		dispatch->recvResult(result);
 		dispatch->sendResult(result);
-		board->qgoboard->setResult(*result);
+		//board->qgoboard->setResult(*result);
 		deleteLater();
 	}
 }
