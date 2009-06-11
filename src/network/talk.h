@@ -38,6 +38,8 @@ public:
 	QWidget        *get_tabWidget()  { return this; }
 	QString        get_name() const;
 	PlayerListing & get_opponent() const;
+	bool	 	getConversationOpened(void) const { return conversationOpened; };
+	void		setConversationOpened(bool c) { conversationOpened = c; };
 	//void           set_name(QString &n) { name = n; }
 	void           write(const QString &text = QString()) const;
 	void recvTalk(QString text);
@@ -62,6 +64,7 @@ private:
 	static int     counter;
 	NetworkConnection * connection;
 	PlayerListing & opponent;
+	bool conversationOpened;
 
 };
 

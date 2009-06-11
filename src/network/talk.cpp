@@ -26,6 +26,8 @@ Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connec
 	qDebug("Creating Talk for %s", opponent.name.toLatin1().constData());
 	ui.setupUi(this);
 	opponent.dialog_opened = true;
+	
+	conversationOpened = false;
 
 	// create a new tab
 	QString s = "MultiLineEdit1_" + QString::number(++counter);
@@ -135,6 +137,7 @@ void Talk::recvTalk(QString text)
  * we have a reference but at the same time, we do
  * need to update things for it
  * We could just call this update and have it use the reference.*/
+ /* What, what is this comment about? */
 void Talk::updatePlayerListing(void)
 {
 	ui.stats_rating->setText(opponent.rank);
