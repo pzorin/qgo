@@ -382,7 +382,8 @@ GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
 	return item->getListing();
 }
 
-void ListModel::sort(int column, Qt::SortOrder order)
+/* FIXME we should possibly use that order variable somehow. */
+void ListModel::sort(int column, Qt::SortOrder /*order*/)
 {
 	/* Take column out of previous place in sort_priority and
 	 * put it in first place */
