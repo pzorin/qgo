@@ -37,6 +37,7 @@ public:
 	void rerackTime(bool black);
 	void makeMove(bool black);
 	class TimeRecord getTimeRecord(bool black);
+	void setTimeSettings(TimeSystem s, int m, int p, int o);
 	void setTimeInfo(int btime, int bstones_periods, int wtime, int wstones_periods);
 	void updateTimers();
 	bool warning(bool black);
