@@ -825,6 +825,9 @@ void BoardHandler::countScore(void)
 	// capturesWhite -= caps_white;
 	capturesBlack = tree->getCurrent()->getCapturesBlack();
 	capturesWhite = tree->getCurrent()->getCapturesWhite();
+	//awkward here: FIXME, do we need two sets of these variables?
+	boardwindow->getGameData()->white_prisoners = capturesWhite;
+	boardwindow->getGameData()->black_prisoners = capturesBlack;
 	caps_black = 0;
 	caps_white = 0;
 	
@@ -963,6 +966,9 @@ void BoardHandler::countMarked(void)
 	int i, j, terrWhite, terrBlack, caps_black, caps_white;
 	capturesBlack = tree->getCurrent()->getCapturesBlack();
 	capturesWhite = tree->getCurrent()->getCapturesWhite();
+	//awkward here: FIXME, do we need two sets of these variables?
+	boardwindow->getGameData()->white_prisoners = capturesWhite;
+	boardwindow->getGameData()->black_prisoners = capturesBlack;
 	caps_black = 0;
 	caps_white = 0;
 	terrWhite = 0;
