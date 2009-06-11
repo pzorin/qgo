@@ -45,7 +45,7 @@ public:
 	int getMoveNumber(void);
 	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual void setModified(bool b= true)		{ isModified = b;}
-	virtual bool getModified()			{ return isModified; }
+	virtual bool getModified();
 	virtual bool getPlaySound()			{ return playSound;}
 	virtual void setPlaySound(bool b) 		{ playSound = b; }
 	
@@ -66,8 +66,12 @@ public:
 
 	virtual void setNode(int , StoneColor , int , int ) {}
 	virtual void requestAdjournDialog(void) {};
+	virtual void requestCountDialog(void) {};
+	virtual void requestDrawDialog(void) {};
 	virtual void adjournGame(void) {};
 	virtual void recvRefuseAdjourn(void) {};
+	virtual void recvRefuseCount(void) {};
+	virtual void recvRefuseDraw(void) {};
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -143,6 +147,8 @@ public slots:
 	virtual void slotDonePressed();
 	virtual void slotResignPressed();
 	virtual void slotReviewPressed() {};
+	virtual void slotDrawPressed() {};
+	virtual void slotCountPressed() {};
 	virtual void slotUndoPressed();
 	virtual void slotScoreToggled(bool);
 	virtual void slotUpdateComment();
@@ -331,10 +337,16 @@ public:
 	void leaveScoreMode();
 	void timerEvent(QTimerEvent*);
 	virtual void requestAdjournDialog(void);
+	virtual void requestCountDialog(void);
+	virtual void requestDrawDialog(void);
 	virtual void recvRefuseAdjourn(void);
+	virtual void recvRefuseCount(void);
+	virtual void recvRefuseDraw(void);
 public slots:
 	void slotUpdateComment() {}
 	virtual void slotReviewPressed();
+	virtual void slotDrawPressed();
+	virtual void slotCountPressed();
 	virtual void slotAdjournPressed();
 
 signals:
