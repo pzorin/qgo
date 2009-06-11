@@ -28,11 +28,14 @@ class GameData
 			 maintime(0),
 			 periodtime(0),
 			 stones_periods(0),
+			 white_prisoners(0),
+			 black_prisoners(0),
 			 result(""),
 			 fullresult(0),
 			 gameMode(modeUndefined),
 			 game_code(0),
 			 nigiriToBeSettled(false),
+			 undoAllowed(false),
 			 oneColorGo(false),
 			 style(1),
 			 date(""),
@@ -42,6 +45,7 @@ class GameData
 			 fileName(""),
 			 overtime(""),
 			 free_rated(noREQ),
+			 move_list_received(false),
 			 white_first_flag(false),
 			 our_invitation(false),
 			 opponentdropcount(0) {};
@@ -77,7 +81,11 @@ class GameData
 				maintime = d->maintime;
 				stones_periods = d->stones_periods;
 				periodtime = d->periodtime;
+				white_prisoners = d->white_prisoners;
+				black_prisoners = d->black_prisoners;
 				nigiriToBeSettled = d->nigiriToBeSettled;
+				undoAllowed = d->undoAllowed;
+				move_list_received = d->move_list_received;
 				white_first_flag = d->white_first_flag;
 				our_invitation = d->our_invitation;
 				opponentdropcount = d->opponentdropcount;
@@ -124,10 +132,15 @@ class GameData
 		unsigned short opponent_id;
 		
 		bool nigiriToBeSettled;
+		bool undoAllowed;
 		bool oneColorGo;
 		int style;
 		QString date, place, copyright, gameName, fileName, overtime;
 		assessType free_rated;
+		/* We can receive moves in an observed IGS game before receiving
+		 * the board state.  But there's another issue with observing
+		 * multiple games that might suggest some other kind of fix */
+		bool move_list_received;
 		//for tygem, I would love to remove but I think we need it
 		//for time messages and I don't want to pick it off
 		//the listing since that's possibly less reliable:
