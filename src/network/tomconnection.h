@@ -9,5 +9,5 @@ class TomConnection : public TygemConnection
 		virtual int requestServerInfo(void);
 		virtual void handleServerInfo(unsigned char *, unsigned int);
 		virtual void handleGamesList(unsigned char * msg, unsigned int size);
-		virtual QString getTygemGameRecordQString(class GameData *);
+		virtual QByteArray getTygemGameRecordQByteArray(class GameData *);
 };
