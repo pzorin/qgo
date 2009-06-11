@@ -20,10 +20,7 @@
 ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _periods, int _periodtime) : QObject(bw)
 {
 	boardwindow = bw;
-	timeSystem = s;		//canadian
-	maintime = _maintime;
-	periods = _periods;
-	periodtime = _periodtime;
+	setTimeSettings(s, _maintime, _periodtime, _periods);
 	//outOfMainTime = false;
 	
 	pb_timeBlack = boardwindow->getUi()->pb_timeBlack;
@@ -56,6 +53,14 @@ ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _pe
 	warningSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/timer.wav" );
 }
 
+void ClockDisplay::setTimeSettings(TimeSystem s, int m, int p, int o)
+{
+	timeSystem = s;		//defaults to canadian
+	maintime = m;
+	periodtime = p;
+	periods = o;
+}
+
 /*
  * This takes alls values coming from the time information and updates the clocks
  */
@@ -65,12 +70,12 @@ void ClockDisplay::setTimeInfo(int btime, int bstones_periods, int wtime, int ws
 	/* FIXME DOUBLECHECK if this is allowed.  We want to be able
 	 * to pass empty records but, this may not be the way to
 	 * do it */
-	if(wtime != 0)
+	if(wtime != 0 || wstones_periods != -1)
 	{
 		w_time = wtime;
 		w_stones_periods = wstones_periods; 
 	}
-	if(btime != 0)
+	if(btime != 0 || bstones_periods != -1)
 	{ 
 		b_time = btime;
 		b_stones_periods = bstones_periods;
@@ -90,16 +95,7 @@ void ClockDisplay::setTimeStep(bool black)
 		if(b_time == 0 && b_stones_periods != 0)
 		{
 			/* FIXME, maybe we should have one clock and subclass
-			 * the time system for different clocks?? Isn't that
-			 * more c++.  Why do you never just do these things
-			 * instead of adding a note?  I guess I want to be
-			 * doing other things... */
-			/* Also, FIXME, is this too much garbage for a timer
-			 * routine? Further, I feel like I've been adding
-			 * stuff to this without any thought to efficiency.
-			 * Laziness... but so instead of this cumulative
-			 * bullshit, this should be made much more efficient,
-			 * combined and such... FIXME*/
+			 * the time system for different clocks??*/
 			if(timeSystem == byoyomi || (timeSystem == tvasia && b_stones_periods != -1))
 			{
 				//printf("b by: %d %d %d %d\n", b_time, b_stones_periods, periodtime, periods);
@@ -128,7 +124,9 @@ void ClockDisplay::setTimeStep(bool black)
 		}
 		/* FIXME
 		 * major thing, we need to get time to switch
-		 * over into byoyomi time on IGS */
+		 * over into byoyomi time on IGS 
+		 * I think the issue was that IGS sends a byoyomi entering
+		 * message... */
 	}
 	else
 	{
@@ -137,7 +135,7 @@ void ClockDisplay::setTimeStep(bool black)
 		{
 			if(timeSystem == byoyomi || (timeSystem == tvasia && w_stones_periods != -1))
 			{
-				printf("w by: %d %d %d %d\n", w_time, w_stones_periods, periodtime, periods);
+				//printf("w by: %d %d %d %d\n", w_time, w_stones_periods, periodtime, periods);
 				if(w_stones_periods > -1 || timeSystem == tvasia)
 					w_stones_periods--;
 				else
@@ -254,7 +252,7 @@ void ClockDisplay::updateTimers()
 	if (w_time < 0)
 		w_time = 0;
 		//wt.prepend("-");	
-	
+
 	if(b_time > 3600 || w_time > 3600)
 	{
 		bt = QTime::QTime(0,0).addSecs(abs(b_time)).toString("h:mm:ss") ;
@@ -304,8 +302,6 @@ void ClockDisplay::updateTimers()
 
 
 }
-
-
 
 /*
  * activates the byo-time warnings
