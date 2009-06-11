@@ -64,11 +64,26 @@
       <property name="horizontalScrollBarPolicy" >
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
+      <property name="editTriggers" >
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="showDropIndicator" stdset="0" >
+       <bool>false</bool>
+      </property>
+      <property name="dragDropMode" >
+       <enum>QAbstractItemView::DragOnly</enum>
+      </property>
+      <property name="selectionMode" >
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
       <property name="iconSize" >
        <size>
         <width>48</width>
         <height>48</height>
        </size>
+      </property>
+      <property name="movement" >
+       <enum>QListView::Snap</enum>
       </property>
       <property name="gridSize" >
        <size>
