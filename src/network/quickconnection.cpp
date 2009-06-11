@@ -69,6 +69,12 @@ void QuickConnection::OnConnected(void)
 		case sendRemoveFriend:
 			packet = connection->sendRemoveFriend(&size, msginfo);
 			break;
+		case sendAddBlock:
+			packet = connection->sendAddFriend(&size, msginfo);
+			break;
+		case sendRemoveBlock:
+			packet = connection->sendRemoveFriend(&size, msginfo);
+			break;
 	}
 	if (qsocket->write(packet, size) < 0)
 		qDebug("QuickConnection write failed");
@@ -89,6 +95,8 @@ void QuickConnection::OnReadyRead(void)
 				break;
 			case sendAddFriend:
 			case sendRemoveFriend:
+			case sendAddBlock:
+			case sendRemoveBlock:
 				connection->recvFriendResponse(bytes, packet);
 				break;
 		}
