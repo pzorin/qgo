@@ -8,11 +8,12 @@
 #define GDF_FREE_RATED_CHOICE		0x00000010
 #define GDF_RATED_SIZE_FIXED		0x00000020
 #define GDF_RATED_HANDICAP_FIXED	0x00000040
-#define GDF_NIGIRI_EVEN			0x00000080	// is this even needed?
-#define GDF_ONLY_DISPUTE_TIME		0x00000100
-#define GDF_BY_CAN_MAIN_MIN		0x00000200
-#define GDF_HANDICAP1			0x00000400
-#define GDF_CANADIAN300			0x00000800	//canadian time must be over 300
-#define GDF_KOMI_FIXED6			0x00001000	//must be 6.5 komi or .5, etc
+#define GDF_RATED_NO_HANDICAP		0x00000080
+#define GDF_NIGIRI_EVEN			0x00000100	// is this even needed?
+#define GDF_ONLY_DISPUTE_TIME		0x00000200
+#define GDF_BY_CAN_MAIN_MIN		0x00000400
+#define GDF_HANDICAP1			0x00000800
+#define GDF_CANADIAN300			0x00001000	//canadian time must be over 300
+#define GDF_KOMI_FIXED6			0x00002000	//must be 6.5 komi or .5, etc
 
 #endif //GAMEDIALOGFLAGS_H

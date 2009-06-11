@@ -158,7 +158,7 @@ void GameDialog::slot_play_nigiri_button(void)
 }
 
 void GameDialog::ratedCB_changed(bool checked)
-{
+{	
 	if((current_match_request->free_rated == RATED) == checked)	//must have changed to get here
 	{
 		dialog_changed--;
@@ -190,11 +190,27 @@ void GameDialog::ratedCB_changed(bool checked)
 		{
 			// We need to actually calculate the proper handicap
 			// FIXME
+			// with tygem its either 0 or 1 !!, anything else
+			// is automatically friendly
 			//ui.boardSizeSpin->setValue(19);
-			ui.boardSizeSpin->setEnabled(false);
+			//ui.boardSizeSpin->setEnabled(false);
+			//for now
+			ui.handicapSpin->setEnabled(false);
 		}
 		else if(!(flags & GDF_ONLY_DISPUTE_TIME))
-			ui.boardSizeSpin->setEnabled(true);
+			ui.handicapSpin->setEnabled(true);
+	}
+	if(flags & GDF_RATED_NO_HANDICAP)
+	{
+		if(checked)
+		{
+			PlayerListing us = connection->getOurListing();
+			getProperKomiHandicap(us.rank, opponent.rank, &(current_match_request->komi), &(current_match_request->handicap));
+			ui.handicapSpin->setValue(current_match_request->handicap);
+			ui.komiSpin->setValue(current_match_request->komi);
+			ui.komiSpin->setEnabled(false);
+			ui.handicapSpin->setEnabled(false);
+		}
 	}
 }
 
@@ -884,6 +900,17 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		
 		if(!(flags & GDF_FREE_RATED_CHOICE))
 			ui.ratedCB->setEnabled(false);
+		if(flags & GDF_RATED_NO_HANDICAP)
+		{
+			PlayerListing us = connection->getOurListing();
+			getProperKomiHandicap(us.rank, opponent.rank, &(mr->komi), &(mr->handicap));
+			if(mr->handicap > 1)
+			{
+				//mr->free_rated = FREE;	//necessary?? FIXME
+				ui.ratedCB->setChecked(false);
+				ui.ratedCB->setEnabled(false);
+			}
+		}
 		if(flags & GDF_STONES25_FIXED)
 		{
 			ui.stonesSpin->setValue(25);
@@ -1019,6 +1046,13 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		if(mr->first_offer)
 		{
 			this_is_offer = true;
+			dialog_changed = 10000;	//so it can't be anything but "Offer"
+			//FIXME should be in one place, also, this FORCES us
+			//to call recvRequest after getGameDialog
+			//the whole thing is awkward and now that we have most
+			//of the protocols figured out it should be cleaned up
+			//also, this may not be necessary, it didn't fix the problem
+			//FIXME
 		}
 		else
 			offered_and_unrefused = true;
