@@ -7,6 +7,7 @@ class PlayerListingRegistry : public Registry <QString, PlayerListing>
 {
 	public:
 		PlayerListingRegistry(PlayerListModel * model) : playerListModel(model) {};
+		PlayerListing * getPlayerFromNotNickName(const QString & notnickname);
 	private:
 		virtual void initEntry(PlayerListing * l);
 		virtual void onErase(PlayerListing * l);		
