@@ -544,6 +544,32 @@ PlayerListing * Room::getPlayerListing(const unsigned int id)
 	return p;
 }
 
+/* Here's the deal with this.  Tygem has a username and a nickname.
+ * the nickname is displayed and generally present, but not always.  The username
+ * seems to always be present.  At first glance, it makes sense to lookup by
+ * the username since that seems how the information is stored and it seems
+ * unique to username.  However, if we need to display and sort by the
+ * nickname, that introduces overhead in the listviews that are slow enough
+ * already.  It might be minor overhead, and it might be really ugly
+ * to search through all the listings to find a particular username like
+ * this, but I think its better since its done rarely.  I may regret this
+ * and change it later. */
+ /* FIXME don't we usually say "from" instead of "by" change this */
+PlayerListing * Room::getPlayerListingByNotNickname(const QString & notnickname)
+{
+	PlayerListing * p;
+	if(!playerListingRegistry)
+	{
+		qDebug("No player listing registry!");
+		return NULL;
+	}
+	else
+		p = playerListingRegistry->getPlayerFromNotNickName(notnickname);
+
+	/* Should probably return & FIXME */
+	return p;	
+}
+
 /* Remember that this and getPlayerListing do return 0.
  * getEntry functions like getIfEntry because getNewEntry
  * is not defined, since we create registry entries for
@@ -676,6 +702,14 @@ void Room::recvPlayerListing(PlayerListing * player)
 		 * so that its more clear that it returns a new stored object
 		 * based on the one passed. (i.e., looking it up if
 		 * alread there)*/
+		if(player->dialog_opened)
+		{
+			Talk * t = connection->getIfTalk(*player);
+			if(t)
+				t->updatePlayerListing();
+			else
+				qDebug("dialog_opened flag set but no talk dialog");
+		}
 	}
 	
 	/* This is just for those listing bugs... its weird...remove it
@@ -703,7 +737,7 @@ void Room::recvExtPlayerListing(class PlayerListing * player)
 void Room::recvGameListing(GameListing * game)
 {
 	unsigned int key;
-	/* FIXME This is iffy, we're using the other ID registry's
+	/* This WAS iffy, we WERE using the other ID registry's
 	 * existence to indicate an ORO connection in order
 	 * to use a different key.  Ugly.  Once this works, 
 	 * we need to find a way to hide this within the
@@ -766,6 +800,17 @@ void PlayerListingRegistry::onErase(PlayerListing * l)
 {
 	playerListModel->removeListing(l);
 	delete l;
+}
+
+PlayerListing * PlayerListingRegistry::getPlayerFromNotNickName(const QString & notnickname)
+{
+	std::map<QString, PlayerListing *>::iterator i;
+	for(i = getStorage()->begin(); i != getStorage()->end(); i++)
+	{
+		if(i->second->notnickname == notnickname)
+			return (i->second);
+	}
+	return NULL;
 }
 
 void PlayerListingIDRegistry::initEntry(PlayerListing * l)

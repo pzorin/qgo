@@ -32,6 +32,7 @@ class Room : public QObject
 		void recvToggle(int type, bool val);
 		PlayerListing * getPlayerListing(const QString & name);
 		PlayerListing * getPlayerListing(const unsigned int id);
+		PlayerListing * getPlayerListingByNotNickname(const QString & notnickname);
 		GameListing * getGameListing(unsigned int key);
 		BoardDispatch * getNewBoardDispatch(unsigned int key);
 		void recvPlayerListing(class PlayerListing * g);
