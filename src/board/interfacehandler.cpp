@@ -375,8 +375,22 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		passButton->setText(QObject::tr("Pass", "button label"));
 		boardwindow->getUi()->undoButton->setEnabled(TRUE);
 		boardwindow->getUi()->resignButton->setEnabled(TRUE);
+		boardwindow->getUi()->reviewButton->setDisabled(TRUE);
+		boardwindow->getUi()->reviewButton->setVisible(TRUE);
+		/*boardwindow->getUi()->reviewButton->setText(QApplication::translate("BoardWindow", "Request Count", 0, QApplication::UnicodeUTF8));
+		if(boardwindow->getBoardDispatch()->supportsRequestCount())
+			boardwindow->getUi()->reviewButton->setEnabled(TRUE);
+		else
+			boardwindow->getUi()->reviewButton->setEnabled(FALSE);*/
 		boardwindow->getUi()->adjournButton->setEnabled(TRUE);
-		boardwindow->getUi()->refreshButton->setEnabled(TRUE);
+		/* FIXME we could have the refreshButton refresh the observers on
+		 * IGS.  This requires a "supports" protocol function, etc., to
+		 * send the refresh.  Or we could just periodically refresh the
+		 * observers.
+		 * But note that its currently not "connect"ed to anything. */
+		//boardwindow->getUi()->refreshButton->setEnabled(TRUE);
+		boardwindow->getUi()->refreshButton->setEnabled(FALSE);
+		
 		boardwindow->getUi()->doneButton->setEnabled(FALSE);
 		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
 		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
@@ -403,7 +417,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 		boardwindow->getUi()->undoButton->setEnabled(TRUE);
 		boardwindow->getUi()->resignButton->setEnabled(TRUE);
 		boardwindow->getUi()->adjournButton->setEnabled(FALSE);
-		boardwindow->getUi()->refreshButton->setEnabled(FALSE);
+		//boardwindow->getUi()->refreshButton->setEnabled(FALSE);
 		boardwindow->getUi()->doneButton->setEnabled(FALSE);
 		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
 		boardwindow->getUi()->navButtonsFrame->setEnabled(FALSE);
@@ -429,7 +443,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 		boardwindow->getUi()->undoButton->setEnabled(true);
 		boardwindow->getUi()->resignButton->setEnabled(true);
 		boardwindow->getUi()->adjournButton->setEnabled(true);
-		boardwindow->getUi()->refreshButton->setEnabled(true);
+		//boardwindow->getUi()->refreshButton->setEnabled(true);
 		boardwindow->getUi()->doneButton->setEnabled(false);
 		boardwindow->getUi()->commentEdit->setReadOnly(true);
 		boardwindow->getUi()->navButtonsFrame->setEnabled(false);
@@ -457,7 +471,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 		boardwindow->getUi()->undoButton->setEnabled(TRUE);
 		boardwindow->getUi()->resignButton->setEnabled(TRUE);
 		boardwindow->getUi()->adjournButton->setEnabled(TRUE);
-		boardwindow->getUi()->refreshButton->setEnabled(TRUE);
+		//boardwindow->getUi()->refreshButton->setEnabled(TRUE);
 		boardwindow->getUi()->doneButton->setEnabled(FALSE);
 		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
 		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
