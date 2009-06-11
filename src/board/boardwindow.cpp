@@ -115,10 +115,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 		qDebug("qgoboard init failed\n");
 	}*/
 
-	/* FIXME since we're now having setGamePhase actually do something
-	 * we might want to use it here to set up the initial button
-	 * settings */
-	gamePhase = phaseOngoing;
+	setGamePhase(phaseOngoing);
 	show();
 	setFocus();
 
@@ -157,9 +154,17 @@ BoardWindow::~BoardWindow()
 
 void BoardWindow::closeEvent(QCloseEvent *e)
 {
+	if(gameData->gameMode == modeMatch)
+	{
+		
+		//return;
+	}
+	
 	/* We need to prompt user on close as well as
 	* set up code to send adjourn/resign signal, etc.
 	* Otherwise other client can actually get stuck */
+	/* We could modify qgoboard->getModified() to pop up
+	 * a window, and send any messages. */
 	if (checkModified()==1)		//checkModified needs to be checked out FIXME
 	{
 		e->accept();
@@ -307,7 +312,11 @@ void BoardWindow::setupBoardUI(void)
 	if (gameData->gameMode == modeMatch || gameData->gameMode == modeComputer)
 	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 	if(gameData->gameMode == modeMatch)
-	connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
+	{
+		connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
+		connect(ui.countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
+		connect(ui.drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
+	}
 	/* eb added this but I've had it in the setupUI function since
 	 * its more part of the UI than the board.  But maybe its better
 	 * or different here.  FIXME */
@@ -370,6 +379,7 @@ int BoardWindow::checkModified(bool /*interactive*/)
 void BoardWindow::gameDataChanged(void)
 {
 	interfaceHandler->updateCaption(gameData);
+	clockDisplay->setTimeSettings(gameData->timeSystem, gameData->maintime, gameData->periodtime, gameData->stones_periods);
 }
 
 void BoardWindow::setGameData(GameData *gd)
@@ -404,7 +414,8 @@ void BoardWindow::swapColors(bool noswap)
 		myColorIsWhite = true;
 	}
 	interfaceHandler->updateCaption(gameData);
-	getBoardHandler()->updateCursor();	//appropriate?
+	//getBoardHandler()->updateCursor();	//appropriate?
+	boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
 	//also need to start any timers if necessary
 	//also network timers in addition to game timers
 }
@@ -749,8 +760,7 @@ bool BoardWindow::doSave(QString fileName, bool force)
 }
 void BoardWindow::setGamePhase(GamePhase gp)
 {
-	gamePhase = gp;
-	/* FIXME We should set and clear buttons and the like here */
+	/* FIXME We should set and clear ALL buttons and the like here */
 	switch(gp)
 	{
 		case phaseEnded:
@@ -760,20 +770,43 @@ void BoardWindow::setGamePhase(GamePhase gp)
 				ui.resignButton->setDisabled(true);
 			if(ui.adjournButton)
 				ui.adjournButton->setDisabled(true);
-			if(ui.refreshButton)		//what the hell is this for FIXME
-				ui.refreshButton->setDisabled(true);
 			if(ui.passButton)
 				ui.passButton->setDisabled(true);
-			// right? enable done button?
-			// FIXME, not getting enabled...
+			if(ui.countButton)
+				ui.countButton->setDisabled(true);
+			if(ui.drawButton)
+				ui.drawButton->setDisabled(true);
+			/* Done button only for scoring, otherwise close
+			 * window */
 			if(ui.doneButton)
-				ui.doneButton->setEnabled(true);
+				ui.doneButton->setDisabled(true);
 			break;
 		case phaseOngoing:
 			/* among many other things: FIXME, adding as we go, for now,
 			 * sloppy */
 			if(ui.passButton)
 				ui.passButton->setEnabled(true);
+			if(gameData->undoAllowed)
+				ui.undoButton->setEnabled(true);
+			else
+				ui.undoButton->setEnabled(false);
+			if(gameData->gameMode == modeMatch)
+			{
+				if(gamePhase == phaseScore)	//was phaseScore
+					ui.undoButton->setText(tr("Undo"));
+				if(getBoardDispatch() && getBoardDispatch()->supportsRequestCount())
+					ui.countButton->setEnabled(true);
+				else
+					ui.countButton->setEnabled(false);
+				if(getBoardDispatch() && getBoardDispatch()->supportsRequestDraw())
+					ui.drawButton->setEnabled(true);
+				else
+					ui.drawButton->setEnabled(false);
+				if(getBoardDispatch() && getBoardDispatch()->supportsRequestAdjourn())
+					ui.adjournButton->setEnabled(true);
+				else
+					ui.adjournButton->setEnabled(false);
+			}
 			break;
 		case phaseScore:
 			/* Maybe we should take everything out of
@@ -783,8 +816,16 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * our turn.. also, should the button's being
 			 * disabled prevent sending the message instead
 			 * of the button checking state?  Probably. FIXME */
+			if(ui.countButton)
+				ui.countButton->setDisabled(true);
+			if(ui.undoButton && gameData->gameMode == modeMatch)
+			{
+				ui.undoButton->setText(tr("Match Mode"));
+				ui.undoButton->setEnabled(true);	//even in rated
+			}
 			if(ui.passButton)
 				ui.passButton->setDisabled(true);
+			//Disable the draw button? 
 			/* FIXME doublecheck, what is doneButton connected to
 			 * in observing a game ?? */
 			ui.doneButton->setEnabled(true);
@@ -792,6 +833,7 @@ void BoardWindow::setGamePhase(GamePhase gp)
 		default:
 			break;
 	}
+	gamePhase = gp;
 }
 
 /*
