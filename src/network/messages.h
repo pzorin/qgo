@@ -60,7 +60,7 @@ struct GameResult
 	float loser_score;
 	enum ResultType { SCORE, RESIGN, TIME, FORFEIT, DRAW } result;
 	GameResult() :  winner_color(stoneNone), winner_name(QString()), loser_name(QString()), winner_score(0.0), loser_score(0.0) {};
-	GameResult(StoneColor c, ResultType r) : winner_color(c), result(r) {};
+	GameResult(StoneColor c, ResultType r) : winner_color(c), winner_name(QString()), loser_name(QString()), winner_score(0.0), loser_score(0.0), result(r) {};
 	QString shortMessage(void)
 	{
 		QString msg;
