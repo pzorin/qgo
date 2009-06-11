@@ -9,6 +9,9 @@
 #include "gamedialogflags.h"
 #include "playergamelistings.h"
 
+#define PLAYERSLISTREFRESH_SECONDS		300
+#define GAMESLISTREFRESH_SECONDS		180
+
 IGSConnection::IGSConnection()
 {
 	init();
@@ -32,6 +35,8 @@ void IGSConnection::init(void)
 {
 	writeReady = false;
 	keepAliveTimer = 0;
+	playersListRefreshTimer = 0;
+	gamesListRefreshTimer = 0;
 	textCodec = QTextCodec::codecForLocale();
 	btime = new TimeRecord();
 	wtime = new TimeRecord();
@@ -119,7 +124,7 @@ void IGSConnection::sendMsg(unsigned int game_id, QString text)
 	}
 }
 
-void IGSConnection::sendMsg(const PlayerListing & player, QString text)
+void IGSConnection::sendMsg(PlayerListing & player, QString text)
 {
 	sendText("tell " + player.name + " " + text + "\r\n");
 	/* Taken from MainWindow::slot_talkTo */
@@ -198,6 +203,28 @@ void IGSConnection::sendPlayersRequest(void)
 void IGSConnection::sendGamesRequest(void)
 {
 	sendText("games\r\n");
+}
+
+void IGSConnection::periodicListRefreshes(bool b)
+{
+	if(b)
+	{
+		if(!playersListRefreshTimer)
+		{
+			playersListRefreshTimer = startTimer(PLAYERSLISTREFRESH_SECONDS * 1000);
+			gamesListRefreshTimer = startTimer(GAMESLISTREFRESH_SECONDS * 1000);
+		}
+	}
+	else
+	{
+		if(playersListRefreshTimer)
+		{
+			killTimer(playersListRefreshTimer);
+			killTimer(gamesListRefreshTimer);
+			playersListRefreshTimer = 0;
+			gamesListRefreshTimer = 0;
+		}
+	}
 }
 
 void IGSConnection::sendRoomListRequest(void)
@@ -367,7 +394,7 @@ void IGSConnection::sendMatchRequest(MatchRequest * mr)
 				color +
 				QString::number(mr->board_size) + " " +
 				QString::number(mr->maintime / 60) + " " +
-				QString::number(mr->periodtime) + "\r\n");
+				QString::number(mr->periodtime / 60) + "\r\n");
 	}
 	match_playerName = mr->opponent;
 }
@@ -1177,8 +1204,6 @@ void IGSConnection::handle_beep(QString line)
 void IGSConnection::handle_down(QString line)
 {
 	//4 **** Server shutdown started by admin. ****
-	/* FIXME Not sure how we want to handle this, but a disconnect
-	 * would probably be a good start */
 	if(line.contains("Server shutdown"))
 	{
 		getConsoleDispatch()->recvText("Server shutdown started by admin");
@@ -1492,12 +1517,6 @@ void IGSConnection::handle_games(QString line)
 	aGame->oneColorGo = false ;
 #endif //FIXME
 
-#ifdef FIXME
-			//sends signal to main windows (for lists)
-	//emit signal_game(aGame);
-			//sends signal to interface (for updating game infos)
-	//emit signal_gameInfo(aGame);
-#endif //FIXME
 	room->recvGameListing(aGame);
 	if(protocol_save_string == "restoring")
 	{
@@ -1642,6 +1661,7 @@ void IGSConnection::handle_info(QString line)
 		qDebug("Joined room number %d", number);
 		//FIXME, we need to reload the player
 		//and games lists here
+		//potentially something else does this? doublecheck
 	}
 	else if (line.indexOf("Channel") == 0) 
 	{
@@ -1915,9 +1935,13 @@ void IGSConnection::handle_info(QString line)
 			aMatch->their_rank = p->rank;
 		else
 		{
-			qDebug("No player listing line: %d!", __LINE__);
-			delete aMatch;
-			return;
+			PlayerListing * aPlayer = new PlayerListing();
+
+			aPlayer->name = aMatch->opponent;
+			room->recvPlayerListing(aPlayer);
+			delete aPlayer;			
+			p = room->getPlayerListing(aMatch->opponent);
+			sendStatsRequest(*p);
 		}
 		GameDialog * gameDialog = getGameDialog(*p);
 		gameDialog->recvRequest(aMatch, flags);
@@ -1949,7 +1973,8 @@ void IGSConnection::handle_info(QString line)
 		QString nr = element(line, 0, "[", "]");
 		QString opp = element(line, 3, " ");
 				////emit signal_matchCreate(nr, opp);
-		/* FIXME, this is probably where we should be doing something? */
+		/* FIXME, this is probably where we should be doing something? 
+		 * assuming its reliable */
 				
 	}
 			// 9 frosla withdraws the match offer.
@@ -2884,6 +2909,9 @@ void IGSConnection::handle_move(QString line)
 							aGameData->board_size = mr->board_size;
 							aGameData->komi = mr->komi;
 							aGameData->handicap = mr->handicap;
+							aGameData->maintime = mr->maintime;
+							aGameData->periodtime = mr->periodtime;
+							aGameData->stones_periods = mr->stones_periods;
 							if(aGameData->white_name == getUsername())
 							{
 								aGameData->white_rank = mr->our_rank;
@@ -2992,8 +3020,7 @@ void IGSConnection::handle_move(QString line)
 		aGameData->black_prisoners = element(line, 1, "(", " ").toInt();
 		btime->time = element(line, 10, " ").toInt();
 		btime->stones_periods = element(line, 10, " ", ")").toInt();
-		/* FIXME the stones can be negative in WING and I'm not sure
-		 * what that means */
+		/* FIXME Doublecheck in WING */
 				/* Is this a new game? 
 		* This is this ugly, convoluted way of checking, but I guess
 		* it gets around the IGS protocol, maybe I'll think of another way later.
@@ -3033,6 +3060,11 @@ void IGSConnection::handle_move(QString line)
 		if(need_time)
 		{
 			need_time = false;
+			/* This is if we get here from a seek game FIXME
+			 * it would obviously make sense to standardize this
+			 * somehow but the protocol isn't too consistent
+			 * not to mention the official client having
+			 * occasional bugs so... */
 			if(1)	//FIXME when you see a byoyomi game here
 			{
 				aGameData->timeSystem = canadian;
@@ -3098,6 +3130,17 @@ void IGSConnection::handle_move(QString line)
 			qDebug("Possible move messages received but no board dispatch");
 			return;
 		}
+		/* If we're getting moves that we can use, then
+		* they have some existing board, which means a boardrecord
+		* which should be more reliable than the listing */
+		GameData * r  = boarddispatch->getGameData();
+		//GameListing * l = room->getGameListing(protocol_save_int);
+		if(!r)
+		{
+			qDebug("Move for unlisted game");
+			return;
+		}
+		
 		/* Not sure what undos look like anymore FIXME */
 		
 		/* If there's multiple moves on a line, the ones
@@ -3106,6 +3149,13 @@ void IGSConnection::handle_move(QString line)
 		aMove->flags = MoveRecord::NONE;
 		aMove->number = element(line, 0, "(").toInt();
 		QString point = element(line, 0, " ", "EOL");
+		if(aMove->number == 0)
+			r->move_list_received = true;
+		else if(!r->move_list_received)
+		{
+			delete aMove;
+			return;
+		}
 		if(point.contains("Handicap", Qt::CaseInsensitive))
 		{
 			/* As long as handicap is
@@ -3133,19 +3183,9 @@ void IGSConnection::handle_move(QString line)
 		}
 		else
 		{
-			/* If we're getting moves that we can use, then
-			 * they have some existing board, which means a boardrecord
-			 * which should be more reliable than the listing */
-			GameData * r  = boarddispatch->getGameData();
-			//GameListing * l = room->getGameListing(protocol_save_int);
-			if(!r)
-			{
-				qDebug("Move for unlisted game");
-				delete aMove;
-				return;
-			}
+			if(!r->handicap)
+				aMove->number++;
 			//qDebug("board size from record: %d", r->board_size);
-			
 			aMove->x = (int)(point.toAscii().at(0));
 			aMove->x -= 'A';
 			point.remove(0,1);

@@ -20,7 +20,7 @@ class IGSConnection : public NetworkConnection
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);
 		virtual void sendMsg(unsigned int game_id, QString text);
-		virtual void sendMsg(const PlayerListing & player, QString text);
+		virtual void sendMsg(PlayerListing & player, QString text);
 		virtual void sendToggle(const QString & param, bool val);
 		virtual void sendObserve(const GameListing & game);
 		virtual void stopObserving(const GameListing & game);
@@ -28,6 +28,7 @@ class IGSConnection : public NetworkConnection
 		virtual void sendStatsRequest(const PlayerListing & opponent);
 		virtual void sendPlayersRequest(void);
 		virtual void sendGamesRequest(void);
+		virtual void periodicListRefreshes(bool b);
 		void sendRoomListRequest(void);
 		virtual void sendMatchInvite(const PlayerListing & player);
 		virtual void adjournGame(const GameListing & game);
@@ -56,18 +57,17 @@ class IGSConnection : public NetworkConnection
 		
 		virtual void requestGameInfo(unsigned int game_id);
 		virtual void requestGameStats(unsigned int game_id);
+		
 		virtual unsigned int rankToScore(QString rank);
+		/* I thought we didn't start time until after first move
+		 * but I check today and we do, so I'll change it... doublecheck */
+		virtual bool startTimerOnOpen(void) { return true; };
 		virtual bool supportsRequestAdjourn(void) { return true; };
 		virtual bool supportsSeek(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; };
 		virtual bool supportsChannels(void) { return true; };
 		virtual unsigned long getGameDialogFlags(void);
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); };
-	
-		/* This is because of that silly IGShandler crap and because I don't want
-		* connectionState to be public, just protected */
-		void setPassFailed(void) { connectionState = PASS_FAILED; };
-		void setProtocolError(void) { connectionState = PROTOCOL_ERROR; };
 			
 	protected:
 		virtual bool readyToWrite(void);
@@ -116,6 +116,8 @@ class IGSConnection : public NetworkConnection
 		
 		bool writeReady;
 		int keepAliveTimer;
+		int playersListRefreshTimer;
+		int gamesListRefreshTimer;
 		
 		QString protocol_save_string;
 		int protocol_save_int;
