@@ -18,7 +18,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);
 		virtual void sendMsg(unsigned int game_id, QString text);
-		virtual void sendMsg(const PlayerListing & player, QString text);
+		virtual void sendMsg(PlayerListing & player, QString text);
 		virtual void sendToggle(const QString & param, bool val);
 		virtual void sendObserve(const GameListing & game);
 		virtual void sendObserveOutside(const GameListing & game);
@@ -30,6 +30,10 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendMatchInvite(const PlayerListing & opponent);
 		virtual void adjournGame(const GameListing & game);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
+		virtual void sendRequestCount(unsigned int game_id);
+		virtual void sendRequestMatchMode(unsigned int game_id);
+		virtual void sendAcceptRequestMatchMode(unsigned int game_id);
+		virtual void sendDeclineRequestMatchMode(unsigned int game_id);
 		virtual void sendTimeLoss(unsigned int game_id);
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void sendRematchRequest(void);
@@ -60,6 +64,8 @@ class CyberOroConnection : public NetworkConnection
 		//virtual void removeFan(PlayerListing & player);
 		virtual void addBlock(PlayerListing & player);
 		virtual void removeBlock(PlayerListing & player);
+		virtual char * sendAddBlock(int * size, void * p);
+		virtual char * sendRemoveBlock(int * size, void * p);
 		
 		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		BoardDispatch * getBoardFromOurOpponent(QString opponent);
@@ -68,12 +74,20 @@ class CyberOroConnection : public NetworkConnection
 		
 		virtual void closeBoardDispatch(unsigned int game_id);
 		
+		virtual int gd_verifyBoardSize(int v);
+		virtual QTime gd_checkMainTime(TimeSystem s, const QTime & t);
+		virtual QTime gd_checkPeriodTime(TimeSystem s, const QTime & t);
+		virtual unsigned int gd_checkPeriods(TimeSystem s, unsigned int p);
+		
 		virtual void requestGameInfo(unsigned int game_id);
 		virtual void requestGameStats(unsigned int game_id);
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
 		virtual bool playerTrackingByID(void) { return true; };
 		virtual bool supportsMultipleUndo(void) { return true; };
+		virtual bool supportsRequestMatchMode(void) { return true; };
+		virtual bool supportsRequestAdjourn(void) { return true; };
+		virtual bool supportsRequestCount(void) { return true; };
 		virtual bool supportsObserveOutside(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
 		virtual bool supportsRematch(void) { return true; };
@@ -94,10 +108,12 @@ class CyberOroConnection : public NetworkConnection
 		void sendSetChatMsg(unsigned short phrase_id);
 		void sendObserveAfterJoining(const GameListing & game);
 		void sendFinishObserving(const GameListing & game);
-		void sendLeave(const GameListing & game);
+		void sendLeave(const GameListing &);
 		void sendGameUpdate(unsigned short game_code);
 		void sendKeepAlive(const GameListing & game);
 		void sendRequestKeepAlive(const GameListing & game);
+		enum FriendsBlocksMsgType { fbm_addFriend, fbm_removeFriend, fbm_addBlock, fbm_removeBlock };
+		char * sendFriendsBlocksMsg(int * size, void * p, enum FriendsBlocksMsgType f);
 		void sendMatchInvite(const PlayerListing & player, bool accepting);
 		void sendDeclineMatchInvite(const PlayerListing & player);
 		void sendDeclineMatchOffer(const PlayerListing & player);
@@ -145,6 +161,8 @@ class CyberOroConnection : public NetworkConnection
 		void handleGameMsg(unsigned char * msg, unsigned int size);
 		void handleBettingMatchStart(unsigned char * msg, unsigned int size);
 		void handleBettingMatchResult(unsigned char * msg, unsigned int size);
+		void handleRequestCount(unsigned char * msg, unsigned int size);
+		void handleRequestMatchMode(unsigned char * msg, unsigned int size);
 		void handleTimeLoss(unsigned char * msg, unsigned int size);
 		void handleMove(unsigned char * msg, unsigned int size);
 		void handleUndo(unsigned char * msg, unsigned int size);
