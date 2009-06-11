@@ -24,10 +24,7 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 	//data used for observing games, when getting the already played moves
 	stated_mv_count = -1;	
 
-	if (gd)
-		gameData = new GameData (gd);//FIXME This is not safe to duplicate the gameData. Should stay single in boardHandler
-	else
-		gameData = NULL;
+	gameData = gd;
 
 //TODO get the sound from correct path
 	clickSound = SoundFactory::newSound( "/usr/share/qgo2/sounds/stone.wav" );
@@ -159,7 +156,7 @@ void qGoBoard::setHandicap(int handicap)
 	
 	// Change cursor stone color
 	//board->setCurStoneColor();
-	//gameData->handicap = handicap;
+	gameData->handicap = handicap;
 	boardwindow->setGamePhase(store);
 	//board->getInterfaceHandler()->disableToolbarButtons();
 }
@@ -565,8 +562,6 @@ bool qGoBoard::getBlackTurn(bool time)
 	return TRUE;
 }
 
- 
-
 /*
  * This functions initialises the scoring mode
  */
@@ -638,6 +633,39 @@ void qGoBoard::markLiveArea(int x, int y)
 	
 	tree->getCurrent()->getMatrix()->markAreaAlive(x, y);
 	boardwindow->getBoardHandler()->countScore();
+}
+
+bool qGoBoard::getModified(void)
+{
+	switch(boardwindow->getGameMode())
+	{
+		case modeMatch:
+		{
+#ifdef FIXME
+			/* Still fixing adjourn/resume code FIXME */
+			/* A bit awkward here, but I'm feeling lazy, should be in
+			 * qgoboard_network FIXME */
+			QMessageBox mb(tr("Resign?"),
+				       QString(tr("Resign game with %1\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+					       QMessageBox::Question,
+	   				 QMessageBox::Yes | QMessageBox::Default,
+    					 QMessageBox::No | QMessageBox::Escape,
+    					 QMessageBox::NoButton);
+			mb.raise();
+//			qgo->playPassSound();
+
+			if (mb.exec() == QMessageBox::Yes)
+			{
+				boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
+				boardwindow->getUi()->resignButton->setEnabled(false);		//FIXME okay? don't want to send resign twice
+			}
+#endif //FIXME
+			break;
+		}
+		default:
+			break;
+	}
+	return isModified;
 }
 
 void qGoBoard::slotUndoPressed(void)
