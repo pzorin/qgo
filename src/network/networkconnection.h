@@ -42,17 +42,17 @@ class NetworkConnection : public QObject
 		void sendConsoleText(const char * text);
 		virtual void sendDisconnect(void) = 0;
 		virtual void sendMsg(unsigned int game_id, QString text) = 0;
-		virtual void sendMsg(const PlayerListing & player, QString text) = 0;
+		virtual void sendMsg(PlayerListing & player, QString text) = 0;
 		virtual void sendToggle(const QString & param, bool val) = 0;
 		virtual void sendObserve(const GameListing & game) = 0;
 		virtual void sendObserveOutside(const GameListing &) {};	//optional
 		virtual void stopObserving(const GameListing & game) = 0;
-		virtual void stopReviewing(const GameListing & game) = 0;
+		virtual void stopReviewing(const GameListing & game) = 0;	//shouldn't this be optional?
 		virtual void sendStatsRequest(const PlayerListing & opponent) = 0;
 		virtual void sendPlayersRequest(void) = 0;
 		virtual void sendGamesRequest(void) = 0;
 		virtual void sendMatchInvite(const PlayerListing &) = 0;
-		virtual void adjournGame(const GameListing &) = 0;
+		virtual void adjournGame(const GameListing &) {};
 		virtual void sendTime(BoardDispatch *) {};
 		virtual void sendMove(unsigned int game_id, class MoveRecord * m) = 0;
 		virtual void sendRequestCount(unsigned int) {};
@@ -105,6 +105,8 @@ class NetworkConnection : public QObject
 		virtual char * sendAddFriend(int *, void *) { return NULL;};
 		virtual void recvFriendResponse(int, char *) {};
 		virtual char * sendRemoveFriend(int *, void *) { return NULL;};
+		virtual char * sendAddBlock(int *, void *) { return NULL; };
+		virtual char * sendRemoveBlock(int *, void *) { return NULL; };
 		
 		std::vector<class FriendFanListing *> & getFriendsList(void) { return friendedList; };
 		std::vector<class FriendFanListing *> & getFansList(void) { return watchedList; };
@@ -121,13 +123,14 @@ class NetworkConnection : public QObject
 		class MatchRequest * getAndCloseGameDialog(const PlayerListing & opponent);
 		Talk * getTalk(PlayerListing & opponent);
 		Talk * getIfTalk(PlayerListing & opponent);
-		void closeTalk(PlayerListing & opponent);
+		virtual void closeTalk(PlayerListing & opponent);
 		
 		const QString & getUsername(void) { return username; };
 		virtual const PlayerListing & getOurListing(void) = 0;
 		virtual unsigned short getRoomNumber(void) { return 0; };
 		virtual void requestGameInfo(unsigned int game_id) = 0;
 		virtual void requestGameStats(unsigned int game_id) = 0;
+		virtual void periodicListRefreshes(bool) {};
 		virtual unsigned int rankToScore(QString rank) = 0;
 		virtual unsigned long getGameDialogFlags(void) { return 0; };
 		virtual void getAndSetFriendFanType(PlayerListing & player);
