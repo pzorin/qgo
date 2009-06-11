@@ -279,7 +279,7 @@ void MainWindow::slot_currentChanged(int i)
 
 
 /*
- * saves the parameters on the 2 lats tabs into the QSettings 
+ * saves the parameters on the 2 last tabs into the QSettings 
  */
 void MainWindow::saveSettings()
 {
