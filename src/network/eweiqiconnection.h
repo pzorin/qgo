@@ -7,5 +7,5 @@ class EWeiQiConnection : public TygemConnection
 		//~EWeiQiConnection();
 	private:
 		virtual int requestServerInfo(void);
-		virtual QString getTygemGameRecordQString(class GameData *);
+		virtual QByteArray getTygemGameRecordQByteArray(class GameData *);
 };
