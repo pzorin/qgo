@@ -1500,9 +1500,14 @@ void MainWindow::slot_cbquiet()
 
 	if (val)
 	{
+		if(connection)
+			connection->periodicListRefreshes(false);	
 		// if 'quiet' button is once set to true the list is not reliable any longer
-//		gamesListSteadyUpdate = false;
-//		playerListSteadyUpdate = false;
+	}
+	else
+	{
+		if(connection)
+			connection->periodicListRefreshes(true);
 	}
 }
 
