@@ -23,6 +23,13 @@
 #define STR_OFFSET 2000
 /* #define DEBUG_CODEC */
 
+/* FIXME consider a parser for other file types, what few there are.
+ * but for instance the tygem protocols use .gibo format and that code
+ * is super ugly.  We could make a better parser for it and put it in here
+ * also allowing the reading of files.  This will become more useful if
+ * we add in the stuff to retrieve game records from the server.
+ * oro also has its own format I think and there's a few others.  There's
+ * no reason why we shouldn't be able to handle them */
 
 // Note: This class is a DIRTY UGLY Hack.
 // It probably does all the stuff books tell you never ever to do.
