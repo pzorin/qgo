@@ -45,7 +45,7 @@ public:
 	int getMoveNumber(void);
 	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual void setModified(bool b= true)		{ isModified = b;}
-	virtual bool getModified();
+	virtual bool getModified()			{ return isModified; }
 	virtual bool getPlaySound()			{ return playSound;}
 	virtual void setPlaySound(bool b) 		{ playSound = b; }
 	

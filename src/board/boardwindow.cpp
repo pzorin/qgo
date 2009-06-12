@@ -154,18 +154,12 @@ BoardWindow::~BoardWindow()
 
 void BoardWindow::closeEvent(QCloseEvent *e)
 {
-	if(gameData->gameMode == modeMatch)
+	if(gameData->gameMode == modeMatch && !gameData->fullresult)
 	{
-		
-		//return;
+		qgoboard->slotResignPressed();
+		e->ignore();
 	}
-	
-	/* We need to prompt user on close as well as
-	* set up code to send adjourn/resign signal, etc.
-	* Otherwise other client can actually get stuck */
-	/* We could modify qgoboard->getModified() to pop up
-	 * a window, and send any messages. */
-	if (checkModified()==1)		//checkModified needs to be checked out FIXME
+	else if (checkModified()==1)	
 	{
 		e->accept();
 		if(dispatch)

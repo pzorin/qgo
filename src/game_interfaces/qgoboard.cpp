@@ -635,39 +635,6 @@ void qGoBoard::markLiveArea(int x, int y)
 	boardwindow->getBoardHandler()->countScore();
 }
 
-bool qGoBoard::getModified(void)
-{
-	switch(boardwindow->getGameMode())
-	{
-		case modeMatch:
-		{
-#ifdef FIXME
-			/* Still fixing adjourn/resume code FIXME */
-			/* A bit awkward here, but I'm feeling lazy, should be in
-			 * qgoboard_network FIXME */
-			QMessageBox mb(tr("Resign?"),
-				       QString(tr("Resign game with %1\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
-					       QMessageBox::Question,
-	   				 QMessageBox::Yes | QMessageBox::Default,
-    					 QMessageBox::No | QMessageBox::Escape,
-    					 QMessageBox::NoButton);
-			mb.raise();
-//			qgo->playPassSound();
-
-			if (mb.exec() == QMessageBox::Yes)
-			{
-				boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
-				boardwindow->getUi()->resignButton->setEnabled(false);		//FIXME okay? don't want to send resign twice
-			}
-#endif //FIXME
-			break;
-		}
-		default:
-			break;
-	}
-	return isModified;
-}
-
 void qGoBoard::slotUndoPressed(void)
 {
 	/* Are we supposed to make a brother node or something ??? FIXME */
