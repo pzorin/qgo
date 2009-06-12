@@ -117,6 +117,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	
 	// connecting the server tab buttons
+	connect(ui.cb_connect, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
 	connect( ui.setQuietMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
 	connect( ui.setOpenMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
 	connect( ui.setLookingMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );

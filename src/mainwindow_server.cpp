@@ -1448,6 +1448,12 @@ void MainWindow::slot_checkbox(int nr, bool val)
 	}
 }
 
+void MainWindow::slot_cbconnectChanged(int)
+{
+	if(!ui.pb_connect->isChecked())
+		ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+}
+
 /*
  * checkbox looking cklicked
  */
