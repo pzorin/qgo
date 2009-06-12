@@ -207,7 +207,7 @@ void GameDialog::ratedCB_changed(bool checked)
 			PlayerListing us = connection->getOurListing();
 			getProperKomiHandicap(us.rank, opponent.rank, &(current_match_request->komi), &(current_match_request->handicap));
 			ui.handicapSpin->setValue(current_match_request->handicap);
-			ui.komiSpin->setValue(current_match_request->komi);
+			ui.komiSpin->setValue((int)(current_match_request->komi - 0.5));	//.5 is added by dialog ui
 			ui.komiSpin->setEnabled(false);
 			ui.handicapSpin->setEnabled(false);
 		}
