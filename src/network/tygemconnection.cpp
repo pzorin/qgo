@@ -970,8 +970,12 @@ void TygemConnection::sendLogin(bool response_bit, bool change_server)
 	delete[] packet;
 }
 
-void TygemConnection::handleLogin(unsigned char * msg, unsigned int /*length*/)
+void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 {
+	if(length != 0x38)
+	{
+		qDebug("Login of strange size: %d", length);
+	}
 	unsigned char * p = msg;
 
 	//0038 0698 0100 0200 228b ae64 0000 0000
@@ -5143,40 +5147,46 @@ QString TygemConnection::getCountryFromCode(unsigned char code)
  * doing now */
  /* FIXME, we may be getting this twice, meaning we may not have to request it
   * or possibly we may not have to request it for eweiqi or something. */
-void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int size)
 {
 	//0018 0696 
 	//0001 2066 696e 7472 7573 696f 6e00 6672 6965 6e00
-	unsigned char * p = msg;
 	unsigned char name[15];
+	unsigned int i;
+	
 	QString encoded_name;
 	name[15] = 0x00;
-	int records = (p[0] << 8) + p[1];
-	p += 2;
+	int records = (msg[0] << 8) + msg[1];
+	if((records * 16) + 4 != (int)size)
+	{
+		qDebug("FriendsBlock message of strange size: %d", size);
+		//return;
+	}
 #ifdef RE_DEBUG
 	printf("FriendsBlocksList: %d\n", records);
-	for(unsigned int i = 0; i < size; i++)
+	for(i = 0; i < size; i++)
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	p += 2;		//2066
+	//i = 2;		//2066
+	i = 4;
 	while(records--)
 	{
-		strncpy((char *)name, (char *)p, 14);
+		strncpy((char *)name, (char *)&(msg[i]), 14);
 		encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-		p += 15;
+		i += 15;
 		/* FIXME somehow, its possible for the same name to be on the official
 		 * server list more than once */
-		if(*p == 0x00)
+		if(msg[i] == 0x00)
 			friendedList.push_back(new FriendFanListing(encoded_name, friendfan_notify_default));
-		else if(*p == 0xff)
+		else if(msg[i] == 0xff)
 			blockedList.push_back(new FriendFanListing(encoded_name, friendfan_notify_default));
 		else
-			printf("unknown indicator: %02x\n", *p);
+			printf("unknown indicator: %02x\n", msg[i]);
 #ifdef RE_DEBUG
-		printf("%02x %s %s\n", *p, encoded_name.toLatin1().constData(), name);
+		printf("%02x %s %s\n", msg[i], encoded_name.toLatin1().constData(), name);
 #endif //RE_DEBUG
-		p++;
+		i++;
 	}
 }
 
@@ -6508,8 +6518,9 @@ void TygemConnection::handleBettingMatchStart(unsigned char * , unsigned int )
 //ca5d	chat rooms also
 //this could potentially also be a join room
 //oro FIXME
-void TygemConnection::handleCreateRoom(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleCreateRoom(unsigned char * /*msg*/, unsigned int /*size*/)
 {
+#ifdef FIXME
 	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * aPlayer;
@@ -6609,6 +6620,7 @@ void TygemConnection::handleCreateRoom(unsigned char * msg, unsigned int /*size*
 	aGameListing = room->getGameListing(room_number);
 	//printf("Pushing back %p with %d\n", aGameListing, aGameListing->number);
 	//rooms_without_games.push_back(aGameListing);
+#endif //FIXME
 }
 
 //oro only??
@@ -6631,7 +6643,7 @@ void TygemConnection::killActiveMatchTimers(void)
  * note that sendMatchResult sends them which is awkward
  * because of "match" versus "game" FIXME */
 //0670
-void TygemConnection::handleGameResult2(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleGameResult2(unsigned char * msg, unsigned int size)
 {
 	BoardDispatch * boarddispatch;
 	GameData * gameData;
@@ -6639,6 +6651,10 @@ void TygemConnection::handleGameResult2(unsigned char * msg, unsigned int /*size
 	//0003 0001 6269 7473 0000 0000 0000 0000
 	//0000 0014 6269 7473 0000 0000 0000 0002
 	//0000 0000 0000 0000
+	if(size != 0x28)
+	{
+		qDebug("Game result 2 msg of strange size: %d", size);
+	}
 	char name[15];
 	strncpy((char *)name, (char *)&(msg[4]), 14);
 	
@@ -6705,7 +6721,7 @@ void TygemConnection::handleGameResult2(unsigned char * msg, unsigned int /*size
 }
 
 //0672
-void TygemConnection::handleGameResult(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 {
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
@@ -6713,6 +6729,10 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int /*size*
 	bool white_wins2;	//FIXME with white_wins below
 	bool white_loses_on_time = false, black_loses_on_time = false;
 	unsigned char victory_condition_code;
+	if(size != 0x24)
+	{
+		qDebug("Game result of strange size: %d", size);
+	}
 	//this is sent if we join an ended game as well
 	//must be result where 0671 is match opened
 	//0670 is sent if, for instance, resign
@@ -6944,8 +6964,13 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int /*size*
 	//d8bd bab9 e820 babb bcb1 b8ae b1d7 0000
  * so not really sure what they are... that's got some names in there, could
  * even be a comment of some kind
+ * likely a game update
 */
+#ifdef RE_DEBUG
+void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int size)
+#else
 void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int /*size*/)
+#endif //RE_DEBUG
 {
 	/* Change name FIXME, definitely not enter score, more likely
 	 * time stop.  Except, they're variable size... Its even possible
@@ -7003,7 +7028,7 @@ void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int /*size*/
 //067b  black keeps hitting confirm confirm c7 versus c5 is likely score?
 //0010 0101 7065746572697573000000000000000865746572697573000000000200c7000000000000
 //0x067b:   
-void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 {
 	BoardDispatch * boarddispatch;
 	GameData * game;
@@ -7011,7 +7036,11 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int /*size*
 	unsigned char name[15];
 	name[14] = 0x00;
 	QString encoded_name, encoded_name2;
-	
+	if(size < 34)
+	{
+		qDebug("Bad endgame msg, size: %d", size);
+		return;
+	}
 	//I"m thinking actually draw request
 	//no I think this is a request, count maybe?  or is that 6a?
 	//maybe winner message?, unlikely, several sent and 0201c5 as well below
@@ -7024,7 +7053,7 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int /*size*
 	//01c5 aa01 0600 0000 030b 00a0 031e 0060
 	//01c50001caa4c1fa3200000000000000000000127368656e676c6f6e6732000201c9000000000000
 	//and then right before DSC move message:
-
+	
 	//0x067b: 01c50101c4f4d2bbb5b6000000000000000000124e6965596944616f0000000201c6000000000000
 	//0x0683: 01c5 aa01 0401 0100 030b 00a0 031e 0060
 	//0x067b: 01c50001caa4c1fa3200000000000000000000127368656e676c6f6e6732000200c6000000000000
@@ -7247,7 +7276,7 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int /*size*
 	}
 }
 
-void TygemConnection::handleCountRequest(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleCountRequest(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
 	BoardDispatch * boarddispatch;
@@ -7256,6 +7285,10 @@ void TygemConnection::handleCountRequest(unsigned char * msg, unsigned int /*siz
 	unsigned char name[15];
 	name[14] = 0x00;
 	QString encoded_name;
+	if(size != 40)
+	{
+		qDebug("Count request of strange size: %d", size);
+	}
 	//0x066a
 	//030a 0001 696e 7472 7573 696f 6e00 0000 0000 0009
 	//696e 7472 7573 696f 6e00 0002 0000 0000 0000 0000
@@ -7295,7 +7328,7 @@ void TygemConnection::handleCountRequest(unsigned char * msg, unsigned int /*siz
 		boarddispatch->recvRequestCount();
 }
 
-void TygemConnection::handleCountRequestResponse(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleCountRequestResponse(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
 	BoardDispatch * boarddispatch;
@@ -7304,11 +7337,16 @@ void TygemConnection::handleCountRequestResponse(unsigned char * msg, unsigned i
 	unsigned char name[15];
 	name[14] = 0x00;
 	QString encoded_name;
+	if(size != 0x24)
+	{
+		qDebug("Count request response of strange size: %d", size);
+	}
 	//0x066a
 	//030a 0001 696e 7472 7573 696f 6e00 0000 0000 0009
 	//696e 7472 7573 696f 6e00 0002 0000 0000 0000 0000
-	//0x066b: 00da0001c6f7bcbcc0ccb5b7000000000000001
-	//66d696e676d696e67303100000100000000000000
+	//0x066b: 00da 0001 c6f7 bcbc c0cc b5b7 0000 0000 
+			//0000 0016 6d69 6e67 6d69 6e67 3031 0000 
+			//0100 0000 0000 0000
 
 	game_number = (msg[0] << 8) + msg[1];	
 	boarddispatch = getIfBoardDispatch(game_number);
@@ -7529,7 +7567,7 @@ enum TygemConnection::TimeFlags TygemConnection::handleTimeChunk(BoardDispatch *
   * number per game in case that's a kind of prevention against replays
   * or something.  */
 //0668
-void TygemConnection::handleMove(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 {
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
@@ -7558,11 +7596,11 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int /*size*/)
 	//53 55 52 20 30 20 31 38 31 20 32 20 0A 00 00 00  SUR 0 181 2 ....
 	
 	previous_opponent_move_pass = false;
-	/*if(size != 32)
+	if(size < 24)		//FIXME
 	{
-		qDebug("Move of strange size: %d", size);
+		qDebug("Bad move msg, size: %d", size);
 		return;
-	}*/
+	}
 #ifdef RE_DEBUG
 	printf("Move msg:\n");
 	for(unsigned int i = 0; i < size; i++)
@@ -7810,8 +7848,12 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int /*size*/)
 		printf("Unknown: %s\n", (char *)p);
 }
 
-void TygemConnection::handlePass(unsigned char * msg, unsigned int /*size*/, int /* FIXME */)
+void TygemConnection::handlePass(unsigned char * msg, unsigned int size, int /* FIXME */)
 {
+	if(size != 0x24)
+	{
+		qDebug("Pass msg of strange size: %d", size);
+	}
 	unsigned char * p = msg;
 	BoardDispatch * boarddispatch;
 	int game_number = (p[0] << 8) + p[1];
@@ -7836,7 +7878,8 @@ void TygemConnection::handlePass(unsigned char * msg, unsigned int /*size*/, int
 	
 	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	//0669 0002 0101 7065 7465 7269 7573 0000 
+	//0669 
+	//0002 0101 7065 7465 7269 7573 0000 
 	//0000 0000 0008 6574 6572 6975 7300 0000
 	//0002 0000 0000 0000 0000
 
@@ -7932,7 +7975,11 @@ int TygemConnection::compareRanks(QString rankA, QString rankB)
 //38 00 00 02 00 00 00 B2 00 A0 00 00 00 FF 00 00  8...............
 //00 00 00 00  
 //0639
+#ifdef RE_DEBUG
+void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int size)
+#else
 void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int /*size*/)
+#endif //RE_DEBUG
 {
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
@@ -7999,7 +8046,7 @@ void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int /*size
 }
 
 //0671
-void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int /*size*/)
+void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
@@ -8012,7 +8059,10 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int /*size
 	QString encoded_nameA, encoded_nameB;
 	QString encoded_nameA2, encoded_nameB2;
 	QString rankA, rankB;
-	
+	if(size != 92)
+	{
+		qDebug("Match open msg of strange size: %d", size);
+	}
 	/* Is there a board_size FIXME or not? */
 	game_number = (p[0] << 8) + p[1];
 	p += 2;
@@ -8517,78 +8567,6 @@ void TygemConnection::handleResumeMatch(unsigned char * msg, unsigned int size)
 	//068e 0005 0000
 	//7065 7465 7269 7573 0000 0000 0000 0000 
 	//696e 7472 7573 696f 6e00 0000 0000 0001
-}
-
-//b5b3	//oro FIXME
-void TygemConnection::handleAdjournRequest(unsigned char * msg, unsigned int /*size*/)
-{
-	unsigned char * p = msg;
-	//unsigned short opponent_id = p[0] + (p[1] << 8);
-	unsigned short game_code = p[2] + (p[3] << 8);
-	unsigned short game_number = game_code_to_number[game_code];
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_number);
-	if(!boarddispatch)
-	{
-		qDebug("Received adjourn decline on nonexistent board");
-		return;
-	}
-	boarddispatch->recvRequestAdjourn();
-
-	p += 2;
-	//their id game id, maybe color?
-#ifdef RE_DEBUG
-	qDebug("b5b3 size: %d", size);
-#endif //RE_DEBUG
-}
-
-//bfb3	//oro FIXME
-void TygemConnection::handleAdjournDecline(unsigned char * msg, unsigned int /*size*/)
-{
-	unsigned char * p = msg;
-	//unsigned short opponent_id = p[0] + (p[1] << 8);
-	unsigned short game_code = p[2] + (p[3] << 8);
-	unsigned short game_number = game_code_to_number[game_code];
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_number);
-	if(!boarddispatch)
-	{
-		qDebug("Received adjourn decline on nonexistent board");
-		return;
-	}
-	boarddispatch->recvRefuseAdjourn();
-
-	p += 2;
-	//their id game id, maybe color?
-//5304 430d 0100 0071
-#ifdef RE_DEBUG
-	printf("0xbfb3 likely adjourn decline: ");
-	for(int i = 0; i < (int)size; i++)
-		printf("%02x", msg[i]);
-	printf("\n");
-
-	qDebug("bfb3 size: %d", size);
-#endif //RE_DEBUG
-}
-
-//bab3 //oro FIXME
-void TygemConnection::handleAdjourn(unsigned char * msg, unsigned int /*size*/)
-{
-	unsigned char * p = msg;
-	//unsigned short opponent_id = p[0] + (p[1] << 8);
-	unsigned short game_code = p[2] + (p[3] << 8);
-	unsigned short game_number = game_code_to_number[game_code];
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_number);
-	if(!boarddispatch)
-	{
-		qDebug("Received adjourn  on nonexistent board");
-		return;
-	}
-	/* FIXME, why do we need to close the board dispatch, shouldn't
-	* the adjournGame do that?  or should it, maybe we can talk after? */
-	boarddispatch->adjournGame();
-	//connection->closeBoardDispatch(memory);
-#ifdef RE_DEBUG
-	qDebug("bab3 size: %d", size);
-#endif //RE_DEBUG
 }
 
 //0643

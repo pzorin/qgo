@@ -2793,7 +2793,11 @@ char * CyberOroConnection::sendAddFriend(int * size, void * p)
 	return sendFriendsBlocksMsg(size, p, fbm_addFriend);
 }
 
+#ifdef RE_DEBUG
+void CyberOroConnection::recvFriendResponse(int size, char * msg)
+#else
 void CyberOroConnection::recvFriendResponse(int size, char * /*msg*/)
+#endif //RE_DEBUG
 {
 	if(size != 8)
 	{
@@ -4590,7 +4594,7 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 }
 
 //0x55c3
-void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
 	//2a02ffff 0000 0000 63ea000083cedc9
@@ -4603,6 +4607,7 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 		qDebug("Can't get player for set chat msg\n");
 		return;
 	}
+	qDebug("handleSetPhraseChatMsg size %d", size);
 	/* Our chat appears back in all the rooms were in???
 	 * why?? 
 	 * FIXME room_were_in must not be the whole picture */
@@ -4810,8 +4815,9 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 	unsigned char * p = msg;
 	unsigned char * text = new unsigned char[size - 7];
 #ifdef RE_DEBUG
+	unsigned int i;
 	printf("** msg size: %d: ", size);
-	for(unsigned int i = 0; i < size; i++)
+	for(i = 0; i < size; i++)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -4825,7 +4831,7 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 	{
 #ifdef RE_DEBUG
 		printf("%s says to you ", player->name.toLatin1().constData());
-		for(i = 0; i < (int)size - 8; i++)
+		for(i = 0; i < size - 8; i++)
 			printf("%02x", text[i]);
 		printf("\n");
 #endif //RE_DEBUG
@@ -5237,7 +5243,7 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 }
 
 //1a81
-void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
@@ -5248,6 +5254,10 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int /*size*
 	PlayerListing * white;
 	PlayerListing * owner;
 	GameListing * aGameListing = 0;
+	if(size != 22)
+	{
+		qDebug("game msg of strange size %d", size);
+	}
 #ifdef RE_DEBUG
 	printf("1a81 message: ");
 #endif //RE_DEBUG
@@ -5379,7 +5389,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int /*size*
 
 /* I think we get these when we try to observe broadcasted, or betting games
  * as well. */
-void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
@@ -5393,9 +5403,13 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	int black_periods, white_periods;
 	bool black_in_byoyomi, white_in_byoyomi;
 	bool add_listing = false;
+	if(size != 116)
+	{
+		qDebug("Betting Match msg of strange size %d", size);
+	}
 #ifdef RE_DEBUG
 	printf("New Betting Match: ");
-	for(unsigned int i = 0; i < (int)size; i++)
+	for(unsigned int i = 0; i < size; i++)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -5613,14 +5627,17 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 
 //ca5d	chat rooms also
 //this could potentially also be a join room
-void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * aPlayer;
 	unsigned short room_number;
 	unsigned char room_type;
-	
+	if(size != 60)
+	{
+		qDebug("create room msg of strange size: %d", size);
+	}
 	aPlayer = room->getPlayerListing(p[0] + (p[1] << 8));
 #ifdef RE_DEBUG
 	if(aPlayer)
@@ -5719,12 +5736,15 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int /*si
 }
 
 //56f4
-void CyberOroConnection::handleBettingMatchResult(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleBettingMatchResult(unsigned char * msg, unsigned int size)
 {
 	unsigned short game_code = msg[0] + (msg[1] << 8);
 	unsigned short game_id = game_code_to_number[game_code];
 	//FIXME
-	
+	if(size != 16)
+	{
+		qDebug("betting match result of strange size %d", size);
+	}
 #ifdef RE_DEBUG
 	printf("56f4: likely betting match result: %d\n", game_id);
 	for(unsigned int i = 0; i < size; i++)
@@ -5787,7 +5807,11 @@ void CyberOroConnection::handleGamePhaseUpdate(unsigned char * msg, unsigned int
 }
 
 //50c3
+#ifdef RE_DEBUG
+void CyberOroConnection::handleMsg3(unsigned char * msg, unsigned int size)
+#else
 void CyberOroConnection::handleMsg3(unsigned char * /*msg*/, unsigned int size)
+#endif //RE_DEBUG
 {
 	//FIXME better name, what was this again?
 	// maybe its the timer msg 
@@ -5932,7 +5956,7 @@ void CyberOroConnection::handleNigiri(unsigned char * msg, unsigned int size)
 }
 
 /* This comes before we've gotten the ids */
-void CyberOroConnection::handleFriends(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleFriends(unsigned char * msg, unsigned int size)
 {
 	unsigned short friend_records;
 	unsigned char * p = msg;
@@ -5942,6 +5966,7 @@ void CyberOroConnection::handleFriends(unsigned char * msg, unsigned int /*size*
 	friend_records = p[0] + (p[1] << 8);
 	p += 2;
 	//check msg size???! FIXME
+	qDebug("handleFriends %d %d", friend_records, size);
 	for(i = 0; i < friend_records; i++)
 	{
 		//name padded to 10, plus two bytes for flags	
@@ -5994,7 +6019,11 @@ void CyberOroConnection::handleMsg2(unsigned char * msg, unsigned int size)
 }
 
 //0x69c3:
+#ifdef RE_DEBUG
+void CyberOroConnection::handleRematchRequest(unsigned char * msg, unsigned int size)
+#else
 void CyberOroConnection::handleRematchRequest(unsigned char * /*msg*/, unsigned int size)
+#endif //RE_DEBUG
 {
 	/* In ORO win client this actually looks just like a matchinvite */
 	if(size != 6)
@@ -6027,7 +6056,11 @@ void CyberOroConnection::handleRematchRequest(unsigned char * /*msg*/, unsigned 
 }
 
 //0x6ec3:
+#ifdef RE_DEBUG
+void CyberOroConnection::handleRematchAccept(unsigned char * msg, unsigned int size)
+#else
 void CyberOroConnection::handleRematchAccept(unsigned char * /*msg*/, unsigned int size)
+#endif //RE_DEBUG
 {
 	bool were_black;
 	if(size != 6)
@@ -6115,13 +6148,13 @@ void CyberOroConnection::handleRematchAccept(unsigned char * /*msg*/, unsigned i
 
 /* This is also used during game negotiation, not just rematches */
 //0x327d
-void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int size)
 {
 	PlayerListing * player;
 	unsigned char * p = msg;
-#ifdef RE_DEBUG
-	printf("327d size: %d\n", size);
-#endif //RE_DEBUG
+
+	qDebug("handleMatchDecline size: %d", size);
+
 	if(p[0] + (p[1] << 8) != our_player_id)
 	{
 		qDebug("*** Woah, 327d rematch decline not meant for us!");
@@ -6293,7 +6326,11 @@ void CyberOroConnection::startMatchTimers(bool ourTurn)
  * Basically we need to watch this very carefully, to see
  * clicks and unlicks, or even observe a game that we play. */
 //e2b31200 2f05 640b 2f05 2863 0201 1106 0804
+#ifdef RE_DEBUG
+void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int size)
+#else
 void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*size*/)
+#endif //RE_DEBUG
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
@@ -6386,7 +6423,11 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 //f1b3
 /* This is definitely like an opponent has hit done kind of
  * msg, not that that means anything to us until we hit done */
+#ifdef RE_DEBUG
+void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int size)
+#else
 void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int /*size*/)
+#endif //RE_DEBUG
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
@@ -6455,7 +6496,11 @@ void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int /*si
 }
 
 //e7b3
+#ifdef RE_DEBUG
+void CyberOroConnection::handleScore(unsigned char * msg, unsigned int size)
+#else
 void CyberOroConnection::handleScore(unsigned char * msg, unsigned int /*size*/)
+#endif //RE_DEBUG
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
@@ -6526,16 +6571,18 @@ void CyberOroConnection::handleScore(unsigned char * msg, unsigned int /*size*/)
 }
 
 //c4b3
-void CyberOroConnection::handleRequestCount(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleRequestCount(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
 	unsigned short game_code, game_number;
-#ifdef RE_DEBUG
-	printf("c4b3 size: %d\n", size);	//should be 12 - 4
-#endif //RE_DEBUG
+
+	if(size != 8)
+	{
+		qDebug("Request count msg of strange size: %d", size);	//should be 12 - 4
+	}
 	//4503 3403 0100 0052
 	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
@@ -6566,16 +6613,18 @@ void CyberOroConnection::handleRequestCount(unsigned char * msg, unsigned int /*
 }
 
 //05b4
-void CyberOroConnection::handleRequestMatchMode(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleRequestMatchMode(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
 	unsigned short game_code, game_number;
-#ifdef RE_DEBUG
-	printf("05b4 size: %d\n", size);	//should be 12 - 4
-#endif //RE_DEBUG
+	if(size != 8)
+	{
+		qDebug("Request match mode msg of strange size: %d", size);
+	}
+
 	//4503 d802 0000 007c
 	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
@@ -6606,16 +6655,16 @@ void CyberOroConnection::handleRequestMatchMode(unsigned char * msg, unsigned in
 }
 
 //f6b3
-void CyberOroConnection::handleTimeLoss(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleTimeLoss(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	PlayerListing * player;
 	unsigned short game_code, game_number;
-#ifdef RE_DEBUG
-	printf("f6b3 size: %d\n", size);	
-#endif //RE_DEBUG
+	
+	qDebug("handleTimeLoss size %d", size);
+
 	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
@@ -6874,10 +6923,15 @@ void CyberOroConnection::handleDeclineUndo(unsigned char * msg, unsigned int siz
 #endif //RE_DEBUG
 }
 
-void CyberOroConnection::handleAcceptUndo(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleAcceptUndo(unsigned char * msg, unsigned int size)
 {
 	unsigned short player_id, game_code;
 	unsigned char * p = msg;
+	
+	if(size != 10)
+	{
+		qDebug("accept undo msg of strange size: %d", size);
+	}
 	
 	player_id = p[0] + (p[1] << 8);
 	game_code = p[2] + (p[3] << 8);
@@ -6907,7 +6961,7 @@ void CyberOroConnection::handleAcceptUndo(unsigned char * msg, unsigned int /*si
 	boarddispatch->recvMove(move);
 	delete move;
 	
-	//4a06 e40b 01000500001d
+	//4a06 e40b 0100 0500 001d
 #ifdef RE_DEBUG
 	printf("0xebaf accept undo: ");
 	for(int i = 0; i < (int)size; i++)
@@ -7067,15 +7121,16 @@ void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 // note that we receive response on this, so likely we should
 // set ourself, check box there FIXME
 //9a65 maybe?!?!? not a result... probably invitation allowed!!!
-void CyberOroConnection::handleInvitationSettings(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleInvitationSettings(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	PlayerListing * player;
-#ifdef RE_DEBUG
-	printf("0x9a65: ");
-#endif //RE_DEBUG
-	
+
+	if(size != 8)
+	{
+		qDebug("Invitation settings msg of strange size %d", size);
+	}
 	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
@@ -7211,7 +7266,7 @@ int CyberOroConnection::compareRanks(QString rankA, QString rankB)
  * make sure we recognize, and then a d2af, which should trigger
  * a rematch accept somehow.  Also likely currently a segmentation fault
  * on this. */
-void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
@@ -7231,7 +7286,10 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int /*s
 	int board_size;
 	bool nigiri = false;
 	bool memo, review, estimate;
-	
+	if(size != 156)
+	{
+		qDebug("Match Opened msg of strange size %d", size);
+	}
 #ifdef RE_DEBUG
 	printf("d2af: \n");
 	for(unsigned int i = 0; i < size; i++)
@@ -7607,7 +7665,7 @@ void CyberOroConnection::handleObserveAfterJoining(unsigned char * msg, unsigned
 //736f756c0000a8060000000000000000000010270000000000000000000000000000000000000000
 //00000000000000000000000000000000000000000000000000000000000000000000000000000000
 
-void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int /*size*/)
+void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
 	unsigned short periodtime;
@@ -7618,7 +7676,7 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int /*si
 	MatchRequest mr;
 	Room * room = getDefaultRoom();
 	unsigned short id = p[0] + (p[1] << 8);
-	
+	qDebug("handleMatchOffer size %d", size);
 	if(id == our_player_id)
 		mr.opponent_is_challenger = false;
 	else
