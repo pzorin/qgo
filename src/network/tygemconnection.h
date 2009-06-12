@@ -204,9 +204,6 @@ class TygemConnection : public NetworkConnection
 		QString getStatusFromCode(unsigned char code, QString rank);
 		int compareRanks(QString rankA, QString rankB);
 		void handleCreateRoom(unsigned char * msg, unsigned int size);
-		void handleAdjournRequest(unsigned char * msg, unsigned int size);
-		void handleAdjournDecline(unsigned char * msg, unsigned int size);
-		void handleAdjourn(unsigned char * msg, unsigned int size);
 		void handleMatchInvite(unsigned char * msg, unsigned int size);
 		void handleMatchOffer(unsigned char * msg, unsigned int size, enum MIVersion = offer);
 		void sendCreateRoom(void);
