@@ -1633,7 +1633,7 @@ void IGSConnection::handle_info(QString line)
 	Room * room = getDefaultRoom();
 	static QString memory_str;
 	static int memory = 0;
-	qDebug("9: %s", line.toLatin1().constData());
+	//qDebug("9: %s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();
 			// status messages
 	if (line.contains("Set open to be"))
