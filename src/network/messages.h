@@ -1,5 +1,6 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
+#include <QCoreApplication>
 #include "connectiontypes.h"
 #include "defines.h"
 /* This file is defined as a source file in src.pro because of a
@@ -16,6 +17,9 @@
  * we thought that was how "const" worked then, but maybe its not. It might
  * just depend on that data not getting deleted while a connectionInfo struct
  * uses it... so far this is a safe bet... but its something to worry about.*/
+
+#define tr_macro(x)   QCoreApplication::translate("Game messages", x, "", QCoreApplication::DefaultCodec)
+	
 
 class PlayerListing;
 
@@ -65,20 +69,20 @@ struct GameResult
 	{
 		QString msg;
 		if(winner_color == stoneWhite)
-			msg = "W+";	
+			msg = tr_macro("W+");	
 		else
-			msg = "B+";	
+			msg = tr_macro("B+");	
 
 		switch(result)
 		{
 			case FORFEIT:
-				msg += "F";
+				msg += tr_macro("F");
 				break;
 			case TIME:
-				msg += "T";
+				msg += tr_macro("T");
 				break;
 			case RESIGN:
-				msg += "R";
+				msg += tr_macro("R");
 				break;
 			case SCORE:
 				msg += QString::number(winner_score - loser_score); 
@@ -100,78 +104,80 @@ struct GameResult
 				if(winner_color == stoneWhite)
 				{
 					if(loser_name != QString())
-						msg = loser_name + "(B) forfeits";
+						msg = loser_name + tr_macro("(B) forfeits");
 					else
-						msg = "Black forfeits";
+						msg = tr_macro("Black forfeits");
 				}
 				else
 				{
 					if(loser_name != QString())
-						msg = loser_name + "(W) forfeits";
+						msg = loser_name + tr_macro("(W) forfeits");
 					else
-						msg = "White forfeits";
+						msg = tr_macro("White forfeits");
 				}
 				break;
 			case TIME:
 				if(winner_color == stoneWhite)
 				{
 					if(loser_name != QString())
-						msg = loser_name + "(B) has lost on time";
+						msg = loser_name + tr_macro("(B) has lost on time");
 					else
-						msg = "Black has lost on time";
+						msg = tr_macro("Black has lost on time");
 				}
 				else
 				{
 					if(loser_name != QString())
-						msg = loser_name + "(W) has lost on time";
+						msg = loser_name + tr_macro("(W) has lost on time");
 					else
-						msg = "White has lost on time";
+						msg = tr_macro("White has lost on time");
 				}
 				break;
 			case RESIGN:
 				if(winner_color == stoneWhite)
 				{
 					if(loser_name != QString())
-						msg = loser_name + "(B) resigns";
+						msg = loser_name + tr_macro("(B) resigns");
 					else
-						msg = "Black resigns";
+						msg = tr_macro("Black resigns");
 				}
 				else
 				{
 					if(loser_name != QString())
-						msg = loser_name + "(W) resigns";
+						msg = loser_name + tr_macro("(W) resigns");
 					else
-						msg = "White resigns";
+						msg = tr_macro("White resigns");
 				}
 				break;
+				/* FIXME score translation is likely inappropriate given
+				 * number and different translation grammars */
 			case SCORE:
 				if(winner_color == stoneWhite)
 				{
 					if(winner_name != QString())
-						msg = winner_name + "(W)";
+						msg = winner_name + tr_macro("(W)");
 					else
-						msg = "White";
+						msg = tr_macro("White");
 					if(margin)
-						msg += " wins by " + \
+						msg += tr_macro(" wins by ") + \
 						QString::number(margin);
 					else
-						msg += " wins";
+						msg += tr_macro(" wins");
 				}
 				else
 				{
 					if(winner_name != QString())
-						msg = winner_name + "(B)";
+						msg = winner_name + tr_macro("(B)");
 					else
-						msg = "Black";
+						msg = tr_macro("Black");
 					if(margin)
-						msg = "Black wins by " + \
+						msg = tr_macro("Black wins by ") + \
 						QString::number(margin);
 					else
-						msg += " wins";
+						msg += tr_macro(" wins");
 				}
 				break;
 			case DRAW:
-				msg = "Draw";	//FIXME
+				msg = tr_macro("Draw");	//FIXME
 				break;
 		}
 		return msg;
