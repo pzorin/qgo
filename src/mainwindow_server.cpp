@@ -196,6 +196,17 @@ void MainWindow::setupConnection(void)
 	{
 		ui.createRoomPB->hide();
 	}
+	if(connection->supportsRefreshListsButtons())
+	{
+		ui.pbRefreshPlayers->show();
+		ui.pbRefreshGames->show();
+		//network/room has the connect calls
+	}
+	else
+	{
+		ui.pbRefreshPlayers->hide();
+		ui.pbRefreshGames->hide();
+	}
 	
 	if(connection->supportsSeek())
 	{
@@ -951,7 +962,8 @@ void MainWindow::recvSeekCancel(void)
 
 }
 
-void MainWindow::recvSeekPlayer(QString player, QString condition)
+/* FIXME This is for IGS, needs to be added it */
+void MainWindow::recvSeekPlayer(QString /*player*/, QString /*condition*/)
 {
 #ifdef FIXME
 	QString Rk;
@@ -1050,7 +1062,7 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 	unsigned long rf = connection->getRoomStructureFlags();
 	/* FIXME, either way, we should keep a list of RoomListings
 	 * some where */
-	qDebug("Recv room listing %d %s", room.number, room.name.toLatin1().constData());
+	//qDebug("Recv room listing %d %s", room.number, room.name.toLatin1().constData());
 	std::vector <const RoomListing *>::iterator it = roomList.begin();
 	while(it != roomList.end())
 	{
@@ -1514,149 +1526,6 @@ void MainWindow::slot_cbquiet()
 	{
 		if(connection)
 			connection->periodicListRefreshes(true);
-	}
-}
-
-
-
-
-void MainWindow::matchRequest(MatchRequest * mr)
-{
-	GameDialog *dlg = NULL;
-	qDebug("Match has been Requested");
-	qDebug("IS ANYTHING CALLING THIS? FIXME");
-
-	for (int i=0; i < matchList.count(); i++)
-	{
-		if (matchList.at(i)->getUi().playerOpponentEdit->text() == mr->opponent)
-			dlg = matchList.at(i);
-	}
-
-	if (!dlg)
-	{
-		//dlg = new GameDialog();
-
-		matchList.insert(0, dlg);//new GameDialog(/* tr("New Game")*/);
-		connect(dlg,
-			SIGNAL(signal_removeDialog(GameDialog *)), 
-			this, 
-			SLOT(slot_removeDialog(GameDialog *)));
-
-		connect(dlg,
-			SIGNAL(signal_sendCommand(const QString&, bool)),
-			this,
-			SLOT(slot_sendCommand(const QString&, bool)));
-
-#ifdef OLD
-		connect(parser,
-			SIGNAL(signal_matchCreate(const QString &, const QString &)),
-			this,
-			SLOT(slot_removeDialog(const QString &, const QString &)));
-
-		connect(parser,
-			SIGNAL(signal_notOpen(const QString&, int)),
-			dlg,
-			SLOT(slot_notOpen(const QString&, int)));
-		connect(parser,
-			SIGNAL(signal_komiRequest(const QString&, int, int, bool)),
-			dlg,
-			SLOT(slot_komiRequest(const QString&, int, int, bool)));
-		connect(parser,
-			SIGNAL(signal_opponentOpen(const QString&)),
-			dlg,
-			SLOT(slot_opponentOpen(const QString&)));
-		connect(parser,
-			SIGNAL(signal_dispute(const QString&, const QString&)),
-			dlg,
-			SLOT(slot_dispute(const QString&, const QString&)));
-
-
-	}
-
-	if (mr->nmatch)
-	{
-		//specific behavior here : IGS nmatch not totally supported
-		// disputes are hardly supported
-		dlg->set_is_nmatch(true);
-		dlg->getUi().timeSpin->setRange(0,100);
-		dlg->getUi().timeSpin->setValue(mr->time.toInt()/60);
-		dlg->getUi().byoTimeSpin->setRange(0,100);
-		dlg->getUi().byoTimeSpin->setValue(mr->byotime.toInt()/60);
-		dlg->getUi().BY_label->setText(tr(" Byo Time : (") + mr->byostones+ tr(" stones)"));
-		dlg->getUi().handicapSpin->setRange(1,9);
-		dlg->getUi().handicapSpin->setValue(mr->handicap);
-		dlg->getUi().boardSizeSpin->setRange(1,19);
-		dlg->getUi().boardSizeSpin->setValue(mr->board_size);
-	}
-	else
-	{
-		dlg->set_is_nmatch(false);
-		dlg->getUi().timeSpin->setRange(0,1000);
-		dlg->getUi().timeSpin->setValue(mr->time.toInt());
-		dlg->getUi().byoTimeSpin->setRange(0,100);
-		dlg->getUi().byoTimeSpin->setValue(mr->byotime.toInt());
-		dlg->getUi().handicapSpin->setEnabled(false);
-		dlg->getUi().play_nigiri_button->setEnabled(false);
-		dlg->getUi().boardSizeSpin->setRange(1,19);
-		dlg->getUi().boardSizeSpin->setValue(mr->board_size);
-
-		dlg->getUi().timeTab->removeTab(1);
-	}
-		
-
-//	QString rk = getPlayerRk(opponent);
-	// look for players in playerlist
-	QTreeWidgetItemIterator lv(ui.ListView_players);
-	QTreeWidgetItem *lvi;
-	for (; (*lv); lv++)
-	{
-		lvi = *lv;
-		// compare names
-		if (lvi->text(1) == mr->opponent)
-			dlg->set_oppRk(lvi->text(2));
-		break;
-	}
-
-
-//	dlg->set_oppRk(rk);
-	/* Once we figure out what we're doing with the listView
-	 * classes, then we'll add getOurListing() which will use
-	 * them and the connection->user[name] to look up a player
-	 * listing for ourself, maybe out of a list it keeps.  If
-	 * we want to really do this right, then everything having to do
-	 * with those lists should be really dynamic.  clicks, everything.
-	 * They shouldn't be just flat lists */
-	PlayerListing * ourAccount = getOurListing(); 
-	QString myrk = myAccount->get_rank();
-	dlg->set_myRk(myrk);
-
-	dlg->getUi().playerOpponentEdit->setText(opponent);		
-	dlg->getUi().playerOpponentEdit->setReadOnly(true);		
-//	dlg->getUi().playerOpponentRkEdit->setText(rk);
-	dlg->set_myName( myAccount->acc_name);
-
-	if (mr->opp_plays_white)
-	{
-		dlg->getUi().play_black_button->setChecked(true);
-	}
-	else if (mr->opp_plays_nigiri)
-	{
-		dlg->getUi().play_nigiri_button->setChecked(true);
-	}
-	else
-		dlg->getUi().play_white_button->setChecked(true);		
-
-	dlg->getUi().buttonDecline->setEnabled(true);
-	dlg->getUi().buttonOffer->setText(tr("Accept"));
-	dlg->getUi().buttonCancel->setDisabled(true);
-
-	dlg->slot_changed();
-	dlg->show();
-//	dlg->setWindowState(Qt::WindowActive);
-	dlg->raise();
-
-	gameSound->play();
-#endif //OLD
 	}
 }
 

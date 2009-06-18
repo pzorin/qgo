@@ -34,7 +34,6 @@ public:
 	MainWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 );
 	~MainWindow();
 
-	void matchRequest(class MatchRequest * mr);
 	void set_sessionparameter(QString par, bool val); //FIXME
 	void loadSgfFile(QString fn);
 	void onConnectionError(void);
