@@ -66,6 +66,7 @@ class IGSConnection : public NetworkConnection
 		virtual bool supportsSeek(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; };
 		virtual bool supportsChannels(void) { return true; };
+		virtual bool supportsRefreshListsButtons(void) { return true; };
 		virtual unsigned long getGameDialogFlags(void);
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); };
 			

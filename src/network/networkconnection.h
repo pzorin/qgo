@@ -3,7 +3,6 @@
 #include <map>
 #include <QtCore>
 #include <QtNetwork>
-//#include "networkdispatch.h"
 #include "messages.h"
 #include "newline_pipe.h"
 
@@ -146,6 +145,7 @@ class NetworkConnection : public QObject
 		virtual bool supportsRequestCount(void) { return false; };
 		virtual bool supportsObserveOutside(void) { return false; };
 		virtual bool supportsServerChange(void) { return false; };
+		virtual bool supportsRefreshListsButtons(void) { return false; };
 		virtual bool supportsRematch(void) { return false; };
 		virtual bool startTimerOnOpen(void) { return false; };	//name?? no "supports"?
 		virtual bool clientCountsTime(void) { return true; };
