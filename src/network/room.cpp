@@ -500,8 +500,6 @@ void Room::unRegisterGameListing(unsigned int key)
 	gameListingRegistry->deleteEntry(key);
 }
 
-/* FIXME We got here with out a playerListingRegistry on an IGS
- * connect !!! */
 PlayerListing * Room::getPlayerListing(const QString & name)
 {
 	PlayerListing * p;
@@ -732,6 +730,11 @@ void Room::recvPlayerListing(PlayerListing * player)
 void Room::recvExtPlayerListing(class PlayerListing * player)
 {
 	mainwindow->slot_statsPlayer(player);
+}
+
+void Room::updatePlayerListing(class PlayerListing & player)
+{
+	playerListModel->updateListing(&player);
 }
 
 void Room::recvGameListing(GameListing * game)

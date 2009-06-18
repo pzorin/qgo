@@ -93,6 +93,8 @@ void FriendsListDialog::populateLists(void)
 	}
 }
 
+/* FIXME this is getting the wrong entry, like if I click on 0th, it takes
+ * the 1st off */
 void FriendsListDialog::slot_showPopupFriends(const QPoint & iPoint)
 {
 	popup_item = friendsView->indexAt(iPoint);
@@ -170,6 +172,7 @@ void FriendsListDialog::slot_addFriend(void)
  * if we don't, just to update that one entry FIXME */
 void FriendsListDialog::slot_removeFriend(void)
 {
+	friendsListModel->removeListing(popup_playerlisting);
 	connection->removeFriend(*popup_playerlisting);
 }
 
@@ -185,6 +188,7 @@ void FriendsListDialog::slot_addFan(void)
 
 void FriendsListDialog::slot_removeFan(void)
 {
+	fansListModel->removeListing(popup_playerlisting);
 	connection->removeFan(*popup_playerlisting);
 }
 
@@ -200,6 +204,7 @@ void FriendsListDialog::slot_addBlock(void)
 
 void FriendsListDialog::slot_removeBlock(void)
 {
+	blockedListModel->removeListing(popup_playerlisting);
 	connection->removeBlock(*popup_playerlisting);
 }
 

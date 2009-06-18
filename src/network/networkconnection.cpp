@@ -273,6 +273,7 @@ void NetworkConnection::addFriend(PlayerListing & player)
 	//FIXME presumably they're not already on the list because
 	//the popup checked that in constructing the popup menu but...
 	friendedList.push_back(new FriendFanListing(player.name, friendfan_notify_default));
+	getDefaultRoom()->updatePlayerListing(player);
 }
 
 void NetworkConnection::removeFriend(PlayerListing & player)
@@ -288,6 +289,7 @@ void NetworkConnection::removeFriend(PlayerListing & player)
 			break;
 		}
 	}
+	getDefaultRoom()->updatePlayerListing(player);
 }
 
 void NetworkConnection::addFan(PlayerListing & player)
@@ -298,6 +300,7 @@ void NetworkConnection::addFan(PlayerListing & player)
 		removeBlock(player);
 	player.friendFanType = PlayerListing::watched;
 	watchedList.push_back(new FriendFanListing(player.name, friendfan_notify_default));
+	getDefaultRoom()->updatePlayerListing(player);
 }
 
 void NetworkConnection::removeFan(PlayerListing & player)
@@ -313,6 +316,7 @@ void NetworkConnection::removeFan(PlayerListing & player)
 			break;
 		}
 	}
+	getDefaultRoom()->updatePlayerListing(player);
 }
 
 void NetworkConnection::addBlock(PlayerListing & player)

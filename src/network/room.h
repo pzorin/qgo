@@ -37,6 +37,7 @@ class Room : public QObject
 		BoardDispatch * getNewBoardDispatch(unsigned int key);
 		void recvPlayerListing(class PlayerListing * g);
 		void recvExtPlayerListing(class PlayerListing * player);
+		void updatePlayerListing(class PlayerListing & player);
 		void recvGameListing(class GameListing * g);
 		void sendStatsRequest(PlayerListing & opponent);
 	protected:

@@ -2762,8 +2762,7 @@ void CyberOroConnection::addFriend(PlayerListing & player)
 		return;
 	}
 	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendAddFriend);
-	return;
-	/* We also need to do connection->addFriend FIXME */
+	NetworkConnection::addFriend(player);
 }
 
 char * CyberOroConnection::sendFriendsBlocksMsg(int * size, void *p, enum FriendsBlocksMsgType f)
@@ -2825,6 +2824,7 @@ void CyberOroConnection::removeFriend(PlayerListing & player)
 		return;
 	}
 	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendRemoveFriend);
+	NetworkConnection::removeFriend(player);
 }
 
 char * CyberOroConnection::sendRemoveFriend(int * size, void * p)
@@ -2841,6 +2841,7 @@ void CyberOroConnection::addBlock(PlayerListing & player)
 		return;
 	}
 	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendAddBlock);
+	NetworkConnection::addBlock(player);
 }
 
 void CyberOroConnection::removeBlock(PlayerListing & player)
@@ -2852,6 +2853,7 @@ void CyberOroConnection::removeBlock(PlayerListing & player)
 		return;
 	}
 	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendRemoveBlock);
+	NetworkConnection::removeBlock(player);
 }
 
 char * CyberOroConnection::sendAddBlock(int * size, void * p)
@@ -4596,6 +4598,10 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 //0x55c3
 void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned int size)
 {
+	if(size != 16)
+	{
+		qDebug("set phrase chat msg of strange size: %d", size);
+	}
 	unsigned char * p = msg;
 	//2a02ffff 0000 0000 63ea000083cedc9
 	unsigned short id = p[0] + (p[1] << 8);
@@ -4607,7 +4613,6 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 		qDebug("Can't get player for set chat msg\n");
 		return;
 	}
-	qDebug("handleSetPhraseChatMsg size %d", size);
 	/* Our chat appears back in all the rooms were in???
 	 * why?? 
 	 * FIXME room_were_in must not be the whole picture */
@@ -5695,7 +5700,7 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 	//{
 #ifdef RE_DEBUG
 		//other than 60 ?? FIXME
-		printf("chat room strange size: %d\n", size);
+		printf("ca5d: \n");
 		for(unsigned int i = 0; i < size; i++)
 			printf("%02x", msg[i]);
 		printf("\n");
@@ -5822,7 +5827,6 @@ void CyberOroConnection::handleMsg3(unsigned char * /*msg*/, unsigned int size)
 	}
 #ifdef RE_DEBUG
 	unsigned char * p = msg;
-	printf("50c3 size: %d\n", size);
 	printf("**** 50c3: ");
 	for(unsigned int i = 0; i < 4; i++)
 		printf("%02x", p[i]);
@@ -5966,7 +5970,7 @@ void CyberOroConnection::handleFriends(unsigned char * msg, unsigned int size)
 	friend_records = p[0] + (p[1] << 8);
 	p += 2;
 	//check msg size???! FIXME
-	qDebug("handleFriends %d %d", friend_records, size);
+	qDebug("handleFriends %d %d", friend_records, size);		//4 520 suggests (4 * 12) + 2 + 470
 	for(i = 0; i < friend_records; i++)
 	{
 		//name padded to 10, plus two bytes for flags	
