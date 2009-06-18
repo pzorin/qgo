@@ -747,10 +747,12 @@ void CyberOroConnection::sendObserveAfterJoining(const GameListing & game)
 	packet[7] = (game.number >> 8);
 	for(i = 8; i < (int)length; i++)
 		packet[i] = 0x00;	//password in here? all password?
+#ifdef RE_DEBUG
 	printf("Sending observe to %s vs %s: %d (%d)\n", game.white_name().toLatin1().constData(), game.black_name().toLatin1().constData(), game.game_code, game.number);
 	for(i = 0; i < (int)length; i++)
 		printf("%02x ", (unsigned char)packet[i]);
 	printf("\n");
+#endif //RE_DEBUG
 	encode((unsigned char *)packet, 0x12);
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending observe");
