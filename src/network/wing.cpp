@@ -406,7 +406,9 @@ void WingConnection::handle_info(QString line)
 			aMatch->maintime = line.section(" ",4,4).toInt();
 			aMatch->periodtime = line.section(" ",5,5).toInt();
 			aMatch->nmatch = false;
-		//}
+#ifdef FIXME
+		}
+#endif //FIXME
 		PlayerListing * p = room->getPlayerListing(aMatch->opponent);
 		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
