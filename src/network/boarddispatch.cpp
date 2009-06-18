@@ -343,7 +343,7 @@ void BoardDispatch::sendKibitz(QString text)
 }
 
 /* FIXME: is this legitimate?  doesn't qgoboard_network handle
- * entering score mode within set_move?  why would we do it here?
+ * entering score mode within handleMove?  why would we do it here?
  * find out who calls this and why.  Could be for special cases
  * but... Okay... looks like everyone calls it... not sure
  * what to say about that... might be redundant with set_move

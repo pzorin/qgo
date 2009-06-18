@@ -40,8 +40,6 @@ BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int * board_size)
 	// initialises the timer
 	wheelTime = QTime::currentTime();
 
-	// Set game data to default
-//	gameData = new GameData();
 	
 //	clipboardNode = NULL;
 //	nodeResults = NULL;

@@ -625,10 +625,8 @@ void BoardWindow::slotDuplicate()
 	//b->setGamePhase(this->getGamePhase());				//maybe?
 
 	b->loadSGF(0,sgf);
-	/* Why is this an issue, whats weird about 0 move? */
-	/* This isn't an issue for all services, I think ORO is now
-	 * broken and IGS is broken separately, we need to fix set_move
-	 * and then come back here and fix this FIXME */
+	
+	//doublecheck FIXME
 	/* Note also that this does not duplicate any ui.board->marks
 	 * that are on the original board.  I think score marks qualify
 	 * but come up some other way as well */
