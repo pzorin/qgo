@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS>
+<TS version="2.0">
 <context>
     <name></name>
     <message>
-        <location filename="../mainwindow_server.cpp" line="1701"/>
         <source>Teaching</source>
         <translation type="obsolete">教學</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="1750"/>
         <source>Offer</source>
         <translation type="obsolete">提出/接受</translation>
     </message>
@@ -16,97 +15,79 @@
 <context>
     <name>Board</name>
     <message>
-        <location filename="" line="0"/>
         <source>Pass</source>
         <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>vs.</source>
         <translation type="obsolete">對</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>W</source>
         <translation type="obsolete">白</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>B</source>
         <translation type="obsolete">黑</translation>
     </message>
     <message>
-        <location filename="../board/board.cpp" line="1410"/>
+        <location filename="../board/board.cpp" line="1324"/>
         <source>Failed to save image!</source>
         <translation>儲存圖像失敗！</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black wins with %1</source>
         <translation type="obsolete">黑棋贏 %1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White wins with %1</source>
         <translation type="obsolete">白棋贏 %1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Jigo</source>
         <translation type="obsolete">Jigo</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>XML</source>
         <translation type="obsolete">XML</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Could not find file:</source>
         <translation type="obsolete">無法找到檔案：</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Could not open file:</source>
         <translation type="obsolete">無法開啟檔案：</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Invalid text encoding given. Please check preferences!</source>
         <translation type="obsolete">文字編碼方式無效。請檢查你的偏好設定！</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Reading sgf file...</source>
         <translation type="obsolete">讀取 SGF 棋譜檔中…</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Abort</source>
         <translation type="obsolete">中止</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Corrupt SGF file at position</source>
         <translation type="obsolete">SGF 棋譜檔損壞</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No filename given!</source>
         <translation type="obsolete">沒有檔案名稱！</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Importing ASCII failed. Clipboard empty?</source>
         <translation type="obsolete">匯入 ASCII 失敗！剪貼簿為空白？</translation>
     </message>
@@ -114,28 +95,29 @@
 <context>
     <name>BoardWindow</name>
     <message>
-        <location filename="../board/boardwindow.cpp" line="357"/>
+        <location filename="../board/boardwindow.cpp" line="352"/>
         <source>You modified the game.
 Do you want to save your changes?</source>
         <translation type="unfinished">你已修改對局
 你想要儲存這些變更嗎?</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="358"/>
+        <location filename="../board/boardwindow.cpp" line="353"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="358"/>
+        <location filename="../board/boardwindow.cpp" line="353"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="358"/>
+        <location filename="../board/boardwindow.cpp" line="353"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.cpp" line="552"/>
         <location filename="../board/boardwindow.cpp" line="617"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
@@ -156,19 +138,24 @@ Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="712"/>
+        <location filename="../board/boardwindow.cpp" line="726"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="712"/>
+        <location filename="../board/boardwindow.cpp" line="726"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
         <translation type="unfinished">SGF (*.sgf);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="731"/>
+        <location filename="../board/boardwindow.cpp" line="745"/>
         <source>Cannot save SGF file.</source>
         <translation type="unfinished">存取 SGF檔案</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.cpp" line="815"/>
+        <source>Match Mode</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="22"/>
@@ -232,6 +219,16 @@ Minimum game move the slider can currently show.</source>
 顯示目前對局的最小落子手數.</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="191"/>
+        <location filename="../board/boardwindow.ui" line="2340"/>
+        <location filename="../board/boardwindow.ui" line="2935"/>
+        <location filename="../board/boardwindow.ui" line="3069"/>
+        <location filename="../board/boardwindow.ui" line="3103"/>
+        <location filename="../board/boardwindow.ui" line="3162"/>
+        <location filename="../board/boardwindow.ui" line="3368"/>
+        <location filename="../board/boardwindow.ui" line="3402"/>
+        <location filename="../board/boardwindow.ui" line="3471"/>
+        <location filename="../board/boardwindow.ui" line="3931"/>
         <location filename="../board/boardwindow.ui" line="4005"/>
         <source>0</source>
         <translation type="unfinished">0</translation>
@@ -296,16 +293,19 @@ Shows the number of sons and brothers within the current node.</source>
 0 之前變化型</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="1781"/>
         <location filename="../board/boardwindow.ui" line="2987"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2288"/>
         <location filename="../board/boardwindow.ui" line="2883"/>
         <source>remaining time / stones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2291"/>
         <location filename="../board/boardwindow.ui" line="2886"/>
         <source>Clock
 
@@ -323,31 +323,39 @@ Click on
 - 對手計時器: 加時1分鐘</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2300"/>
         <location filename="../board/boardwindow.ui" line="2895"/>
         <source>00:00</source>
         <translation type="unfinished">00:00</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2324"/>
+        <location filename="../board/boardwindow.ui" line="2919"/>
+        <location filename="../board/boardwindow.ui" line="3124"/>
         <location filename="../board/boardwindow.ui" line="3423"/>
         <source>Captures:</source>
         <translation type="unfinished">提子:</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2376"/>
         <location filename="../board/boardwindow.ui" line="3289"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3031"/>
         <location filename="../board/boardwindow.ui" line="3333"/>
         <source>Territory :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3209"/>
         <location filename="../board/boardwindow.ui" line="3948"/>
         <source>komi points</source>
         <translation type="unfinished">讓子點數</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3212"/>
         <location filename="../board/boardwindow.ui" line="3951"/>
         <source>komi:
 
@@ -359,11 +367,13 @@ Use &quot;komi x&quot; to request a komi of x (number).</source>
 使用 &quot;komi x&quot; 要求讓子數(x)</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3218"/>
         <location filename="../board/boardwindow.ui" line="3957"/>
         <source>Komi:</source>
         <translation type="unfinished">讓子:</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3259"/>
         <location filename="../board/boardwindow.ui" line="3964"/>
         <source>5.5</source>
         <translation type="unfinished">5.5</translation>
@@ -569,6 +579,9 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="4890"/>
+        <location filename="../board/boardwindow.ui" line="4940"/>
+        <location filename="../board/boardwindow.ui" line="4990"/>
         <location filename="../board/boardwindow.ui" line="5040"/>
         <source>Empty variatonreate an empty branch</source>
         <translation type="unfinished"></translation>
@@ -609,12 +622,20 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5497"/>
+        <location filename="../board/boardwindow.ui" line="5270"/>
+        <location filename="../board/boardwindow.ui" line="5385"/>
+        <location filename="../board/boardwindow.ui" line="5488"/>
+        <location filename="../board/boardwindow.ui" line="5518"/>
+        <location filename="../board/boardwindow.ui" line="5548"/>
         <source>Pass move</source>
         <translation type="unfinished">虛手</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5500"/>
+        <location filename="../board/boardwindow.ui" line="5273"/>
+        <location filename="../board/boardwindow.ui" line="5388"/>
+        <location filename="../board/boardwindow.ui" line="5491"/>
+        <location filename="../board/boardwindow.ui" line="5521"/>
+        <location filename="../board/boardwindow.ui" line="5551"/>
         <source>Pass
 
 Pass your turn.</source>
@@ -623,7 +644,8 @@ Pass your turn.</source>
 此次落子虛手</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5365"/>
+        <location filename="../board/boardwindow.ui" line="5278"/>
+        <location filename="../board/boardwindow.ui" line="5393"/>
         <source>Pass</source>
         <translation type="unfinished">虛手</translation>
     </message>
@@ -633,7 +655,8 @@ Pass your turn.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5430"/>
+        <location filename="../board/boardwindow.ui" line="5297"/>
+        <location filename="../board/boardwindow.ui" line="5461"/>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
@@ -645,61 +668,72 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
         <translation type="unfinished">計地</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5397"/>
+        <location filename="../board/boardwindow.ui" line="5415"/>
         <source>Refresh display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5400"/>
+        <location filename="../board/boardwindow.ui" line="5418"/>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5405"/>
+        <location filename="../board/boardwindow.ui" line="5423"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5427"/>
+        <location filename="../board/boardwindow.ui" line="5458"/>
         <source>Request adjournment</source>
         <translation type="unfinished">要求打掛</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5435"/>
+        <location filename="../board/boardwindow.ui" line="5466"/>
         <source>Adjourn</source>
         <translation type="unfinished">打掛</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5467"/>
+        <location filename="../board/boardwindow.ui" line="5496"/>
+        <source>Draw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5526"/>
+        <source>Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5355"/>
         <source>Undo last move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5470"/>
+        <location filename="../board/boardwindow.ui" line="5358"/>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5475"/>
+        <location filename="../board/boardwindow.cpp" line="788"/>
+        <location filename="../board/boardwindow.ui" line="5363"/>
         <source>Undo</source>
         <translation type="unfinished">回手</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5505"/>
+        <location filename="../board/boardwindow.ui" line="5556"/>
         <source>Done</source>
         <translation type="unfinished">完成</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5996"/>
+        <location filename="../board/boardwindow.ui" line="6047"/>
         <source>Default Loss</source>
         <translation type="unfinished">判定輸棋</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5999"/>
+        <location filename="../board/boardwindow.ui" line="6050"/>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
@@ -708,87 +742,87 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
 立即投子. 對手獲勝. 遊戲結束</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6004"/>
+        <location filename="../board/boardwindow.ui" line="6055"/>
         <source>RESIGN</source>
         <translation type="unfinished">投子</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6033"/>
+        <location filename="../board/boardwindow.ui" line="6084"/>
         <source>Review</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6181"/>
+        <location filename="../board/boardwindow.ui" line="6238"/>
         <source>fileSave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6190"/>
+        <location filename="../board/boardwindow.ui" line="6247"/>
         <source>fileSaveAs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6193"/>
+        <location filename="../board/boardwindow.ui" line="6250"/>
         <source>Save file as ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6202"/>
+        <location filename="../board/boardwindow.ui" line="6259"/>
         <source>quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6217"/>
+        <location filename="../board/boardwindow.ui" line="6274"/>
         <source>export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6220"/>
+        <location filename="../board/boardwindow.ui" line="6277"/>
         <source>export  export to several formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6232"/>
+        <location filename="../board/boardwindow.ui" line="6289"/>
         <source>import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6241"/>
+        <location filename="../board/boardwindow.ui" line="6298"/>
         <source>gameInfo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6253"/>
+        <location filename="../board/boardwindow.ui" line="6310"/>
         <source>sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6262"/>
+        <location filename="../board/boardwindow.ui" line="6319"/>
         <source>whatsThis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6271"/>
+        <location filename="../board/boardwindow.ui" line="6328"/>
         <source>duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6283"/>
+        <location filename="../board/boardwindow.ui" line="6340"/>
         <source>coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6295"/>
+        <location filename="../board/boardwindow.ui" line="6352"/>
         <source>play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6300"/>
+        <location filename="../board/boardwindow.ui" line="6357"/>
         <source>Export &amp;ASCII</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6303"/>
+        <location filename="../board/boardwindow.ui" line="6360"/>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
@@ -797,17 +831,17 @@ Export current board to ASCII.</source>
 匯出現在盤面為 ASCII</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6310"/>
+        <location filename="../board/boardwindow.ui" line="6367"/>
         <source>Export SGF &amp;to clipboard</source>
         <translation type="unfinished">匯出 SGF 到剪貼簿(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6315"/>
+        <location filename="../board/boardwindow.ui" line="6372"/>
         <source>Export &amp;Image</source>
         <translation type="unfinished">匯出圖像(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6320"/>
+        <location filename="../board/boardwindow.ui" line="6377"/>
         <source>E&amp;xport Image to clipboard</source>
         <translation type="unfinished">匯出圖像到剪貼簿(&amp;X)</translation>
     </message>
@@ -815,17 +849,14 @@ Export current board to ASCII.</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="" line="0"/>
         <source>Ready.</source>
         <translation type="obsolete">備妥</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current online players / watched players</source>
         <translation type="obsolete">目前的 線上人數 / 監看人數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
@@ -833,44 +864,36 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
 你正在監看的棋友已經加進「監看棋友」欄位</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current online games / observed games + matches</source>
         <translation type="obsolete">目前的 線上局數 / 你的局數（觀局 ＋ 對局）</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
         <translation type="obsolete">顯示目前的線上對局數目和你目前的對局數或觀局數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current server</source>
         <translation type="obsolete">目前所在的伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
         <translation type="obsolete">顯示目前所在的伺服器名稱或者是 OFFLINE (離線)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current channels and users</source>
         <translation type="obsolete">目前所在的頻道及棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Displays the current channels you are in and the number of users inthere.
 The tooltip text contains the channels&apos; title and users&apos; names</source>
         <translation type="obsolete">顯示目前你所在的頻道名稱及使用者人數
 工具提示文字包含頻道標題及使用者名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Online Time</source>
         <translation type="obsolete">連線時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
@@ -879,182 +902,149 @@ The tooltip text contains the channels&apos; title and users&apos; names</source
 (Hold) - &gt; 鎖定行</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Bytes in:</source>
         <translation type="obsolete">流入位元:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Bytes out:</source>
         <translation type="obsolete">流出位元: </translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Connect with</source>
         <translation type="obsolete">連線在</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disconnect from</source>
         <translation type="obsolete">斷線於</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Info</source>
         <translation type="obsolete">資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Won</source>
         <translation type="obsolete">勝</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Lost</source>
         <translation type="obsolete">負</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Country</source>
         <translation type="obsolete">國家</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Lang</source>
         <translation type="obsolete">語系</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>observe</source>
         <translation type="obsolete">觀局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>stats W</source>
         <translation type="obsolete">白方描述</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>stats B</source>
         <translation type="obsolete">黑方描述</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New Game</source>
         <translation type="obsolete">新對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Teaching</source>
         <translation type="obsolete">教學</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>W</source>
         <translation type="obsolete">白</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Accept</source>
         <translation type="obsolete">接受</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>match</source>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>talk</source>
         <translation type="obsolete">交談</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>stats</source>
         <translation type="obsolete">描述</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>stored games</source>
         <translation type="obsolete">打掛棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>results</source>
         <translation type="obsolete">結果</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>rating</source>
         <translation type="obsolete">積分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>observe game</source>
         <translation type="obsolete">觀局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>toggle watch list</source>
         <translation type="obsolete">切換是否監看</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>toggle exclude list</source>
         <translation type="obsolete">切換是否排除</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>USER NOT LOGGED IN.</source>
         <translation type="obsolete">使用者尚未登入</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>msg*</source>
         <translation type="obsolete">訊息*</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Message</source>
         <translation type="obsolete">訊息</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Window size saved.</source>
         <translation type="obsolete">視窗大小已儲存</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Window size restored.</source>
         <translation type="obsolete">還原視窗大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
         <translation type="obsolete">SGF (*.sgf);;MGT (*.mgt);;XML (*.xml);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You did not set the Computer program path !</source>
         <translation type="obsolete">你沒有設定電腦圍棋程式的路徑 !</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Table of games
 
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
         <translation type="obsolete">對局列表
@@ -1076,48 +1066,47 @@ This table can be updated by &apos;Refresh games&apos;</source>
 表單可經由更新進行重新整理</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Table of players
 
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
         <translation type="obsolete">棋友名單
 
 滑鼠右鍵開啟目錄
@@ -1161,7 +1150,6 @@ X 私人訊息:
 切換排除名單 相似於監看 - 標示 &apos;X&apos; 符號; 棋友的呼叫將不會顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
@@ -1170,42 +1158,34 @@ Enables/disables the statusbar.</source>
 啟用或停用狀態列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shouts*</source>
         <translation type="obsolete">公眾*</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>rooms left</source>
         <translation type="obsolete">棋室置左</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Room </source>
         <translation type="obsolete">棋室</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source> Byoyomi Time : (</source>
         <translation type="obsolete"> 讀秒時間 : (</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source> stones)</source>
         <translation type="obsolete"> 落子)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Match prefs</source>
         <translation type="obsolete">對局偏好</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>match within his prefs</source>
         <translation type="obsolete">使用他的對局偏好</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>trail</source>
         <translation type="obsolete">拖曳</translation>
     </message>
@@ -1213,222 +1193,178 @@ Enables/disables the statusbar.</source>
 <context>
     <name>ClientWindowGui</name>
     <message>
-        <location filename="" line="0"/>
         <source>qGo Client V2</source>
         <translation type="obsolete">qGo Client V2</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Players</source>
         <translation type="obsolete">棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>1p-9p</source>
         <translation type="obsolete">1p-9p</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>9d</source>
         <translation type="obsolete">9d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>8d</source>
         <translation type="obsolete">8d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>7d</source>
         <translation type="obsolete">7d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>6d</source>
         <translation type="obsolete">6d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>5d</source>
         <translation type="obsolete">5d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>4d</source>
         <translation type="obsolete">4d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>3d</source>
         <translation type="obsolete">3d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>2d</source>
         <translation type="obsolete">2d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>1d</source>
         <translation type="obsolete">1d</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>1k</source>
         <translation type="obsolete">1k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>2k</source>
         <translation type="obsolete">2k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>3k</source>
         <translation type="obsolete">3k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>4k</source>
         <translation type="obsolete">4k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>5k</source>
         <translation type="obsolete">5k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>6k</source>
         <translation type="obsolete">6k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>7k</source>
         <translation type="obsolete">7k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>8k</source>
         <translation type="obsolete">8k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>9k</source>
         <translation type="obsolete">10k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>10k</source>
         <translation type="obsolete">10k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>11k</source>
         <translation type="obsolete">11k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>12k</source>
         <translation type="obsolete">12k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>13k</source>
         <translation type="obsolete">13k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>14k</source>
         <translation type="obsolete">14k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>15k</source>
         <translation type="obsolete">15k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>16k</source>
         <translation type="obsolete">16k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>17k</source>
         <translation type="obsolete">17k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>18k</source>
         <translation type="obsolete">18k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>19k</source>
         <translation type="obsolete">19k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>20k</source>
         <translation type="obsolete">20k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>21k</source>
         <translation type="obsolete">21k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>22k</source>
         <translation type="obsolete">22k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>23k</source>
         <translation type="obsolete">23k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>24k</source>
         <translation type="obsolete">24k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>25k</source>
         <translation type="obsolete">25k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>26k</source>
         <translation type="obsolete">26k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>27k</source>
         <translation type="obsolete">27k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>28k</source>
         <translation type="obsolete">28k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>29k</source>
         <translation type="obsolete">29k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>30k</source>
         <translation type="obsolete">30k</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select players rank boundaries</source>
         <translation type="obsolete">選擇棋友棋力範圍</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select players ranks boundaries
 
 Use these lists to select the rank of players you want to see in the list
@@ -1439,17 +1375,14 @@ This will take effect after refreshing the players list.</source>
 將會於重新整理棋友列表之後顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>open</source>
         <translation type="obsolete">套用到名單</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>toggle for displaying only open players</source>
         <translation type="obsolete">切換顯示棋力範圍內的棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Open players
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
@@ -1462,57 +1395,46 @@ This will take effect after refreshing the players list.</source>
 將會於重新整理棋友列表之後顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Msg*</source>
         <translation type="obsolete">訊息*</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close all talk tabs</source>
         <translation type="obsolete">關閉所有交談頁籤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Games</source>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>relevant messages from/to server</source>
         <translation type="obsolete">往來於伺服器的重要訊息</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;File</source>
         <translation type="obsolete">檔案(&amp;F)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Connections</source>
         <translation type="obsolete">連線(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Settings</source>
         <translation type="obsolete">設定(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;View</source>
         <translation type="obsolete">檢視(&amp;V)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Help</source>
         <translation type="obsolete">協助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Tools</source>
         <translation type="obsolete">工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
@@ -1521,22 +1443,18 @@ Connect with/Disconnect from selected Go server.</source>
 自選擇的伺服器連線或斷線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>chose Go server to connect to or use &apos;Preferences&apos; to add/change a Go server entry</source>
         <translation type="obsolete">選擇伺服器連線或使用&quot;偏好設定&quot;進行新增或修改伺服器項目</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Open</source>
         <translation type="obsolete">開啟</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Open...</source>
         <translation type="obsolete">開啟(&amp;O)...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Open
 
 Open a sgf file.</source>
@@ -1545,27 +1463,22 @@ Open a sgf file.</source>
 開啟 SGF 棋譜案</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+O</source>
         <translation type="obsolete">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Manual</source>
         <translation type="obsolete">使用者手冊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Manual</source>
         <translation type="obsolete">使用者手冊(&amp;M)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Opens the manual</source>
         <translation type="obsolete">開啟手冊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Help
 
 Opens the manual of the application.</source>
@@ -1574,27 +1487,22 @@ Opens the manual of the application.</source>
 開啟本程式的手冊.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F1</source>
         <translation type="obsolete">F1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">關於</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;About</source>
         <translation type="obsolete">關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About the application.</source>
         <translation type="obsolete">關於此程式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About
 
 About the application.</source>
@@ -1603,67 +1511,54 @@ About the application.</source>
 關於此程式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disconnect</source>
         <translation type="obsolete">斷線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Disconnect</source>
         <translation type="obsolete">斷線(&amp;D)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disconnect from server</source>
         <translation type="obsolete">從伺服器斷線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Looking</source>
         <translation type="obsolete">尋求對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Looking</source>
         <translation type="obsolete">尋求對局(&amp;L)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>toggles looking for matches</source>
         <translation type="obsolete">切換是否尋求對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &apos;!&apos; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &apos;X&apos;)!</source>
         <translation type="obsolete">假如點選之後你將尋求對局, 這代表你準備進行對局. 在重新整理之後棋友列表會出線 ! 標示指示正在尋求對局. 點選這個選取方塊切換模式. 假如你正尋求對局而你點選. 則, 伺服器設定為接受對局(在沒有 &apos;X&apos; 情況之下)!</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Open</source>
         <translation type="obsolete">接受對局(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>toggles open for matches</source>
         <translation type="obsolete">切換是否接受對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked you are open for matches. After refreshing the player table having a &apos;X&apos; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
         <translation type="obsolete">假如在你開啟接受對局之後按下。重新整理之後棋友列中將會有 &apos;X&apos; 符號，代表不接受邀局。點選此按鈕進行切換。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play with program</source>
         <translation type="obsolete">和電腦對戰</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Play with program</source>
         <translation type="obsolete">和電腦對戰(&amp;P)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Menubar
 
 Enables/disables the menubar.</source>
@@ -1672,7 +1567,6 @@ Enables/disables the menubar.</source>
 啟用或停用 功能表列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
@@ -1681,52 +1575,43 @@ Sets a playing session with a pGo program using GTP (like GNUGO)</source>
 設定與 qGo 對局時的程式 (使用 GTP 如 GNUGO)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+P</source>
         <translation type="obsolete">Ctrl+P</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh players</source>
         <translation type="obsolete">更新棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Get new players table from server</source>
         <translation type="obsolete">由伺服器取得新棋友名單</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh Games</source>
         <translation type="obsolete">更新對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Get new games table from server</source>
         <translation type="obsolete">由伺服器取得新對局列表</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Quiet</source>
         <translation type="obsolete">消音</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Quiet</source>
         <translation type="obsolete">消音(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>toggles system messages</source>
         <translation type="obsolete">切換消音模式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
 
 Note : some features cannot work if set to quiet (checked box):
-<byte value="x9"/>- sound when watched players enter/leave
-<byte value="x9"/>- update of player/gamestable</source>
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
         <translation type="obsolete">點選後你將不會接收系統訊息, 這代表你不會收到棋友的上下線及對局等資訊. 點選這個按鈕切換模式. 消音指示為 &apos;Q&apos; 於棋友表.
 
 註 : 某些功能於消音無法作業 (對話方塊已勾選):
@@ -1734,32 +1619,26 @@ Note : some features cannot work if set to quiet (checked box):
  - 更新棋友及對局表</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Connect</source>
         <translation type="obsolete">連線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Connect</source>
         <translation type="obsolete">連線(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Connects to the server</source>
         <translation type="obsolete">連線到伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Preferences</source>
         <translation type="obsolete">偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit the preferences</source>
         <translation type="obsolete">編輯偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Preferences
 
 Edit the applications preferences.</source>
@@ -1768,27 +1647,22 @@ Edit the applications preferences.</source>
 編緝程式偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+P</source>
         <translation type="obsolete">Alt+P</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">離開</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>E&amp;xit</source>
         <translation type="obsolete">離開(&amp;X)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Quits the application</source>
         <translation type="obsolete">離開本程式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit
 
 Quits the application.</source>
@@ -1797,27 +1671,22 @@ Quits the application.</source>
 離開本程式.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+Q</source>
         <translation type="obsolete">Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New Board 19x19</source>
         <translation type="obsolete">新棋盤 - 19路</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New &amp;Board 19x19</source>
         <translation type="obsolete">新棋盤 - 19路(&amp;B)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Creates a new board with size 19x19</source>
         <translation type="obsolete">新棋盤 - 19路</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New
 
 Creates a new 19x19 board.</source>
@@ -1826,27 +1695,22 @@ Creates a new 19x19 board.</source>
 新棋盤 19路.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+B</source>
         <translation type="obsolete">Ctrl+B</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ToolBar</source>
         <translation type="obsolete">工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;ToolBar</source>
         <translation type="obsolete">工具列(&amp;T)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the toolbar</source>
         <translation type="obsolete">啟用或停用 工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
@@ -1855,52 +1719,42 @@ Enables/disables the toolbar.</source>
 啟用或停用 工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit servers</source>
         <translation type="obsolete">編輯伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Edit servers</source>
         <translation type="obsolete">編輯伺服器(&amp;E)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Menubar</source>
         <translation type="obsolete">功能表列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Menubar</source>
         <translation type="obsolete">功能表列(&amp;M)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the menubar</source>
         <translation type="obsolete">啟用或停用功能表列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F7</source>
         <translation type="obsolete">F7</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Statusbar</source>
         <translation type="obsolete">狀態列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Statusbar</source>
         <translation type="obsolete">狀態列(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the statusbar</source>
         <translation type="obsolete">啟用或停用狀態列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
@@ -1909,22 +1763,18 @@ Enables/disables the statusbar.</source>
 啟用或停用 狀態列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sound</source>
         <translation type="obsolete">音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Sound</source>
         <translation type="obsolete">音效(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Short info on sound availability</source>
         <translation type="obsolete">短訊息音效可用</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
@@ -1933,17 +1783,14 @@ Views a message box with a short comment about sound.</source>
 檢視訊息框有關於音效的短訊息註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About Qt</source>
         <translation type="obsolete">關於 QT</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About &amp;Qt</source>
         <translation type="obsolete">關於 &amp;QT</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About Qt
 
 About Qt.</source>
@@ -1952,62 +1799,50 @@ About Qt.</source>
 關於 QT</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New Board</source>
         <translation type="obsolete">新棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;New Board</source>
         <translation type="obsolete">新棋盤(&amp;N)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Creates a new board</source>
         <translation type="obsolete">新棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+N</source>
         <translation type="obsolete">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Toolbar_2</source>
         <translation type="obsolete"> 自訂工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>View user toolbar</source>
         <translation type="obsolete">檢視自訂工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>View &amp;user toolbar</source>
         <translation type="obsolete">檢視自訂工具列(&amp;U)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Rooms*</source>
         <translation type="obsolete">棋廳*</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>main toolbar</source>
         <translation type="obsolete">主要工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>choose server</source>
         <translation type="obsolete">選擇伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Seek game</source>
         <translation type="obsolete">自動尋找對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Seek game
 
 Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
@@ -2018,42 +1853,34 @@ The server will automatically launch a game against an opponent with matching se
 伺服器將會自動開始一個對局且對方棋手符合對局設定。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>even</source>
         <translation type="obsolete">棋力相同</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>within 2 stones</source>
         <translation type="obsolete">授2子內</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>within 5 stones</source>
         <translation type="obsolete">授5子內</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>anyone</source>
         <translation type="obsolete">任何棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>same or stronger</source>
         <translation type="obsolete">相同或更強</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>same or weaker</source>
         <translation type="obsolete">相同或更弱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Set the handicap range you want for seeking games</source>
         <translation type="obsolete">設定你在自動尋找對局時的授子數範圍</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>handicap range
 
 Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
@@ -2062,33 +1889,70 @@ Set the handicap range you wish when seeking a game. See &apos;seek&apos; button
 設定當自動搜尋對局時你希望的授子數範圍。 查看 &apos;seek&apos; 按鈕取得更多訊息。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>user defined toolbar</source>
         <translation type="obsolete">使用者定義工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Action</source>
         <translation type="obsolete">動作</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New version message</source>
         <translation type="obsolete">新版本訊息</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>shows new version message</source>
         <translation type="obsolete">顯示新版本訊息</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
         <translation type="obsolete">新版本訊息
 
 使用顯示執行新版本訊息方塊</translation>
+    </message>
+</context>
+<context>
+    <name>CodecWarnDialog</name>
+    <message>
+        <location filename="../network/codecwarndialog.cpp" line="15"/>
+        <source>Okay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/codecwarndialog.cpp" line="19"/>
+        <source>Don&apos;t warn me again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/codecwarndialog.cpp" line="21"/>
+        <source>Can&apos;t find font codec &quot;%1&quot;
+Using default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/codecwarndialog.cpp" line="32"/>
+        <source>Missing Codec!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>CountDialog</name>
+    <message>
+        <location filename="../game_interfaces/countdialog.cpp" line="15"/>
+        <source>&amp;Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/countdialog.cpp" line="17"/>
+        <source>&amp;Reject</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/countdialog.cpp" line="59"/>
+        <source>: Accept result?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2379,161 +2243,193 @@ displays the message box that appears at launch of a new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="446"/>
         <location filename="../network/createroomdialog.ui" line="839"/>
         <source>below 7D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="451"/>
         <location filename="../network/createroomdialog.ui" line="844"/>
         <source>below 6D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="456"/>
         <location filename="../network/createroomdialog.ui" line="849"/>
         <source>below 5D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="461"/>
         <location filename="../network/createroomdialog.ui" line="854"/>
         <source>below 4D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="466"/>
         <location filename="../network/createroomdialog.ui" line="859"/>
         <source>below 3D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="471"/>
         <location filename="../network/createroomdialog.ui" line="864"/>
         <source>below 2D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="476"/>
         <location filename="../network/createroomdialog.ui" line="869"/>
         <source>below 1D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="481"/>
         <location filename="../network/createroomdialog.ui" line="874"/>
         <source>below 1K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="486"/>
         <location filename="../network/createroomdialog.ui" line="879"/>
         <source>below 2K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="491"/>
         <location filename="../network/createroomdialog.ui" line="884"/>
         <source>below 3K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="496"/>
         <location filename="../network/createroomdialog.ui" line="889"/>
         <source>below 4K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="501"/>
         <location filename="../network/createroomdialog.ui" line="894"/>
         <source>below 5K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="506"/>
         <location filename="../network/createroomdialog.ui" line="899"/>
         <source>below 6K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="511"/>
         <location filename="../network/createroomdialog.ui" line="904"/>
         <source>below 7K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="516"/>
         <location filename="../network/createroomdialog.ui" line="909"/>
         <source>below 8K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="521"/>
         <location filename="../network/createroomdialog.ui" line="914"/>
         <source>below 9K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="526"/>
         <location filename="../network/createroomdialog.ui" line="919"/>
         <source>below 10K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="531"/>
         <location filename="../network/createroomdialog.ui" line="924"/>
         <source>below 11K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="536"/>
         <location filename="../network/createroomdialog.ui" line="929"/>
         <source>below 12K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="541"/>
         <location filename="../network/createroomdialog.ui" line="934"/>
         <source>below 13K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="546"/>
         <location filename="../network/createroomdialog.ui" line="939"/>
         <source>below 14K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="551"/>
         <location filename="../network/createroomdialog.ui" line="944"/>
         <source>below 15K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="556"/>
         <location filename="../network/createroomdialog.ui" line="949"/>
         <source>below 16K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="561"/>
         <location filename="../network/createroomdialog.ui" line="954"/>
         <source>below 17K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="566"/>
         <location filename="../network/createroomdialog.ui" line="959"/>
         <source>below 18K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="571"/>
         <location filename="../network/createroomdialog.ui" line="964"/>
         <source>below 19K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="576"/>
         <location filename="../network/createroomdialog.ui" line="969"/>
         <source>below 20K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="581"/>
         <location filename="../network/createroomdialog.ui" line="974"/>
         <source>below 21K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="586"/>
         <location filename="../network/createroomdialog.ui" line="979"/>
         <source>below 22K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="591"/>
         <location filename="../network/createroomdialog.ui" line="984"/>
         <source>below 23K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="596"/>
         <location filename="../network/createroomdialog.ui" line="989"/>
         <source>below 24K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="601"/>
         <location filename="../network/createroomdialog.ui" line="994"/>
         <source>below 25K</source>
         <translation type="unfinished"></translation>
@@ -2594,16 +2490,19 @@ displays the message box that appears at launch of a new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="731"/>
         <location filename="../network/createroomdialog.ui" line="780"/>
         <source>10 M(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="736"/>
         <location filename="../network/createroomdialog.ui" line="785"/>
         <source>15 M(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="741"/>
         <location filename="../network/createroomdialog.ui" line="790"/>
         <source>20 M(s)</source>
         <translation type="unfinished"></translation>
@@ -2614,11 +2513,13 @@ displays the message box that appears at launch of a new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="751"/>
         <location filename="../network/createroomdialog.ui" line="795"/>
         <source>30 M(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="756"/>
         <location filename="../network/createroomdialog.ui" line="810"/>
         <source>60 M(s)</source>
         <translation type="unfinished"></translation>
@@ -2682,7 +2583,17 @@ displays the message box that appears at launch of a new version</source>
 <context>
     <name>CyberOroConnection</name>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="7188"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3438"/>
+        <source>Server full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="3438"/>
+        <source>Server full, try another</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="8109"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2690,190 +2601,310 @@ displays the message box that appears at launch of a new version</source>
 <context>
     <name>Debug_Dialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>Debug</source>
         <translation type="obsolete">除錯</translation>
     </message>
 </context>
 <context>
+    <name>FriendsListDialog</name>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="110"/>
+        <location filename="../network/friendslistdialog.cpp" line="132"/>
+        <source>Match</source>
+        <translation type="unfinished">對局</translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="111"/>
+        <location filename="../network/friendslistdialog.cpp" line="133"/>
+        <source>Talk</source>
+        <translation type="unfinished">交談</translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="113"/>
+        <source>Remove from Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="114"/>
+        <source>Add to Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="115"/>
+        <location filename="../network/friendslistdialog.cpp" line="138"/>
+        <source>Block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="135"/>
+        <source>Add to Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="137"/>
+        <source>Remove from Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.cpp" line="155"/>
+        <source>Remove from Blocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.ui" line="13"/>
+        <source>Friends, Fans, and Blocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.ui" line="28"/>
+        <source>Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.ui" line="38"/>
+        <source>Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/friendslistdialog.ui" line="48"/>
+        <source>Blocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GameDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>you</source>
         <translation type="obsolete">你</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>yes</source>
         <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="850"/>
+        <location filename="../network/gamedialog.cpp" line="110"/>
+        <location filename="../network/gamedialog.cpp" line="130"/>
+        <location filename="../network/gamedialog.cpp" line="150"/>
+        <location filename="../network/gamedialog.cpp" line="172"/>
+        <location filename="../network/gamedialog.cpp" line="235"/>
+        <location filename="../network/gamedialog.cpp" line="253"/>
+        <location filename="../network/gamedialog.cpp" line="284"/>
+        <location filename="../network/gamedialog.cpp" line="314"/>
+        <location filename="../network/gamedialog.cpp" line="340"/>
+        <location filename="../network/gamedialog.cpp" line="364"/>
+        <location filename="../network/gamedialog.cpp" line="387"/>
+        <location filename="../network/gamedialog.cpp" line="412"/>
+        <location filename="../network/gamedialog.cpp" line="435"/>
+        <location filename="../network/gamedialog.cpp" line="458"/>
+        <location filename="../network/gamedialog.cpp" line="482"/>
+        <location filename="../network/gamedialog.cpp" line="506"/>
+        <location filename="../network/gamedialog.cpp" line="529"/>
+        <location filename="../network/gamedialog.cpp" line="628"/>
+        <location filename="../network/gamedialog.cpp" line="735"/>
+        <location filename="../network/gamedialog.cpp" line="757"/>
+        <location filename="../network/gamedialog.cpp" line="795"/>
+        <location filename="../network/gamedialog.cpp" line="815"/>
+        <location filename="../network/gamedialog.cpp" line="821"/>
+        <location filename="../network/gamedialog.cpp" line="1234"/>
+        <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
         <translation>提出/接受</translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="740"/>
+        <location filename="../network/gamedialog.cpp" line="768"/>
         <source>Teaching</source>
         <translation>教學</translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="1180"/>
+        <location filename="../network/gamedialog.cpp" line="104"/>
+        <location filename="../network/gamedialog.cpp" line="124"/>
+        <location filename="../network/gamedialog.cpp" line="144"/>
+        <location filename="../network/gamedialog.cpp" line="167"/>
+        <location filename="../network/gamedialog.cpp" line="230"/>
+        <location filename="../network/gamedialog.cpp" line="248"/>
+        <location filename="../network/gamedialog.cpp" line="279"/>
+        <location filename="../network/gamedialog.cpp" line="309"/>
+        <location filename="../network/gamedialog.cpp" line="335"/>
+        <location filename="../network/gamedialog.cpp" line="358"/>
+        <location filename="../network/gamedialog.cpp" line="382"/>
+        <location filename="../network/gamedialog.cpp" line="406"/>
+        <location filename="../network/gamedialog.cpp" line="430"/>
+        <location filename="../network/gamedialog.cpp" line="453"/>
+        <location filename="../network/gamedialog.cpp" line="477"/>
+        <location filename="../network/gamedialog.cpp" line="501"/>
+        <location filename="../network/gamedialog.cpp" line="524"/>
+        <location filename="../network/gamedialog.cpp" line="1241"/>
         <source>Accept</source>
         <translation>接受</translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="774"/>
+        <location filename="../network/gamedialog.cpp" line="801"/>
         <source>%1 not open for matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="776"/>
+        <location filename="../network/gamedialog.cpp" line="803"/>
         <source>%1 declined the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="778"/>
+        <location filename="../network/gamedialog.cpp" line="805"/>
         <source>%1 canceled the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="780"/>
+        <location filename="../network/gamedialog.cpp" line="807"/>
         <source>%1 already playing a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="782"/>
+        <location filename="../network/gamedialog.cpp" line="809"/>
         <source>%1 does not accept direct matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="787"/>
+        <location filename="../network/gamedialog.cpp" line="814"/>
         <source>Invalid Parameters!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="1159"/>
         <source> stones)</source>
         <translation type="obsolete"> 落子)</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="19"/>
+        <location filename="../network/gamedialog.ui" line="19"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="427"/>
+        <location filename="../network/gamedialog.ui" line="427"/>
         <source>Canadian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="455"/>
+        <location filename="../network/gamedialog.ui" line="455"/>
         <source>Number of stones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="661"/>
+        <location filename="../network/gamedialog.ui" line="474"/>
+        <location filename="../network/gamedialog.ui" line="493"/>
+        <location filename="../network/gamedialog.ui" line="543"/>
+        <location filename="../network/gamedialog.ui" line="556"/>
+        <location filename="../network/gamedialog.ui" line="642"/>
+        <location filename="../network/gamedialog.ui" line="661"/>
         <source>m:ss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="506"/>
+        <location filename="../network/gamedialog.ui" line="506"/>
         <source>Time per stones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="687"/>
+        <location filename="../network/gamedialog.ui" line="519"/>
+        <location filename="../network/gamedialog.ui" line="587"/>
         <source>Main Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="525"/>
+        <location filename="../network/gamedialog.ui" line="525"/>
         <source>Byo Yomi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="674"/>
+        <location filename="../network/gamedialog.ui" line="573"/>
+        <location filename="../network/gamedialog.ui" line="687"/>
         <source>Period time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="623"/>
+        <location filename="../network/gamedialog.ui" line="580"/>
         <source>Number of periods</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="595"/>
+        <location filename="../network/gamedialog.ui" line="595"/>
         <source>TV Asia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="696"/>
+        <location filename="../network/gamedialog.ui" line="623"/>
+        <source>Number of overtimes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/gamedialog.ui" line="674"/>
+        <source>Overtime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/gamedialog.ui" line="696"/>
         <source>Board size :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="703"/>
+        <location filename="../network/gamedialog.ui" line="703"/>
         <source>Handicap :</source>
         <translation type="unfinished">授子 :</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="728"/>
+        <location filename="../network/gamedialog.ui" line="728"/>
         <source>Nigiri</source>
         <translation type="unfinished">猜先</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="735"/>
+        <location filename="../network/gamedialog.ui" line="735"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="742"/>
+        <location filename="../network/gamedialog.ui" line="742"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="752"/>
+        <location filename="../network/gamedialog.ui" line="752"/>
         <source>You play :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="762"/>
+        <location filename="../network/gamedialog.ui" line="762"/>
         <source>Komi :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="800"/>
+        <location filename="../network/gamedialog.ui" line="800"/>
         <source>0</source>
         <translation type="unfinished">0</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="835"/>
+        <location filename="../network/gamedialog.ui" line="835"/>
         <source>Game against :</source>
         <translation type="unfinished">對局對手:</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="863"/>
+        <location filename="../network/gamedialog.ui" line="863"/>
         <source>Decline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="870"/>
+        <location filename="../network/gamedialog.ui" line="870"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="898"/>
+        <location filename="../network/gamedialog.ui" line="898"/>
         <source>Rated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../gamedialog.ui" line="778"/>
+        <location filename="../network/gamedialog.ui" line="778"/>
         <source>.5</source>
         <translation type="unfinished">.5</translation>
     </message>
     <message>
-        <location filename="../gamedialog.cpp" line="784"/>
+        <location filename="../network/gamedialog.cpp" line="811"/>
         <source>%1&apos;s client does not support nmatch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2881,72 +2912,58 @@ displays the message box that appears at launch of a new version</source>
 <context>
     <name>GameInfoDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>Game Information</source>
         <translation type="obsolete">對局資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;OK</source>
         <translation type="obsolete">確認(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑方</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白方</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Rank</source>
         <translation type="obsolete">棋力</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Name</source>
         <translation type="obsolete">名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap:</source>
         <translation type="obsolete">授子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Result:</source>
         <translation type="obsolete">結果:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game Name:</source>
         <translation type="obsolete">對局名稱:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Date:</source>
         <translation type="obsolete">日期:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Played at:</source>
         <translation type="obsolete">對局於:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Copyright:</source>
         <translation type="obsolete">版權:</translation>
     </message>
@@ -3017,25 +3034,134 @@ displays the message box that appears at launch of a new version</source>
 <context>
     <name>IGSConnection</name>
     <message>
-        <location filename="../server/igsconnection.cpp" line="114"/>
         <source>...send password</source>
         <translation type="obsolete">...傳送密碼</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Trying to connect to</source>
         <translation type="obsolete">嘗試連線到</translation>
     </message>
 </context>
 <context>
+    <name>LoginDialog</name>
+    <message>
+        <location filename="../network/login.cpp" line="53"/>
+        <source>Empty Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="53"/>
+        <source>You must enter a username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="57"/>
+        <source>Please wait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="57"/>
+        <source>Connecting...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="92"/>
+        <source>Bad Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="92"/>
+        <source>Invalid Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="96"/>
+        <source>Bad Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="96"/>
+        <source>Invalid Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="102"/>
+        <source>Already Logged In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="102"/>
+        <source>Are you logged in somewhere else?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="106"/>
+        <source>Can&apos;t connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="106"/>
+        <source>Can&apos;t connect to host!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="110"/>
+        <source>Connection Refused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="110"/>
+        <source>Server may be down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="114"/>
+        <source>Protocol Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.cpp" line="114"/>
+        <source>Notify Developer!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.ui" line="13"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.ui" line="28"/>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <location filename="../network/login.ui" line="35"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.ui" line="54"/>
+        <source>Save Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/login.ui" line="83"/>
+        <source>Password:</source>
+        <translation type="unfinished">密碼:</translation>
+    </message>
+    <message>
+        <location filename="../network/login.ui" line="96"/>
+        <source>Login:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainAppWidget</name>
     <message>
-        <location filename="" line="0"/>
         <source>MainAppWidget</source>
         <translation type="obsolete">MinaAppWidget</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Command line
 
 Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos;connect&apos; button first.
@@ -3055,22 +3181,21 @@ In order to open a window use the mouse click instead of entering the &apos;obse
 <context>
     <name>MainTable</name>
     <message>
-        <location filename="" line="0"/>
         <source>Table of games
 
 right click to observe
 
 Symbol explanation: (click on tab to sort by)
-Id<byte value="x9"/>game number
-White/WR<byte value="x9"/>white player&apos;s name and rank
-Black/BR<byte value="x9"/>black player&apos;s name and rank
-Mv<byte value="x9"/>number of moves at last refresh
-Sz<byte value="x9"/>board size
-H<byte value="x9"/>handicap
-K<byte value="x9"/>komi
-By<byte value="x9"/>byoyomi time
-FR<byte value="x9"/>free (FI), rated (I) or teach (TI) game
-(Ob)<byte value="x9"/>number of observers at last refresh
+Id	game number
+White/WR	white player&apos;s name and rank
+Black/BR	black player&apos;s name and rank
+Mv	number of moves at last refresh
+Sz	board size
+H	handicap
+K	komi
+By	byoyomi time
+FR	free (FI), rated (I) or teach (TI) game
+(Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
         <translation type="obsolete">對局列表
@@ -3092,58 +3217,55 @@ This table can be updated by &apos;Refresh games&apos;</source>
 此表單可經由更新重新整理</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Games</source>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>relevant messages from/to server</source>
         <translation type="obsolete">往來於伺服器的重要訊息</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Table of players
 
 right click for menu
 
 Symbol explanation: (click on tab to sort by)
-Stat<byte value="x9"/>player&apos;s stats:
-<byte value="x9"/>X...close
-<byte value="x9"/>!...looking = wants to play a game
-<byte value="x9"/>Q...quiet = doesn&apos;t receive system messages
-<byte value="x9"/>S...shout = can&apos;t receive shouts
-<byte value="x9"/>??...unknown - player entered after last table update
-name<byte value="x9"/>player&apos;s name
-Rk<byte value="x9"/>player&apos;s rank
-pl<byte value="x9"/>playing game (only one game visible)
-ob<byte value="x9"/>observing game (only one game visible)
-Idle<byte value="x9"/>idle time
-X<byte value="x9"/>private info:
-<byte value="x9"/>M..me
-<byte value="x9"/>X..excluded from shout
-<byte value="x9"/>W..watched (sort: X entries, then Rk)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
 and, if extended player info (Toolbox) is active (IGS only):
-Info<byte value="x9"/>player&apos;s info string
-Won<byte value="x9"/>number of games won by player
-Lost<byte value="x9"/>number of games lost by player
-Country<byte value="x9"/>origin of player (from e-mail address)
-Lang<byte value="x9"/>preferred language
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
 
 This table can be updated by &apos;Refresh players&apos;
 
 Menu entries (right click):
-match<byte value="x9"/>request for match (dialog arises)
-talk<byte value="x9"/>talk to player (tab arises)
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
 ----
-stats<byte value="x9"/><byte value="x9"/>show player&apos;s stats
-stored games<byte value="x9"/>show stored games
-results<byte value="x9"/><byte value="x9"/>show results
-rating<byte value="x9"/><byte value="x9"/>show rating (NNGS/IGS only)
-observe game<byte value="x9"/>show game currently played by player
+stats		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
 ----
-toggle watch list<byte value="x9"/><byte value="x9"/>put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
-toggle exclude list<byte value="x9"/>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
         <translation type="obsolete">棋友列表
 
 滑鼠右鍵開啟目錄
@@ -3187,27 +3309,22 @@ X 私人訊息:
 切換排除列表 相似的觀局 - 按 &apos;X&apos; 進入; 棋友的呼叫無法更大顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Players</source>
         <translation type="obsolete">棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Log online-time and name of arriving message</source>
         <translation type="obsolete">記錄時間及訊息</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close all talk tabs</source>
         <translation type="obsolete">關閉所有交談頁籤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
         <translation type="obsolete">關閉所有標籤包含棋友名稱(未取得&apos;*&apos;). 訊息不會被刪除. 假如你想觀看點選右鍵於棋友名稱然後選擇交談 (像是 &apos;#24 *name*&apos;)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>msg*</source>
         <translation type="obsolete">訊息*</translation>
     </message>
@@ -3215,17 +3332,14 @@ X 私人訊息:
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="" line="0"/>
         <source>Edit</source>
         <translation type="obsolete">編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Done</source>
         <translation type="obsolete">完成</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass</source>
         <translation type="obsolete">虛手</translation>
     </message>
@@ -3233,12 +3347,10 @@ X 私人訊息:
 <context>
     <name>MainWidgetGui</name>
     <message>
-        <location filename="" line="0"/>
         <source>MainWidgetGui</source>
         <translation type="obsolete">MainWidgetGui</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Click on the board to place a stone.
 
 When in normal mode, left click plays moves in alternating colors.
@@ -3257,12 +3369,10 @@ Shift + → 到目前變化的下一手
 在計地模式時, 左鍵標示棋塊為死子, 右鍵標示活棋或雙活. 再次點擊則取消標示.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>0</source>
         <translation type="obsolete">0</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
@@ -3271,7 +3381,6 @@ Minimum game move the slider can currently show.</source>
 顯示目前對局的最小落子手數.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
@@ -3280,7 +3389,6 @@ Use the slider to quickly navigate through the current branch of the game.</sour
 使用捲軸快速巡覽目前對局分支.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
@@ -3289,12 +3397,11 @@ Maximum game move the slider can currently show.</source>
 顯示目前對局的最大落子手數.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Tools tab
 
-N/S<byte value="x9"/>normal/score tools
-E<byte value="x9"/>edit tools
-TG<byte value="x9"/>teach tools / game tree</source>
+N/S	normal/score tools
+E	edit tools
+TG	teach tools / game tree</source>
         <translation type="obsolete">工具頁籤
 
 一般 一般/計地 工具
@@ -3302,27 +3409,22 @@ TG<byte value="x9"/>teach tools / game tree</source>
 教學 教學工具 / 對局變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>NS</source>
         <translation type="obsolete">一般</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>E</source>
         <translation type="obsolete">編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit Tools</source>
         <translation type="obsolete">編輯工具</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Change the edit tool</source>
         <translation type="obsolete">修改編輯工具</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
@@ -3331,12 +3433,10 @@ When in edit mode, you can choose what you want to edit, like setting stones or 
 在編輯時, 你能夠選擇你想要編輯的, 像是設定棋石建立標記.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Square</source>
         <translation type="obsolete">方形</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
@@ -3345,12 +3445,10 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
 編輯方形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Circle</source>
         <translation type="obsolete">圓形</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
@@ -3359,12 +3457,10 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
 編輯圓形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Letter</source>
         <translation type="obsolete">文字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
@@ -3373,12 +3469,10 @@ Edit letter marks on the board. Left click sets a mark, right click removes it. 
 數入文字標記於棋盤. 左鍵設定標示, 右鍵移除. 按下Shift讓你編輯自訂文字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cross</source>
         <translation type="obsolete">Ｘ</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
@@ -3387,12 +3481,10 @@ Edit cross marks on the board. Left click sets a mark, right click removes it.</
 編輯Ｘ標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Triangle</source>
         <translation type="obsolete">三角</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
@@ -3401,12 +3493,10 @@ Edit triangle marks on the board. Left click sets a mark, right click removes it
 編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Number</source>
         <translation type="obsolete">數字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
@@ -3415,12 +3505,10 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
 編輯數字標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stone</source>
         <translation type="obsolete">棋子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
@@ -3429,12 +3517,10 @@ Edit stones on the board. Left click for a black, right click for a white stone.
 編輯棋子於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Color of next move</source>
         <translation type="obsolete">下一手顏色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
@@ -3443,27 +3529,22 @@ Set the color of next move. If left untouched, default color is chosen.</source>
 設定下一手顏色. 假如之前沒按, 將會選用預設顏色.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>TG</source>
         <translation type="obsolete">教學</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>opponent:</source>
         <translation type="obsolete">對手:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>-- none --</source>
         <translation type="obsolete">-- 無 --</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>opponent: invited by teacher</source>
         <translation type="obsolete">對手: 要求教學棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
@@ -3472,17 +3553,14 @@ choose opponent from list to enable him playing with you in a teaching game.</so
 由列表選擇的對手與許他與你進行教學局.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>controls</source>
         <translation type="obsolete">控制</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>hand over controls to opponent</source>
         <translation type="obsolete">結束控制對手落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
@@ -3492,34 +3570,28 @@ both teacher and pupil can release control.</source>
 僅教學者能夠給予控制, 教學者及學生都能釋出控制</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>mark</source>
         <translation type="obsolete">標示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>remember that point for fast return</source>
         <translation type="obsolete">記憶快速返回落子點</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
         <translation type="obsolete">於啟始點按下按鈕開始記憶
 之後放置且或回手釋放返回按鈕到自動開始點</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Move 0</source>
         <translation type="obsolete">開始對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Move number</source>
         <translation type="obsolete">落子數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Move number
 
 Number of the currently displayed move.</source>
@@ -3528,17 +3600,14 @@ Number of the currently displayed move.</source>
 顯示目前的落子手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black to play</source>
         <translation type="obsolete">輪到黑棋落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Player to play</source>
         <translation type="obsolete">輪到棋友落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Player to play
 
 Indicates wether it is black&apos;s or white&apos;s turn.</source>
@@ -3547,19 +3616,16 @@ Indicates wether it is black&apos;s or white&apos;s turn.</source>
 指示無論持黑棋或白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>0 brothers
 0 sons</source>
         <translation type="obsolete">0 之後變化型
 0 之前變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variations</source>
         <translation type="obsolete">變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
@@ -3568,17 +3634,14 @@ Shows the number of sons and brothers within the current node.</source>
 顯示主或支數目於現在節點.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh</source>
         <translation type="obsolete">更新</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh display</source>
         <translation type="obsolete">更新顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
@@ -3587,17 +3650,14 @@ Refresh board. Use this if you cannot see any stones on the board.</source>
 更新棋盤. 請使用當你看不到棋盤上的棋子時</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass</source>
         <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass move</source>
         <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass
 
 Pass your turn.</source>
@@ -3606,17 +3666,14 @@ Pass your turn.</source>
 此次落子虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Undo</source>
         <translation type="obsolete">回手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Undo last move</source>
         <translation type="obsolete">打回上一手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
@@ -3625,17 +3682,14 @@ Undo the opponent&apos;s last move.</source>
 替對手打回一手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjourn</source>
         <translation type="obsolete">打掛</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Request adjournment</source>
         <translation type="obsolete">要求打掛</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
@@ -3644,17 +3698,14 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
 送出打掛請求給對手. 假如對方同意, 此對局將會打掛並儲存.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Score</source>
         <translation type="obsolete">計地</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Score/Edit</source>
         <translation type="obsolete">計地/編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Score
 
 Left click on a group to mark it as dead.
@@ -3675,17 +3726,14 @@ Click to get a new, editable offline window.</source>
 點選後開啟新視窗, 可離線編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>RESIGN</source>
         <translation type="obsolete">投子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Default Loss</source>
         <translation type="obsolete">判定輸棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
@@ -3694,17 +3742,14 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
 立即投子. 對手獲勝. 遊戲結束</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigate through the game</source>
         <translation type="obsolete">逐步巡覽對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>000</source>
         <translation type="obsolete">000</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
@@ -3716,42 +3761,34 @@ Indicates whether it is black&apos;s or white&apos;s turn.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="" line="0"/>
         <source>Observers</source>
         <translation type="obsolete">觀局者</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+E</source>
         <translation type="obsolete">Ctrl+E</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+T</source>
         <translation type="obsolete">Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2301"/>
         <source>New</source>
-        <translation>新增</translation>
+        <translation type="obsolete">新增</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New &amp;Board</source>
         <translation type="obsolete">新增棋盤(&amp;B)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+B</source>
         <translation type="obsolete">Ctrl+B</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Creates a new board</source>
         <translation type="obsolete">建立新棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New
 
 Creates a new board.</source>
@@ -3760,29 +3797,26 @@ Creates a new board.</source>
 建立新棋盤.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1265"/>
+        <location filename="../mainwindow.ui" line="1110"/>
+        <location filename="../mainwindow.ui" line="1333"/>
         <source>New game</source>
         <translation>新增對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;New game</source>
         <translation type="obsolete">新增對局(&amp;N)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+N</source>
         <translation type="obsolete">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Creates a new game on this board</source>
         <translation type="obsolete">新增
 
 新增對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New
 
 Creates a new game on this board.</source>
@@ -3791,27 +3825,23 @@ Creates a new game on this board.</source>
 新增對局</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="722"/>
+        <location filename="../mainwindow.ui" line="773"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Open</source>
         <translation type="obsolete">開啟(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+O</source>
         <translation type="obsolete">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Open a sgf file</source>
         <translation type="obsolete">開啟 SGF 棋譜檔案</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Open
 
 Open a sgf file.</source>
@@ -3820,27 +3850,22 @@ Open a sgf file.</source>
 開啟 SGF 棋譜檔案</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">儲存</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Save</source>
         <translation type="obsolete">儲存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+S</source>
         <translation type="obsolete">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save a sgf file</source>
         <translation type="obsolete">儲存SGF棋譜</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save
 
 Save a sgf file.</source>
@@ -3849,22 +3874,18 @@ Save a sgf file.</source>
 儲存SGF棋譜</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save As</source>
         <translation type="obsolete">另存新檔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save &amp;As</source>
         <translation type="obsolete">另存新檔(&amp;A)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save a sgf file under a new name</source>
         <translation type="obsolete">儲存 SGF 棋譜於新名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save As
 
 Save a sgf file under a new name.</source>
@@ -3873,27 +3894,22 @@ Save a sgf file under a new name.</source>
 儲存SGF檔案於新名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close</source>
         <translation type="obsolete">關閉</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Close</source>
         <translation type="obsolete">關閉(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+W</source>
         <translation type="obsolete">Ctrl+W</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close this board</source>
         <translation type="obsolete">關閉此棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit
 
 Close this board.</source>
@@ -3902,22 +3918,18 @@ Close this board.</source>
 關閉此棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import ASCII</source>
         <translation type="obsolete">匯入 ASCII</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import &amp;ASCII</source>
         <translation type="obsolete">匯入 &amp;ASCII </translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import an ASCII file as new variation</source>
         <translation type="obsolete">匯入 ASCII 檔案新變量</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
@@ -3926,22 +3938,18 @@ Import an ASCII file as new variation.</source>
 匯入 ASCII 檔新變量</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import ASCII from clipboard</source>
         <translation type="obsolete">由剪貼簿匯入ASCII</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import ASCII from &amp;clipboard</source>
         <translation type="obsolete">由剪貼簿匯入ASCII(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import an ASCII board as new variation from the clipboard</source>
         <translation type="obsolete">由剪貼簿匯入 ASCII 棋盤新變量</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
@@ -3950,22 +3958,18 @@ Import an ASCII file as new variation from the clipboard.</source>
 由剪貼簿匯入 ASCII 檔案於新變量.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export ASCII</source>
         <translation type="obsolete">匯出 ASCII</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Export ASCII</source>
         <translation type="obsolete">匯出 ASCII(&amp;E)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export current board to ASCII</source>
         <translation type="obsolete">匯出現在盤面為 ASCII</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
@@ -3974,22 +3978,18 @@ Export current board to ASCII.</source>
 匯出現在盤面為 ASCII</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import SGF from clipboard</source>
         <translation type="obsolete">由剪貼簿匯入 SGF 棋譜</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import SGF &amp;from clipboard</source>
         <translation type="obsolete">由剪貼簿匯入 SGF 棋譜(&amp;F)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import a complete game in SGF format from clipboard</source>
         <translation type="obsolete">由剪貼簿匯入 SGF 格式完整棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
@@ -3998,22 +3998,18 @@ Import a complete game in SGF format from clipboard.</source>
 由剪貼簿匯入 SGF 格式完整棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export SGF to clipboard</source>
         <translation type="obsolete">匯出 SGF 到剪貼簿</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export SGF &amp;to clipboard</source>
         <translation type="obsolete">匯出 SGF 到剪貼簿(&amp;T)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export a complete game in SGF format to clipboard</source>
         <translation type="obsolete">由剪貼簿匯出 SGF 格式完整棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
@@ -4022,22 +4018,18 @@ Export a complete game in SGF format to clipboard.</source>
 由剪貼簿匯入 SGF 格式完整棋局.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export Image</source>
         <translation type="obsolete">匯出圖像</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export &amp;Image</source>
         <translation type="obsolete">匯出圖像(&amp;I)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export current board to an image</source>
         <translation type="obsolete">匯出現在的棋盤為圖像</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export Image
 
 Export current board to an image.</source>
@@ -4046,22 +4038,18 @@ Export current board to an image.</source>
 匯出現在的棋盤為圖像</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export Image to clipboard</source>
         <translation type="obsolete">匯出圖像到剪貼簿</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>E&amp;xport Image to clipboard</source>
         <translation type="obsolete">匯出圖像到剪貼簿(&amp;X)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export current board to the clipboard as image</source>
         <translation type="obsolete">匯出現在的棋盤圖像到剪貼簿</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
@@ -4070,27 +4058,22 @@ Export current board to the clipboard as image.</source>
 匯出現在的棋盤圖像到剪貼簿</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">離開</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>E&amp;xit</source>
         <translation type="obsolete">離開(&amp;E)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+Q</source>
         <translation type="obsolete">Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Quits the application</source>
         <translation type="obsolete">離開本程式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit
 
 Quits the application.</source>
@@ -4099,27 +4082,22 @@ Quits the application.</source>
 離開本程式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cut</source>
         <translation type="obsolete">剪下</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cut</source>
         <translation type="obsolete">剪下(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+X</source>
         <translation type="obsolete">Ctrl+X</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cut this and all following positions</source>
         <translation type="obsolete">剪下此項及之後位置</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cut
 
 Cut this and all following positions.</source>
@@ -4128,27 +4106,22 @@ Cut this and all following positions.</source>
 剪下並之後位置.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste</source>
         <translation type="obsolete">貼上</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Paste</source>
         <translation type="obsolete">貼上(&amp;P)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+P</source>
         <translation type="obsolete">Ctrl+P</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste as son of the current move</source>
         <translation type="obsolete">於目前落子之後貼上變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste
 
 Paste as son of the current move.</source>
@@ -4157,22 +4130,18 @@ Paste as son of the current move.</source>
 於目前落子之後貼上變化型.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste as brother</source>
         <translation type="obsolete">貼上為之前變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste as &amp;brother</source>
         <translation type="obsolete">貼上為之前變化型 (&amp;B)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste as brother of the current move</source>
         <translation type="obsolete">於目前落子之前貼上變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Paste
 
 Paste as brother of the current move.</source>
@@ -4181,27 +4150,22 @@ Paste as brother of the current move.</source>
 於目前落子之前貼上變化型.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2343"/>
         <source>Delete</source>
-        <translation>刪除</translation>
+        <translation type="obsolete">刪除</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Delete</source>
         <translation type="obsolete">刪除(&amp;D)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+D</source>
         <translation type="obsolete">Ctrl+D</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Delete this and all following positions</source>
         <translation type="obsolete">刪除此項及所有之後的部份</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Delete
 
 Delete this and all following positions.</source>
@@ -4210,27 +4174,22 @@ Delete this and all following positions.</source>
 刪除此項及所有之後的部份.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Number Moves</source>
         <translation type="obsolete">落子手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Number Moves</source>
         <translation type="obsolete">落子手數(&amp;N)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shift+F2</source>
         <translation type="obsolete">Shift+F2</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark all moves with the number of their turn</source>
         <translation type="obsolete">標示所有落子手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
@@ -4239,27 +4198,22 @@ Mark all moves with the number of their turn.</source>
 標示所有落子手數.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark brothers</source>
         <translation type="obsolete">標記之前變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark &amp;brothers</source>
         <translation type="obsolete">標記之前變化型(&amp;B)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shift+F3</source>
         <translation type="obsolete">Shift+F3</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark all brothers of the current move</source>
         <translation type="obsolete">標記目前落子所有的之前變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
@@ -4268,27 +4222,22 @@ Mark all brothers of the current move.</source>
 標記目前落子所有的之前變化型.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark sons</source>
         <translation type="obsolete">標記之後變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark &amp;sons</source>
         <translation type="obsolete">標記之後變化型(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shift+F4</source>
         <translation type="obsolete">Shift+F4</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark all sons of the current move</source>
         <translation type="obsolete">標示所有目前落子之後的變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
@@ -4297,27 +4246,22 @@ Mark all sons of the current move.</source>
 標示所有目前落子之後的變化型.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous move (Left)</source>
         <translation type="obsolete">上一手 (←)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Previous move</source>
         <translation type="obsolete">上一手 (&amp;P)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Left</source>
         <translation type="obsolete">左方向鍵</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To previous move</source>
         <translation type="obsolete">上一步</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous move
 
 Move one move backward.</source>
@@ -4326,27 +4270,22 @@ Move one move backward.</source>
 移動落子到前一手.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next move (Right)</source>
         <translation type="obsolete">下一手 (→)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Next move</source>
         <translation type="obsolete">下一手 (&amp;N)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Right</source>
         <translation type="obsolete">右鍵</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To next move</source>
         <translation type="obsolete">下一手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next move
 
 Move one move forward.</source>
@@ -4355,27 +4294,22 @@ Move one move forward.</source>
 移動到之後的一手.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>First move (Home)</source>
         <translation type="obsolete">棋局開始 (Home)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;First move</source>
         <translation type="obsolete">棋局開始(&amp;F)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Home</source>
         <translation type="obsolete">Home</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To first move</source>
         <translation type="obsolete">到棋局開始</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>First move
 
 Move to first move.</source>
@@ -4384,27 +4318,22 @@ Move to first move.</source>
 移到棋局開始.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Last move (End)</source>
         <translation type="obsolete">最後一手 (End)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Last move</source>
         <translation type="obsolete">最後一手 (&amp;L)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>End</source>
         <translation type="obsolete">End</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To last move</source>
         <translation type="obsolete">到最後一手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Last move
 
 Move to last move.</source>
@@ -4413,27 +4342,22 @@ Move to last move.</source>
 移動到最後一手.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous variation (Up)</source>
         <translation type="obsolete">之前變化 (↑)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>P&amp;revious variation</source>
         <translation type="obsolete">之前變化 (&amp;R)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Up</source>
         <translation type="obsolete">上</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To previous variation</source>
         <translation type="obsolete">到之前變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
@@ -4442,27 +4366,22 @@ Move to the previous variation of this move.</source>
 移動到此落子的之前變化.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next variation (Down)</source>
         <translation type="obsolete">下一變量(Down)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>N&amp;ext variation</source>
         <translation type="obsolete">下一變量(&amp;E)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Down</source>
         <translation type="obsolete">下</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To next variation</source>
         <translation type="obsolete">到下一變量</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next variation
 
 Move to the next variation of this move.</source>
@@ -4471,22 +4390,18 @@ Move to the next variation of this move.</source>
 移到到下一變量於此落子.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Main Branch</source>
         <translation type="obsolete">主要分支</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Main branch</source>
         <translation type="obsolete">主要分支(&amp;M)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To main branch</source>
         <translation type="obsolete">到主要分支</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
@@ -4495,22 +4410,18 @@ Move to the main branch where variation started.</source>
 移到主分支變化開始處.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variation start</source>
         <translation type="obsolete">變化開始</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variation &amp;start</source>
         <translation type="obsolete">變化開始(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To top of variation</source>
         <translation type="obsolete">變化起始點</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
@@ -4519,22 +4430,18 @@ Move to the top variation of this branch.</source>
 移到主分支變化開始.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next branch</source>
         <translation type="obsolete">下一分支</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next &amp;branch</source>
         <translation type="obsolete">下一分支(&amp;B)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To next branch starting a variation</source>
         <translation type="obsolete">到下一個分支變化開始</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
@@ -4543,27 +4450,22 @@ Move to the next branch starting a variation.</source>
 到下一個分支變化開始.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Goto move</source>
         <translation type="obsolete">前進到手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Goto Move</source>
         <translation type="obsolete">前進到手數(&amp;G)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+G</source>
         <translation type="obsolete">Ctrl+G</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Goto a move of main branch by number</source>
         <translation type="obsolete">前往主分支的落子手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
@@ -4572,27 +4474,22 @@ Goto a move of main branch by number.</source>
 前往主分支的落子手數.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autoplay</source>
         <translation type="obsolete">自動播放</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Autoplay</source>
         <translation type="obsolete">自動播放(&amp;A)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+A</source>
         <translation type="obsolete">Ctrl+A</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Start/Stop autoplaying current game</source>
         <translation type="obsolete">開啟或停止 自動播放目前棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autoplay
 
 Start/Stop autoplaying current game.</source>
@@ -4601,22 +4498,18 @@ Start/Stop autoplaying current game.</source>
 開始或停止 自動播放現在棋局.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Empty branch</source>
         <translation type="obsolete">空白分支</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Empt&amp;y branch</source>
         <translation type="obsolete">空白分支(&amp;Y)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Create an empty branch</source>
         <translation type="obsolete">建立空白分支</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Empty branch
 
 Create an empty branch.</source>
@@ -4625,22 +4518,18 @@ Create an empty branch.</source>
 建立空白分支.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Duplicate move</source>
         <translation type="obsolete">重製落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>D&amp;uplicate move</source>
         <translation type="obsolete">重製落子(&amp;U)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Copies and duplicates this move</source>
         <translation type="obsolete">複製及重製這個落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
@@ -4649,22 +4538,18 @@ Copies and duplicates this move.</source>
 複製及重製這個落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Swap variations</source>
         <translation type="obsolete">交換變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>S&amp;wap variations</source>
         <translation type="obsolete">交換變化(&amp;W)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Swap current move with previous variation</source>
         <translation type="obsolete">交換目前落子於之前變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Swap variations
 
 Swap current move with previous variation.</source>
@@ -4673,22 +4558,18 @@ Swap current move with previous variation.</source>
 交換目前落子於之前變化.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous commented move</source>
         <translation type="obsolete">前一個落子註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous &amp;commented move</source>
         <translation type="obsolete">前一個落子註解(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To previous comment</source>
         <translation type="obsolete">到前一個註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
@@ -4697,37 +4578,30 @@ Move to the previous move that has a comment</source>
 移動到前一個有註解的落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next commented move</source>
         <translation type="obsolete">下一個註解落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next c&amp;ommented move</source>
         <translation type="obsolete">下一個註解落子(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To next comment</source>
         <translation type="obsolete">到下一註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Goto stone at clicked move</source>
         <translation type="obsolete">前往點選棋子的落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Goto clic&amp;ked move</source>
         <translation type="obsolete">前往已點選落子(&amp;K)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>To clicked move</source>
         <translation type="obsolete">已點選落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
@@ -4736,27 +4610,23 @@ Move to the stone played at this intersection (if any)</source>
 下棋落子於這個交錯點 (任意)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="111"/>
+        <location filename="../mainwindow.ui" line="126"/>
         <source>Preferences</source>
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Preferences</source>
         <translation type="obsolete">偏好設定(&amp;P)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+P</source>
         <translation type="obsolete">Alt+P</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit the preferences</source>
         <translation type="obsolete">編輯偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Preferences
 
 Edit the applications preferences.</source>
@@ -4765,27 +4635,22 @@ Edit the applications preferences.</source>
 編輯程式偏好設定.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game Info</source>
         <translation type="obsolete">對局資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Game Info</source>
         <translation type="obsolete">對局資訊(&amp;G)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+I</source>
         <translation type="obsolete">Ctrl+I</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Display game information</source>
         <translation type="obsolete">顯示對局資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game Info
 
 Display game information.</source>
@@ -4794,22 +4659,18 @@ Display game information.</source>
 顯示對局資訊.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>File toolbar</source>
         <translation type="obsolete">檔案工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;File toolbar</source>
         <translation type="obsolete">檔案工具列(&amp;F)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the file toolbar</source>
         <translation type="obsolete">啟用或停用 檔案工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
@@ -4818,22 +4679,18 @@ Enables/disables the file toolbar.</source>
 啟用或停用 檔案工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigation toolbar</source>
         <translation type="obsolete">巡覽工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigation &amp;toolbar</source>
         <translation type="obsolete">巡覽工具列(&amp;T)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the navigation toolbar</source>
         <translation type="obsolete">啟用或停用 巡覽工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
@@ -4842,22 +4699,18 @@ Enables/disables the navigation toolbar.</source>
 啟用或停用 巡覽工具列.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit toolbar</source>
         <translation type="obsolete">編輯工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Edit toolbar</source>
         <translation type="obsolete">編輯工具列(&amp;E)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the edit toolbar</source>
         <translation type="obsolete">啟用或停用 編輯工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
@@ -4866,27 +4719,22 @@ Enables/disables the edit toolbar.</source>
 啟用或停用 編輯工具列.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Menubar</source>
         <translation type="obsolete">目錄列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Menubar</source>
         <translation type="obsolete">目錄列(&amp;M)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F7</source>
         <translation type="obsolete">F7</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the menubar</source>
         <translation type="obsolete">啟用或停用 目錄列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Menubar
 
 Enables/disables the menubar.</source>
@@ -4895,22 +4743,18 @@ Enables/disables the menubar.</source>
 啟用或停用目錄列.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Statusbar</source>
         <translation type="obsolete">狀態列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Statusbar</source>
         <translation type="obsolete">狀態列(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the statusbar</source>
         <translation type="obsolete">啟用或停用 狀態列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
@@ -4919,27 +4763,22 @@ Enables/disables the statusbar.</source>
 啟用或停用 狀態列.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Coordinates</source>
         <translation type="obsolete">座標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>C&amp;oordinates</source>
         <translation type="obsolete">座標(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F8</source>
         <translation type="obsolete">F8</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the coordinates</source>
         <translation type="obsolete">啟用或停用 座標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
@@ -4948,27 +4787,22 @@ Enables/disables the coordinates.</source>
 啟用或停用 座標.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Slider</source>
         <translation type="obsolete">捲軸</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sli&amp;der</source>
         <translation type="obsolete">捲軸(&amp;D)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+F8</source>
         <translation type="obsolete">Ctrl+F8</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the slider</source>
         <translation type="obsolete">允許或停用 捲軸</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Slider
 
 Enables/disables the slider.</source>
@@ -4977,27 +4811,22 @@ Enables/disables the slider.</source>
 允許或停用 捲軸.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sidebar</source>
         <translation type="obsolete">側邊列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Side&amp;bar</source>
         <translation type="obsolete">側邊列(&amp;B)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F9</source>
         <translation type="obsolete">F9</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the sidebar</source>
         <translation type="obsolete">允許或停用 邊側列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
@@ -5006,27 +4835,22 @@ Enables/disables the sidebar.</source>
 允許或停用 邊側列.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Comment</source>
         <translation type="obsolete">註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Comment</source>
         <translation type="obsolete">註解(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F10</source>
         <translation type="obsolete">F10</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables the comment field</source>
         <translation type="obsolete">允許或停用 註解欄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Comment field
 
 Enables/disables the comment field.</source>
@@ -5035,27 +4859,22 @@ Enables/disables the comment field.</source>
 允許或停用 註解欄.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Vertical comment</source>
         <translation type="obsolete">垂直註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Vertical comment</source>
         <translation type="obsolete">垂直註解(&amp;V)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shift+F10</source>
         <translation type="obsolete">Shift+F10</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables a vertical direction of the comment field</source>
         <translation type="obsolete">啟用或停用 垂直方向於命令欄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Vertical comment field
 
 Enables/disables a vertical direction of the comment field.
@@ -5068,27 +4887,22 @@ Note: This setting is temporary for this board. In order to set permanent horizo
 備註: 這項設定為暫時於本局. 請使用 &apos;偏好設定&apos; 設定永久水平/垂直註解.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pin comment</source>
         <translation type="obsolete">固定註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Pin comment</source>
         <translation type="obsolete">固定註解(&amp;P)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ctrl+F10</source>
         <translation type="obsolete">Ctrl+F10</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enables/disables pinning the comment field</source>
         <translation type="obsolete">允許或停用 固定註解欄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
@@ -5097,27 +4911,22 @@ Enables/disables pinning the comment field.</source>
 允許或停用 固定註解欄.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zoom In</source>
         <translation type="obsolete">放大</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zoom &amp;In</source>
         <translation type="obsolete">放大(&amp;I)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt++</source>
         <translation type="obsolete">Alt++</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zooms in the board</source>
         <translation type="obsolete">放大於棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zoom In
 
 Zooms in the board.</source>
@@ -5126,27 +4935,22 @@ Zooms in the board.</source>
 放大棋盤.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zoom Out</source>
         <translation type="obsolete">縮小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zoom &amp;Out</source>
         <translation type="obsolete">縮小(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+-</source>
         <translation type="obsolete">Alt+-</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zooms out the board</source>
         <translation type="obsolete">縮小棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Zoom Out
 
 Zooms out the board.</source>
@@ -5155,22 +4959,18 @@ Zooms out the board.</source>
 縮小棋盤.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save size</source>
         <translation type="obsolete">儲存大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save si&amp;ze</source>
         <translation type="obsolete">儲存大小(&amp;Z)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save the current window size</source>
         <translation type="obsolete">儲存現在的視窗大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save size
 
 Saves the current window size and restores it on the next program start.
@@ -5191,27 +4991,22 @@ Restore with CTRL + &lt;number key&gt;
 &lt;9&gt; 編輯視窗預設值.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Fullscreen</source>
         <translation type="obsolete">全螢幕</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Fullscreen</source>
         <translation type="obsolete">全螢幕(&amp;F)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F11</source>
         <translation type="obsolete">F11</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enable/disable fullscreen mode</source>
         <translation type="obsolete">允許或停用 全螢幕模式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
@@ -5220,27 +5015,22 @@ Enable/disable fullscreen mode.</source>
 允許或停用 全螢幕模式.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Manual</source>
         <translation type="obsolete">使用手冊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Manual</source>
         <translation type="obsolete">使用手冊 (&amp;M)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>F1</source>
         <translation type="obsolete">F1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Opens the manual</source>
         <translation type="obsolete">開啟使用手冊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Help
 
 Opens the manual of the application.</source>
@@ -5249,22 +5039,18 @@ Opens the manual of the application.</source>
 開啟程式使用手冊.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sound Info</source>
         <translation type="obsolete">音效資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Sound</source>
         <translation type="obsolete">音效(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Short info on sound availability</source>
         <translation type="obsolete">短資訊於音效可用</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
@@ -5273,22 +5059,18 @@ Views a message box with a short comment about sound.</source>
 檢視訊息框有關於音效短註解.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">關於</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;About...</source>
         <translation type="obsolete">關於(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About the application</source>
         <translation type="obsolete">關於此程式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About
 
 About the application.</source>
@@ -5297,17 +5079,14 @@ About the application.</source>
 觀於程式.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About Qt</source>
         <translation type="obsolete">關於 QT</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About &amp;Qt...</source>
         <translation type="obsolete">關於 &amp;QT</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About Qt
 
 About Qt.</source>
@@ -5316,267 +5095,219 @@ About Qt.</source>
 關於 QT</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Import/Export</source>
         <translation type="obsolete">匯入/匯出(&amp;I)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>What&apos;s &amp;This?</source>
         <translation type="obsolete">這是什麼?(&amp;T)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;File</source>
         <translation type="obsolete">檔案(&amp;F)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Edit</source>
         <translation type="obsolete">編輯(&amp;E)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Navigation</source>
         <translation type="obsolete">巡覽(&amp;N)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Settings</source>
         <translation type="obsolete">設定(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;View</source>
         <translation type="obsolete">檢視(&amp;V)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Help</source>
         <translation type="obsolete">協助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="177"/>
+        <location filename="../mainwindow.cpp" line="172"/>
         <source>Ready.</source>
         <translation>備妥</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current move</source>
         <translation type="obsolete">目前落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Move
 Displays the number of the current turn and the last move played.</source>
         <translation type="obsolete">落子
 顯示目前落子數及落下的最後一手.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Brothers / sons</source>
         <translation type="obsolete">前變化 / 後變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Navigation
 Shows the brothers and sons of the current move.</source>
         <translation type="obsolete">巡覽
 顯示目前落子之前及之後的變化.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current mode</source>
         <translation type="obsolete">同步模式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mode
 Shows the current mode. &apos;N&apos; for normal mode, &apos;E&apos; for edit mode.</source>
         <translation type="obsolete">模式
 顯示目前模式. &apos;N&apos; 代表一般, &apos;E&apos; 代表編輯模式.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current edit mark</source>
         <translation type="obsolete">同步編輯標示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
         <translation type="obsolete">標記
 顯示正在編輯標記. &apos;-&apos; 於一般模式.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>newgame</source>
         <translation type="obsolete">新對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New board prepared.</source>
         <translation type="obsolete">新棋盤備妥</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
         <translation type="obsolete">SGF (*.sgf);;MGF (*,mgt);;XML (*.xml);;全部格式 (*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF</source>
         <translation type="obsolete">SGF</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>loaded.</source>
         <translation type="obsolete">已讀取.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
         <translation type="obsolete">SGF (*.sgf);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>This file already exists. Do you want to overwrite it?</source>
         <translation type="obsolete">此檔案已經存在. 你要取代他嗎?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Yes</source>
         <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No</source>
         <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cannot save SGF file.</source>
         <translation type="obsolete">存取 SGF檔案</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>saved.</source>
         <translation type="obsolete">己新檔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Update</source>
         <translation type="obsolete">更新</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cannot load from clipboard. Is it empty?</source>
         <translation type="obsolete">無法讀取剪貼簿. 可能為空白?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF imported.</source>
         <translation type="obsolete">SGF 匯入.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Failed to export SGF to clipboard.</source>
         <translation type="obsolete">匯出SGF棋譜到剪貼簿失敗.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF exported.</source>
         <translation type="obsolete">SGF匯出.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Text Files (*.txt);;All Files (*)</source>
         <translation type="obsolete">文字檔 (*.txt);;所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ASCII imported.</source>
         <translation type="obsolete">ASCII 匯入</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Importing ASCII failed. Clipboard empty?</source>
         <translation type="obsolete">匯入 ASCII 失敗. Clipboar empty?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Export image as</source>
         <translation type="obsolete">匯出圖案.. </translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>entermove</source>
         <translation type="obsolete">輸入手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autoplay stopped.</source>
         <translation type="obsolete">自動播放已停止.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autoplay started.</source>
         <translation type="obsolete">自動播放已開始.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variation duplicated.</source>
         <translation type="obsolete">變化已重製.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variations swapped.</source>
         <translation type="obsolete">變化已交換.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No previous variation available.</source>
         <translation type="obsolete">先前沒有變化.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>preferences</source>
         <translation type="obsolete">偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Window size saved.</source>
         <translation type="obsolete">視窗大小已儲存.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Window size restored.</source>
         <translation type="obsolete">還原視窗.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You modified the game.
 Do you want to save your changes?</source>
         <translation type="obsolete">你已修改對局
 你想要儲存這些變更嗎?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3528"/>
+        <location filename="../mainwindow.ui" line="2026"/>
+        <location filename="../mainwindow.ui" line="3190"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Update from online game</source>
         <translation type="obsolete">更新線上對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Update from online game to local board and supersede own changes.</source>
         <translation type="obsolete">由線上對局改變取代本機棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next comment
 
 Move to the next move that has a comment</source>
@@ -5585,27 +5316,22 @@ Move to the next move that has a comment</source>
 移動到下一個有註解的落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Rk</source>
         <translation type="obsolete">棋力</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mute stones sound</source>
         <translation type="obsolete">落子無聲</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Mute stones sound</source>
         <translation type="obsolete">落子無聲(&amp;M)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Toggle stones sound on/off</source>
         <translation type="obsolete">切換落子音效 開啟/關閉</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stones sound
 
 Toggle stones sound on/off
@@ -5616,12 +5342,12 @@ this toggles only the stones sounds</source>
 這項切換只用於落子的音效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="197"/>
+        <location filename="../mainwindow.cpp" line="192"/>
         <source>Current online players / watched players</source>
         <translation type="unfinished">目前的 線上人數 / 監看人數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="198"/>
+        <location filename="../mainwindow.cpp" line="193"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
@@ -5629,32 +5355,32 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
 你正在監看的棋友已經加進「監看棋友」欄位</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="205"/>
+        <location filename="../mainwindow.cpp" line="200"/>
         <source>Current online games / observed games + matches</source>
         <translation type="unfinished">目前的 線上局數 / 你的局數（觀局 ＋ 對局）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="206"/>
+        <location filename="../mainwindow.cpp" line="201"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
         <translation type="unfinished">顯示目前的線上對局數目和你目前的對局數或觀局數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="213"/>
+        <location filename="../mainwindow.cpp" line="208"/>
         <source>Current server</source>
         <translation type="unfinished">目前所在的伺服器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="214"/>
+        <location filename="../mainwindow.cpp" line="209"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
         <translation type="unfinished">顯示目前所在的伺服器名稱或者是 OFFLINE (離線)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="229"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>Online Time</source>
         <translation type="unfinished">連線時間</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="230"/>
+        <location filename="../mainwindow.cpp" line="225"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
@@ -5663,7 +5389,7 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
 (Hold) - &gt; 鎖定行</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="477"/>
+        <location filename="../mainwindow.cpp" line="480"/>
         <source>*** Both players are the same ! ***</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5673,337 +5399,417 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3564"/>
+        <location filename="../mainwindow.ui" line="99"/>
+        <location filename="../mainwindow.ui" line="3244"/>
         <source>Go server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="93"/>
+        <location filename="../mainwindow.ui" line="108"/>
         <source>SGF editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_settings.cpp" line="795"/>
+        <location filename="../mainwindow.ui" line="117"/>
+        <location filename="../mainwindow.ui" line="3235"/>
+        <location filename="../mainwindow_settings.cpp" line="486"/>
         <source>Go engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="120"/>
+        <location filename="../mainwindow.ui" line="135"/>
         <source>Servers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="157"/>
+        <location filename="../mainwindow.ui" line="172"/>
         <source>Server status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1915"/>
+        <location filename="../mainwindow.ui" line="244"/>
+        <location filename="../mainwindow.ui" line="333"/>
+        <location filename="../mainwindow.ui" line="780"/>
+        <location filename="../mainwindow.ui" line="822"/>
+        <location filename="../mainwindow.ui" line="2003"/>
+        <location filename="../mainwindow.ui" line="2010"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="192"/>
+        <location filename="../mainwindow.ui" line="223"/>
         <source>Open for playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="199"/>
+        <location filename="../mainwindow.ui" line="205"/>
+        <source>Tygem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="210"/>
+        <source>eWeiQi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="215"/>
+        <source>Tom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="230"/>
         <source>Looking for a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="206"/>
+        <location filename="../mainwindow.ui" line="237"/>
         <source>No lists update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="236"/>
+        <location filename="../mainwindow.ui" line="267"/>
         <source>Set the handicap range you want for seeking games</source>
         <translation type="unfinished">設定你在自動尋找對局時的授子數範圍</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="240"/>
+        <location filename="../mainwindow.ui" line="271"/>
         <source>Even</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="245"/>
+        <location filename="../mainwindow.ui" line="276"/>
         <source>Within 2 stones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="250"/>
+        <location filename="../mainwindow.ui" line="281"/>
         <source>Within 5 stones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="255"/>
+        <location filename="../mainwindow.ui" line="286"/>
         <source>Anyone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="260"/>
+        <location filename="../mainwindow.ui" line="291"/>
         <source>Same or stronger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="265"/>
+        <location filename="../mainwindow.ui" line="296"/>
         <source>Same or weaker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="273"/>
+        <location filename="../mainwindow.ui" line="304"/>
         <source>Rooms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="283"/>
+        <location filename="../mainwindow.ui" line="314"/>
         <source>Channels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="327"/>
+        <location filename="../mainwindow.ui" line="385"/>
         <source>Shouts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="353"/>
+        <location filename="../mainwindow.ui" line="411"/>
         <source>Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="378"/>
+        <location filename="../mainwindow.ui" line="436"/>
         <source>Erase messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="399"/>
+        <location filename="../mainwindow.ui" line="457"/>
         <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="584"/>
+        <location filename="../mainwindow.ui" line="491"/>
+        <location filename="../mainwindow.ui" line="635"/>
         <source>9p-1p</source>
         <translation type="unfinished">1p-9p {9p?} {1p?}</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="589"/>
+        <location filename="../mainwindow.ui" line="496"/>
+        <location filename="../mainwindow.ui" line="640"/>
         <source>9d</source>
         <translation type="unfinished">9d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="594"/>
+        <location filename="../mainwindow.ui" line="501"/>
+        <location filename="../mainwindow.ui" line="645"/>
         <source>8d</source>
         <translation type="unfinished">8d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="599"/>
+        <location filename="../mainwindow.ui" line="506"/>
+        <location filename="../mainwindow.ui" line="650"/>
         <source>7d</source>
         <translation type="unfinished">7d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="604"/>
+        <location filename="../mainwindow.ui" line="511"/>
+        <location filename="../mainwindow.ui" line="655"/>
         <source>6d</source>
         <translation type="unfinished">6d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="609"/>
+        <location filename="../mainwindow.ui" line="516"/>
+        <location filename="../mainwindow.ui" line="660"/>
         <source>5d</source>
         <translation type="unfinished">5d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="614"/>
+        <location filename="../mainwindow.ui" line="521"/>
+        <location filename="../mainwindow.ui" line="665"/>
         <source>4d</source>
         <translation type="unfinished">4d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="619"/>
+        <location filename="../mainwindow.ui" line="526"/>
+        <location filename="../mainwindow.ui" line="670"/>
         <source>3d</source>
         <translation type="unfinished">3d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="624"/>
+        <location filename="../mainwindow.ui" line="531"/>
+        <location filename="../mainwindow.ui" line="675"/>
         <source>2d</source>
         <translation type="unfinished">2d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="629"/>
+        <location filename="../mainwindow.ui" line="536"/>
+        <location filename="../mainwindow.ui" line="680"/>
         <source>1d</source>
         <translation type="unfinished">1d</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="634"/>
+        <location filename="../mainwindow.ui" line="541"/>
+        <location filename="../mainwindow.ui" line="685"/>
         <source>1k</source>
         <translation type="unfinished">1k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="639"/>
+        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="690"/>
         <source>2k</source>
         <translation type="unfinished">2k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="644"/>
+        <location filename="../mainwindow.ui" line="551"/>
+        <location filename="../mainwindow.ui" line="695"/>
         <source>3k</source>
         <translation type="unfinished">3k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="649"/>
+        <location filename="../mainwindow.ui" line="556"/>
+        <location filename="../mainwindow.ui" line="700"/>
         <source>4k</source>
         <translation type="unfinished">4k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="654"/>
+        <location filename="../mainwindow.ui" line="561"/>
+        <location filename="../mainwindow.ui" line="705"/>
         <source>5k</source>
         <translation type="unfinished">5k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="659"/>
+        <location filename="../mainwindow.ui" line="566"/>
+        <location filename="../mainwindow.ui" line="710"/>
         <source>6k</source>
         <translation type="unfinished">6k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="664"/>
+        <location filename="../mainwindow.ui" line="571"/>
+        <location filename="../mainwindow.ui" line="715"/>
         <source>7k</source>
         <translation type="unfinished">7k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="669"/>
+        <location filename="../mainwindow.ui" line="576"/>
+        <location filename="../mainwindow.ui" line="720"/>
         <source>8k</source>
         <translation type="unfinished">8k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="674"/>
+        <location filename="../mainwindow.ui" line="581"/>
+        <location filename="../mainwindow.ui" line="725"/>
         <source>9k</source>
         <translation type="unfinished">10k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="679"/>
+        <location filename="../mainwindow.ui" line="586"/>
+        <location filename="../mainwindow.ui" line="730"/>
         <source>10k</source>
         <translation type="unfinished">10k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="684"/>
+        <location filename="../mainwindow.ui" line="591"/>
+        <location filename="../mainwindow.ui" line="735"/>
         <source>11k</source>
         <translation type="unfinished">11k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="689"/>
+        <location filename="../mainwindow.ui" line="596"/>
+        <location filename="../mainwindow.ui" line="740"/>
         <source>12k</source>
         <translation type="unfinished">12k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="694"/>
+        <location filename="../mainwindow.ui" line="601"/>
+        <location filename="../mainwindow.ui" line="745"/>
         <source>13k</source>
         <translation type="unfinished">13k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="699"/>
+        <location filename="../mainwindow.ui" line="606"/>
+        <location filename="../mainwindow.ui" line="750"/>
         <source>14k</source>
         <translation type="unfinished">14k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="704"/>
+        <location filename="../mainwindow.ui" line="611"/>
+        <location filename="../mainwindow.ui" line="755"/>
         <source>15k</source>
         <translation type="unfinished">15k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="709"/>
+        <location filename="../mainwindow.ui" line="616"/>
+        <location filename="../mainwindow.ui" line="760"/>
         <source>16k</source>
         <translation type="unfinished">16k</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="714"/>
+        <location filename="../mainwindow.ui" line="621"/>
+        <location filename="../mainwindow.ui" line="765"/>
         <source>NR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="767"/>
+        <location filename="../mainwindow.ui" line="791"/>
+        <source>Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="798"/>
+        <source>Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="808"/>
+        <source>Edit Friends/Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="815"/>
         <source>Create Room</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="774"/>
+        <location filename="../mainwindow.ui" line="353"/>
         <source>Change Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="782"/>
+        <location filename="../mainwindow.ui" line="850"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="840"/>
+        <location filename="../mainwindow.ui" line="908"/>
         <source>New file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1365"/>
+        <location filename="../mainwindow.ui" line="928"/>
+        <location filename="../mainwindow.ui" line="1170"/>
+        <location filename="../mainwindow.ui" line="1433"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1392"/>
+        <location filename="../mainwindow.ui" line="955"/>
+        <location filename="../mainwindow.ui" line="1225"/>
+        <location filename="../mainwindow.ui" line="1460"/>
         <source>Handicap</source>
         <translation type="unfinished">授子</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1129"/>
+        <location filename="../mainwindow.ui" line="1012"/>
+        <location filename="../mainwindow.ui" line="1197"/>
         <source>White player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3439"/>
+        <location filename="../mainwindow.ui" line="1019"/>
+        <location filename="../mainwindow.ui" line="1245"/>
+        <location filename="../mainwindow.ui" line="1394"/>
+        <location filename="../mainwindow.ui" line="3101"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1136"/>
+        <location filename="../mainwindow.ui" line="1036"/>
+        <location filename="../mainwindow.ui" line="1204"/>
         <source>Black player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3432"/>
+        <location filename="../mainwindow.ui" line="1043"/>
+        <location filename="../mainwindow.ui" line="1177"/>
+        <location filename="../mainwindow.ui" line="1357"/>
+        <location filename="../mainwindow.ui" line="3094"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1143"/>
+        <location filename="../mainwindow.ui" line="1073"/>
+        <location filename="../mainwindow.ui" line="1211"/>
+        <location filename="../mainwindow.ui" line="1493"/>
         <source>Komi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1447"/>
         <source>6,5</source>
         <translation type="obsolete">6,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1052"/>
+        <location filename="../mainwindow.ui" line="1120"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1552"/>
+        <location filename="../mainwindow.ui" line="1135"/>
+        <location filename="../mainwindow.ui" line="1620"/>
         <source>Open game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1095"/>
+        <location filename="../mainwindow.ui" line="1163"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1170"/>
+        <location filename="../mainwindow.ui" line="1238"/>
         <source>19</source>
         <translation type="unfinished">19</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1184"/>
+        <location filename="../mainwindow.ui" line="1252"/>
         <source>Result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1522"/>
+        <location filename="../mainwindow.ui" line="1306"/>
+        <location filename="../mainwindow.ui" line="1590"/>
         <source>Click on the board to place a stone.
 
 When in normal mode, left click plays moves in alternating colors.
@@ -6022,107 +5828,117 @@ Shift + → 到目前變化的下一手
 在計地模式時, 左鍵標示棋塊為死子, 右鍵標示活棋或雙活. 再次點擊則取消標示.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1277"/>
+        <location filename="../mainwindow.ui" line="1345"/>
         <source>Computer engine plays as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1304"/>
+        <location filename="../mainwindow.ui" line="1372"/>
         <source>Computer level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1425"/>
-        <source>komi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1450"/>
+        <location filename="../mainwindow.ui" line="1518"/>
         <source>One color Go</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1459"/>
+        <location filename="../mainwindow.ui" line="1527"/>
         <source>Set defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1466"/>
+        <location filename="../mainwindow.ui" line="1534"/>
         <source>Start game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1476"/>
+        <location filename="../mainwindow.ui" line="1544"/>
         <source>Open started game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1575"/>
+        <location filename="../mainwindow.ui" line="1643"/>
         <source>Go engine path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1603"/>
+        <location filename="../mainwindow.ui" line="1671"/>
         <source>Get engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1636"/>
+        <location filename="../mainwindow.ui" line="1704"/>
         <source>International</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1648"/>
+        <location filename="../mainwindow.ui" line="1716"/>
         <source>Language</source>
         <translation type="unfinished">語言</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1656"/>
+        <location filename="../mainwindow.ui" line="1724"/>
         <source>System default</source>
         <translation type="unfinished">系統預設</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1661"/>
+        <location filename="../mainwindow.ui" line="1729"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1666"/>
+        <location filename="../mainwindow.ui" line="1734"/>
         <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1687"/>
+        <location filename="../mainwindow.ui" line="1755"/>
         <source>Text encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1695"/>
+        <location filename="../mainwindow.ui" line="1763"/>
         <source>None</source>
         <translation type="unfinished">無</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1706"/>
+        <location filename="../mainwindow.ui" line="1774"/>
         <source>Misc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1718"/>
+        <location filename="../mainwindow.ui" line="1784"/>
+        <source>Territory Cross</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1791"/>
+        <source>Territory Stone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1802"/>
         <source>Ko marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1744"/>
+        <location filename="../mainwindow.ui" line="1809"/>
+        <source>Number Current Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1837"/>
         <source>Autoplay interval</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1754"/>
+        <location filename="../mainwindow.ui" line="1847"/>
         <source>Time interval for autoplay</source>
         <translation type="unfinished">自動播放時間間隔</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1757"/>
+        <location filename="../mainwindow.ui" line="1850"/>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
@@ -6131,107 +5947,106 @@ Delay between the moves in autoplay mode in seconds.</source>
 延遲自動播放落子秒數間隔</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1763"/>
+        <location filename="../mainwindow.ui" line="1856"/>
         <source>0.1</source>
         <translation type="unfinished">0.1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1768"/>
+        <location filename="../mainwindow.ui" line="1861"/>
         <source>0.5</source>
         <translation type="unfinished">0.5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1773"/>
+        <location filename="../mainwindow.ui" line="1866"/>
         <source>1</source>
         <translation type="unfinished">1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1778"/>
+        <location filename="../mainwindow.ui" line="1871"/>
         <source>2.5</source>
         <translation type="unfinished">2.5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1783"/>
+        <location filename="../mainwindow.ui" line="1876"/>
         <source>5</source>
         <translation type="unfinished">5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1788"/>
+        <location filename="../mainwindow.ui" line="1881"/>
         <source>7.5</source>
         <translation type="unfinished">7.5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1793"/>
+        <location filename="../mainwindow.ui" line="1886"/>
         <source>10</source>
         <translation type="unfinished">10</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1804"/>
+        <location filename="../mainwindow.ui" line="1899"/>
         <source>Sound</source>
         <translation type="unfinished">音效</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1816"/>
+        <location filename="../mainwindow.ui" line="1911"/>
         <source>Sound off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1823"/>
+        <location filename="../mainwindow.ui" line="1918"/>
         <source>My games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1830"/>
+        <location filename="../mainwindow.ui" line="1925"/>
         <source>All games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1840"/>
+        <location filename="../mainwindow.ui" line="1935"/>
         <source>Stones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1852"/>
+        <location filename="../mainwindow.ui" line="1947"/>
         <source>Ugly 2D</source>
         <translation type="unfinished">醜醜的 2D</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1859"/>
+        <location filename="../mainwindow.ui" line="1954"/>
         <source>Plain 3D</source>
         <translation type="unfinished">純3D</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1866"/>
+        <location filename="../mainwindow.ui" line="1961"/>
         <source>Realistic</source>
         <translation type="unfinished">逼真的</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1882"/>
+        <location filename="../mainwindow.ui" line="1977"/>
         <source>Goban and table</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1894"/>
+        <location filename="../mainwindow.ui" line="1989"/>
+        <location filename="../mainwindow_settings.cpp" line="512"/>
         <source>Table picture</source>
         <translation type="unfinished">表格圖片</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1901"/>
+        <location filename="../mainwindow.ui" line="1996"/>
+        <location filename="../mainwindow_settings.cpp" line="499"/>
         <source>Goban picture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1965"/>
         <source>Title:</source>
-        <translation type="unfinished">標題:</translation>
+        <translation type="obsolete">標題:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1972"/>
         <source>title, e.g.: guest account at NNGS</source>
-        <translation type="unfinished">標題, 例如: guest account at NNGS</translation>
+        <translation type="obsolete">標題, 例如: guest account at NNGS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1975"/>
         <source>unique title, e.g.:
 
 guest account at NNGS
@@ -6241,7 +6056,7 @@ xyz
 The title field is used to chose a server connection.
 
 Note: don&apos;t use a default server name, i.e. &apos;-- Aurora --&apos; etc.</source>
-        <translation type="unfinished">獨一標題, 例如:
+        <translation type="obsolete">獨一標題, 例如:
 
 guest account at NNGS
 qGo1234 (IGS)
@@ -6253,51 +6068,43 @@ xyz
 (使用中文標題時系統有時無法判別, 請注意)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2011"/>
         <source>Title</source>
-        <translation type="unfinished">標題</translation>
+        <translation type="obsolete">標題</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2016"/>
         <source>Host</source>
-        <translation type="unfinished">主機</translation>
+        <translation type="obsolete">主機</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2021"/>
         <source>Port</source>
-        <translation type="unfinished">通訊埠</translation>
+        <translation type="obsolete">通訊埠</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2026"/>
         <source>Name</source>
-        <translation type="unfinished">名稱</translation>
+        <translation type="obsolete">名稱</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2031"/>
         <source>Pass</source>
-        <translation type="unfinished">虛手</translation>
+        <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2053"/>
         <source>Name:</source>
-        <translation type="unfinished">名稱:</translation>
+        <translation type="obsolete">名稱:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2060"/>
         <source>use your login name; if unregistered use a unique name like &apos;hotdog17&apos; (NNGS, CWS) or guest (other servers)</source>
-        <translation type="unfinished">使用你的名稱登入; 假如尚未註冊使用單一名稱如 &apos;hotdog17&apos; (NNGS, CWS) 或 &apos;guest&apos; (其他伺服器)</translation>
+        <translation type="obsolete">使用你的名稱登入; 假如尚未註冊使用單一名稱如 &apos;hotdog17&apos; (NNGS, CWS) 或 &apos;guest&apos; (其他伺服器)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2063"/>
         <source>name
 
 Registered users: 
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
-        <translation type="unfinished">名稱
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
+        <translation type="obsolete">名稱
 
 已註冊使用者: 
 使用你伺服器提供給你或註冊之後的登入名稱及密碼
@@ -6307,78 +6114,57 @@ NNGS, CWS: 使用單一名稱如 &apos;hotdog17&apos;
 其他:  guest</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2093"/>
         <source>Host:</source>
-        <translation type="unfinished">主機:</translation>
+        <translation type="obsolete">主機:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2109"/>
+        <location filename="../mainwindow.ui" line="185"/>
         <source>IGS</source>
         <translation type="unfinished">IGS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2114"/>
+        <location filename="../mainwindow.ui" line="190"/>
         <source>WING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2119"/>
+        <location filename="../mainwindow.ui" line="195"/>
         <source>LGS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2124"/>
+        <location filename="../mainwindow.ui" line="200"/>
         <source>CyberORO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_settings.cpp" line="697"/>
-        <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2153"/>
-        <source>address :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2163"/>
-        <source>Port :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2176"/>
         <source>port address, e.g.: 9696</source>
-        <translation type="unfinished">通訊埠位址, 例如: 9696</translation>
+        <translation type="obsolete">通訊埠位址, 例如: 9696</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2179"/>
         <source>port address, e.g.: 9696
 
 Port address is defined for each go server. It&apos;s a fixed number. See Host for predefined server names.</source>
-        <translation type="unfinished">連接埠位址, 例如:9696
+        <translation type="obsolete">連接埠位址, 例如:9696
 
 定義伺服器連接埠數字. 那是固定數字. 看先前定義的伺服器主機位址</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2207"/>
         <source>Password:</source>
-        <translation type="unfinished">密碼:</translation>
+        <translation type="obsolete">密碼:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2214"/>
         <source>your password; if unregistered: blank field</source>
-        <translation type="unfinished">你的密碼; 如果尚未註冊: 留空</translation>
+        <translation type="obsolete">你的密碼; 如果尚未註冊: 留空</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2217"/>
         <source>password
 
 Registered users: 
 use your login name and password provided by the go server operator after registration
 
 New users: leave blank!</source>
-        <translation type="unfinished">密碼
+        <translation type="obsolete">密碼
 
 已註冊使用者:
 使用你伺服器提供給你或註冊之後的登入名稱及密碼
@@ -6386,77 +6172,65 @@ New users: leave blank!</source>
 新使用者: 留空</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2254"/>
         <source>Codec:</source>
-        <translation type="unfinished">編碼:</translation>
+        <translation type="obsolete">編碼:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2293"/>
         <source>clear form</source>
-        <translation type="unfinished">清除表單</translation>
+        <translation type="obsolete">清除表單</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2296"/>
         <source>New
 
 clear form; doesn&apos;t make any changes to the entries</source>
-        <translation type="unfinished">新增表單
+        <translation type="obsolete">新增表單
 
 清除表單; 不改變任何項目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2316"/>
         <source>add/change current entry</source>
-        <translation type="unfinished">新增/變更 目前項目</translation>
+        <translation type="obsolete">新增/變更 目前項目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2319"/>
         <source>Add or Change
 
 Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
 
 Label &apos;Add&apos; is default. The given entries will be saved under the given title.</source>
-        <translation type="unfinished">新增或修改
+        <translation type="obsolete">新增或修改
 
 標籤 &apos;修改&apos; 顯示於你的標題有重複, 換言之目前的項目將取代已儲存的項目標題
 
 標籤 &apos;新增&apos; 為預設. 給予的項目將儲存於標題之上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2326"/>
-        <source>Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2333"/>
         <source>delete current entry</source>
-        <translation type="unfinished">刪除目前項目</translation>
+        <translation type="obsolete">刪除目前項目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2336"/>
         <source>Delete
 
 Deletes the saved entries with same Title.
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="unfinished">刪除
+        <translation type="obsolete">刪除
 
 刪除儲存欄位相同標題
 
 備註: &apos;刪除&apos; 涉及儲存記錄</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2354"/>
+        <location filename="../mainwindow.ui" line="3205"/>
         <source>Default is Observe Outside</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2872"/>
+        <location filename="../mainwindow.ui" line="2534"/>
         <source>Score/Edit</source>
         <translation type="unfinished">計地/編輯</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2875"/>
+        <location filename="../mainwindow.ui" line="2537"/>
         <source>Score
 
 Left click on a group to mark it as dead.
@@ -6477,67 +6251,71 @@ Click to get a new, editable offline window.</source>
 點選後開啟新視窗, 可離線編輯</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2899"/>
+        <location filename="../mainwindow.ui" line="2561"/>
         <source>Byo Yomi warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2905"/>
+        <location filename="../mainwindow.ui" line="2567"/>
         <source>Seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2935"/>
+        <location filename="../mainwindow.ui" line="2597"/>
         <source>sound warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2945"/>
+        <location filename="../mainwindow.ui" line="2607"/>
         <source>Autosave</source>
         <translation type="unfinished">自動儲存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2957"/>
+        <location filename="../mainwindow.ui" line="2619"/>
         <source>Observed games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2964"/>
+        <location filename="../mainwindow.ui" line="2626"/>
         <source>Played games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2974"/>
+        <location filename="../mainwindow.ui" line="2636"/>
         <source>Games settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3485"/>
+        <location filename="../mainwindow.ui" line="2672"/>
+        <location filename="../mainwindow.ui" line="2691"/>
+        <location filename="../mainwindow.ui" line="3127"/>
+        <location filename="../mainwindow.ui" line="3147"/>
         <source>board size</source>
         <translation type="unfinished">棋盤大小</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3013"/>
+        <location filename="../mainwindow.ui" line="2675"/>
         <source>Board size:</source>
         <translation type="unfinished">棋盤大小:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3074"/>
+        <location filename="../mainwindow.ui" line="2717"/>
+        <location filename="../mainwindow.ui" line="2736"/>
         <source>Komi: added to white&apos;s result</source>
         <translation type="unfinished">讓子: 加到白地數目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3058"/>
+        <location filename="../mainwindow.ui" line="2720"/>
         <source>Komi:</source>
         <translation type="unfinished">讓子:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3098"/>
+        <location filename="../mainwindow.ui" line="2760"/>
         <source>allow client to negotiate automatic</source>
         <translation type="unfinished">允許用戶端自動巡覽</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3101"/>
+        <location filename="../mainwindow.ui" line="2763"/>
         <source>Automatic Negotiation
 
 Allow client to negotiate komi automatic.
@@ -6550,134 +6328,148 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
 注意: 這可能造成困擾如果對受不想同意你的預設甚至如果你的預設之前有送至對手. 這可能固有不同內部使用於 用戶端協議值</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3108"/>
+        <location filename="../mainwindow.ui" line="2770"/>
         <source>Automatic komi 
 negotiation</source>
         <translation type="unfinished">自動讓子
 協議</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3371"/>
+        <location filename="../mainwindow.ui" line="2788"/>
+        <location filename="../mainwindow.ui" line="2814"/>
+        <location filename="../mainwindow.ui" line="3013"/>
+        <location filename="../mainwindow.ui" line="3033"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3129"/>
+        <location filename="../mainwindow.ui" line="2791"/>
         <source>Byoyomi
 time:</source>
         <translation type="unfinished">讀秒
 時間 :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3322"/>
+        <location filename="../mainwindow.ui" line="2837"/>
+        <location filename="../mainwindow.ui" line="2863"/>
+        <location filename="../mainwindow.ui" line="2964"/>
+        <location filename="../mainwindow.ui" line="2984"/>
         <source>Playing time</source>
         <translation type="unfinished">對局時間</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3178"/>
+        <location filename="../mainwindow.ui" line="2840"/>
         <source>Main 
 time :</source>
         <translation type="unfinished">主要
 時間 :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3235"/>
+        <location filename="../mainwindow.ui" line="2897"/>
         <source>All servers settings</source>
         <translation type="unfinished">所有伺服器設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3268"/>
+        <location filename="../mainwindow.ui" line="2930"/>
         <source>IGS &apos;nmatch&apos; specific settings</source>
         <translation type="unfinished">IGS 特有的 &apos;nmatch&apos; 指令設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3305"/>
+        <location filename="../mainwindow.ui" line="2967"/>
         <source>Main time 
 up to :</source>
         <translation type="unfinished">主要時間
 增加到 :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3354"/>
+        <location filename="../mainwindow.ui" line="3016"/>
         <source>Byo time
 up to :</source>
         <translation type="unfinished">讀秒時間
 增加到 :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3417"/>
+        <location filename="../mainwindow.ui" line="3079"/>
         <source>Play as :</source>
         <translation type="unfinished">持子 :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3446"/>
+        <location filename="../mainwindow.ui" line="3108"/>
         <source>Nigiri</source>
         <translation type="unfinished">猜先</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3468"/>
+        <location filename="../mainwindow.ui" line="3130"/>
         <source>Handicap 
 up to :</source>
         <translation type="unfinished">授子
 提升到 :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3488"/>
+        <location filename="../mainwindow.ui" line="3150"/>
         <source>0</source>
         <translation type="unfinished">0</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3546"/>
+        <location filename="../mainwindow.ui" line="3226"/>
         <source>sgf editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="250"/>
+        <location filename="../mainwindow_server.cpp" line="285"/>
+        <location filename="../mainwindow_server.cpp" line="1466"/>
         <source>Connect with</source>
         <translation type="unfinished">連線在</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="128"/>
+        <location filename="../mainwindow_server.cpp" line="113"/>
         <source>Disconnect from</source>
         <translation type="unfinished">斷線於</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="1194"/>
+        <location filename="../mainwindow_server.cpp" line="330"/>
+        <source>Not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow_server.cpp" line="330"/>
+        <source>This feature will be in a later version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow_server.cpp" line="1234"/>
         <source>msg*</source>
         <translation type="unfinished">訊息*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="1220"/>
+        <location filename="../mainwindow_server.cpp" line="1260"/>
         <source>Shouts*</source>
         <translation type="unfinished">公眾*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="1533"/>
-        <source> Byo Time : (</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow_server.cpp" line="1533"/>
         <source> stones)</source>
-        <translation type="unfinished"> 落子)</translation>
+        <translation type="obsolete"> 落子)</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="1598"/>
         <source>Accept</source>
-        <translation type="unfinished">接受</translation>
+        <translation type="obsolete">接受</translation>
     </message>
     <message>
-        <location filename="../mainwindow_settings.cpp" line="796"/>
+        <location filename="../mainwindow_settings.cpp" line="487"/>
+        <location filename="../mainwindow_settings.cpp" line="500"/>
+        <location filename="../mainwindow_settings.cpp" line="513"/>
         <source>All Files (*)</source>
         <translation type="unfinished">所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1438"/>
+        <location filename="../mainwindow.ui" line="1086"/>
+        <location filename="../mainwindow.ui" line="1190"/>
+        <location filename="../mainwindow.ui" line="1506"/>
         <source>6.5</source>
         <translation type="unfinished">6.5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3077"/>
+        <location filename="../mainwindow.ui" line="2739"/>
         <source>.5</source>
         <translation type="unfinished">.5</translation>
     </message>
@@ -6695,6 +6487,7 @@ up to :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../network/matchinvitedialog.cpp" line="12"/>
         <location filename="../network/matchinvitedialog.cpp" line="44"/>
         <source>%1 seconds</source>
         <translation type="unfinished"></translation>
@@ -6716,159 +6509,151 @@ up to :</source>
     </message>
 </context>
 <context>
+    <name>NetworkConnection</name>
+    <message>
+        <location filename="../network/networkconnection.cpp" line="380"/>
+        <source>Signed on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/networkconnection.cpp" line="380"/>
+        <source>%1 has signed on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/networkconnection.cpp" line="419"/>
+        <source>Match Started!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/networkconnection.cpp" line="419"/>
+        <source>Match has started between %1 and %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NewGameDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>New Game</source>
         <translation type="obsolete">新對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Decline</source>
         <translation type="obsolete">拒絕(&amp;D)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Offer</source>
         <translation type="obsolete">提出/接受 (&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board size:</source>
         <translation type="obsolete">棋盤大小:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap:</source>
         <translation type="obsolete">授子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Free game</source>
         <translation type="obsolete">記分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>no</source>
         <translation type="obsolete">記分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>yes</source>
         <translation type="obsolete">不計分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byoyomi Time:</source>
         <translation type="obsolete">讀秒時間:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation type="obsolete">25手落子的時間; 過了25手後, 時間會重新開始計時</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time:</source>
         <translation type="obsolete">基本時間:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Playing time</source>
         <translation type="obsolete">對局時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>s&amp;wap colors</source>
         <translation type="obsolete">持子對換(&amp;W)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;suggest</source>
         <translation type="obsolete">對局建議(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black player:</source>
         <translation type="obsolete">持黑者:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White player:</source>
         <translation type="obsolete">持白者:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>suggest proper handicap according to players ranks</source>
         <translation type="obsolete">依照對局者棋力建議適當授子數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>swap players colors</source>
         <translation type="obsolete">持子對換</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>S&amp;tats</source>
         <translation type="obsolete">棋友狀態(&amp;T)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>query the other players stats</source>
         <translation type="obsolete">查詢邀局棋友資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+O</source>
         <translation type="obsolete">Alt+O</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Opponent</source>
         <translation type="obsolete">對手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game against :</source>
         <translation type="obsolete">對局對手:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+T</source>
         <translation type="obsolete">Alt+T</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You play</source>
         <translation type="obsolete">你持</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Nigiri</source>
         <translation type="obsolete">猜先</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+S</source>
         <translation type="obsolete">Alt+S</translation>
     </message>
@@ -6876,82 +6661,66 @@ up to :</source>
 <context>
     <name>NewLocalGameDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>New Game</source>
         <translation type="obsolete">新對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White:</source>
         <translation type="obsolete">白棋:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black:</source>
         <translation type="obsolete">黑棋:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Player Name:</source>
         <translation type="obsolete">棋友名稱:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Rank:</source>
         <translation type="obsolete">棋力:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Ok</source>
         <translation type="obsolete">確認(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board size:</source>
         <translation type="obsolete">棋盤大小:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap:</source>
         <translation type="obsolete">授子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byoyomi Time:</source>
         <translation type="obsolete">讀秒時間:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation type="obsolete">手落子的時間; 過了25手後, 時間會重新開始計時</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time:</source>
         <translation type="obsolete">基本時間:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Playing time</source>
         <translation type="obsolete">對局時間</translation>
     </message>
@@ -6959,12 +6728,10 @@ up to :</source>
 <context>
     <name>NodeResultsGUI</name>
     <message>
-        <location filename="" line="0"/>
         <source>Results</source>
         <translation type="obsolete">結果</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close</source>
         <translation type="obsolete">關閉</translation>
     </message>
@@ -6972,27 +6739,22 @@ up to :</source>
 <context>
     <name>NormalTools</name>
     <message>
-        <location filename="" line="0"/>
         <source>NormalTools</source>
         <translation type="obsolete">一般工具</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>00:00</source>
         <translation type="obsolete">00:00</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>remaining time / stones</source>
         <translation type="obsolete">剩餘時間 / 手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Clock
 
 shows remaining time or byoyomi time / remaining stones.
@@ -7009,32 +6771,26 @@ Click on
 - 對手計時器: 加時1分鐘</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Captures:</source>
         <translation type="obsolete">提子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>0</source>
         <translation type="obsolete">0</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>komi points</source>
         <translation type="obsolete">讓子點數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>komi:
 
 Add komi points to white because black has the advantage to set the first stone.
@@ -7045,22 +6801,18 @@ Use &quot;komi x&quot; to request a komi of x (number).</source>
 使用 &quot;komi x&quot; 要求讓子數(x)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>5.5</source>
         <translation type="obsolete">5.5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>H:</source>
         <translation type="obsolete">授:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap</source>
         <translation type="obsolete">授子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap
 
 Number of stones placed by black as his first move.</source>
@@ -7069,17 +6821,14 @@ Number of stones placed by black as his first move.</source>
 多少黑棋於棋局開始時先放置</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byo:</source>
         <translation type="obsolete">讀秒:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>byoyomi time (minutes)</source>
         <translation type="obsolete">讀秒時間(分)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byoyomi time
 
 Additional time to place a number of stones.
@@ -7106,17 +6855,14 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
 計次讀秒: 例如 讀秒: 7x30s, 7 次 30 秒; 如果在 30 秒之內落子, 時間將會回復到 30 秒, 如果沒有在 30 秒之內落子, 讀秒次數將會減少一次, 新一次的讀秒將會由 30 開始計時; 假如讀秒次數為零並且最後時間結束則對局結束</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>free</source>
         <translation type="obsolete">不計分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>free/rated game</source>
         <translation type="obsolete">不計分/計分棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>free game:
 
 use &quot;free&quot; command to make game rated or unrated (free)</source>
@@ -7128,22 +6874,18 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 <context>
     <name>NthMoveDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>Move Number</source>
         <translation type="obsolete">落子手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enter move number:</source>
         <translation type="obsolete">輸入落子手數:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;OK</source>
         <translation type="obsolete">確定(&amp;O)</translation>
     </message>
@@ -7151,6 +6893,7 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 <context>
     <name>ORO_setphrases</name>
     <message>
+        <location filename="../network/orosetphrasechat.cpp" line="12"/>
         <location filename="../network/orosetphrasechat.cpp" line="50"/>
         <source>Hello</source>
         <translation type="unfinished"></translation>
@@ -7399,7 +7142,6 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 <context>
     <name>Parser</name>
     <message>
-        <location filename="" line="0"/>
         <source>msg*</source>
         <translation type="obsolete">訊息*</translation>
     </message>
@@ -7407,87 +7149,70 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 <context>
     <name>PreferencesDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>Change</source>
         <translation type="obsolete">修改</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add</source>
         <translation type="obsolete">加入</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stones</source>
         <translation type="obsolete">落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass</source>
         <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autoplay</source>
         <translation type="obsolete">自動播放</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time</source>
         <translation type="obsolete">時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Talk</source>
         <translation type="obsolete">交談</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Say</source>
         <translation type="obsolete">發言</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Match</source>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enter</source>
         <translation type="obsolete">進入</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game end</source>
         <translation type="obsolete">對局結束</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Leave</source>
         <translation type="obsolete">離開</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disconnect</source>
         <translation type="obsolete">斷線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Connect</source>
         <translation type="obsolete">連線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>All Files (*)</source>
         <translation type="obsolete">所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
         <translation type="obsolete">圖像 (*.png *.jpg *.xpm *.ico)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Images (*.png *.xpm *.jpg)</source>
         <translation type="obsolete">圖像 (*.png *.xpm *.jpg)</translation>
     </message>
@@ -7495,44 +7220,36 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
 <context>
     <name>PreferencesDialogGui</name>
     <message>
-        <location filename="" line="0"/>
         <source>Preferences</source>
         <translation type="obsolete">偏好設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Apply</source>
         <translation type="obsolete">套用(&amp;A)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;OK</source>
         <translation type="obsolete">確認(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>remember that point for fast return</source>
         <translation type="obsolete">記錄快速返回點</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
         <translation type="obsolete">於啟始點按下按鈕開始記憶
 之後放置且或回手釋放返回按鈕到自動開始點</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>hand over controls to opponent</source>
         <translation type="obsolete">結束控制對手落子讓對方能夠落子或回手等</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
@@ -7542,37 +7259,30 @@ both teacher and pupil can release control.</source>
 僅教學者能夠給予控制, 教學者及學生都能釋出控制.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stones</source>
         <translation type="obsolete">棋子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shadow</source>
         <translation type="obsolete">陰影</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>show white stones with shadow</source>
         <translation type="obsolete">顯示白棋陰影</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show white stones with shadow. Contrast may be better then.</source>
         <translation type="obsolete">顯示白棋陰影.  增加顏色對比</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shell look</source>
         <translation type="obsolete">貝瞉樣式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>let the stones look like shell stones</source>
         <translation type="obsolete">讓棋石看起來像貝殼</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shell look
 
 Use this to let stones look like shell stones with random stripes.</source>
@@ -7582,17 +7292,14 @@ Use this to let stones look like shell stones with random stripes.</source>
 </translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Smaller stones</source>
         <translation type="obsolete">較小的棋子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Draw stones slightly smaller</source>
         <translation type="obsolete">用較小的棋子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Draw stones slightly smaller
 
 If activated, stones on the board will be drawn slightly smaller and the underlaying grid lines can be seen.</source>
@@ -7601,22 +7308,18 @@ If activated, stones on the board will be drawn slightly smaller and the underla
 如果開啟, 在棋盤上的棋子將會較小並能夠看見格線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board</source>
         <translation type="obsolete">棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Coordinates</source>
         <translation type="obsolete">坐標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show board coordinates</source>
         <translation type="obsolete">顯示坐標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show board coordinates
 
 Toggles if the board coordinates are shown.</source>
@@ -7625,17 +7328,14 @@ Toggles if the board coordinates are shown.</source>
 切換假如棋盤座標已經顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Slider</source>
         <translation type="obsolete">捲軸</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show slider</source>
         <translation type="obsolete">顯示捲軸</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show slider
 
 Toggles the slider on the bottom of the board on or off.</source>
@@ -7644,17 +7344,14 @@ Toggles the slider on the bottom of the board on or off.</source>
 切換顯示或關閉捲軸於棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cursor</source>
         <translation type="obsolete">游標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show a ghost stone at mouse pointer</source>
         <translation type="obsolete">顯示死子於滑鼠指標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show a ghost stone at mouse pointer
 
 Have a ghost stone showing the current position of the mouse pointer on the board?</source>
@@ -7663,17 +7360,14 @@ Have a ghost stone showing the current position of the mouse pointer on the boar
 棋盤會顯示死子位置於目前滑鼠指標上?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ToolTip coords</source>
         <translation type="obsolete">工具提示座標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show coordinates as ToolTip</source>
         <translation type="obsolete">顯示座標於工具提示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show coordinates as ToolTip
 
 When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
@@ -7683,17 +7377,14 @@ When the mouse hovers over a point on the board, show a tooltip with the current
 </translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variable mark font</source>
         <translation type="obsolete">變化標示字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variable font size for marks</source>
         <translation type="obsolete">變化標示字型大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variable font size for marks 
 
 Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
@@ -7702,17 +7393,14 @@ Ignore the size of the chosen font for marks and set size to about stone dimensi
 忽略選擇標示的文字字型大小並設定為相對於棋石大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disable tooltips</source>
         <translation type="obsolete">取消工具提示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disable Tool Tips</source>
         <translation type="obsolete">取消工具提示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disable Tool Tips
 
 Globally disables all tool tips that would show up if the mouse hovers over a GUI element.</source>
@@ -7721,17 +7409,14 @@ Globally disables all tool tips that would show up if the mouse hovers over a GU
 全面取消所有當滑鼠停留時顯示的工具提示於一般使用者介面元素</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Smaller marks</source>
         <translation type="obsolete">小標記</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Draw marks slightly smaller</source>
         <translation type="obsolete">繪製更小的標記</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Draw marks slightly smaller
 
 If activated, all types of marks on the board will be drawn slightly smaller.</source>
@@ -7740,17 +7425,14 @@ If activated, all types of marks on the board will be drawn slightly smaller.</s
 假如允許, 所有棋盤上的標籤將會繪製成更小的標記</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjust font size</source>
         <translation type="obsolete">調整字形大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjust font size for text and number labels</source>
         <translation type="obsolete">調整標籤文字及數字字形大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjust font size for text and number labels
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
@@ -7761,17 +7443,14 @@ When editing only single digit marks, it might be convinient to switch this off.
 當編輯單一數位標示時, 關閉此項可能會過於集中</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Bold marks</source>
         <translation type="obsolete">粗體字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Draw marks bold</source>
         <translation type="obsolete">繪製粗體標示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Draw marks bold
 
 If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
@@ -7780,17 +7459,14 @@ If activated, all types of marks except characters and numbers on the board will
 假如啟動, 所有於棋盤上的例外文字或數字將會標示為粗體</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sidebar</source>
         <translation type="obsolete">邊側列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show sidebar</source>
         <translation type="obsolete">顯示邊側列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show sidebar
 
 Enables or disables the navigation and tool sidebar.</source>
@@ -7799,17 +7475,14 @@ Enables or disables the navigation and tool sidebar.</source>
 允許或取消巡覽及邊側工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>left</source>
         <translation type="obsolete">左方</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show sidebar on the left</source>
         <translation type="obsolete">顯示邊側列於左方</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show sidebar on the left
 
 Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
@@ -7818,27 +7491,22 @@ Swaps sidebar and board, thus board is on the left and sidbar is on the right.</
 交換邊側列與棋盤, 如此的話棋盤會在左邊而邊側列會在右邊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound for</source>
         <translation type="obsolete">音效設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass</source>
         <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound for pass move</source>
         <translation type="obsolete">當虛手時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when placing a stone</source>
         <translation type="obsolete">當落子時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when placing a stone
 
 Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
@@ -7847,17 +7515,14 @@ Enable this box when you want to listen a clicking sound when playing a stone on
 允許此項當你進行對局時想聽到落子聲</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autoplay</source>
         <translation type="obsolete">自動播放</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound in autoplay mode</source>
         <translation type="obsolete">播放音效於自動播放模式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound in autoplay mode
 
 Play a sound when a stone is placed in autoplay mode.</source>
@@ -7866,127 +7531,102 @@ Play a sound when a stone is placed in autoplay mode.</source>
 當自動播放棋子落下時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Talk</source>
         <translation type="obsolete">交談</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound for incoming talk message</source>
         <translation type="obsolete">當有交談訊息時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game end</source>
         <translation type="obsolete">對局結束</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when played or observed game has ended</source>
         <translation type="obsolete">當賽局結束時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Say</source>
         <translation type="obsolete">說</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound for incoming say message while playing a game</source>
         <translation type="obsolete">在對局時有訊息流入播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enter</source>
         <translation type="obsolete">輸入</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when a watched player enters the room</source>
         <translation type="obsolete">當有觀局棋友進入時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Leave</source>
         <translation type="obsolete">離開</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when a watched player leaves the room</source>
         <translation type="obsolete">當觀局棋友離開時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Disconnect</source>
         <translation type="obsolete">斷線</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when disconnected from server</source>
         <translation type="obsolete">當從伺服器斷開時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Connect</source>
         <translation type="obsolete">連結</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound when connected to server</source>
         <translation type="obsolete">連結伺服器時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Match</source>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound for incoming match request</source>
         <translation type="obsolete">當有對局要求時播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Interval:</source>
         <translation type="obsolete">間格:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>0.1</source>
         <translation type="obsolete">0.1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>0.5</source>
         <translation type="obsolete">0.5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>1</source>
         <translation type="obsolete">1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>2</source>
         <translation type="obsolete">2</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>3</source>
         <translation type="obsolete">3</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>5</source>
         <translation type="obsolete">5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time interval for autoplay</source>
         <translation type="obsolete">自動播放時間間隔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
@@ -7995,17 +7635,14 @@ Delay between the moves in autoplay mode in seconds.</source>
 延遲自動播放落子秒數間隔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>sgf time tags</source>
         <translation type="obsolete">SGF時間標籤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>use time info of input file</source>
         <translation type="obsolete">使用輸入檔案時間資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>sgf time tags
 
 Use time info of input file. The autoplay speed is same as recorded.
@@ -8016,22 +7653,18 @@ If not available then interval time is used.</source>
 假如取消此項將會使用間隔時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Interface Style</source>
         <translation type="obsolete">界面風格</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Language</source>
         <translation type="obsolete">語言</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Set application language</source>
         <translation type="obsolete">設定程式語言</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Set application language
 
 Choose your language for qGo.
@@ -8050,22 +7683,18 @@ If your language is not supported, you might consider translating qGo. Please ch
 假如你的語言尚未支援, 你可以考慮進行翻譯 qGo. 請查看 qGo 網站於 http://qgo.sourceforge.net</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>System default</source>
         <translation type="obsolete">系統預設</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Comment orientation</source>
         <translation type="obsolete">註解方向</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Horizontal or vertical comment orientation</source>
         <translation type="obsolete">水平或垂直註解方向</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Horizontal or vertical comment orientation
 
 The comment field will either be displayed on the bottom of the board or on the right side.
@@ -8082,33 +7711,28 @@ If None is selected, the comment field is by default hidden.</source>
 如果 None 沒有選擇, 註解欄預設則為隱藏</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>as saved</source>
         <translation type="obsolete">已儲存</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>horizontal</source>
         <translation type="obsolete">水平</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>vertical</source>
         <translation type="obsolete">垂直</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>choose default comment orientation</source>
         <translation type="obsolete">選擇預設註解方向</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>default comment field orientation
 
-as saved<byte value="x9"/>use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
-<byte value="x9"/><byte value="x9"/>restore with CTRL+&lt;0..9&gt;
-horizontal<byte value="x9"/>always show horizontal comment field
-vertical<byte value="x9"/><byte value="x9"/>always show vertical comment field
+as saved	use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
+		restore with CTRL+&lt;0..9&gt;
+horizontal	always show horizontal comment field
+vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
         <translation type="obsolete">使用 ALT+&lt;0-9&gt; 儲存位置,大小及註解方向, 
@@ -8119,17 +7743,14 @@ To use saved comment field orientation you must select &apos;as saved&apos;. By 
 使用已儲存註解欄方向你必須選擇 &apos;另存為&apos;. 使用 ALT/CTRL+&lt;數子&gt; 當水平或垂直被選擇時, 儲存註解欄方向將會被忽視</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Variation display</source>
         <translation type="obsolete">顯示變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Display variations</source>
         <translation type="obsolete">顯示變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Display variations
 
 Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</source>
@@ -8138,57 +7759,46 @@ Select how to display all brothers of the current move. Either not at all, or as
 選擇如何顯示目前落子的之前變化型. 或者完全沒有, 死子或為小棋子.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>None</source>
         <translation type="obsolete">無</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ghosts</source>
         <translation type="obsolete">死子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Small stones</source>
         <translation type="obsolete">小棋子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Windows</source>
         <translation type="obsolete">視窗樣式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Platinum</source>
         <translation type="obsolete">Platinum</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Motif</source>
         <translation type="obsolete">Motif</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Motif Plus</source>
         <translation type="obsolete">Motif Plus</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>CDE</source>
         <translation type="obsolete">CDE</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGI</source>
         <translation type="obsolete">SGI</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Choose your interface style</source>
         <translation type="obsolete">選擇你的界面風格</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Choose interface style
 
 Choose one of the styles for the look-and-feel of this program.</source>
@@ -8197,37 +7807,30 @@ Choose one of the styles for the look-and-feel of this program.</source>
 選擇這個程式的外觀界面風格</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Light wood</source>
         <translation type="obsolete">亮紋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Dark wood</source>
         <translation type="obsolete">暗紋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Wood 3</source>
         <translation type="obsolete">木紋3</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Wood 4</source>
         <translation type="obsolete">木紋4</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Wood 5</source>
         <translation type="obsolete">木紋5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Choose your board style</source>
         <translation type="obsolete">選擇你的棋盤樣式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Choose your board style
 
 Choose a style for the board.</source>
@@ -8236,27 +7839,22 @@ Choose a style for the board.</source>
 替棋盤選擇樣式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Font</source>
         <translation type="obsolete">字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font: standard</source>
         <translation type="obsolete">字型: 標準</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current font</source>
         <translation type="obsolete">目前字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font</source>
         <translation type="obsolete">選擇新字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font
 
 Select the font for the application.</source>
@@ -8265,12 +7863,10 @@ Select the font for the application.</source>
 選擇程式的字形.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font: marks</source>
         <translation type="obsolete">字型: 標記</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font
 
 Select the font for marks on the board.</source>
@@ -8279,12 +7875,10 @@ Select the font for marks on the board.</source>
 選擇棋盤標記新字型.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font: comments</source>
         <translation type="obsolete">字型: 註解</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font
 
 Select font used in all text input/output fields.</source>
@@ -8293,12 +7887,10 @@ Select font used in all text input/output fields.</source>
 選擇自行使用於所有文字輸入輸出欄位</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font: lists</source>
         <translation type="obsolete">字型: 列表</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font
 
 Select the font for lists.</source>
@@ -8307,12 +7899,10 @@ Select the font for lists.</source>
 選擇列表新字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font: clocks</source>
         <translation type="obsolete">字型: 計時器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font
 
 Select the font for the clocks.</source>
@@ -8321,27 +7911,22 @@ Select the font for the clocks.</source>
 選擇計時器新字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Color</source>
         <translation type="obsolete">顏色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>color: Background</source>
         <translation type="obsolete">顏色: 背景</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Current background color</source>
         <translation type="obsolete">現在的背景顏色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new color</source>
         <translation type="obsolete">選擇新顏色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new color
 
 Select the color for dialog background in the application.</source>
@@ -8350,17 +7935,14 @@ Select the color for dialog background in the application.</source>
 選擇程式對話方塊背景顏色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ASCII Characters</source>
         <translation type="obsolete">ASCII 符號</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ASCII character for import/export</source>
         <translation type="obsolete">ASCII符號匯入/匯出</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ASCII character for import
 
 When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
@@ -8369,77 +7951,62 @@ When importing or exporting ASCII files, use these characters to indicate the gi
 當匯入或匯出 ASCII 檔案時, 使用這些符號指示棋盤上的其實或點</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black stone:</source>
         <translation type="obsolete">黑子棋石:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>#</source>
         <translation type="obsolete">#</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White stone:</source>
         <translation type="obsolete">白子棋石:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>O</source>
         <translation type="obsolete">O</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Star point:</source>
         <translation type="obsolete">星位點:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>,</source>
         <translation type="obsolete">,</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Empty point:</source>
         <translation type="obsolete">空白點:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>.</source>
         <translation type="obsolete">.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Horizontal border:</source>
         <translation type="obsolete">水平框架:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>|</source>
         <translation type="obsolete">|</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Vertical border:</source>
         <translation type="obsolete">垂直框架:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>-</source>
         <translation type="obsolete">-</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add as brother</source>
         <translation type="obsolete">加入為之前變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add imported position as brother</source>
         <translation type="obsolete">新增匯入部份為之前變化</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add imported position as brother
 
 If disabled, the imported position is added as son.</source>
@@ -8448,12 +8015,10 @@ If disabled, the imported position is added as son.</source>
 假如停用, 匯入部份會新增到之後變化.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Square</source>
         <translation type="obsolete">方形</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
@@ -8462,12 +8027,10 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
 編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Remember last directory</source>
         <translation type="obsolete">記住最後的目錄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Remember last directory
 
 When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
@@ -8476,12 +8039,10 @@ When toggled on, the last used directory when loading or saving sgf files will b
 在切換之後, 最後使用於讀取或儲存SGF棋譜檔的目錄將會被記錄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Text encoding for loading and saving</source>
         <translation type="obsolete">讀取或儲存的文字編碼</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Text encoding for loading and saving
 
 This is used for loading and saving files containing asian letters.
@@ -8494,47 +8055,38 @@ If &apos;None&apos; is selected, Latin1 encoding will be used, common in western
 &apos;None&apos; 將會加速大檔案讀取像是重要目錄 Kogos Joseki</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Text encoding:</source>
         <translation type="obsolete">文字編碼:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>EUC-JP</source>
         <translation type="obsolete">EUC-JP</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>JIS</source>
         <translation type="obsolete">JIS</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Shift-JIS</source>
         <translation type="obsolete">Shift-JIS</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>EUC-KR</source>
         <translation type="obsolete">EUC-KR</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>GBK</source>
         <translation type="obsolete">GBK</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Tamil TSCII</source>
         <translation type="obsolete">Tamil TSCII</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Request adjournment</source>
         <translation type="obsolete">要求打掛</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
@@ -8543,17 +8095,14 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
 送出打掛請求給對手. 假如對方同意, 此對局將會打掛並儲存</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Fast loading (EXPERIMENTAL)</source>
         <translation type="obsolete">快速讀取 (測試中)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enable fast loading</source>
         <translation type="obsolete">允許快速讀取</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
@@ -8562,27 +8111,22 @@ Warning: This is experimental and does not work properly!</source>
 警告: 此為試驗中並且無法作業特性!</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Fast loading is experimental right now and does not work completely!</source>
         <translation type="obsolete">快速讀取目前為試驗階段並且無法完整作業!</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Special players</source>
         <translation type="obsolete">特殊棋友</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>watch players:</source>
         <translation type="obsolete">監看棋友:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>players to be colored red</source>
         <translation type="obsolete">棋友標示為紅色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>add players you want to
 
 - see red coloured and
@@ -8597,12 +8141,10 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
 使用分號 &quot;;&quot; 為分隔符號 (無空白)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>players to be colored green</source>
         <translation type="obsolete">棋友標示為綠色</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>add players you want to
 
 - see green coloured and
@@ -8617,27 +8159,22 @@ Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
 使用分號 &quot;;&quot; 為分隔符號 (無空白)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>exclude players:</source>
         <translation type="obsolete">排除棋友:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>IGS</source>
         <translation type="obsolete">IGS</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Extended user info</source>
         <translation type="obsolete">延伸使用者資訊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>see more information from users -&gt; slow!</source>
         <translation type="obsolete">檢視更多棋友訊息 -&gt; 緩慢!</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked then additional information is requested from server.
 
 &apos;user&apos; cmd instead of &apos;who&apos;, thus, info string, won/lost, country and language settings are available.
@@ -8654,52 +8191,42 @@ On IGS only.</source>
 僅適用於 IGS.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Go Engine</source>
         <translation type="obsolete">圍棋引擎</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Path to the Go program</source>
         <translation type="obsolete">圍棋程式路徑</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Path to the Go playing program, e.g. GnuGo</source>
         <translation type="obsolete">圍棋對局程式路徑, 例如 GnuGo</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Go Server</source>
         <translation type="obsolete">圍棋伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Title</source>
         <translation type="obsolete">標題</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Host</source>
         <translation type="obsolete">主機</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Port</source>
         <translation type="obsolete">通訊埠</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Name</source>
         <translation type="obsolete">名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Password</source>
         <translation type="obsolete">密碼</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Host Entries
 
 Select &apos;New&apos; to clear input fields. After filling in at least Title and Host use Add/Change.
@@ -8716,17 +8243,14 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
 選擇使用預先設定的主機名稱 -- xxx -- 並加入標題</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Title:</source>
         <translation type="obsolete">標題:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>title, e.g.: guest account at NNGS</source>
         <translation type="obsolete">標題, 例如: guest account at NNGS</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>unique title, e.g.:
 
 guest account at NNGS
@@ -8748,12 +8272,10 @@ xyz
 (使用中文標題時系統有時無法判別, 請注意)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh display</source>
         <translation type="obsolete">重新整理顯示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
@@ -8762,17 +8284,14 @@ Refresh board. Use this if you cannot see any stones on the board.</source>
 重新整理棋盤. 當你無法看見任何落子變化時可以使用本項</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Host:</source>
         <translation type="obsolete">主機:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>hostname, e.g.: nngs.cosmic.org</source>
         <translation type="obsolete">主機名稱, 例如: nngs.cosmic.org</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>hostname
 
 Use a valid hostname or ip address. Instead of typing it one of the predefined hosts can be chosen:
@@ -8799,17 +8318,14 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
 -- WING --</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Port:</source>
         <translation type="obsolete">通訊埠 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>port address, e.g.: 9696</source>
         <translation type="obsolete">通訊埠位址, 例如: 9696</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>port address, e.g.: 9696
 
 Port address is defined for each go server. It&apos;s a fixed number. See Host for predefined server names.</source>
@@ -8818,12 +8334,10 @@ Port address is defined for each go server. It&apos;s a fixed number. See Host f
 定義伺服器連接埠數字. 那是固定數字. 看先前定義的伺服器主機位址</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Undo last move</source>
         <translation type="obsolete">打回一手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
@@ -8832,25 +8346,22 @@ Undo the opponent&apos;s last move.</source>
 替對手回一手.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Name:</source>
         <translation type="obsolete">名稱:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>use your login name; if unregistered use a unique name like &apos;hotdog17&apos; (NNGS, CWS) or guest (other servers)</source>
         <translation type="obsolete">使用你的名稱登入; 假如尚未註冊使用單一名稱如 &apos;hotdog17&apos; (NNGS, CWS) 或 &apos;guest&apos; (其他伺服器)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>name
 
 Registered users: 
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
         <translation type="obsolete">名稱
 
 已註冊使用者: 
@@ -8861,17 +8372,14 @@ NNGS, CWS: 使用單一名稱如 &apos;hotdog17&apos;
 其他:  guest</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Password:</source>
         <translation type="obsolete">密碼:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>your password; if unregistered: blank field</source>
         <translation type="obsolete">你的密碼; 如果尚未註冊: 留空</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>password
 
 Registered users: 
@@ -8886,12 +8394,10 @@ New users: leave blank!</source>
 新使用者: 留空</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Score/Edit</source>
         <translation type="obsolete">計地/編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Score
 
 Left click on a group to mark it as dead.
@@ -8912,17 +8418,14 @@ Click to get a new, editable offline window.</source>
 點選後開啟新視窗, 可離線編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New</source>
         <translation type="obsolete">新增表單</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>clear form</source>
         <translation type="obsolete">清除表單</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New
 
 clear form; doesn&apos;t make any changes to the entries</source>
@@ -8931,17 +8434,14 @@ clear form; doesn&apos;t make any changes to the entries</source>
 清除表單; 不改變任何項目</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add</source>
         <translation type="obsolete">增加</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>add/change current entry</source>
         <translation type="obsolete">新增/變更 目前項目</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add or Change
 
 Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
@@ -8954,17 +8454,14 @@ Label &apos;Add&apos; is default. The given entries will be saved under the give
 標籤 &apos;新增&apos; 為預設. 給予的項目將儲存於標題之上</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Delete</source>
         <translation type="obsolete">刪除</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>delete current entry</source>
         <translation type="obsolete">刪除目前項目</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Delete
 
 Deletes the saved entries with same Title.
@@ -8977,52 +8474,42 @@ Note: &apos;Delete&apos; concerns saved records.</source>
 備註: &apos;刪除&apos; 涉及儲存記錄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Default games settings</source>
         <translation type="obsolete">預設遊戲設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board size:</source>
         <translation type="obsolete">棋盤大小:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time:</source>
         <translation type="obsolete">基本時間:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Playing time</source>
         <translation type="obsolete">對局時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byoyomi Time:</source>
         <translation type="obsolete">讀秒時間:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation type="obsolete">加入25手的落子時間; 25手之後將會重新計時</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Default (OS style)</source>
         <translation type="obsolete">預設(系統樣式)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font: console</source>
         <translation type="obsolete">字型: 主機命令框架</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>font for the server console</source>
         <translation type="obsolete">選擇主機命令框架字型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Select new font
 
 Select the font for the server console (fixed font preferably).</source>
@@ -9031,84 +8518,68 @@ Select the font for the server console (fixed font preferably).</source>
 選擇主機命令框架字型 (修正先前字型)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Time (secs.)</source>
         <translation type="obsolete">時間 (秒)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play sound for remaining seconds of own time</source>
         <translation type="obsolete">當餘下數秒時間時,播放音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Check this box if you want to be warned when Byo Yomi ends.
 You can set the warning time besides</source>
         <translation type="obsolete">勾選此項 當計次讀秒結束時給你警告
 除此之外你能夠設定時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Warning time</source>
         <translation type="obsolete">警告時間</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</source>
         <translation type="obsolete">設定你在結束讀秒之前多久提出警告</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Default for White</source>
         <translation type="obsolete">預設白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Computer</source>
         <translation type="obsolete">電腦</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Human</source>
         <translation type="obsolete">玩家</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Default for Black</source>
         <translation type="obsolete">預設黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>board size</source>
         <translation type="obsolete">棋盤大小</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi: added to white&apos;s result</source>
         <translation type="obsolete">讓子: 加到白地數目</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>.5</source>
         <translation type="obsolete">.5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Automatic Negotiation of Komi</source>
         <translation type="obsolete">自動巡覽讓子數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>allow client to negotiate automatic</source>
         <translation type="obsolete">允許用戶端自動巡覽</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Automatic Negotiation
 
 Allow client to negotiate komi automatic.
@@ -9121,17 +8592,14 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
 注意: 這可能造成困擾如果對受不想同意你的預設甚至如果你的預設之前有送至對手. 這可能固有不同內部使用於 用戶端協議值</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Main Interface</source>
         <translation type="obsolete">主要樣式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>User buttons toolbar</source>
         <translation type="obsolete">使用者按鈕工具列</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Delete
 
 Deletes the saved entries with same label
@@ -9144,17 +8612,14 @@ Note: &apos;Delete&apos; concerns saved records.</source>
 備註: &apos;Delete&apos;  涉及儲存記錄</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Help text:</source>
         <translation type="obsolete">協助文字:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Help text, displayed as tooltip</source>
         <translation type="obsolete">協助文字, 顯示為工具提示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>help text
 
 This text is displayed as tooltip of the created button</source>
@@ -9163,17 +8628,14 @@ This text is displayed as tooltip of the created button</source>
 此文字顯示類似工具提示於建立的按鈕</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Command:</source>
         <translation type="obsolete">指令:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>command passed to the server</source>
         <translation type="obsolete">指令已傳送到伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>command
 
 the command is passed to the server</source>
@@ -9182,17 +8644,14 @@ the command is passed to the server</source>
 指令已傳送到伺服器</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pixmap file:</source>
         <translation type="obsolete">圖示檔:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>file path to the button pixmap</source>
         <translation type="obsolete">按鈕圖像檔案路徑</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>file path to the button pixmap
 
 Set it with the file chooser</source>
@@ -9201,22 +8660,18 @@ Set it with the file chooser</source>
 於選擇檔案中設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>pixmap file chooser</source>
         <translation type="obsolete">選擇圖示檔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Label:</source>
         <translation type="obsolete">標籤:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Button label</source>
         <translation type="obsolete">按鈕標籤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>unique label, 
 
 The label is displayed as button text.</source>
@@ -9225,32 +8680,26 @@ The label is displayed as button text.</source>
 標籤顯示於按鈕文字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pixmap</source>
         <translation type="obsolete">圖示</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Label</source>
         <translation type="obsolete">標籤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Command</source>
         <translation type="obsolete">命令</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Help Text</source>
         <translation type="obsolete">協助文字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>User defined button list</source>
         <translation type="obsolete">自訂按鈕列表</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Button Entries
 
 Select &apos;New&apos; to clear input fields. After filling in at least label and command use Add/Change.
@@ -9265,71 +8714,58 @@ Select an entry to edit, change (label keeps unchanged) or delete a line.
 </translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board Window</source>
         <translation type="obsolete">棋盤視窗</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Goban</source>
         <translation type="obsolete">棋盤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Computer Go</source>
         <translation type="obsolete">電腦圍棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Import / Export</source>
         <translation type="obsolete">匯入/匯出</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Imported game position</source>
         <translation type="obsolete">已匯入對局部份</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap :</source>
         <translation type="obsolete">授子 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Big5</source>
         <translation type="obsolete">Big5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+A</source>
         <translation type="obsolete">Alt+A</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alt+O</source>
         <translation type="obsolete">Alt+O</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF Style</source>
         <translation type="obsolete">SGF 格式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show SGF board coordinates</source>
         <translation type="obsolete">顯示 SGF 棋盤座標</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Show SGF board coordinates
-<byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/><byte value="x9"/>
+										
 Toggles if SGF style board coordinates are shown.</source>
         <translation type="obsolete">顯示 SGF 棋盤座標
 
 切換顯示  SGF 格是棋盤座標。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Adjust font size for text and number labels
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
@@ -9340,17 +8776,14 @@ When editing only single digit marks, it might be convenient to switch this off.
 檔編輯中只有單一標示，他可能會轉換切換成關閉。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>On line games</source>
         <translation type="obsolete">線上對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Anti clicko (1/4 second click latency)</source>
         <translation type="obsolete">反制 clicko (1/4 秒點擊因素)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Anti Clicko
 
 Check the box for setting an anti clicko delay (1/4 second) for on line games.
@@ -9361,7 +8794,6 @@ If you press to enter a move on the board, the move will not be acknowledged if 
 如果你按下enter或下棋子於棋盤，落子將不會被公認如果滑鼠釋出太早</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked then additional information is requested from server.
 
 &apos;user&apos; cmd instead of &apos;who&apos;, thus, info string, won/lost, country and language settings are available.
@@ -9378,22 +8810,18 @@ On IGS only.</source>
 僅在IGS。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Check for setting an anti cliko delay for on line games</source>
         <translation type="obsolete">勾選則設定反制 cliko 延遲於線上對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>shadow</source>
         <translation type="obsolete">陰影</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>check for shadowed stones</source>
         <translation type="obsolete">勾選為陰影棋石</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>shadow
 
 Check the box for haveing a shadow displayed under the stones.</source>
@@ -9402,17 +8830,14 @@ Check the box for haveing a shadow displayed under the stones.</source>
 勾選對話方塊則棋石上會有陰影顯示。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>shell look</source>
         <translation type="obsolete">貝殼樣式</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>check for striped white stones (shell looking)</source>
         <translation type="obsolete">勾選為條紋棋石 (貝殼樣式)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>shell look
 
 Check the box for having striped, shell looking, white stones.</source>
@@ -9421,22 +8846,18 @@ Check the box for having striped, shell looking, white stones.</source>
 勾選核選方塊則有條文、貝殼樣式、白色棋石。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autosave</source>
         <translation type="obsolete">自動儲存</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autosave observed games</source>
         <translation type="obsolete">自動儲存觀棋對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>check for automatic saving observed games</source>
         <translation type="obsolete">勾選則自動儲存中的已觀局對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autosave
 
 If checked then when an observed game completes, it is automatically saved in the working directory</source>
@@ -9445,27 +8866,22 @@ If checked then when an observed game completes, it is automatically saved in th
 如果核選則當觀看對局完畢時，他會自動儲存於作業中資料夾。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board picture</source>
         <translation type="obsolete">棋盤圖檔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>observed games</source>
         <translation type="obsolete">已觀局棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>played games</source>
         <translation type="obsolete">已對局棋局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>check for automatic saving for your games games</source>
         <translation type="obsolete">選擇則會自動儲存你的對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Autosave
 
 If checked then when a game you played completes, it is automatically saved in the working directory</source>
@@ -9474,81 +8890,66 @@ If checked then when a game you played completes, it is automatically saved in t
 如果選取的話當你一個棋局對局結束時， 他會自動儲存於工作資料夾。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Background</source>
         <translation type="obsolete">背景</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Alternate (lists)</source>
         <translation type="obsolete">替代 (列表)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Path to the goban picture</source>
         <translation type="obsolete">棋盤圖片路徑</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Path to the goban picture.
 If the picture is not set, or unvalid, a default goban is used by qgo</source>
         <translation type="obsolete">棋盤圖片路徑
 如果圖片還沒設定或者設定無效，qGo則會使用預設的棋盤。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Table picture</source>
         <translation type="obsolete">表格圖片</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Path to the table picture</source>
         <translation type="obsolete">表格圖片路徑</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Path to the table picture.
 If the picture is not set, or unvalid, a default picture is used by qgo</source>
         <translation type="obsolete">表格圖片路徑
 如果圖片還沒設定或者設定無效，qGo則會使用預設的圖片。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>2.5</source>
         <translation type="obsolete">2.5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>7.5</source>
         <translation type="obsolete">7.5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>10</source>
         <translation type="obsolete">10</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Codec:</source>
         <translation type="obsolete">編碼:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>check for automatic saving for your games</source>
         <translation type="obsolete">選取則會自動儲存你的對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>use new &apos;nmatch&apos; feature</source>
         <translation type="obsolete">使用 &apos;nmatch&apos; 新功能</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked then match offers will use the new &apos;nmatch&apos; protocol.</source>
         <translation type="obsolete">選取的話將會在對局建議中使用 &apos;nmatch&apos; 新協定。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If checked then match offers will use the new &apos;nmatch&apos; protocol.
 
 When both players use this protocol, they can set handicap before playing, have &apos;nigiri&apos; for even games. IGS also permits the japanese Byo yomi clock, but it&apos;s not yet supported by qGo</source>
@@ -9557,17 +8958,14 @@ When both players use this protocol, they can set handicap before playing, have 
 當雙方對局者使用這個協定石，他們能夠在對局之前設定授子數，即使是有猜先&apos;nigiri&apos;的對局。 IGS 能夠容許日式讀秒倒數，但是它並不能夠被qGo所支援。</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ugly 2D</source>
         <translation type="obsolete">醜醜的 2D</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>flat circled ... ugly but asked for ...</source>
         <translation type="obsolete">平面圓圈 ... 醜醜的但是仍舊要求 ...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stone appearance
 
 This will display back and white circles</source>
@@ -9576,17 +8974,14 @@ This will display back and white circles</source>
 此項將會顯示黑和白的外緣</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Plain 3D</source>
         <translation type="obsolete">純3D</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>plain 3D (no shadow, no stripes)</source>
         <translation type="obsolete">純 3D (沒有陰影, 沒有紋路)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stone appearance
 
 this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
@@ -9595,17 +8990,14 @@ this will display simple 3D stones, with no shadow and neither stripes on white 
 此項將會顯示簡單的 3D 棋石, 包含陰影和條紋於白棋上</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Realistic</source>
         <translation type="obsolete">逼真的</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Realistic 3D stones with stripes and shadow</source>
         <translation type="obsolete">逼真的3D棋石具有紋路跟陰影</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stone appearance
 
 This will display realistic 3D stones with stripes and shadow</source>
@@ -9614,72 +9006,60 @@ This will display realistic 3D stones with stripes and shadow</source>
 此項將會顯逼真的 3D 棋石具有紋路和陰影</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>All servers settings</source>
         <translation type="obsolete">所有伺服器設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Automatic komi 
 negotiation</source>
         <translation type="obsolete">自動讓子
 協議</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Main 
 time :</source>
         <translation type="obsolete">主要
 時間 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byoyomi
 time:</source>
         <translation type="obsolete">讀秒
 時間 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>IGS &apos;nmatch&apos; specific settings</source>
         <translation type="obsolete">IGS 特有的 &apos;nmatch&apos; 指令設定</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Main time 
 up to :</source>
         <translation type="obsolete">主要時間
 增加到 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Byo time
 up to :</source>
         <translation type="obsolete">讀秒時間
 增加到 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Play as :</source>
         <translation type="obsolete">持子 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Nigiri</source>
         <translation type="obsolete">猜先</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap 
 up to :</source>
         <translation type="obsolete">授子
@@ -9689,17 +9069,14 @@ up to :</source>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="" line="0"/>
         <source>free</source>
         <translation type="obsolete">不計分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>rated</source>
         <translation type="obsolete">計分棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>teach</source>
         <translation type="obsolete">教學棋</translation>
     </message>
@@ -9707,27 +9084,22 @@ up to :</source>
 <context>
     <name>QNewGameDlg</name>
     <message>
-        <location filename="" line="0"/>
         <source>Human</source>
         <translation type="obsolete">玩家</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Computer</source>
         <translation type="obsolete">電腦</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
         <translation type="obsolete">SGF (*.sgf);;MGT (*.mgt);;XML (*.xml);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">錯誤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You entered an invalid Handicap (1 is not legal)</source>
         <translation type="obsolete">你輸入的授子數不正確 (1並不合理)</translation>
     </message>
@@ -9735,67 +9107,54 @@ up to :</source>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
-        <location filename="" line="0"/>
         <source>Computer Game</source>
         <translation type="obsolete">電腦圍棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White Player</source>
         <translation type="obsolete">持白棋者</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Name</source>
         <translation type="obsolete">名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Computer Level</source>
         <translation type="obsolete">電腦等級</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black Player</source>
         <translation type="obsolete">持黑棋者</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Load game</source>
         <translation type="obsolete">讀取對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;OK</source>
         <translation type="obsolete">確認(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>New Game</source>
         <translation type="obsolete">新對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Board size:</source>
         <translation type="obsolete">棋盤大小:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Handicap:</source>
         <translation type="obsolete">授子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>One Color Go</source>
         <translation type="obsolete">一色棋</translation>
     </message>
@@ -9803,179 +9162,155 @@ up to :</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../gamedata.h" line="14"/>
+        <location filename="../board/interfacehandler.cpp" line="124"/>
+        <location filename="../board/interfacehandler.cpp" line="125"/>
+        <location filename="../gamedata.h" line="15"/>
         <source>Black</source>
         <translation>黑棋</translation>
     </message>
     <message>
-        <location filename="../gamedata.h" line="15"/>
+        <location filename="../board/interfacehandler.cpp" line="106"/>
+        <location filename="../board/interfacehandler.cpp" line="107"/>
+        <location filename="../gamedata.h" line="14"/>
         <source>White</source>
         <translation>白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
         <translation type="obsolete">棋桌</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <comment>GamesTable White name</comment>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
         <translation type="obsolete">棋力</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
         <translation type="obsolete">黑棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
         <translation type="obsolete">棋力</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
         <translation type="obsolete">手數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
         <translation type="obsolete">路數</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
         <translation type="obsolete">授子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>K</source>
         <comment>GamesTable Komi</comment>
         <translation type="obsolete">讓子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>By</source>
         <comment>GamesTable Byoyomi time</comment>
         <translation type="obsolete">讀秒</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
         <translation type="obsolete">類</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
         <translation type="obsolete">觀局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
         <translation type="obsolete">狀態</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
         <translation type="obsolete">名稱</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
         <translation type="obsolete">棋力</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>ob</source>
         <comment>PlayerTable: observing game</comment>
         <translation type="obsolete">觀局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
         <translation type="obsolete">閒置</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Refresh</source>
         <comment>button label</comment>
         <translation type="obsolete">重新整理</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Score</source>
         <comment>button label</comment>
         <translation type="obsolete">計地</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>N</source>
         <comment>Board status line: normal mode</comment>
         <translation type="obsolete">一般</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>E</source>
         <comment>Board status line: edit mode</comment>
         <translation type="obsolete">編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Edit</source>
         <comment>button label</comment>
         <translation type="obsolete">編輯</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>O</source>
         <comment>Board status line: observe mode</comment>
         <translation type="obsolete">觀</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Pass</source>
         <comment>button label</comment>
         <translation type="obsolete">虛手</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>P</source>
         <comment>Board status line: play mode</comment>
         <translation type="obsolete">P</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>T</source>
         <comment>Board status line: teach mode</comment>
         <translation type="obsolete">T</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>S</source>
         <comment>Board status line: score mode</comment>
         <translation type="obsolete">計地</translation>
@@ -9986,11 +9321,17 @@ up to :</source>
         <translation>手數</translation>
     </message>
     <message>
+        <location filename="../board/interfacehandler.cpp" line="114"/>
+        <location filename="../board/interfacehandler.cpp" line="116"/>
+        <location filename="../board/interfacehandler.cpp" line="166"/>
         <location filename="../board/interfacehandler.cpp" line="175"/>
         <source>W</source>
         <translation>白</translation>
     </message>
     <message>
+        <location filename="../board/interfacehandler.cpp" line="132"/>
+        <location filename="../board/interfacehandler.cpp" line="134"/>
+        <location filename="../board/interfacehandler.cpp" line="166"/>
         <location filename="../board/interfacehandler.cpp" line="175"/>
         <source>B</source>
         <translation>黑</translation>
@@ -10031,12 +9372,12 @@ up to :</source>
         <translation>之後變化型</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>textedit</source>
         <translation type="obsolete">文字編輯</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="90"/>
+        <location filename="../board/boardwindow.cpp" line="74"/>
+        <location filename="../board/boardwindow.cpp" line="93"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
@@ -10056,32 +9397,34 @@ up to :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sgf/sgfparser.cpp" line="243"/>
+        <location filename="../sgf/sgfparser.cpp" line="260"/>
         <source>Could not find file:</source>
         <translation type="unfinished">無法找到檔案：</translation>
     </message>
     <message>
-        <location filename="../sgf/sgfparser.cpp" line="1500"/>
+        <location filename="../sgf/sgfparser.cpp" line="266"/>
+        <location filename="../sgf/sgfparser.cpp" line="1527"/>
         <source>Could not open file:</source>
         <translation type="unfinished">無法開啟檔案：</translation>
     </message>
     <message>
-        <location filename="../sgf/sgfparser.cpp" line="1526"/>
+        <location filename="../sgf/sgfparser.cpp" line="273"/>
+        <location filename="../sgf/sgfparser.cpp" line="1553"/>
         <source>Invalid text encoding given. Please check preferences!</source>
         <translation type="unfinished">文字編碼方式無效。請檢查你的偏好設定！</translation>
     </message>
     <message>
-        <location filename="../sgf/sgfparser.cpp" line="423"/>
+        <location filename="../sgf/sgfparser.cpp" line="441"/>
         <source>Reading sgf file...</source>
         <translation type="unfinished">讀取 SGF 棋譜檔中…</translation>
     </message>
     <message>
-        <location filename="../sgf/sgfparser.cpp" line="423"/>
+        <location filename="../sgf/sgfparser.cpp" line="441"/>
         <source>Abort</source>
         <translation type="unfinished">中止</translation>
     </message>
     <message>
-        <location filename="../sgf/sgfparser.cpp" line="1213"/>
+        <location filename="../sgf/sgfparser.cpp" line="1240"/>
         <source>Corrupt SGF file at position</source>
         <translation type="unfinished">SGF 棋譜檔損壞</translation>
     </message>
@@ -10089,7 +9432,6 @@ up to :</source>
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="" line="0"/>
         <source>Move</source>
         <translation type="obsolete">手數</translation>
     </message>
@@ -10097,11 +9439,13 @@ up to :</source>
 <context>
     <name>ResultDialog</name>
     <message>
+        <location filename="../game_interfaces/resultdialog.cpp" line="19"/>
         <location filename="../game_interfaces/resultdialog.cpp" line="62"/>
         <source> requests rematch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../game_interfaces/resultdialog.cpp" line="21"/>
         <location filename="../game_interfaces/resultdialog.cpp" line="64"/>
         <source>&amp;Accept?</source>
         <translation type="unfinished"></translation>
@@ -10125,22 +9469,49 @@ up to :</source>
 <context>
     <name>Room</name>
     <message>
-        <location filename="../room.cpp" line="188"/>
+        <location filename="../network/room.cpp" line="263"/>
         <source>Match</source>
         <translation type="unfinished">對局</translation>
     </message>
     <message>
-        <location filename="../room.cpp" line="189"/>
+        <location filename="../network/room.cpp" line="264"/>
         <source>Talk</source>
         <translation type="unfinished">交談</translation>
     </message>
     <message>
-        <location filename="../room.cpp" line="216"/>
+        <location filename="../network/room.cpp" line="267"/>
+        <source>Remove from Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/room.cpp" line="269"/>
+        <source>Add to Friends</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/room.cpp" line="271"/>
+        <source>Remove from Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/room.cpp" line="273"/>
+        <source>Add to Fans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/room.cpp" line="274"/>
+        <source>Block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/room.cpp" line="295"/>
+        <location filename="../network/room.cpp" line="301"/>
         <source>Observe Outside</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../room.cpp" line="215"/>
+        <location filename="../network/room.cpp" line="296"/>
+        <location filename="../network/room.cpp" line="300"/>
         <source>Join and Observe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10148,42 +9519,34 @@ up to :</source>
 <context>
     <name>ScoreTools</name>
     <message>
-        <location filename="" line="0"/>
         <source>ScoreTools</source>
         <translation type="obsolete">計地工具</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White</source>
         <translation type="obsolete">白棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Total:</source>
         <translation type="obsolete">總共:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>0</source>
         <translation type="obsolete">0</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Cap:</source>
         <translation type="obsolete">提子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Terr.:</source>
         <translation type="obsolete">地:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Komi:</source>
         <translation type="obsolete">讓子:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black</source>
         <translation type="obsolete">黑棋</translation>
     </message>
@@ -10191,25 +9554,37 @@ up to :</source>
 <context>
     <name>ServerListDialog</name>
     <message>
-        <location filename="../network/serverlistdialog.cpp" line="11"/>
+        <location filename="../network/serverlistdialog.cpp" line="9"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/serverlistdialog.cpp" line="14"/>
+        <location filename="../network/serverlistdialog.cpp" line="12"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished">取消(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../network/serverlistdialog.cpp" line="31"/>
+        <location filename="../network/serverlistdialog.cpp" line="30"/>
         <source>Choose server...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SetPhrasePalette</name>
+    <message>
+        <location filename="../network/setphrasepalette.cpp" line="11"/>
+        <source>Chat Phrases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/setphrasepalette.cpp" line="145"/>
+        <source>Set Phrases</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Talk</name>
     <message>
-        <location filename="" line="0"/>
         <source>close</source>
         <translation type="obsolete">關閉</translation>
     </message>
@@ -10217,12 +9592,10 @@ up to :</source>
 <context>
     <name>TalkGui</name>
     <message>
-        <location filename="" line="0"/>
         <source>Form1</source>
         <translation type="obsolete">Form1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>dialog
 
 
@@ -10239,12 +9612,10 @@ in this box you see the conversation with the player whose name appears on the t
 在這個方塊你能夠看見顯示於標籤中棋友名稱的交談對話</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>match</source>
         <translation type="obsolete">對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>match
 
 
@@ -10261,12 +9632,10 @@ proposes a match to this player</source>
 巷這個棋友提出對局建議</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>close</source>
         <translation type="obsolete">關閉</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>close
 
 
@@ -10283,72 +9652,72 @@ closes the tab (and dialog)</source>
 關閉標籤 (以及對話)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>dialog with this player</source>
         <translation type="obsolete">與這個棋友對話</translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="461"/>
+        <location filename="../network/talk_gui.ui" line="297"/>
+        <location filename="../network/talk_gui.ui" line="334"/>
+        <location filename="../network/talk_gui.ui" line="373"/>
+        <location filename="../network/talk_gui.ui" line="383"/>
+        <location filename="../network/talk_gui.ui" line="422"/>
+        <location filename="../network/talk_gui.ui" line="461"/>
         <source>--</source>
         <translation>--</translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="327"/>
+        <location filename="../network/talk_gui.ui" line="327"/>
         <source>Idle :</source>
         <translation>閒置 :</translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="415"/>
+        <location filename="../network/talk_gui.ui" line="415"/>
         <source>Rating :</source>
         <translation>積分 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Rated games :</source>
         <translation type="obsolete">計分棋局 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Country :</source>
         <translation type="obsolete">國家 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Wins :</source>
         <translation type="obsolete">勝 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Loss :</source>
         <translation type="obsolete">敗 :</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>playing game :</source>
         <translation type="obsolete">目前對局 :</translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="178"/>
+        <location filename="../network/talk_gui.ui" line="178"/>
         <source>Address :</source>
         <translation>位址 :</translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="13"/>
+        <location filename="../network/talk_gui.ui" line="13"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="136"/>
+        <location filename="../network/talk_gui.ui" line="129"/>
+        <location filename="../network/talk_gui.ui" line="136"/>
         <source>-</source>
         <translation type="unfinished">-</translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="366"/>
+        <location filename="../network/talk_gui.ui" line="366"/>
         <source>W/L :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../talk_gui.ui" line="454"/>
+        <location filename="../network/talk_gui.ui" line="454"/>
         <source>Playing :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10356,22 +9725,18 @@ closes the tab (and dialog)</source>
 <context>
     <name>TextEditDialog</name>
     <message>
-        <location filename="" line="0"/>
         <source>Text Label</source>
         <translation type="obsolete">文字標籤</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Enter the text for this label:</source>
         <translation type="obsolete">輸入標籤文字標題:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;OK</source>
         <translation type="obsolete">確認(&amp;O)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Cancel</source>
         <translation type="obsolete">取消(&amp;C)</translation>
     </message>
@@ -10379,27 +9744,22 @@ closes the tab (and dialog)</source>
 <context>
     <name>TextView</name>
     <message>
-        <location filename="" line="0"/>
         <source>Text Files (*.txt);;All Files (*)</source>
         <translation type="obsolete">文字檔案 (*.txt);;所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>This file already exists. Do you want to overwrite it?</source>
         <translation type="obsolete">此檔案己存在.是否覆蓋?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Yes</source>
         <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No</source>
         <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Failed to write to file</source>
         <translation type="obsolete">寫入檔案失敗</translation>
     </message>
@@ -10407,45 +9767,95 @@ closes the tab (and dialog)</source>
 <context>
     <name>TextViewGUI</name>
     <message>
-        <location filename="" line="0"/>
         <source>Text View</source>
         <translation type="obsolete">檢視文字</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;To clipboard</source>
         <translation type="obsolete">到剪貼簿(&amp;T)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Copy position to clipboard</source>
         <translation type="obsolete">複製選取範圍到剪貼簿</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Save</source>
         <translation type="obsolete">儲存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save position to file</source>
         <translation type="obsolete">儲存選取範圍到檔案</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&amp;Close</source>
         <translation type="obsolete">關閉(&amp;C)</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Close this window</source>
         <translation type="obsolete">關閉本視窗</translation>
     </message>
 </context>
 <context>
+    <name>TygemConnection</name>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="280"/>
+        <location filename="../network/tygemconnection.cpp" line="2045"/>
+        <source>3 Boards Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="280"/>
+        <source>You must close a board before you can open another one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="726"/>
+        <source>Server full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="726"/>
+        <source>Server full, try another</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="2045"/>
+        <source>You must close a board before you can start a game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="2049"/>
+        <location filename="../network/tygemconnection.cpp" line="8512"/>
+        <location filename="../network/tygemconnection.cpp" line="8520"/>
+        <source>Not open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="5299"/>
+        <source>Resume match?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="5300"/>
+        <source>Resume match in progress with %1?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="8488"/>
+        <source>Invite declined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="8502"/>
+        <source>In game?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui</name>
     <message>
-        <location filename="../gamedialog.cpp" line="23"/>
+        <location filename="../network/gamedialog.cpp" line="23"/>
         <source>New Game</source>
         <translation type="unfinished">新對局</translation>
     </message>
@@ -10506,7 +9916,6 @@ closes the tab (and dialog)</source>
 <context>
     <name>qGo</name>
     <message>
-        <location filename="" line="0"/>
         <source>At least one board is modified.
 If you exit the application now, all changes will be lost!
 Exit anyways?</source>
@@ -10515,27 +9924,22 @@ Exit anyways?</source>
 是否要離開?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Yes</source>
         <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No</source>
         <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No sound available.</source>
         <translation type="obsolete">無法使用音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No sound available. Qt on Mac uses QuickTime sound.</source>
         <translation type="obsolete">無法使用音效. Qt 於 Mac 使用 QuickTime 音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You are not running the Network Audio sytem.
 If you have the `au&apos; command, run it in the background before this program. The latest release of the Network Audio System can be obtained from:
 
@@ -10556,37 +9960,30 @@ ftp.x.org:/contrib/audio/nas
 然而, 假如你有 oss, 音效應該能夠作業並指向 /dev/dsp</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sound available.</source>
         <translation type="obsolete">音效可用</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Sound files not found.</source>
         <translation type="obsolete">找不到音效檔</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Please check for the directories</source>
         <translation type="obsolete">請檢查資料夾</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>or</source>
         <translation type="obsolete">或</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>depending on your installation.</source>
         <translation type="obsolete">相依於你的安裝過程</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You can navigate to the main qGo directory (for example:</source>
         <translation type="obsolete">你能夠巡覽qGo主資料夾 (例如:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
 anymore except you install qGo again into a different directory.
 To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
@@ -10594,27 +9991,22 @@ To abort this procedure, click &apos;Cancel&apos; in the following dialog.</sour
 中止此程序, 點選 &apos;取消&apos; 於之後的對話方塊</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>qGo directory</source>
         <translation type="obsolete">qGo 資料夾</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No valid directory was given. Sound is not available.</source>
         <translation type="obsolete">沒有給予合法資料夾. 無法使用音效</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About...</source>
         <translation type="obsolete">關於...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>GTP code from Goliath, thanks to:</source>
         <translation type="obsolete">GTP 碼源於 Goliath, 感謝:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>English translation by:
 Peter Strempel
 Johannes Mesa
@@ -10625,13 +10017,11 @@ wex
 CHI KWOK yEUNG</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>No sound files in bundle, strange.
 </source>
         <translation type="obsolete">沒有音效檔案於包裝, 別處.</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>At least one board is modified.
 If you exit the application now, all changes will be lost!
 Exit anyway?</source>
@@ -10640,7 +10030,6 @@ Exit anyway?</source>
 卻要離開嗎?</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>You are not running the Network Audio system.
 If you have the `au&apos; command, run it in the background before this program. The latest release of the Network Audio System can be obtained from:
 
@@ -10664,60 +10053,49 @@ ftp.x.org:/contrib/audio/nas
 <context>
     <name>qGoBoard</name>
     <message>
-        <location filename="" line="0"/>
         <source>free</source>
         <translation type="obsolete">不計分</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>rated</source>
         <translation type="obsolete">計分棋</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>opponent:</source>
         <translation type="obsolete">對手:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>-- none --</source>
         <translation type="obsolete">-- 無 --</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Failed to play the stone within program 
 </source>
         <translation type="obsolete">程式播放棋子失敗</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Failed to pass within program 
 </source>
         <translation type="obsolete">程式虛手失敗</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Failed to have the program play its stone
 </source>
         <translation type="obsolete">程式播放棋子失敗</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>remaining time / stones</source>
         <translation type="obsolete">剩時 / 落子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>click to pause/unpause the game</source>
         <translation type="obsolete">暫停 / 取消暫停對局</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>click to add 1 minute to your opponent&apos;s clock</source>
         <translation type="obsolete">替你的對手加時一分鐘</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Failed to undo within program 
 </source>
         <translation type="obsolete">程式回手失敗
@@ -10727,18 +10105,22 @@ ftp.x.org:/contrib/audio/nas
 <context>
     <name>qGoBoardComputerInterface</name>
     <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="165"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="176"/>
         <source>Failed to play the stone within program 
 </source>
         <translation type="unfinished">程式播放棋子失敗</translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="209"/>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="217"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="236"/>
         <source>Failed to have the program play its stone
 </source>
         <translation type="unfinished">程式播放棋子失敗</translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="311"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="324"/>
         <source>Failed to pass within program 
 </source>
@@ -10758,85 +10140,169 @@ ftp.x.org:/contrib/audio/nas
 <context>
     <name>qGoBoardMatchInterface</name>
     <message>
-        <location filename="../game_interfaces/qgoboard_match.cpp" line="120"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="162"/>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
         <translation type="unfinished">計地模式: 點選棋石標示為死子...</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_match.cpp" line="166"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="177"/>
+        <source>LEAVING SCORE MODE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="192"/>
+        <source>Request Draw?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="193"/>
+        <source>Ask %1 to end game in draw?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="207"/>
+        <source>Request Count?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="208"/>
+        <source>Ask %1 to end game?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="234"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="256"/>
         <source>Adjourn?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_match.cpp" line="145"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="235"/>
         <source>Ask %1 to adjourn?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_match.cpp" line="161"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="251"/>
         <source>Adjourn Declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_match.cpp" line="161"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="251"/>
         <source> has declined to adjourn the game.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_match.cpp" line="167"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="257"/>
         <source>%1 wants to adjourn
 
 Do you accept ? 
 </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="283"/>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="310"/>
+        <source>End game?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="284"/>
+        <source>%1 requests count
+
+Do you accept ? 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="305"/>
+        <source>Count Declined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="305"/>
+        <source> has declined to count and end the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="311"/>
+        <source>%1 requests draw
+
+Do you accept ? 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="332"/>
+        <source>Draw Declined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="332"/>
+        <source> has declined to draw the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qGoBoardNetworkInterface</name>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="287"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="59"/>
+        <source>Unmark All?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="60"/>
+        <source>Unmark all your dead stones?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="92"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="400"/>
         <source>Invalid Move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="58"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="92"/>
         <source>Move %1 %2 is invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="287"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="400"/>
         <source>The incoming move %1 %2 seems to be invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="394"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="515"/>
         <source>Resign?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="395"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="516"/>
         <source>Resign game with %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="425"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="542"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="546"/>
         <source>Game Adjourned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="421"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="542"/>
         <source> vs. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="425"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="542"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="546"/>
         <source> has been adjourned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="425"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="546"/>
         <source>Game with </source>
         <translation type="unfinished"></translation>
     </message>
@@ -10844,24 +10310,8 @@ Do you accept ?
 <context>
     <name>qGoBoardObserveInterface</name>
     <message>
-        <location filename="../game_interfaces/qgoboard_observe.cpp" line="68"/>
-        <source>Game n&#xb0; </source>
-        <translation type="unfinished">對局 n° </translation>
-    </message>
-    <message>
-        <location filename="../game_interfaces/qgoboard_observe.cpp" line="356"/>
-        <source>Invalid Move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../game_interfaces/qgoboard_observe.cpp" line="190"/>
-        <source>The incoming move %1 %2 seems to be invalid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../game_interfaces/qgoboard_observe.cpp" line="356"/>
-        <source>The incoming move %1 seems to be invalid</source>
-        <translation type="unfinished"></translation>
+        <source>Game n° </source>
+        <translation type="obsolete">對局 n° </translation>
     </message>
 </context>
 <context>
@@ -10880,67 +10330,54 @@ Do you accept ?
 <context>
     <name>qGoIF</name>
     <message>
-        <location filename="" line="0"/>
         <source>Game continued as Game number %1</source>
         <translation type="obsolete">遊戲繼續 遊戲數目 %1</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game has adjourned</source>
         <translation type="obsolete">棋局打掛</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White forfeits on time</source>
         <translation type="obsolete">白棋時盡</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black forfeits on time</source>
         <translation type="obsolete">黑棋時盡</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>White resigns</source>
         <translation type="obsolete">白棋投子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Black resigns</source>
         <translation type="obsolete">黑棋投子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>LOAD</source>
         <translation type="obsolete">讀取</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>*** Both players are Human ! ***</source>
         <translation type="obsolete">*** 雙方都為玩家 ***</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>komi </source>
         <translation type="obsolete">讓子</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>decline</source>
         <translation type="obsolete">拒絕</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgo_interface.cpp" line="572"/>
         <source>Opponent</source>
         <translation type="obsolete">對手</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgo_interface.cpp" line="596"/>
         <source>Request of Opponent</source>
         <translation type="obsolete">對手要求</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgo_interface.cpp" line="577"/>
         <source>%1 wants to %2
 YES = %3
 CANCEL = %4</source>
@@ -10949,47 +10386,38 @@ CANCEL = %4</source>
 取消 = %4</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgo_interface.cpp" line="577"/>
         <source>ignore request</source>
         <translation type="obsolete">忽略要求</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Done</source>
         <translation type="obsolete">完成</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
         <translation type="obsolete">計地模式: 重置 - 點選棋石標示為死子...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
         <translation type="obsolete">計地模式: 點選棋石標示為死子...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>GAME MODE: place stones...</source>
         <translation type="obsolete">對局模式: 落子區域...</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game Status: W:</source>
         <translation type="obsolete">對局狀態: 白:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>B:</source>
         <translation type="obsolete">黑:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
-        <source>Game n&#xb0; </source>
+        <source>Game n° </source>
         <translation type="obsolete">對局 n° </translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgo_interface.cpp" line="598"/>
         <source>%1 wants to %2
 
 Do you accept ? 
