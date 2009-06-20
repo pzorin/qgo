@@ -406,7 +406,10 @@ void BoardDispatch::recvRequestMatchMode(void)
 {
 	//this takes us out of the scorephase, for instance
 	//if borders are not defined
-	//FIXME
+	//FIXME, probably need more than this
+	if(!boardwindow)
+		return;
+	boardwindow->qgoboard->leaveScoreMode();
 }
 
 void BoardDispatch::createCountDialog(void)
