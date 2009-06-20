@@ -343,11 +343,14 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					xr1=(2*z-x+y)/xr;
 					xr2=(2*z+x-y)/xr;
 				
-				
-					if (xr1>0.9) xg1=(xr1-0.9)*10;
+//#define WHITE_SHINE_START			0.9
+//#define WHITE_SHINE_END			0.92
+#define WHITE_SHINE_START			0.9695		//or .965 better maybe
+#define WHITE_SHINE_END				0.97
+					if (xr1>WHITE_SHINE_START) xg1=(xr1-WHITE_SHINE_START)*10;
 					else xg1=0;
 
-					if (xr2>0.92) xg2=(xr2-0.92)*10;
+					if (xr2>WHITE_SHINE_END) xg2=(xr2-WHITE_SHINE_END)*10;
 					else xg2=0;
 				
 					g2=(int)(200+10* xr2+xg2*45);
