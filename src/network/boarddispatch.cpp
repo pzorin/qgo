@@ -269,8 +269,8 @@ void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)
 
 void BoardDispatch::recvResult(GameResult * r)
 {
-	qDebug("here: %p", this);
-	qDebug("BW: %p dispatch for: %d", boardwindow, gameData ? gameData->number : -1);
+	/* FIXME there's still some issues here with this being called from certain services
+	 * at the wrong time, etc. */
 	if(!boardwindow)
 		return;
 	if(!r)
