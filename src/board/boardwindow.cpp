@@ -46,9 +46,8 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	}
 	
 	gamePhase = phaseInit;
-	qDebug("PHASE is init\n");
 	boardSize = gd->board_size;
-	qDebug("Boardsize: %d handicap %d", boardSize, gd->handicap);
+
 	//Creates the game tree
 	tree = new Tree(&boardSize);
 

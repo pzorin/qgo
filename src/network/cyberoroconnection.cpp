@@ -103,7 +103,6 @@ void CyberOroConnection::OnConnected()
 	/* Likely client version info */
 	if(connectionState == LOGIN)
 	{
-		qDebug("CyberOro::OnConnected() \n");
 		sendLogin();
 	}
 }
@@ -7544,7 +7543,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 			boarddispatch->recvObserver(*oblistit, true);
 	}
 	else
-		qDebug("Can't get game listing for game %d", game_number);
+		qDebug("Can't get game listing for game %d", game_number);		//FIXME we've hit this
 }
 
 

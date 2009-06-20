@@ -203,7 +203,7 @@ void NetworkConnection::onClose(void)
 NetworkConnection::~NetworkConnection()
 {
 	//feels a little sparse so far... this should probably be super close FIXME
-	qDebug("Destroying connection\n");
+	//qDebug("Destroying connection\n");
 	//closeConnection();			//specific impl already calls this
 	/* Not sure where to delete qsocket.  Possible OnDelayClosedFinish() thing. */
 	//delete qsocket;
@@ -425,12 +425,11 @@ void NetworkConnection::checkGameWatched(GameListing & game)
 /* Slots */
 void NetworkConnection::OnHostFound()
 {
-	qDebug("OnHostFound()");
+	//FIXME useful?
 }
 
 void NetworkConnection::OnConnected()
 {
-	qDebug("OnConnected()");
 	/* Invalid read of size 1 here FIXME 
 	 * also prints garbage... */
 	if(console_dispatch)
@@ -484,7 +483,6 @@ void NetworkConnection::OnReadyRead()
 
 void NetworkConnection::OnConnectionClosed() 
 {
-	qDebug("OnConnectionClosed");
 	/* Without networkdispatch, this now needs to do something
 	 * except FIXME only if there's actually been an error.  like
 	 * if we change servers and get disconnected, versus if we
@@ -559,7 +557,6 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 
 void NetworkConnection::setupRoomAndConsole(void)
 {
-	qDebug("setupRoomAndConsole");
 	mainwindowroom = new Room();
 	mainwindowroom->setConnection(this);
 	setDefaultRoom(mainwindowroom);
@@ -788,7 +785,6 @@ MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing & op
 
 Talk * NetworkConnection::getTalk(PlayerListing & opponent)
 {
-	qDebug("getTalk %s\n", opponent.name.toLatin1().constData());
 	return talkRegistry->getEntry(&opponent);
 }
 
@@ -799,7 +795,6 @@ Talk * NetworkConnection::getIfTalk(PlayerListing & opponent)
 
 void NetworkConnection::closeTalk(PlayerListing & opponent)
 {
-	qDebug("deleting %s\n", opponent.name.toLatin1().constData());
 	talkRegistry->deleteEntry(&opponent);
 }
 

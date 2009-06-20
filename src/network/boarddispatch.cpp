@@ -17,8 +17,6 @@
 
 BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 {
-	qDebug("Creating new Board Dispatch\n");
-	
 	connection = conn;
 	boardwindow = 0;
 	resultdialog = 0;
@@ -77,7 +75,6 @@ BoardDispatch::~BoardDispatch()
  * or not at all */
 void BoardDispatch::closeBoard(void)
 {
-	qDebug("bd::closeBoard");
 	if(connection)
 	{
 		switch(boardwindow->getGameMode())

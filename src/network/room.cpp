@@ -42,7 +42,6 @@ Room::Room()
 
 void Room::setupUI(void)
 {
-	qDebug("Setting up Room UI");
 	gamesListModel = new GamesListModel();
 
 	/*ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
