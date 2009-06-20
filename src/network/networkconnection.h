@@ -45,8 +45,8 @@ class NetworkConnection : public QObject
 		virtual void sendToggle(const QString & param, bool val) = 0;
 		virtual void sendObserve(const GameListing & game) = 0;
 		virtual void sendObserveOutside(const GameListing &) {};	//optional
-		virtual void stopObserving(const GameListing & game) = 0;
-		virtual void stopReviewing(const GameListing & game) = 0;	//shouldn't this be optional?
+		virtual void stopObserving(const GameListing &) {};
+		virtual void stopReviewing(const GameListing &) {};
 		virtual void sendStatsRequest(const PlayerListing & opponent) = 0;
 		virtual void sendPlayersRequest(void) = 0;
 		virtual void sendGamesRequest(void) = 0;
@@ -127,8 +127,8 @@ class NetworkConnection : public QObject
 		const QString & getUsername(void) { return username; };
 		virtual const PlayerListing & getOurListing(void) = 0;
 		virtual unsigned short getRoomNumber(void) { return 0; };
-		virtual void requestGameInfo(unsigned int game_id) = 0;
-		virtual void requestGameStats(unsigned int game_id) = 0;
+		virtual void requestGameInfo(unsigned int) {};		//for IGS on board open
+		virtual void requestGameStats(unsigned int) {};		//same
 		virtual void periodicListRefreshes(bool) {};
 		virtual unsigned int rankToScore(QString rank) = 0;
 		virtual unsigned long getGameDialogFlags(void) { return 0; };

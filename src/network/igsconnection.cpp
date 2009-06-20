@@ -733,7 +733,9 @@ void IGSConnection::onReady(void)
 		//sendText("toggle client on\r\n");		//adds type codes, done earlier
 		sendText("toggle nmatch on\r\n");		//allows nmatch
 		sendText("toggle seek on\r\n");
-
+		//sendText("toggle quiet on\r\n");		//FIXME do we want this?
+		//sendText("toggle review on\r\n");
+		
 		sendPlayersRequest();
 		
 		sendText("seek config_list\r\n");

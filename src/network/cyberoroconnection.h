@@ -22,8 +22,6 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendToggle(const QString & param, bool val);
 		virtual void sendObserve(const GameListing & game);
 		virtual void sendObserveOutside(const GameListing & game);
-		virtual void stopObserving(const GameListing & game);
-		virtual void stopReviewing(const GameListing & game);
 		virtual void sendStatsRequest(const PlayerListing &) {};
 		virtual void sendPlayersRequest(void) {};
 		virtual void sendGamesRequest(void) {};
@@ -79,8 +77,6 @@ class CyberOroConnection : public NetworkConnection
 		virtual QTime gd_checkPeriodTime(TimeSystem s, const QTime & t);
 		virtual unsigned int gd_checkPeriods(TimeSystem s, unsigned int p);
 		
-		virtual void requestGameInfo(unsigned int game_id);
-		virtual void requestGameStats(unsigned int game_id);
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
 		virtual bool playerTrackingByID(void) { return true; };

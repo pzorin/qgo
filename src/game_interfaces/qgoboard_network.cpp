@@ -24,9 +24,8 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	boardTimerId = 0;
 	
 	// what about review games?  games without timers ??
-	
-}
 
+}
 
 void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 {
@@ -102,7 +101,6 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 
 void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 {
-	bool move_alteration = false;
 	int move_number, move_counter, handicap;
 	Move * remember, * last;
 	//static bool offset_1 = false;
@@ -112,91 +110,63 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	/* In case we join in score phase */
 	if(m->flags == MoveRecord::NONE && boardwindow->getGamePhase() == phaseScore)
 		m->flags = MoveRecord::REMOVE;
-	
-	/*if(m->flags == MoveRecord::NONE ||
-		m->flags == MoveRecord::UNDO ||
-		m->flags == MoveRecord::PASS ||
-		m->flags == MoveRecord::HANDICAP ||
-	  	m->flags == MoveRecord::TERRITORY)*/
-		move_alteration = true;	//FIXME
-	
-	if(move_alteration)	//paired with exit of function
-	{
-		remember = tree->getCurrent();
-		last = tree->findLastMoveInMainBranch();
-		
-		/*qDebug("Remember: %d %d-%d %p Last: %d %d-%d %p",
-		       remember->getMoveNumber(), remember->getX(), remember->getY(),
-		       remember->getMatrix(),
-		       last->getMoveNumber(), last->getX(), last->getY(),
-		       last->getMatrix());*/
-		tree->setCurrent(last);
 
-		move_number = m->number;
-		//bool hcp_move = tree->getCurrent()->isHandicapMove();
-		move_counter = tree->getCurrent()->getMoveNumber();
-		if(move_number == NOMOVENUMBER)	//not all services number
-			move_number = move_counter + 1;		//since we add one to move counter later
-		/* If move_counter == 0 even though a handicap has been set, there's
-		 * a problem */
-		//qDebug("MN: %d MC: %d", move_number, move_counter);
-		/*if(move_number > 1 && move_counter == 0)
-		{*/
-			/* This is a bit ugly and I still want to rewrite this whole
-			 * function.  But basically, if we get a move before we've
-			 * retrieved the boardstate, then I guess, and this is
-			 * really the thing that should be fixed, not this, but
-			 * the offset_1 flag below gets screwed up
-			 * such that the first move is skipped if we don't return here*/
-			//qDebug("Received move before move list, ignoring");
-			/*if (remember != last)
-				tree->setCurrent(remember);
-			return;
-		}*/
-		//1 0
-		handicap = boardwindow->getGameData()->handicap;
-		/* Since we don't send the handicap move right now... */
-		if(move_counter == 0)
-		{
-			if(handicap/* && move_number == 0*/)	//1??
-			{	
-				/* Why would we do this?  Its done on the creation.
-				 * WING is an issue, but we'll figure that out later 
-				 * IGS needs this.  If we, for instance, get the
-				 * handicap after the board is created, then
-				 * we might set it here... */
+	remember = tree->getCurrent();
+	last = tree->findLastMoveInMainBranch();
+	
+	tree->setCurrent(last);
+
+	move_number = m->number;
+	//bool hcp_move = tree->getCurrent()->isHandicapMove();
+	move_counter = tree->getCurrent()->getMoveNumber();
+	if(move_number == NOMOVENUMBER)	//not all services number
+		move_number = move_counter + 1;		//since we add one to move counter later
+	
+	//qDebug("MN: %d MC: %d", move_number, move_counter);
+	
+	handicap = boardwindow->getGameData()->handicap;
+	/* Since we don't send the handicap move right now... */
+	if(move_counter == 0)
+	{
+		if(handicap/* && move_number == 0*/)	//1??
+		{	
+			/* Why would we do this?  Its done on the creation.
+			 * WING is an issue, but we'll figure that out later 
+			 * IGS needs this.  If we, for instance, get the
+			 * handicap after the board is created, then
+			 * we might set it here... */
 #ifdef OLD
-				/* This definitely was necessary for IGS
-				 * when we were doing !handicap. 
-				 * we don't have the handicap available but
-				 * we have it before the first move and
-				 * there's often a handicap move,
-				 * right now, we're relying on HANDICAP */
-				qDebug("Setting handicap to %d\n", handicap); 
-				setHandicap(handicap);
-				// FIXME do we need to test remember here like this?
-				if (remember != last)
-					tree->setCurrent(remember);
-				boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+			/* This definitely was necessary for IGS
+			 * when we were doing !handicap. 
+			 * we don't have the handicap available but
+			 * we have it before the first move and
+			 * there's often a handicap move,
+			 * right now, we're relying on HANDICAP */
+			qDebug("Setting handicap to %d\n", handicap); 
+			setHandicap(handicap);
+			// FIXME do we need to test remember here like this?
+			if (remember != last)
+				tree->setCurrent(remember);
+			boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 #endif //OLD
-			}
-			/* If we never got a move number 0, whether there
-			 * was a handicap or not, i.e., move counter is
-			 * still set to 0 and presumably it would have
-			 * incremented, then we're just going to offset
-			 * everything starting here */
-			//if(move_number == 1)
-			//	offset_1 = true;
-			//else if(move_counter == 0)
-			//	move_counter++;
 		}
-		/* This is insanely ugly: setHandicap should properly update the
-		 * move counter */
-		//if(handicap)
+		/* If we never got a move number 0, whether there
+		 * was a handicap or not, i.e., move counter is
+		 * still set to 0 and presumably it would have
+		 * incremented, then we're just going to offset
+		 * everything starting here */
+		//if(move_number == 1)
+		//	offset_1 = true;
+		//else if(move_counter == 0)
 		//	move_counter++;
-		//if(offset_1)
-		move_counter++;
 	}
+	/* This is insanely ugly: setHandicap should properly update the
+	 * move counter */
+	//if(handicap)
+	//	move_counter++;
+	//if(offset_1)
+	move_counter++;
+		
 	switch(m->flags)
 	{
 		case MoveRecord::TERRITORY:
@@ -255,7 +225,8 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			else
 				tree->undoMove();
 			/* I've turned off multiple undo for tygem, just for now... 
-			 * since NOMOVENUMBER FIXME */
+			 * since NOMOVENUMBER FIXME, actually I'm not sure if tygem
+			 * has a normal multiple undo, though it might for review games */
 			qDebug("Undoing move %d = %d - 1", move_number, move_counter);
 			/* FIXME This can get screwy especially around the scoreMode
 			 * stuff.... apparently we can only undo our own passes
@@ -423,14 +394,12 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			boardwindow->getClockDisplay()->rerackTime(getBlackTurn());
 			break;
 	}
-	if(move_alteration)
-	{
-		//check whether we should update to the incoming move or not
-		if (remember != last)
-			tree->setCurrent(remember);
 	
-		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-	}
+	//check whether we should update to the incoming move or not
+	if (remember != last)
+		tree->setCurrent(remember);
+	
+	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 }
 
 void qGoBoardNetworkInterface::sendPassToInterface(StoneColor /*c*/)

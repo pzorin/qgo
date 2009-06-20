@@ -41,12 +41,6 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	//	gameListing = new GameListing();
 }
 
-/* Somewhere we need to send the console commands to quit the board
- * to the server, I'm just not sure where.  The type is different
- * dependent on the board/game opened so that would imply here,
- * but its dependent on the connection as well... I guess we just
- * need to support each type of game.
- * Anyway, code is taken from qGoIF::slot_boardClosed*/
 BoardDispatch::~BoardDispatch()
 {
 	qDebug("Destroying board dispatch\n");
@@ -79,7 +73,8 @@ BoardDispatch::~BoardDispatch()
 	delete gameListing;
 }
 
-/* FIXME, we need to make better use of this */
+/* FIXME, we need to make better use of this,
+ * or not at all */
 void BoardDispatch::closeBoard(void)
 {
 	qDebug("bd::closeBoard");
@@ -98,7 +93,11 @@ void BoardDispatch::closeBoard(void)
 				/* FIXME if game is over, we don't need to adjourn
 				 * nor perhaps with the above modes either
 				 * so we should check this out... maybe this
-				 * function shouldn't be being called */
+				 * function shouldn't be being called,
+				 * at least not from here.  Basically,
+				 * responsibilities of board dispatch and
+				 * qgoboard or boardwindow or whatever are
+				 * overlapping here.  Something needs to go */
 				if(boardwindow->getGamePhase() != phaseEnded)
 					connection->adjournGame(*gameListing);	 //FIXME
 				break;
@@ -238,15 +237,8 @@ void BoardDispatch::openBoard(void)
 	else
 	{
 		qDebug("Game data update");
-		/* Probably need to call some boardwindow text update thing
-		 * Actually, recvRecord would just be called to trigger
-		 * some kind of update since we would alter the record directly.
-		 * But I want just one game data I think... but who creates
-		 * and who deletes.  We usually claim network creates, and...
-		 * board window deletes?  That seems okay.  What if there's a
-		 * failure when game starts up?  But I guess record would already
-		 * exist in some sense so... FIXME */
 		
+		/* FIXME we now have a gameDataChanged() function, can we remove this? */
 		
 		/* Mainly to allow accurate IGS status lookups */
 		//gameData->black_prisoners = g->black_prisoners;

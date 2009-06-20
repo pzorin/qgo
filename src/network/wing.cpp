@@ -144,6 +144,8 @@ void WingConnection::onReady(void)
 		firstonReadyCall = 0;
 		connectionState = CONNECTED;
 		
+		/* FIXME Note that wing and lgs use "set" instead of
+		 * "toggle" possibly, so that's maybe an issue */
 		sendPlayersRequest();
 		sendGamesRequest();
 		qDebug("Ready!");

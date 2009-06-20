@@ -123,7 +123,6 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	
 	player_accepted_match = 0;
 	
-	room_were_in = 0;	//lobby?
 	connecting_to_game_number = 0;
 	playing_game_number = 0;
 	our_game_being_played = 0;	//FIXME redundant
@@ -389,27 +388,6 @@ void TygemConnection::sendResume(unsigned short game_number)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending resume");
 	delete[] packet;
-}
-
-void TygemConnection::stopObserving(const GameListing & game)
-{
-	qDebug("stopObserving %d %d", room_were_in, game.number);
-	/* These should probably be done by the closeBoard stuff.
-	 * i.e., there isn't really a stopObserving */
-#ifdef FIXME
-	if(room_were_in == game.number)
-		sendLeave(game);
-	else
-		sendFinishObserving(game);
-#endif //FIXME
-	/* Shouldn't igs, etc., have this also?!?!?! only adjourns
-	 * seem to properly close through registry FIXME */
-	//closeBoardDispatch(game.game_code);
-}
-
-void TygemConnection::stopReviewing(const GameListing & /*game_id*/)
-{
-	//FIXME
 }
 
 void TygemConnection::closeTalk(PlayerListing & opponent)
@@ -1985,7 +1963,7 @@ void TygemConnection::sendFinishObserving(unsigned short game_number)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending finish observing");
 	delete[] packet;
-	//setRoomNumber(0);
+	
 	if(playing_game_number == game_number)
 		playing_game_number = 0;
 }
@@ -2027,7 +2005,6 @@ void TygemConnection::sendCreateRoom(void)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending create room");
 	delete[] packet;
-	//setRoomNumber(0);	
 }
 
 //FIXME
@@ -4086,77 +4063,14 @@ unsigned char TygemConnection::getVictoryCode(GameResult & aGameResult)
 	return 0;
 }
 
-/* FIXME oro code: */
 /* It seems like this appears like a match invite if opponent closes
  * the window */
 void TygemConnection::sendRematchRequest(void)
 {
-	unsigned int length = 10;
-	unsigned char * packet = new unsigned char[length];
-	if(!room_were_in)
-	{
-		qDebug("Trying to send rematch request but not in a room");
-		return;
-	}
-	BoardDispatch * boarddispatch = getIfBoardDispatch(room_were_in);
-	if(!boarddispatch)
-	{
-		qDebug("Can't get board for %d for rematch send", room_were_in);
-		return;
-	}
-	GameData * gr = boarddispatch->getGameData();
-	packet[0] = 0x69;
-	packet[1] = 0xc3;
-	packet[2] = 0x0a;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = gr->opponent_id & 0x00ff;
-	packet[7] = (gr->opponent_id >> 8);
-	packet[8] = 0x12;	//?
-	packet[9] = 0x00;	//?
-	
-	encode(packet, 0xa);
-	qDebug("Sending rematch request");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending rematch request");
-	delete[] packet;
 }
 
 void TygemConnection::sendRematchAccept(void)
 {
-	unsigned int length = 10;
-	unsigned char * packet = new unsigned char[length];
-	if(!room_were_in)
-	{
-		qDebug("Trying to send rematch accept but we aren't in room");
-		return;
-	}
-	BoardDispatch * boarddispatch = getIfBoardDispatch(room_were_in);
-	if(!boarddispatch)
-	{
-		qDebug("Can't get board for %d for rematch accept send", room_were_in);
-		return;
-	}
-	GameData * gr = boarddispatch->getGameData();
-	packet[0] = 0x6e;
-	packet[1] = 0xc3;
-	packet[2] = 0x0a;
-	packet[3] = 0x00;
-	packet[4] = gr->opponent_id & 0x00ff;
-	packet[5] = (gr->opponent_id >> 8);
-	packet[6] = our_player_id & 0x00ff;
-	packet[7] = (our_player_id >> 8);
-	packet[8] = 0x12;	//?	 is this a room?
-	packet[9] = 0x00;	//?
-	
-	encode(packet, 0xa);
-	qDebug("Sending rematch request accept");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending rematch request accept");
-	delete[] packet;
-	playing_game_number = room_were_in;	//so d2af is ready
-	//prepare for rematch func?
 }
 
 /* This really needs to be a whole packet of stuff but for now,
@@ -5316,83 +5230,6 @@ void TygemConnection::promptResumeMatch(unsigned short game_number)
 	our_match_in_progress = 0;
 }
 
-/* This is necessary as a safety precaution.  Maybe if we were sure
- * about all aspects of protocol, but for now, let's prevent the
- * crashes. */
-/* Starting to think that we shouldn't modify observers here.
- * entering should be enough.  That and the listing on connect */
- /* CyberORO does have multi 1:N games which means that there's possibly
-  * some issues where there might be a player attached to multiple games */
- /* Also, FIXME, there's no real need for an observing and a playing with ORO,
-  * we should just use observing to determine what room they're in.  Its confusing
-  * otherwise.  Although I guess "playing" can be used to mean their name is in the
-  * listing.  All of these places where we close empty rooms need to be brought
-  * together FIXME*/
-void TygemConnection::setAttachedGame(PlayerListing * const player, unsigned short game_id)
-{
-	if(player->playing && player->playing != game_id)
-	{
-		GameListing * g = getDefaultRoom()->getGameListing(player->playing);
-		if(g)
-		{
-			if(g->white == player)
-			{
-				g->white = 0;
-				if(g->black)
-				{
-					/* This is so the name is always
-					 * in the same column */
-					g->white = g->black;
-					g->black = 0;
-				}
-				//g->observers--;	
-			}
-			else if(g->black == player)
-			{
-				g->black = 0;
-				//g->observers--;
-			}
-			/*if(!g->observers)
-			{
-				//broadcast games never go down, so there's FIXME
-				//issues here
-				qDebug("Closing game %d, no observers", g->number);
-				g->running = false;
-				getDefaultRoom()->recvGameListing(g);	
-			}*/
-		}
-	}
-	else if(player->playing == game_id)
-		return;			//nothing to do
-#ifdef RE_DEBUG
-	printf("Moving %s %p from %d to %d\n", player->name.toLatin1().constData(), player, player->playing, game_id);
-#endif //RE_DEBUG
-	player->playing = game_id;
-	if(player->observing && player->observing != game_id)
-	{
-		GameListing * g = getDefaultRoom()->getGameListing(player->observing);
-		if(g)
-		{
-			g->observers--;
-			if(!g->observers)
-			{
-				//broadcast games never go down, so there's FIXME
-				//issues here
-				qDebug("Closing game %d, no observers", g->number);
-				g->running = false;
-				getDefaultRoom()->recvGameListing(g);	
-			}
-		}
-	}
-	else
-		player->observing = game_id;
-	/* Don't need to increment observers because this is done elsewhere, as room
-	 * is created joined, or on the games list */
-	//GameListing * g = getDefaultRoom()->getGameListing(player->playing);
-	//if(g)
-	//	g->observers++;
-}
-
 void TygemConnection::handleServerAnnouncement(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
@@ -6283,114 +6120,6 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
  * oro FIXME, but tygem may have betting in general*/
 void TygemConnection::handleBettingMatchStart(unsigned char * , unsigned int )
 {
-}
-
-//ca5d	chat rooms also
-//this could potentially also be a join room
-//oro FIXME
-void TygemConnection::handleCreateRoom(unsigned char * /*msg*/, unsigned int /*size*/)
-{
-#ifdef FIXME
-	Room * room = getDefaultRoom();
-	unsigned char * p = msg;
-	PlayerListing * aPlayer;
-	unsigned short room_number;
-	unsigned char room_type;
-	
-	aPlayer = room->getPlayerListing(p[0] + (p[1] << 8));
-#ifdef RE_DEBUG
-	if(aPlayer)
-		qDebug("player %s %02x%02x chat room/match\n", aPlayer->name.toLatin1().constData(), p[0], p[1]);
-	else
-		qDebug("can't find player %02x%02x\n", p[0], p[1]);
-#endif //RE_DEBUG
-	p += 2;
-	room_number = p[0] + (p[1] << 8);
-	GameListing * aGameListing = new GameListing();
-	aGameListing->running = true;
-	aGameListing->number = room_number;
-	aGameListing->owner_id = aPlayer->id;
-	aGameListing->white = aPlayer;
-	
-	aGameListing->black = 0;
-	aGameListing->_black_name = QString::number(room_type, 16);
-	aGameListing->observers = 1;	//the person who created it
-	
-	aGameListing->isRoomOnly = true;
-#ifdef RE_DEBUG
-	printf("room number on that chat: %d\n", room_number);
-#endif //RE_DEBUG
-	p += 2;
-	p += 3;
-	//probably room info
-	//0000 00
-	//4011
-	switch(p[0])
-	{
-		case 0xc0:
-			break;
-		case 0x40:
-			break;
-		case 0x09:
-			break;
-		case 0x00:
-			aGameListing->_black_name = "** wished " + QString::number(p[1], 16);
-			break;
-	}
-	room_type = p[0];
-	//p[1] here is time and strength wished as per create room code
-	p += 2;
-	p += 8;
-	//a room byte info?
-	p++;
-	//title!!
-	
-	p += 20;
-	// and lots of zeroes
-	p += 22;
-	//if(p != msg + size)
-	//{
-#ifdef RE_DEBUG
-		printf("chat room strange size: %d\n", size);
-		for(unsigned int i = 0; i < size; i++)
-			printf("%02x", msg[i]);
-		printf("\n");
-#endif //RE_DEBUG
-	//}
-//review game minminmin 7d
-//c901de00 0000 00c0 000000027d60005acdabbadc003b00003cb3a5017d60b65a68b3a501d98bcf7700e0fd7f68b3a5015a88cf770000000000000000
-//chat room
-//89041401 0000 0040 11000000000000000000000000760000000000000000000000000000000000000000000000000000000000000000000000000000
-//chat room
-//15008500 0000 0000 11000000000000000000000000b90000000000000000000000000000000000000000000000000000000000000000000000000000
-//980d6600 0000 0000 11000000000000000000000000bc0000000000000000000000000000000000000000000000000000000000000000000000000000
-//wished normal time even 1k
-//74099800 0000 0000 11000000000000000000000000e90000000000000000000000000000000000000000000000000000000000000000000000000000
-//wished normal time strong
-//b8052301 0000 0000 01000000000000000000000000860000000000000000000000000000000000000000000000000000000000000000000000000000
-//wished normal time even
-//8d00b100 00000000 11000000000000000000000000dd0000000000000000000000000000000000000000000000000000000000000000000000000000
-//wished normal time even
-//29093201 00000000 110000000000000000000000008e0000000000000000000000000000000000000000000000000000000000000000000000000000
-//74099800 00000000 11000000000000000000000000e90000000000000000000000000000000000000000000000000000000000000000000000000000
-//quit playing
-//5d0da60000000000 110000000000000000000000005b0000000000000000000000000000000000000000000000000000000000000000000000000000
-//locked gomoku? equal standard wished?		
-//6d0b1201 0000 0009 11000000000000000000000000ed0000000000000000000000000000000000000000000000000000000000000000000000000000	
-	
-	
-	
-	room->recvGameListing(aGameListing);
-	
-	/* Set the attachment right after the game list is recvd */
-	if(aPlayer)
-		setAttachedGame(aPlayer, aGameListing->number);
-	//FIXME test without delete
-	delete aGameListing;
-	aGameListing = room->getGameListing(room_number);
-	//printf("Pushing back %p with %d\n", aGameListing, aGameListing->number);
-	//rooms_without_games.push_back(aGameListing);
-#endif //FIXME
 }
 
 //oro only??
@@ -7346,7 +7075,6 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	unsigned short game_number = (p[0] << 8) + p[1];
 	int player_number, player_number2, number0;
 	bool opponents_move = false;
-	//unsigned short game_number = game_code_to_number[game_id];
 	//00 24 06 68 01 8D 01 01 FF FF FF FF 00 01  R`.$.h..........
 	//AF 00 53 54 4F 20 30 20 32 20 31 20 31 35 20 33  ..STO 0 2 1 15 3
 	//20 0A 00 00 00 00
@@ -8580,19 +8308,6 @@ void TygemConnection::handleCreateRoomResponse(unsigned char * msg, unsigned int
 	playing_game_number = room_number;	//needed for observer check send
 }
 
-/* The point of this is that we should clear out the observer lists
- * on rooms we leave, etc. */
-void TygemConnection::setRoomNumber(unsigned short number)
-{
-	if(room_were_in)
-	{
-		BoardDispatch * bd = getIfBoardDispatch(room_were_in);
-		if(bd)
-			bd->clearObservers();
-	}
-	room_were_in = number;
-}
-
 /* There's also FIXME FIXME FIXME, 
  * these massive 0x8129 messages at the start of the game, 
  * looks like an opponents records or something... maybe a picture?
@@ -8645,16 +8360,6 @@ BoardDispatch * TygemConnection::getBoardFromOurOpponent(QString opponent)
 			return board;
 	}
 	return NULL;
-}
-
-void TygemConnection::requestGameInfo(unsigned int /*game_id*/)
-{
-	//FIXME disable the button
-}
-
-void TygemConnection::requestGameStats(unsigned int /*game_id*/)
-{
-	//FIXME disable the button
 }
 
 GameData * TygemConnection::getGameData(unsigned int game_id)

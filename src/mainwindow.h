@@ -1,8 +1,3 @@
-/***************************************************************************
-* Mainwindow.h
-* headers for the main client window           *
- ***************************************************************************/
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -10,8 +5,6 @@
 #include "mainwindow_settings.h"
 #include "defines.h"
 #include "igsconnection.h"
-//#include "oldparser.h"
-//#include "qgo_interface.h"
 #include "audio.h"
 
 #include <QtGui>
@@ -90,10 +83,6 @@ public slots:
 	void slot_cblooking();
 	void slot_cbopen();
 	void slot_cbquiet();
-	//void slot_matchRequest(const QString &);
-	//void slot_talkTo(QString &, QString &);
-	void slot_removeDialog(GameDialog *);
-	void slot_matchCanceled(const QString&);
 
 	// parser slots
 	void recvRoomListing(const RoomListing & room, bool b);
@@ -101,7 +90,6 @@ public slots:
 	void slot_checkbox(int , bool );
 	//void slot_playerConnected(Player*);
 	void slot_connexionClosed();
-	void slot_removeDialog(const QString &, const QString &);
 	void slot_msgBox(const QString&);
 	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
 	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
@@ -122,7 +110,6 @@ private:
 	SGFParser * MW_SGFparser;
 	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
 	GameData * GameLoaded , * GameLoaded2 ;
-	//qGoIF * qgoif;
 	Sound *connectSound, *gameSound;
 
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
@@ -148,8 +135,6 @@ private:
 	LoginDialog * logindialog;
 	NetworkConnection * connection;
 	ServerListStorage * serverliststorage;
-	//QList<sendBuf*>  sendBuffer;
-	//sendBuf		*currentCommand;
 	QMenu 		*seekMenu;
 	QList<Talk*>	talkList;
 	QList<GameDialog*> matchList;

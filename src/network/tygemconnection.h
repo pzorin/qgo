@@ -24,8 +24,6 @@ class TygemConnection : public NetworkConnection
 		virtual void sendMsg(PlayerListing & player, QString text);
 		virtual void sendToggle(const QString & param, bool val);
 		virtual void sendObserve(const GameListing & game);
-		virtual void stopObserving(const GameListing & game);
-		virtual void stopReviewing(const GameListing & game);
 		virtual void sendStatsRequest(const PlayerListing &) {};
 		virtual void sendPlayersRequest(void) {};
 		virtual void sendGamesRequest(void) {};
@@ -84,7 +82,7 @@ class TygemConnection : public NetworkConnection
 		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		BoardDispatch * getBoardFromOurOpponent(QString opponent);
 		virtual const PlayerListing & getOurListing(void);
-		virtual unsigned short getRoomNumber(void) { return room_were_in; };
+		virtual unsigned short getRoomNumber(void) { return playing_game_number; /*FIXME for gamedialog unsure of necessity or reliability here*/};
 		
 		virtual void closeTalk(PlayerListing & opponent);
 		virtual void closeBoardDispatch(unsigned int game_id);
@@ -94,8 +92,6 @@ class TygemConnection : public NetworkConnection
 		virtual QTime gd_checkPeriodTime(TimeSystem s, const QTime & t);
 		virtual unsigned int gd_checkPeriods(TimeSystem s, unsigned int p);
 		
-		virtual void requestGameInfo(unsigned int game_id);
-		virtual void requestGameStats(unsigned int game_id);
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
 		virtual bool supportsMultipleUndo(void) { return false; };
@@ -203,7 +199,6 @@ class TygemConnection : public NetworkConnection
 		void handleResumeMatch(unsigned char * msg, unsigned int size);
 		QString getStatusFromCode(unsigned char code, QString rank);
 		int compareRanks(QString rankA, QString rankB);
-		void handleCreateRoom(unsigned char * msg, unsigned int size);
 		void handleMatchInvite(unsigned char * msg, unsigned int size);
 		void handleMatchOffer(unsigned char * msg, unsigned int size, enum MIVersion = offer);
 		void sendCreateRoom(void);
@@ -220,8 +215,6 @@ class TygemConnection : public NetworkConnection
 		class GameData * getGameData(unsigned int game_id);
 		int time_to_seconds(const QString & time);
 		void killActiveMatchTimers(void);
-		void setRoomNumber(unsigned short number);
-		void setAttachedGame(PlayerListing * const player, unsigned short game_id);
 		
 		unsigned int http_connect_content_length;
 		/* We should really just have the player listing for ourself FIXME */
@@ -237,10 +230,6 @@ class TygemConnection : public NetworkConnection
 		
 		std::map <PlayerListing *, QString> pendingConversationMsg;
 		
-		//oro FIXME
-		std::map <unsigned short, unsigned short> game_code_to_number;
-		
-		unsigned short room_were_in;
 		unsigned short connecting_to_game_number;	//awkward FIXME
 		unsigned short playing_game_number;		//awkward
 		bool we_send_nigiri;
@@ -254,8 +243,7 @@ class TygemConnection : public NetworkConnection
 		int opponentDisconnectTimerID;
 		//unsigned short opp_requests_undo_move_number;
 		unsigned short done_response;
-		//oro FIXME
-		std::vector <MoveRecord> deadStonesList;
+		
 		/* FIXME, below are awkward, we should just do some kind of state thing */
 		bool receivedOppDone;
 		bool sentDone;

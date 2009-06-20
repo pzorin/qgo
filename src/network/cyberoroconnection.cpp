@@ -156,27 +156,6 @@ void CyberOroConnection::sendObserve(const GameListing & game)
 	sendObserveAfterJoining(game);
 }
 
-void CyberOroConnection::stopObserving(const GameListing & game)
-{
-	qDebug("stopObserving %d %d", room_were_in, game.number);
-	/* These should probably be done by the closeBoard stuff.
-	 * i.e., there isn't really a stopObserving */
-#ifdef FIXME
-	if(room_were_in == game.number)
-		sendLeave(game);
-	else
-		sendFinishObserving(game);
-#endif //FIXME
-	/* Shouldn't igs, etc., have this also?!?!?! only adjourns
-	 * seem to properly close through registry FIXME */
-	//closeBoardDispatch(game.game_code);
-}
-
-void CyberOroConnection::stopReviewing(const GameListing & /*game_id*/)
-{
-	//FIXME
-}
-
 void CyberOroConnection::adjournGame(const GameListing & )
 {
 }
@@ -8356,16 +8335,6 @@ unsigned int CyberOroConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 			break;
 	}
 	return p;
-}
-
-void CyberOroConnection::requestGameInfo(unsigned int /*game_id*/)
-{
-	//FIXME disable the button
-}
-
-void CyberOroConnection::requestGameStats(unsigned int /*game_id*/)
-{
-	//FIXME disable the button
 }
 
 GameData * CyberOroConnection::getGameData(unsigned int game_id)

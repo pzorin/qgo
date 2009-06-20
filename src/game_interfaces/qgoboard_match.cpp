@@ -70,7 +70,6 @@ void qGoBoardMatchInterface::localMarkDeadRequest(int x,  int y)
 	sendMoveToInterface(stoneBlack,x,y);
 }
 
-
 void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 {
 	if (boardwindow->getGamePhase() != phaseOngoing)
@@ -111,6 +110,9 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
  *  time info has been send by parser
  *  TODO : make sure we won't need this in qgoboard (code duplicate)
  */
+/* FIXME Looks like this function was used for more than it is now and the
+ * stuff with the interface handler, which I assume goes to the clockdisplay...
+ * its all a little awkward. */
 void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
 {
 	int bt_i = btime.toInt();
@@ -144,8 +146,6 @@ void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &b
 	// cause no moves cmd in execution
 //	sound = true;
 }
-
-
 
 /*
  * initialises the scoring phase in match mode
@@ -216,9 +216,6 @@ void qGoBoardMatchInterface::slotCountPressed()
 	if (mb.exec() == QMessageBox::Yes)
 		boardwindow->getBoardDispatch()->sendRequestCount();
 }
-
-
-
 
 /*
  * 'adjourn button pressed
