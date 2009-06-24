@@ -754,6 +754,11 @@ void BoardWindow::setGamePhase(GamePhase gp)
 	/* FIXME We should set and clear ALL buttons and the like here */
 	switch(gp)
 	{
+		case phaseInit:
+			//more defaults FIXME, and doublecheck
+			ui.adjournButton->setEnabled(false);
+			ui.drawButton->setEnabled(false);
+			break;
 		case phaseEnded:
 			if(ui.undoButton)
 				ui.undoButton->setDisabled(true);
