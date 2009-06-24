@@ -777,7 +777,7 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * sloppy */
 			if(ui.passButton)
 				ui.passButton->setEnabled(true);
-			if(gameData->undoAllowed)
+			if(gameData->undoAllowed || gameData->gameMode == modeComputer)
 				ui.undoButton->setEnabled(true);
 			else
 				ui.undoButton->setEnabled(false);
