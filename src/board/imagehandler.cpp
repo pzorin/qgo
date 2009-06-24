@@ -345,15 +345,18 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 				
 //#define WHITE_SHINE_START			0.9
 //#define WHITE_SHINE_END			0.92
-#define WHITE_SHINE_START			0.9695		//or .965 better maybe
-#define WHITE_SHINE_END				0.97
+#define WHITE_SHINE_START			0.9795
+#define WHITE_SHINE_END				0.98
 					if (xr1>WHITE_SHINE_START) xg1=(xr1-WHITE_SHINE_START)*10;
 					else xg1=0;
 
 					if (xr2>WHITE_SHINE_END) xg2=(xr2-WHITE_SHINE_END)*10;
 					else xg2=0;
-				
-					g2=(int)(200+10* xr2+xg2*45);
+//#define WHITENESS					200
+#define WHITENESS					235
+//#define WHITENESS_SHINE			10
+#define WHITENESS_SHINE				5
+					g2=(int)(WHITENESS+WHITENESS_SHINE* xr2+xg2*45);
 				//g=(g1 > g2 ? g1 : g2);
 				
 					theta = atan2(double(j-d/2), double(i-d/2)) + M_PI - M_PI/4 + M_PI/2;
@@ -365,8 +368,8 @@ void ImageHandler::paintWhiteStone (QImage &wi, int d, int stone_render)//bool s
 					double stripe = STRIPE*sin((M_PI/2)*(theta-ALPHA)/(M_PI-ALPHA));
 					if (stripe < 1) stripe = 1;
 				
-					double g1min=(int)(0+10*xr1+xg1*45), g2min=(int)(0+10*xr2+xg2*45);
-					double g1max=(int)(200+10*xr1+xg1*45), g2max=(int)(200+10* xr2+xg2*45);;
+					double g1min=(int)(0+WHITENESS_SHINE*xr1+xg1*45), g2min=(int)(0+WHITENESS_SHINE*xr2+xg2*45);
+					double g1max=(int)(WHITENESS+WHITENESS_SHINE*xr1+xg1*45), g2max=(int)(WHITENESS+WHITENESS_SHINE* xr2+xg2*45);;
 					g1min = g1max - (g1max-g1min)*(1-exp(-1*(theta-ALPHA)/(M_PI-ALPHA)));
 					g2min = g2max - (g2max-g2min)*(1-exp(-1*(theta-ALPHA)/(M_PI-ALPHA)));
 				
