@@ -74,9 +74,9 @@ class NetworkConnection : public QObject
 		virtual unsigned int gd_checkPeriods(TimeSystem, unsigned int p) { return p; };
 		virtual void sendRejectCount(class GameData *) {};
 		virtual void sendAcceptCount(class GameData *) {};
-		virtual void sendAdjournRequest(void) = 0;
-		virtual void sendAdjourn(void) = 0;
-		virtual void sendRefuseAdjourn(void) = 0;
+		virtual void sendAdjournRequest(void) {};
+		virtual void sendAdjourn(void) {};
+		virtual void sendRefuseAdjourn(void) {};
 		int write(const char * packet, unsigned int size);
 		void setConsoleDispatch(ConsoleDispatch * c);
 		void setDefaultRoom(Room * r) { default_room = r; };
