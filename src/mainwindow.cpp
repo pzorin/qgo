@@ -148,13 +148,15 @@ MainWindow::~MainWindow()
 	cleanupServerData();
 }
 
-
+/* FIXME FIXME FIXME We need to prompt for close if there are games open !!!!!!!!! 
+ * we should also prompt to save any edited normal boards, or the boards should
+ * do that themselves on closing.  The board windows might actually be separate though.*/
 void MainWindow::closeEvent(QCloseEvent *)
 {
+	//e->ignore();
 	/* Close connection if open */
 	closeConnection();
 	saveSettings();
-	qDebug("closeEvent : saveSettings() exited");
 }
 
 
