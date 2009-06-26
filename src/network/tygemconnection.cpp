@@ -2190,7 +2190,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	PlayerListing * opponent = room->getPlayerListing(mr.opponent);
 	if(!opponent)
 	{
-		qDebug("Can't get opponent listing for match request\n");
+		qDebug("Can't get opponent listing for match offer\n");
 		return;
 	}
 	ourPlayer = room->getPlayerListing(getUsername());
@@ -2476,7 +2476,7 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 	PlayerListing * opponent = room->getPlayerListing(mr.opponent);
 	if(!opponent)
 	{
-		qDebug("Can't get opponent listing for match request\n");
+		qDebug("Can't get opponent listing for start game\n");
 		return;
 	}
 	ourPlayer = room->getPlayerListing(getUsername());
@@ -3375,115 +3375,6 @@ void TygemConnection::sendAcceptCount(GameData * data)
  * come back from the server meaning that perhaps we should not act on any
  * messages until they come back?  Much like placing stones? */
 
-/* FIXME oro code: */
-void TygemConnection::sendAdjournRequest(void)
-{
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(our_game_being_played);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us an adjourn request");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xb5;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending adjourn request");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending adjourn request");
-	delete[] packet;
-}
-
-/* FIXME oro code: */
-/* The three below should be combined to just change
- * that one byte. FIXME */
-void TygemConnection::sendAdjourn(void)
-{
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(our_game_being_played);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us an adjourn accept");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xba;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending adjourn accept");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending adjourn accept");
-	delete[] packet;
-}
-
-/* FIXME oro code: */
-void TygemConnection::sendRefuseAdjourn(void)
-{
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(our_game_being_played);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us an adjourn refusal");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xbf;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending adjourn refuse");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending adjourn refusal");
-	delete[] packet;
-}
 	
 /* Loser sends this after resign, but I think only if they offered
  * the game 
@@ -3507,7 +3398,8 @@ void TygemConnection::sendMatchResult(unsigned short game_code)
 	}
 	/* We need to notify boarddispatch of finished game so we can
 	 * get the full result */
-	boarddispatch->recvResult(0);
+	//boarddispatch->recvResult(0);		//doublecheck FIXME don't think we need to do this anymore
+	/* Unless we ever send it with the score margin from somewhere else */
 	GameData *aGameData = boarddispatch->getGameData();
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
@@ -3525,7 +3417,7 @@ void TygemConnection::sendMatchResult(unsigned short game_code)
 	PlayerListing * opponent = getDefaultRoom()->getPlayerListing(aGameData->black_name == getUsername() ? aGameData->white_name : aGameData->black_name);
 	if(!opponent)
 	{
-		qDebug("Can't get opponent listing for match request\n");
+		qDebug("Can't get opponent listing for match result send\n");
 		return;
 	}
 	/* FIXME This header is same as sendEnterScoring, combine */
@@ -3620,7 +3512,7 @@ void TygemConnection::sendLongMatchResult(unsigned short game_code)
 	PlayerListing * opponent = getDefaultRoom()->getPlayerListing(game->black_name == getUsername() ? game->white_name : game->black_name);
 	if(!opponent)
 	{
-		qDebug("Can't get opponent listing for match request\n");
+		qDebug("Can't get opponent listing for long match result send\n");
 		return;
 	}
 	writeNotNicknameAndRank((char *)&(packet[8]), *opponent);
@@ -6836,7 +6728,7 @@ void TygemConnection::handleCountRequestResponse(unsigned char * msg, unsigned i
 	unsigned char name[15];
 	name[14] = 0x00;
 	QString encoded_name;
-	if(size != 0x24)
+	if(size != 0x24)	//eweiqi 40 FIXME
 	{
 		qDebug("Count request response of strange size: %d", size);
 	}
@@ -7065,6 +6957,9 @@ enum TygemConnection::TimeFlags TygemConnection::handleTimeChunk(BoardDispatch *
  /* FIXME Consider adding code to actually filter out by the move message
   * number per game in case that's a kind of prevention against replays
   * or something.  */
+/* FIXME When resuming a game "Opp sends bad move message number" comes up
+ * repeatedly because we're passed all the moves at once and sends none of
+ * them.  bad move message number stuff needs to be fixed up somehow anyway. */
 //0668
 void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 {
@@ -7348,7 +7243,7 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 
 void TygemConnection::handlePass(unsigned char * msg, unsigned int size, int /* FIXME */)
 {
-	if(size != 0x24)
+	if(size != 0x24)	//eweiqi 40 FIXME
 	{
 		qDebug("Pass msg of strange size: %d", size);
 	}
@@ -7557,7 +7452,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	QString encoded_nameA, encoded_nameB;
 	QString encoded_nameA2, encoded_nameB2;
 	QString rankA, rankB;
-	if(size != 92)
+	if(size != 92)			//eweiqi 88 FIXME
 	{
 		qDebug("Match open msg of strange size: %d", size);
 	}
