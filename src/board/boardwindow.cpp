@@ -756,6 +756,8 @@ void BoardWindow::setGamePhase(GamePhase gp)
 	{
 		case phaseInit:
 			//more defaults FIXME, and doublecheck
+			//also consider vanishing buttons instead of making
+			//them disabled, especially with like computer go, etc.
 			ui.adjournButton->setEnabled(false);
 			ui.drawButton->setEnabled(false);
 			break;
@@ -814,7 +816,8 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * of the button checking state?  Probably. FIXME */
 			if(ui.countButton)
 				ui.countButton->setDisabled(true);
-			if(ui.undoButton && gameData->gameMode == modeMatch)
+			if(ui.undoButton && gameData->gameMode == modeMatch &&
+				getBoardDispatch() && getBoardDispatch()->supportsRequestMatchMode())
 			{
 				ui.undoButton->setText(tr("Match Mode"));
 				ui.undoButton->setEnabled(true);	//even in rated
