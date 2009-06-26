@@ -46,11 +46,9 @@ BoardDispatch::~BoardDispatch()
 	if(boardwindow)
 	{
 		//clearObservers();
+		boardwindow->getUi()->observerView->setModel(0);
 		if(observerListModel)
-		{
-			boardwindow->getUi()->observerView->setModel(0);
 			delete observerListModel;
-		}
 		if(boardwindow->getGamePhase() != phaseEnded)
 		{
 			//got an oro crash here after return to match/rematch
