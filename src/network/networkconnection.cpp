@@ -379,13 +379,13 @@ void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
 				if((*i)->notify)
 					QMessageBox::information(0, tr("Signed on"), tr("%1 has signed on").arg(player.name));
 #endif //FIXME
-				return;
 			}
 			else if(!player.online)
 			{
 				(*i)->online = false;
 				//they are disconnecting
 			}
+			return;
 		}
 	}
 	for(i = watchedList.begin(); i != watchedList.end(); i++)
