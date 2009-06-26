@@ -41,7 +41,6 @@ public:
 	virtual void stopTime() {};
 	virtual void set_move(StoneColor , QString , QString ) {};
 	virtual void handleMove(class MoveRecord *) {}; 
-	virtual void set_statedMoveCount(int n) 	{ stated_mv_count = n;}
 	int getMoveNumber(void);
 	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual void setModified(bool b= true)		{ isModified = b;}
@@ -196,7 +195,7 @@ protected:
 //	MainWindow  *win;
 //	qGo         *qgo;
 //	int         mv_counter;
-	int	stated_mv_count ;
+	int	stated_mv_count;
 	bool	playSound;
 //	int         bt_i, wt_i;
 //	QString     bt, wt;

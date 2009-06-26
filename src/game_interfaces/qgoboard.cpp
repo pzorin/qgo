@@ -406,6 +406,7 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 void qGoBoard::localMarkDeadRequest(int x, int y)
 {
 	markDeadStone(x,y);
+	/* FIXME maybe should be markDeadArea()?  Maybe as option? */
 }
 
 
@@ -680,8 +681,11 @@ void qGoBoard::kibitzReceived(const QString& text)
 
 	QString k = text;
 	// be nice to do this in bold or something
-	k.prepend( "(" + QString::number(tree->getCurrent()->getMoveNumber()) + ") ");
-	
+	if(stated_mv_count != tree->findLastMoveInMainBranch()->getMoveNumber())
+	{
+		stated_mv_count = tree->findLastMoveInMainBranch()->getMoveNumber();
+		k.prepend( "(" + QString::number(stated_mv_count) + ") ");
+	}
 	QString txt = tree->getCurrent()->getComment();
 
 	if (!txt.isEmpty())
