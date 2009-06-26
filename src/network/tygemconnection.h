@@ -59,9 +59,6 @@ class TygemConnection : public NetworkConnection
 		virtual void sendRefuseDrawRequest(class GameData * data);
 		virtual void sendRejectCount(class GameData * data);
 		virtual void sendAcceptCount(class GameData * data);
-		virtual void sendAdjournRequest(void);
-		virtual void sendAdjourn(void);
-		virtual void sendRefuseAdjourn(void);
 		virtual void handlePendingData(newline_pipe <unsigned char> * p);
 		virtual bool isReady(void);
 		virtual void onReady(void);
