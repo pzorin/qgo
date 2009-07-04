@@ -32,9 +32,6 @@ class TygemConnection : public NetworkConnection
 		virtual void sendTime(BoardDispatch * boarddispatch);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
 		
-		void writeNotNicknameAndRank(char * p, const PlayerListing & player);
-		void writeNicknameAndCID(char * p, const PlayerListing & player);
-		
 		//EndgameMsg should probably be protected or even private
 		enum EGVersion {pass, done_scoring, accept_count, reject_count,
 				request_count, accept_count_request, refuse_count_request,
@@ -76,8 +73,6 @@ class TygemConnection : public NetworkConnection
 		virtual void requestLongInfo(PlayerListing & player);
 		virtual void requestShortInfo(PlayerListing & player);
 
-		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
-		BoardDispatch * getBoardFromOurOpponent(QString opponent);
 		virtual const PlayerListing & getOurListing(void);
 		virtual unsigned short getRoomNumber(void) { return playing_game_number; /*FIXME for gamedialog unsure of necessity or reliability here*/};
 		
@@ -179,6 +174,11 @@ class TygemConnection : public NetworkConnection
 		QString getCountryFromCode(unsigned char code);
 		int getPhase(unsigned char byte);
 		QString getRoomTag(unsigned char byte);
+
+		void writeNotNicknameAndRank(char * p, const PlayerListing & player);
+		void writeNicknameAndCID(char * p, const PlayerListing & player);
+		PlayerListing * getOrCreatePlayerListingFromRecord(char * r);
+
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);
 		void handleServerRoomChat(unsigned char * msg, unsigned int size);
 		void handlePersonalChat(unsigned char * msg, unsigned int size);

@@ -65,8 +65,6 @@ class CyberOroConnection : public NetworkConnection
 		virtual char * sendAddBlock(int * size, void * p);
 		virtual char * sendRemoveBlock(int * size, void * p);
 		
-		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
-		BoardDispatch * getBoardFromOurOpponent(QString opponent);
 		virtual const PlayerListing & getOurListing(void);
 		virtual unsigned short getRoomNumber(void) { return room_were_in; };
 		
