@@ -170,7 +170,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 int TygemConnection::requestServerInfo(void)
 {
 	qDebug("Requesting Tygem Server Info");
-	if(!openConnection("121.189.9.52", 80))
+	if(!openConnection("121.189.9.52", 80, NOT_MAIN_CONNECTION))
 	{
 		qDebug("Can't get server info");
 		return -1;
@@ -208,9 +208,6 @@ TygemConnection::~TygemConnection()
 	closeConnection();
 	//backup serverlist
 	getServerListStorage().saveServerList(connectionType, serverList);
-	/*std::vector<ServerItem*>::iterator iter;
-	for(iter = serverList.begin(); iter != serverList.end(); iter++)
-		delete *iter;*/
 }
 
 void TygemConnection::OnConnected()
@@ -598,11 +595,6 @@ void TygemConnection::acceptMatchOffer(const PlayerListing & opponent, MatchRequ
 		sendMatchOffer(*mr, accept);
 }
 
-/*void TygemConnection::setAccountAttrib(AccountAttib * aa)
-{
-		
-}*/
-
 void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 {
 	unsigned char * c;
@@ -759,6 +751,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 				delete[] c;
 			}
 			break;
+		case SETUP:
 		case CONNECTED:
 			while((bytes = p->canRead()))
 			{
@@ -997,11 +990,17 @@ void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 	
 	sendRequestGames();
 	sendRequest();
-	connectionState = CONNECTED;
+	connectionState = SETUP;
 	sendName();
 	serverKeepAliveTimerID = startTimer(119000);	//not fast enough? 2 minutes I thought
 							//maybe we're supposed to send something
 							//else soon on login too...
+	/* FIXME currently we have handleFriends doing setConnected which closes the please wait
+	 * getting us out of SETUP.  This means that the players haven't come in yet.
+	 * the problem is that handleFriends puts the friends on a list that's then checked when
+	 * we receive players.  But there's some other issues with this as well and we should get
+	 * CyberORO working better with this, as well as IGS Before we worry about this
+	 * relatively minor problem */
 	sendFriendsBlocksRequest();
 	sendRequestPlayers();
 	//53
@@ -2302,6 +2301,10 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 			packet[45] = 0x00;
 			packet[46] = 0x00;
 		}
+		packet[45] = 0x10;
+		packet[46] = 0x00;		//testing!! FIXME
+		//on tom sending accept I've seen 45 and 46 as 10 00
+		//might even be critical
 		
 		/* These two bytes are likely about non rated games... or they're
 		 * the ones we're looking for */
@@ -2360,12 +2363,15 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		for(i = 60; i < 64; i++)
 			packet[i] = 0x00;
 		
+		writeNicknameAndCID((char *)&(packet[64]), *opponent);
+#ifdef OLD
 		writeZeroPaddedString((char *)&(packet[64]), opponent->name, 10);
 		packet[74] = 0x00;
 		
 		//packet[75] = 0x01;	//what is this? FIXME affects names?
 		//packet[75] = 0x02;
 		packet[75] = opponent->country_id;
+#endif //OLD
 		//packet[75] = THIRD_BYTE(mo_flags);
 		//75, as 0x02 makes our name first as white
 		//if 87 is also 0x02 later which makes opponent second black
@@ -2393,6 +2399,8 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	//01 02 with 01 earlier, challenger plays white, we maybe can play but doesn't
 				//go through
 	
+	writeNicknameAndCID((char *)&(packet[76]), *ourPlayer);
+#ifdef OLD	
 	writeZeroPaddedString((char *)&(packet[76]), getUsername(), 10);
 	packet[86] = 0x00;
 	//per match invite, I don't think we can change this...
@@ -2408,7 +2416,8 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		packet[87] = 0x02;
 	else if(version == accept || version == decl)
 		packet[87] = 0x02;		//invite_byte?*/
-	packet[87] = ourPlayer->country_id; 
+	packet[87] = ourPlayer->country_id;
+#endif //OLD
 	//just changed from 02
 	//presumably matches with match invites, etc.
 	//packet[87] = FOURTH_BYTE(mo_flags);
@@ -2912,6 +2921,49 @@ void TygemConnection::writeNicknameAndCID(char * p, const PlayerListing & player
 	p[11] = player.country_id;
 }
 
+/* We could use this in handlePlayerListing except that that would double the calls
+ * to new since player listings are copied by room in entering them into the registry.
+ * FIXME however, I can't off hand remember why it does that, so I should consider
+ * fixing that to not copy construct the registry entries if that's okay
+ * with all the registries. */
+PlayerListing * TygemConnection::getOrCreatePlayerListingFromRecord(char * r)
+{
+	Room * room = getDefaultRoom();
+	unsigned char name[15];
+	name[14] = 0x00;
+
+	strncpy((char *)name, r, 14);
+	QString encoded_name = QString((char *)name);
+	QString rank;
+	unsigned char country_id;
+	//QString encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
+	if(r[15] < 0x12)
+		rank = QString::number(0x12 - r[15]) + 'k';
+	else if(r[15] > 0x1a)
+		rank = QString::number(r[15] - 0x1a) + 'p';
+	else
+		rank = QString::number(r[15] - 0x11) + 'd';
+	strncpy((char *)name, &(r[16]), 11);
+	QString encoded_name2 = QString((char *)name);
+	country_id = r[27];
+	PlayerListing * player = room->getPlayerListing(encoded_name2);
+	if(!player)
+	{
+		player = new PlayerListing();
+		player->online = true;
+		player->info = "??";
+		player->playing = 0;
+		player->observing = 0;
+		player->idletime = "-";
+		player->notnickname = encoded_name;
+		player->name = encoded_name2;
+		player->rank = rank;
+		player->country_id = country_id;
+		room->recvPlayerListing(player);
+		player = room->getPlayerListing(encoded_name2);
+	}
+	return player;
+}
 /* This is in addition to and before the board SKI msg from sendMove()
  * and since its the same form, we're adding the counting messages to
  * it as well. Remember to delete sendCountMsg() FIXME*/
@@ -4069,10 +4121,10 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 	 * messages per packet, etc. */
 	/*if((message_type & 0x00ff) == 0x00b3)
 	{*/
-		/*printf("****: \n");
-		for(i = 0; i < size; i++)
+		/*printf("\n****: \n");
+		for(i = 0; i < (int)size; i++)
 			printf("%02x", msg[i]);
-		printf("\n");*/
+		printf("\n\n");*/
 	/*}*/
 	
 	msg += 4;
@@ -4144,17 +4196,17 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			//0x0643: 70657465726975730000000000000001706574657269757300000000696e74727573696f6e00000000000
 			//		009696e74727573696f6e0000020100ffff
 			handleMatchInvite(msg, size);
-#ifdef RE_DEBUG
-			printf("0x0643: ");
-			for(i = 0; i < (int)size; i++)
-				printf("%02x", msg[i]);
-			printf("\n");
-#endif //RE_DEBUG
 			break;
 		case TYGEM_MATCHINVITERESPONSE:
 			handleMatchInviteResponse(msg, size);
 			break;
 		case TYGEM_MATCHOFFER:
+#ifdef RE_DEBUG
+			printf("0645: ");
+			for(i = 0; i < (int)size; i++)
+				printf("%02x", msg[i]);
+			printf("\n");
+#endif //RE_DEBUG
 			if(msg[43] == 0x02)
 				handleMatchOffer(msg, size, offer);
 			else if(msg[43] == 0x03)	//double check
@@ -4764,6 +4816,7 @@ void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int 
 #endif //RE_DEBUG
 		i++;
 	}
+	setConnected();		//might be a better place for this
 }
 
 /* These are the number of players on the other servers
@@ -7237,6 +7290,60 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 		boarddispatch->recvMove(aMove);
 		delete aMove;
 	}
+	else if(strncmp((char *)p, "BAC ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		/* I assume this is backup, or go back to a particular point.  I'm not quite sure
+		 * what to do with it right now, since currently observer can look at any move.
+		 * but quite likely it just sets the move to something. */
+		p += 4;
+		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &player_number) != 3)
+		{
+			qDebug("Bad BAC move");
+			delete aMove;
+			return;
+		}
+		qDebug("BAC msg %d %d", aMove->number, player_number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+		}
+		
+		aMove->number = NOMOVENUMBER;
+		aMove->flags = MoveRecord::UNDO;
+		boarddispatch->recvMove(aMove);*/
+		delete aMove;
+	}
+	else if(strncmp((char *)p, "FOR ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		/* I assume this is backup, or go back to a particular point.  I'm not quite sure
+		 * what to do with it right now, since currently observer can look at any move.
+		 * but quite likely it just sets the move to something. */
+		p += 4;
+		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &player_number) != 3)
+		{
+			qDebug("Bad BAC move");
+			delete aMove;
+			return;
+		}
+		qDebug("BAC msg %d %d", aMove->number, player_number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+		}
+		
+		aMove->number = NOMOVENUMBER;
+		aMove->flags = MoveRecord::UNDO;
+		boarddispatch->recvMove(aMove);*/
+		delete aMove;
+	}
 	else
 		printf("Unknown: %s\n", (char *)p);
 }
@@ -7368,21 +7475,23 @@ int TygemConnection::compareRanks(QString rankA, QString rankB)
 //38 00 00 02 00 00 00 B2 00 A0 00 00 00 FF 00 00  8...............
 //00 00 00 00  
 //0639
-#ifdef RE_DEBUG
 void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int size)
-#else
-void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int /*size*/)
-#endif //RE_DEBUG
 {
 	BoardDispatch * boarddispatch;
 	unsigned char * p = msg;
 	GameData * aGameData;
 	unsigned short game_number;
+	if(size != 0x30)
+	{
+		qDebug("board opened msg of strange size: %d\n", size);
+	}
 
 	game_number = (p[0] << 8) + p[1];
 	p += 2;
 	//this doesn't look like a match message
-	
+	//0089 0100 696e 7472 7573 696f 6e00 0000
+	//0000 0008 696e 7472 7573 696f 6e00 0002
+	//0000 0001 0000 0000 00ff 0000 0000 0000
 	//001f010070657465726975730000000000000008706574657269757300000002000000010000000000ff000000000000
 #ifdef RE_DEBUG
 	printf("0639 match: \n");
@@ -7767,18 +7876,16 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 	//ffffffff000100010000010073777765
 	//74000000000000023132333435363779
 	//00000002
-
-	int i;
+	if(size != 84)
+	{
+		qDebug("Match offer msg of strange size: %d", size);
+	}
 	unsigned short game_number;
 	unsigned char name[15];
 	name[14] = 0x00;
 	QString encoded_name, encoded_name2;
 	PlayerListing * opponent;
 	
-	printf("0x0645/6 match offer: ");
-	for(i = 0; i < (int)size; i++)
-		printf("%02x", msg[i]);
-	printf("\n");
 	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	if(encoded_name != getUsername())	//FIXME in case response doesn't readdress
@@ -7982,11 +8089,24 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 		qDebug("MatchInvite of size %d\n", size);
 		// probably should print it out and exit FIXME
 	}
-	Room * room = getDefaultRoom();
+#ifdef RE_DEBUG
+	printf("0x0643: ");
+	for(unsigned int i = 0; i < size; i++)
+		printf("%02x", msg[i]);
+	printf("\n");
+
+	//tom
+	//7065 7465 7269 7573 0000 0000 0000 0008
+	//7065 7465 7269 7573 0000 0000 696e 7472
+	//7573 696f 6e00 0000 0000 0008 696e 7472
+	//7573 696f 6e00 0002 0100 ffff
+#endif //RE_DEBUG
 	p += 14;
 	invite_byte = p[1];		//probably not
 	p += 2;
 	p += 12;
+#ifdef OLD
+	Room * room = getDefaultRoom();
 	/* Can't we make a special thing to do all these repetitive string copies? */
 	strncpy((char *)name, (char *)p, 14);
 	QString encoded_name = QString((char *)name);
@@ -8001,6 +8121,10 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 		qDebug("Match invite from unknown player");
 		return;
 	}
+#else
+	p += 16;
+#endif //OLD
+	PlayerListing * player = getOrCreatePlayerListingFromRecord((char *)&(msg[28]));
 	p += 10;
 	p++;
 	opponent_is_challenger = (bool)(p[0] - 1);
@@ -8217,44 +8341,6 @@ void TygemConnection::onReady(void)
 	//sendInvitationSettings(true);	//for now
 	qDebug("Ready!\n");
 	NetworkConnection::onReady();
-}
-
-
-/* Because the IGS protocol is garbage, we have to break encapsulation here
- * and in BoardDispatch Wow FIXME, don't think we need this.*/
-BoardDispatch * TygemConnection::getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi)
-{
-	BoardDispatch * board;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
-	{
-		board = i->second;
-		if(board->isAttribBoard(black_player, black_captures, black_komi, white_player, white_captures, white_komi))
-			return board;
-	}
-	return NULL;
-}
-
-BoardDispatch * TygemConnection::getBoardFromOurOpponent(QString opponent)
-{
-	BoardDispatch * board;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
-	/* Parser may supply our name from the IGS protocol... this is ugly
-	 * but I'm really just trying to reconcile what I think a real
- 	 * protocol would be like with the IGS protocol */
-	if(opponent == username)
-		opponent = "";
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
-	{
-		board = i->second;
-		if(board->isOpponentBoard(username, opponent))
-			return board;
-	}
-	return NULL;
 }
 
 GameData * TygemConnection::getGameData(unsigned int game_id)
