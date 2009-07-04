@@ -22,7 +22,6 @@
 #include "defines.h"
 #include "mainwindow.h"
 #include "sgfparser.h"
-//#include "parser.h"
 #include "network/networkconnection.h"
 #include "network/talk.h"
 #include "network/gamedialog.h"
@@ -103,6 +102,8 @@ void MainWindow::slot_connect(bool b)
 		return;		//already doing something
 	if (b)
 	{
+		if(connection)
+			return;
 		qDebug("Creating login dialog!");
 		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
 		if(logindialog->exec())
@@ -118,7 +119,9 @@ void MainWindow::slot_connect(bool b)
 			statusServer->setText(" ONLINE ");
 		}
 		else
+		{
 			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
+		}
 		//delete logindialog;	//not supposed to delete?
 		logindialog = 0;
 	}
@@ -142,7 +145,11 @@ void MainWindow::slot_connect(bool b)
 			//logindialog->deleteLater();
 			logindialog = 0;
 		}
-		closeConnection();
+		if(closeConnection() < 0)
+		{
+			ui.pb_connect->setChecked(TRUE);
+			return;
+		}
 		ui.cb_connect->setEnabled(true);
 		/* FIXME
 		 * this looks ugly grayed out but it shouldn't be changeable...
@@ -261,13 +268,18 @@ void MainWindow::onConnectionError(void)
 	if(logindialog)
 		return;
 	qDebug("onConnectionError");
-	closeConnection();
+	closeConnection();		//probably don't care about return here since connection is likely dead.
+					//could be a crash here though or maybe shouldn't be here at all doublecheck FIXME
+	/* FIXME this can get stuck open if we get a connection error on connect, like the app doesn't quit when
+	 * the main window is closed */
 }
 
-void MainWindow::closeConnection(void)
+int MainWindow::closeConnection(void)
 {
 	if(connection)
 	{
+		if(connection->checkForOpenBoards() < 0)
+			return -1;
 		NetworkConnection * c = connection;
 		connection = 0;
 		/* setChecked(false) might trigger this again so... */ 
@@ -283,6 +295,7 @@ void MainWindow::closeConnection(void)
 
 	ui.pb_connect->setIcon(QIcon(":/ressources/pics/connect_no2.png"));
 	ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+	return 0;
 }
 
 /*

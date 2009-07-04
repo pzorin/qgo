@@ -47,6 +47,7 @@ BoardDispatch::~BoardDispatch()
 	{
 		//clearObservers();
 		boardwindow->getUi()->observerView->setModel(0);
+		boardwindow->setGamePhase(phaseEnded);		//disables all buttons
 		if(observerListModel)
 			delete observerListModel;
 		if(boardwindow->getGamePhase() != phaseEnded)
@@ -67,6 +68,21 @@ BoardDispatch::~BoardDispatch()
 		delete countdialog;
 	
 	delete gameListing;
+}
+
+bool BoardDispatch::canClose(void)
+{
+	if(!gameData)
+		return true;
+	if(gameData->gameMode == modeMatch && gameData->fullresult == 0)
+	{
+		boardwindow->qgoboard->slotResignPressed();
+		/* fullresult won't get set until we receive the server acknowledgement, so
+		 * for now, we'll just stop the process each time.  Its likely player is only
+		 * playing one game so this is more of a warning */
+		return false;
+	}
+	return true;
 }
 
 /* FIXME, we need to make better use of this,

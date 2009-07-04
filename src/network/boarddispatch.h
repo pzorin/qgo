@@ -6,6 +6,7 @@ class BoardDispatch
 	public:
 		BoardDispatch(NetworkConnection * conn, class GameListing * l);
 		~BoardDispatch();
+		bool canClose(void);
 		void closeBoard(void);
 		void recvMove(class MoveRecord * m);
 		void sendMove(class MoveRecord * m);

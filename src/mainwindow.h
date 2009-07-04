@@ -93,6 +93,9 @@ public slots:
 	void slot_msgBox(const QString&);
 	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
 	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
+	void addBoardWindow(BoardWindow *);
+	void removeBoardWindow(BoardWindow *);
+	int checkForOpenBoards(void);
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
@@ -100,7 +103,7 @@ protected:
 
 private:
 	void setupConnection(void);
-	void closeConnection(void);
+	int closeConnection(void);
 	
 	void cleanupServerData(void);
 	
@@ -138,8 +141,10 @@ private:
 	QMenu 		*seekMenu;
 	QList<Talk*>	talkList;
 	QList<GameDialog*> matchList;
+	std::vector<BoardWindow *> boardWindowList;
 	std::vector<const RoomListing *> roomList;
 	int 	seekButtonTimer;
+	bool skipNextConnectToggle;
 
 	//players table
 	void showOpen(bool show);

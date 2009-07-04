@@ -275,9 +275,6 @@ void MainWindow::slot_currentChanged(int i)
 	
 }
 
-
-
-
 /*
  * saves the parameters on the 2 last tabs into the QSettings 
  */
@@ -325,7 +322,16 @@ void MainWindow::saveSettings()
 	else
 		i=0;
 	settings.setValue("NUMBER_CURRENT_MOVE", i);
-	
+	if ( ui.warnOnCloseEditedCB->isChecked())
+		i=1;
+	else
+		i=0;
+	settings.setValue("WARNONCLOSEEDITED", i);
+	if ( ui.warnOnCloseEngineCB->isChecked())
+		i=1;
+	else
+		i=0;
+	settings.setValue("WARNONCLOSEENGINE", i);
 	if ( ui.observeOutsideCB->isChecked())
 		i=1;
 	else
@@ -414,6 +420,8 @@ void MainWindow::loadSettings()
 	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
 	ui.komarkerCB->setChecked((settings.value("KOMARKER") == 1));
 	ui.numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
+	ui.warnOnCloseEditedCB->setChecked((settings.value("WARNONCLOSEEDITED") == 1));
+	ui.warnOnCloseEngineCB->setChecked((settings.value("WARNONCLOSENGINE") == 1));
 	if(settings.value("TERR_STONE_MARK").toBool())
 		ui.terrStoneRB->setChecked(true);
 	else

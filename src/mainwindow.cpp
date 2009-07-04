@@ -151,11 +151,19 @@ MainWindow::~MainWindow()
 /* FIXME FIXME FIXME We need to prompt for close if there are games open !!!!!!!!! 
  * we should also prompt to save any edited normal boards, or the boards should
  * do that themselves on closing.  The board windows might actually be separate though.*/
-void MainWindow::closeEvent(QCloseEvent *)
+void MainWindow::closeEvent(QCloseEvent * e)
 {
-	//e->ignore();
 	/* Close connection if open */
-	closeConnection();
+	if(closeConnection() < 0)
+	{
+		e->ignore();
+		return;
+	}
+	if(checkForOpenBoards() < 0)
+	{
+		e->ignore();
+		return;
+	}
 	saveSettings();
 }
 
@@ -503,4 +511,33 @@ void MainWindow::slot_computerOpenBoard(const QModelIndex & i)
 	slot_loadComputerFile(i, QModelIndex());
 	if(GameLoaded2)
 		slot_computerOpenBoard();
+}
+
+void MainWindow::addBoardWindow(BoardWindow * bw)
+{
+	boardWindowList.push_back(bw);
+}
+
+void MainWindow::removeBoardWindow(BoardWindow * bw)
+{
+	std::vector<BoardWindow *>::iterator i;
+	for(i = boardWindowList.begin(); i != boardWindowList.end(); i++)
+	{
+		if(*i == bw)
+		{
+			boardWindowList.erase(i);
+			return;
+		}
+	}
+}
+
+int MainWindow::checkForOpenBoards(void)
+{
+	std::vector<BoardWindow *>::iterator i;
+	for(i = boardWindowList.begin(); i != boardWindowList.end(); i++)
+	{
+		if(!(*i)->okayToQuit())
+			return -1;
+	}
+	return 0;
 }

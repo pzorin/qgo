@@ -70,8 +70,8 @@ public:
 	ClockDisplay *getClockDisplay()		{return clockDisplay;}
 	void swapColors(bool noswap = false);
 	
-	int checkModified(bool interactive = TRUE);
-	
+	bool okayToQuit(void);	
+
 	qGoBoard *qgoboard;
 	//virtual QSize sizeHint() const;
 	/* boarddispatch should be stored in the interface, NOT here
