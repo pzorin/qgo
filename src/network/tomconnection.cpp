@@ -5,6 +5,9 @@
 #include "serverlistdialog.h"
 #include "serverliststorage.h"
 #include "codecwarndialog.h"
+/* Note that Tom either has additional checks on this or simply that one cannot play against
+ * the same username meaning that sendMatchOffers may not be received. */
+
 
 TomConnection::TomConnection(const QString & user, const QString & pass)
 : TygemConnection(user, pass, TypeTOM)
@@ -31,7 +34,7 @@ TomConnection::TomConnection(const QString & user, const QString & pass)
 int TomConnection::requestServerInfo(void)
 {
 	qDebug("Requesting Tom Server Info");
-	if(!openConnection("61.135.158.147", 80))
+	if(!openConnection("61.135.158.147", 80, NOT_MAIN_CONNECTION))
 	{
 		qDebug("Can't get server info");
 		return -1;

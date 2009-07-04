@@ -30,7 +30,7 @@ EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
 int EWeiQiConnection::requestServerInfo(void)
 {
 	qDebug("Requesting eWeiQi Server Info");
-	if(!openConnection("121.189.9.52", 80))
+	if(!openConnection("121.189.9.52", 80, NOT_MAIN_CONNECTION))
 	{
 		qDebug("Can't get server info");
 		return -1;
