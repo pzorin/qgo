@@ -50,7 +50,7 @@ CyberOroConnection::CyberOroConnection(const QString & user, const QString & pas
 	//servers that are provided on a list. */
 	/* FIXME, we need to contact some dns listed server
 	 * to get official ip in case it changes */
-	if(openConnection(CYBERORO_METASERVER, 7447))
+	if(openConnection(CYBERORO_METASERVER, 7447, NOT_MAIN_CONNECTION))
 	{
 		connectionState = LOGIN;
 		username = user;
@@ -457,7 +457,7 @@ int CyberOroConnection::reconnectToServer(void)
 	if(openConnection(serverList[server_i]->ipaddress, 7002))
 	{
 		qDebug("Reconnected");
-		connectionState = CONNECTED;
+		setConnected();			//should be just SETUP FIXME
 		game_code_to_number.clear();
 	}
 	else
@@ -4961,7 +4961,7 @@ void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned i
 	PlayerListing * aPlayer = room->getPlayerListing(id);
 	if(!aPlayer)
 	{
-		printf("Can't find msg player %02x%02x\n", p[0], p[1]);
+		printf("Can't find msg player %02x%02x\n", p[0], p[1]);		//FIXME we're getting this
 		return;
 	}
 	p += 2;
@@ -5108,7 +5108,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 	game = room->getGameListing(game_number);
 	if(!game)
 	{
-		qDebug("e1af for no game\n");
+		qDebug("e1af for no game\n");		//FIXME, we're getting this a good deal, probably chat rooms or something
 		return;
 	}
 	//our_game_being_played is no longer viable here because of handleScore
@@ -8164,44 +8164,6 @@ void CyberOroConnection::onReady(void)
 	//sendInvitationSettings(true);	//for now
 	qDebug("Ready!\n");
 	NetworkConnection::onReady();
-}
-
-
-/* Because the IGS protocol is garbage, we have to break encapsulation here
- * and in BoardDispatch Wow FIXME, don't think we need this.*/
-BoardDispatch * CyberOroConnection::getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi)
-{
-	BoardDispatch * board;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
-	{
-		board = i->second;
-		if(board->isAttribBoard(black_player, black_captures, black_komi, white_player, white_captures, white_komi))
-			return board;
-	}
-	return NULL;
-}
-
-BoardDispatch * CyberOroConnection::getBoardFromOurOpponent(QString opponent)
-{
-	BoardDispatch * board;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
-	/* Parser may supply our name from the IGS protocol... this is ugly
-	 * but I'm really just trying to reconcile what I think a real
- 	 * protocol would be like with the IGS protocol */
-	if(opponent == username)
-		opponent = "";
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
-	{
-		board = i->second;
-		if(board->isOpponentBoard(username, opponent))
-			return board;
-	}
-	return NULL;
 }
 
 int CyberOroConnection::gd_verifyBoardSize(int v)
