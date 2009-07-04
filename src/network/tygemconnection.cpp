@@ -2301,8 +2301,6 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 			packet[45] = 0x00;
 			packet[46] = 0x00;
 		}
-		packet[45] = 0x10;
-		packet[46] = 0x00;		//testing!! FIXME
 		//on tom sending accept I've seen 45 and 46 as 10 00
 		//might even be critical
 		
