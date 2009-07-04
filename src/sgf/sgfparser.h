@@ -39,7 +39,6 @@ public:
 	bool parseASCII(const QString &fileName, ASCII_Import *charset, bool isFilename=true);
 */
 protected:
-	bool initStream(QTextStream *stream);
 	int minPos(int n1, int n2, int n3);
 	bool corruptSgf(int where=0, QString reason=NULL);
 
@@ -54,6 +53,8 @@ protected:
 	bool checkBoardSize(const QString &toParse, ASCII_Import *charset);
 */	
 private:
+	bool setCodec(QString c = QString());
+
 //	BoardHandler *boardHandler;
 	QTextStream *stream;
 	bool isRoot;

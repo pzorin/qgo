@@ -268,7 +268,8 @@ QString SGFParser::loadFile(const QString &fileName)
 	}
 	
 	QTextStream txt(&file);
-	if (!initStream(&txt))
+	stream = &txt;
+	if (!setCodec())
 	{
 		QMessageBox::critical(0, PACKAGE, QObject::tr("Invalid text encoding given. Please check preferences!"));
 		return NULL;
@@ -288,18 +289,20 @@ QString SGFParser::loadFile(const QString &fileName)
 	return toParse;
 }
 
-bool SGFParser::initStream(QTextStream *stream)
+bool SGFParser::setCodec(QString c)
 {
-	QSettings settings;
-
 	QTextCodec *codec = NULL;
 
-	// TODO : make sure we are getting the proper codec value from settings
-//	QSettings  settings("qgo2");
-	if (settings.contains("CODEC"))
-		codec = QTextCodec::codecForName(settings.value("CODEC").toByteArray ());
+	if(c == QString())
+	{
+		QSettings settings;
 
-
+		// TODO : make sure we are getting the proper codec value from settings
+		if (settings.contains("CODEC"))
+			codec = QTextCodec::codecForName(settings.value("CODEC").toByteArray ());
+	}
+	else
+		codec = QTextCodec::codecForName(c.toLatin1().constData());
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "LOCALE", codec);
 #endif
@@ -1294,6 +1297,19 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	QString tmp="";
 	GameData *gameData = new GameData;
 
+
+	//codec
+	if (!parseProperty(toParse, "CA", tmp))
+		return false;
+	if (!tmp.isEmpty())
+	{
+		gameData->codec = tmp;
+		setCodec(tmp);			//FIXME might not want to ignore return value here doublecheck
+	}
+	else
+		gameData->codec = QString();		
+	//probably should either be Latin1 or some default codec from somewhere FIXME
+
 	// White player name
 	if (!parseProperty(toParse, "PW", tmp))
 		return false;
@@ -1548,7 +1564,7 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree, GameData *gameData)
 bool SGFParser::writeStream(Tree *tree, GameData *gameData)
 {
 	Q_CHECK_PTR(stream);
-	if (!initStream(stream))
+	if (!setCodec())
 	{
 		QMessageBox::critical(0, PACKAGE, QObject::tr("Invalid text encoding given. Please check preferences!"));
 		delete stream;
@@ -1581,6 +1597,8 @@ void SGFParser::writeGameHeader(GameData *gameData)
 		*stream << "ST[" << gameData->style << "]";
 	else
 		*stream << "ST[1]";						// We show vars of current node
+	if(gameData->codec != QString())
+		*stream << "CA[" << gameData->codec << "]";
 	if (gameData->gameName.isEmpty())					// Skip game name if empty
 		*stream << endl;
 	else

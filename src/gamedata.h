@@ -41,6 +41,7 @@ class GameData
 			 date(""),
 			 place(""),
 			 copyright(""),
+			 codec(""),
 			 gameName(""),
 			 fileName(""),
 			 overtime(""),
@@ -63,6 +64,7 @@ class GameData
 				date = d->date;
 				place = d->place;
 				copyright = d->copyright;
+				codec = d->codec;
 				gameName = d->gameName;
 				fileName = d->fileName;
 				overtime = d->overtime;
@@ -135,7 +137,7 @@ class GameData
 		bool undoAllowed;
 		bool oneColorGo;
 		int style;
-		QString date, place, copyright, gameName, fileName, overtime;
+		QString date, place, copyright, codec, gameName, fileName, overtime;
 		assessType free_rated;
 		/* We can receive moves in an observed IGS game before receiving
 		 * the board state.  But there's another issue with observing
