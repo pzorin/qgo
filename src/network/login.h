@@ -13,8 +13,8 @@ class LoginDialog : public QDialog, Ui::LoginDialog
 	public:
 		LoginDialog(const QString &, HostList * h);
 	private slots:		//or can these be private?
-		void slot_connect(void);
 		void slot_cancel(void);
+		void slot_connect(void);
 		void slot_editTextChanged(const QString &);
 	private:
 		ConnectionType serverStringToConnectionType(const QString & s);
@@ -26,6 +26,4 @@ class LoginDialog : public QDialog, Ui::LoginDialog
 		HostList * hostlist;
 		QString connectionName;
 		bool serverlistdialog_open;
-		QMessageBox * connectingDialog;
-		QPushButton * cancelConnecting;
 };

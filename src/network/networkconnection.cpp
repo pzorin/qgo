@@ -19,6 +19,8 @@ default_room(0), console_dispatch(0), qsocket(0)
 	boardDispatchRegistry = 0;
 	gameDialogRegistry = 0;
 	talkRegistry = 0;
+
+	connectingDialog = 0;
 }
 
 /* Maybe this should return an enum, but I'm feeling lazy at the moment,
@@ -45,12 +47,28 @@ int NetworkConnection::getConnectionState(void)
 			return ND_ALREADYLOGGEDIN;
 		case CONN_REFUSED:
 			return ND_CONN_REFUSED;
+		case HOST_NOT_FOUND:
+			return ND_BADHOST;
+		case SOCK_TIMEOUT:
+			return ND_BADCONNECTION;
+		case UNKNOWN_ERROR:
+			return ND_BADCONNECTION;
 		default:
 			return ND_WAITING;
 	}
 }
 
-bool NetworkConnection::openConnection(const QString & host, const unsigned short port)
+void NetworkConnection::setConnected(void)
+{
+	if(connectingDialog)
+	{
+		connectingDialog->deleteLater();
+		connectingDialog = 0;
+	}
+	connectionState = CONNECTED;
+}
+
+bool NetworkConnection::openConnection(const QString & host, const unsigned short port, bool not_main_connection)
 {	
 	qsocket = new QTcpSocket();	//try with no parent passed for now
 	if(!qsocket)
@@ -73,6 +91,10 @@ bool NetworkConnection::openConnection(const QString & host, const unsigned shor
 	//remove asserts later
 	Q_ASSERT(host != 0);
 	Q_ASSERT(port != 0);
+
+	if(!not_main_connection)
+		drawPleaseWait();
+
 	qDebug("Connecting to %s %d...\n", host.toLatin1().constData(), port);
 	// assume info.host is clean
 	qsocket->connectToHost(host, (quint16) port);
@@ -141,7 +163,21 @@ class ServerListStorage & NetworkConnection::getServerListStorage(void)
 {
 	return mainwindow->getServerListStorage(); 
 }
-		
+
+int NetworkConnection::checkForOpenBoards(void)
+{
+	BoardDispatch * boarddispatch;
+	std::map<unsigned int, class BoardDispatch *>::iterator i;
+	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
+		boardDispatchRegistry->getRegistryStorage();
+	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
+	{
+		boarddispatch = i->second;
+		if(!boarddispatch->canClose())
+			return -1;
+	}
+	return 0;
+}
 
 void NetworkConnection::closeConnection(bool send_disconnect)
 {
@@ -422,7 +458,27 @@ void NetworkConnection::checkGameWatched(GameListing & game)
 	}
 }
 
+void NetworkConnection::drawPleaseWait(void)
+{
+	QPushButton * cancelConnecting;
+
+	connectingDialog = new QMessageBox(QMessageBox::NoIcon, tr("Please wait"), tr("Connecting..."));
+	//connectingDialog->setWindowTitle();
+	//connectingDialog->setText();
+	cancelConnecting = connectingDialog->addButton(QMessageBox::Cancel);
+	connect(cancelConnecting, SIGNAL(clicked()), this, SLOT(slot_cancelConnecting()));
+	connectingDialog->show();
+	connectingDialog->setFixedSize(180, 100);
+}
+
 /* Slots */
+void NetworkConnection::slot_cancelConnecting(void)
+{
+	userCanceled();
+	connectingDialog->deleteLater();
+	connectingDialog = 0;
+}
+
 void NetworkConnection::OnHostFound()
 {
 	//FIXME useful?
@@ -529,21 +585,30 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 		case QTcpSocket::HostNotFoundError: qDebug("ERROR: host not found...");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Host not found!");
+			connectionState = HOST_NOT_FOUND;
 			break;
 		case QTcpSocket::SocketTimeoutError: qDebug("ERROR: socket time out ...");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Socket time out!");
+			connectionState = SOCK_TIMEOUT;
 			break;
 		case QTcpSocket::RemoteHostClosedError: qDebug("ERROR: connection closed by host ...");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Connection closed by host!");
+			connectionState = PROTOCOL_ERROR;
 			break;
 		default: qDebug("ERROR: unknown Error...");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Unknown socket error!");
+			connectionState = UNKNOWN_ERROR;
 			break;
 	}
-
+	
+	if(connectingDialog)
+	{
+		connectingDialog->deleteLater();
+		connectingDialog = 0;
+	}
 	//sendTextToApp("ERROR - Connection closed.\n"+ qsocket->errorString() );
 	qDebug("Socket Error\n");
 	//OnReadyRead();
@@ -551,8 +616,6 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	
 	if(mainwindow)	//mainwindow can ignore if loginDialog is open
 		mainwindow->onConnectionError();
-	if(connectionState != CONN_REFUSED)
-		connectionState = PROTOCOL_ERROR;
 }
 
 void NetworkConnection::setupRoomAndConsole(void)

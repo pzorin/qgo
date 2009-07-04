@@ -21,6 +21,9 @@ class GameDialogRegistry;
 class TalkRegistry;
 
 class Room;
+class QMessageBox;
+
+#define NOT_MAIN_CONNECTION		true
 
 /* I think this needs to inherit from QObject so that it can pick up signals, if those
  * are still necessary */
@@ -35,6 +38,7 @@ class NetworkConnection : public QObject
 		~NetworkConnection();
 		int getConnectionState();	//should probably return enum
 		void userCanceled(void) { connectionState = CANCELED; /* anything else? */};
+		int checkForOpenBoards(void);
 		void onClose(void);	//so far private? we're going to have tygem use it...
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
@@ -186,6 +190,7 @@ class NetworkConnection : public QObject
 	protected:
 		virtual bool readyToWrite(void) { return true; };
 		virtual void setReadyToWrite(void) {};
+		void setConnected(void);
 		virtual void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
 		QTcpSocket * getQSocket(void) { return qsocket; };
@@ -197,7 +202,7 @@ class NetworkConnection : public QObject
 		friend class TalkRegistry;
 		Room * default_room;
 		ConsoleDispatch * console_dispatch;
-		bool openConnection(const QString & host, const unsigned short port);
+		bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
 		
 		newline_pipe <unsigned char> pending;
 		newline_pipe <unsigned char> send_buffer;	//not always used
@@ -216,12 +221,16 @@ class NetworkConnection : public QObject
    			AUTH_FAILED,
       			PASS_FAILED,
       			INFO,
+			SETUP,
      			CONNECTED,
      			RECONNECTING,
      			CANCELED,
 			PROTOCOL_ERROR,
    			ALREADY_LOGGED_IN,
-      			CONN_REFUSED
+      			CONN_REFUSED,
+			HOST_NOT_FOUND,
+			SOCK_TIMEOUT,
+			UNKNOWN_ERROR
 		} connectionState;
 		
 		bool friendfan_notify_default;
@@ -235,10 +244,14 @@ class NetworkConnection : public QObject
 		void tearDownRoomAndConsole(void);
 		void loadfriendsfans(void);
 		void savefriendsfans(void);
+
+		void drawPleaseWait(void);
 		
 		QTcpSocket * qsocket;	//unnecessary?
 		
 		Room * mainwindowroom;
+
+		QMessageBox * connectingDialog;
 		
 	protected slots:
 		virtual void OnConnected();
@@ -249,6 +262,8 @@ class NetworkConnection : public QObject
 		//OnDelayedCloseFinish();
 		//OnBytesWritten(int);
 		void OnError(QAbstractSocket::SocketError);
+	
+		void slot_cancelConnecting(void);
 };
 
 struct FriendFanListing
