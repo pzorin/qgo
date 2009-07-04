@@ -17,6 +17,7 @@
 #include "../network/boarddispatch.h"
 #include "listviews.h"
 #include "ui_gameinfo.h"
+#include "mainwindow.h"		//for board window lists
 
 #include <QtGui>
 
@@ -128,7 +129,8 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	
 	//update();
 	//gridLayout->update();
-	
+
+	mainwindow->addBoardWindow(this);	
 }
 
 BoardWindow::~BoardWindow()
@@ -143,22 +145,49 @@ BoardWindow::~BoardWindow()
 	delete tree;	//okay?
 	
 	delete gameData;
-	/* FIXME I'm not totally certain we want to delete the dispatch
-	 * here.  If the boardwindow closes, then that sends its own
-	 * closed signal through the network if it exits.  If the
-	 * dispatch closes, then it doesn't close the board anyway */
-	//if(dispatch)
-	//	delete dispatch;
+	mainwindow->removeBoardWindow(this);
 }
 
+bool BoardWindow::okayToQuit(void)
+{
+	if (!qgoboard->getModified())
+		return true;
+
+	QSettings settings;
+	if(getGameMode() == modeComputer && !settings.value("WARNONCLOSEENGINE").toBool())
+		return true;
+	if(getGameMode() == modeNormal && !settings.value("WARNONCLOSEEDITED").toBool())
+		return true;
+
+	switch (QMessageBox::warning(this, PACKAGE,
+		tr("You modified the game.\nDo you want to save your changes?"),
+		tr("Yes"), tr("No"), tr("Cancel"),
+		0, 2))
+	{
+		case 0:
+			return slotFileSave() && !qgoboard->getModified();
+			
+		case 1:
+			return true;
+			
+		case 2:
+			return false;
+			
+		default:
+			qWarning("Unknown messagebox input.");
+			return false;
+	}
+	return true;
+}
+
+/* FIXME make sure closeEvent doesn't get called on delete */
 void BoardWindow::closeEvent(QCloseEvent *e)
 {
-	if(gameData->gameMode == modeMatch && !gameData->fullresult)
+	if(dispatch && !dispatch->canClose())
 	{
-		qgoboard->slotResignPressed();
 		e->ignore();
 	}
-	else if (checkModified()==1)	
+	else if (okayToQuit())	
 	{
 		e->accept();
 		if(dispatch)
@@ -310,6 +339,18 @@ void BoardWindow::setupBoardUI(void)
 		connect(ui.countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
 		connect(ui.drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
 	}
+	if(gameData->gameMode != modeMatch)
+	{
+		ui.adjournButton->setVisible(false);
+		ui.countButton->setVisible(false);
+		ui.drawButton->setVisible(false);
+	}
+	if(dispatch && !dispatch->supportsRequestAdjourn())
+		ui.adjournButton->setVisible(false);
+	if(dispatch && !dispatch->supportsRequestCount())
+		ui.countButton->setVisible(false);
+	if(dispatch && !dispatch->supportsRequestDraw())
+		ui.drawButton->setVisible(false);
 	/* eb added this but I've had it in the setupUI function since
 	 * its more part of the UI than the board.  But maybe its better
 	 * or different here.  FIXME */
@@ -337,36 +378,6 @@ void BoardWindow::setupBoardUI(void)
 
 void BoardWindow::resizeEvent(QResizeEvent *)
 {
-}
-
-int BoardWindow::checkModified(bool /*interactive*/)
-{	
-	if (!qgoboard->getModified())
-		return 1;
-	
-//	if (!interactive)
-//		return 0;
-	
-	switch (QMessageBox::warning(this, PACKAGE,
-		tr("You modified the game.\nDo you want to save your changes?"),
-		tr("Yes"), tr("No"), tr("Cancel"),
-		0, 2))
-	{
-		case 0:
-			return slotFileSave() && !qgoboard->getModified();
-			
-		case 1:
-			return 1;
-			
-		case 2:
-			return 2;
-			
-		default:
-			qWarning("Unknown messagebox input.");
-			return 0;
-	}
-		
-	return 1;
 }
 
 void BoardWindow::gameDataChanged(void)
