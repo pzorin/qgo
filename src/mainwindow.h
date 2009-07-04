@@ -144,8 +144,7 @@ private:
 	std::vector<BoardWindow *> boardWindowList;
 	std::vector<const RoomListing *> roomList;
 	int 	seekButtonTimer;
-	bool skipNextConnectToggle;
-
+	
 	//players table
 	void showOpen(bool show);
 	void setColumnsForExtUserInfo();
