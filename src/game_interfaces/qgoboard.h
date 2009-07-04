@@ -217,8 +217,9 @@ protected:
 	virtual void sendPassToInterface(StoneColor ) { doPass(); };
 	virtual bool doMove(StoneColor c, int x, int y, bool dontplayyet = false);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
-//	virtual void set_move(StoneColor sc, QString pt, QString mv_nr);
-	
+private:
+	bool dontCheckValidity;
+	QTime lastSound;
 };
 
 /* We can override the virtuals above with nulls below if the option

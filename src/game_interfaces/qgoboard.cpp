@@ -29,6 +29,9 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 //TODO get the sound from correct path
 	clickSound = SoundFactory::newSound( "/usr/share/qgo2/sounds/stone.wav" );
 //	clickSound = SoundFactory::newSound( "/home/eb/Packages/qgo.new/src/sounds/enter.wav" );
+
+	dontCheckValidity = false;
+	lastSound = QTime(0,0,0);
 }
 
 /* FIXME: Make sure this isn't called from places it shouldn't be. Like
@@ -352,6 +355,7 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 						addStone(mouseState == Qt::LeftButton ? stoneBlack : stoneWhite, x, y);
 					else
 						removeStone(x,y);
+					setModified(true);
 					return;
 				}
 				default:
@@ -360,6 +364,7 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 						addMark(x,y, boardwindow->getEditMark());
 					else
 						removeMark(x,y);
+					setModified(true);
 					return;
 				}
 					
@@ -386,6 +391,11 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 	}
 }
 
+/* FIXME sendMoveToInterface is awkward.  Should be a virtual function and anyway,
+ * its redundant in different places.
+ * but come on, doMove, sendMoveToInterface and localMoveRequest?  And that's just
+ * one of these. */
+
 /*
  * This functions gets the move request (from a board click)
  * and displays the resulting stone (if valid)
@@ -409,7 +419,6 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
 	/* FIXME maybe should be markDeadArea()?  Maybe as option? */
 }
 
-
 /* We need to combine the below perhaps with the above sendPassToInterface */
 /*
  * This function adds a pass move to a game. there is no need to return anything
@@ -426,17 +435,12 @@ void qGoBoard::doPass()
 
 }
 
-
-
-
 /*
  * This functions adds a move to a game. returns 1 if move was valid, 0 if not)
  */
 bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 {
 	bool validMove = TRUE;
-	static bool dontCheckValidity = false;
-	static QTime lastSound = QTime(0,0,0);
 
 	if(dontplayyet && !tree->checkMoveIsValid(c, x, y))
 		validMove = false;
@@ -452,45 +456,16 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 		else
 			validMove = true;
 		if(validMove)
+		{
 			tree->addStoneOrLastValidMove();
+			setModified(true);
+		}
 	}
 	else
 	{
 		dontCheckValidity = true;
 	}
-#ifdef OLD
-	// does the matrix have already a stone there ?
-	if (tree->getCurrent()->getMatrix()->getStoneAt(x,y) != stoneNone)
-	{
-		qDebug ("QGoboard:doMove - We seem to have already a stone at this place : %d %d (%d)",x,y, dontplayyet);
-		return FALSE;
-	}
 
-	/* FIXME, I don't understand this, why is there addMove and addStoneSGF?? */
-	/* Its possible that the addMove can add anything valid or not and addStoneSGF
- 	 * adds and calls checkPosition, but then that should be a flag or we should
-	 * name it differently */
-	//The move is added to the tree. if it exists already, it becomes the current move
-	//tree->addMove(c, x, y, TRUE);
-
-	// Is the move valid ?
-	if ( tree->addStoneSGF(c,x,y,true,dontplayyet) < 0)
-	{
-		qDebug ("QGoboard:doMove - This move does not seem to be valid : %d %d",x,y);
-		//tree->deleteNode(); 
-		validMove = FALSE;
-	}
-	if(dontplayyet && validMove)	//i.e., we didn't go into last conditional
-	{
-		qDebug("not playing yet but valid...");
-		//tree->deleteNode();
-		/* Ugly, we need to figure out why there's
-		 * an addMove, and an addStoneSGF and why its called
-		 * SGF, and clear out both of those, and then here...
-		 * we shouldn't be adding a bad node, and then deleting it
-		 * if its bad, we shouldn't add it if its bad... FIXME */
-	}
-#endif //OLD
 	/* Non trivial here.  We don't want to play a sound as we get all
 	 * the moves from an observed game.  But there's no clean way
 	 * to tell when the board has stopped loading, particularly for IGS.
@@ -509,8 +484,6 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 	
 	return validMove;
 }
-
-
 
 /*
  * Returns true wether it's black to play
@@ -577,7 +550,6 @@ void qGoBoard::enterScoreMode()
 		boardwindow->getBoardHandler()->updateCursor();
 	boardwindow->getBoardHandler()->countScore();
 }
-
 
 /*
  * This functions leaves the scoring mode
@@ -671,7 +643,6 @@ void qGoBoard::slotUpdateComment()
 		setModified();
 	}
 }
-
 
 /*
  * kibitz was received. Tranfer it to move and comment window
@@ -782,7 +753,6 @@ TimeRecord qGoBoard::getTheirTimeRecord(void)
  * Normal Interface
  *
  ****************************************************************************/
-
 
 
 qGoBoardNormalInterface::qGoBoardNormalInterface(BoardWindow *bw, Tree * t, GameData *gd) 
