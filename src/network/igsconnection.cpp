@@ -703,7 +703,7 @@ void IGSConnection::onReady(void)
 		if(connectionState != PASSWORD_SENT)
 			return;
 		firstonReadyCall = 0;
-		connectionState = CONNECTED;
+		setConnected();		//shouldbe just SETUP FIXME
 	/* This gets called too much, we need a better
 	 * way to call it */
 	/* also needs to be earlier */
@@ -4461,10 +4461,13 @@ void IGSConnection::handle_removed(QString line)
 		delete aMove;
 	}
 }
+
 //FIXME	
 //51 Say in game 432
-void IGSConnection::handle_ingamesay(QString)
-{}
+void IGSConnection::handle_ingamesay(QString s)
+{
+	qDebug("Ingamesay: %s", s.toLatin1().constData());
+}
 			
 
 // 53 Game 75 adjournment is declined
