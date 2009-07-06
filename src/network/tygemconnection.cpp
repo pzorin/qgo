@@ -21,6 +21,10 @@
 #include "serverliststorage.h"
 #include <QMessageBox>
 
+
+#ifndef uint32_t
+#define uint32_t unsigned long
+#endif //uint32_t
 //#define RE_DEBUG
 
 #define ZODIAC_BYTE	0x01
