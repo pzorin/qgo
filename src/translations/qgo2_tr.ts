@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="tr">
-<defaultcodec></defaultcodec>
+<!DOCTYPE TS>
+<TS version="2.0" language="tr">
 <context>
     <name>Board</name>
     <message>
@@ -34,6 +34,7 @@ Değişiklikleri kaydetmek istermisiniz?</translation>
         <translation>İptal</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.cpp" line="562"/>
         <location filename="../board/boardwindow.cpp" line="627"/>
         <source>Export</source>
         <translation>Dışarı aktar</translation>
@@ -134,6 +135,16 @@ Minimum game move the slider can currently show.</source>
 Sürgünün gösterebileceği asgari hamle miktarı.</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="191"/>
+        <location filename="../board/boardwindow.ui" line="2340"/>
+        <location filename="../board/boardwindow.ui" line="2935"/>
+        <location filename="../board/boardwindow.ui" line="3069"/>
+        <location filename="../board/boardwindow.ui" line="3103"/>
+        <location filename="../board/boardwindow.ui" line="3162"/>
+        <location filename="../board/boardwindow.ui" line="3368"/>
+        <location filename="../board/boardwindow.ui" line="3402"/>
+        <location filename="../board/boardwindow.ui" line="3471"/>
+        <location filename="../board/boardwindow.ui" line="3931"/>
         <location filename="../board/boardwindow.ui" line="4005"/>
         <source>0</source>
         <translation>0</translation>
@@ -198,16 +209,19 @@ Bulunulan noktadaki alt ve üst dalların sayısı.</translation>
 0 alt dal</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="1781"/>
         <location filename="../board/boardwindow.ui" line="2987"/>
         <source>White</source>
         <translation>Beyaz</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2288"/>
         <location filename="../board/boardwindow.ui" line="2883"/>
         <source>remaining time / stones</source>
         <translation>kalan süre / taş</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2291"/>
         <location filename="../board/boardwindow.ui" line="2886"/>
         <source>Clock
 
@@ -225,31 +239,39 @@ kalan ana süre ya da byoyomi süresi ve kalan hamleyi gösterir
 tıklayın.</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2300"/>
         <location filename="../board/boardwindow.ui" line="2895"/>
         <source>00:00</source>
         <translation>00:00</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2324"/>
+        <location filename="../board/boardwindow.ui" line="2919"/>
+        <location filename="../board/boardwindow.ui" line="3124"/>
         <location filename="../board/boardwindow.ui" line="3423"/>
         <source>Captures:</source>
         <translation>Esirler:</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="2376"/>
         <location filename="../board/boardwindow.ui" line="3289"/>
         <source>Black</source>
         <translation>Siyah</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3031"/>
         <location filename="../board/boardwindow.ui" line="3333"/>
         <source>Territory :</source>
         <translation>Alan:</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3209"/>
         <location filename="../board/boardwindow.ui" line="3948"/>
         <source>komi points</source>
         <translation>komi</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3212"/>
         <location filename="../board/boardwindow.ui" line="3951"/>
         <source>komi:
 
@@ -261,11 +283,13 @@ Siyah ilk hamleyi yapma avantajına sahip olduğundan Beyaz&apos;a komi puanı e
 Belirli miktarda komi istemek için &quot;komi &gt;sayı&gt;&quot; deyin.</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3218"/>
         <location filename="../board/boardwindow.ui" line="3957"/>
         <source>Komi:</source>
         <translation>Komi:</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="3259"/>
         <location filename="../board/boardwindow.ui" line="3964"/>
         <source>5.5</source>
         <translation>5,5</translation>
@@ -473,6 +497,9 @@ Tahtadaki kare imlerini düzenler. İmlemek için sol, kaldırmak için sağ tı
         <translation>dalları değiştokuş eder</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="4890"/>
+        <location filename="../board/boardwindow.ui" line="4940"/>
+        <location filename="../board/boardwindow.ui" line="4990"/>
         <location filename="../board/boardwindow.ui" line="5040"/>
         <source>Empty variatonreate an empty branch</source>
         <translation>Boş dal
@@ -514,11 +541,19 @@ Boş bir dal yaratır</translation>
         <translation>dal olarak yapıştır</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="5270"/>
+        <location filename="../board/boardwindow.ui" line="5385"/>
+        <location filename="../board/boardwindow.ui" line="5488"/>
+        <location filename="../board/boardwindow.ui" line="5518"/>
         <location filename="../board/boardwindow.ui" line="5548"/>
         <source>Pass move</source>
         <translation>Pas geç</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="5273"/>
+        <location filename="../board/boardwindow.ui" line="5388"/>
+        <location filename="../board/boardwindow.ui" line="5491"/>
+        <location filename="../board/boardwindow.ui" line="5521"/>
         <location filename="../board/boardwindow.ui" line="5551"/>
         <source>Pass
 
@@ -528,6 +563,7 @@ Pass your turn.</source>
 Sıranızı hamle yapmadan geçirin.</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="5278"/>
         <location filename="../board/boardwindow.ui" line="5393"/>
         <source>Pass</source>
         <translation>Pas</translation>
@@ -538,6 +574,7 @@ Sıranızı hamle yapmadan geçirin.</translation>
         <translation>sayma kipine geç</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.ui" line="5297"/>
         <location filename="../board/boardwindow.ui" line="5461"/>
         <source>Adjourn.
 
@@ -595,6 +632,7 @@ Undo the opponent&apos;s last move.</source>
 Rakibin son hamlesini geri al.</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.cpp" line="805"/>
         <location filename="../board/boardwindow.ui" line="5363"/>
         <source>Undo</source>
         <translation>Geri al</translation>
@@ -1077,161 +1115,193 @@ Varsayılanı kullanıyorum</translation>
         <translation>Yorumcu seviyesi:</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="446"/>
         <location filename="../network/createroomdialog.ui" line="839"/>
         <source>below 7D</source>
         <translation>7D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="451"/>
         <location filename="../network/createroomdialog.ui" line="844"/>
         <source>below 6D</source>
         <translation>6D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="456"/>
         <location filename="../network/createroomdialog.ui" line="849"/>
         <source>below 5D</source>
         <translation>5D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="461"/>
         <location filename="../network/createroomdialog.ui" line="854"/>
         <source>below 4D</source>
         <translation>4D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="466"/>
         <location filename="../network/createroomdialog.ui" line="859"/>
         <source>below 3D</source>
         <translation>3D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="471"/>
         <location filename="../network/createroomdialog.ui" line="864"/>
         <source>below 2D</source>
         <translation>2D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="476"/>
         <location filename="../network/createroomdialog.ui" line="869"/>
         <source>below 1D</source>
         <translation>1D altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="481"/>
         <location filename="../network/createroomdialog.ui" line="874"/>
         <source>below 1K</source>
         <translation>1K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="486"/>
         <location filename="../network/createroomdialog.ui" line="879"/>
         <source>below 2K</source>
         <translation>2K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="491"/>
         <location filename="../network/createroomdialog.ui" line="884"/>
         <source>below 3K</source>
         <translation>3K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="496"/>
         <location filename="../network/createroomdialog.ui" line="889"/>
         <source>below 4K</source>
         <translation>4K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="501"/>
         <location filename="../network/createroomdialog.ui" line="894"/>
         <source>below 5K</source>
         <translation>5K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="506"/>
         <location filename="../network/createroomdialog.ui" line="899"/>
         <source>below 6K</source>
         <translation>6K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="511"/>
         <location filename="../network/createroomdialog.ui" line="904"/>
         <source>below 7K</source>
         <translation>7K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="516"/>
         <location filename="../network/createroomdialog.ui" line="909"/>
         <source>below 8K</source>
         <translation>8K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="521"/>
         <location filename="../network/createroomdialog.ui" line="914"/>
         <source>below 9K</source>
         <translation>9K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="526"/>
         <location filename="../network/createroomdialog.ui" line="919"/>
         <source>below 10K</source>
         <translation>10K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="531"/>
         <location filename="../network/createroomdialog.ui" line="924"/>
         <source>below 11K</source>
         <translation>11K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="536"/>
         <location filename="../network/createroomdialog.ui" line="929"/>
         <source>below 12K</source>
         <translation>12K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="541"/>
         <location filename="../network/createroomdialog.ui" line="934"/>
         <source>below 13K</source>
         <translation>13K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="546"/>
         <location filename="../network/createroomdialog.ui" line="939"/>
         <source>below 14K</source>
         <translation>14K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="551"/>
         <location filename="../network/createroomdialog.ui" line="944"/>
         <source>below 15K</source>
         <translation>15K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="556"/>
         <location filename="../network/createroomdialog.ui" line="949"/>
         <source>below 16K</source>
         <translation>16K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="561"/>
         <location filename="../network/createroomdialog.ui" line="954"/>
         <source>below 17K</source>
         <translation>17K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="566"/>
         <location filename="../network/createroomdialog.ui" line="959"/>
         <source>below 18K</source>
         <translation>18K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="571"/>
         <location filename="../network/createroomdialog.ui" line="964"/>
         <source>below 19K</source>
         <translation>19K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="576"/>
         <location filename="../network/createroomdialog.ui" line="969"/>
         <source>below 20K</source>
         <translation>20K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="581"/>
         <location filename="../network/createroomdialog.ui" line="974"/>
         <source>below 21K</source>
         <translation>21K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="586"/>
         <location filename="../network/createroomdialog.ui" line="979"/>
         <source>below 22K</source>
         <translation>22K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="591"/>
         <location filename="../network/createroomdialog.ui" line="984"/>
         <source>below 23K</source>
         <translation>23K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="596"/>
         <location filename="../network/createroomdialog.ui" line="989"/>
         <source>below 24K</source>
         <translation>24K altı</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="601"/>
         <location filename="../network/createroomdialog.ui" line="994"/>
         <source>below 25K</source>
         <translation>25K altı</translation>
@@ -1292,16 +1362,19 @@ Varsayılanı kullanıyorum</translation>
         <translation>Bekleme süresi:</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="731"/>
         <location filename="../network/createroomdialog.ui" line="780"/>
         <source>10 M(s)</source>
         <translation>10 Dak.</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="736"/>
         <location filename="../network/createroomdialog.ui" line="785"/>
         <source>15 M(s)</source>
         <translation>15 Dak.</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="741"/>
         <location filename="../network/createroomdialog.ui" line="790"/>
         <source>20 M(s)</source>
         <translation>20 Dak.</translation>
@@ -1312,11 +1385,13 @@ Varsayılanı kullanıyorum</translation>
         <translation>25 Dak.</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="751"/>
         <location filename="../network/createroomdialog.ui" line="795"/>
         <source>30 M(s)</source>
         <translation>30 Dak.</translation>
     </message>
     <message>
+        <location filename="../network/createroomdialog.ui" line="756"/>
         <location filename="../network/createroomdialog.ui" line="810"/>
         <source>60 M(s)</source>
         <translation>60 Dak.</translation>
@@ -1398,11 +1473,13 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>FriendsListDialog</name>
     <message>
+        <location filename="../network/friendslistdialog.cpp" line="110"/>
         <location filename="../network/friendslistdialog.cpp" line="132"/>
         <source>Match</source>
         <translation>Oyun</translation>
     </message>
     <message>
+        <location filename="../network/friendslistdialog.cpp" line="111"/>
         <location filename="../network/friendslistdialog.cpp" line="133"/>
         <source>Talk</source>
         <translation>Sohbet</translation>
@@ -1418,6 +1495,7 @@ Varsayılanı kullanıyorum</translation>
         <translation>Hayran ol</translation>
     </message>
     <message>
+        <location filename="../network/friendslistdialog.cpp" line="115"/>
         <location filename="../network/friendslistdialog.cpp" line="138"/>
         <source>Block</source>
         <translation>Engelle</translation>
@@ -1461,6 +1539,30 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>GameDialog</name>
     <message>
+        <location filename="../network/gamedialog.cpp" line="113"/>
+        <location filename="../network/gamedialog.cpp" line="133"/>
+        <location filename="../network/gamedialog.cpp" line="153"/>
+        <location filename="../network/gamedialog.cpp" line="175"/>
+        <location filename="../network/gamedialog.cpp" line="238"/>
+        <location filename="../network/gamedialog.cpp" line="256"/>
+        <location filename="../network/gamedialog.cpp" line="287"/>
+        <location filename="../network/gamedialog.cpp" line="317"/>
+        <location filename="../network/gamedialog.cpp" line="343"/>
+        <location filename="../network/gamedialog.cpp" line="367"/>
+        <location filename="../network/gamedialog.cpp" line="390"/>
+        <location filename="../network/gamedialog.cpp" line="415"/>
+        <location filename="../network/gamedialog.cpp" line="438"/>
+        <location filename="../network/gamedialog.cpp" line="461"/>
+        <location filename="../network/gamedialog.cpp" line="485"/>
+        <location filename="../network/gamedialog.cpp" line="509"/>
+        <location filename="../network/gamedialog.cpp" line="532"/>
+        <location filename="../network/gamedialog.cpp" line="631"/>
+        <location filename="../network/gamedialog.cpp" line="738"/>
+        <location filename="../network/gamedialog.cpp" line="760"/>
+        <location filename="../network/gamedialog.cpp" line="798"/>
+        <location filename="../network/gamedialog.cpp" line="818"/>
+        <location filename="../network/gamedialog.cpp" line="824"/>
+        <location filename="../network/gamedialog.cpp" line="1237"/>
         <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
         <translation>Teklif et</translation>
@@ -1501,6 +1603,7 @@ Varsayılanı kullanıyorum</translation>
         <translation>Kanada tipi</translation>
     </message>
     <message>
+        <location filename="../network/gamedialog.ui" line="519"/>
         <location filename="../network/gamedialog.ui" line="587"/>
         <source>Main Time</source>
         <translation>Ana Süre</translation>
@@ -1515,11 +1618,17 @@ Varsayılanı kullanıyorum</translation>
         <translation>Byoyomi</translation>
     </message>
     <message>
+        <location filename="../network/gamedialog.ui" line="474"/>
+        <location filename="../network/gamedialog.ui" line="493"/>
+        <location filename="../network/gamedialog.ui" line="543"/>
+        <location filename="../network/gamedialog.ui" line="556"/>
+        <location filename="../network/gamedialog.ui" line="642"/>
         <location filename="../network/gamedialog.ui" line="661"/>
         <source>m:ss</source>
         <translation>d:ss</translation>
     </message>
     <message>
+        <location filename="../network/gamedialog.ui" line="573"/>
         <location filename="../network/gamedialog.ui" line="687"/>
         <source>Period time</source>
         <translation>Zaman aralığı</translation>
@@ -1593,6 +1702,23 @@ Varsayılanı kullanıyorum</translation>
         <translation>İptal</translation>
     </message>
     <message>
+        <location filename="../network/gamedialog.cpp" line="107"/>
+        <location filename="../network/gamedialog.cpp" line="127"/>
+        <location filename="../network/gamedialog.cpp" line="147"/>
+        <location filename="../network/gamedialog.cpp" line="170"/>
+        <location filename="../network/gamedialog.cpp" line="233"/>
+        <location filename="../network/gamedialog.cpp" line="251"/>
+        <location filename="../network/gamedialog.cpp" line="282"/>
+        <location filename="../network/gamedialog.cpp" line="312"/>
+        <location filename="../network/gamedialog.cpp" line="338"/>
+        <location filename="../network/gamedialog.cpp" line="361"/>
+        <location filename="../network/gamedialog.cpp" line="385"/>
+        <location filename="../network/gamedialog.cpp" line="409"/>
+        <location filename="../network/gamedialog.cpp" line="433"/>
+        <location filename="../network/gamedialog.cpp" line="456"/>
+        <location filename="../network/gamedialog.cpp" line="480"/>
+        <location filename="../network/gamedialog.cpp" line="504"/>
+        <location filename="../network/gamedialog.cpp" line="527"/>
         <location filename="../network/gamedialog.cpp" line="1244"/>
         <source>Accept</source>
         <translation>Kabul</translation>
@@ -1735,12 +1861,10 @@ Varsayılanı kullanıyorum</translation>
         <translation>Kullanıcı adı girmeniz gerekir</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="57"/>
         <source>Please wait</source>
         <translation type="obsolete">Lütfen bekleyin</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="57"/>
         <source>Connecting...</source>
         <translation type="obsolete">Bağlanılıyor...</translation>
     </message>
@@ -1901,6 +2025,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>qGo2</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="100"/>
         <location filename="../mainwindow.ui" line="3266"/>
         <source>Go server</source>
         <translation>Go sunucusu</translation>
@@ -1911,6 +2036,8 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>SGF düzenleyici</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="118"/>
+        <location filename="../mainwindow.ui" line="3257"/>
         <location filename="../mainwindow_settings.cpp" line="494"/>
         <source>Go engine</source>
         <translation>Go programı</translation>
@@ -1983,136 +2110,163 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">-</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="492"/>
         <location filename="../mainwindow.ui" line="636"/>
         <source>9p-1p</source>
         <translation>9p-1p</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="497"/>
         <location filename="../mainwindow.ui" line="641"/>
         <source>9d</source>
         <translation>9d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="502"/>
         <location filename="../mainwindow.ui" line="646"/>
         <source>8d</source>
         <translation>8d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="507"/>
         <location filename="../mainwindow.ui" line="651"/>
         <source>7d</source>
         <translation>7d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="512"/>
         <location filename="../mainwindow.ui" line="656"/>
         <source>6d</source>
         <translation>6d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="517"/>
         <location filename="../mainwindow.ui" line="661"/>
         <source>5d</source>
         <translation>5d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="522"/>
         <location filename="../mainwindow.ui" line="666"/>
         <source>4d</source>
         <translation>4d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="527"/>
         <location filename="../mainwindow.ui" line="671"/>
         <source>3d</source>
         <translation>3d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="532"/>
         <location filename="../mainwindow.ui" line="676"/>
         <source>2d</source>
         <translation>2d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="537"/>
         <location filename="../mainwindow.ui" line="681"/>
         <source>1d</source>
         <translation>1d</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="542"/>
         <location filename="../mainwindow.ui" line="686"/>
         <source>1k</source>
         <translation>1k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="547"/>
         <location filename="../mainwindow.ui" line="691"/>
         <source>2k</source>
         <translation>2k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="552"/>
         <location filename="../mainwindow.ui" line="696"/>
         <source>3k</source>
         <translation>3k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="557"/>
         <location filename="../mainwindow.ui" line="701"/>
         <source>4k</source>
         <translation>4k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="562"/>
         <location filename="../mainwindow.ui" line="706"/>
         <source>5k</source>
         <translation>5k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="567"/>
         <location filename="../mainwindow.ui" line="711"/>
         <source>6k</source>
         <translation>6k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="572"/>
         <location filename="../mainwindow.ui" line="716"/>
         <source>7k</source>
         <translation>7k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="577"/>
         <location filename="../mainwindow.ui" line="721"/>
         <source>8k</source>
         <translation>8k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="582"/>
         <location filename="../mainwindow.ui" line="726"/>
         <source>9k</source>
         <translation>9k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="587"/>
         <location filename="../mainwindow.ui" line="731"/>
         <source>10k</source>
         <translation>10k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="592"/>
         <location filename="../mainwindow.ui" line="736"/>
         <source>11k</source>
         <translation>11k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="597"/>
         <location filename="../mainwindow.ui" line="741"/>
         <source>12k</source>
         <translation>12k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="602"/>
         <location filename="../mainwindow.ui" line="746"/>
         <source>13k</source>
         <translation>13k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="612"/>
         <location filename="../mainwindow.ui" line="756"/>
         <source>15k</source>
         <translation>15k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="617"/>
         <location filename="../mainwindow.ui" line="761"/>
         <source>16k</source>
         <translation>16k</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="622"/>
         <location filename="../mainwindow.ui" line="766"/>
         <source>NR</source>
         <translation>NR</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="607"/>
         <location filename="../mainwindow.ui" line="751"/>
         <source>14k</source>
         <translation>14k</translation>
@@ -2123,6 +2277,11 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>Açık</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="245"/>
+        <location filename="../mainwindow.ui" line="334"/>
+        <location filename="../mainwindow.ui" line="781"/>
+        <location filename="../mainwindow.ui" line="823"/>
+        <location filename="../mainwindow.ui" line="1879"/>
         <location filename="../mainwindow.ui" line="1886"/>
         <source>...</source>
         <translation>...</translation>
@@ -2132,6 +2291,9 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">Nu</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1020"/>
+        <location filename="../mainwindow.ui" line="1246"/>
+        <location filename="../mainwindow.ui" line="1395"/>
         <location filename="../mainwindow.ui" line="3123"/>
         <source>White</source>
         <translation>Beyaz</translation>
@@ -2141,6 +2303,9 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">BS</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1044"/>
+        <location filename="../mainwindow.ui" line="1178"/>
+        <location filename="../mainwindow.ui" line="1358"/>
         <location filename="../mainwindow.ui" line="3116"/>
         <source>Black</source>
         <translation>Siyah</translation>
@@ -2268,11 +2433,15 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>Yeni dosya</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="929"/>
+        <location filename="../mainwindow.ui" line="1171"/>
         <location filename="../mainwindow.ui" line="1434"/>
         <source>Size</source>
         <translation>Boyut</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="956"/>
+        <location filename="../mainwindow.ui" line="1226"/>
         <location filename="../mainwindow.ui" line="1461"/>
         <source>Handicap</source>
         <translation>Avans</translation>
@@ -2283,16 +2452,20 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>0</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1013"/>
         <location filename="../mainwindow.ui" line="1198"/>
         <source>White player</source>
         <translation>Beyaz oyuncu</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1037"/>
         <location filename="../mainwindow.ui" line="1205"/>
         <source>Black player</source>
         <translation>Siyah oyuncu</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1074"/>
+        <location filename="../mainwindow.ui" line="1212"/>
         <location filename="../mainwindow.ui" line="1494"/>
         <source>Komi</source>
         <translation>Komi</translation>
@@ -2302,6 +2475,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">6,5</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1111"/>
         <location filename="../mainwindow.ui" line="1334"/>
         <source>New game</source>
         <translation>Yeni oyun</translation>
@@ -2312,6 +2486,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>Dosya aç</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1136"/>
         <location filename="../mainwindow.ui" line="1621"/>
         <source>Open game</source>
         <translation>Oyun aç</translation>
@@ -2332,6 +2507,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>Sonuç</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1307"/>
         <location filename="../mainwindow.ui" line="1591"/>
         <source>Click on the board to place a stone.
 
@@ -2534,16 +2710,19 @@ Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</t
         <translation>Go tahtası ve masa</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1865"/>
         <location filename="../mainwindow_settings.cpp" line="520"/>
         <source>Table picture</source>
         <translation>Masa resmi</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1872"/>
         <location filename="../mainwindow_settings.cpp" line="507"/>
         <source>Goban picture</source>
         <translation>Go tahtası resmi</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1902"/>
         <location filename="../mainwindow.ui" line="3212"/>
         <source>Cancel</source>
         <translation>İptal</translation>
@@ -2607,16 +2786,16 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: depends on server
-NNGS, CWS:<byte value="x9"/>use a unique name like &apos;hotdog17&apos;
-others:<byte value="x9"/><byte value="x9"/>guest</source>
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
         <translation type="obsolete">ad
 
 Kayıtlı kullanıcılar:
 kayıt olduktan sonra Go sunucunuzun size verdiği kullanıcı adı ve parolayı kullanın
 
 Yeni kullanıcılar: sunucuya göre değişir
-NNGS, CWS:<byte value="x9"/> &apos;hotdog17&apos; gibi özgün bir isim kullanın
-diğerleri: <byte value="x9"/>guest</translation>
+NNGS, CWS:	 &apos;hotdog17&apos; gibi özgün bir isim kullanın
+diğerleri: 	guest</translation>
     </message>
     <message>
         <source>Host:</source>
@@ -2805,6 +2984,9 @@ Yeni, düzenlenebilir çevrimdışı bir pencere açmak için tıklayın.</trans
         <translation>Oyun ayarları</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="2694"/>
+        <location filename="../mainwindow.ui" line="2713"/>
+        <location filename="../mainwindow.ui" line="3149"/>
         <location filename="../mainwindow.ui" line="3169"/>
         <source>board size</source>
         <translation>tahta boyutu</translation>
@@ -2815,6 +2997,7 @@ Yeni, düzenlenebilir çevrimdışı bir pencere açmak için tıklayın.</trans
         <translation>Tahta boyutu:</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="2739"/>
         <location filename="../mainwindow.ui" line="2758"/>
         <source>Komi: added to white&apos;s result</source>
         <translation>Komi: Beyaz&apos;ın sonucuna eklenir</translation>
@@ -2854,6 +3037,9 @@ negotiation</source>
 pazarlığı</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="2810"/>
+        <location filename="../mainwindow.ui" line="2836"/>
+        <location filename="../mainwindow.ui" line="3035"/>
         <location filename="../mainwindow.ui" line="3055"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation>25 hamle için ek süre; her 25 hamle bitiminde byoyomi tekrar başlar</translation>
@@ -2866,6 +3052,9 @@ time:</source>
 süresi:</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="2859"/>
+        <location filename="../mainwindow.ui" line="2885"/>
+        <location filename="../mainwindow.ui" line="2986"/>
         <location filename="../mainwindow.ui" line="3006"/>
         <source>Playing time</source>
         <translation>Oyun süresi</translation>
@@ -2924,6 +3113,7 @@ avans:</translation>
         <translation>SGF düzenleyici</translation>
     </message>
     <message>
+        <location filename="../mainwindow_server.cpp" line="297"/>
         <location filename="../mainwindow_server.cpp" line="1101"/>
         <source>Connect with</source>
         <translation>Bağlan</translation>
@@ -2964,6 +3154,8 @@ avans:</translation>
         <translation type="obsolete">Kabul</translation>
     </message>
     <message>
+        <location filename="../mainwindow_settings.cpp" line="495"/>
+        <location filename="../mainwindow_settings.cpp" line="508"/>
         <location filename="../mainwindow_settings.cpp" line="521"/>
         <source>All Files (*)</source>
         <translation>Tüm Dosyalar (*)</translation>
@@ -3014,6 +3206,8 @@ avans:</translation>
         <translation>Oda aç</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1087"/>
+        <location filename="../mainwindow.ui" line="1191"/>
         <location filename="../mainwindow.ui" line="1507"/>
         <source>6.5</source>
         <translation>6,5</translation>
@@ -3082,6 +3276,7 @@ avans:</translation>
         <translation>sizinle oynamak istiyor...</translation>
     </message>
     <message>
+        <location filename="../network/matchinvitedialog.cpp" line="12"/>
         <location filename="../network/matchinvitedialog.cpp" line="44"/>
         <source>%1 seconds</source>
         <translation>%1 saniye</translation>
@@ -3138,6 +3333,7 @@ avans:</translation>
 <context>
     <name>ORO_setphrases</name>
     <message>
+        <location filename="../network/orosetphrasechat.cpp" line="12"/>
         <location filename="../network/orosetphrasechat.cpp" line="50"/>
         <source>Hello</source>
         <translation>Merhaba</translation>
@@ -3391,21 +3587,31 @@ avans:</translation>
         <translation>-</translation>
     </message>
     <message>
+        <location filename="../board/interfacehandler.cpp" line="106"/>
+        <location filename="../board/interfacehandler.cpp" line="107"/>
         <location filename="../gamedata.h" line="14"/>
         <source>White</source>
         <translation>Beyaz</translation>
     </message>
     <message>
+        <location filename="../board/interfacehandler.cpp" line="114"/>
+        <location filename="../board/interfacehandler.cpp" line="116"/>
+        <location filename="../board/interfacehandler.cpp" line="166"/>
         <location filename="../board/interfacehandler.cpp" line="175"/>
         <source>W</source>
         <translation>B</translation>
     </message>
     <message>
+        <location filename="../board/interfacehandler.cpp" line="124"/>
+        <location filename="../board/interfacehandler.cpp" line="125"/>
         <location filename="../gamedata.h" line="15"/>
         <source>Black</source>
         <translation>Siyah</translation>
     </message>
     <message>
+        <location filename="../board/interfacehandler.cpp" line="132"/>
+        <location filename="../board/interfacehandler.cpp" line="134"/>
+        <location filename="../board/interfacehandler.cpp" line="166"/>
         <location filename="../board/interfacehandler.cpp" line="175"/>
         <source>B</source>
         <translation>S</translation>
@@ -3451,6 +3657,7 @@ avans:</translation>
         <translation>alt dal</translation>
     </message>
     <message>
+        <location filename="../board/boardwindow.cpp" line="74"/>
         <location filename="../board/boardwindow.cpp" line="93"/>
         <source>Error</source>
         <translation>Hata</translation>
@@ -3475,11 +3682,13 @@ avans:</translation>
         <translation>Bulunamayan dosya:</translation>
     </message>
     <message>
+        <location filename="../sgf/sgfparser.cpp" line="266"/>
         <location filename="../sgf/sgfparser.cpp" line="1543"/>
         <source>Could not open file:</source>
         <translation>Açılamayan dosya:</translation>
     </message>
     <message>
+        <location filename="../sgf/sgfparser.cpp" line="274"/>
         <location filename="../sgf/sgfparser.cpp" line="1569"/>
         <source>Invalid text encoding given. Please check preferences!</source>
         <translation>Metin kodu tercihi yanlış. Lütfen program tercihlerinizi gözden geçirin!</translation>
@@ -3503,11 +3712,13 @@ avans:</translation>
 <context>
     <name>ResultDialog</name>
     <message>
+        <location filename="../game_interfaces/resultdialog.cpp" line="19"/>
         <location filename="../game_interfaces/resultdialog.cpp" line="62"/>
         <source> requests rematch</source>
         <translation type="unfinished">tekrar oynamak istiyor </translation>
     </message>
     <message>
+        <location filename="../game_interfaces/resultdialog.cpp" line="21"/>
         <location filename="../game_interfaces/resultdialog.cpp" line="64"/>
         <source>&amp;Accept?</source>
         <translation>K&amp;abul?</translation>
@@ -3566,11 +3777,13 @@ avans:</translation>
         <translation>Engelle</translation>
     </message>
     <message>
+        <location filename="../network/room.cpp" line="294"/>
         <location filename="../network/room.cpp" line="300"/>
         <source>Observe Outside</source>
         <translation>Dışarıdan İzle</translation>
     </message>
     <message>
+        <location filename="../network/room.cpp" line="295"/>
         <location filename="../network/room.cpp" line="299"/>
         <source>Join and Observe</source>
         <translation>Katıl ve İzle</translation>
@@ -3624,6 +3837,11 @@ avans:</translation>
         <translation>Adres:</translation>
     </message>
     <message>
+        <location filename="../network/talk_gui.ui" line="297"/>
+        <location filename="../network/talk_gui.ui" line="334"/>
+        <location filename="../network/talk_gui.ui" line="373"/>
+        <location filename="../network/talk_gui.ui" line="383"/>
+        <location filename="../network/talk_gui.ui" line="422"/>
         <location filename="../network/talk_gui.ui" line="461"/>
         <source>--</source>
         <translation>--</translation>
@@ -3649,6 +3867,7 @@ avans:</translation>
         <translation>Oynadığı oyun:</translation>
     </message>
     <message>
+        <location filename="../network/talk_gui.ui" line="129"/>
         <location filename="../network/talk_gui.ui" line="136"/>
         <source>-</source>
         <translation>-</translation>
@@ -3657,6 +3876,7 @@ avans:</translation>
 <context>
     <name>TygemConnection</name>
     <message>
+        <location filename="../network/tygemconnection.cpp" line="280"/>
         <location filename="../network/tygemconnection.cpp" line="2025"/>
         <source>3 Boards Open</source>
         <translation type="unfinished">3 Tahta Açık</translation>
@@ -3682,6 +3902,8 @@ avans:</translation>
         <translation type="unfinished">Yeni oyuna başlamadan önce açık olanı kapatmalısınız</translation>
     </message>
     <message>
+        <location filename="../network/tygemconnection.cpp" line="2029"/>
+        <location filename="../network/tygemconnection.cpp" line="8261"/>
         <location filename="../network/tygemconnection.cpp" line="8269"/>
         <source>Not open</source>
         <translation type="unfinished"></translation>
@@ -3773,6 +3995,7 @@ avans:</translation>
 <context>
     <name>qGoBoardComputerInterface</name>
     <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="165"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="176"/>
         <source>Failed to play the stone within program 
 </source>
@@ -3780,6 +4003,8 @@ avans:</translation>
 </translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="209"/>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="217"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="236"/>
         <source>Failed to have the program play its stone
 </source>
@@ -3787,6 +4012,7 @@ avans:</translation>
 </translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="311"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="324"/>
         <source>Failed to pass within program 
 </source>
@@ -3815,7 +4041,7 @@ avans:</translation>
         <translation type="obsolete">Gelen hamle %1 geçersiz hamle</translation>
     </message>
     <message>
-        <source>Game n&#xb0; </source>
+        <source>Game n° </source>
         <translation type="obsolete">Oyun Nu</translation>
     </message>
     <message>
@@ -3852,6 +4078,7 @@ avans:</translation>
         <translation type="unfinished">%1&apos;a/e oyunu bitirmeyi teklif et</translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="231"/>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="253"/>
         <source>Adjourn?</source>
         <translation type="unfinished">Ara ver?</translation>
@@ -3884,6 +4111,7 @@ Kabul ediyor musunuz?
 </translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_match.cpp" line="280"/>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="307"/>
         <source>End game?</source>
         <translation type="unfinished">Oyunu bitir?</translation>
@@ -3946,6 +4174,7 @@ Kabul ediyor musunuz?
 </translation>
     </message>
     <message>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="91"/>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="371"/>
         <source>Invalid Move</source>
         <translation>Geçersiz Hamle</translation>
@@ -3961,42 +4190,50 @@ Kabul ediyor musunuz?
         <translation>Gelen hamle %1,%2 geçersiz gözüküyor</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="484"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="490"/>
         <source>Resign?</source>
         <translation type="unfinished">Pes?</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="485"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="491"/>
         <source>Resign game with %1
 </source>
         <translation type="unfinished">%1 ile olan oyunda pes et
 </translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="515"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="517"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="521"/>
         <source>Game Adjourned</source>
         <translation type="unfinished">Oyuna Ara Verildi</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="511"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="517"/>
+        <source>%1 vs. %2 has been adjourned.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="521"/>
+        <source>Game with %1 has been adjourned.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source> vs. </source>
-        <translation type="unfinished">ile</translation>
+        <translation type="obsolete">ile</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="515"/>
         <source> has been adjourned.</source>
-        <translation type="unfinished">ile oyuna ara verildi.</translation>
+        <translation type="obsolete">ile oyuna ara verildi.</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="515"/>
         <source>Game with </source>
-        <translation type="unfinished"> </translation>
+        <translation type="obsolete"> </translation>
     </message>
 </context>
 <context>
     <name>qGoBoardObserveInterface</name>
     <message>
-        <source>Game n&#xb0; </source>
+        <source>Game n° </source>
         <translation type="obsolete">Oyun Nu</translation>
     </message>
     <message>
