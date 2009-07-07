@@ -471,6 +471,7 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 	
 	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(moves, MoveRecord::REQUESTUNDO));
 }
+/* Note that these all crash if we disconnect from server first, but server should handle that anyway FIXME */
 
 /* Really the ui button disables should be on some gamePhase code FIXME */
 void qGoBoardNetworkInterface::slotDonePressed()
@@ -481,6 +482,11 @@ void qGoBoardNetworkInterface::slotDonePressed()
 
 void qGoBoardNetworkInterface::slotResignPressed()
 {
+	if(boardwindow->getBoardDispatch()->getOpponentName() == QString())
+	{
+		boardwindow->getGameData()->fullresult = new GameResult();		//temporary for bugs FIXME
+		return;
+	}
 	QMessageBox mb(tr("Resign?"),
 		      QString(tr("Resign game with %1\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
 		      QMessageBox::Question,
@@ -508,11 +514,11 @@ void qGoBoardNetworkInterface::adjournGame(void)
 		if(!r)
 			qDebug("No game record on adjourned game");
 		else
-			QMessageBox::information(boardwindow , tr("Game Adjourned"), r->white_name + tr(" vs. ") + r->black_name + tr(" has been adjourned."));
+			QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("%1 vs. %2 has been adjourned.").arg(r->white_name).arg(r->black_name));
 
 	}
 	else
-		QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("Game with ") + opp_name + tr(" has been adjourned."));
+		QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("Game with %1 has been adjourned.").arg(opp_name));
 	boardwindow->getUi()->adjournButton->setEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
 }
 
