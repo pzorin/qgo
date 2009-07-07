@@ -27,15 +27,24 @@
 
 struct _preferences preferences;
 MainWindow * mainwindow = 0;
+QApplication * appPtr;
+QTranslator * translatorPtr;
+void installTranslator(enum Language);
 
 int main(int argc, char *argv[])
 {
 	Q_INIT_RESOURCE(application);
 	QApplication app(argc, argv);
+	QTranslator translator;
 	QString *sgf_file = NULL;
 
 	QCoreApplication::setOrganizationName("qgo2");
-
+	
+	appPtr = &app;
+	translatorPtr = &translator;
+	QSettings settings;
+	installTranslator((enum Language)settings.value("LANGUAGE").toInt());		//temporary place for this
+	
 	mainwindow = new MainWindow(0,0);
 
 	if ( argc > 1 )
@@ -57,3 +66,23 @@ int main(int argc, char *argv[])
 	return app.exec();
 }
 
+void installTranslator(enum Language l)
+{
+	//QSettings settings;
+	
+	switch(l)
+	{
+		case German:
+			return;
+		case French:
+			translatorPtr->load("qgo2_fr");			//path?!?
+			break;
+		case Turkish:
+			translatorPtr->load("qgo2_tr");			//path?!?
+			break;
+		case None:
+		default:
+			return;
+	}
+	appPtr->installTranslator(translatorPtr);
+}

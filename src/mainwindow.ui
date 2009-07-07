@@ -1735,6 +1735,11 @@ When in score mode, left click to mark a group as dead, right click to mark it a
                <string>French</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>Turkish</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
