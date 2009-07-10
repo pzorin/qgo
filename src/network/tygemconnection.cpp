@@ -4376,11 +4376,12 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			//c3b6 b5bf bdc3 b4eb 0000 0000 0000 0000 01
 			//0000 0000 0000 0003
 			//e86f 6c64 6572 6100 0000 0000 00
-
+#ifdef RE_DEBUG
 			printf("0x06b1: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			break;
 		case 0x06af:	//login request response?
 			printf("0x06af: ");
