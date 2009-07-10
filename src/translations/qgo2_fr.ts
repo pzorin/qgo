@@ -3335,88 +3335,88 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <translation type="obsolete">vous</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="113"/>
-        <location filename="../network/gamedialog.cpp" line="133"/>
-        <location filename="../network/gamedialog.cpp" line="153"/>
-        <location filename="../network/gamedialog.cpp" line="175"/>
-        <location filename="../network/gamedialog.cpp" line="238"/>
-        <location filename="../network/gamedialog.cpp" line="256"/>
-        <location filename="../network/gamedialog.cpp" line="287"/>
-        <location filename="../network/gamedialog.cpp" line="317"/>
-        <location filename="../network/gamedialog.cpp" line="343"/>
-        <location filename="../network/gamedialog.cpp" line="367"/>
-        <location filename="../network/gamedialog.cpp" line="390"/>
-        <location filename="../network/gamedialog.cpp" line="415"/>
-        <location filename="../network/gamedialog.cpp" line="438"/>
-        <location filename="../network/gamedialog.cpp" line="461"/>
-        <location filename="../network/gamedialog.cpp" line="485"/>
-        <location filename="../network/gamedialog.cpp" line="509"/>
-        <location filename="../network/gamedialog.cpp" line="532"/>
-        <location filename="../network/gamedialog.cpp" line="631"/>
-        <location filename="../network/gamedialog.cpp" line="738"/>
-        <location filename="../network/gamedialog.cpp" line="760"/>
-        <location filename="../network/gamedialog.cpp" line="798"/>
-        <location filename="../network/gamedialog.cpp" line="818"/>
-        <location filename="../network/gamedialog.cpp" line="824"/>
-        <location filename="../network/gamedialog.cpp" line="1237"/>
+        <location filename="../network/gamedialog.cpp" line="107"/>
+        <location filename="../network/gamedialog.cpp" line="127"/>
+        <location filename="../network/gamedialog.cpp" line="147"/>
+        <location filename="../network/gamedialog.cpp" line="169"/>
+        <location filename="../network/gamedialog.cpp" line="240"/>
+        <location filename="../network/gamedialog.cpp" line="258"/>
+        <location filename="../network/gamedialog.cpp" line="289"/>
+        <location filename="../network/gamedialog.cpp" line="319"/>
+        <location filename="../network/gamedialog.cpp" line="345"/>
+        <location filename="../network/gamedialog.cpp" line="369"/>
+        <location filename="../network/gamedialog.cpp" line="392"/>
+        <location filename="../network/gamedialog.cpp" line="417"/>
+        <location filename="../network/gamedialog.cpp" line="440"/>
+        <location filename="../network/gamedialog.cpp" line="463"/>
+        <location filename="../network/gamedialog.cpp" line="487"/>
+        <location filename="../network/gamedialog.cpp" line="511"/>
+        <location filename="../network/gamedialog.cpp" line="534"/>
+        <location filename="../network/gamedialog.cpp" line="633"/>
+        <location filename="../network/gamedialog.cpp" line="740"/>
+        <location filename="../network/gamedialog.cpp" line="762"/>
+        <location filename="../network/gamedialog.cpp" line="800"/>
+        <location filename="../network/gamedialog.cpp" line="820"/>
+        <location filename="../network/gamedialog.cpp" line="826"/>
+        <location filename="../network/gamedialog.cpp" line="1239"/>
         <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
         <translation>Offre</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="771"/>
+        <location filename="../network/gamedialog.cpp" line="773"/>
         <source>Teaching</source>
         <translation>Réviser</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="107"/>
-        <location filename="../network/gamedialog.cpp" line="127"/>
-        <location filename="../network/gamedialog.cpp" line="147"/>
-        <location filename="../network/gamedialog.cpp" line="170"/>
-        <location filename="../network/gamedialog.cpp" line="233"/>
-        <location filename="../network/gamedialog.cpp" line="251"/>
-        <location filename="../network/gamedialog.cpp" line="282"/>
-        <location filename="../network/gamedialog.cpp" line="312"/>
-        <location filename="../network/gamedialog.cpp" line="338"/>
-        <location filename="../network/gamedialog.cpp" line="361"/>
-        <location filename="../network/gamedialog.cpp" line="385"/>
-        <location filename="../network/gamedialog.cpp" line="409"/>
-        <location filename="../network/gamedialog.cpp" line="433"/>
-        <location filename="../network/gamedialog.cpp" line="456"/>
-        <location filename="../network/gamedialog.cpp" line="480"/>
-        <location filename="../network/gamedialog.cpp" line="504"/>
-        <location filename="../network/gamedialog.cpp" line="527"/>
-        <location filename="../network/gamedialog.cpp" line="1244"/>
+        <location filename="../network/gamedialog.cpp" line="101"/>
+        <location filename="../network/gamedialog.cpp" line="121"/>
+        <location filename="../network/gamedialog.cpp" line="141"/>
+        <location filename="../network/gamedialog.cpp" line="164"/>
+        <location filename="../network/gamedialog.cpp" line="235"/>
+        <location filename="../network/gamedialog.cpp" line="253"/>
+        <location filename="../network/gamedialog.cpp" line="284"/>
+        <location filename="../network/gamedialog.cpp" line="314"/>
+        <location filename="../network/gamedialog.cpp" line="340"/>
+        <location filename="../network/gamedialog.cpp" line="363"/>
+        <location filename="../network/gamedialog.cpp" line="387"/>
+        <location filename="../network/gamedialog.cpp" line="411"/>
+        <location filename="../network/gamedialog.cpp" line="435"/>
+        <location filename="../network/gamedialog.cpp" line="458"/>
+        <location filename="../network/gamedialog.cpp" line="482"/>
+        <location filename="../network/gamedialog.cpp" line="506"/>
+        <location filename="../network/gamedialog.cpp" line="529"/>
+        <location filename="../network/gamedialog.cpp" line="1246"/>
         <source>Accept</source>
         <translation>Accepter</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="804"/>
+        <location filename="../network/gamedialog.cpp" line="806"/>
         <source>%1 not open for matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="806"/>
+        <location filename="../network/gamedialog.cpp" line="808"/>
         <source>%1 declined the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="808"/>
+        <location filename="../network/gamedialog.cpp" line="810"/>
         <source>%1 canceled the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="810"/>
+        <location filename="../network/gamedialog.cpp" line="812"/>
         <source>%1 already playing a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="812"/>
+        <location filename="../network/gamedialog.cpp" line="814"/>
         <source>%1 does not accept direct matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="817"/>
+        <location filename="../network/gamedialog.cpp" line="819"/>
         <source>Invalid Parameters!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3557,7 +3557,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <translation type="unfinished">,5</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="814"/>
+        <location filename="../network/gamedialog.cpp" line="816"/>
         <source>%1&apos;s client does not support nmatch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6540,7 +6540,7 @@ A propos de l&apos;application.</translation>
         <translation type="obsolete">&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="182"/>
+        <location filename="../mainwindow.cpp" line="181"/>
         <source>Ready.</source>
         <translation>Prêt.</translation>
     </message>
@@ -6617,8 +6617,8 @@ Do you want to save your changes?</source>
 Voulez vous enregistrer les changements?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1902"/>
-        <location filename="../mainwindow.ui" line="3212"/>
+        <location filename="../mainwindow.ui" line="1907"/>
+        <location filename="../mainwindow.ui" line="3217"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -7069,12 +7069,12 @@ Son pour les pierres on/off
 Ceci n&apos;affecte que le son des pierres</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="202"/>
+        <location filename="../mainwindow.cpp" line="201"/>
         <source>Current online players / watched players</source>
         <translation type="unfinished">Joueurs actuellement en ligne / Joueurs observés</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="203"/>
+        <location filename="../mainwindow.cpp" line="202"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
@@ -7083,33 +7083,33 @@ ainsi que le nombre de joueurs en ligne que vous observez
 Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apos;.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="209"/>
         <source>Current online games / observed games + matches</source>
         <translation type="unfinished">Parties actuellement en ligne / Parties observées + matches</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="211"/>
+        <location filename="../mainwindow.cpp" line="210"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
         <translation type="unfinished">Affiche le nombre de parties actuellement en cours sur le serveur ainsi que le nombre de parties que vous observez ou que vous jouez
 </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="218"/>
+        <location filename="../mainwindow.cpp" line="217"/>
         <source>Current server</source>
         <translation type="unfinished">Serveur actuel</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="219"/>
+        <location filename="../mainwindow.cpp" line="218"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
         <translation type="unfinished">Affiche le serveur en cours ou DECONNECTE si vous n&apos;êtes pas connecté.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="234"/>
+        <location filename="../mainwindow.cpp" line="233"/>
         <source>Online Time</source>
         <translation type="unfinished">Durée de la connexion</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="235"/>
+        <location filename="../mainwindow.cpp" line="234"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
@@ -7118,7 +7118,7 @@ Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apo
 (Attente) -&gt; attente de la ligne</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="490"/>
+        <location filename="../mainwindow.cpp" line="489"/>
         <source>*** Both players are the same ! ***</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7129,7 +7129,7 @@ Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apo
     </message>
     <message>
         <location filename="../mainwindow.ui" line="100"/>
-        <location filename="../mainwindow.ui" line="3266"/>
+        <location filename="../mainwindow.ui" line="3271"/>
         <source>Go server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7140,8 +7140,8 @@ Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apo
     </message>
     <message>
         <location filename="../mainwindow.ui" line="118"/>
-        <location filename="../mainwindow.ui" line="3257"/>
-        <location filename="../mainwindow_settings.cpp" line="494"/>
+        <location filename="../mainwindow.ui" line="3262"/>
+        <location filename="../mainwindow_settings.cpp" line="523"/>
         <source>Go engine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7160,8 +7160,8 @@ Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apo
         <location filename="../mainwindow.ui" line="334"/>
         <location filename="../mainwindow.ui" line="781"/>
         <location filename="../mainwindow.ui" line="823"/>
-        <location filename="../mainwindow.ui" line="1879"/>
-        <location filename="../mainwindow.ui" line="1886"/>
+        <location filename="../mainwindow.ui" line="1884"/>
+        <location filename="../mainwindow.ui" line="1891"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7481,7 +7481,7 @@ Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apo
         <location filename="../mainwindow.ui" line="1020"/>
         <location filename="../mainwindow.ui" line="1246"/>
         <location filename="../mainwindow.ui" line="1395"/>
-        <location filename="../mainwindow.ui" line="3123"/>
+        <location filename="../mainwindow.ui" line="3128"/>
         <source>White</source>
         <translation type="unfinished">Blanc</translation>
     </message>
@@ -7495,7 +7495,7 @@ Un joueur que vous observez est indiqué dans le champ &apos;joueur observé&apo
         <location filename="../mainwindow.ui" line="1044"/>
         <location filename="../mainwindow.ui" line="1178"/>
         <location filename="../mainwindow.ui" line="1358"/>
-        <location filename="../mainwindow.ui" line="3116"/>
+        <location filename="../mainwindow.ui" line="3121"/>
         <source>Black</source>
         <translation type="unfinished">Noir</translation>
     </message>
@@ -7622,62 +7622,67 @@ En mode score, un click gauche sur un groupe le marque comme mort, un click droi
         <translation type="unfinished">Français</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1756"/>
+        <location filename="../mainwindow.ui" line="1740"/>
+        <source>Turkish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1761"/>
         <source>Text encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1764"/>
+        <location filename="../mainwindow.ui" line="1769"/>
         <source>None</source>
         <translation type="unfinished">Aucun</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1909"/>
+        <location filename="../mainwindow.ui" line="1914"/>
         <source>Misc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1919"/>
+        <location filename="../mainwindow.ui" line="1924"/>
         <source>Territory Cross</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1929"/>
+        <location filename="../mainwindow.ui" line="1934"/>
         <source>Territory Stone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1940"/>
+        <location filename="../mainwindow.ui" line="1945"/>
         <source>Ko marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1947"/>
+        <location filename="../mainwindow.ui" line="1952"/>
         <source>Number Current Move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1958"/>
+        <location filename="../mainwindow.ui" line="1963"/>
         <source>Warn on Closing Edited Board</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1965"/>
+        <location filename="../mainwindow.ui" line="1970"/>
         <source>Warn on Closing Engine Board</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1993"/>
+        <location filename="../mainwindow.ui" line="1998"/>
         <source>Autoplay interval</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2003"/>
+        <location filename="../mainwindow.ui" line="2008"/>
         <source>Time interval for autoplay</source>
         <translation type="unfinished">Intervalle de temps pour le déroulement automatique</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2006"/>
+        <location filename="../mainwindow.ui" line="2011"/>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
@@ -7686,94 +7691,94 @@ Delay between the moves in autoplay mode in seconds.</source>
 Délai entre les coups du déroulement automatique.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2012"/>
+        <location filename="../mainwindow.ui" line="2017"/>
         <source>0.1</source>
         <translation type="unfinished">0.1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2017"/>
+        <location filename="../mainwindow.ui" line="2022"/>
         <source>0.5</source>
         <translation type="unfinished">0,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2022"/>
+        <location filename="../mainwindow.ui" line="2027"/>
         <source>1</source>
         <translation type="unfinished">1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2027"/>
+        <location filename="../mainwindow.ui" line="2032"/>
         <source>2.5</source>
         <translation type="unfinished">2.5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2032"/>
+        <location filename="../mainwindow.ui" line="2037"/>
         <source>5</source>
         <translation type="unfinished">5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2037"/>
+        <location filename="../mainwindow.ui" line="2042"/>
         <source>7.5</source>
         <translation type="unfinished">7.5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2042"/>
+        <location filename="../mainwindow.ui" line="2047"/>
         <source>10</source>
         <translation type="unfinished">10</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1775"/>
+        <location filename="../mainwindow.ui" line="1780"/>
         <source>Sound</source>
         <translation type="unfinished">Son</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1787"/>
+        <location filename="../mainwindow.ui" line="1792"/>
         <source>Sound off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1794"/>
+        <location filename="../mainwindow.ui" line="1799"/>
         <source>My games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1801"/>
+        <location filename="../mainwindow.ui" line="1806"/>
         <source>All games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1811"/>
+        <location filename="../mainwindow.ui" line="1816"/>
         <source>Stones</source>
         <translation type="unfinished">Pierres</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1823"/>
+        <location filename="../mainwindow.ui" line="1828"/>
         <source>Ugly 2D</source>
         <translation type="unfinished">moche 2D</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1830"/>
+        <location filename="../mainwindow.ui" line="1835"/>
         <source>Plain 3D</source>
         <translation type="unfinished">3D simple</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1837"/>
+        <location filename="../mainwindow.ui" line="1842"/>
         <source>Realistic</source>
         <translation type="unfinished">réaliste</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1853"/>
+        <location filename="../mainwindow.ui" line="1858"/>
         <source>Goban and table</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1865"/>
-        <location filename="../mainwindow_settings.cpp" line="520"/>
+        <location filename="../mainwindow.ui" line="1870"/>
+        <location filename="../mainwindow_settings.cpp" line="549"/>
         <source>Table picture</source>
         <translation type="unfinished">Image de la table</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1872"/>
-        <location filename="../mainwindow_settings.cpp" line="507"/>
+        <location filename="../mainwindow.ui" line="1877"/>
+        <location filename="../mainwindow_settings.cpp" line="536"/>
         <source>Goban picture</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7958,17 +7963,17 @@ Supprime les données qui ont le titre affiché
 Note : &apos;Supprimer&apos; ne concerne que ce qui est déjà enregistré.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3227"/>
+        <location filename="../mainwindow.ui" line="3232"/>
         <source>Default is Observe Outside</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2556"/>
+        <location filename="../mainwindow.ui" line="2561"/>
         <source>Score/Edit</source>
         <translation type="unfinished">Score / Edition</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2559"/>
+        <location filename="../mainwindow.ui" line="2564"/>
         <source>Score
 
 Left click on a group to mark it as dead.
@@ -7989,71 +7994,71 @@ Edition
 Cliquer pour une nouvelle fenêtre d&apos;édition hors ligne.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2583"/>
+        <location filename="../mainwindow.ui" line="2588"/>
         <source>Byo Yomi warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2589"/>
+        <location filename="../mainwindow.ui" line="2594"/>
         <source>Seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2619"/>
+        <location filename="../mainwindow.ui" line="2624"/>
         <source>sound warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2629"/>
+        <location filename="../mainwindow.ui" line="2634"/>
         <source>Autosave</source>
         <translation type="unfinished">enregistrement automatique</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2641"/>
+        <location filename="../mainwindow.ui" line="2646"/>
         <source>Observed games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2648"/>
+        <location filename="../mainwindow.ui" line="2653"/>
         <source>Played games</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2658"/>
+        <location filename="../mainwindow.ui" line="2663"/>
         <source>Games settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2694"/>
-        <location filename="../mainwindow.ui" line="2713"/>
-        <location filename="../mainwindow.ui" line="3149"/>
-        <location filename="../mainwindow.ui" line="3169"/>
+        <location filename="../mainwindow.ui" line="2699"/>
+        <location filename="../mainwindow.ui" line="2718"/>
+        <location filename="../mainwindow.ui" line="3154"/>
+        <location filename="../mainwindow.ui" line="3174"/>
         <source>board size</source>
         <translation type="unfinished">Taille du plateau</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2697"/>
+        <location filename="../mainwindow.ui" line="2702"/>
         <source>Board size:</source>
         <translation type="unfinished">Taille du plateau:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2739"/>
-        <location filename="../mainwindow.ui" line="2758"/>
+        <location filename="../mainwindow.ui" line="2744"/>
+        <location filename="../mainwindow.ui" line="2763"/>
         <source>Komi: added to white&apos;s result</source>
         <translation type="unfinished">Komi: ajouté au résultat de Blanc</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2742"/>
+        <location filename="../mainwindow.ui" line="2747"/>
         <source>Komi:</source>
         <translation type="unfinished">Komi:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2782"/>
+        <location filename="../mainwindow.ui" line="2787"/>
         <source>allow client to negotiate automatic</source>
         <translation type="unfinished">Permettre au client de négocier le Komi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2785"/>
+        <location filename="../mainwindow.ui" line="2790"/>
         <source>Automatic Negotiation
 
 Allow client to negotiate komi automatic.
@@ -8066,96 +8071,96 @@ Permettre au client de négocier le Komi
 Attention: il peut être ennuyeux que l&apos;adversaire n&apos;accepte pas vos paramètres par défaut, même s&apos;ils ont été envoyé auparavant. Ceci peut provenir des ajustements différents des clients.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2792"/>
+        <location filename="../mainwindow.ui" line="2797"/>
         <source>Automatic komi 
 negotiation</source>
         <translation type="unfinished">négociation du komi
 automatique</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2810"/>
-        <location filename="../mainwindow.ui" line="2836"/>
-        <location filename="../mainwindow.ui" line="3035"/>
-        <location filename="../mainwindow.ui" line="3055"/>
+        <location filename="../mainwindow.ui" line="2815"/>
+        <location filename="../mainwindow.ui" line="2841"/>
+        <location filename="../mainwindow.ui" line="3040"/>
+        <location filename="../mainwindow.ui" line="3060"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation type="unfinished">Temps additionnel pour 25 coups; après 25 coups, le byoyomi reprend</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2813"/>
+        <location filename="../mainwindow.ui" line="2818"/>
         <source>Byoyomi
 time:</source>
         <translation type="unfinished">Byo
 yomi :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2859"/>
-        <location filename="../mainwindow.ui" line="2885"/>
-        <location filename="../mainwindow.ui" line="2986"/>
-        <location filename="../mainwindow.ui" line="3006"/>
+        <location filename="../mainwindow.ui" line="2864"/>
+        <location filename="../mainwindow.ui" line="2890"/>
+        <location filename="../mainwindow.ui" line="2991"/>
+        <location filename="../mainwindow.ui" line="3011"/>
         <source>Playing time</source>
         <translation type="unfinished">Durée de la partie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2862"/>
+        <location filename="../mainwindow.ui" line="2867"/>
         <source>Main 
 time :</source>
         <translation type="unfinished">Temps
 principal :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2919"/>
+        <location filename="../mainwindow.ui" line="2924"/>
         <source>All servers settings</source>
         <translation type="unfinished">Tous serveurs</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2952"/>
+        <location filename="../mainwindow.ui" line="2957"/>
         <source>IGS &apos;nmatch&apos; specific settings</source>
         <translation type="unfinished">Spécifique à IGS &apos;nmatch&apos;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2989"/>
+        <location filename="../mainwindow.ui" line="2994"/>
         <source>Main time 
 up to :</source>
         <translation type="unfinished">Temps principal
 jusqu&apos;à :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3038"/>
+        <location filename="../mainwindow.ui" line="3043"/>
         <source>Byo time
 up to :</source>
         <translation type="unfinished">Byo yomi
 jusqu&apos;à :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3101"/>
+        <location filename="../mainwindow.ui" line="3106"/>
         <source>Play as :</source>
         <translation type="unfinished">Jouer :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3130"/>
+        <location filename="../mainwindow.ui" line="3135"/>
         <source>Nigiri</source>
         <translation type="unfinished">Nigiri</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3152"/>
+        <location filename="../mainwindow.ui" line="3157"/>
         <source>Handicap 
 up to :</source>
         <translation type="unfinished">Handicap 
 jusqu&apos;à :</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3172"/>
+        <location filename="../mainwindow.ui" line="3177"/>
         <source>0</source>
         <translation type="unfinished">0</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3248"/>
+        <location filename="../mainwindow.ui" line="3253"/>
         <source>sgf editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="297"/>
-        <location filename="../mainwindow_server.cpp" line="1101"/>
+        <location filename="../mainwindow_server.cpp" line="302"/>
+        <location filename="../mainwindow_server.cpp" line="1108"/>
         <source>Connect with</source>
         <translation type="unfinished">Se connecter à</translation>
     </message>
@@ -8165,22 +8170,22 @@ jusqu&apos;à :</translation>
         <translation type="unfinished">Se déconnecter de</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="343"/>
+        <location filename="../mainwindow_server.cpp" line="350"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="343"/>
+        <location filename="../mainwindow_server.cpp" line="350"/>
         <source>This feature will be in a later version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="869"/>
+        <location filename="../mainwindow_server.cpp" line="876"/>
         <source>msg*</source>
         <translation type="unfinished">msg*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="895"/>
+        <location filename="../mainwindow_server.cpp" line="902"/>
         <source>Shouts*</source>
         <translation type="unfinished">Naviguer dans la partie</translation>
     </message>
@@ -8193,9 +8198,20 @@ jusqu&apos;à :</translation>
         <translation type="obsolete">Accepter</translation>
     </message>
     <message>
-        <location filename="../mainwindow_settings.cpp" line="495"/>
-        <location filename="../mainwindow_settings.cpp" line="508"/>
-        <location filename="../mainwindow_settings.cpp" line="521"/>
+        <location filename="../mainwindow_settings.cpp" line="239"/>
+        <source>Change Language?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow_settings.cpp" line="240"/>
+        <source>Changing the language requires restarting qGo.  Go ahead?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow_settings.cpp" line="524"/>
+        <location filename="../mainwindow_settings.cpp" line="537"/>
+        <location filename="../mainwindow_settings.cpp" line="550"/>
         <source>All Files (*)</source>
         <translation type="unfinished">Tous (*)</translation>
     </message>
@@ -8207,7 +8223,7 @@ jusqu&apos;à :</translation>
         <translation type="unfinished">6,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2761"/>
+        <location filename="../mainwindow.ui" line="2766"/>
         <source>.5</source>
         <translation type="unfinished">,5</translation>
     </message>
@@ -12041,13 +12057,13 @@ Après avoir placé une pierre et/ou une anullation, libérer le bouton retourne
 <context>
     <name>TygemConnection</name>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="280"/>
-        <location filename="../network/tygemconnection.cpp" line="2025"/>
+        <location filename="../network/tygemconnection.cpp" line="274"/>
+        <location filename="../network/tygemconnection.cpp" line="2026"/>
         <source>3 Boards Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="280"/>
+        <location filename="../network/tygemconnection.cpp" line="274"/>
         <source>You must close a board before you can open another one</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12062,35 +12078,35 @@ Après avoir placé une pierre et/ou une anullation, libérer le bouton retourne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2025"/>
+        <location filename="../network/tygemconnection.cpp" line="2026"/>
         <source>You must close a board before you can start a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2029"/>
-        <location filename="../network/tygemconnection.cpp" line="8261"/>
-        <location filename="../network/tygemconnection.cpp" line="8269"/>
+        <location filename="../network/tygemconnection.cpp" line="2030"/>
+        <location filename="../network/tygemconnection.cpp" line="8262"/>
+        <location filename="../network/tygemconnection.cpp" line="8270"/>
         <source>Not open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5160"/>
+        <location filename="../network/tygemconnection.cpp" line="5137"/>
         <source>Resume match?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5161"/>
+        <location filename="../network/tygemconnection.cpp" line="5138"/>
         <source>Resume match in progress with %1?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8237"/>
+        <location filename="../network/tygemconnection.cpp" line="8238"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8251"/>
+        <location filename="../network/tygemconnection.cpp" line="8252"/>
         <source>In game?</source>
         <translation type="unfinished"></translation>
     </message>
