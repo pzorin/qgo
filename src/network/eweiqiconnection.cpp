@@ -150,6 +150,7 @@ QByteArray EWeiQiConnection::getTygemGameRecordQByteArray(GameData * game)
 			//string += " " + QString(0xbad2) + QString(0xb0e8) + QString(0xbdc2);
 			break;
 		case GameResult::SCORE:
+			{
 			float fmargin = game->fullresult->winner_score = game->fullresult->loser_score;
 			margin = (int)fmargin;
 			if(fmargin > (float)margin)
@@ -161,6 +162,9 @@ QByteArray EWeiQiConnection::getTygemGameRecordQByteArray(GameData * game)
 			string += QByteArray::number(margin);
 			//string += QString(0x3f) + " " + QByteArray::number(margin) +
 			//		QString(0x3f3f) + " " + QString(0x3f);
+			}
+			break;
+		default:
 			break;
 	}
 	string += "\\]\r\n";

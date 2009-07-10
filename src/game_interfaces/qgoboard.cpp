@@ -281,7 +281,8 @@ void qGoBoard::setResult(GameResult & r)
 		qDebug("Already received result");
 		return;
 	}
-	kibitzReceived("\n" + r.shortMessage());
+	if(r.result != GameResult::NOGAME)
+		kibitzReceived("\n" + r.shortMessage());
 	boardwindow->getGameData()->result = r.shortMessage();
 	/* This is all a little ugly. FIXME.  The problem is that the
 	 * QString result is used by the sgf loader, its sort of
@@ -310,10 +311,12 @@ void qGoBoard::setResult(GameResult & r)
 	/* This should be parent window modal, otherwise its annoying.
 	 * I'm going to make it its own dialog so it could be extended
 	 * later */
-	ResultDialog * rd = new ResultDialog(boardwindow, boarddispatch, boardwindow->getId(), &r);
-	rd->setWindowModality(Qt::WindowModal);
-	rd->show();
-
+	if(r.result != GameResult::NOGAME)
+	{
+		ResultDialog * rd = new ResultDialog(boardwindow, boarddispatch, boardwindow->getId(), &r);
+		rd->setWindowModality(Qt::WindowModal);
+		rd->show();
+	}
 	QSettings settings;
 	if( settings.value("AUTOSAVE").toBool())
 		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);

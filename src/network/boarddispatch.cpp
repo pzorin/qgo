@@ -286,9 +286,9 @@ void BoardDispatch::recvResult(GameResult * r)
 	{
 		qDebug("No game record to check with result");
 		return;	
-	} 
+	}
 	/* IGS passes sparse entries... bit ugly but: */
-	if(r->winner_name == QString() && r->winner_color == stoneNone)
+	if(r->winner_name == QString() && r->winner_color == stoneNone && r->result != GameResult::NOGAME)
 	{
 		if(r->loser_name == gameData->white_name)
 		{
