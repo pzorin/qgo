@@ -140,7 +140,7 @@ class TygemConnection : public NetworkConnection
 		void sendFriendsBlocksRequest(void);
 		void promptResumeMatch(unsigned short game_number);
 		void sendOpenConversation(PlayerListing & player);
-		enum MIVersion {offer, accept, decline, modify, create, acknowledge};
+		enum MIVersion {offer, accept, decline, modify, create, acknowledge, alreadyingame};
 		void sendConversationReply(PlayerListing & player, enum MIVersion version);
 		void sendConversationMsg(PlayerListing & player, const char * text);
 		void sendCloseConversation(PlayerListing & player);

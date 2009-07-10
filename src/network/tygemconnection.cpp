@@ -24,12 +24,9 @@
 
 //#define RE_DEBUG
 
-#define ZODIAC_BYTE	0x01
 unsigned char zodiac_byte;
-/* I now think you have to buy icons at the store,
- * so we're not going to mess with this, there
- * should be a byte somewhere that we're passed that
- * has it.*/
+/* I now think you have to buy avatar icons at the store,
+ * so we're not going to mess with this */
 /* 57 is our zodiac sign 
 		01 is rat, 02 is bull, 03 is tiger, 04 is rabbit
 		05 is dragon, 06 is snake, 07 is horse
@@ -506,7 +503,6 @@ QTime TygemConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 				return QTime(t.hour(), t.minute(), 0);
 			break;
 		default:
-			qDebug("unsupported Tygem time type %d", s);
 			break;
 	}
 	return t;
@@ -535,7 +531,6 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 			else
 				return QTime(t.hour(), t.minute(), 0);
 		default:
-			qDebug("unsupported Tygem time type, %d", s);
 			break;
 	}
 	return t;
@@ -563,7 +558,6 @@ unsigned int TygemConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 				return p;
 			break;
 		default:
-			qDebug("unsupported Tygem time type:: %d", s);
 			break;
 	}
 	return p;
@@ -575,6 +569,15 @@ void TygemConnection::declineMatchOffer(const PlayerListing & opponent)
 	MatchRequest mr;
 	mr.number = playing_game_number;
 	mr.opponent = opponent.name;
+	BoardDispatch * boarddispatch = getIfBoardDispatch(playing_game_number);
+	if(boarddispatch)
+	{
+		/* Awkward but to prevent issues on board close */
+		playing_game_number = 0;
+		GameResult g;
+		g.result = GameResult::NOGAME;
+		boarddispatch->recvResult(&g);
+	}
 	sendMatchOffer(mr, decline);
 }
 
@@ -1257,6 +1260,7 @@ int TygemConnection::reconnectToServer(void)
 	else if(connectionState == LOGIN)
 	{
 		closeConnection(false);
+		reconnecting = false;
 	}
 	else
 		reconnecting = false;
@@ -2045,7 +2049,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
 	packet[2] = 0x06;
-	if(version == accept || version == decline)
+	if(version == accept || version == decline || version == alreadyingame)
 		packet[3] = 0x44;
 	else	//offer or create
 		packet[3] = 0x43;
@@ -2099,6 +2103,13 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 			packet[61] = 0x00;
 		packet[62] = 0xff;
 		packet[63] = 0xff;	//not implied username... see server chat comment
+	}
+	else if(version == alreadyingame)
+	{
+		packet[60] = 0x01;
+		packet[61] = 0x0b;
+		packet[62] = 0xff;
+		packet[63] = 0xff;	
 	}
 	else if(version == create)
 	{
@@ -2237,7 +2248,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 			/* FIXME  it sets the handicap but doesn't know
 			 * whos turn it is or something !?!?! */
 			qDebug("Handicap %d\n", mr.handicap);
-			packet[43] = 0x00;
+			packet[43] = (unsigned char)(mr.komi - 0.5);
 		/*}
 		else if(version == accept)
 		{
@@ -2363,22 +2374,6 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 			packet[i] = 0x00;
 		
 		writeNicknameAndCID((char *)&(packet[64]), *opponent);
-#ifdef OLD
-		writeZeroPaddedString((char *)&(packet[64]), opponent->name, 10);
-		packet[74] = 0x00;
-		
-		//packet[75] = 0x01;	//what is this? FIXME affects names?
-		//packet[75] = 0x02;
-		packet[75] = opponent->country_id;
-#endif //OLD
-		//packet[75] = THIRD_BYTE(mo_flags);
-		//75, as 0x02 makes our name first as white
-		//if 87 is also 0x02 later which makes opponent second black
-		//01 makes the later name whites name
-		//02 makes the later name blacks name
-		//(was with 01 later)
-		//send 0 1, with 0 here, their name
-		//send 0 1, with 1 here, their name
 	}
 	//02 01 with 00 earlier lets challenger be black
 	//01 02 with 01 earlier seems screwed up
@@ -2399,30 +2394,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 				//go through
 	
 	writeNicknameAndCID((char *)&(packet[76]), *ourPlayer);
-#ifdef OLD	
-	writeZeroPaddedString((char *)&(packet[76]), getUsername(), 10);
-	packet[86] = 0x00;
-	//per match invite, I don't think we can change this...
-	/* Okay, 87, I've apparently seen as 02 and 01 in offers
-	 * I think it must be related to player order or rank or
-	 * the like... I'm sending a 02 because I've seen higher ranked
-	 * offer sent as 2 but that assumes that invite sequence and
-	 * join was correct 
-	 * Its possible that it should be 1, if we are the lower
-	 * rank, but we'll see... only real test would be to
-	 * challenge higher ranked player... if it works it works...*/
-	/*if(version == offer)
-		packet[87] = 0x02;
-	else if(version == accept || version == decl)
-		packet[87] = 0x02;		//invite_byte?*/
-	packet[87] = ourPlayer->country_id;
-#endif //OLD
-	//just changed from 02
-	//presumably matches with match invites, etc.
-	//packet[87] = FOURTH_BYTE(mo_flags);
-	//02 here seems to set this name as the white player
-	//01 here with 02 above seems to scre up this name as 
-	//player...
+	
 	for(i = 88; i < 92; i++)
 		packet[i] = 0x00;
 	//005c 0645 696e 7472 7573 696f 6e00 0000
@@ -2450,7 +2422,8 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	//0000 0002 0000 0000
 	/* FIXME I think we've already set playing_game_number elsewhere
 	 * we should really be more careful about it */
-	playing_game_number = mr.number;		//so the match can bring it up
+	if(version != decline)
+		playing_game_number = mr.number;		//so the match can bring it up
 	//005c 0645 696e 7472 7573 696f 6e00 0000
 	//0000 0009 7065 7465 7269 7573 0000 0000
 	//0000 0008 0000 0258 5819 0000 0100 0002
@@ -3660,6 +3633,7 @@ QByteArray TygemConnection::getTygemGameRecordQByteArray(GameData * game)
 		qDebug("Can't get player listing for white: \"%s\"", game->white_name.toLatin1().constData());
 		return QByteArray();
 	}
+	/* FIXME we need the korean dan qualifier character */
 	sscanf(black->rank.toLatin1().constData(), "%d%c", &black_ordinal, &black_qualifier);
 	if(black_qualifier == 'k')
 	{
@@ -3756,6 +3730,7 @@ QByteArray TygemConnection::getTygemGameRecordQByteArray(GameData * game)
 			string.append(" \xba\xd2\xb0\xe8\xbd\xc2");
 			break;
 		case GameResult::SCORE:
+			{
 			float fmargin = game->fullresult->winner_score = game->fullresult->loser_score;
 			margin = (int)fmargin;
 			if(fmargin > (float)margin)
@@ -3769,6 +3744,9 @@ QByteArray TygemConnection::getTygemGameRecordQByteArray(GameData * game)
 			string += " " + QByteArray::number(margin);
 			//	QChar(0x3f3f) + " " + QChar(0x3f);
 			//pretty sure these ??? are a mistake
+			}
+			break;
+		default:
 			break;
 	}
 	string += "\\]\r\n";
@@ -3966,7 +3944,7 @@ QByteArray TygemConnection::getTygemGameTagQByteArray(GameData * game, unsigned 
 			",A:" + serverCodec->fromUnicode(white->name) + ",B:" + serverCodec->fromUnicode(black->name) + 
 			",J:" + QByteArray::number(white->country_id) +
 			",K:" + QByteArray::number(black->country_id) + "\\]\r\n";
-	qDebug("GAMTAG: %s", string.constData());
+	qDebug("GAMETAG: %s", string.constData());
 	return string;
 }
 
@@ -4000,6 +3978,8 @@ unsigned char TygemConnection::getVictoryCode(GameResult & aGameResult)
 			break;
 		case GameResult::DRAW:
 			return 2;
+			break;
+		default:
 			break;
 	}
 	qDebug("Unhandled GameResult code!!");
@@ -6171,6 +6151,8 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 	unsigned short game_number = (p[0] << 8) + p[1];
 	bool white_wins2;	//FIXME with white_wins below
 	bool white_loses_on_time = false, black_loses_on_time = false;
+	unsigned int moves;
+	unsigned int margin;
 	unsigned char victory_condition_code;
 	if(size != 0x24)
 	{
@@ -6211,12 +6193,16 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("0672 %02x vs %02x!!", p[0], gd->our_invitation);
 #endif //RE_DEBUG
+	/* FIXME double check this, but as is, it seems in our games, this is addressed
+	 * to us and this is not the winner name, winner rank, but just the usual msg
+	 * header, doublecheck against other games */
+
 	//00 00 their invitation, they win
 	//01 00 their invitation, we win
 	p += 2;
-	//winner name
+	//winner name		//probably not, dest
 	p += 14;
-	//winner rank
+	//winner rank		//probably not, dest
 	p += 2;
 	//0300 0000 0115 0000
 	victory_condition_code = p[0];
@@ -6224,10 +6210,16 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 	//04		W + R
 	//00		W + X
 	//07		B + T
-	p += 8;
+	//0000 0956 002e 0000 
+	p += 2;
+	margin = (p[0] << 8) + p[1];
+	p += 2;
+	moves = (p[0] << 8) + p[1];
+	p += 2;
+	
+	p += 2;
 	//times
-	p += 8;
-	//problem here FIXME?  3 bytes after 40 allocated?
+	
 	enum TimeFlags f = handleTimeChunk(boarddispatch, p, gd->white_first_flag);
 	/* FIXME unreliable !! not necessary */
 	if(f == BLACK_LOSES)
@@ -6303,12 +6295,14 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 		case 0x00:
 			aGameResult.result = GameResult::SCORE;
 			black_wins = true;
-			//margin? FIXME
+			aGameResult.winner_score = (float)margin/10.0;
+			aGameResult.loser_score = 0;
 			break;
 		case 0x01:
 			aGameResult.result = GameResult::SCORE;
 			white_wins = true;
-			//margin? FIXME
+			aGameResult.winner_score = (float)margin/10.0;
+			aGameResult.loser_score = 0;
 			break;
 		case 0x02:
 			aGameResult.result = GameResult::DRAW;
@@ -7349,7 +7343,7 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 
 void TygemConnection::handlePass(unsigned char * msg, unsigned int size, int /* FIXME */)
 {
-	if(size != 0x24)	//eweiqi 40 FIXME
+	if(size != 40)	//or 0x24??
 	{
 		qDebug("Pass msg of strange size: %d", size);
 	}
@@ -7875,10 +7869,15 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 	//ffffffff000100010000010073777765
 	//74000000000000023132333435363779
 	//00000002
-	if(size != 84)
+	if(size != 88)		//84
 	{
 		qDebug("Match offer msg of strange size: %d", size);
 	}
+	//696e74727573696f6e0000000000000a
+	//70657465726975730000000000000009
+	//0007
+	//04b0 1e 03 05 020001010200000000000000000000000000000000000000000000000000000000706574657269757300000002000061ea
+
 	unsigned short game_number;
 	unsigned char name[15];
 	name[14] = 0x00;
@@ -7907,7 +7906,8 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 	tempmr->periodtime = p[2];
 	tempmr->stones_periods = p[3];
 	tempmr->handicap = p[4];
-	//0001
+	qDebug("Got handicap offer: %d", tempmr->handicap);
+	tempmr->komi = (float)p[5] + .5;
 	switch(p[6])
 	{
 		case 0x00:
@@ -8149,6 +8149,10 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 	{
 		// if we already have 3 games open, there's no warning, just decline
 		sendMatchInvite(*player, decline);	//decline handles getBoardDispatches() 
+	}
+	else if(playing_game_number)
+	{
+		sendMatchInvite(*player, alreadyingame);		//doublecheck this isn't block
 	}
 	else
 	{
