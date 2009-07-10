@@ -27,6 +27,7 @@
 
 struct _preferences preferences;
 MainWindow * mainwindow = 0;
+
 QApplication * appPtr;
 QTranslator * translatorPtr;
 void installTranslator(enum Language);
@@ -42,10 +43,8 @@ int main(int argc, char *argv[])
 	
 	appPtr = &app;
 	translatorPtr = &translator;
-	QSettings settings;
-	installTranslator((enum Language)settings.value("LANGUAGE").toInt());		//temporary place for this
-	
-	mainwindow = new MainWindow(0,0);
+
+	startqGo();
 
 	if ( argc > 1 )
 	{
@@ -68,8 +67,6 @@ int main(int argc, char *argv[])
 
 void installTranslator(enum Language l)
 {
-	//QSettings settings;
-	
 	switch(l)
 	{
 		case German:
@@ -82,7 +79,32 @@ void installTranslator(enum Language l)
 			break;
 		case None:
 		default:
+			QString locale = QLocale::system().name();
+     			translatorPtr->load(QString("qgo2_") + locale);
 			return;
 	}
 	appPtr->installTranslator(translatorPtr);
+}
+
+void startqGo(void)
+{
+	QSettings settings;
+	bool restarting = false;
+
+	installTranslator((enum Language)settings.value("LANGUAGE").toInt());		//temporary place for this
+	if(mainwindow)
+	{
+		restarting = true;
+		mainwindow->deleteLater();
+	}
+	mainwindow = new MainWindow(0,0);
+	if(restarting)
+		mainwindow->show();
+
+	QVariant main_window_size_x = settings.value("MAIN_WINDOW_SIZE_X");
+	if(main_window_size_x != QVariant())
+	{
+		mainwindow->resize(main_window_size_x.toInt(), settings.value("MAIN_WINDOW_SIZE_Y").toInt());
+		mainwindow->move(settings.value("MAIN_WINDOW_POS_X").toInt(), settings.value("MAIN_WINDOW_POS_Y").toInt());
+	}
 }

@@ -98,8 +98,6 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
  */
 void MainWindow::slot_connect(bool b)
 {
-	if(logindialog)	//because b is unreliable
-		return;		//already doing something
 	if (b)
 	{
 		if(connection)
@@ -108,7 +106,9 @@ void MainWindow::slot_connect(bool b)
 		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
 		if(logindialog->exec())
 		{
+			ui.pb_connect->blockSignals(true);
 			ui.pb_connect->setChecked(true);
+			ui.pb_connect->blockSignals(false);
 			ui.cb_connect->setEnabled(false);
 			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
 			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
@@ -120,7 +120,9 @@ void MainWindow::slot_connect(bool b)
 		}
 		else
 		{
-			ui.pb_connect->setChecked(FALSE);	//not supposed to trigger...
+			ui.pb_connect->blockSignals(true);
+			ui.pb_connect->setChecked(FALSE);
+			ui.pb_connect->blockSignals(false);
 		}
 		//delete logindialog;	//not supposed to delete?
 		logindialog = 0;
@@ -147,7 +149,9 @@ void MainWindow::slot_connect(bool b)
 		}
 		if(closeConnection() < 0)
 		{
+			ui.pb_connect->blockSignals(true);
 			ui.pb_connect->setChecked(TRUE);
+			ui.pb_connect->blockSignals(false);
 			return;
 		}
 		ui.cb_connect->setEnabled(true);
@@ -282,8 +286,9 @@ int MainWindow::closeConnection(void)
 			return -1;
 		NetworkConnection * c = connection;
 		connection = 0;
-		/* setChecked(false) might trigger this again so... */ 
+		ui.pb_connect->blockSignals(true);
 		ui.pb_connect->setChecked(false);	//doublecheck all this?
+		ui.pb_connect->blockSignals(false);
 		delete c;
 	}
 	
@@ -315,7 +320,9 @@ void MainWindow::slot_connexionClosed()
 	myAccount->set_offline();
 #endif //FIXME
 	//pb_connect->setOn(FALSE);
+	ui.pb_connect->blockSignals(true);
 	ui.pb_connect->setChecked(FALSE);
+	ui.pb_connect->blockSignals(false);
 	seekMenu->clear();
 
 #ifdef FIXME

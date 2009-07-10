@@ -131,6 +131,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	//coneects the preference buttons
 	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
 	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
+	connect(ui.comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
@@ -166,8 +167,6 @@ void MainWindow::closeEvent(QCloseEvent * e)
 	}
 	saveSettings();
 }
-
-
 
 #ifdef FIXME
 	/* We're not sure yet what to do with the status bar,

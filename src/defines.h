@@ -311,4 +311,6 @@ extern class MainWindow * mainwindow;
 extern QString applicationPath;
 #endif
 
+void startqGo(void);
+
 #endif

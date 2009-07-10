@@ -234,6 +234,34 @@ void MainWindow::slot_cancelPressed()
 	loadSettings();
 }
 
+void MainWindow::slot_languageChanged(int)
+{
+	QMessageBox mb(tr("Change Language?"),
+			QString(tr("Changing the language requires restarting qGo.  Go ahead?\n")),
+			QMessageBox::Question,
+	  		QMessageBox::Yes | QMessageBox::Default,
+   			QMessageBox::No | QMessageBox::Escape,
+   			QMessageBox::NoButton);
+
+	if (mb.exec() == QMessageBox::Yes)
+	{
+		if(closeConnection() < 0)
+			goto lc_no_close;
+		if(checkForOpenBoards() < 0)
+			goto lc_no_close;
+		saveSettings();
+		startqGo();
+	}
+	else
+	{
+lc_no_close:
+		QSettings settings;
+		ui.comboBox_language->blockSignals(true);
+		ui.comboBox_language->setCurrentIndex(settings.value("LANGUAGE").toInt());
+		ui.comboBox_language->blockSignals(false);
+	}
+}
+
 /*
  * a page has been left. If it's a preference or server stting page, we check the settings
  */
@@ -281,6 +309,11 @@ void MainWindow::slot_currentChanged(int i)
 void MainWindow::saveSettings()
 {
 	QSettings settings;
+
+	settings.setValue("MAIN_WINDOW_SIZE_X", width());
+	settings.setValue("MAIN_WINDOW_SIZE_Y", height());
+	settings.setValue("MAIN_WINDOW_POS_X", pos().x());
+	settings.setValue("MAIN_WINDOW_POS_Y", pos().y());
 
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
 //	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
@@ -383,8 +416,6 @@ void MainWindow::saveSettings()
 	preferences.save();	//FIXME, save is only for match setting defaults right?
 }
 
-
-
 /*
  * loads the parameters from the QSettings into the 2 lats tabs
  */
@@ -482,8 +513,6 @@ void MainWindow::loadSettings()
 	ui.newFile_Komi->setText(var.toString());
 
 	preferences.fill();
-
-
 }
 
 /*

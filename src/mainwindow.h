@@ -80,6 +80,7 @@ public slots:
 	void talkRecv(Talk * d);
 	void slot_pbRelOneTab(QWidget *w);
 	void slot_cbconnectChanged(int);
+	void slot_languageChanged(int);
 	void slot_cblooking();
 	void slot_cbopen();
 	void slot_cbquiet();
