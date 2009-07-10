@@ -61,10 +61,7 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	/* FIXME, what about size 38 and larger boards ?? */
 	ui.boardSizeSpin->setRange(1,19);
 	ui.handicapSpin->setRange(1,9);
-	/* FIXME, just guessing on these ranges */
-	ui.stonesSpin->setRange(1, 100);
-	ui.BYPeriodsSpin->setRange(1, 60);
-	ui.ASIAPeriodsSpin->setRange(1, 60);
+	
 	we_are_challenger = false;
 	
 	/* Not sure what to do with these.  It would make sense to
@@ -72,9 +69,6 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	* allowed in two of the settings... but it would probably be better
 	* to set something on the timeSpin so that it still has the :00
 	* seconds reminder.  Unless we want to have "seconds" in the text. */
-	// FIXME
-	//ui.timeSpin->setRange(0,1000);
-	//ui.stonesTimeSpin->setRange(0,100);
 	
 	/* FIXME we need to connect the buttons before setting the default so that
 	 * the protocol specific check code can alter it.  However, I seem to remember
@@ -213,6 +207,11 @@ void GameDialog::ratedCB_changed(bool checked)
 			ui.komiSpin->setValue((int)(current_match_request->komi - 0.5));	//.5 is added by dialog ui
 			ui.komiSpin->setEnabled(false);
 			ui.handicapSpin->setEnabled(false);
+		}
+		else if(!(flags & GDF_ONLY_DISPUTE_TIME))
+		{
+			ui.komiSpin->setEnabled(true);
+			ui.handicapSpin->setEnabled(true);
 		}
 	}
 }
@@ -877,7 +876,6 @@ void GameDialog::slot_komiRequest(const QString &opponent, int h, int k, bool /*
 		ui.buttonCancel->setEnabled(true);
 }
 
-
 /* If there's an existing match request, we need to highlight the changes */
 void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 {
@@ -903,7 +901,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		
 		if(!(flags & GDF_FREE_RATED_CHOICE))
 			ui.ratedCB->setEnabled(false);
-		if(flags & GDF_RATED_NO_HANDICAP)
+		if((flags & GDF_RATED_NO_HANDICAP) && (!mr || mr->free_rated == RATED))
 		{
 			PlayerListing us = connection->getOurListing();
 			getProperKomiHandicap(us.rank, opponent.rank, &(mr->komi), &(mr->handicap));
@@ -914,7 +912,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 				ui.ratedCB->setEnabled(false);
 			}
 		}
-		if(flags & GDF_STONES25_FIXED)
+		if((flags & GDF_STONES25_FIXED) && !mr)
 		{
 			ui.stonesSpin->setValue(25);
 			ui.stonesSpin->setEnabled(false);
@@ -956,7 +954,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 			//ui.BYTimeSpin->setDisplayFormat("mmm");
 		}
 		//ui.ASIATimeSpin->setDisplayFormat("sss");
-		if(flags & GDF_KOMI_FIXED6)
+		if((flags & GDF_KOMI_FIXED6) && !mr)
 		{
 			if(ui.handicapSpin->value() == 0)
 				ui.komiSpin->setValue(6);
