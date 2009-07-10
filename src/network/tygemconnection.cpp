@@ -7906,7 +7906,6 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 	tempmr->periodtime = p[2];
 	tempmr->stones_periods = p[3];
 	tempmr->handicap = p[4];
-	qDebug("Got handicap offer: %d", tempmr->handicap);
 	tempmr->komi = (float)p[5] + .5;
 	switch(p[6])
 	{
