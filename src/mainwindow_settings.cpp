@@ -355,16 +355,19 @@ void MainWindow::saveSettings()
 	else
 		i=0;
 	settings.setValue("NUMBER_CURRENT_MOVE", i);
+#ifdef UNNECESSARY
 	if ( ui.warnOnCloseEditedCB->isChecked())
 		i=1;
 	else
 		i=0;
+
 	settings.setValue("WARNONCLOSEEDITED", i);
 	if ( ui.warnOnCloseEngineCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("WARNONCLOSEENGINE", i);
+#endif //UNNECESSARY
 	if ( ui.observeOutsideCB->isChecked())
 		i=1;
 	else
@@ -451,8 +454,10 @@ void MainWindow::loadSettings()
 	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
 	ui.komarkerCB->setChecked((settings.value("KOMARKER") == 1));
 	ui.numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
+#ifdef UNNECESSARY
 	ui.warnOnCloseEditedCB->setChecked((settings.value("WARNONCLOSEEDITED") == 1));
 	ui.warnOnCloseEngineCB->setChecked((settings.value("WARNONCLOSENGINE") == 1));
+#endif //UNNECESSARY
 	if(settings.value("TERR_STONE_MARK").toBool())
 		ui.terrStoneRB->setChecked(true);
 	else

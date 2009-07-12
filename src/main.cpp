@@ -70,9 +70,34 @@ void installTranslator(enum Language l)
 	switch(l)
 	{
 		case German:
+			translatorPtr->load("qgo2_de");	
 			return;
 		case French:
 			translatorPtr->load("qgo2_fr");			//path?!?
+			break;
+		case Italian:
+			translatorPtr->load("qgo2_it");	
+			break;
+		case Danish:
+			translatorPtr->load("qgo2_dk");	
+			break;
+		case Dutch:
+			translatorPtr->load("qgo2_nl");	
+			break;
+		case Czech:
+			translatorPtr->load("qgo2_cz");	
+			break;
+		case Chinese:
+			translatorPtr->load("qgo2_zh");	
+			break;
+		case Portugese:
+			translatorPtr->load("qgo2_pt");	
+			break;
+		case Polish:
+			translatorPtr->load("qgo2_it");	
+			break;
+		case Russian:
+			translatorPtr->load("qgo2_ru");	
 			break;
 		case Turkish:
 			translatorPtr->load("qgo2_tr");			//path?!?

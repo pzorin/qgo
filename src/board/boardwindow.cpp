@@ -154,11 +154,12 @@ bool BoardWindow::okayToQuit(void)
 		return true;
 
 	QSettings settings;
+#ifdef UNNECESSARY
 	if(getGameMode() == modeComputer && !settings.value("WARNONCLOSEENGINE").toBool())
 		return true;
 	if(getGameMode() == modeNormal && !settings.value("WARNONCLOSEEDITED").toBool())
 		return true;
-
+#endif //UNNECESSARY
 	switch (QMessageBox::warning(this, PACKAGE,
 		tr("You modified the game.\nDo you want to save your changes?"),
 		tr("Yes"), tr("No"), tr("Cancel"),

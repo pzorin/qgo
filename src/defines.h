@@ -98,7 +98,7 @@ enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, mod
 enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseNavTo, phaseScore, phaseEnded};
 enum MarkType { markNone, markSquare, markCircle, markTriangle, markCross, markText, markNumber, markTerrBlack, markTerrWhite, markKoMarker };
 enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
-enum Language { None, German, French, Turkish };
+enum Language { None, German, French, Italian, Danish, Dutch, Czech, Chinese, Portugese, Polish, Russian, Turkish };
 enum player_type {HUMAN=0,COMPUTER} ;
 enum assessType { noREQ, FREE, RATED, TEACHING };
 

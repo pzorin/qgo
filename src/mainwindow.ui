@@ -1737,6 +1737,46 @@ When in score mode, left click to mark a group as dead, right click to mark it a
              </item>
              <item>
               <property name="text">
+               <string>Italian</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Danish</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dutch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Czech</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Chinese</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Portugese</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Polish</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Russian</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Turkish</string>
               </property>
              </item>
@@ -1950,24 +1990,6 @@ When in score mode, left click to mark a group as dead, right click to mark it a
                 <widget class="QCheckBox" name="numberCurrentMoveCB">
                  <property name="text">
                   <string>Number Current Move</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <item>
-                <widget class="QCheckBox" name="warnOnCloseEditedCB">
-                 <property name="text">
-                  <string>Warn on Closing Edited Board</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="warnOnCloseEngineCB">
-                 <property name="text">
-                  <string>Warn on Closing Engine Board</string>
                  </property>
                 </widget>
                </item>
