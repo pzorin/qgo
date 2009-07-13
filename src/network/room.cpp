@@ -53,7 +53,7 @@ void Room::setupUI(void)
 	/* Qt 4.4.1 made sortIndicatorShown necesssary for sort behavior
 	 * !!!! */
 	gamesView->header()->setSortIndicatorShown ( true );
-	gamesView->setSelectionBehavior(QAbstractItemView::SelectRows);
+	//gamesView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	/*ui.gamesView->setColumnWidth ( 0, 40 );	//35
 	ui.gamesView->setColumnWidth ( 1, 100 );
 	ui.gamesView->setColumnWidth ( 2, 48 );	//35
