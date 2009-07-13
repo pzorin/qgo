@@ -1,8 +1,9 @@
 #include <QtGui>
 #include "matchinvitedialog.h"
 
-MatchInviteDialog::MatchInviteDialog(QString name, QString rank)
+MatchInviteDialog::MatchInviteDialog(QString name, QString rank, bool canRefuseFuture)
 {
+	int horiz_pos = 0;
 	seconds = 20;		//does it?
 	
 	/* FIXME, we need to center this text, make the font larger, or
@@ -15,20 +16,27 @@ MatchInviteDialog::MatchInviteDialog(QString name, QString rank)
 	acceptButton->setDefault(true);
 	
 	declineButton = new QPushButton(tr("&Decline"));
-	
+	if(canRefuseFuture)
+		refuseFutureCB = new QCheckBox(tr("Refuse Invites from %1").arg(name));
+	else
+		refuseFutureCB = 0;
 	buttonBox = new QDialogButtonBox(Qt::Horizontal);
 	buttonBox->addButton(acceptButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(declineButton, QDialogButtonBox::ActionRole);
 	
 	connect(acceptButton, SIGNAL(clicked()), this, SLOT(slot_accept()));
 	connect(declineButton, SIGNAL(clicked()), this, SLOT(slot_decline()));
+	if(refuseFutureCB)
+		connect(refuseFutureCB, SIGNAL(checked(bool)), this, SLOT(slot_refuseFutureCB(bool)));
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
-	mainLayout->addWidget(namelabel, 0, 0);
-	mainLayout->addWidget(dialoglabel, 1, 0);
-	mainLayout->addWidget(timelabel, 2, 0);
-	mainLayout->addWidget(buttonBox, 3, 0);
+	mainLayout->addWidget(namelabel, horiz_pos++, 0);
+	mainLayout->addWidget(dialoglabel, horiz_pos++, 0);
+	mainLayout->addWidget(timelabel, horiz_pos++, 0);
+	if(refuseFutureCB)
+		mainLayout->addWidget(refuseFutureCB, horiz_pos++, 0);
+	mainLayout->addWidget(buttonBox, horiz_pos++, 0);
 	setLayout(mainLayout);
 	
 	setWindowTitle(tr("Match Invite!"));
@@ -48,6 +56,7 @@ MatchInviteDialog::~MatchInviteDialog()
 {
 	delete acceptButton;
 	delete declineButton;
+	delete refuseFutureCB;
 	delete buttonBox;
 }
 
@@ -59,5 +68,18 @@ void MatchInviteDialog::slot_accept(void)
 
 void MatchInviteDialog::slot_decline(void)
 {
-	done(-1);
+	if(refuseFutureCB && refuseFutureCB->isChecked())
+		done(-2);
+	else
+		done(-1);
+}
+
+void MatchInviteDialog::slot_refuseFutureCB(bool b)
+{
+	if(b)
+	{
+		acceptButton->setEnabled(false);
+	}
+	else
+		acceptButton->setEnabled(true);
 }

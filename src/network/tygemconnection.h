@@ -140,7 +140,7 @@ class TygemConnection : public NetworkConnection
 		void sendFriendsBlocksRequest(void);
 		void promptResumeMatch(unsigned short game_number);
 		void sendOpenConversation(PlayerListing & player);
-		enum MIVersion {offer, accept, decline, modify, create, acknowledge, alreadyingame};
+		enum MIVersion {offer, accept, decline, decline_all, modify, create, acknowledge, alreadyingame};
 		void sendConversationReply(PlayerListing & player, enum MIVersion version);
 		void sendConversationMsg(PlayerListing & player, const char * text);
 		void sendCloseConversation(PlayerListing & player);
@@ -169,7 +169,7 @@ class TygemConnection : public NetworkConnection
 		void handleConnected(unsigned char * msg, unsigned int size);
 		void handlePlayerList(unsigned char * msg, unsigned int size);
 		void handleFriendsBlocksList(unsigned char * msg, unsigned int size);
-		void handleList(unsigned char * msg, unsigned int size);
+		void handleServerPlayerCounts(unsigned char * msg, unsigned int size);
 		QString rating_pointsToRank(unsigned int rp);
 		QString getCountryFromCode(unsigned char code);
 		int getPhase(unsigned char byte);

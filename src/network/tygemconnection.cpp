@@ -2049,7 +2049,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
 	packet[2] = 0x06;
-	if(version == accept || version == decline || version == alreadyingame)
+	if(version == accept || version == decline || version == decline_all || version == alreadyingame)
 		packet[3] = 0x44;
 	else	//offer or create
 		packet[3] = 0x43;
@@ -2107,7 +2107,14 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	else if(version == alreadyingame)
 	{
 		packet[60] = 0x01;
-		packet[61] = 0x0b;
+		packet[61] = 0x0b;		//doublecheck FIXME
+		packet[62] = 0xff;
+		packet[63] = 0xff;	
+	}
+	else if(version == decline_all)
+	{
+		packet[60] = 0x01;
+		packet[61] = 0x0c;		//doublecheck FIXME
 		packet[62] = 0xff;
 		packet[63] = 0xff;	
 	}
@@ -2132,7 +2139,8 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 #ifdef RE_DEBUG
 	printf("match %s packet before encoding: ", (version == offer ? "offer" :
 						     (version == accept ? "accept" :
-						     (version == decline ? "decline" : "create"))));
+						     (version == decline || version == decline_all 
+							|| version == already_in_game ? "decline" : "create"))));
 	for(int i = 0; i < (int)length; i++)
 		printf("%02x ", packet[i]);
 	printf("\n");
@@ -2375,23 +2383,6 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		
 		writeNicknameAndCID((char *)&(packet[64]), *opponent);
 	}
-	//02 01 with 00 earlier lets challenger be black
-	//01 02 with 01 earlier seems screwed up
-	//01 02 with 00 earlier makes us white and challenger black
-	//01 02 with 02 earlier screwed up, we're black but can't play
-	//02 01 with 02 earlier lets challenger play black but we can't play
-	//02 01 with 01 earlier we seem to be able to play as black but they have cursor
-				//and can't
-	//02 02 with 01 earlier we seem to be able to play as black but they have cursor
-				//and can't
-	//00 00 with 01 earlier, same
-	//00 00 with 02 earlier, same
-	//00 00 with 00 earlier, challenger plays black, okay, moves screwy
-	//02 00 with 00 earlier, same
-	//01 00 with 00 earlier, same
-	//02 02 with 00 earlier, same
-	//01 02 with 01 earlier, challenger plays white, we maybe can play but doesn't
-				//go through
 	
 	writeNicknameAndCID((char *)&(packet[76]), *ourPlayer);
 	
@@ -2498,13 +2489,6 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 	
 	packet[45] = 0x00;
 	//this is our color
-	/* We appear to be able to change this in the games we
-	 * send with impunity (because we're offering it, obviously)
-	  but LOOK, isn't it backwards I'm going to switch it,
-	 * damn the consequences?!?!?*/
-	/* I tried switching it but switched it back because it seems
-	 * to play not work, it could hinge on earlier messages... but
-	 * I doubt that */
 	switch(mr.color_request)
 	{
 		case MatchRequest::WHITE:
@@ -2518,7 +2502,6 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 			break;	
 		
 	}
-	qDebug("packet 46: %02x", packet[46]);
 	
 	packet[47] = 0x01;		//was 0
 	packet[48] = 0x01;
@@ -2541,6 +2524,7 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 	packet[61] = 0x01;		//pics?
 	packet[62] = 0x00;
 	packet[63] = zodiac_byte;
+#ifdef FIXME
 	//proper order here seems to be their name then our name
 	//careful might change if we play black
 	writeZeroPaddedString((char *)&(packet[64]), opponent->notnickname, 10);
@@ -2553,7 +2537,14 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 	packet[75] = opponent->country_id;
 	writeZeroPaddedString((char *)&(packet[76]), getUsername(), 10);
 	packet[86] = 0x00;
-	packet[87] = ourPlayer->country_id;		
+	packet[87] = ourPlayer->country_id;
+#endif //FIXME
+	/* This could be a problem, typically, the below is right, but I have "notnickname"
+	 * used above.  Often it doesn't matter, but I'm assuming this packet conforms
+	 * to the general format and maybe it doesn't. Doublecheck FIXME */
+	writeNicknameAndCID((char *)&(packet[64]), *opponent);
+	writeNicknameAndCID((char *)&(packet[76]), *ourPlayer);
+		
 	for(i = 88; i < 96; i++)
 		packet[i] = 0x00;
 	
@@ -2601,6 +2592,7 @@ void TygemConnection::timerEvent(QTimerEvent * event)
 	{
 		//response bit seems necessary here for tygem
 		//at least, double check for tom
+		//still screwy FIXME
 		sendLogin(true); //was true (nothing seems to work for tom)
 		killTimer(retryLoginTimerID);
 		retryLoginTimerID = 0;
@@ -2843,9 +2835,6 @@ void TygemConnection::sendMove(unsigned int game_id, MoveRecord * move)
 		//actually maybe loser does always send this
 		// !!person who accepted offer sends 0672!! FIXME
 		sendMatchResult(r->number);
-		/* This isn't happening, we can't seem to resign,
-		 * they don't get anything and all we changed
-		 * recently was the country_id FIXME */
 	}
 	else if(move->flags == MoveRecord::PASS)
 	{
@@ -3399,7 +3388,7 @@ void TygemConnection::sendAcceptCount(GameData * data)
  * come back from the server meaning that perhaps we should not act on any
  * messages until they come back?  Much like placing stones? */
 
-	
+
 /* Loser sends this after resign, but I think only if they offered
  * the game 
  * Not sure here, looks like winner sends 0672, but again, I've so
@@ -3987,7 +3976,7 @@ unsigned char TygemConnection::getVictoryCode(GameResult & aGameResult)
 }
 
 /* It seems like this appears like a match invite if opponent closes
- * the window */
+ * the window FIXME */
 void TygemConnection::sendRematchRequest(void)
 {
 }
@@ -4279,10 +4268,12 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			break;
 		case 0x0681:
 			//068101f7020103050340033b028001000000
+#ifdef RE_DEBUG
 			printf("0x0681: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			break;
 		case 0x0683:	//clock stop? //enter score?
 			/* This comes a lot during broadcasted games,  not
@@ -4296,14 +4287,11 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 		//0000 0000 0000 696e 7472 7573 696f 6e00
 		//0000 0000 0001
 			
-		case 0x0654:	//0653 requests FIXME
+		case TYGEM_SERVERPLAYERCOUNTS:	//0653 requests
 			//0651 might request this
 			//in which case 0651 might not be
 			//a disconnect
-			handleList(msg, size);
-			//0100000c79bd091300000b9b79bd092d0000023c79bd0914000009e879bd09120000002279bd094b000008c679bd092c0000065b79bd0
-			//97d000004c179bd092f0000036a79bd094c000009c379bd09150000000179bd091100000a8c79bd092e00000050
-			//00c40616
+			handleServerPlayerCounts(msg, size);
 			break;
 		case 0x068e:
 			handleResumeMatch(msg, size);
@@ -4316,11 +4304,12 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			// be like the creation confirm when its added to the list?
 			// anyway, seems legit, I mean just names and ranks here:
 			//000c000070657465726975730000000000000008696e74727573696f6e0000000000000900000000
-
+#ifdef RE_DEBUG
 			printf("***0x06c7: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			break;
 		//Two bytestrange: 0692: 
 		//0692696e74727573696f6e00000000000009696e74727573696f6e0049020000000000000000000000000000000000000
@@ -4363,15 +4352,17 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			break;
 		case 0x0698:
 			//maybe number of games/players?
+#ifdef RE_DEBUG
 			printf("0x0698: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			break;
 		case 0x069f:
 			handlePersonalChat(msg, size);
 			break;
-		case 0x06b1:	//a name during game?  //maybe bets?
+		case 0x06b1:	//a name during game?  //maybe bets? probably bets FIXME
 			//0001 0700 b0fc 
 			//c3b6 b5bf bdc3 b4eb 0000 0000 0000 0000 01
 			//0000 0000 0000 0003
@@ -4384,10 +4375,12 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 			break;
 		case 0x06af:	//login request response?
+#ifdef RE_DEBUG
 			printf("0x06af: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
 			//is this right here?!?!? commenting out for now
 			//sendInvitationSettings(false);
 			break;
@@ -4802,7 +4795,7 @@ void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int 
 /* These are the number of players on the other servers
  * FIXME */
 //0x0654: 
-void TygemConnection::handleList(unsigned char * msg, unsigned int size)
+void TygemConnection::handleServerPlayerCounts(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
 	int records;
@@ -8172,13 +8165,15 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 		 * yet another point, it seems somehow that the dialog
 		 * can close prematurely, somehow and then the seconds
 		 * will start low for another invite or something, its weird */
-		MatchInviteDialog * mid = new MatchInviteDialog(player->name, player->rank);
+		MatchInviteDialog * mid = new MatchInviteDialog(player->name, player->rank, true);
 		int mid_return = mid->exec();
 	
 		if(mid_return == 1)
 			sendMatchInvite(*player, accept);
 		else if(mid_return == -1)
 			sendMatchInvite(*player, decline);
+		else if(mid_return == -2)
+			sendMatchInvite(*player, decline_all);
 	}
 }
 
