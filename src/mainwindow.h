@@ -151,6 +151,7 @@ private:
 	void setColumnsForExtUserInfo();
 	QString rkToKey(QString txt, bool integer=FALSE);
 	QString rkMax, rkMin;
+	QString currentWorkingDir;
 
 	// timing aids
 	void 		timerEvent(QTimerEvent*);

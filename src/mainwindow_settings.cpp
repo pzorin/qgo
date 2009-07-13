@@ -316,6 +316,7 @@ void MainWindow::saveSettings()
 	settings.setValue("MAIN_WINDOW_POS_Y", pos().y());
 
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
+	settings.setValue("LAST_PATH", currentWorkingDir);
 //	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
 	settings.setValue("COMPUTER_PLAYS_WHITE", ui.computerPlaysWhite->isChecked());
 	settings.setValue("COMPUTER_HANDICAP", ui.newComputer_Handicap->text().toInt());
@@ -434,6 +435,10 @@ void MainWindow::loadSettings()
 	else
 		ui.computerPlaysBlack->setChecked(TRUE);
 	ui.newComputer_Handicap->setValue(settings.value("COMPUTER_HANDICAP").toInt());
+	if((var = settings.value("LAST_PATH")) == QVariant())
+		currentWorkingDir = QString();
+	else
+		currentWorkingDir = var.toString();
 	/* Why is this komi text and other default komi is value?  FIXME,
 	 * Spin versus LineEdit, but inconsistent */
 	if((var = settings.value("COMPUTER_KOMI")) == QVariant())

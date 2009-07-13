@@ -71,16 +71,24 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	ui.dirView_1->hideColumn(1);
 	ui.dirView_1->hideColumn(2);
-	ui.dirView_1->setColumnWidth(0,300); 
-	ui.dirView_1->setCurrentIndex(model->index( QDir::homePath () ));
-
+	ui.dirView_1->setColumnWidth(0,300);
+	if(currentWorkingDir == QString())
+		ui.dirView_1->setCurrentIndex(model->index(QDir::homePath()));
+	else
+		ui.dirView_1->setCurrentIndex(model->index(currentWorkingDir));
+	if (model->isDir(ui.dirView_1->currentIndex()))
+		ui.dirView_1->expand(ui.dirView_1->currentIndex());
 	ui.dirView_2->setModel(model);
 
 	ui.dirView_2->hideColumn(1);
 	ui.dirView_2->hideColumn(2);
 	ui.dirView_2->setColumnWidth(0,300); 
-	ui.dirView_2->setCurrentIndex(model->index( QDir::homePath () ));
-
+	if(currentWorkingDir == QString())
+		ui.dirView_2->setCurrentIndex(model->index(QDir::homePath ()));
+	else
+		ui.dirView_2->setCurrentIndex(model->index(currentWorkingDir));
+	if (model->isDir(ui.dirView_2->currentIndex()))
+		ui.dirView_2->expand(ui.dirView_2->currentIndex());
 	//init the small board display
 	ui.displayBoard->init(19);
 	ui.displayBoard2->init(19);
@@ -235,8 +243,6 @@ void MainWindow::initStatusBar()
 
 }
 
-
-
 /* 
  * Loads the file header data from the item selected in the directory display
  */
@@ -297,7 +303,6 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 
 }
 
-
 /*
  *
  */
@@ -341,8 +346,6 @@ void MainWindow::displayGame()
 		cursor = s.indexOf(";W[",cursor +1);
 
 	}
-
-
 }
 
 /* 
@@ -408,19 +411,20 @@ void MainWindow::loadSgfFile(QString fn)
 
 	ui.button_loadComputerGame->setEnabled(true);
 	
-	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
+	GameLoaded2 = MW_SGFparser->initGame(SGFloaded2, fileLoaded2);
 	GameLoaded2->gameMode = modeNormal;
 	new BoardWindow(new GameData(GameLoaded2), TRUE, TRUE);
 }
 
-void MainWindow::slot_expanded(const QModelIndex & /*i*/)
+void MainWindow::slot_expanded(const QModelIndex & i)
 {
 	//refresh file system info
 	//before I was calling it on "i" but it didn't like that
 	// in 4.4.1, catually still crashes on this.
 	//model->refresh(i);
 	//FIXME
-	//really would like a refresh here
+	//really would like a refresh here	
+	currentWorkingDir = model->filePath(i);
 }
 
 /*
