@@ -120,6 +120,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	encode_offset = 0;
 	
 	player_accepted_match = 0;
+	accepted_match_from_player = 0;
 	
 	connecting_to_game_number = 0;
 	playing_game_number = 0;
@@ -892,7 +893,6 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	}
 }
 
-/* Response bit is also server change/reconnect bit */
 void TygemConnection::sendLogin(bool response_bit, bool change_server)
 {	
 	unsigned int length = 0x28;
@@ -902,28 +902,21 @@ void TygemConnection::sendLogin(bool response_bit, bool change_server)
 	packet[0] = 0x00;
 	packet[1] = 0x28;
 	packet[2] = 0x06;
-	packet[3] = 0xa5;		//not really
-	if(change_server)
-	{
-		for(i = 4; i < length; i++)
-			packet[i] = 0x00;
-	}
-	else
-	{
-		for(i = 0; i < (unsigned)username.length(); i++)
-			packet[i + 4] = username.toLatin1().data()[i];
-		for(i = username.length() + 4; i < 16; i++)
-			packet[i] = 0x00;
-		for(i = 16; i < 20; i++)
-			packet[i] = 0x00;
-		packet[20] = response_bit;
-		for(i = 21; i < 24; i++)
-			packet[i] = 0x00;
-		for(i = 0; i < (unsigned)password.length(); i++)
-			packet[24 + i] = password.toLatin1().data()[i];
-		for(i = 24 + password.length(); i < length; i++)
-			packet[i] = 0x00;
-	}
+	packet[3] = 0xa5;
+	for(i = 0; i < (unsigned)username.length(); i++)
+		packet[i + 4] = username.toLatin1().data()[i];
+	for(i = username.length() + 4; i < 16; i++)
+		packet[i] = 0x00;
+	for(i = 16; i < 20; i++)
+		packet[i] = 0x00;
+	packet[19] = response_bit;
+	packet[20] = change_server;
+	for(i = 21; i < 24; i++)
+		packet[i] = 0x00;
+	for(i = 0; i < (unsigned)password.length(); i++)
+		packet[24 + i] = password.toLatin1().data()[i];
+	for(i = 24 + password.length(); i < length; i++)
+		packet[i] = 0x00;
 	//before encode
 #ifdef RE_DEBUG
 	printf("Sending login: ");
@@ -1298,6 +1291,13 @@ const PlayerListing & TygemConnection::getOurListing(void)
  * in tygem_endgame4.txt on spacecoyote I think FIXME */
  /* I think we can use existing messages in UI but that should be fixed up
   * anyway */
+/* Okay, there's a simple reason this is commented out.  There's no UI element
+ * to handle it.  We'd need to set something up to send messages and I know there's
+ * some facility for that, as in IGS, its like an on-server email service, but we
+ * haven't set that feature up in general and that would need to be done first.
+ * also note that that 0617 conflicts with the server announcement code as
+ * far as I can tell.  See handlePersonalChat with 069f I think.  Good chance
+ * this stuff is copy and pasted. FIXME */
 void TygemConnection::sendPersonalChat(const PlayerListing & , const char * )
 {
 	/*unsigned int length = 42 + text.size();
@@ -2093,6 +2093,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 		//packet[61] = 0x13;	//??
 		//packet[62] = 0xff;
 		//packet[63] = 0xff;
+		accepted_match_from_player = (PlayerListing *)&player;
 	}
 	else if(version == offer || version == decline)
 	{
@@ -2114,9 +2115,10 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	else if(version == decline_all)
 	{
 		packet[60] = 0x01;
-		packet[61] = 0x0c;		//doublecheck FIXME
+		//packet[61] = 0x0c;		//doublecheck FIXME
+		packet[61] = 0x0e;
 		packet[62] = 0xff;
-		packet[63] = 0xff;	
+		packet[63] = 0xff;
 	}
 	else if(version == create)
 	{
@@ -2140,7 +2142,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	printf("match %s packet before encoding: ", (version == offer ? "offer" :
 						     (version == accept ? "accept" :
 						     (version == decline || version == decline_all 
-							|| version == already_in_game ? "decline" : "create"))));
+							|| version == alreadyingame ? "decline" : "create"))));
 	for(int i = 0; i < (int)length; i++)
 		printf("%02x ", packet[i]);
 	printf("\n");
@@ -2345,6 +2347,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		packet[49] = 0xff;
 		packet[50] = 0xff;
 		packet[51] = 0xff;
+		accepted_match_from_player = 0;
 	}
 	else if(version == modify)
 	{
@@ -2361,6 +2364,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		packet[49] = 0xff;
 		packet[50] = 0xff;
 		packet[51] = 0xff;
+		//accepted_match_from_player = 0; //FIXME here?
 	}
 	
 	if(version == offer)
@@ -4903,7 +4907,7 @@ QString TygemConnection::getRoomTag(unsigned char byte)
 }
 
 #ifdef RE_DEBUG
-//#define GAMESLIST_DEBUG
+#define GAMESLIST_DEBUG
 #endif //RE_DEBUG
 //0612
 void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
@@ -4945,7 +4949,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 #ifdef GAMESLIST_DEBUG
 			printf("Id: %d:\n", id);
 			printf("is ended!!!\n");
-			for(i = 0; i < 4; i++)
+			for(unsigned int i = 0; i < 4; i++)
 				printf("%c", p[i]);
 			printf("\n");
 #endif //GAMESLIST_DEBUG
@@ -4957,12 +4961,12 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		}
 		//p[4] == 0x02 is some other kind of record
 #ifdef GAMESLIST_DEBUG
-		for(i = 0; i < 0x4c; i++)
+		for(unsigned int i = 0; i < 0x4c; i++)
 		{
 			printf("%c", p[i]);	
 		}
 		printf("\n");
-		for(i = 0; i < 0x4c; i++)
+		for(unsigned int i = 0; i < 0x4c; i++)
 		{
 			printf("%02x", p[i]);	
 		}
@@ -4985,7 +4989,8 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		aGameListing->white_first_flag = p[0] & 0x01;
 		/* 04 means done, 06 is waiting room or looking, 01 and 00
 		 * probably mean playing */
-		aGameListing->FR = QString::number(p[0], 16);
+		aGameListing->FR = QString::number(p[0], 16) + " ";
+		/* 40 looks like a lit 2 computer screens, 50 like 2 dark computers */
 		p++;
 		aGameListing->observers = (p[0] << 8) + p[1];
 		//We have an issue here I think FIXME with observer numbers
@@ -5552,7 +5557,7 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 	unsigned char * text = new unsigned char[size - 7];
 	unsigned char name[15];
 	name[14] = 0x00;
-	int subject_size, msg_size;
+	unsigned int subject_size, msg_size;
 	QString our_name, encoded_name, encoded_name2, rank, subject;
 #ifdef RE_DEBUG
 	printf("** msg size: %d: ", size);
@@ -5560,6 +5565,12 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
+	//** msg size: 72: 
+	//696e 7472 7573 696f 6e00 0000 0000 0000
+	//7065 7465 7269 7573 0000 0000 0000 0009
+	//7065 7465 7269 7573 0000 0002 0008 7375
+	//626a 6563 7400 0010 6865 6c6c 6f20 7468
+	//6572 6520 796f 7500
 	strncpy((char *)name, (char *)p, 14);
 	our_name = QString((char *)name);
 	p += 15;
@@ -5581,21 +5592,29 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 	p++;		
 	strncpy((char *)name, (char *)p, 11);
 	encoded_name2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 10;
-	p += 4;
+	p += 12;
+	p++;
 	subject_size = p[0];
 	p++;
 	printf("Subjectsize: %d\n", subject_size);
-	fflush(stdout);
-	fflush(stderr);
+	if(subject_size > (size - 47))
+	{
+		qDebug("Bad message subject size: %d", subject_size);
+		delete[] text;
+		return;
+	}
 	strncpy((char *)text, (char *)p, subject_size);
 	subject = QString((char *)text);
 	p += subject_size;
 	msg_size = (p[0] << 8) + p[1];		//tygem caps at 1024
 	p += 2;
 	printf("msg_size: %d\n", msg_size);
-	fflush(stdout);
-	fflush(stderr);
+	if(msg_size > (size - (47 + subject_size + 2)))
+	{
+		qDebug("Bad message msg size: %d", msg_size);
+		delete[] text;
+		return;
+	}
 	strncpy((char *)text, (char *)p, msg_size + 1);
 	
 	Room * room = getDefaultRoom();
@@ -7397,7 +7416,7 @@ void TygemConnection::handlePass(unsigned char * msg, unsigned int size, int /* 
 	//not right
 	//still not right, for instance if we offer the game and play black
 	//it gets reversed
-	boarddispatch->recvKibitz(0, QString(white ? "White" : "Black") + " passes " + QString::number(move->color));
+	boarddispatch->recvKibitz(0, QString(white ? "White" : "Black") + " passes.");
 	boarddispatch->recvMove(move);
 	//black
 	//00870101 6261 696e 6974 6500 0000 0000 0000 00116261696e69746500000000020000000000000000
@@ -7952,6 +7971,11 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 			delete tempmr;
 			return;
 		}
+		if(opponent != accepted_match_from_player)
+		{
+			qDebug("Got match offer from player we didn't accept match from");
+			//FIXME
+		}
 	}
 	else
 	{
@@ -7962,6 +7986,19 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 			qDebug("Match modify or accept from unknown opponent");
 			delete tempmr;
 			return;
+		}
+		if(opponent != accepted_match_from_player)
+		{
+			/* This doesn't apply because if we invited them, it wouldn't be set.
+			 * however, I think we need to think about a kind of state based thing on this.
+			 * In the process of figuring out the protocol, I've just let the messages and
+			 * the server and the other client keep state.  But so that means we could
+			 * get, for instance, an accept match offer out of the blue and join a game
+			 * we don't want to.  I've been concentrating on just getting things working
+			 * but if enough people use the client, there's going to be somebody who uses
+			 * it to cheat.  FIXME FIXME FIXME */
+			//qDebug("Got match offer 2 from player we didn't accept match from");
+			//FIXME
 		}
 	}
 	//0004 0e10 1e03 0100
@@ -7999,6 +8036,7 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 			//as well
 			qDebug("Match requests don't match, no pun intended!");
 		}
+		accepted_match_from_player = 0;
 		sendStartGame(*tempmr);
 	}
 	else if(version == decline)
@@ -8009,7 +8047,8 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 			qDebug("No game dialog open to be declined");
 		}
 		else
-			gameDialogDispatch->recvRefuseMatch(GD_REFUSE_DECLINE); 	
+			gameDialogDispatch->recvRefuseMatch(GD_REFUSE_DECLINE);
+		accepted_match_from_player = 0;
 	}
 	delete tempmr;
 	return;
@@ -8123,7 +8162,7 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 	p++;
 	p += 2;		//possible first, second player settings
 	room_number = p[0] + (p[1] << 8);
-	if(room_number != 0xffff)
+	if(room_number != 0xffff && accepted_match_from_player == player)
 	{
 		// this is created room
 		playing_game_number = room_number;
@@ -8137,6 +8176,11 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 		//they send it, we're first ones in
 		/* Do we need to wait for observe reply?? or no? */
 		sendJoin(room_number);
+	}
+	else if(std::find(decline_all_invitations.begin(), decline_all_invitations.end(), player) != decline_all_invitations.end())
+	{
+		//client is responsible for this:
+		sendMatchInvite(*player, decline_all);
 	}
 	else if(getBoardDispatches() == 3)
 	{
@@ -8173,7 +8217,10 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 		else if(mid_return == -1)
 			sendMatchInvite(*player, decline);
 		else if(mid_return == -2)
+		{
+			decline_all_invitations.push_back(player);
 			sendMatchInvite(*player, decline_all);
+		}
 	}
 }
 
@@ -8266,6 +8313,20 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 				       QMessageBox::NoButton, QMessageBox::NoButton);
 			mb.exec();
 		}
+			break;
+		case 0x0e:
+		{
+			/* I think you get this if you check the box */
+			QString text = player->name + " has declined all invitation";
+			QMessageBox mb(tr("Invite declined"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+				       QMessageBox::NoButton, QMessageBox::NoButton);
+			mb.exec();
+		}
+			break;
+		default:
+#ifdef RE_DEBUG
+			qDebug("Received strange byte %02x in match invite response", p[0]);
+#endif //RE_DEBUG
 			break;
 	}
 }

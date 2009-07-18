@@ -221,7 +221,8 @@ class TygemConnection : public NetworkConnection
 		bool opponent_is_challenger;
 		bool previous_opponent_move_pass;
 		bool havenot_requested_friendsblocks;
-		PlayerListing * player_accepted_match;
+		PlayerListing * player_accepted_match, * accepted_match_from_player;
+		std::vector<PlayerListing *> decline_all_invitations;
 		QTextCodec * textCodec;
 		unsigned long encode_offset;
 		
