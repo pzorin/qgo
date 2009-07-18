@@ -27,7 +27,7 @@ MatchInviteDialog::MatchInviteDialog(QString name, QString rank, bool canRefuseF
 	connect(acceptButton, SIGNAL(clicked()), this, SLOT(slot_accept()));
 	connect(declineButton, SIGNAL(clicked()), this, SLOT(slot_decline()));
 	if(refuseFutureCB)
-		connect(refuseFutureCB, SIGNAL(checked(bool)), this, SLOT(slot_refuseFutureCB(bool)));
+		connect(refuseFutureCB, SIGNAL(clicked(bool)), this, SLOT(slot_refuseFutureCB(bool)));
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
