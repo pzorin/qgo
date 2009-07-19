@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <time.h>
+#include <algorithm>
 #include "tygemconnection.h"
 #include "tygemprotocol.h"
 #include "consoledispatch.h"
