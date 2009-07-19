@@ -461,6 +461,7 @@ QTime TygemConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 	//int seconds = (t.minute() * 60) + t.second();
 	switch(s)
 	{
+		default:
 		case byoyomi:
 			//it looks like there's an unlimited time
 			//option, its a dropdown menu...
@@ -503,8 +504,6 @@ QTime TygemConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 			else
 				return QTime(t.hour(), t.minute(), 0);
 			break;
-		default:
-			break;
 	}
 	return t;
 }
@@ -514,6 +513,7 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 	//int seconds = (t.minute() * 60) + t.second();
 	switch(s)
 	{
+		default:
 		case byoyomi:
 			if(t.minute() || t.second() > 40)
 				return QTime(0, 1, 0);
@@ -531,7 +531,6 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 				return QTime(0, 1, 0);
 			else
 				return QTime(t.hour(), t.minute(), 0);
-		default:
 			break;
 	}
 	return t;
@@ -541,6 +540,7 @@ unsigned int TygemConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 {
 	switch(s)
 	{
+		default:
 		case byoyomi:
 			if(p == 0)
 				return 1;
@@ -557,8 +557,6 @@ unsigned int TygemConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 				return 50;
 			else
 				return p;
-			break;
-		default:
 			break;
 	}
 	return p;
