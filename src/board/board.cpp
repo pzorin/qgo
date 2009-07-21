@@ -84,9 +84,9 @@ void Board::init(int size)
 #ifdef Q_WS_WIN
 	resizeDelayFlag = false;
 #endif
-	curX = curY = -1;
 	showCursor = setting->readBoolEntry("CURSOR");
 */	
+	curX = curY = -1;
 	downX = downY = -1;
 //	isLocalGame = true;
 	
@@ -142,13 +142,15 @@ Board::~Board()
  	qDeleteAll(*stones);
 	qDeleteAll(*ghosts);
 	qDeleteAll(*marks);		//FIXME can still crash here as well as below
-	
+	delete stones;
+	delete ghosts;
+	delete marks;
+
 	delete gatter;
 	/* FIXME, can be a segmentation fault, when deleting canvas */
 	delete canvas;
 	qDebug("Finishing deleting board");
 }
-
 
 /*
  * cleans up the board
@@ -177,7 +179,6 @@ void Board::clearData()
 	ghosts->clear();
 
 	repaint();
-
 }
 
 /*
@@ -228,9 +229,7 @@ void Board::calculateSize()
 	//deletes the samples
 	delete coordV;
 	delete coordH;
-
 }
-
 
 /*
 * actually draws the gatter lines
@@ -423,10 +422,6 @@ void Board::drawCoordinates()
 		else
 			coord->hide();
 	}
-
-
-
-
 }
 
 /*
@@ -458,8 +453,6 @@ void Board::resizeEvent(QResizeEvent*)
 #endif
 }
 
-
-
 /*
 * called by the resize event
 */
@@ -473,10 +466,7 @@ void Board::changeSize()
 //	resizeBoard(s.width(), s.height());
 
 	resizeBoard(width()-5, height()-5);
-
-
 }
-
 
 /*
 * does the resizing work
@@ -544,12 +534,9 @@ void Board::resizeBoard(int w, int h)
 			}
 			if(item->type() == RTTI_MARK_TERR && preferences.terr_stone_mark)
 			{
-				QGraphicsItem * olditem = item;
-				item = new MarkSmallStoneTerr(static_cast<MarkSmallStoneTerr *>(item)->getX(),
-							       static_cast<MarkSmallStoneTerr *>(item)->getY(), 
-								square_size / SMALL_STONE_TERR_DIVISOR, (static_cast<MarkSmallStoneTerr *>(item)->getType() == markTerrBlack ? stoneBlack : stoneWhite) , imageHandler->getSmallStonePixmaps(), canvas);
-				delete olditem;
 				m = (MarkSmallStoneTerr *)item;
+				static_cast<MarkSmallStoneTerr *>(item)->setSize(square_size / SMALL_STONE_TERR_DIVISOR, square_size / SMALL_STONE_TERR_DIVISOR);
+				static_cast<MarkSmallStoneTerr *>(item)->setPixmap(imageHandler->getSmallStonePixmaps());
 			}
 			else
 				m->setSize(square_size, square_size);
@@ -634,7 +621,6 @@ void Board::setCursorType(CursorType cur)
 	}
 	
 	cursor = cur;
-	
 }
 
  /*
@@ -809,8 +795,9 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 //	{
 //		if (m->getType() == t && m->getType() != markText)  // Text labels are overwritten
 //			return;
-		
+		//printf("Removing existing mark at %d %d, %d\n", x, y, marks->count());
 		removeMark(x, y);
+		//printf("new mark count %d\n", marks->count());
 //	}
 
 	if (lastMoveMark != NULL &&
@@ -938,7 +925,6 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 	m->show();
 	
 	marks->append(m);
-	
 //	if (update)
 //		boardHandler->editMark(x, y, t, txt);
 }
@@ -980,31 +966,6 @@ void Board::removeDeadMarks()
 }
 
 /*
-void Board::updateDeadMarks(int &black, int &white)
-{
-//	QIntDictIterator<Stone> it(*stones);
-	Stone *s;
-	
-//	while (it.current())
-
-	QHashIterator<int, Stone*> it(*stones);
-	while (it.hasNext()) 	
-	{
-		s = it.next().value();
-//		CHECK_PTR(s);
-		if (s->isDead())
-		{
-			if (s->getColor() == stoneBlack)
-				white ++;
-			else
-				black ++;
-		}
-//		++it;
-	}
-}
-*/
-
-/*
  * Sets a text in 'text' mark at positon 'x,y'.
  */
 void Board::setMarkText(int x, int y, const QString &txt)
@@ -1020,7 +981,6 @@ void Board::setMarkText(int x, int y, const QString &txt)
 	// Adjust the position on the board, if the text size has changed.
 	m->setSize((double)square_size, (double)square_size);
 	m->setPos(offsetX + square_size * (x-1) - m->getSizeX()/2 , offsetY + square_size * (y-1) - m->getSizeY()/2);
-	
 }
 
 /*
@@ -1029,7 +989,7 @@ void Board::setMarkText(int x, int y, const QString &txt)
 Mark* Board::hasMark(int x, int y)
 {
 	Mark *m = NULL;
-	
+
 //	for (m=marks->first(); m != NULL; m=marks->next())
 	for (int i=0; i<marks->count(); i++)
 	{
@@ -1037,10 +997,9 @@ Mark* Board::hasMark(int x, int y)
 		if (m->posX() == x && m->posY() == y)
 			return m;
 	}
-		
+
 	return NULL;
 }
-
 
 /*
  * Removes the mark at position 'x,y'
@@ -1053,7 +1012,7 @@ void Board::removeMark(int x, int y, bool /*update*/)
 		lastMoveMark->posX() == x &&
 		lastMoveMark->posY() == y)
 		removeLastMoveMark();
-	
+
 //	for (m=marks->first(); m != NULL; m=marks->next())
 	for (int i=0; i<marks->count(); i++)
 	{
@@ -1062,6 +1021,8 @@ void Board::removeMark(int x, int y, bool /*update*/)
 		{
 			/* FIXME bug here if we duplicate a board in score
 			 * mode and try to play on it */
+			/* I'm thinking that the marks aren't actually copied or that they're
+			 * deleted somewhere or something, or freed, etc. */
 			if (m->getCounter() != -1)
 			{
 				if (m->getType() == markText)
@@ -1069,7 +1030,6 @@ void Board::removeMark(int x, int y, bool /*update*/)
 				else if (m->getType() == markNumber)
 					numberPool[m->getCounter()] = false;
 			}
-			
 			delete marks->takeAt(i);
 			gatter->show(x,y);
 //			if (update)
@@ -1091,7 +1051,6 @@ void Board::removeLastMoveMark()
 		lastMoveMark = NULL;
 	}
 }
-
 
 /*
  * Updates the mark on the last stone played
@@ -1225,7 +1184,6 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 	//canvas->update();
 }
 
-
 /*
  * mouse wheel has been turned
  */
@@ -1233,7 +1191,6 @@ void Board::wheelEvent(QWheelEvent *e)
 {
 	emit signalWheelEvent( e);
 }
-
 
 /*
  * starts the counter for anticlivko moves
