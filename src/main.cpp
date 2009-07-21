@@ -39,8 +39,9 @@ int main(int argc, char *argv[])
 	QTranslator translator;
 	QString *sgf_file = NULL;
 
-	QCoreApplication::setOrganizationName("qgo2");
-	
+	QCoreApplication::setOrganizationName("qGo");
+	QCoreApplication::setApplicationName("qGo");
+
 	appPtr = &app;
 	translatorPtr = &translator;
 
