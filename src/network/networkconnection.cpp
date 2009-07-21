@@ -8,14 +8,14 @@
 #include "playergamelistings.h"
 #include "mainwindow.h"			//don't like so much
 
-#define FRIENDFAN_NOTIFY_DEFAULT	1
+#define FRIENDWATCH_NOTIFY_DEFAULT	1
 
 NetworkConnection::NetworkConnection() :
 default_room(0), console_dispatch(0), qsocket(0)
 {
 	firstonReadyCall = 1;
 	mainwindowroom = 0;
-	friendfan_notify_default = FRIENDFAN_NOTIFY_DEFAULT;
+	friendwatch_notify_default = FRIENDWATCH_NOTIFY_DEFAULT;
 	boardDispatchRegistry = 0;
 	gameDialogRegistry = 0;
 	talkRegistry = 0;
@@ -268,7 +268,7 @@ QTime NetworkConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 	return t;
 }
 
-PlayerListing * NetworkConnection::getPlayerListingFromFriendFanListing(FriendFanListing & f)
+PlayerListing * NetworkConnection::getPlayerListingFromFriendWatchListing(FriendWatchListing & f)
 {
 	if(!default_room) 
 		return NULL;
@@ -301,21 +301,21 @@ PlayerListing * NetworkConnection::getPlayerListingFromFriendFanListing(FriendFa
  * separate interface */
 void NetworkConnection::addFriend(PlayerListing & player)
 {
-	if(player.friendFanType == PlayerListing::blocked)
+	if(player.friendWatchType == PlayerListing::blocked)
 		removeBlock(player);
-	else if(player.friendFanType == PlayerListing::watched)
-		removeFan(player);
-	player.friendFanType = PlayerListing::friended;
+	else if(player.friendWatchType == PlayerListing::watched)
+		removeWatch(player);
+	player.friendWatchType = PlayerListing::friended;
 	//FIXME presumably they're not already on the list because
 	//the popup checked that in constructing the popup menu but...
-	friendedList.push_back(new FriendFanListing(player.name, friendfan_notify_default));
+	friendedList.push_back(new FriendWatchListing(player.name, friendwatch_notify_default));
 	getDefaultRoom()->updatePlayerListing(player);
 }
 
 void NetworkConnection::removeFriend(PlayerListing & player)
 {
-	player.friendFanType = PlayerListing::none;
-	std::vector<FriendFanListing * >::iterator i;
+	player.friendWatchType = PlayerListing::none;
+	std::vector<FriendWatchListing * >::iterator i;
 	for(i = friendedList.begin(); i != friendedList.end(); i++)
 	{
 		if((*i)->name == player.name)
@@ -328,21 +328,21 @@ void NetworkConnection::removeFriend(PlayerListing & player)
 	getDefaultRoom()->updatePlayerListing(player);
 }
 
-void NetworkConnection::addFan(PlayerListing & player)
+void NetworkConnection::addWatch(PlayerListing & player)
 {
-	if(player.friendFanType == PlayerListing::friended)
+	if(player.friendWatchType == PlayerListing::friended)
 		removeFriend(player);
-	else if(player.friendFanType == PlayerListing::blocked)
+	else if(player.friendWatchType == PlayerListing::blocked)
 		removeBlock(player);
-	player.friendFanType = PlayerListing::watched;
-	watchedList.push_back(new FriendFanListing(player.name, friendfan_notify_default));
+	player.friendWatchType = PlayerListing::watched;
+	watchedList.push_back(new FriendWatchListing(player.name, friendwatch_notify_default));
 	getDefaultRoom()->updatePlayerListing(player);
 }
 
-void NetworkConnection::removeFan(PlayerListing & player)
+void NetworkConnection::removeWatch(PlayerListing & player)
 {
-	player.friendFanType = PlayerListing::none;
-	std::vector<FriendFanListing * >::iterator i;
+	player.friendWatchType = PlayerListing::none;
+	std::vector<FriendWatchListing * >::iterator i;
 	for(i = watchedList.begin(); i != watchedList.end(); i++)
 	{
 		if((*i)->name == player.name)
@@ -357,18 +357,18 @@ void NetworkConnection::removeFan(PlayerListing & player)
 
 void NetworkConnection::addBlock(PlayerListing & player)
 {
-	if(player.friendFanType == PlayerListing::friended)
+	if(player.friendWatchType == PlayerListing::friended)
 		removeFriend(player);
-	else if(player.friendFanType == PlayerListing::watched)
-		removeFan(player);
-	player.friendFanType = PlayerListing::blocked;
-	blockedList.push_back(new FriendFanListing(player.name));
+	else if(player.friendWatchType == PlayerListing::watched)
+		removeWatch(player);
+	player.friendWatchType = PlayerListing::blocked;
+	blockedList.push_back(new FriendWatchListing(player.name));
 }
 
 void NetworkConnection::removeBlock(PlayerListing & player)
 {
-	player.friendFanType = PlayerListing::none;
-	std::vector<FriendFanListing * >::iterator i;
+	player.friendWatchType = PlayerListing::none;
+	std::vector<FriendWatchListing * >::iterator i;
 	for(i = blockedList.begin(); i != blockedList.end(); i++)
 	{
 		if((*i)->name == player.name)
@@ -392,9 +392,9 @@ void NetworkConnection::removeBlock(PlayerListing & player)
  * that.  So we probably need to have an online flag
  * on the friends listing to see if we've already flagged
  * them FIXME */
-void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
+void NetworkConnection::getAndSetFriendWatchType(PlayerListing & player)
 {
-	std::vector<FriendFanListing * >::iterator i;
+	std::vector<FriendWatchListing * >::iterator i;
 	
 	for(i = friendedList.begin(); i != friendedList.end(); i++)
 	{
@@ -403,7 +403,7 @@ void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
 			if(!(*i)->online)
 			{
 				(*i)->online = true;
-				player.friendFanType = PlayerListing::friended;
+				player.friendWatchType = PlayerListing::friended;
 				/* We may want to put this somewhere else or have it be dialog
 				 * with options, like talk or match.  We might also want
 			 	 * to block all notifies while one is in a game FIXME 
@@ -428,7 +428,7 @@ void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
 	{
 		if((*i)->name == player.name)
 		{
-			player.friendFanType = PlayerListing::watched;
+			player.friendWatchType = PlayerListing::watched;
 			return;
 		}
 	}
@@ -436,17 +436,17 @@ void NetworkConnection::getAndSetFriendFanType(PlayerListing & player)
 	{
 		if((*i)->name == player.name)
 		{
-			player.friendFanType = PlayerListing::blocked;
+			player.friendWatchType = PlayerListing::blocked;
 			return;
 		}
 	}
-	player.friendFanType = PlayerListing::none;
+	player.friendWatchType = PlayerListing::none;
 	return;
 }
 
 void NetworkConnection::checkGameWatched(GameListing & game)
 {
-	std::vector<FriendFanListing * >::iterator i;
+	std::vector<FriendWatchListing * >::iterator i;
 	for(i = watchedList.begin(); i != watchedList.end(); i++)
 	{
 		if((*i)->name == game.white_name() || (*i)->name == game.black_name())
@@ -630,12 +630,12 @@ void NetworkConnection::setupRoomAndConsole(void)
 	boardDispatchRegistry = new BoardDispatchRegistry(this);
 	gameDialogRegistry = new GameDialogRegistry(this);
 	talkRegistry = new TalkRegistry(this);
-	loadfriendsfans();
+	loadfriendswatches();
 }
 
 void NetworkConnection::tearDownRoomAndConsole(void)
 {
-	savefriendsfans();
+	savefriendswatches();
 	delete boardDispatchRegistry;
 	delete gameDialogRegistry;
 	delete talkRegistry;
@@ -655,12 +655,12 @@ void NetworkConnection::tearDownRoomAndConsole(void)
 	}
 }
 
-/* Edit friends/fans list window is created when needed.
+/* Edit friends/watches list window is created when needed.
  * but we might consider having it always existing and then
  * show hide it?  That's ugly though.  But like these functions
  * should probably be part of a friendsfan class instead of
  * the network connection awkward but perhaps minor FIXME */
-void NetworkConnection::loadfriendsfans(void)
+void NetworkConnection::loadfriendswatches(void)
 {
 	QSettings settings;
 	int size, i;
@@ -670,19 +670,19 @@ void NetworkConnection::loadfriendsfans(void)
 		for (i = 0; i < size; ++i) 
 		{
 			settings.setArrayIndex(i);
-			friendedList.push_back(new FriendFanListing(
+			friendedList.push_back(new FriendWatchListing(
 							settings.value("name").toString(),
 							settings.value("notify").toBool()));
 		}
  		settings.endArray();
 	}
-	if(!supportsFanList())
+	if(!supportsWatchList())
 	{
 		size = settings.beginReadArray("WATCHEDLIST");
 		for (i = 0; i < size; ++i) 
 		{
 			settings.setArrayIndex(i);
-			watchedList.push_back(new FriendFanListing(
+			watchedList.push_back(new FriendWatchListing(
 							settings.value("name").toString(),
 							settings.value("notify").toBool()));
 		}
@@ -694,21 +694,21 @@ void NetworkConnection::loadfriendsfans(void)
 		for (i = 0; i < size; ++i) 
 		{
 			settings.setArrayIndex(i);
-			blockedList.push_back(new FriendFanListing(
+			blockedList.push_back(new FriendWatchListing(
 							settings.value("name").toString()));
 		}
  		settings.endArray();
 	}
 }
 
-void NetworkConnection::savefriendsfans(void)
+void NetworkConnection::savefriendswatches(void)
 {
 	QSettings settings;
 	int index;
 	if(!supportsFriendList())
 	{
 		settings.beginWriteArray("FRIENDEDLIST");
-		std::vector<FriendFanListing * >::iterator i;
+		std::vector<FriendWatchListing * >::iterator i;
 		index = 0;
 		for (i = friendedList.begin(); i != friendedList.end(); i++) 
 		{
@@ -720,10 +720,10 @@ void NetworkConnection::savefriendsfans(void)
 		}
 		settings.endArray();
 	}
-	if(!supportsFanList())
+	if(!supportsWatchList())
 	{
 		settings.beginWriteArray("WATCHEDLIST");
-		std::vector<FriendFanListing * >::iterator i;
+		std::vector<FriendWatchListing * >::iterator i;
 		index = 0;
 		for (i = watchedList.begin(); i != watchedList.end(); i++) 
 		{
@@ -738,7 +738,7 @@ void NetworkConnection::savefriendsfans(void)
 	if(!supportsBlockList())
 	{
 		settings.beginWriteArray("BLOCKEDLIST");
-		std::vector<FriendFanListing * >::iterator i;
+		std::vector<FriendWatchListing * >::iterator i;
 		index = 0;
 		for (i = blockedList.begin(); i != blockedList.end(); i++) 
 		{

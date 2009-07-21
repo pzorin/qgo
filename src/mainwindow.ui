@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>qGo2</string>
+   <string>qGo</string>
   </property>
   <property name="windowIcon">
    <iconset resource="application.qrc">
@@ -794,19 +794,19 @@
              </widget>
             </item>
             <item row="1" column="5">
-             <widget class="QCheckBox" name="fansCheck">
+             <widget class="QCheckBox" name="watchesCheck">
               <property name="text">
-               <string>Fans</string>
+               <string>Watch</string>
               </property>
              </widget>
             </item>
             <item row="1" column="6">
-             <widget class="QPushButton" name="editFriendsFansPB">
+             <widget class="QPushButton" name="editFriendsWatchesPB">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Edit Friends/Fans</string>
+               <string>Edit Friends/Watch</string>
               </property>
              </widget>
             </item>

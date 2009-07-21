@@ -86,7 +86,7 @@ class NetworkConnection : public QObject
 		void setDefaultRoom(Room * r) { default_room = r; };
 		ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; };
 		Room * getDefaultRoom(void) { return default_room; };
-		class PlayerListing * getPlayerListingFromFriendFanListing(class FriendFanListing & f);
+		class PlayerListing * getPlayerListingFromFriendWatchListing(class FriendWatchListing & f);
 		virtual bool isReady(void) = 0;
 		virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
 		virtual void setKeepAlive(int) {};
@@ -101,8 +101,8 @@ class NetworkConnection : public QObject
 		
 		virtual void addFriend(PlayerListing & player);
 		virtual void removeFriend(PlayerListing & player);
-		virtual void addFan(PlayerListing & player);
-		virtual void removeFan(PlayerListing & player);
+		virtual void addWatch(PlayerListing & player);
+		virtual void removeWatch(PlayerListing & player);
 		virtual void addBlock(PlayerListing & player);
 		virtual void removeBlock(PlayerListing & player);
 		virtual char * sendAddFriend(int *, void *) { return NULL;};
@@ -111,9 +111,9 @@ class NetworkConnection : public QObject
 		virtual char * sendAddBlock(int *, void *) { return NULL; };
 		virtual char * sendRemoveBlock(int *, void *) { return NULL; };
 		
-		std::vector<class FriendFanListing *> & getFriendsList(void) { return friendedList; };
-		std::vector<class FriendFanListing *> & getFansList(void) { return watchedList; };
-		std::vector<class FriendFanListing *> & getBlockedList(void) { return blockedList; };
+		std::vector<class FriendWatchListing *> & getFriendsList(void) { return friendedList; };
+		std::vector<class FriendWatchListing *> & getWatchesList(void) { return watchedList; };
+		std::vector<class FriendWatchListing *> & getBlockedList(void) { return blockedList; };
 		
 		// FIXME Not certain but maybe this chunk below should be protected:??
 		BoardDispatch * getBoardDispatch(unsigned int game_id);
@@ -136,7 +136,7 @@ class NetworkConnection : public QObject
 		virtual void periodicListRefreshes(bool) {};
 		virtual unsigned int rankToScore(QString rank) = 0;
 		virtual unsigned long getGameDialogFlags(void) { return 0; };
-		virtual void getAndSetFriendFanType(PlayerListing & player);
+		virtual void getAndSetFriendWatchType(PlayerListing & player);
 		virtual void checkGameWatched(GameListing & game);
 		
 		virtual int gd_verifyBoardSize(int v) { return v; };
@@ -158,7 +158,7 @@ class NetworkConnection : public QObject
 		virtual bool cantMarkOppStonesDead(void) { return false; };
 		virtual bool twoPassesEndsGame(void) { return false; };		//used?? FIXME
 		virtual bool supportsFriendList(void) { return false; };
-		virtual bool supportsFanList(void) { return false; };
+		virtual bool supportsWatchList(void) { return false; };
 		virtual bool supportsBlockList(void) { return false; };
 		virtual bool supportsSeek(void) { return false; };
 		virtual unsigned long getPlayerListColumns(void) { return 0; };
@@ -233,17 +233,17 @@ class NetworkConnection : public QObject
 			UNKNOWN_ERROR
 		} connectionState;
 		
-		bool friendfan_notify_default;
+		bool friendwatch_notify_default;
 		
-		std::vector<FriendFanListing *> friendedList;
-		std::vector<FriendFanListing *> watchedList;
-		std::vector<FriendFanListing *> blockedList;
+		std::vector<FriendWatchListing *> friendedList;
+		std::vector<FriendWatchListing *> watchedList;
+		std::vector<FriendWatchListing *> blockedList;
 		
 	private:
 		void setupRoomAndConsole(void);
 		void tearDownRoomAndConsole(void);
-		void loadfriendsfans(void);
-		void savefriendsfans(void);
+		void loadfriendswatches(void);
+		void savefriendswatches(void);
 
 		void drawPleaseWait(void);
 		
@@ -266,10 +266,10 @@ class NetworkConnection : public QObject
 		void slot_cancelConnecting(void);
 };
 
-struct FriendFanListing
+struct FriendWatchListing
 {
-	FriendFanListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {};
-	FriendFanListing(QString n) : name(n), id(0), notify(false), online(false) {};		//blocked has no notify
+	FriendWatchListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {};
+	FriendWatchListing(QString n) : name(n), id(0), notify(false), online(false) {};		//blocked has no notify
 	QString name;
 	unsigned short id;		//if necessary
 	bool notify;

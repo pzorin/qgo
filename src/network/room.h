@@ -57,9 +57,9 @@ class Room : public QObject
 
 		QTreeView * playerView, * gamesView;
 		QToolButton * refreshGamesButton, * refreshPlayersButton;
-		QPushButton * editFriendsFansListButton;
+		QPushButton * editFriendsWatchesListButton;
 		QComboBox * whoBox1, * whoBox2;
-		QCheckBox * whoOpenCheckBox, * friendsCheckBox, * fansCheckBox;
+		QCheckBox * whoOpenCheckBox, * friendsCheckBox, * watchesCheckBox;
 		NetworkConnection * connection;
 		QModelIndex popup_item;
 		
@@ -73,14 +73,14 @@ class Room : public QObject
 		void slot_setRankSpreadView(void);
 		void slot_showOpen(int);
 		void slot_showFriends(int);
-		void slot_showFans(int);
-		void slot_editFriendsFansList(void);
+		void slot_showWatches(int);
+		void slot_editFriendsWatchesList(void);
 		void slot_showPopup(const QPoint & iPoint);
 		void slot_showGamesPopup(const QPoint & iPoint);
 		void slot_addFriend(void);
 		void slot_removeFriend(void);
-		void slot_addFan(void);
-		void slot_removeFan(void);
+		void slot_addWatch(void);
+		void slot_removeWatch(void);
 		void slot_addBlock(void);
 		void slot_popupMatch(void);
 		void slot_popupTalk(void);

@@ -20,8 +20,8 @@ Room::Room()
 	whoBox2 = mainwindow->getUi()->whoBox2;
 	whoOpenCheckBox = mainwindow->getUi()->whoOpenCheck;
 	friendsCheckBox = mainwindow->getUi()->friendsCheck;
-	fansCheckBox = mainwindow->getUi()->fansCheck;
-	editFriendsFansListButton = mainwindow->getUi()->editFriendsFansPB;
+	watchesCheckBox = mainwindow->getUi()->watchesCheck;
+	editFriendsWatchesListButton = mainwindow->getUi()->editFriendsWatchesPB;
 	/* Normally the dispatch and the UI are created at the sametime
 	* by the connection or dispatch code.  In this case,
 	* the UI already exists and is being passed straight in here,
@@ -137,9 +137,9 @@ void Room::setupUI(void)
 	connect(whoBox2, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
 	connect(whoOpenCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showOpen(int)));
 	connect(friendsCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showFriends(int)));
-	connect(fansCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showFans(int)));
-	connect(editFriendsFansListButton, SIGNAL(pressed()), SLOT(slot_editFriendsFansList()));
-	editFriendsFansListButton->setEnabled(true);
+	connect(watchesCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showWatches(int)));
+	connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
+	editFriendsWatchesListButton->setEnabled(true);
 }
 
 Room::~Room()
@@ -164,8 +164,8 @@ Room::~Room()
 	delete gamesListModel;
 	disconnect(whoBox1, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(whoBox2, SIGNAL(currentIndexChanged(int)), 0, 0);
-	disconnect(editFriendsFansListButton, SIGNAL(pressed()), 0, 0);
-	editFriendsFansListButton->setDisabled(true);
+	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
+	editFriendsWatchesListButton->setDisabled(true);
 	
 	QSettings settings;
 	settings.setValue("LOWRANKFILTER", whoBox1->currentIndex());
@@ -175,7 +175,7 @@ Room::~Room()
 	
 	settings.setValue("OPENFILTER", whoOpenCheckBox->isChecked());
 	settings.setValue("FRIENDSFILTER", friendsCheckBox->isChecked());
-	settings.setValue("FANSFILTER", fansCheckBox->isChecked());
+	settings.setValue("WATCHESFILTER", watchesCheckBox->isChecked());
 }
 
 void Room::onError(void)
@@ -223,7 +223,7 @@ void Room::setConnection(NetworkConnection * c)
 	
 	whoOpenCheckBox->setChecked(settings.value("OPENFILTER").toBool());
 	friendsCheckBox->setChecked(settings.value("FRIENDSFILTER").toBool());
-	fansCheckBox->setChecked(settings.value("FANSFILTER").toBool());
+	watchesCheckBox->setChecked(settings.value("WATCHESFILTER").toBool());
 }
 
 void Room::updateRoomStats(void)
@@ -262,14 +262,14 @@ void Room::slot_showPopup(const QPoint & iPoint)
 	menu.addAction(tr("Match"), this, SLOT(slot_popupMatch()));
 	menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
 	menu.addSeparator();
-    	if(popup_playerlisting->friendFanType == PlayerListing::friended)
+    	if(popup_playerlisting->friendWatchType == PlayerListing::friended)
     		menu.addAction(tr("Remove from Friends"), this, SLOT(slot_removeFriend()));
     	else
     		menu.addAction(tr("Add to Friends"), this, SLOT(slot_addFriend()));
-    	if(popup_playerlisting->friendFanType == PlayerListing::watched)
-    		menu.addAction(tr("Remove from Fans"), this, SLOT(slot_removeFan()));
+    	if(popup_playerlisting->friendWatchType == PlayerListing::watched)
+    		menu.addAction(tr("Remove from Watches"), this, SLOT(slot_removeWatch()));
     	else
-    		menu.addAction(tr("Add to Fans"), this, SLOT(slot_addFan()));
+    		menu.addAction(tr("Add to Watches"), this, SLOT(slot_addWatch()));
     	menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
     	menu.exec(playerView->mapToGlobal(iPoint));
 	}
@@ -317,14 +317,14 @@ void Room::slot_removeFriend(void)
 	connection->removeFriend(*popup_playerlisting);
 }
 
-void Room::slot_addFan(void)
+void Room::slot_addWatch(void)
 {
-	connection->addFan(*popup_playerlisting);
+	connection->addWatch(*popup_playerlisting);
 }
 
-void Room::slot_removeFan(void)
+void Room::slot_removeWatch(void)
 {
-	connection->removeFan(*popup_playerlisting);
+	connection->removeWatch(*popup_playerlisting);
 }
 
 void Room::slot_addBlock(void)
@@ -464,12 +464,12 @@ void Room::slot_showFriends(int)
 	playerSortProxy->setFilter(PlayerSortProxy::friends);
 }
 
-void Room::slot_showFans(int)
+void Room::slot_showWatches(int)
 {
 	playerSortProxy->setFilter(PlayerSortProxy::fans);
 }
 
-void Room::slot_editFriendsFansList(void)
+void Room::slot_editFriendsWatchesList(void)
 {
 	//does this crash if we do it too soon?
 	FriendsListDialog * fld = new FriendsListDialog(connection);
@@ -670,8 +670,8 @@ void Room::recvPlayerListing(PlayerListing * player)
 			if(player->dialog_opened)
 				connection->closeTalk(*player);
 		}
-		if(player->friendFanType != PlayerListing::none)
-			connection->getAndSetFriendFanType(*player);  //removes
+		if(player->friendWatchType != PlayerListing::none)
+			connection->getAndSetFriendWatchType(*player);  //removes
 	}
 	PlayerListing * registered_player = 0;
 	if(playerListingIDRegistry)
@@ -694,7 +694,7 @@ void Room::recvPlayerListing(PlayerListing * player)
 		/* We might possibly be able to set this before
 		 * the entry is inserted into Registry... but just
 		 * in case that would cause problems, we'll do it here. */
-		connection->getAndSetFriendFanType(*registered_player);
+		connection->getAndSetFriendWatchType(*registered_player);
 		/* FIXME consider changing name of getEntry with the object?
 		 * so that its more clear that it returns a new stored object
 		 * based on the one passed. (i.e., looking it up if

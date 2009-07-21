@@ -20,20 +20,20 @@ class FriendsListDialog : public QDialog, Ui::FriendsListDialog
 		QModelIndex popup_item;
 		class PlayerListing * popup_playerlisting;
 		class SimplePlayerListModel * friendsListModel;
-		class SimplePlayerListModel * fansListModel;
+		class SimplePlayerListModel * watchesListModel;
 		class SimplePlayerListModel * blockedListModel;
 	private slots:
 		void slot_showPopupFriends(const QPoint & iPoint);
-		void slot_showPopupFans(const QPoint & iPoint);
+		void slot_showPopupWatches(const QPoint & iPoint);
 		void slot_showPopupBlocked(const QPoint & iPoint);
 		void slot_addFriend(void);
 		void slot_removeFriend(void);
-		void slot_addFan(void);
-		void slot_removeFan(void);
+		void slot_addWatch(void);
+		void slot_removeWatch(void);
 		void slot_addBlock(void);
 		void slot_removeBlock(void);
 		void slot_playersDoubleClickedFriends(const QModelIndex & index);
-		void slot_playersDoubleClickedFans(const QModelIndex & index);
+		void slot_playersDoubleClickedWatches(const QModelIndex & index);
 		void slot_popupMatch(void);
 		void slot_popupTalk(void);
 };

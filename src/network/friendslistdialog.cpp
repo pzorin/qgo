@@ -10,7 +10,7 @@ FriendsListDialog::FriendsListDialog(NetworkConnection * c) : QDialog(), Ui::Fri
 	ui.setupUi(this);
 	
 	friendsView = ui.friendsView;
-	fansView = ui.fansView;
+	watchesView = ui.watchesView;
 	blockedView = ui.blockedView;
 	
 	//friendsSortProxy = new PlayerSortProxy();
@@ -19,17 +19,17 @@ FriendsListDialog::FriendsListDialog(NetworkConnection * c) : QDialog(), Ui::Fri
 	//friendsView->setModel(friendsSortProxy);
 	friendsView->setModel(friendsListModel);
 	//friendsSortProxy->setDynamicSortFilter(true);
-	fansListModel = new SimplePlayerListModel(true);
-	fansView->setModel(fansListModel);
+	watchesListModel = new SimplePlayerListModel(true);
+	watchesView->setModel(watchesListModel);
 	blockedListModel = new SimplePlayerListModel(true);
 	blockedView->setModel(blockedListModel);
 	
 	connect(friendsView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupFriends(const QPoint &)));
-	connect(fansView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupFans(const QPoint &)));
+	connect(watchesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupWatches(const QPoint &)));
 	connect(blockedView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupBlocked(const QPoint &)));
 	
 	connect(friendsView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClickedFriends(const QModelIndex &)));
-	connect(fansView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClickedFans(const QModelIndex &)));
+	connect(watchesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClickedWatches(const QModelIndex &)));
 	
 	
 	/* We need basically the same popup options as from room.cpp */
@@ -40,7 +40,7 @@ FriendsListDialog::FriendsListDialog(NetworkConnection * c) : QDialog(), Ui::Fri
 FriendsListDialog::~FriendsListDialog()
 {
 	delete friendsListModel;
-	delete fansListModel;
+	delete watchesListModel;
 	delete blockedListModel;
 }
 
@@ -53,41 +53,41 @@ void FriendsListDialog::populateLists(void)
 	 * they come in the same form as the local lists or are
 	 * loaded as such.  We might need to override that or have
 	 * some kind of special list iterator or maybe have the
-	 * other protocols subclass the FriendFanListing and do
+	 * other protocols subclass the FriendWatchListing and do
 	 * some dynamic_cast ing here. 
 	 * In any event, I think we need to checkup on ORO and tygem
 	 * friend lists before we go any further here */
 	 /* So far it looks like if there's a notification option,
 	  * its global, which means ours would either be stuck on
 	  * or we'd have to store them privately.
-	  * Tygem doesn't seem to have fans, but it does have
+	  * Tygem doesn't seem to have watches, but it does have
 	  * friends and blocks, IGS nothing.
 	  * 
 	  * I think though I've decided that the time checks and
 	  * the friends lists are a lower priority than getting
 	  * games playing on all three services */ 
 	
-	std::vector<FriendFanListing *> & friends = connection->getFriendsList();
-	std::vector<FriendFanListing *> & fans = connection->getFansList();
-	std::vector<FriendFanListing *> & blocked = connection->getBlockedList();
+	std::vector<FriendWatchListing *> & friends = connection->getFriendsList();
+	std::vector<FriendWatchListing *> & watches = connection->getWatchesList();
+	std::vector<FriendWatchListing *> & blocked = connection->getBlockedList();
 	
-	std::vector<FriendFanListing *>::iterator i;
+	std::vector<FriendWatchListing *>::iterator i;
 	PlayerListing * p;
 	for(i = friends.begin(); i != friends.end(); i++)
 	{
-		p = connection->getPlayerListingFromFriendFanListing(**i);
+		p = connection->getPlayerListingFromFriendWatchListing(**i);
 		if(p)
 			friendsListModel->insertListing(p);
 	}
-	for(i = fans.begin(); i != fans.end(); i++)
+	for(i = watches.begin(); i != watches.end(); i++)
 	{
-		p = connection->getPlayerListingFromFriendFanListing(**i);
+		p = connection->getPlayerListingFromFriendWatchListing(**i);
 		if(p)
-			fansListModel->insertListing(p);
+			watchesListModel->insertListing(p);
 	}
 	for(i = blocked.begin(); i != blocked.end(); i++)
 	{
-		p = connection->getPlayerListingFromFriendFanListing(**i);
+		p = connection->getPlayerListingFromFriendWatchListing(**i);
 		if(p)
 			blockedListModel->insertListing(p);
 	}
@@ -111,32 +111,32 @@ void FriendsListDialog::slot_showPopupFriends(const QPoint & iPoint)
 		menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
 		menu.addSeparator();
 		menu.addAction(tr("Remove from Friends"), this, SLOT(slot_removeFriend()));
-		menu.addAction(tr("Add to Fans"), this, SLOT(slot_addFan()));
+		menu.addAction(tr("Add to Watches"), this, SLOT(slot_addWatch()));
 		menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
 		menu.exec(friendsView->mapToGlobal(iPoint));
 	}
 }
 
-void FriendsListDialog::slot_showPopupFans(const QPoint & iPoint)
+void FriendsListDialog::slot_showPopupWatches(const QPoint & iPoint)
 {
-	popup_item = fansView->indexAt(iPoint);
+	popup_item = watchesView->indexAt(iPoint);
 	if (popup_item != QModelIndex())
 	{
 		//QModelIndex translated = playerSortProxy->mapToSource(popup_item);
 		//popup_playerlisting = playerListModel->playerListingFromIndex(translated);
-		popup_playerlisting = fansListModel->playerListingFromIndex(popup_item);
+		popup_playerlisting = watchesListModel->playerListingFromIndex(popup_item);
 		if(popup_playerlisting->name == connection->getUsername())
 			return;
 			
-		QMenu menu(fansView);
+		QMenu menu(watchesView);
 		menu.addAction(tr("Match"), this, SLOT(slot_popupMatch()));
 		menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
 		menu.addSeparator();
 		menu.addAction(tr("Add to Friends"), this, SLOT(slot_addFriend()));
 		//Maybe we don't want to have match and talk as fan options?
-		menu.addAction(tr("Remove from Fans"), this, SLOT(slot_removeFan()));
+		menu.addAction(tr("Remove from Watches"), this, SLOT(slot_removeWatch()));
 		menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
-		menu.exec(fansView->mapToGlobal(iPoint));
+		menu.exec(watchesView->mapToGlobal(iPoint));
 	}
 }
 
@@ -159,9 +159,9 @@ void FriendsListDialog::slot_showPopupBlocked(const QPoint & iPoint)
 
 void FriendsListDialog::slot_addFriend(void)
 {
-	if(popup_playerlisting->friendFanType == PlayerListing::watched)
-		fansListModel->removeListing(popup_playerlisting);
-	else if(popup_playerlisting->friendFanType == PlayerListing::blocked)
+	if(popup_playerlisting->friendWatchType == PlayerListing::watched)
+		watchesListModel->removeListing(popup_playerlisting);
+	else if(popup_playerlisting->friendWatchType == PlayerListing::blocked)
 		blockedListModel->removeListing(popup_playerlisting);
 	friendsListModel->insertListing(popup_playerlisting);
 	connection->addFriend(*popup_playerlisting);
@@ -176,28 +176,28 @@ void FriendsListDialog::slot_removeFriend(void)
 	connection->removeFriend(*popup_playerlisting);
 }
 
-void FriendsListDialog::slot_addFan(void)
+void FriendsListDialog::slot_addWatch(void)
 {
-	if(popup_playerlisting->friendFanType == PlayerListing::friended)
+	if(popup_playerlisting->friendWatchType == PlayerListing::friended)
 		friendsListModel->removeListing(popup_playerlisting);
-	else if(popup_playerlisting->friendFanType == PlayerListing::blocked)
+	else if(popup_playerlisting->friendWatchType == PlayerListing::blocked)
 		blockedListModel->removeListing(popup_playerlisting);
-	fansListModel->insertListing(popup_playerlisting);
-	connection->addFan(*popup_playerlisting);
+	watchesListModel->insertListing(popup_playerlisting);
+	connection->addWatch(*popup_playerlisting);
 }
 
-void FriendsListDialog::slot_removeFan(void)
+void FriendsListDialog::slot_removeWatch(void)
 {
-	fansListModel->removeListing(popup_playerlisting);
-	connection->removeFan(*popup_playerlisting);
+	watchesListModel->removeListing(popup_playerlisting);
+	connection->removeWatch(*popup_playerlisting);
 }
 
 void FriendsListDialog::slot_addBlock(void)
 {
-	if(popup_playerlisting->friendFanType == PlayerListing::friended)
+	if(popup_playerlisting->friendWatchType == PlayerListing::friended)
 		friendsListModel->removeListing(popup_playerlisting);
-	else if(popup_playerlisting->friendFanType == PlayerListing::watched)
-		fansListModel->removeListing(popup_playerlisting);
+	else if(popup_playerlisting->friendWatchType == PlayerListing::watched)
+		watchesListModel->removeListing(popup_playerlisting);
 	blockedListModel->insertListing(popup_playerlisting);
 	connection->addBlock(*popup_playerlisting);
 }
@@ -232,10 +232,10 @@ void FriendsListDialog::slot_playersDoubleClickedFriends(const QModelIndex & ind
 		talk->updatePlayerListing();
 }
 
-void FriendsListDialog::slot_playersDoubleClickedFans(const QModelIndex & index)
+void FriendsListDialog::slot_playersDoubleClickedWatches(const QModelIndex & index)
 {
 	//QModelIndex translated = playerSortProxy->mapToSource(index);
-	PlayerListing * opponent = fansListModel->playerListingFromIndex(index);
+	PlayerListing * opponent = watchesListModel->playerListingFromIndex(index);
 	Talk * talk;
 	talk = connection->getTalk(*opponent);
 	if(talk)
