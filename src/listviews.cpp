@@ -736,6 +736,8 @@ QVariant GamesListItem::data(int column) const
 			return QVariant(listing->black_rank());
 			break;
 		case GC_MOVES:
+			if(listing->moves == (unsigned)-1)
+				return QVariant("-");
 			return QVariant(listing->moves);
 			break;
 		case GC_SIZE:
@@ -1113,16 +1115,16 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 
 	if(!(flags & noblock))
 	{
-		if(p->friendFanType == PlayerListing::blocked)
+		if(p->friendWatchType == PlayerListing::blocked)
 			return false;
 	}
 	if(flags & friends)
 	{
-		if(p->friendFanType != PlayerListing::friended)
+		if(p->friendWatchType != PlayerListing::friended)
 		{
 			if(flags & fans)
 			{
-				if(p->friendFanType != PlayerListing::watched)
+				if(p->friendWatchType != PlayerListing::watched)
 					return false;
 			}
 			else
@@ -1131,7 +1133,7 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 	}
 	else if(flags & fans)
 	{
-		if(p->friendFanType != PlayerListing::watched)
+		if(p->friendWatchType != PlayerListing::watched)
 			return false;	
 	}
 	
