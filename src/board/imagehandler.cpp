@@ -123,8 +123,6 @@ ImageHandler::~ImageHandler()
 	delete[] painting_buffer;
 }
 
-
-
 void ImageHandler::icopy(int *im, QImage &qim, int w, int h) 
 {
 	
@@ -137,7 +135,6 @@ void ImageHandler::icopy(int *im, QImage &qim, int w, int h)
 		}
 	}
 }
-
 
 void ImageHandler::decideAppearance(WhiteDesc *desc, int size)  
 {
@@ -163,7 +160,6 @@ void ImageHandler::decideAppearance(WhiteDesc *desc, int size)
 	desc->zMul = drand48() * 650.0 + 70.0;
 
 }
-
 
 double ImageHandler::getStripe(WhiteDesc &white, double bright, double z, int x, int y) {
 	double wBright;
