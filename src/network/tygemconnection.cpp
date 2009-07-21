@@ -4782,9 +4782,9 @@ void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int 
 		/* FIXME somehow, its possible for the same name to be on the official
 		 * server list more than once */
 		if(msg[i] == 0x00)
-			friendedList.push_back(new FriendFanListing(encoded_name, friendfan_notify_default));
+			friendedList.push_back(new FriendWatchListing(encoded_name, friendwatch_notify_default));
 		else if(msg[i] == 0xff)
-			blockedList.push_back(new FriendFanListing(encoded_name, friendfan_notify_default));
+			blockedList.push_back(new FriendWatchListing(encoded_name, friendwatch_notify_default));
 		else
 			printf("unknown indicator: %02x\n", msg[i]);
 #ifdef RE_DEBUG
@@ -4912,6 +4912,7 @@ QString TygemConnection::getRoomTag(unsigned char byte)
 void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
+	unsigned char * game_record;
 	unsigned int number_of_games;
 	unsigned int id;
 	unsigned int name_length;
@@ -4934,7 +4935,8 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	p += 4;
 	while(p < (msg + size - 0x48) || (p < (msg + size - 3) && p[2] == 0x01))
 	{
-		id = (p[0] << 8) + p[1];
+		game_record = p;
+		id = (game_record[0] << 8) + game_record[1];
 #ifdef GAMESLIST_DEBUG
 		printf("Id: %d:\n", id);
 #endif //GAMESLIST_DEBUG
@@ -4942,7 +4944,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		if(!aGameListing)
 			aGameListing = ag;
 		aGameListing->number = id;
-		if(p[2] == 0x01)
+		if(game_record[2] == 0x01)
 		{
 
 #ifdef GAMESLIST_DEBUG
@@ -4986,15 +4988,17 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		//impacts time
 		//there's also 0x30, I think 0x50, etc.. issues here
 		aGameListing->white_first_flag = p[0] & 0x01;
-		/* 04 means done, 06 is waiting room or looking, 01 and 00
-		 * probably mean playing */
-		aGameListing->FR = QString::number(p[0], 16) + " ";
+		aGameListing->FR = "";
+		//aGameListing->FR += QString::number(p[0], 16) + " ";
 		/* 40 looks like a lit 2 computer screens, 50 like 2 dark computers */
+		/* 30 is just betting and over*/
+		/* Thinking 40 bit is broadcast and 20 bit is betting */
 		p++;
-		aGameListing->observers = (p[0] << 8) + p[1];
+		aGameListing->observers = (game_record[6] << 8) + game_record[7];
 		//We have an issue here I think FIXME with observer numbers
 		p += 2;
 		int some_number = (p[0] << 8) + p[1];
+		/* This number seems to be either 0 or -1 */
 		if(some_number != 0)
 		{
 			different_game_record = true;
@@ -5022,7 +5026,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		}
 		//ff00
 		p++;
-		
+
 		//name 1
 		strncpy((char *)name, (char *)p, 14);
 		encoded_nameA = serverCodec->toUnicode((char *)name, strlen((char *)name));
@@ -5070,7 +5074,30 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		
 		p++;
 		//this p[0] should be game status
-		aGameListing->FR += QString::number(p[0], 16);
+		//aGameListing->FR += QString::number(p[0], 16);
+		switch(game_record[73])
+		{
+			case 0:
+				aGameListing->FR += "?";	//looking
+				break;
+			case 1:
+				aGameListing->moves = 0;
+				break;
+			case 2:
+				aGameListing->moves = 50;
+				break;
+			case 3:
+				aGameListing->moves = 120;
+				break;
+			case 4:
+				aGameListing->moves = (unsigned)-1;	//over
+				break;
+			case 5:
+				aGameListing->FR += "V";	//review
+				break;
+			case 6:
+				break;
+		}
 		p++;
 		p++;
 		//name_length = p[0];
