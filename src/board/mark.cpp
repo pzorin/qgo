@@ -1,10 +1,5 @@
-/*
-* mark.cpp
-*/
-
 #include "mark.h"
 #include "imagehandler.h"
-
 
 /*
 * Mark
@@ -276,9 +271,13 @@ MarkSmallStoneTerr::MarkSmallStoneTerr(int x, int y, double s, StoneColor c, QLi
 	//the territory marks, but I get the feeling that ZValues are inconsistently
 	//used and that the gatter drawing could be significantly sped up
 	setZValue(1);
-	if (p->count() <= 2)
-		setPixmap(p->at( col == stoneBlack ? 0 : 1));
-	else	
-		setPixmap(p->at( col == stoneBlack ? 0 : (rand() % (p->count() -2) ) + 1));
+	setPixmap(p);
 }
-		
+
+void MarkSmallStoneTerr::setPixmap(QList <QPixmap> * p)
+{
+	if (p->count() <= 2)
+		QGraphicsPixmapItem::setPixmap(p->at( col == stoneBlack ? 0 : 1));
+	else	
+		QGraphicsPixmapItem::setPixmap(p->at( col == stoneBlack ? 0 : (rand() % (p->count() -2) ) + 1));
+}		

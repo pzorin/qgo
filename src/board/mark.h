@@ -1,7 +1,3 @@
-/*
-* mark.h
-*/
-
 #ifndef MARK_H
 #define MARK_H
 
@@ -217,6 +213,7 @@ class MarkSmallStoneTerr : public Mark, public QGraphicsPixmapItem
 		virtual void hide() { QGraphicsPixmapItem::hide(); };
 		virtual void setColor(const QColor &) {};
 		virtual const QColor getColor() { return QColor(0, 0, 0);}
+		void setPixmap(QList <QPixmap> * p);
 	private:
 		int _x, _y;
 		StoneColor col;
