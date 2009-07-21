@@ -5962,9 +5962,9 @@ void CyberOroConnection::handleFriends(unsigned char * msg, unsigned int size)
 		//first byte is 01, they're probably friend
 		//first byte is 02, probably block
 		if(p[0] == 0x01)
-			friendedList.push_back(new FriendFanListing(QString((const char *)name), friendfan_notify_default));
+			friendedList.push_back(new FriendWatchListing(QString((const char *)name), friendwatch_notify_default));
 		else if(p[0] == 0x02)
-			blockedList.push_back(new FriendFanListing(QString((const char *)name), friendfan_notify_default));
+			blockedList.push_back(new FriendWatchListing(QString((const char *)name), friendwatch_notify_default));
 		p += 2;
 	}
 	//the rest is a mystery for right now
@@ -7305,7 +7305,8 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	if(!connecting_to_game_number && !playing_game_number)
 	{
 		printf("Received unexpected observing match started msg: d2af\n");
-		return;
+		printf("Hopefully observering rematch\n");
+		//return;
 	}
 	if(connecting_to_game_number)
 		game_number = connecting_to_game_number;
