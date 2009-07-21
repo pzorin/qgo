@@ -55,7 +55,6 @@ BoardHandler::~BoardHandler()
 
 }
 
-
 void BoardHandler::clearData()
 {
 	tree->init(boardSize);
@@ -82,7 +81,6 @@ void BoardHandler::slotNavForward()
 	if (m != NULL)
 		updateMove(m);
 }
-
 
 void BoardHandler::slotNavBackward()
 {
@@ -269,7 +267,6 @@ void BoardHandler::slotNavPrevVar()
 	updateMove(m);
 }
 
-
 void BoardHandler::slotNavStartVar()
 {
 //	if (gameMode == modeScore)
@@ -428,7 +425,6 @@ void BoardHandler::slotNthMove(int n)
 
 }
 
-
 void BoardHandler::gotoMove(Move *m)
 {
 	Q_CHECK_PTR(m);
@@ -436,7 +432,6 @@ void BoardHandler::gotoMove(Move *m)
 	updateAll_updateAll = true;
 	updateMove(m);
 }
-
 
 /*
  * This deals with updating the 'board' and the 'interface handler' with the data
@@ -701,7 +696,7 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 
 		}
 	}
-	
+	updateAll_updateAll = false;
 	return modified;
 }
 
