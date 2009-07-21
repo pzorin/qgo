@@ -1,7 +1,3 @@
-/*
-* move.cpp
-*/
-
 #include "move.h"
 #include "matrix.h"
 
@@ -22,6 +18,7 @@ Move::Move(int board_size)
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
+	timeinfo = false;
 	handicapMove = FALSE;
 	matrix = new Matrix(board_size);
 }
@@ -40,6 +37,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &m
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
+	timeinfo = false;
 	handicapMove = FALSE;
 	matrix = new Matrix(mat, clearAllMarks);
 	// Make all matrix values positive
@@ -61,6 +59,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
+	timeinfo = false;
 	handicapMove = FALSE;
 }
 
