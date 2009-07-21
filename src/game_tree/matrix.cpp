@@ -1,7 +1,3 @@
-/*
-* matrix.cpp
-*/
-
 #include "matrix.h"
 //#include <stdlib.h>
 //#ifndef NO_DEBUG
