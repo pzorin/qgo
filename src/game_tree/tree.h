@@ -1,19 +1,12 @@
-/*
-* tree.h
-*/
-
 #ifndef TREE_H
 #define TREE_H
 
 #include "defines.h"
 #include "matrix.h"
-//#include "group.h"
 
 #include <QtCore>
 
 class Move;
-
-//template<class type> class QStack;
 
 class Tree
 {

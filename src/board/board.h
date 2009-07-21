@@ -7,8 +7,6 @@
 
 #include "defines.h"
 
-#include <vector>
-
 #include <QtGui>
 
 class ImageHandler;

@@ -1,7 +1,3 @@
-/*
- * sgfparser.h
- */
-
 #ifndef SGFPARSER_H
 #define SGFPARSER_H
 
@@ -10,13 +6,6 @@
 
 #include <QtCore>
 
-/*
-class BoardHandler;
-class Tree;
-class QTextStream;
-class Move;
-struct ASCII_Import;
-class XMLParser;*/
 class GameData;
 
 class SGFParser
