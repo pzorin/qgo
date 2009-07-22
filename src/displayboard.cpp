@@ -36,12 +36,6 @@ DisplayBoard::DisplayBoard(QWidget *parent, QGraphicsScene *c)
 
 DisplayBoard::~DisplayBoard()
 {
-	qDeleteAll(*stones);
-	qDeleteAll(*ghosts);
-	qDeleteAll(*marks);
-	delete stones;
-	delete ghosts;
-	delete marks;
 }
 
 /* Used by file browse display */
