@@ -1,9 +1,6 @@
-/*
- *   gamedialog.cpp
- */
 #include "gamedialog.h"
 #include "audio.h"
-//#include "newgame_gui.h"
+
 #include "defines.h"
 //#include "komispinbox.h"
 #include "network/networkconnection.h"
@@ -31,6 +28,36 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	
 	current_match_request = new MatchRequest();
 	
+	
+	
+	/* FIXME, what about size 38 and larger boards ?? */
+	ui.boardSizeSpin->setRange(1,19);
+	ui.handicapSpin->setRange(1,9);
+	
+	we_are_challenger = false;
+	
+	/* Not sure what to do with these.  It would make sense to
+	* just have a number instead of a time spin since no seconds are
+	* allowed in two of the settings... but it would probably be better
+	* to set something on the timeSpin so that it still has the :00
+	* seconds reminder.  Unless we want to have "seconds" in the text. */
+	
+	ui.boardSizeSpin->setValue(connection->gd_verifyBoardSize(preferences.default_size));
+	ui.komiSpin->setValue(preferences.default_komi);
+	
+	ui.timeSpin->setDisplayFormat("h:mm:ss");
+	ui.timeSpin->setTime(connection->gd_checkMainTime(canadian, qtimeFromSeconds(preferences.default_stonesmaintime)));
+	ui.stonesTimeSpin->setTime(connection->gd_checkPeriodTime(canadian, QTime(0, preferences.default_stonestime/60, preferences.default_stonestime%60)));
+	ui.stonesSpin->setValue(connection->gd_checkPeriods(canadian, preferences.default_stones));
+	ui.BYTimeSpin->setTime(connection->gd_checkMainTime(byoyomi, QTime(0, preferences.default_byomaintime/60, preferences.default_byomaintime%60)));
+	ui.BYPeriodTimeSpin->setTime(connection->gd_checkPeriodTime(byoyomi, QTime(0, preferences.default_byoperiodtime/60, preferences.default_byoperiodtime%60)));
+	ui.BYPeriodsSpin->setValue(connection->gd_checkPeriods(byoyomi, preferences.default_byoperiods));
+	ui.ASIATimeSpin->setTime(connection->gd_checkMainTime(tvasia, QTime(0, preferences.default_asiamaintime/60, preferences.default_asiamaintime%60)));
+	ui.ASIAPeriodTimeSpin->setTime(connection->gd_checkPeriodTime(tvasia, QTime(0, preferences.default_asiaperiodtime/60, preferences.default_asiaperiodtime%60)));
+	ui.ASIAPeriodsSpin->setValue(connection->gd_checkPeriods(tvasia, preferences.default_asiaperiods));
+	
+//	cb_free->setChecked(true);
+
 	connect(ui.buttonCancel,SIGNAL(pressed()), SLOT(slot_cancel()));
 	connect(ui.buttonDecline,SIGNAL(pressed()), SLOT(slot_decline()));
 	connect(ui.buttonOffer,SIGNAL(clicked(bool)),SLOT( slot_offer(bool)));
@@ -57,38 +84,6 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	connect(ui.ASIATimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIATimeSpin(const QTime &)));
 	connect(ui.ASIAPeriodTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIAPeriodTimeSpin(const QTime &)));
 	connect(ui.ASIAPeriodsSpin, SIGNAL(valueChanged(int)), SLOT(slot_ASIAPeriodsSpin(int)));
-	
-	/* FIXME, what about size 38 and larger boards ?? */
-	ui.boardSizeSpin->setRange(1,19);
-	ui.handicapSpin->setRange(1,9);
-	
-	we_are_challenger = false;
-	
-	/* Not sure what to do with these.  It would make sense to
-	* just have a number instead of a time spin since no seconds are
-	* allowed in two of the settings... but it would probably be better
-	* to set something on the timeSpin so that it still has the :00
-	* seconds reminder.  Unless we want to have "seconds" in the text. */
-	
-	/* FIXME we need to connect the buttons before setting the default so that
-	 * the protocol specific check code can alter it.  However, I seem to remember
-	 * there being a bug with that and it crashing... doublecheck that its okay*/
-	
-	ui.boardSizeSpin->setValue(preferences.default_size);
-	ui.komiSpin->setValue(preferences.default_komi);
-	
-	ui.timeSpin->setDisplayFormat("h:mm:ss");
-	ui.timeSpin->setTime(qtimeFromSeconds(preferences.default_stonesmaintime));
-	ui.stonesTimeSpin->setTime(QTime(0, preferences.default_stonestime/60, preferences.default_stonestime%60));
-	ui.stonesSpin->setValue(preferences.default_stones);
-	ui.BYTimeSpin->setTime(QTime(0, preferences.default_byomaintime/60, preferences.default_byomaintime%60));
-	ui.BYPeriodTimeSpin->setTime(QTime(0, preferences.default_byoperiodtime/60, preferences.default_byoperiodtime%60));
-	ui.BYPeriodsSpin->setValue(preferences.default_byoperiods);
-	ui.ASIATimeSpin->setTime(QTime(0, preferences.default_asiamaintime/60, preferences.default_asiamaintime%60));
-	ui.ASIAPeriodTimeSpin->setTime(QTime(0, preferences.default_asiaperiodtime/60, preferences.default_asiaperiodtime%60));
-	ui.ASIAPeriodsSpin->setValue(preferences.default_asiaperiods);
-	
-//	cb_free->setChecked(true);
 }
 
 void GameDialog::slot_play_black_button(void)
