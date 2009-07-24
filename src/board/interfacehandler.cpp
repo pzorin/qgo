@@ -313,6 +313,7 @@ void InterfaceHandler::setCaptures(float black, float white)
 /*
  * This updates the UI with the correct layout depending on the game mode
  */
+/* FIXME this overlaps with stuff in boardhandler I think it is, or boardwindow */
 void InterfaceHandler::toggleMode(GameMode mode)
 {
 	
@@ -578,6 +579,44 @@ void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, co
  */
 void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float komi)
 {
+	GameData * gd = boardwindow->getGameData();
+	bool simple = gd->white_rank.length() == 0 && gd->black_rank.length() == 0;
+	QGroupBox *gb = boardwindow->getUi()->whiteFrame_score;
+
+	QString player = gd->white_name;
+	if (simple && player == QObject::tr("White"))
+		gb->setTitle(QObject::tr("White"));	
+	else
+	{
+		// truncate to 12 characters max
+		player.truncate(12);
+
+		if (gd->white_rank.length() != 0)
+			player = QObject::tr("W") + ": " + player + " " + gd->white_rank;
+		else
+			player = QObject::tr("W") + ": " + player;
+		
+		gb->setTitle(player);
+	}
+
+	gb = boardwindow->getUi()->blackFrame_score;
+
+	player = gd->black_name;
+	if (simple && player == QObject::tr("Black"))
+		gb->setTitle(QObject::tr("Black"));	
+	else
+	{
+		// truncate to 12 characters max
+		player.truncate(12);
+
+		if (gd->black_rank.length() != 0)
+			player = QObject::tr("B") + ": " + player + " " + gd->black_rank;
+		else
+			player = QObject::tr("B") + ": " + player;
+		
+		gb->setTitle(player);
+	}
+
 	boardwindow->getUi()->komiScore->setText(QString::number(komi));
 	boardwindow->getUi()->terrWhite->setText(QString::number(terrW));
 	boardwindow->getUi()->capturesWhiteScore->setText(QString::number(capW));
