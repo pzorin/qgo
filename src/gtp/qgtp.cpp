@@ -35,8 +35,8 @@ QGtp::QGtp()
 {
 	/*openGtpSession(filename);*/
 	programProcess = NULL; // This to permit proper ending
+	responseReceived = FALSE;
 }
-
 
 QGtp::~QGtp()
 {
@@ -166,7 +166,6 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 // Read from stdout
 void QGtp::slot_readFromStdout()
 {
-
 	int number;
 	int pos;
 	responseReceived = TRUE;
@@ -219,7 +218,6 @@ void QGtp::slot_processExited(int exitCode, QProcess::ExitStatus exitStatus)
 //	fflush(outFile);
 	//	return waitResponse();
 }
-
 
 /* Function:  wait for a go response
 * Arguments: none
@@ -841,7 +839,6 @@ QGtp::dragonData ()
 	return waitResponse();
 }
 
-
 /* Function:  Return the information in the dragon data structure.
 * Arguments: intersection
 * Fails:     invalid coordinate
@@ -854,7 +851,6 @@ QGtp::dragonData (char c,int i)
 	fflush(outFile);
 	return waitResponse();
 }
-
 
 /***********************
 * combination attacks *
@@ -989,7 +985,6 @@ QGtp::finalStatus (char c, int i, int seed)
 	return waitResponse();
 }
 
-
 /* Function:  Report vertices with a specific final status in a finished game.
 * Arguments: Status in the form of one of the strings "alive", "dead",
 *            "seki", "white_territory", "black_territory", or "dame".
@@ -1006,6 +1001,7 @@ QGtp::finalStatusList (QString status, int seed)
 	fflush(outFile);
 	return waitResponse();
 }
+
 /**************
 * score *
 **************/
@@ -1108,7 +1104,6 @@ QGtp::resetReadingNodeCounter ()
 	return waitResponse();
 }
 
-
 /* Function:  Retrieve the count of reading nodes.
 * Arguments: none
 * Fails:     never
@@ -1164,7 +1159,6 @@ QGtp::showboard ()
 	fflush(outFile);
 	return waitResponse();
 }
-
 
 /* Function:  Dump stack to stderr.
 * Arguments: none
@@ -1258,7 +1252,6 @@ QGtp::wormData (char c, int i)
 	return waitResponse();
 }
 
-
 /* Function:  Return the cutstone field in the worm data structure.
 * Arguments: non-empty vertex
 * Fails:     never
@@ -1324,7 +1317,6 @@ QGtp::knownCommand (QString s)
 	fflush(outFile);
 	return waitResponse();
 }
-
 
 /* Function:  Turn uncertainty reports from owl_attack
 *            and owl_defend on or off.
