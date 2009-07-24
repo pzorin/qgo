@@ -245,7 +245,7 @@ void qGoBoardMatchInterface::slotAdjournPressed()
 
 void qGoBoardMatchInterface::recvRefuseAdjourn(void)
 {
-	QMessageBox::information(boardwindow, tr("Adjourn Declined"), boardwindow->getBoardDispatch()->getOpponentName() + tr(" has declined to adjourn the game."));
+	QMessageBox::information(boardwindow, tr("Adjourn Declined"), tr("%1 has declined to adjourn the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
 }
 
 void qGoBoardMatchInterface::requestAdjournDialog(void)
@@ -299,7 +299,34 @@ void qGoBoardMatchInterface::requestCountDialog(void)
 
 void qGoBoardMatchInterface::recvRefuseCount(void)
 {
-	QMessageBox::information(boardwindow, tr("Count Declined"), boardwindow->getBoardDispatch()->getOpponentName() + tr(" has declined to count and end the game."));
+	QMessageBox::information(boardwindow, tr("Count Declined"), tr("%1 has declined to count and end the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
+}
+
+void qGoBoardMatchInterface::requestMatchModeDialog(void)
+{
+	QMessageBox mb(tr("Return to game?"),
+			QString(tr("%1 requests return to match mode\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+			QMessageBox::Question,
+   			QMessageBox::Yes | QMessageBox::Default,
+   			QMessageBox::No | QMessageBox::Escape,
+   			QMessageBox::NoButton);
+	mb.raise();
+//	qgo->playPassSound();
+
+	if (mb.exec() == QMessageBox::Yes)
+	{
+		boardwindow->getBoardDispatch()->sendAcceptMatchModeRequest();
+		leaveScoreMode();
+	}
+	else
+	{
+		boardwindow->getBoardDispatch()->sendRefuseMatchModeRequest();
+	}
+}
+
+void qGoBoardMatchInterface::recvRefuseMatchMode(void)
+{
+	QMessageBox::information(boardwindow, tr("Match mode declined"), tr("%1 has declined to return to the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
 }
 
 void qGoBoardMatchInterface::requestDrawDialog(void)
@@ -326,5 +353,5 @@ void qGoBoardMatchInterface::requestDrawDialog(void)
 
 void qGoBoardMatchInterface::recvRefuseDraw(void)
 {
-	QMessageBox::information(boardwindow, tr("Draw Declined"), boardwindow->getBoardDispatch()->getOpponentName() + tr(" has declined to draw the game."));
+	QMessageBox::information(boardwindow, tr("Draw Declined"), tr("%1 has declined to draw the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
 }
