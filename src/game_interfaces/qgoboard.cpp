@@ -221,7 +221,6 @@ void qGoBoard::addStone(StoneColor c, int x, int y)
 	setModified();
 }
 
-
 /*
  * removes a stone to the current move's matrix
  * This is used in edit phase to remove stones (and not moves) on the board
@@ -259,7 +258,6 @@ void qGoBoard::slotPassPressed()
  * 'Score' button toggled
  */
 void qGoBoard::slotScoreToggled(bool pressed)
-//was slot_doPass()
 {
 	if (pressed)
 		enterScoreMode();
@@ -300,18 +298,20 @@ void qGoBoard::setResult(GameResult & r)
 	 * as an add on to it.  Just add whatever interpretation of
 	 * SGF files is necessary.*/
 	boardwindow->getGameData()->fullresult = new GameResult(r);
-	BoardDispatch * boarddispatch = boardwindow->getBoardDispatch();
-	if(!boarddispatch)
+	//just one gamedata now, FIXME delete comment
+	BoardDispatch * boarddispatch = 0;
+	boarddispatch = boardwindow->getBoardDispatch();
+	/*if(!boarddispatch)
 	{
 		qDebug("No board dispatch for game result");
 		return;
 	}
 	GameData * gr = boarddispatch->getGameData();
-	gr->fullresult = new GameResult(r);
+	gr->fullresult = new GameResult(r);*/
 	/* This should be parent window modal, otherwise its annoying.
 	 * I'm going to make it its own dialog so it could be extended
 	 * later */
-	if(r.result != GameResult::NOGAME)
+	if(boarddispatch && r.result != GameResult::NOGAME)
 	{
 		ResultDialog * rd = new ResultDialog(boardwindow, boarddispatch, boardwindow->getId(), &r);
 		rd->setWindowModality(Qt::WindowModal);
@@ -320,7 +320,7 @@ void qGoBoard::setResult(GameResult & r)
 	QSettings settings;
 	if( settings.value("AUTOSAVE").toBool())
 		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
-
+	
 	boardwindow->setGamePhase(phaseEnded);
 	/* FIXME:  getting the result doesn't set the result
 	 * in the toolbar for some reason.  Like it doesn't
@@ -427,7 +427,6 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
  * This function adds a pass move to a game. there is no need to return anything
  */
 void qGoBoard::doPass()
-
 {
 //	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 
@@ -482,7 +481,7 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 				clickSound->play();
 			//setModified();
 			lastSound = QTime::currentTime();	
-			lastSound = lastSound.addMSecs(500);
+			lastSound = lastSound.addMSecs(250);	//500 too slow
 	}
 	
 	return validMove;
@@ -566,7 +565,6 @@ void qGoBoard::leaveScoreMode()
 	boardwindow->setGamePhase ( phaseOngoing );
 	boardwindow->getBoardHandler()->exitScore();
 }
-
 
 /*
  * This functions is called in scoring phase when clicking on a dead group
