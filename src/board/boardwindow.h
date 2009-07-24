@@ -101,6 +101,8 @@ public slots:
 	void slotExportPic();
 	void slotDuplicate();
 	void keyPressEvent(QKeyEvent *e);
+	void slotToggleInsertStones(bool val);
+	
 
 private:
 	void setupUI(void);

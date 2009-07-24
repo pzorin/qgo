@@ -6218,6 +6218,8 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    <addaction name="actionCoordinates"/>
    <addaction name="separator"/>
    <addaction name="actionWhatsThis"/>
+   <addaction name="separator"/>
+   <addaction name="actionInsertStone"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -6375,6 +6377,17 @@ Export current board to ASCII.</string>
   <action name="actionExportPicClipB">
    <property name="text">
     <string>E&amp;xport Image to clipboard</string>
+   </property>
+  </action>
+  <action name="actionInsertStone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>InsertStone</string>
+   </property>
+   <property name="toolTip">
+    <string>Insert stone to position (no variation)</string>
    </property>
   </action>
  </widget>

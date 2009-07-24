@@ -21,6 +21,7 @@ Tree::Tree(int * board_size)
 	koStoneX = 0;
 	koStoneY = 0;
 	lastCaptures = 0;
+	insertStoneFlag = false;
 	
 /* 
  * This initialisation is from stonehandler
@@ -963,6 +964,22 @@ void Tree::addStone(StoneColor c, int x, int y)
 
 void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 {
+	if (insertStoneFlag)
+	{
+		c = lastValidMoveChecked->getColor();
+		x = lastValidMoveChecked->getX();
+		y = lastValidMoveChecked->getY();
+
+		Matrix *mat = current->getMatrix();
+		Q_CHECK_PTR(mat);
+		//do insert if game mode is OK
+		Move *m = new Move (c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
+		Q_CHECK_PTR(m);
+		insertStone(m);
+		lastValidMoveChecked = NULL;
+		return;
+	}
+
 	koStoneX = 0;
 	koStoneY = 0;
 	if(lastValidMoveChecked)
@@ -1051,6 +1068,84 @@ void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
 	}
 	updateCurrentMatrix(c, x, y, phaseEdit);
 	//editMove(c, x, y);
+}
+
+/*
+ *	Returns: True  - son of current move was found
+ *           False - 
+ */
+bool Tree::insertStone(Move *node)
+{
+	if (root == NULL)
+	{
+		qFatal("Error: No root!");
+		return false;
+	}
+	else
+	{
+		if (current == NULL)
+		{
+			qFatal("Error: No current node!");
+			return false;
+		}
+
+		// current node has no son?
+		if (current->son == NULL)
+		{
+			if(current == node)
+			{
+				qDebug("Attempting to add move as its own son!");
+				return false;
+			}
+
+			current->son = node;
+			node->parent = current;
+			node->setTimeinfo(false);
+			current = node;
+			// What it does?
+			//assignCurrent(current, node);
+			
+			return false;
+		}
+		// A son found
+		else
+		{
+			
+			//we insert node between current and current->son
+			node->parent = current;
+			node->son = current->son;
+			current->son->parent = node;
+			current->son = node;
+
+			current->parent->marker = current;
+			node->marker = NULL;
+
+			node->setTimeinfo(false);
+			current = node;
+			// What it does?
+			//assignCurrent(current, node);
+
+			// Traverse the tree and update every node (matrix and moveNum)
+			QStack<Move*> stack;
+			Move *t = NULL;
+			stack.push(node);
+
+			while (!stack.isEmpty())
+			{
+				t = stack.pop();
+				if (t != NULL)
+				{
+					if (t->brother != NULL)
+						stack.push(t->brother);
+					if (t->son != NULL)
+						stack.push(t->son);
+					t->setMoveNumber(t->getMoveNumber()+1);
+					t->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+				}
+			}
+			return true;
+		}
+	}
 }
 
 void Tree::undoMove(void)

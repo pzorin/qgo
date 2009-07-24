@@ -54,6 +54,9 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 
 	setupUI();
 
+	ui.actionInsertStone->setChecked(false);
+	ui.actionInsertStone->setEnabled(false);
+	
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
 		loadSGF(gameData->fileName);
@@ -63,6 +66,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	{
 		case modeNormal :
 			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
+			ui.actionInsertStone->setEnabled(true);
 			break;
 		case modeComputer :
 			try
@@ -280,6 +284,7 @@ void BoardWindow::setupUI(void)
 	//Connects the 'edit' buttons to the slots
 	connect(editButtons, SIGNAL(buttonPressed ( int )), 
 		this, SLOT(slotEditButtonPressed( int )));
+	connect(ui.actionInsertStone, SIGNAL(toggled(bool)), SLOT(slotToggleInsertStones(bool)));
 	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
 
@@ -995,3 +1000,10 @@ void BoardWindow::setBoardDispatch(BoardDispatch * d)
 	dispatch = d;
 }
 
+/*
+ * say to tree to not create variation, insert stones directly
+ */
+void BoardWindow::slotToggleInsertStones(bool val)
+{
+	tree->setInsertStone(val);
+}

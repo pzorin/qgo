@@ -77,6 +77,10 @@ public:
 //	void checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties, Matrix *m);// TODO remove
 	//bool updateAll(Matrix *m, bool toDraw=true);
 
+	bool insertStone(Move *node);
+	void setInsertStone (bool val) { insertStoneFlag = val; };
+	bool getInsertStone () { return insertStoneFlag; };
+
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
@@ -101,6 +105,8 @@ private:
 	int koStoneY;
 	int lastCaptures;
 	Move * lastValidMoveChecked;
+ // true - insert stone directly to position, false - insert stone as new variation (default)
+	bool insertStoneFlag;
 };
 
 #endif
