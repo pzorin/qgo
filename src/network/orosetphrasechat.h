@@ -65,6 +65,11 @@
 #define OROSP_HAVEAGOODTIME		0xede7
 #define OROSP_IMLEAVINGNOW		0xede8
 
+#define OROSP_NICETOMEETEVERYONE	0x2716
+#define OROSP_ANYONEFORQUICKGAME	0x2775
+#define OROSP_LOOKINGFORFRIENDLY	0x2779
+#define OROSP_DONTMINDANYGAME		0x277c
+
 extern std::map<unsigned short, QString> ORO_setphrase;
 
 void ORO_setup_setphrases(void);

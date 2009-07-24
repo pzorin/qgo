@@ -68,4 +68,8 @@ void ORO_setup_setphrases(void)
 	ORO_setphrase[OROSP_HAVEAGOODTIME] = QCoreApplication::translate("ORO_setphrases", "Have a good time", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_IMLEAVINGNOW] = QCoreApplication::translate("ORO_setphrases", "I'm leaving now", "", QCoreApplication::DefaultCodec);
 
+	ORO_setphrase[OROSP_NICETOMEETEVERYONE] = QCoreApplication::translate("ORO_setphrases", "Nice to meet you everyone", "", QCoreApplication::DefaultCodec);
+	ORO_setphrase[OROSP_ANYONEFORQUICKGAME] = QCoreApplication::translate("ORO_setphrases", "Anyone want a quick game?", "", QCoreApplication::DefaultCodec);
+	ORO_setphrase[OROSP_LOOKINGFORFRIENDLY] = QCoreApplication::translate("ORO_setphrases", "I'm looking for a friendly match.", "", QCoreApplication::DefaultCodec);
+	ORO_setphrase[OROSP_DONTMINDANYGAME] = QCoreApplication::translate("ORO_setphrases", "I don't mind any sorts of games with anyone.  Just request me.", "", QCoreApplication::DefaultCodec);
 }
