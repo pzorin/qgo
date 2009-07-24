@@ -13,8 +13,8 @@
 * Global defines
 */
 
-#define PACKAGE "qgo2"
-#define VERSION "0.1"
+#define PACKAGE "qGo"
+#define VERSION "2.0.0"
 
 #define DEFAULT_BOARD_SIZE 19
 #define BOARD_X 500
