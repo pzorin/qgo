@@ -30,6 +30,8 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
 		virtual void sendRequestCount(unsigned int game_id);
 		virtual void sendRequestMatchMode(unsigned int game_id);
+		virtual void sendAcceptCountRequest(class GameData * data);
+		virtual void sendRefuseCountRequest(class GameData * data);
 		virtual void sendAcceptRequestMatchMode(unsigned int game_id);
 		virtual void sendDeclineRequestMatchMode(unsigned int game_id);
 		virtual void sendTimeLoss(unsigned int game_id);
@@ -156,7 +158,10 @@ class CyberOroConnection : public NetworkConnection
 		void handleBettingMatchStart(unsigned char * msg, unsigned int size);
 		void handleBettingMatchResult(unsigned char * msg, unsigned int size);
 		void handleRequestCount(unsigned char * msg, unsigned int size);
+		void handleAcceptCountRequest(unsigned char * msg, unsigned int size);
+		void handleRejectCountRequest(unsigned char * msg, unsigned int size);
 		void handleRequestMatchMode(unsigned char * msg, unsigned int size);
+		void handleRejectMatchModeRequest(unsigned char * msg, unsigned int size);
 		void handleTimeLoss(unsigned char * msg, unsigned int size);
 		void handleMove(unsigned char * msg, unsigned int size);
 		void handleUndo(unsigned char * msg, unsigned int size);
