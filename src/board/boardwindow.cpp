@@ -109,12 +109,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	}
 	setupBoardUI();
 
-//	ui.board->init(boardSize);
-	/*if(!qgoboard->init())
-	{
-		qDebug("qgoboard init failed\n");
-	}*/
-
 	setGamePhase(phaseOngoing);
 	show();
 	setFocus();
@@ -123,9 +117,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	// Computer may have to make the first move
 	if(gameData->gameMode == modeComputer)
 		qgoboard->startGame();
-	//ui.board->resize(407, 606);
-		//ui.board->setBaseSize(407, 606);
-	//ui.board->setGeometry(0, 0, 407, 606);
 	
 	//update();
 	//gridLayout->update();
@@ -304,7 +295,6 @@ void BoardWindow::setupUI(void)
 	/* Set column widths ?? */
 }
 
-
 void BoardWindow::setupBoardUI(void)
 {
 	//make sure to set the sound button to the proper state before anything
@@ -333,7 +323,7 @@ void BoardWindow::setupBoardUI(void)
 	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
 	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
 	if (gameData->gameMode == modeMatch || gameData->gameMode == modeComputer)
-	connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
+		connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 	if(gameData->gameMode == modeMatch)
 	{
 		connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
@@ -372,9 +362,7 @@ void BoardWindow::setupBoardUI(void)
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
 	if (gameData->gameMode != modeNormal && gameData->gameMode != modeComputer )
-	connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
-//connect(ui.scoreButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-
+		connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 }
 
 void BoardWindow::resizeEvent(QResizeEvent *)
@@ -424,12 +412,12 @@ void BoardWindow::swapColors(bool noswap)
 	//also need to start any timers if necessary
 	//also network timers in addition to game timers
 }
+
 /*
  * Loads the SGF string. returns true if the file was sucessfully parsed
  */
 bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
 {
-
 	SGFParser *sgfParser = new SGFParser(tree);
 	
 	QString SGFLoaded;
@@ -548,7 +536,6 @@ void BoardWindow::slotEditButtonPressed( int m )
 //	board->setMarkType(t);
 }
 
-
 /*
  * button menu 'export to clipboard' activated
  */
@@ -568,7 +555,6 @@ void BoardWindow::slotExportSGFtoClipB()
 	QApplication::clipboard()->setText(str);
 
 }
-
 
 /*
  * button menu 'export picture' activated
@@ -601,7 +587,6 @@ void BoardWindow::slotExportPic()
 	ui.board->exportPicture(fileName, new QString(filter->section(" ",0,0)), FALSE);//->left(3));
 }
 
-
 /*
  * button menu 'export picture to clipboard' activated
  */
@@ -610,8 +595,6 @@ void BoardWindow::slotExportPicClipB()
 	QString null = "";
 	ui.board->exportPicture(0, 0 , TRUE);	
 }
-
-
 
 /*
  * button 'duplicate board' activated
@@ -633,8 +616,7 @@ void BoardWindow::slotDuplicate()
 	gd->gameMode = modeNormal;
 	gd->fileName = "";
 	BoardWindow *b = new BoardWindow(gd, TRUE, TRUE);
-	//b->setGamePhase(this->getGamePhase());				//maybe?
-
+	
 	b->loadSGF(0,sgf);
 	
 	//doublecheck FIXME
@@ -651,8 +633,15 @@ void BoardWindow::slotDuplicate()
 	//if(mn > 0)
 	//	mn--;
 	b->getBoardHandler()->slotNthMove(mn);
-}
 
+	/* Doesn't seem to matter where the below is */
+	/*b->setGamePhase(this->getGamePhase());				//maybe?
+	if(this->getGamePhase() == phaseScore)
+	{
+		b->qgoboard->enterScoreMode();
+		b->ui.scoreButton->setDown(true);
+	}*/
+}
 
 /*
  * button 'coordinates' has been toggled
@@ -699,7 +688,6 @@ void BoardWindow::slotGameInfo(bool /*toggle*/)
 //	statusBar()->message(tr("Ready."));
 }
 
-
 /*
  * button 'sound' has been toggled
  */
@@ -711,9 +699,6 @@ void BoardWindow::slotSound(bool toggle)
 	else
 		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_on.png"));
 }
-
-
-
 
 /* 
  * Saves the game tree under file 'filename'
@@ -761,6 +746,7 @@ bool BoardWindow::doSave(QString fileName, bool force)
 	qgoboard->setModified(false);
 	return true;
 }
+
 void BoardWindow::setGamePhase(GamePhase gp)
 {
 	/* FIXME We should set and clear ALL buttons and the like here */
@@ -886,7 +872,6 @@ bool BoardWindow::slotFileSave()
 	else
 		return doSave(fileName, TRUE);
 }
-
 
 /*
  * The 'save as' icon has been pressed
