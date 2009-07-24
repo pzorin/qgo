@@ -407,12 +407,25 @@ void BoardDispatch::recvRefuseDrawRequest(void)
 
 void BoardDispatch::recvRequestMatchMode(void)
 {
-	//this takes us out of the scorephase, for instance
-	//if borders are not defined
-	//FIXME, probably need more than this
 	if(!boardwindow)
 		return;
-	boardwindow->qgoboard->leaveScoreMode();
+	boardwindow->qgoboard->requestMatchModeDialog();
+}
+
+void BoardDispatch::sendAcceptMatchModeRequest(void)
+{
+	connection->sendAcceptRequestMatchMode(gameData->number);
+}
+
+void BoardDispatch::sendRefuseMatchModeRequest(void)
+{
+	connection->sendDeclineRequestMatchMode(gameData->number);
+}
+
+void BoardDispatch::recvRejectMatchModeRequest(void)
+{
+	if(boardwindow)
+		boardwindow->qgoboard->recvRefuseMatchMode();
 }
 
 void BoardDispatch::createCountDialog(void)

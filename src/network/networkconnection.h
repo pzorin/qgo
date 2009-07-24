@@ -61,6 +61,8 @@ class NetworkConnection : public QObject
 		virtual void sendRequestCount(unsigned int) {};
 		virtual void sendAcceptCountRequest(class GameData *) {};
 		virtual void sendRefuseCountRequest(class GameData *) {};
+		virtual void sendAcceptRequestMatchMode(unsigned int) {};
+		virtual void sendDeclineRequestMatchMode(unsigned int) {};
 		virtual void sendRequestDraw(unsigned int) {};
 		virtual void sendAcceptDrawRequest(class GameData *) {};
 		virtual void sendRefuseDrawRequest(class GameData *) {};

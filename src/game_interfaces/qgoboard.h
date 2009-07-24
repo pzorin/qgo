@@ -48,7 +48,6 @@ public:
 	virtual bool getPlaySound()			{ return playSound;}
 	virtual void setPlaySound(bool b) 		{ playSound = b; }
 	
-	virtual void setResult(QString , QString ) {};
 	virtual void setResult(class GameResult & );
 	virtual void kibitzReceived(const QString& txt);
 	virtual void setTimerInfo(const QString&, const QString&, const QString&, const QString&) {}
@@ -66,10 +65,12 @@ public:
 	virtual void setNode(int , StoneColor , int , int ) {}
 	virtual void requestAdjournDialog(void) {};
 	virtual void requestCountDialog(void) {};
+	virtual void requestMatchModeDialog(void) {};
 	virtual void requestDrawDialog(void) {};
 	virtual void adjournGame(void) {};
 	virtual void recvRefuseAdjourn(void) {};
 	virtual void recvRefuseCount(void) {};
+	virtual void recvRefuseMatchMode(void) {};
 	virtual void recvRefuseDraw(void) {};
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
@@ -338,9 +339,11 @@ public:
 	void timerEvent(QTimerEvent*);
 	virtual void requestAdjournDialog(void);
 	virtual void requestCountDialog(void);
+	virtual void requestMatchModeDialog(void);
 	virtual void requestDrawDialog(void);
 	virtual void recvRefuseAdjourn(void);
 	virtual void recvRefuseCount(void);
+	virtual void recvRefuseMatchMode(void);
 	virtual void recvRefuseDraw(void);
 public slots:
 	void slotUpdateComment() {}
@@ -361,8 +364,6 @@ private:
 //	int warningSecs;
 
 };
-
-
 
 class qGoBoardReviewInterface : public qGoBoardNetworkInterface 
 {

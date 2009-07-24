@@ -38,6 +38,9 @@ class BoardDispatch
 		void sendAcceptDrawRequest(void);
 		void sendRefuseDrawRequest(void);
 		void recvRequestMatchMode(void);
+		void sendAcceptMatchModeRequest(void);
+		void sendRefuseMatchModeRequest(void);
+		void recvRejectMatchModeRequest(void);
 		void clearCountDialog(void) { countdialog = 0; };
 		void recvRejectCount(void);
 		void recvAcceptCount(void);
