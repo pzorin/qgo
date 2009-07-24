@@ -259,7 +259,15 @@ void Room::slot_showPopup(const QPoint & iPoint)
 			return;
 			
     	QMenu menu(playerView);
-	menu.addAction(tr("Match"), this, SLOT(slot_popupMatch()));
+	QAction * matchAct = new QAction(tr("Match"), 0);
+	if(popup_playerlisting->info.contains("X"))
+		matchAct->setEnabled(false);
+	else
+		connect(matchAct, SIGNAL(triggered()), this, SLOT(slot_popupMatch()));
+		
+	menu.addAction(matchAct);
+	
+		
 	menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
 	menu.addSeparator();
     	if(popup_playerlisting->friendWatchType == PlayerListing::friended)
@@ -272,6 +280,7 @@ void Room::slot_showPopup(const QPoint & iPoint)
     		menu.addAction(tr("Add to Watches"), this, SLOT(slot_addWatch()));
     	menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
     	menu.exec(playerView->mapToGlobal(iPoint));
+	delete matchAct;
 	}
 }
 
