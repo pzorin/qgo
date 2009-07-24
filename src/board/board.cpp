@@ -139,17 +139,11 @@ void Board::init(int size)
 
 Board::~Board()
 {
- 	qDeleteAll(*stones);
-	qDeleteAll(*ghosts);
-	qDeleteAll(*marks);		//FIXME can still crash here as well as below
 	delete stones;
 	delete ghosts;
 	delete marks;
 
-	delete gatter;
-	/* FIXME, can be a segmentation fault, when deleting canvas */
 	delete canvas;
-	qDebug("Finishing deleting board");
 }
 
 /*
@@ -795,9 +789,7 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 //	{
 //		if (m->getType() == t && m->getType() != markText)  // Text labels are overwritten
 //			return;
-		//printf("Removing existing mark at %d %d, %d\n", x, y, marks->count());
 		removeMark(x, y);
-		//printf("new mark count %d\n", marks->count());
 //	}
 
 	if (lastMoveMark != NULL &&
@@ -1019,10 +1011,6 @@ void Board::removeMark(int x, int y, bool /*update*/)
 		m=marks->at(i);
 		if (m->posX() == x && m->posY() == y)
 		{
-			/* FIXME bug here if we duplicate a board in score
-			 * mode and try to play on it */
-			/* I'm thinking that the marks aren't actually copied or that they're
-			 * deleted somewhere or something, or freed, etc. */
 			if (m->getCounter() != -1)
 			{
 				if (m->getType() == markText)

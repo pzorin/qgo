@@ -4,7 +4,6 @@
 * Is is used only by the 'board' class
 */
 
-#include "defines.h"
 #include "stone.h"
 #include "imagehandler.h"
 
@@ -48,8 +47,6 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 
 Stone::~Stone()
 {
-	delete shadow;
-	delete moveNum;
 } 
 
 /*
