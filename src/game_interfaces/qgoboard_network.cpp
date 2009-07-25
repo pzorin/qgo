@@ -519,6 +519,7 @@ void qGoBoardNetworkInterface::adjournGame(void)
 	}
 	else
 		QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("Game with %1 has been adjourned.").arg(opp_name));
+	boardwindow->getGameData()->fullresult = new GameResult(stoneNone, GameResult::ADJOURNED);
 	boardwindow->getUi()->adjournButton->setEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
 }
 
