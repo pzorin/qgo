@@ -1102,8 +1102,7 @@ bool Tree::insertStone(Move *node)
 			node->parent = current;
 			node->setTimeinfo(false);
 			current = node;
-			// What it does?
-			//assignCurrent(current, node);
+			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
 			
 			return false;
 		}
@@ -1122,25 +1121,31 @@ bool Tree::insertStone(Move *node)
 
 			node->setTimeinfo(false);
 			current = node;
-			// What it does?
-			//assignCurrent(current, node);
+			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
 
-			// Traverse the tree and update every node (matrix and moveNum)
-			QStack<Move*> stack;
-			Move *t = NULL;
-			stack.push(node);
+			//update son - it is exclude from traverse search because we cannot update brothers of node->son
+			node->son->setMoveNumber(node->son->getMoveNumber()+1);
+			node->son->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
 
-			while (!stack.isEmpty())
+			if (node->son->son != NULL)
 			{
-				t = stack.pop();
-				if (t != NULL)
+				// Traverse the tree and update every node (matrix and moveNum)
+				QStack<Move*> stack;
+				Move *t = NULL;
+				stack.push(node->son->son);
+
+				while (!stack.isEmpty())
 				{
-					if (t->brother != NULL)
-						stack.push(t->brother);
-					if (t->son != NULL)
-						stack.push(t->son);
-					t->setMoveNumber(t->getMoveNumber()+1);
-					t->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+					t = stack.pop();
+					if (t != NULL)
+					{
+						if (t->brother != NULL)
+							stack.push(t->brother);
+						if (t->son != NULL)
+							stack.push(t->son);
+						t->setMoveNumber(t->getMoveNumber()+1);
+						t->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+					}
 				}
 			}
 			return true;
