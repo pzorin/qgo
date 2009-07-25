@@ -2025,8 +2025,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player)
 		QMessageBox::information(0, tr("3 Boards Open"), tr("You must close a board before you can start a game"));
 	else if(player.info == QString('X'))
 	{
-		QString text = player.name + " is not accepting invitations";
-		QMessageBox mb(tr("Not open"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+		QMessageBox mb(tr("Not open"), tr("%1 is not accepting invitations").arg(player.name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 			       QMessageBox::NoButton, QMessageBox::NoButton);
 		mb.exec();
 	}
@@ -8308,8 +8307,7 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 	{
 		case 0x00:
 		{
-			QString text = player->name + " has declined invitation";
-			QMessageBox mb(tr("Invite declined"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox mb(tr("Invite declined"), tr("%1 has declined invitation").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 				       QMessageBox::NoButton, QMessageBox::NoButton);
 			mb.exec();
 		}
@@ -8322,8 +8320,7 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 		{
 			/* FIXME, I'm thinking 0b may mean that they're already in a game
 			 * in addition?*/
-			QString text = player->name + " is not accepting invitations";
-			QMessageBox mb(tr("In game?"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox mb(tr("In game?"), tr("%1 is not accepting invitations").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 				       QMessageBox::NoButton, QMessageBox::NoButton);
 			mb.exec();
 		}
@@ -8332,16 +8329,14 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 		{
 			/* We shouldn't really get here, this means they have "decline"
 			 * set */
-			QString text = player->name + " is not accepting invitations";
-			QMessageBox mb(tr("Not open"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox mb(tr("Not open"), tr("%1 is not accepting invitations").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 				       QMessageBox::NoButton, QMessageBox::NoButton);
 			mb.exec();
 		}
 			break;
 		case 0x0d:
 		{
-			QString text = player->name + " has the maximum boards (3) open";
-			QMessageBox mb(tr("Not open"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox mb(tr("Not open"), tr("%1 has the maximum boards (3) open").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 				       QMessageBox::NoButton, QMessageBox::NoButton);
 			mb.exec();
 		}
@@ -8349,8 +8344,7 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 		case 0x0e:
 		{
 			/* I think you get this if you check the box */
-			QString text = player->name + " has declined all invitation";
-			QMessageBox mb(tr("Invite declined"), text, QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
+			QMessageBox mb(tr("Invite declined"), tr("%1 has declined all invitations").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 				       QMessageBox::NoButton, QMessageBox::NoButton);
 			mb.exec();
 		}
