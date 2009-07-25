@@ -121,6 +121,7 @@ class CyberOroConnection : public NetworkConnection
 		void sendDeclineUndo(unsigned int game_code, const MoveRecord * move);
 		void sendAcceptUndo(unsigned int game_code, const MoveRecord * move);
 		void sendRemoveStones(unsigned int game_code, const MoveRecord * move);
+		void sendEndgame12Msg(unsigned int game_id, unsigned short msg_code);
 		void sendEnterScoring(unsigned int game_code);
 		void sendDoneScoring(unsigned int game_id, unsigned short opp_id);
 		void sendResign(unsigned int game_code);
