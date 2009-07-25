@@ -111,6 +111,11 @@ void BoardDispatch::closeBoard(void)
 				 * overlapping here.  Something needs to go */
 				if(boardwindow->getGamePhase() != phaseEnded)
 					connection->adjournGame(*gameListing);	 //FIXME
+				if(resultdialog)
+				{
+					delete resultdialog;
+					resultdialog = 0;
+				}
 				break;
 			default:
 				qDebug("Unknown game Mode, board dispatch does nothing\n");
@@ -466,7 +471,7 @@ void BoardDispatch::recvRequestAdjourn(void)
 
 void BoardDispatch::sendAdjournRequest(void)
 {
-	connection->sendAdjournRequest();	
+	connection->sendAdjournRequest();
 }
 
 /* We either don't need this or it might overlap with some other message
