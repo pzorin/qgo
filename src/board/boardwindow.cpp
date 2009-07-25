@@ -40,6 +40,19 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 		myColorIsBlack = false;
 		myColorIsWhite = false;
 	}
+	else if(gameData->gameMode == modeComputer)
+	{
+			if(gameData->white_name == "Human")		//is this reliable?
+			{
+				myColorIsWhite = true;
+				myColorIsBlack = false;
+			}
+			else
+			{
+				myColorIsWhite = false;
+				myColorIsBlack = true;
+			}
+	}
 	else
 	{
 		myColorIsBlack = iAmBlack;
@@ -231,12 +244,7 @@ void BoardWindow::setupUI(void)
 	exportButton->setPopupMode( QToolButton::InstantPopup);
 	ui.toolBar->insertWidget ( ui.actionImport, exportButton );
 
-	if(!gameData)
-		qDebug("bw: no game data? okay?, line: %d\n", __LINE__);
-	if(!gameData)
-		clockDisplay = new ClockDisplay(this, canadian, 6000, 25, 60);	//what is this, FIXME
-	else
-		clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
+	clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
 	ui.board->init(boardSize);
 
 	interfaceHandler = new InterfaceHandler( this);
