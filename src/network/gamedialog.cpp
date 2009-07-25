@@ -647,6 +647,10 @@ void GameDialog::slot_offer(bool active)
 		current_match_request->color_request = MatchRequest::NIGIRI;
 		//current_match_request->challenger_is_black = 0;
 	}
+	if(ui.ratedCB->isChecked())
+		current_match_request->free_rated = RATED;
+	else
+		current_match_request->free_rated = FREE;
 	current_match_request->board_size = ui.boardSizeSpin->value();
 	qDebug("bs value: %d", current_match_request->board_size);
 	current_match_request->handicap = ui.handicapSpin->cleanText().toInt();
@@ -684,7 +688,7 @@ void GameDialog::slot_offer(bool active)
 	}
 	else if(ui.timeTab->currentIndex() == 2)	//tv asia, ORO
 	{
-		current_match_request->maintime = timeToSeconds(ui.ASIATimeSpin->text());
+		current_match_request->maintime = timeToSeconds(ui.ASIATimeSpin->time());
 		/* We can have more than 60 seconds... like 300 FIXME */
 		//current_match_request->maintime = (ui.ASIATimeSpin->time().minute() * 60);
 		//current_match_request->maintime += ui.ASIATimeSpin->time().second();
