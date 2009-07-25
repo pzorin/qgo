@@ -39,7 +39,7 @@
         <translation type="obsolete">N</translation>
     </message>
     <message>
-        <location filename="../board/board.cpp" line="1277"/>
+        <location filename="../board/board.cpp" line="1269"/>
         <source>Failed to save image!</source>
         <translation>Imaginem servare nequivi!</translation>
     </message>
@@ -95,65 +95,65 @@
 <context>
     <name>BoardWindow</name>
     <message>
-        <location filename="../board/boardwindow.cpp" line="159"/>
+        <location filename="../board/boardwindow.cpp" line="172"/>
         <source>You modified the game.
 Do you want to save your changes?</source>
         <translation type="unfinished">Certatio correcta.
 Correctiones servandae sunt?</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="160"/>
+        <location filename="../board/boardwindow.cpp" line="173"/>
         <source>Yes</source>
         <translation type="unfinished">Sic</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="160"/>
+        <location filename="../board/boardwindow.cpp" line="173"/>
         <source>No</source>
         <translation type="unfinished">Non</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="160"/>
+        <location filename="../board/boardwindow.cpp" line="173"/>
         <source>Cancel</source>
         <translation type="unfinished">Tollere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="555"/>
-        <location filename="../board/boardwindow.cpp" line="616"/>
+        <location filename="../board/boardwindow.cpp" line="563"/>
+        <location filename="../board/boardwindow.cpp" line="624"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="555"/>
+        <location filename="../board/boardwindow.cpp" line="563"/>
         <source>Could not export  the game to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="571"/>
+        <location filename="../board/boardwindow.cpp" line="579"/>
         <source>Export image as</source>
         <translation type="unfinished">Imaginem exportare sicut</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="616"/>
+        <location filename="../board/boardwindow.cpp" line="624"/>
         <source>Could not duplicate the game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="727"/>
+        <location filename="../board/boardwindow.cpp" line="735"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="727"/>
+        <location filename="../board/boardwindow.cpp" line="735"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
         <translation type="unfinished">Plicae SGF (*.sgf);;Omnia (*)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="746"/>
+        <location filename="../board/boardwindow.cpp" line="754"/>
         <source>Cannot save SGF file.</source>
         <translation type="unfinished">Plicam modo SGF compositam servare nequivi.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="825"/>
+        <location filename="../board/boardwindow.cpp" line="833"/>
         <source>Match Mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -735,7 +735,7 @@ Undo the opponent&apos;s last move.</source>
 Novissimum motum hostis tollit.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="797"/>
+        <location filename="../board/boardwindow.cpp" line="805"/>
         <location filename="../board/boardwindow.ui" line="5370"/>
         <source>Undo</source>
         <translation type="unfinished">Tollere</translation>
@@ -2573,18 +2573,33 @@ Using default</source>
 <context>
     <name>CyberOroConnection</name>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3437"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3512"/>
         <source>Server full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3437"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3512"/>
         <source>Server full, try another</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8231"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6296"/>
+        <source>Rematch declined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="6296"/>
+        <source>%1 has declined rematch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="8318"/>
         <source>Invite declined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="8318"/>
+        <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2690,18 +2705,18 @@ Using default</source>
         <location filename="../network/gamedialog.cpp" line="504"/>
         <location filename="../network/gamedialog.cpp" line="527"/>
         <location filename="../network/gamedialog.cpp" line="626"/>
-        <location filename="../network/gamedialog.cpp" line="733"/>
-        <location filename="../network/gamedialog.cpp" line="755"/>
-        <location filename="../network/gamedialog.cpp" line="793"/>
-        <location filename="../network/gamedialog.cpp" line="813"/>
-        <location filename="../network/gamedialog.cpp" line="819"/>
-        <location filename="../network/gamedialog.cpp" line="1231"/>
+        <location filename="../network/gamedialog.cpp" line="737"/>
+        <location filename="../network/gamedialog.cpp" line="759"/>
+        <location filename="../network/gamedialog.cpp" line="797"/>
+        <location filename="../network/gamedialog.cpp" line="817"/>
+        <location filename="../network/gamedialog.cpp" line="823"/>
+        <location filename="../network/gamedialog.cpp" line="1235"/>
         <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
         <translation>Praebere</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="766"/>
+        <location filename="../network/gamedialog.cpp" line="770"/>
         <source>Teaching</source>
         <translation>Lectio</translation>
     </message>
@@ -2723,37 +2738,37 @@ Using default</source>
         <location filename="../network/gamedialog.cpp" line="475"/>
         <location filename="../network/gamedialog.cpp" line="499"/>
         <location filename="../network/gamedialog.cpp" line="522"/>
-        <location filename="../network/gamedialog.cpp" line="1238"/>
+        <location filename="../network/gamedialog.cpp" line="1242"/>
         <source>Accept</source>
         <translation>Accipere</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="799"/>
+        <location filename="../network/gamedialog.cpp" line="803"/>
         <source>%1 not open for matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="801"/>
+        <location filename="../network/gamedialog.cpp" line="805"/>
         <source>%1 declined the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="803"/>
+        <location filename="../network/gamedialog.cpp" line="807"/>
         <source>%1 canceled the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="805"/>
+        <location filename="../network/gamedialog.cpp" line="809"/>
         <source>%1 already playing a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="807"/>
+        <location filename="../network/gamedialog.cpp" line="811"/>
         <source>%1 does not accept direct matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="812"/>
+        <location filename="../network/gamedialog.cpp" line="816"/>
         <source>Invalid Parameters!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2894,7 +2909,7 @@ Using default</source>
         <translation type="unfinished">.5</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="809"/>
+        <location filename="../network/gamedialog.cpp" line="813"/>
         <source>%1&apos;s client does not support nmatch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5106,7 +5121,7 @@ De Qt.</translation>
         <translation type="obsolete">&amp;Enchiridion</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="189"/>
+        <location filename="../mainwindow.cpp" line="188"/>
         <source>Ready.</source>
         <translation>Paratus.</translation>
     </message>
@@ -5287,12 +5302,12 @@ Correctiones servandae sunt?</translation>
         <translation type="obsolete">E moderatro certationem reficit correctiones suae tabellae negligens.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="208"/>
         <source>Current online players / watched players</source>
         <translation type="unfinished">Lusores conexi / lusores perspecti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="209"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
@@ -5301,32 +5316,32 @@ et numerum lusorum perspectorum ostendit.
 Lusor perspectus in &apos;lusores perspecti:&apos; regione apparet.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="217"/>
+        <location filename="../mainwindow.cpp" line="216"/>
         <source>Current online games / observed games + matches</source>
         <translation type="unfinished">Certationes in moderatro / certationes spectatae + provocationes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="218"/>
+        <location filename="../mainwindow.cpp" line="217"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
         <translation type="unfinished">Numerum certationum lusarum in hoc moderatro ostendit atque numerum certationum a te spectatarum vel lusarum</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>Current server</source>
         <translation type="unfinished">Hoc moderatrum</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="226"/>
+        <location filename="../mainwindow.cpp" line="225"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
         <translation type="unfinished">Nomen huius moderatri aut OFFLINE si non conexus interreti ostendit.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="240"/>
         <source>Online Time</source>
         <translation type="unfinished">Tempus Conexi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="242"/>
+        <location filename="../mainwindow.cpp" line="241"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
@@ -5335,7 +5350,7 @@ Lusor perspectus in &apos;lusores perspecti:&apos; regione apparet.</translation
 (Hold) -&gt; conexum sustentat</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="493"/>
+        <location filename="../mainwindow.cpp" line="492"/>
         <source>*** Both players are the same ! ***</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9047,8 +9062,8 @@ ad :</translation>
         <translation type="obsolete">Quaerere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="78"/>
-        <location filename="../board/boardwindow.cpp" line="97"/>
+        <location filename="../board/boardwindow.cpp" line="91"/>
+        <location filename="../board/boardwindow.cpp" line="110"/>
         <source>Error</source>
         <translation>Erratum</translation>
     </message>
@@ -9597,32 +9612,54 @@ pittacium (dialogumque) concludit</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2029"/>
-        <location filename="../network/tygemconnection.cpp" line="8336"/>
-        <location filename="../network/tygemconnection.cpp" line="8344"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
+        <location filename="../network/tygemconnection.cpp" line="8332"/>
+        <location filename="../network/tygemconnection.cpp" line="8339"/>
         <source>Not open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5168"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
+        <location filename="../network/tygemconnection.cpp" line="8323"/>
+        <location filename="../network/tygemconnection.cpp" line="8332"/>
+        <source>%1 is not accepting invitations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="5167"/>
         <source>Resume match?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5169"/>
+        <location filename="../network/tygemconnection.cpp" line="5168"/>
         <source>Resume match in progress with %1?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8312"/>
-        <location filename="../network/tygemconnection.cpp" line="8353"/>
+        <location filename="../network/tygemconnection.cpp" line="8310"/>
+        <location filename="../network/tygemconnection.cpp" line="8347"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8326"/>
+        <location filename="../network/tygemconnection.cpp" line="8310"/>
+        <source>%1 has declined invitation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="8323"/>
         <source>In game?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="8339"/>
+        <source>%1 has the maximum boards (3) open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/tygemconnection.cpp" line="8347"/>
+        <source>%1 has declined all invitations</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
