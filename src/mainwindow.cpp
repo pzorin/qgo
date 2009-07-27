@@ -26,7 +26,6 @@
 #include "sgfparser.h"
 #include "tree.h"
 #include "listviews.h"
-//#include "oldparser.h"
 #include "network/serverliststorage.h"
 
 #include <QtGui>
@@ -41,7 +40,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	//hide by default
 	ui.changeServerPB->hide();
 	ui.createRoomPB->hide();
-		
+	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));
 	initStatusBar();
 	/* FIXME, really need a list of such things, 0s */
 	connection = 0;
