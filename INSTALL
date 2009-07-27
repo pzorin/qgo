@@ -2,6 +2,27 @@ qmake instructions
 __________________
 
 
-
 > > qmake -o Makefile qgo2.pro
 > > gmake -f Makefile
+
+
+Some additional notes
+____________________
+
+make and make install issues haven't really been fixed yet so here's some hints.
+
+If you want sounds, you have to copy them to /usr/share/qgo2/sounds or run qgo
+from the sounds directory.
+If you want to use a translation, you'll need to run lrelease src.pro and then
+run qgo from the translations directory.
+
+cd src
+qmake src.pro
+make
+
+May also work.  
+
+On Mac Systems, there's a line in src.pro: 
+QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
+You may have to change this to MacOSX10.5.sdk or something else depending on
+where those libraries are installed.
