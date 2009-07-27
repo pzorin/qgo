@@ -411,21 +411,15 @@ void WingConnection::handle_info(QString line)
 #ifdef FIXME
 		}
 #endif //FIXME
-		PlayerListing * p = room->getPlayerListing(aMatch->opponent);
+		PlayerListing * p = getPlayerListingNeverFail(aMatch->opponent);
 		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
 		{	
 			aMatch->our_name = us->name;
 			aMatch->our_rank = us->rank;
 		}
-		if(p)
-			aMatch->their_rank = p->rank;
-		else
-		{
-			qDebug("No player listing! line: %d", __LINE__);
-			delete aMatch;
-			return;
-		}
+		aMatch->their_rank = p->rank;
+
 		GameDialog * gameDialogDispatch = getGameDialog(*p);
 		gameDialogDispatch->recvRequest(aMatch);
 		delete aMatch;
@@ -464,7 +458,7 @@ void WingConnection::handle_info(QString line)
 			line.contains("withdraws the match offer"))
 	{
 		QString opp = element(line, 0, " ");
-		PlayerListing * p = room->getPlayerListing(opp);
+		PlayerListing * p = getPlayerListingNeverFail(opp);
 		GameDialog * gameDialogDispatch = getGameDialog(*p);
 		gameDialogDispatch->recvRefuseMatch(1);
 	}
@@ -912,11 +906,8 @@ void WingConnection::handle_info(QString line)
 			rank = element(line, i, " ");
 			fixRankString(&rank);
 					// send as kibitz from "0"
-			PlayerListing * p = room->getPlayerListing(name);
-			if(p)
-				boarddispatch->recvObserver(p, true);
-			else
-				qDebug("No player listing for %s", name.toLatin1().constData());
+			PlayerListing * p = getPlayerListingNeverFail(name);
+			boarddispatch->recvObserver(p, true);
 			name = element(line, ++i , " ");
 		}
 
@@ -1060,7 +1051,7 @@ void WingConnection::handle_info(QString line)
 	else if (line.contains("Player:"))
 	{
 		QString name = element(line, 1, " ");
-		statsPlayer = room->getPlayerListing(name);
+		statsPlayer = getPlayerListingNeverFail(name);
 #ifdef FIXME
 				/* So this would have cleared the structure, but
 		* we're just creating a new empty object later.
@@ -1238,7 +1229,7 @@ void WingConnection::handle_kibitz(QString line)
 				qDebug("No board dispatch for this game!");
 				return;
 			}
-			PlayerListing * p = getDefaultRoom()->getPlayerListing(name);
+			PlayerListing * p = getPlayerListingNeverFail(name);
 			boarddispatch->recvObserver(p, true);
 			memory = 0;
 			memory_str.clear();

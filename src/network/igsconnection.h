@@ -114,6 +114,7 @@ class IGSConnection : public NetworkConnection
 		QString element(const QString &line, int index, const QString &del1, const QString &del2="", bool killblanks=FALSE);
 		unsigned int idleTimeToSeconds(QString time);
 		void fixRankString(QString * rank);
+		PlayerListing * getPlayerListingNeverFail(QString & name);
 		
 		bool writeReady;
 		int keepAliveTimer;

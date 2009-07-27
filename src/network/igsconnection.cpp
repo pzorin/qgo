@@ -721,7 +721,7 @@ void IGSConnection::onReady(void)
 	/* There's a bug here where a person who's name is "" gets painted blue FIXME */
 	//getDefaultRoom()->setAccountName(username);
 	
-	QString v = "id qGo2v" + QString(VERSION) + "\r\n";
+	QString v = "id qGov" + QString(VERSION) + "\r\n";
 	sendText(v.toLatin1().constData());
 	//sendText("toggle newrating\r\n");
 	
@@ -1257,21 +1257,21 @@ void IGSConnection::handle_error(QString line)
 			opp = element(line, 1, " ", "\"");
 		else
 			opp = element(line, 0, " ");
-		PlayerListing * p = room->getPlayerListing(opp);
+		PlayerListing * p = getPlayerListingNeverFail(opp);
 		GameDialog * gameDialog = getGameDialog(*p);
 		gameDialog->recvRefuseMatch(GD_REFUSE_INGAME);
 	}
 	else if (line.contains("is not open to match requests"))
 	{
 		QString opp = element(line, 0, "\"", "\"");
-		PlayerListing * p = room->getPlayerListing(opp);
+		PlayerListing * p = getPlayerListingNeverFail(opp);
 		GameDialog * gameDialog = getGameDialog(*p);
 		gameDialog->recvRefuseMatch(GD_REFUSE_NOTOPEN);
 	}
 	else if(line.contains("does not accept direct match"))
 	{
 		QString opp = element(line, 0, " ");//, " ");
-		PlayerListing * p = room->getPlayerListing(opp);
+		PlayerListing * p = getPlayerListingNeverFail(opp);
 		GameDialog * gameDialog = getGameDialog(*p);
 		gameDialog->recvRefuseMatch(GD_REFUSE_NODIRECT);
 	}
@@ -1287,7 +1287,7 @@ void IGSConnection::handle_error(QString line)
 		* I'll just do this for now*/
 		if(match_playerName.size())
 		{
-			PlayerListing * p = room->getPlayerListing(match_playerName);
+			PlayerListing * p = getPlayerListingNeverFail(match_playerName);
 			GameDialog * gameDialog = getGameDialog(*p);
 			gameDialog->recvRefuseMatch(GD_REFUSE_NOTOPEN);
 		}
@@ -1296,7 +1296,7 @@ void IGSConnection::handle_error(QString line)
 	{
 		if(match_playerName.size())
 		{
-			PlayerListing * p = room->getPlayerListing(match_playerName);
+			PlayerListing * p = getPlayerListingNeverFail(match_playerName);
 			GameDialog * gameDialog = getGameDialog(*p);
 			gameDialog->recvRefuseMatch(GD_INVALID_PARAMETERS);
 		}
@@ -1306,7 +1306,7 @@ void IGSConnection::handle_error(QString line)
 	{
 		if(match_playerName.size())
 		{
-			PlayerListing * p = room->getPlayerListing(match_playerName);
+			PlayerListing * p = getPlayerListingNeverFail(match_playerName);
 			GameDialog * gameDialog = getGameDialog(*p);
 			gameDialog->recvRefuseMatch(GD_OPP_NO_NMATCH);
 		}
@@ -1402,21 +1402,15 @@ void IGSConnection::handle_error(QString line)
 		}				
 
 				
-		PlayerListing * pl = room->getPlayerListing(aMatch->opponent);
+		PlayerListing * pl = getPlayerListingNeverFail(aMatch->opponent);
 		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
 		{
 			aMatch->our_name = us->name;
 			aMatch->our_rank = us->rank;
 		}
-		if(pl)
-			aMatch->their_rank = pl->rank;
-		else
-		{
-			qDebug("No player listing! line: %d", __LINE__);
-			delete aMatch;
-			return;
-		}
+		aMatch->their_rank = pl->rank;
+		
 		GameDialog * gameDialog = getGameDialog(*pl);
 		gameDialog->recvRequest(aMatch);
 		delete aMatch;		
@@ -1428,12 +1422,7 @@ void IGSConnection::handle_error(QString line)
 		//5 lemon wants Time 60 - 60.
 		//5 seinosuke wants Time 300 - 300
 		QString opponent = element(line, 0, " ");
-		PlayerListing * pl = room->getPlayerListing(opponent);
-		if(!pl)
-		{
-			qDebug("No player listing for %s", opponent.toLatin1().constData());
-			return;
-		}
+		PlayerListing * pl = getPlayerListingNeverFail(opponent);
 		//QString timetochange = element(line, 2, " ");
 		GameDialog * gameDialog = getGameDialog(*pl);
 		MatchRequest * m = gameDialog->getMatchRequest();
@@ -1500,14 +1489,16 @@ void IGSConnection::handle_games(QString line)
 #ifdef FIXME
 	gameListB->append(aGame->number);
 #endif //FIXME
-	aGame->white = room->getPlayerListing(element(line, 0, "]", "[", true));
+	QString name = element(line, 0, "]", "[", true);
+	aGame->white = getPlayerListingNeverFail(name);
 	aGame->_white_name = element(line, 0, "]", "[", true);
 	aGame->_white_rank = element(line, 1, "[", "]", true);
 	fixRankString(&(aGame->_white_rank));
 	aGame->_white_rank_score = rankToScore(aGame->_white_rank);
 			// skip 'vs.'
 	buffer = element(line, 1, "]", "[", true);
-	aGame->black = room->getPlayerListing(buffer.remove(0, 3));
+	name = buffer.remove(0, 3);
+	aGame->black = getPlayerListingNeverFail(name);
 	aGame->_black_name = buffer;
 	aGame->_black_rank = element(line, 2, "[", "]", true);
 	fixRankString(&(aGame->_black_rank));
@@ -1926,25 +1917,15 @@ void IGSConnection::handle_info(QString line)
 			flags |= GDF_STONES25_FIXED;
 			aMatch->nmatch = false;
 		}
-		PlayerListing * p = room->getPlayerListing(aMatch->opponent);
+		PlayerListing * p = getPlayerListingNeverFail(aMatch->opponent);
 		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
 		{	
 			aMatch->our_name = us->name;
 			aMatch->our_rank = us->rank;
 		}
-		if(p)
-			aMatch->their_rank = p->rank;
-		else
-		{
-			PlayerListing * aPlayer = new PlayerListing();
-
-			aPlayer->name = aMatch->opponent;
-			room->recvPlayerListing(aPlayer);
-			delete aPlayer;			
-			p = room->getPlayerListing(aMatch->opponent);
-			sendStatsRequest(*p);
-		}
+		aMatch->their_rank = p->rank;
+		
 		GameDialog * gameDialog = getGameDialog(*p);
 		gameDialog->recvRequest(aMatch, flags);
 		delete aMatch;
@@ -1985,7 +1966,7 @@ void IGSConnection::handle_info(QString line)
 			line.contains("withdraws the match offer"))
 	{
 		QString opp = element(line, 0, " ");
-		PlayerListing * p = room->getPlayerListing(opp);
+		PlayerListing * p = getPlayerListingNeverFail(opp);
 		GameDialog * gameDialog = getGameDialog(*p);
 		gameDialog->recvRefuseMatch(1);
 	}
@@ -2461,11 +2442,8 @@ void IGSConnection::handle_info(QString line)
 			rank = element(line, i, " ");
 			fixRankString(&rank);
 					// send as kibitz from "0"
-			PlayerListing * p = room->getPlayerListing(name);
-			if(p)
-				boarddispatch->recvObserver(p, true);
-			else
-				qDebug("No player listing for %s", name.toLatin1().constData());
+			PlayerListing * p = getPlayerListingNeverFail(name);
+			boarddispatch->recvObserver(p, true);
 			name =  element(line, ++i , " ");
 		}
 
@@ -2618,7 +2596,7 @@ void IGSConnection::handle_info(QString line)
 	{
 		//statsPlayer = new PlayerListing();
 		QString name = element(line, 1, " ");
-		statsPlayer = room->getPlayerListing(name);
+		statsPlayer = getPlayerListingNeverFail(name);
 #ifdef FIXME
 				/* So this would have cleared the structure, but
 		* we're just creating a new empty object later.
@@ -2898,7 +2876,7 @@ void IGSConnection::handle_move(QString line)
 					QString opp = (white == getUsername() ? black : white);
 					if((white == getUsername() || black == getUsername()) && !getBoardFromOurOpponent(opp))
 					{
-						PlayerListing * p = room->getPlayerListing(opp);
+						PlayerListing * p = getPlayerListingNeverFail(opp);
 						MatchRequest * mr = getAndCloseGameDialog(*p);
 						if(mr)
 						{
@@ -2928,17 +2906,15 @@ void IGSConnection::handle_move(QString line)
 						}
 						else
 						{
-							PlayerListing * blackPlayer = room->getPlayerListing(black);
-							PlayerListing * whitePlayer = room->getPlayerListing(white);
+							PlayerListing * blackPlayer = getPlayerListingNeverFail(black);
+							PlayerListing * whitePlayer = getPlayerListingNeverFail(white);
 							boarddispatch = getBoardDispatch(number);
 							GameData * aGameData = boarddispatch->getGameData();
 							aGameData->number = number;
 							aGameData->white_name = white;
 							aGameData->black_name = black;
-							if(blackPlayer)	
-								aGameData->black_rank = blackPlayer->rank;
-							if(whitePlayer)
-								aGameData->white_rank = whitePlayer->rank;
+							aGameData->black_rank = blackPlayer->rank;
+							aGameData->white_rank = whitePlayer->rank;
 							// Could be from seek opponent !!!
 							
 							boarddispatch->openBoard();
@@ -3556,12 +3532,14 @@ void IGSConnection::handle_shout(QString line)
 			*aGame = *l;
 		aGame->number = number;
 		/* No reason to wait for player listing since info is here */
-		aGame->white = room->getPlayerListing(element(line, 0, ":", "["));
+		QString name = element(line, 0, ":", "[");
+		aGame->white = getPlayerListingNeverFail(name);
 		aGame->_white_name = element(line, 0, ":", "[");
 		aGame->_white_rank = element(line, 0, "[", "]");
 		fixRankString(&(aGame->_white_rank));
 		aGame->_white_rank_score = rankToScore(aGame->_white_rank);
-		aGame->black = room->getPlayerListing(element(line, 0, "]", "["));
+		name = element(line, 0, "]", "[");
+		aGame->black = getPlayerListingNeverFail(name);
 		aGame->_black_name = element(line, 0, "]", "[");
 		aGame->_black_rank = element(line, 1, "[", "]");
 		fixRankString(&(aGame->_black_rank));
@@ -3755,7 +3733,6 @@ void IGSConnection::handle_tell(QString line)
 	qDebug("24: %s", line.toLatin1().constData());
 	int pos;
 	BoardDispatch * boarddispatch;
-	Room * room = getDefaultRoom();
 #ifdef FIXME
 	if (((((pos = line.indexOf("*")) != -1) && (pos < 3)) || 
 		      (((pos = line.indexOf("-->")) != -1) && (pos < 3) &&
@@ -3796,7 +3773,7 @@ void IGSConnection::handle_tell(QString line)
 	if (line.contains("*SYSTEM*"))
 	{
 		QString opp = element(line, 1, " ");
-		PlayerListing * p = room->getPlayerListing(opp);
+		PlayerListing * p = getPlayerListingNeverFail(opp);
 		line = line.remove(0,10);
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 
@@ -3844,15 +3821,7 @@ void IGSConnection::handle_tell(QString line)
 
 			// //emit player + message + true (=player)
 			////emit signal_talk(e1, e2, true);
-	PlayerListing * p = room->getPlayerListing(e1);
-	if(!p)
-	{
-		p = new PlayerListing();
-		p->online = true;
-		p->name = e1;
-		room->recvPlayerListing(p);
-		p = room->getPlayerListing(e1);
-	}
+	PlayerListing * p = getPlayerListingNeverFail(e1);
 	Talk * talk = getIfTalk(*p);
 	if(!talk)
 	{
@@ -3912,7 +3881,7 @@ void IGSConnection::handle_thist(QString line)
 		//case 27:
 void IGSConnection::handle_who(QString line)
 {
-	PlayerListing * aPlayer;
+	PlayerListing * aPlayer, * newPlayer = 0;
 	Room * room = getDefaultRoom();
 	int pos;
 	//line = line.remove(0, 2).trimmed();
@@ -3933,20 +3902,28 @@ void IGSConnection::handle_who(QString line)
 #endif //OLD
 		qDebug("Room stats: %d %d", rs->players, rs->games);
 		delete rs;
+		return;
 	}
-
-	aPlayer = new PlayerListing();
-			// indicate player to be online
-	aPlayer->online = true;
 			
 		if (line[15] != ' ')
 		{
 //27   X --   -- truetest    7m     1d* |   X --   -- aajjoo      6s      9k
 					// parse line
-			aPlayer->info = line.mid(4,2);
-			aPlayer->observing = line.mid(6,3).toInt();
-			aPlayer->playing = line.mid(11,3).trimmed().toInt();
-			aPlayer->name = line.mid(15,11).trimmed();
+			QString info = line.mid(4,2);
+			int observing = line.mid(6,3).toInt();
+			int playing = line.mid(11,3).trimmed().toInt();
+			QString name = line.mid(15,11).trimmed();
+			aPlayer = room->getPlayerListing(name);
+			if(!aPlayer)
+			{
+				newPlayer = new PlayerListing();
+				aPlayer = newPlayer;
+				aPlayer->name = name;
+			}
+			aPlayer->online = true;
+			aPlayer->info = info;
+			aPlayer->observing = observing;
+			aPlayer->playing = playing;
 			aPlayer->idletime = line.mid(26,3);
 			aPlayer->seconds_idle = idleTimeToSeconds(aPlayer->idletime);
 					//aPlayer->nmatch = false;
@@ -3970,7 +3947,12 @@ void IGSConnection::handle_who(QString line)
 			}
 					
 					// check if line ok, true -> cmd "players" preceded
-			room->recvPlayerListing(aPlayer);
+			if(newPlayer)
+			{
+				room->recvPlayerListing(aPlayer);
+				delete newPlayer;
+				newPlayer = 0;
+			}
 		}
 		else
 			qDebug("player27 dropped (1): %s" + line.toLatin1());
@@ -3981,10 +3963,21 @@ void IGSConnection::handle_who(QString line)
 		if (pos != -1 && line[52] != ' ')
 		{
 					// parse line
-			aPlayer->info = line.mid(41,2);
-			aPlayer->observing = line.mid(43,3).toInt();
-			aPlayer->playing = line.mid(48,3).trimmed().toInt();
-			aPlayer->name = line.mid(52,11).trimmed();
+			QString info = line.mid(41,2);
+			int observing = line.mid(43,3).toInt();
+			int playing = line.mid(48,3).trimmed().toInt();
+			QString name = line.mid(52,11).trimmed();
+			aPlayer = room->getPlayerListing(name);
+			if(!aPlayer)
+			{
+				newPlayer = new PlayerListing();
+				aPlayer = newPlayer;
+				aPlayer->name = name;
+			}
+			aPlayer->online = true;
+			aPlayer->info = info;
+			aPlayer->observing = observing;
+			aPlayer->playing = playing;
 			aPlayer->idletime = line.mid(63,3);
 			aPlayer->seconds_idle = idleTimeToSeconds(aPlayer->idletime);
 					//aPlayer->nmatch = false;
@@ -4008,12 +4001,14 @@ void IGSConnection::handle_who(QString line)
 			}
 
 					// true -> cmd "players" preceded
-			room->recvPlayerListing(aPlayer);
+			if(newPlayer)
+			{
+				room->recvPlayerListing(aPlayer);
+				delete newPlayer;
+			}
 		}
 		else
 			qDebug("player27 dropped (2): %s" + line.toLatin1());
-	
-	delete aPlayer;
 }
 
 void IGSConnection::handle_undo(QString line)
@@ -4191,15 +4186,14 @@ void IGSConnection::handle_automatch(QString line)
 		aMatch->maintime = element(line, 4, " ").toInt();
 		aMatch->periodtime = element(line, 7, " ").toInt();
 		aMatch->stones_periods = element(line, 10, " ").toInt();
-		PlayerListing * p = room->getPlayerListing(aMatch->opponent);
+		PlayerListing * p = getPlayerListingNeverFail(aMatch->opponent);
 		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
 		{	
 			aMatch->our_name = us->name;
 			aMatch->our_rank = us->rank;
 		}
-		if(p)
-			aMatch->their_rank = p->rank;
+		aMatch->their_rank = p->rank;
 		/* Maybe we have to do automatch, rather than accept/decline,
 		 * FIXME */
 		//protocol_save_string = "automatch";
@@ -4272,7 +4266,7 @@ void IGSConnection::handle_dot(QString)
 void IGSConnection::handle_userlist(QString line)
 {
 	//line = line.remove(0, 2).trimmed();
-	PlayerListing * aPlayer;
+	PlayerListing * aPlayer, * newPlayer = 0;
 	Room * room = getDefaultRoom();
 	if (line[40] == 'R')	//this was line ??? 
 	{
@@ -4314,8 +4308,15 @@ void IGSConnection::handle_userlist(QString line)
 			
 			// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
 
-	aPlayer = new PlayerListing();
-	aPlayer->name = re1.cap(1).trimmed();
+	QString name = re1.cap(1).trimmed();
+	aPlayer = room->getPlayerListing(name);
+	if(!aPlayer)
+	{
+		newPlayer = new PlayerListing();
+		aPlayer = newPlayer;
+		aPlayer->name = name;
+	}
+
 	if(re2.indexIn(line) >= 0)
 	{
 		aPlayer->extInfo = re2.cap(1).trimmed();
@@ -4420,8 +4421,11 @@ void IGSConnection::handle_userlist(QString line)
 	aPlayer->online = true;
 			
 			// check if line ok, true -> cmd 'players' or 'users' preceded
-	room->recvPlayerListing(aPlayer);
-	delete aPlayer;
+	if(newPlayer)
+	{
+		room->recvPlayerListing(aPlayer);
+		delete newPlayer;
+	}
 }
 
 		
@@ -4746,7 +4750,6 @@ QString IGSConnection::element(const QString &line, int index, const QString &de
 	return sub;
 }
 
-
 unsigned int IGSConnection::idleTimeToSeconds(QString time)
 {
 	QString i = time;
@@ -4780,4 +4783,19 @@ void IGSConnection::fixRankString(QString * rank)
 	else if(*rank == "NR") {}
 	else
 			*rank += "?";
+}
+
+PlayerListing * IGSConnection::getPlayerListingNeverFail(QString & name)
+{
+	PlayerListing * p = getDefaultRoom()->getPlayerListing(name);
+	if(p)
+		return p;
+	p = new PlayerListing();
+	p->online = true;
+	p->name = name;
+	getDefaultRoom()->recvPlayerListing(p);
+	delete p;
+	p = getDefaultRoom()->getPlayerListing(name);
+	sendStatsRequest(*p);
+	return p;
 }
