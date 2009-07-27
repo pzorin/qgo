@@ -276,11 +276,22 @@ QString SGFParser::loadFile(const QString &fileName)
 	}
 	
 	QString toParse;
-	
-	// Read file in string toParse
+	int i = 10;
+	while (!txt.atEnd() && i--)
+		toParse.append(txt.readLine() + "\n");
+	QString tmp="";
+	if (!parseProperty(toParse, "CA", tmp))		//codec
+		return NULL;
+	if (!tmp.isEmpty())
+	{
+		if(!setCodec(tmp))
+			return NULL;
+		toParse.clear();
+		txt.seek(0);
+	}
 	while (!txt.atEnd())
 		toParse.append(txt.readLine() + "\n");
-	
+
 	file.close();
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "READING", toParse);
@@ -1297,19 +1308,14 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	QString tmp="";
 	GameData *gameData = new GameData;
 
-
-	//codec
-	if (!parseProperty(toParse, "CA", tmp))
-		return false;
+	if (!parseProperty(toParse, "CA", tmp))		//codec
+		return NULL;
 	if (!tmp.isEmpty())
-	{
 		gameData->codec = tmp;
-		setCodec(tmp);			//FIXME might not want to ignore return value here doublecheck
-	}
 	else
-		gameData->codec = QString();		
+		gameData->codec = QString();
 	//probably should either be Latin1 or some default codec from somewhere FIXME
-
+		
 	// White player name
 	if (!parseProperty(toParse, "PW", tmp))
 		return false;
@@ -1557,7 +1563,6 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree, GameData *gameData)
 	return res;
 }
 
-
 /*
  * Writes the SGF code for whot 'tree' into the 'stream'
  */
@@ -1583,7 +1588,6 @@ bool SGFParser::writeStream(Tree *tree, GameData *gameData)
 	
 	return true;
 }
-
 
 /*
  * Writes the SGF header data from gameData into the 'stream'
