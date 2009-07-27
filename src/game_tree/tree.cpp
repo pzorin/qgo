@@ -1101,7 +1101,7 @@ bool Tree::insertStone(Move *node)
 			current->son = node;
 			node->parent = current;
 			node->setTimeinfo(false);
-			current = node;
+			assignCurrent(current, node);
 			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
 			
 			return false;
@@ -1116,11 +1116,18 @@ bool Tree::insertStone(Move *node)
 			current->son->parent = node;
 			current->son = node;
 
+			//update all brothers to enable switching between them
+			Move *t = node->son->brother;
+			while (t != NULL) 
+			{
+				t->parent = node;
+				t = t->brother;
+			}
 			current->parent->marker = current;
 			node->marker = NULL;
 
 			node->setTimeinfo(false);
-			current = node;
+			assignCurrent(current, node);
 			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
 
 			//update son - it is exclude from traverse search because we cannot update brothers of node->son
