@@ -4796,6 +4796,6 @@ PlayerListing * IGSConnection::getPlayerListingNeverFail(QString & name)
 	getDefaultRoom()->recvPlayerListing(p);
 	delete p;
 	p = getDefaultRoom()->getPlayerListing(name);
-	sendStatsRequest(*p);
+	//sendStatsRequest(*p);
 	return p;
 }
