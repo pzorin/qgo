@@ -96,19 +96,19 @@ void InterfaceHandler::updateCaption(GameData *gd)
 				+ (!gd->black_rank.isEmpty() ?
 					" " + gd->black_rank : 
 					QString()) :
-				gd->gameName) +	"   " + QString(PACKAGE   " "  VERSION));
+				gd->gameName) +	"   " + QString(PACKAGE));
 
 
 	bool simple = gd->white_rank.length() == 0 && gd->black_rank.length() == 0;
 	QGroupBox *gb = boardwindow->getUi()->whiteFrame;
-
+	/* This name stuff is super redundant with below FIXME */
 	QString player = gd->white_name;
 	if (simple && player == QObject::tr("White"))
 		gb->setTitle(QObject::tr("White"));	
 	else if(!gd->nigiriToBeSettled)
 	{
-		// truncate to 12 characters max
-		player.truncate(12);
+		// truncate to 13 characters max
+		player.truncate(13);
 
 		if (gd->white_rank.length() != 0)
 			player = QObject::tr("W") + ": " + player + " " + gd->white_rank;
@@ -125,8 +125,8 @@ void InterfaceHandler::updateCaption(GameData *gd)
 		gb->setTitle(QObject::tr("Black"));	
 	else if(!gd->nigiriToBeSettled)
 	{
-		// truncate to 12 characters max
-		player.truncate(12);
+		// truncate to 13 characters max
+		player.truncate(13);
 
 		if (gd->black_rank.length() != 0)
 			player = QObject::tr("B") + ": " + player + " " + gd->black_rank;
@@ -588,8 +588,8 @@ void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float 
 		gb->setTitle(QObject::tr("White"));	
 	else
 	{
-		// truncate to 12 characters max
-		player.truncate(12);
+		// truncate to 13 characters max
+		player.truncate(13);
 
 		if (gd->white_rank.length() != 0)
 			player = QObject::tr("W") + ": " + player + " " + gd->white_rank;
@@ -606,8 +606,8 @@ void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float 
 		gb->setTitle(QObject::tr("Black"));	
 	else
 	{
-		// truncate to 12 characters max
-		player.truncate(12);
+		// truncate to 13 characters max
+		player.truncate(13);
 
 		if (gd->black_rank.length() != 0)
 			player = QObject::tr("B") + ": " + player + " " + gd->black_rank;
