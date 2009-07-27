@@ -900,6 +900,7 @@ bool BoardWindow::slotFileSaveAs()
 void BoardWindow::slotEditDelete()
 {
 	tree->deleteNode();
+	boardHandler->updateMove(tree->getCurrent());
 }
 
 /* FIXME this comes up with unrelated keys, which is okay I guess, little
