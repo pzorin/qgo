@@ -374,7 +374,9 @@ void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 
 void Room::slot_refreshPlayers(void)
 {
-	clearPlayerList();
+	//we don't have to clear the players list
+	//if we're checking for existing player records
+	//clearPlayerList();
 	connection->sendPlayersRequest();
 }
 
@@ -683,6 +685,8 @@ void Room::recvPlayerListing(PlayerListing * player)
 			connection->getAndSetFriendWatchType(*player);  //removes
 	}
 	PlayerListing * registered_player = 0;
+	if(player->online)
+		connection->getAndSetFriendWatchType(*player);
 	if(playerListingIDRegistry)
 	{
 		if(player->online)
@@ -700,10 +704,6 @@ void Room::recvPlayerListing(PlayerListing * player)
 	
 	if(registered_player && player->online)
 	{
-		/* We might possibly be able to set this before
-		 * the entry is inserted into Registry... but just
-		 * in case that would cause problems, we'll do it here. */
-		connection->getAndSetFriendWatchType(*registered_player);
 		/* FIXME consider changing name of getEntry with the object?
 		 * so that its more clear that it returns a new stored object
 		 * based on the one passed. (i.e., looking it up if
