@@ -466,7 +466,6 @@ QTime IGSConnection::gd_checkMainTime(TimeSystem s, QTime & t)
 				return QTime(0, c.minute(), 0);
 			break;
 		default:
-			qDebug("unsupported IGS time type");
 			break;
 	}
 	return c;
@@ -497,6 +496,7 @@ unsigned int IGSConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 	switch(s)
 	{
 		case canadian:
+			//canadian might actually be stuck at 25
 			if(p > 25)
 				return 25;
 			else
@@ -738,8 +738,8 @@ void IGSConnection::onReady(void)
 		
 		sendPlayersRequest();
 		
-		sendText("seek config_list\r\n");
 		sendNmatchParameters();
+		sendText("seek config_list\r\n");
 	}
 	
 	sendGamesRequest();
@@ -917,7 +917,8 @@ void IGSConnection::sendNmatchParameters(void)
 	c.append(QString::number(settings.value("DEFAULT_BY").toInt()*60));
 	c.append("-");
 	c.append(QString::number(settings.value("NMATCH_BYO_TIME").toInt()*60));
-	c.append(" 25-25 0 0 0-0\r\n");
+	//c.append(" 25-25 0 0 0-0\r\n");		//FIXME we need to get and send KORYO time as well
+	c.append(" 5-25 50 30 1-3\r\n");
 	qDebug("nmatch string %s: ", c.toLatin1().constData());
 	sendText(c);
 }
@@ -2002,6 +2003,7 @@ void IGSConnection::handle_info(QString line)
 	}*/
 		/* 49 handles this for IGS... but what about observed games? */
 #ifdef FIXME
+		
 		if(protocol_save_int < 0)
 		{
 			qDebug("Received stone removal message without game in scoring mode");
@@ -2009,29 +2011,12 @@ void IGSConnection::handle_info(QString line)
 		}
 		else
 		{
-			boarddispatch = getBoardDispatch(protocol_save_int);
-			GameData * r = getGameData(protocol_save_int);
-			if(!r)
-			{
-				qDebug("Game has no game Record, line: %d", __LINE__);
-				return;
-			}
-			MoveRecord * aMove = new MoveRecord();
 			QString pt = element(line, 2, " ");
-			aMove->flags = MoveRecord::REMOVE;
-			aMove->x = (int)(pt.toAscii().at(0));
-			aMove->x -= 'A';
-			if(aMove->x < 9)	//no I on IGS
-				aMove->x++;
-			pt.remove(0,1);
-			aMove->y = element(pt, 0, " ").toInt();
-			/* Do we need the board size here???*/
-			aMove->y = r->board_size + 1 - aMove->y;
-			boarddispatch->recvMove(aMove);
+			handleRemovingAt(protocol_save_int, pt);
 			// FIXME Set protocol_save_int to -1???
-			delete aMove;
 		}
 #endif //FIXME
+
 	}
 			// 9 You can check your score with the score command, type 'done' when finished.
 	else if (line.contains("check your score with the score command"))
@@ -4154,7 +4139,6 @@ void IGSConnection::handle_yell(QString line)
 //			//emit signal_talk(e1, e2, false);
 }
 
-
 /* 36 
 36 terra1 wants a match with you:
 36 terra1 wants 19x19 in 1 minutes with 10 byo-yomi and 25 byo-stones
@@ -4428,7 +4412,6 @@ void IGSConnection::handle_userlist(QString line)
 	}
 }
 
-		
 // IGS: 49 Game 42 qGoDev is removing @ C5
 void IGSConnection::handle_removed(QString line)
 {
@@ -4436,34 +4419,38 @@ void IGSConnection::handle_removed(QString line)
 	if (line.contains("is removing @"))
 	{
 		int game = element(line, 1, " ").toInt();
-		//emit signal_removeStones(pt, game);
-		BoardDispatch * boarddispatch = getIfBoardDispatch(game);
-		if(!boarddispatch)
-		{
-			qDebug("removing for game we don't have");
-			return;
-		}
-		GameData * r = boarddispatch->getGameData();
-		if(!r)
-		{
-			qDebug("Can't get game record");
-			return;
-		}
-		
-		MoveRecord * aMove = new MoveRecord();
 		QString pt = element(line, 6, " ");
-		aMove->flags = MoveRecord::REMOVE;
-		aMove->x = (int)(pt.toAscii().at(0));
-		aMove->x -= 'A';
-		if(aMove->x < 9)	//no I on IGS
-			aMove->x++;
-		pt.remove(0,1);
-		aMove->y = element(pt, 0, " ").toInt();
-		/* Do we need the board size here???*/
-		aMove->y = r->board_size + 1 - aMove->y;
-		boarddispatch->recvMove(aMove);
-		delete aMove;
+		handleRemovingAt(game, pt);
 	}
+}
+
+void IGSConnection::handleRemovingAt(unsigned int game, QString pt)
+{
+	BoardDispatch * boarddispatch = getIfBoardDispatch(game);
+	if(!boarddispatch)
+	{
+		qDebug("removing for game we don't have");
+		return;
+	}
+	GameData * r = boarddispatch->getGameData();
+	if(!r)
+	{
+		qDebug("Can't get game record");
+		return;
+	}
+		
+	MoveRecord * aMove = new MoveRecord();
+	aMove->flags = MoveRecord::REMOVE;
+	aMove->x = (int)(pt.toAscii().at(0));
+	aMove->x -= 'A';
+	if(aMove->x < 9)	//no I on IGS
+		aMove->x++;
+	pt.remove(0,1);
+	aMove->y = element(pt, 0, " ").toInt();
+	/* Do we need the board size here???*/
+	aMove->y = r->board_size + 1 - aMove->y;
+	boarddispatch->recvMove(aMove);
+	delete aMove;
 }
 
 //FIXME	
@@ -4472,7 +4459,6 @@ void IGSConnection::handle_ingamesay(QString s)
 {
 	qDebug("Ingamesay: %s", s.toLatin1().constData());
 }
-			
 
 // 53 Game 75 adjournment is declined
 void IGSConnection::handle_adjourndeclined(QString line)
@@ -4491,7 +4477,6 @@ void IGSConnection::handle_adjourndeclined(QString line)
 		}
 	}
 }
-
 
 // IGS : seek syntax, answer to 'seek config_list' command
 // 63 CONFIG_LIST_START 4

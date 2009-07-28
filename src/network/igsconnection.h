@@ -109,6 +109,7 @@ class IGSConnection : public NetworkConnection
 		void handle_seek(QString line);
 		void handle_review(QString line);
 		
+		void handleRemovingAt(unsigned int game, QString pt);
 		void sendToggleClientOn(void);
 		
 		QString element(const QString &line, int index, const QString &del1, const QString &del2="", bool killblanks=FALSE);
