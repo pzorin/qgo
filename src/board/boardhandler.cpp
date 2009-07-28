@@ -944,6 +944,7 @@ void BoardHandler::countScore(void)
 	tree->getCurrent()->setTerritoryMarked(true);
 	// Paint the territory on the board
 	updateAll(tree->getCurrent());
+	updateAll_updateAll = true;			//double update, find out why this is necessary to show stone removals in network games FIXME
 	
 	// Update Interface
 	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack  + caps_black,
