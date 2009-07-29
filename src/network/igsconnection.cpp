@@ -1312,8 +1312,6 @@ void IGSConnection::handle_error(QString line)
 			gameDialog->recvRefuseMatch(GD_OPP_NO_NMATCH);
 		}
 	}
-	
-
 	else if (line.contains("You cannot undo") || line.contains("client does not support undoplease")) 
 	{
 		BoardDispatch * boarddispatch = getIfBoardDispatch(game_were_playing);
@@ -1342,7 +1340,27 @@ void IGSConnection::handle_error(QString line)
 		// 5   yfh2test wants White on a 19x19 in 10 mins (10 byoyomi).
 		// 5   eb5 wants Black on a 19x19 in 10 mins (12 byoyomi).
 	
-
+	else if(line.contains("wants Time"))
+	{
+		/* FIXME note that we should really look up their match conditions
+		 * before even creating game dialog !!! */
+		//5 lemon wants Time 60 - 60.
+		//5 seinosuke wants Time 300 - 300
+		QString opponent = element(line, 0, " ");
+		PlayerListing * pl = getPlayerListingNeverFail(opponent);
+		//QString timetochange = element(line, 2, " ");
+		GameDialog * gameDialog = getGameDialog(*pl);
+		MatchRequest * m = gameDialog->getMatchRequest();
+		MatchRequest * aMatch = new MatchRequest(*m);
+		aMatch->maintime = element(line, 3, " ").toInt();
+		aMatch->periodtime = element(line, 4, " ", ".").toInt();
+		if(aMatch->periodtime > 299)
+			aMatch->timeSystem = canadian;
+		else
+			aMatch->timeSystem = byoyomi;
+		gameDialog->recvRequest(aMatch);
+		gameDialog->recvRefuseMatch(GD_RESET);
+	}
 	else if (line.contains("request:") || line.contains("wants"))
 	{
 		QString p = element(line, 0, " ");
@@ -1357,12 +1375,36 @@ void IGSConnection::handle_error(QString line)
 			memory_str = "";
 			return;
 		}
-		
-		MatchRequest * aMatch = new MatchRequest();
-		aMatch->opponent = p;
-				
+		MatchRequest * aMatch = 0;
+		GameDialog * gameDialog = 0;
+		PlayerListing * pl = 0;
 		if(line.contains("wants"))	//match
 		{
+			if(line.contains("turn"))
+			{
+				pl = getPlayerListingNeverFail(p);
+				gameDialog = getGameDialog(*pl);
+				MatchRequest * m = gameDialog->getMatchRequest();
+				aMatch = new MatchRequest(*m);
+				if(element(line, 3, " ") == "[B]")
+				{
+					aMatch->color_request = MatchRequest::BLACK;
+				}	
+				else if(element(line, 3, " ") == "[W]")
+				{
+					aMatch->color_request = MatchRequest::WHITE;
+				}
+				else
+				{
+					qDebug("Unknown: %s", line.toLatin1().constData());
+					delete aMatch;
+					return;
+				}
+			}
+			else
+			{
+			aMatch = new MatchRequest();
+			aMatch->opponent = p;
 			aMatch->nmatch = false;
 					
 			if(element(line, 2, " ") == "Black")
@@ -1378,10 +1420,12 @@ void IGSConnection::handle_error(QString line)
 			s = element(line, 9, " ");
 			aMatch->periodtime = element(s, 1, "(").toInt();
 			aMatch->stones_periods = 25;	// I assume IGS assumes this is always 25
-				
+			}
 		}
 		else		//nmatch
 		{
+			aMatch = new MatchRequest();
+			aMatch->opponent = p;
 			aMatch->nmatch = true;
 			if(element(line, 2, " ") == "B")
 				aMatch->color_request = MatchRequest::BLACK;
@@ -1402,8 +1446,8 @@ void IGSConnection::handle_error(QString line)
 				aMatch->timeSystem = byoyomi;
 		}				
 
-				
-		PlayerListing * pl = getPlayerListingNeverFail(aMatch->opponent);
+		if(!pl)		
+			pl = getPlayerListingNeverFail(aMatch->opponent);
 		PlayerListing * us = room->getPlayerListing(getUsername());
 		if(us)
 		{
@@ -1412,31 +1456,10 @@ void IGSConnection::handle_error(QString line)
 		}
 		aMatch->their_rank = pl->rank;
 		
-		GameDialog * gameDialog = getGameDialog(*pl);
+		if(!gameDialog)
+			gameDialog = getGameDialog(*pl);
 		gameDialog->recvRequest(aMatch);
 		delete aMatch;		
-	}
-	else if(line.contains("wants"))
-	{
-		/* FIXME note that we should really look up their match conditions
-		 * before even creating game dialog !!! */
-		//5 lemon wants Time 60 - 60.
-		//5 seinosuke wants Time 300 - 300
-		QString opponent = element(line, 0, " ");
-		PlayerListing * pl = getPlayerListingNeverFail(opponent);
-		//QString timetochange = element(line, 2, " ");
-		GameDialog * gameDialog = getGameDialog(*pl);
-		MatchRequest * m = gameDialog->getMatchRequest();
-		MatchRequest * aMatch = new MatchRequest(*m);
-		aMatch->maintime = element(line, 3, " ").toInt();
-		aMatch->periodtime = element(line, 4, " ", ".").toInt();
-		if(aMatch->periodtime > 299)
-			aMatch->timeSystem = canadian;
-		else
-			aMatch->timeSystem = byoyomi;
-		gameDialog->recvRequest(aMatch);
-		gameDialog->recvRefuseMatch(GD_RESET);
-		
 	}
 	else if(line.contains("is a private game"))
 	{
@@ -3804,6 +3827,8 @@ void IGSConnection::handle_tell(QString line)
 		e2 = element(line, 0, ":", "EOL").trimmed();
 	}
 
+	/* FIXME, what's weird here is that this is usually where you get "Thanks for game"
+	 * not in the board window and I'm not sure that's appropriate. */
 			// //emit player + message + true (=player)
 			////emit signal_talk(e1, e2, true);
 	PlayerListing * p = getPlayerListingNeverFail(e1);
