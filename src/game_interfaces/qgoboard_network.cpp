@@ -253,7 +253,10 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			}
 			break;
 		case MoveRecord::PASS:
-			
+			/* FIXME what about a kibitz here saying opponent name
+			 * has passed.  I think IGS needs it, not sure about
+			 * other protocols which may have it, but if they do,
+			 * it should be moved here.  Otherwise easy to miss. */
 			/* If there's three passes, we should stop the clock,
 			 * although some servers might have two pass models
 			 * and we need a flag for that */
@@ -448,6 +451,11 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 		if(boardwindow->getBoardDispatch()->supportsRequestMatchMode())
 		{
 			boardwindow->getBoardDispatch()->sendRequestMatchMode();
+			return;
+		}
+		else if(boardwindow->getBoardDispatch()->undoResetsScore())
+		{
+			boardwindow->getBoardDispatch()->sendMove(new MoveRecord(-1, MoveRecord::UNDO));
 			return;
 		}
 	}

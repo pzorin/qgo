@@ -63,6 +63,7 @@ class IGSConnection : public NetworkConnection
 		 * but I check today and we do, so I'll change it... doublecheck */
 		virtual bool startTimerOnOpen(void) { return true; };
 		virtual bool supportsRequestAdjourn(void) { return true; };
+		virtual bool undoResetsScore(void) { return true; };
 		virtual bool supportsSeek(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; };
 		virtual bool supportsChannels(void) { return true; };

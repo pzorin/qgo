@@ -109,6 +109,8 @@ void BoardDispatch::closeBoard(void)
 				 * responsibilities of board dispatch and
 				 * qgoboard or boardwindow or whatever are
 				 * overlapping here.  Something needs to go */
+				/* This shouldn't be here anymore since we do the canClose which
+				 * prompts for resign.  Or its an IGS only feature FIXME */
 				if(boardwindow->getGamePhase() != phaseEnded)
 					connection->adjournGame(*gameListing);	 //FIXME
 				if(resultdialog)
@@ -745,5 +747,6 @@ bool BoardDispatch::startTimerOnOpen(void) {return connection->startTimerOnOpen(
 bool BoardDispatch::clientCountsTime(void) { return connection->clientCountsTime(); }
 bool BoardDispatch::clientSendsTime(void) { return connection->clientSendsTime(); }
 bool BoardDispatch::twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); }
+bool BoardDispatch::undoResetsScore(void) { return connection->undoResetsScore(); }
 bool BoardDispatch::unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); }
 bool BoardDispatch::cantMarkOppStonesDead(void) { return connection->cantMarkOppStonesDead(); }

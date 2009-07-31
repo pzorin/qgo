@@ -156,6 +156,7 @@ class NetworkConnection : public QObject
 		virtual bool startTimerOnOpen(void) { return false; };	//name?? no "supports"?
 		virtual bool clientCountsTime(void) { return true; };
 		virtual bool clientSendsTime(void) { return false; };
+		virtual bool undoResetsScore(void) { return false; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
 		virtual bool cantMarkOppStonesDead(void) { return false; };
 		virtual bool twoPassesEndsGame(void) { return false; };		//used?? FIXME

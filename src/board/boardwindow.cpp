@@ -827,11 +827,17 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * of the button checking state?  Probably. FIXME */
 			if(ui.countButton)
 				ui.countButton->setDisabled(true);
-			if(ui.undoButton && gameData->gameMode == modeMatch &&
-				getBoardDispatch() && getBoardDispatch()->supportsRequestMatchMode())
+			if(ui.undoButton && gameData->gameMode == modeMatch && getBoardDispatch())
 			{
-				ui.undoButton->setText(tr("Match Mode"));
-				ui.undoButton->setEnabled(true);	//even in rated
+				if(getBoardDispatch()->supportsRequestMatchMode())
+				{
+					ui.undoButton->setText(tr("Match Mode"));
+					ui.undoButton->setEnabled(true);	//even in rated
+				}
+				else if(getBoardDispatch()->undoResetsScore())
+				{
+					ui.undoButton->setEnabled(true);	//even in rated
+				}
 			}
 			if(ui.passButton)
 				ui.passButton->setDisabled(true);

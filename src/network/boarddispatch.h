@@ -83,6 +83,7 @@ class BoardDispatch
 		bool clientCountsTime(void);
 		bool clientSendsTime(void);
 		bool twoPassesEndsGame(void);
+		bool undoResetsScore(void);
 		bool unmarkUnmarksAllDeadStones(void);
 		bool cantMarkOppStonesDead(void);
 	private:
