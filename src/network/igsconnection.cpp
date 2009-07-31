@@ -285,6 +285,7 @@ void IGSConnection::sendMatchInvite(const PlayerListing & player)
 void IGSConnection::adjournGame(const GameListing &/*game_id*/)
 {
 	/* double check this one */
+	/* There are three of these adjournGame, sendAdjournGame, and sendAdjournRequest FIXME */
 	sendText("adjourn\r\n");
 }
 
@@ -917,8 +918,10 @@ void IGSConnection::sendNmatchParameters(void)
 	c.append(QString::number(settings.value("DEFAULT_BY").toInt()*60));
 	c.append("-");
 	c.append(QString::number(settings.value("NMATCH_BYO_TIME").toInt()*60));
-	//c.append(" 25-25 0 0 0-0\r\n");		//FIXME we need to get and send KORYO time as well
-	c.append(" 5-25 50 30 1-3\r\n");
+	c.append(" 25-25 0 0 0-0\r\n");		//FIXME we need to get and send KORYO time as well, or do we
+	/* If a line is used like below, match requests won't get to client but will be refused
+	 * by server with a line like "wants Koryotime count 50 - 50 */
+	//c.append(" 5-25 50 30 1-3\r\n");
 	qDebug("nmatch string %s: ", c.toLatin1().constData());
 	sendText(c);
 }
@@ -1459,7 +1462,7 @@ void IGSConnection::handle_error(QString line)
 		if(!gameDialog)
 			gameDialog = getGameDialog(*pl);
 		gameDialog->recvRequest(aMatch);
-		delete aMatch;		
+		delete aMatch;
 	}
 	else if(line.contains("is a private game"))
 	{
@@ -3276,8 +3279,8 @@ void IGSConnection::handle_score_m(QString line)
 }	
 			
 			
-		// SHOUT - a info from the server
-		//case 21:
+// SHOUT - a info from the server
+//case 21:
 void IGSConnection::handle_shout(QString line)
 {
 	PlayerListing * aPlayer;
