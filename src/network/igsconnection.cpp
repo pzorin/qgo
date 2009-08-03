@@ -724,16 +724,17 @@ void IGSConnection::onReady(void)
 	
 	QString v = "id qGov" + QString(VERSION) + "\r\n";
 	sendText(v.toLatin1().constData());
-	//sendText("toggle newrating\r\n");
 	
 	//onAuthenticationNegotiated();
 	
 	if(!guestAccount)
 	{
-		sendText("toggle newundo on\r\n");
+		sendText("toggle newundo on\r\n");		//undoplease undo requests
 		//sendText("toggle client on\r\n");		//adds type codes, done earlier
 		sendText("toggle nmatch on\r\n");		//allows nmatch
 		sendText("toggle seek on\r\n");
+		sendText("toggle newrating\r\n");		//?s and +s
+	
 		//sendText("toggle quiet on\r\n");		//FIXME do we want this?
 		//sendText("toggle review on\r\n");
 		
@@ -1361,6 +1362,21 @@ void IGSConnection::handle_error(QString line)
 			aMatch->timeSystem = canadian;
 		else
 			aMatch->timeSystem = byoyomi;
+		gameDialog->recvRequest(aMatch);
+		gameDialog->recvRefuseMatch(GD_RESET);
+	}
+	else if(line.contains("wants Byomoves"))
+	{
+		/* FIXME note that we should really look up their match conditions
+		 * before even creating game dialog !!! */
+		//5 x wants Byomoves 1 - 1.
+		QString opponent = element(line, 0, " ");
+		PlayerListing * pl = getPlayerListingNeverFail(opponent);
+		//QString timetochange = element(line, 2, " ");
+		GameDialog * gameDialog = getGameDialog(*pl);
+		MatchRequest * m = gameDialog->getMatchRequest();
+		MatchRequest * aMatch = new MatchRequest(*m);
+		aMatch->stones_periods = element(line, 3, " ").toInt();
 		gameDialog->recvRequest(aMatch);
 		gameDialog->recvRefuseMatch(GD_RESET);
 	}
@@ -2086,7 +2102,7 @@ void IGSConnection::handle_info(QString line)
 			// WING: 9 Use <adjourn> to adjourn, or <decline adjourn> to decline.
 	else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
 	{
-		qDebug("parser->case 9: Use adjourn to");
+		qDebug("9: Use adjourn to");
 				////emit signal_requestDialog("adjourn", "decline adjourn", 0, 0);
 		boarddispatch = getBoardDispatch(memory);
 		boarddispatch->recvRequestAdjourn();
