@@ -262,8 +262,10 @@ class NetworkConnection : public QObject
 		Room * mainwindowroom;
 
 		QMessageBox * connectingDialog;
+#ifdef LATENCY
 		struct timeval latencyLast;
 		unsigned long latencyAverage;
+#endif //LATENCY
 
 	protected slots:
 		virtual void OnConnected();
