@@ -8,6 +8,7 @@
 #include "dispatchregistries.h"
 #include "gamedialogflags.h"
 #include "playergamelistings.h"
+#include "matchnegotiationstate.h"
 
 #define PLAYERSLISTREFRESH_SECONDS		300
 #define GAMESLISTREFRESH_SECONDS		180
@@ -278,6 +279,11 @@ void IGSConnection::sendMatchInvite(const PlayerListing & player)
 		//mr->rated = false;
 	}
 	gd->recvRequest(m, getGameDialogFlags());
+}
+
+void IGSConnection::sendAddTime(int minutes)
+{
+	sendText("addtime " + QString::number(minutes) + "\r\n");
 }
 
 /* I'm thinking you can only play one game at a time on IGS,
@@ -1320,7 +1326,10 @@ void IGSConnection::handle_error(QString line)
 	{
 		BoardDispatch * boarddispatch = getIfBoardDispatch(game_were_playing);
 		if(boarddispatch)
+		{
 			boarddispatch->recvKibitz(0, line);
+			boarddispatch->getGameData()->undoAllowed = false;
+		}
 		//maybe should be a message box?  FIXME
 	}
 	else if(line.contains("There is no such game") || line.contains("Invalid game number"))
@@ -2016,6 +2025,7 @@ void IGSConnection::handle_info(QString line)
 			//9 yfh2test declines undo
 	else if (line.contains("declines undo"))
 	{
+		qDebug("%s", line.toLatin1().constData());	//FIXME
 				// not the cleanest way : we should send this to a message box
 		//emit signal_kibitz(0, element(line, 0, " "), line);
 		return;
@@ -2102,10 +2112,10 @@ void IGSConnection::handle_info(QString line)
 			// WING: 9 Use <adjourn> to adjourn, or <decline adjourn> to decline.
 	else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
 	{
-		qDebug("9: Use adjourn to");
-				////emit signal_requestDialog("adjourn", "decline adjourn", 0, 0);
-		boarddispatch = getBoardDispatch(memory);
-		boarddispatch->recvRequestAdjourn();
+		////emit signal_requestDialog("adjourn", "decline adjourn", 0, 0);
+		boarddispatch = getBoardDispatch(match_negotiation_state->getGameId());
+		if(boarddispatch)
+			boarddispatch->recvRequestAdjourn();
 	}
 			// 9 frosla requests to pause the game.
 	else if (line.contains("requests to pause"))
@@ -2201,8 +2211,15 @@ void IGSConnection::handle_info(QString line)
 	else if (line.contains("minutes were added"))
 	{
 #ifdef FIXME
+		//boarddispatch = getIfBoardDispatch(protocol_save_int);
+		//need to see this in action FIXME addTime
+		//also check LGS/WING code
 		int t = element(line, 0, " ").toInt();
-		emit signal_timeAdded(t, false);
+		boarddispatch = getIfBoardDispatch(match_negotiation_state->getGameId());
+		if(boarddispatch)
+			boarddispatch->recvAddTime(t, boarddispatch->getOpponentName());
+		
+		//emit signal_timeAdded(t, false);
 #endif //FIXME
 	}
 			// 9 Your opponent has added 1 minutes to your clock.
@@ -2210,7 +2227,10 @@ void IGSConnection::handle_info(QString line)
 	{
 #ifdef FIXME
 		int t = element(line, 4, " ").toInt();
-		emit signal_timeAdded(t, true);
+		boarddispatch = getIfBoardDispatch(match_negotiation_state->getGameId());
+		if(boarddispatch)
+			boarddispatch->recvAddTime(t, getUsername());
+		//emit signal_timeAdded(t, true);
 #endif //FIXME
 	}
 			// NNGS: 9 Game clock paused. Use "unpause" to resume.
@@ -2227,18 +2247,25 @@ void IGSConnection::handle_info(QString line)
 		emit signal_timeAdded(-1, false);
 #endif //FIXME
 	}
-			// 9 Increase frosla's time by 1 minute
+	// 9 Increase frosla's time by 1 minute
 	else if (line.contains("s time by"))
 	{
-#ifdef FIXME
+		//not sure how this works if we're observing the game FIXME
 		int t = element(line, 4, " ").toInt();
-		if (line.contains(getUsername()))
+		boarddispatch = getIfBoardDispatch(match_negotiation_state->getGameId());
+		if(boarddispatch)
+		{
+			if (line.contains(getUsername()))
+				boarddispatch->recvAddTime(t, getUsername());
+			else
+				boarddispatch->recvAddTime(t, boarddispatch->getOpponentName());
+		}
+		/*if (line.contains(getUsername()))
 			emit signal_timeAdded(t, true);
 		else
-			emit signal_timeAdded(t, false);
-#endif //FIXME
+			emit signal_timeAdded(t, false);*/
 	}
-			// 9 Setting your . to Banana  [text] (idle: 0 minutes)
+	// 9 Setting your . to Banana  [text] (idle: 0 minutes)
 	else if (line.contains("Setting your . to"))
 	{
 		QString busy = element(line, 0, "[", "]");
@@ -2919,6 +2946,7 @@ void IGSConnection::handle_move(QString line)
 							aGameData->maintime = mr->maintime;
 							aGameData->periodtime = mr->periodtime;
 							aGameData->stones_periods = mr->stones_periods;
+							aGameData->undoAllowed = true;
 							if(aGameData->white_name == getUsername())
 							{
 								aGameData->white_rank = mr->our_rank;
@@ -2942,6 +2970,7 @@ void IGSConnection::handle_move(QString line)
 							aGameData->black_name = black;
 							aGameData->black_rank = blackPlayer->rank;
 							aGameData->white_rank = whitePlayer->rank;
+							aGameData->undoAllowed = true;
 							// Could be from seek opponent !!!
 							
 							boarddispatch->openBoard();
@@ -2953,6 +2982,7 @@ void IGSConnection::handle_move(QString line)
 					/* We probably just accepted a match */
 						
 				}
+				match_negotiation_state->setGameId(number);
 					//requestGameInfo(game_number);
 					//delete aGame;
 				return;
@@ -4810,8 +4840,10 @@ void IGSConnection::fixRankString(QString * rank)
 	if(rank->at(rank->length() - 1) == '*')
 		rank->truncate(rank->length() - 1);
 	else if(*rank == "NR") {}
+#ifdef IGS_OLDRATING		//doublecheck WING/LGS FIXME
 	else
 			*rank += "?";
+#endif //IGS_OLDRATING
 }
 
 PlayerListing * IGSConnection::getPlayerListingNeverFail(QString & name)

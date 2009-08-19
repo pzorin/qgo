@@ -31,6 +31,7 @@ class IGSConnection : public NetworkConnection
 		virtual void periodicListRefreshes(bool b);
 		void sendRoomListRequest(void);
 		virtual void sendMatchInvite(const PlayerListing & player);
+		virtual void sendAddTime(int);
 		virtual void adjournGame(const GameListing & game);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
 		virtual void sendMatchRequest(class MatchRequest * mr);
@@ -63,6 +64,7 @@ class IGSConnection : public NetworkConnection
 		 * but I check today and we do, so I'll change it... doublecheck */
 		virtual bool startTimerOnOpen(void) { return true; };
 		virtual bool supportsRequestAdjourn(void) { return true; };
+		virtual bool supportsAddTime(void) { return true; };
 		virtual bool undoResetsScore(void) { return true; };
 		virtual bool supportsSeek(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; };
