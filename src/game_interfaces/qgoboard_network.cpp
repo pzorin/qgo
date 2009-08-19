@@ -116,7 +116,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	
 	tree->setCurrent(last);
 
-	move_number = m->number;
+	move_number = m->number;		//this is undefined from cyberoro remove stones for instance
 	//bool hcp_move = tree->getCurrent()->isHandicapMove();
 	move_counter = tree->getCurrent()->getMoveNumber();
 	if(move_number == NOMOVENUMBER)	//not all services number
@@ -274,6 +274,8 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 					enterScoreMode();
 					//boardwindow->setGamePhase ( phaseScore );	//okay?	
 			}
+			//FIXME potentially white/black here should come from color from network which is unreliable now
+			boardwindow->qgoboard->kibitzReceived(QString(getBlackTurn() ? "Black" : "White") + " passes.");
 			doPass();
 			break;
 		case MoveRecord::HANDICAP:
@@ -450,7 +452,17 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 	{
 		if(boardwindow->getBoardDispatch()->supportsRequestMatchMode())
 		{
-			boardwindow->getBoardDispatch()->sendRequestMatchMode();
+			QMessageBox mb(tr("Return to game?"),
+		      		QString(tr("Ask opponent to return to game?\n")),
+		      		QMessageBox::Question,
+		      		QMessageBox::Yes | QMessageBox::Default,
+		      		QMessageBox::No | QMessageBox::Escape,
+		      		QMessageBox::NoButton);
+			mb.raise();
+//			qgo->playPassSound();
+
+			if (mb.exec() == QMessageBox::Yes)
+				boardwindow->getBoardDispatch()->sendRequestMatchMode();
 			return;
 		}
 		else if(boardwindow->getBoardDispatch()->undoResetsScore())
