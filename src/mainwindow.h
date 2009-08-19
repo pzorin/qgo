@@ -104,7 +104,7 @@ protected:
 
 private:
 	void setupConnection(void);
-	int closeConnection(void);
+	int closeConnection(bool error = false);
 	
 	void cleanupServerData(void);
 	

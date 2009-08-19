@@ -272,17 +272,17 @@ void MainWindow::onConnectionError(void)
 	if(logindialog)
 		return;
 	qDebug("onConnectionError");
-	closeConnection();		//probably don't care about return here since connection is likely dead.
+	closeConnection(true);		//probably don't care about return here since connection is likely dead.
 					//could be a crash here though or maybe shouldn't be here at all doublecheck FIXME
 	/* FIXME this can get stuck open if we get a connection error on connect, like the app doesn't quit when
 	 * the main window is closed */
 }
 
-int MainWindow::closeConnection(void)
+int MainWindow::closeConnection(bool error)
 {
 	if(connection)
 	{
-		if(connection->checkForOpenBoards() < 0)
+		if(!error && connection->checkForOpenBoards() < 0)
 			return -1;
 		NetworkConnection * c = connection;
 		connection = 0;
@@ -401,12 +401,8 @@ void MainWindow::set_sessionparameter(QString par, bool val)
 	}*/
 }
 
-/*
- * room list clicked
- */
 void MainWindow::slot_roomListClicked(const QString& text)
 {
-	qDebug("slot_roomListClicked\n");
 	if(!connection)
 		return;	
 	std::vector <const RoomListing *>::iterator it = roomList.begin();
@@ -647,7 +643,6 @@ void MainWindow::slot_seek(bool b)
 		connection->sendSeekCancel();
 }
 
-
 /*
  * seek button : menu entry (time conditions) selected
  */
@@ -691,7 +686,6 @@ void MainWindow::slot_seek(QAction *act)
 	connection->sendSeek(s);
 	delete s;
 }
-
 
 /* FIXME FIXME FIXME
  * Same thing here, room changes, as in channels, should be fixed.. but I'm
@@ -1026,8 +1020,6 @@ void MainWindow::slot_pbRelOneTab(QWidget *w)
 
 }
 
-
-
 /*
  * 'stats' information has been received by the parser
  */
@@ -1130,7 +1122,6 @@ void MainWindow::slot_cblooking()
 	if(val)
 		settings.setValue("OPEN_FOR_GAMES", true);
 }
-
 
 /*
  * checkbox open clicked
