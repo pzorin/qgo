@@ -74,7 +74,7 @@ class TygemConnection : public NetworkConnection
 		virtual void requestShortInfo(PlayerListing & player);
 
 		virtual const PlayerListing & getOurListing(void);
-		virtual unsigned short getRoomNumber(void) { return playing_game_number; /*FIXME for gamedialog unsure of necessity or reliability here*/};
+		virtual unsigned short getRoomNumber(void); //FIXME for gamedialog unsure of necessity or reliability here
 		
 		virtual void closeTalk(PlayerListing & opponent);
 		virtual void closeBoardDispatch(unsigned int game_id);
@@ -129,7 +129,7 @@ class TygemConnection : public NetworkConnection
 		int move_message_number;	//FIXME can't use if more than one game
 		int seconds_until_opp_forfeits;
 	private:
-		void sendObserve(unsigned short game_number);	//FIXME awkward with other sendObserve
+		void sendJoin(unsigned short game_number);
 		void sendMatchMsg1(const PlayerListing & player, unsigned short game_number);
 		void sendLogin(bool response_bit = false, bool change_server = false);
 		void handleLogin(unsigned char * msg, unsigned int length);
@@ -138,7 +138,7 @@ class TygemConnection : public NetworkConnection
 		void sendName(void);
 		void sendRequest(void);
 		void sendFriendsBlocksRequest(void);
-		void promptResumeMatch(unsigned short game_number);
+		void promptResumeMatch(void);
 		void sendOpenConversation(PlayerListing & player);
 		enum MIVersion {offer, accept, decline, decline_all, modify, create, acknowledge, alreadyingame};
 		void sendConversationReply(PlayerListing & player, enum MIVersion version);
@@ -146,7 +146,6 @@ class TygemConnection : public NetworkConnection
 		void sendCloseConversation(PlayerListing & player);
 		void sendPersonalChat(const PlayerListing & player, const char * text);
 		void sendServerChat(QString text);
-		void sendJoin(unsigned short game_number);
 		void sendResume(unsigned short game_number);
 		void sendFinishObserving(unsigned short game_number);
 		void sendObserversRequest(unsigned short game_number);
@@ -211,42 +210,23 @@ class TygemConnection : public NetworkConnection
 		void handleMsg2(unsigned char * msg, unsigned int size);
 		class GameData * getGameData(unsigned int game_id);
 		int time_to_seconds(const QString & time);
-		void killActiveMatchTimers(void);
 		
 		unsigned int http_connect_content_length;
 		/* We should really just have the player listing for ourself FIXME */
 		unsigned short our_player_id;
-		unsigned char our_special_byte;
-		unsigned char invite_byte;
 		bool opponent_is_challenger;
-		bool previous_opponent_move_pass;
 		bool havenot_requested_friendsblocks;
-		PlayerListing * player_accepted_match, * accepted_match_from_player;
+
 		std::vector<PlayerListing *> decline_all_invitations;
 		QTextCodec * textCodec;
 		unsigned long encode_offset;
 		
 		std::map <PlayerListing *, QString> pendingConversationMsg;
 		
-		unsigned short connecting_to_game_number;	//awkward FIXME
-		unsigned short playing_game_number;		//awkward
-		bool we_send_nigiri;
-		
-		/* We can only play one game at a time so:...*/
-		unsigned short our_game_being_played;	//redundant with playing_game_number??
-		unsigned short our_match_in_progress;	//for resumes
 		int matchKeepAliveTimerID, matchRequestKeepAliveTimerID;
 		int serverKeepAliveTimerID;
 		int retryLoginTimerID;
 		int opponentDisconnectTimerID;
-		//unsigned short opp_requests_undo_move_number;
-		unsigned short done_response;
-		
-		/* FIXME, below are awkward, we should just do some kind of state thing */
-		bool receivedOppDone;
-		bool sentDone;
-		bool receivedOppAccept;
-		bool receivedOppReject;
 		
 		bool received_players;
 		bool received_games;
