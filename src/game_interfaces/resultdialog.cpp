@@ -78,10 +78,17 @@ void ResultDialog::timerEvent(QTimerEvent*)
 		seconds--;
 }
 
+void ResultDialog::closeEvent(QCloseEvent *)
+{
+	/*if(dispatch)
+		dispatch->setRematchDialog(0);*/
+}
+
 ResultDialog::~ResultDialog()
 {
-	if(dispatch && dispatch->supportsRematch())
+	if(dispatch)		//here also in case no "closeEvent"
 		dispatch->setRematchDialog(0);
+	qDebug("deleting result dialog");
 	delete okayButton;
 	delete mainlabel;
 }
@@ -95,6 +102,9 @@ void ResultDialog::slot_okay(void)
 			dispatch->sendRematchAccept();
 		else
 			dispatch->sendRematchRequest();
+		dispatch->setRematchDialog(0);
+		qDebug("rematch slot okay");
+		dispatch = 0;
 	}
 	hide();
 	deleteLater();

@@ -16,6 +16,8 @@ class ResultDialog : public QDialog
 	public slots:
 		void slot_okay(void);
 	private:
+		void closeEvent(QCloseEvent *);
+
 		QLabel * mainlabel;
 		QPushButton * okayButton;
 		BoardDispatch * dispatch;
