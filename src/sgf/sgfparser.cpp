@@ -310,7 +310,7 @@ bool SGFParser::setCodec(QString c)
 
 		// TODO : make sure we are getting the proper codec value from settings
 		if (settings.contains("CODEC"))
-			codec = QTextCodec::codecForName(settings.value("CODEC").toByteArray ());
+			codec = QTextCodec::codecForName(settings.value("CODEC").toByteArray());
 	}
 	else
 		codec = QTextCodec::codecForName(c.toLatin1().constData());
@@ -584,8 +584,10 @@ bool SGFParser::doParse(const QString &toParseStr)
 //				qDebug(toParse->Str.toLatin1().constData());
 //				qDebug("############### After creating move ####################");
 				unknownProperty = QString();
+#ifdef FIXME	//why is this a warning? this happens on loading a file with time info
 				if (tree->getCurrent()->getTimeinfo())
 				qWarning("*** Timeinfo set !!!!");
+#endif //FIXME
 				//tree->getCurrent()->setTimeinfo(false);
 			}
 			else
@@ -803,8 +805,10 @@ bool SGFParser::doParse(const QString &toParseStr)
 							tree->addEmptyMove();
 							isRoot = false;
 							unknownProperty = QString();
+#ifdef FIXME	//why is this a warning?
 							if (tree->getCurrent()->getTimeinfo())
-								qWarning("*** Timeinfo set !!!!");
+								qWarning("*** Timeinfo set (2)!!!!");
+#endif //FIXME
 							//tree->getCurrent()->setTimeinfo(false);
 						}
 					case editBlack:
