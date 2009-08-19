@@ -1,3 +1,6 @@
+#ifdef LATENCY
+#include <sys/time.h>
+#endif //LATENCY
 #include "networkconnection.h"
 #include "consoledispatch.h"
 #include "boarddispatch.h"
@@ -7,6 +10,7 @@
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
 #include "mainwindow.h"			//don't like so much
+#include "matchnegotiationstate.h"
 
 #define FRIENDWATCH_NOTIFY_DEFAULT	1
 
@@ -21,6 +25,7 @@ default_room(0), console_dispatch(0), qsocket(0)
 	talkRegistry = 0;
 
 	connectingDialog = 0;
+	match_negotiation_state = new MatchNegotiationState();
 }
 
 /* Maybe this should return an enum, but I'm feeling lazy at the moment,
@@ -191,7 +196,11 @@ void NetworkConnection::closeConnection(bool send_disconnect)
 	* there's a MainWindow::connexionClosed that does
 	* good stuff we should move into somewhere
 	* nearby., also what about onError?*/
-	
+	if(connectingDialog)
+	{
+		connectingDialog->deleteLater();
+		connectingDialog = 0;
+	}
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
 		if(send_disconnect)
@@ -245,6 +254,7 @@ NetworkConnection::~NetworkConnection()
 	//delete qsocket;
 	//In case these still exist
 	//probably unnecessary?
+	delete match_negotiation_state;
 	if(boardDispatchRegistry)
 		qDebug("board dispatch registry unfreed!");
 }
@@ -451,6 +461,7 @@ void NetworkConnection::checkGameWatched(GameListing & game)
 	{
 		if((*i)->name == game.white_name() || (*i)->name == game.black_name())
 		{
+			//notifies too often!!! FIXME
 			if((*i)->notify)
 				QMessageBox::information(0, tr("Match Started!"), tr("Match has started between %1 and %2").arg(game.white_name()).arg(game.black_name()));
 			return;
@@ -614,6 +625,8 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	//OnReadyRead();
 	/* We need to toggle the connection flag, close things up, etc.. */
 	
+	/* FIXME, we need to also notify the board dispatches, etc., not just ignore it, it should close everything and prevent
+	 * those board window, do you want to resign messages */
 	if(mainwindow)	//mainwindow can ignore if loginDialog is open
 		mainwindow->onConnectionError();
 }
@@ -749,6 +762,27 @@ void NetworkConnection::savefriendswatches(void)
 		}
 		settings.endArray();
 	}
+}
+
+/* Problem if messages come out of order */
+void NetworkConnection::latencyOnSend(void)
+{
+#ifdef LATENCY
+	gettimeofday(&latencyLast, NULL);
+#endif //LATENCY
+}
+
+void NetworkConnection::latencyOnRecv(void)
+{
+#ifdef LATENCY
+	unsigned long ms;
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	ms = (tv.tv_sec - latencyLast.tv_sec) * 1000;
+	ms += (tv.tv_usec - latencyLast.tv_usec);
+	latencyAverage += ms;
+	latencyAverage /= 2;
+#endif //LATENCY
 }
 
 void NetworkConnection::sendConsoleText(const char * text)

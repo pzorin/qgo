@@ -20,6 +20,8 @@ class BoardDispatchRegistry;
 class GameDialogRegistry;
 class TalkRegistry;
 
+class MatchNegotiationState;
+
 class Room;
 class QMessageBox;
 
@@ -57,6 +59,7 @@ class NetworkConnection : public QObject
 		virtual void sendMatchInvite(const PlayerListing &) = 0;
 		virtual void adjournGame(const GameListing &) {};
 		virtual void sendTime(BoardDispatch *) {};
+		virtual void sendAddTime(int) {};
 		virtual void sendMove(unsigned int game_id, class MoveRecord * m) = 0;
 		virtual void sendRequestCount(unsigned int) {};
 		virtual void sendAcceptCountRequest(class GameData *) {};
@@ -149,6 +152,7 @@ class NetworkConnection : public QObject
 		virtual bool supportsRequestAdjourn(void) { return false; };
 		virtual bool supportsRequestDraw(void) { return false; };
 		virtual bool supportsRequestCount(void) { return false; };
+		virtual bool supportsAddTime(void) { return false; };
 		virtual bool supportsObserveOutside(void) { return false; };
 		virtual bool supportsServerChange(void) { return false; };
 		virtual bool supportsRefreshListsButtons(void) { return false; };
@@ -185,12 +189,9 @@ class NetworkConnection : public QObject
 		void recvSeekPlayer(QString player, QString condition);
 		virtual void sendSeek(class SeekCondition *) {};
 		virtual void sendSeekCancel(void) {};
-		/* The only reason closeConnection is public as opposed to
-		 * protected is so the msghandlers can close it.  FIXME
-		 * We need to have just one way that things get disconnected,
-		 * error or not... not a bunch of ways from different places */
-		void closeConnection(bool send_disconnect = true);
+		
 	protected:
+		void closeConnection(bool send_disconnect = true);
 		virtual bool readyToWrite(void) { return true; };
 		virtual void setReadyToWrite(void) {};
 		void setConnected(void);
@@ -200,12 +201,16 @@ class NetworkConnection : public QObject
 		void writeFromBuffer(void);
 		void writeZeroPaddedString(char * dst, const QString & src, int size);
 		class ServerListStorage & getServerListStorage(void);
+		bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
+		void latencyOnSend(void);
+		void latencyOnRecv(void);
+
 		bool firstonReadyCall;
 		friend class GameDialogRegistry;
 		friend class TalkRegistry;
 		Room * default_room;
 		ConsoleDispatch * console_dispatch;
-		bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
+		
 		
 		newline_pipe <unsigned char> pending;
 		newline_pipe <unsigned char> send_buffer;	//not always used
@@ -241,6 +246,8 @@ class NetworkConnection : public QObject
 		std::vector<FriendWatchListing *> friendedList;
 		std::vector<FriendWatchListing *> watchedList;
 		std::vector<FriendWatchListing *> blockedList;
+
+		MatchNegotiationState * match_negotiation_state;
 		
 	private:
 		void setupRoomAndConsole(void);
@@ -255,7 +262,9 @@ class NetworkConnection : public QObject
 		Room * mainwindowroom;
 
 		QMessageBox * connectingDialog;
-		
+		struct timeval latencyLast;
+		unsigned long latencyAverage;
+
 	protected slots:
 		virtual void OnConnected();
 	private slots:
