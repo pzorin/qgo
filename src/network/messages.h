@@ -222,7 +222,7 @@ struct MatchRequest
 	bool opponent_is_challenger;	//i.e., he initiated the exchange
 	bool challenger_is_black;
 	unsigned short last_game_code;
-	bool undoAllowed;		//currently only set by tygem
+	bool undoAllowed;
 	bool rematch;
 	bool first_offer;
 	MatchRequest() : opponent(""),
