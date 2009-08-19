@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
 	appPtr = &app;
 	translatorPtr = &translator;
-
+	
 	startqGo();
 
 	if ( argc > 1 )
@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
 	{
 		mainwindow->show();
 	}
+
+	srand(time(NULL));
 
 	return app.exec();
 }
