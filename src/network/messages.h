@@ -222,6 +222,7 @@ struct MatchRequest
 	bool opponent_is_challenger;	//i.e., he initiated the exchange
 	bool challenger_is_black;
 	unsigned short last_game_code;
+	bool undoAllowed;		//currently only set by tygem
 	bool rematch;
 	bool first_offer;
 	MatchRequest() : opponent(""),
@@ -239,7 +240,7 @@ struct MatchRequest
 		nmatch_handicapMax(0), 
 		free_rated(noREQ), 
 		number(0), opponent_id(0), 
-		last_game_code(0), rematch(false), first_offer(false) {};
+		last_game_code(0), undoAllowed(false), rematch(false), first_offer(false) {};
 };
 
 // FIXME We added a recvToggle function, after having forgotten about this
