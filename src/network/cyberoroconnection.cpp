@@ -18,6 +18,7 @@
 #include "gamedata.h"
 #include "playergamelistings.h"
 #include "quickconnection.h"
+#include "matchnegotiationstate.h"
 #include <QMessageBox>
 /* We need to eventually clean all the code up with some
  * c++ "syntactic sugar" but it just seems like a pain in
@@ -70,8 +71,6 @@ CyberOroConnection::CyberOroConnection(const QString & user, const QString & pas
 	
 	room_were_in = 0;	//lobby?
 	connecting_to_game_number = 0;
-	playing_game_number = 0;
-	our_game_being_played = 0;	//FIXME redundant
 	
 	matchKeepAliveTimerID = 0;
 	matchRequestKeepAliveTimerID = 0;
@@ -721,7 +720,7 @@ void CyberOroConnection::sendObserveAfterJoining(const GameListing & game)
 	for(i = 8; i < (int)length; i++)
 		packet[i] = 0x00;	//password in here? all password?
 #ifdef RE_DEBUG
-	printf("Sending observe to %s vs %s: %d (%d)\n", game.white_name().toLatin1().constData(), game.black_name().toLatin1().constData(), game.game_code, game.number);
+	printf("Sending observe to %s vs %s: %d (%d)\n", game.white_name().toLatin1().constData(), game.black_name().toLatin1().constData(), game.game_code, game.number);	//crash here ?!?!
 	for(i = 0; i < (int)length; i++)
 		printf("%02x ", (unsigned char)packet[i]);
 	printf("\n");
@@ -910,10 +909,13 @@ void CyberOroConnection::sendMatchInvite(const PlayerListing & player)
 }
 
 /* note that this only enters the match offer dialog
- * it doesn't accept the game.  Haven't decided whether
- * to auto send this or to have a special popup for it.*/
+ * it doesn't accept the game.*/
 void CyberOroConnection::sendMatchInvite(const PlayerListing & player, bool accepting)
 {
+#ifdef FIXME
+	if(!match_negotiation_state->newMatchAllowed())		//really should be handled elsewhere FIXME
+		return;
+#endif //FIXME
 	unsigned int length = 16;
 	unsigned char * packet = new unsigned char[length];
 	
@@ -968,6 +970,7 @@ void CyberOroConnection::sendMatchInvite(const PlayerListing & player, bool acce
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending accept match request or invite");
 	delete[] packet;
+	match_negotiation_state->sendMatchInvite((PlayerListing *)&player);
 }
 
 void CyberOroConnection::sendDeclineMatchInvite(const PlayerListing & player)
@@ -1041,10 +1044,11 @@ void CyberOroConnection::sendMatchOfferPending(const PlayerListing & player)
 	packet[9] = 0x00;
 	
 	encode(packet, 0xa);
-	qDebug("Sending decline request");
+	qDebug("Sending match offer pending");
 	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending decline request");
+		qWarning("*** failed sending match offer pending");
 	delete[] packet;
+	match_negotiation_state->sendMatchOfferPending();
 }
 
 void CyberOroConnection::sendMatchOfferCancel(const PlayerListing & )
@@ -1220,6 +1224,13 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 		packet[13] = 0x00;
 	else
 		packet[13] = mr.challenger_is_black;
+	packet[13] = 0x00;
+	//if we're black and we're sending the match offer and no handicap,
+	//then I saw a 0 for 13.  Not sure where challenger_is_black comes from anymore
+	/* challenger_is_black is set to 1 when we send the initial match offer, no matter what
+	 * otherwise, its gotten from a different byte when we receive a match offer.  Its used
+	 * totally inconsistently and this is the only place we send it. We need to figure out
+	 * what this byte is, and then remove challenger_is_black completely */
 #ifdef RE_DEBUG
 	printf("challenger is black: %d\n", mr.challenger_is_black);
 #endif //RE_DEBUG
@@ -1300,6 +1311,12 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 	packet[63] = 0x00;
 	//challengers name first... 
 	// maybe challenger first if nigiri? otherwise black first?
+	/* FIXME FIXME FIXME
+	 * This is not enough.  If we send the match offer and we choose to play black
+	 * opponent can play a black stone, thinking that they're black and its screwed
+	 * from there.  If we choose to play white, its okay.  There's either another
+	 * flag or something. Could even be a problem in another message like a start
+	 * game message FIXME FIXME FIXME*/
 	const QString * first_name, * second_name;
 	unsigned short first_id, second_id;
 	switch(mr.color_request)
@@ -1367,8 +1384,8 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 	//packet[116] = 0x27;
 	// 3 * 16 zeroes 
 	
-	
-	playing_game_number = mr.number;		//so the match can bring it up
+	match_negotiation_state->offerMatchTerms((MatchRequest *)&mr);
+	match_negotiation_state->setGameId(mr.number);
 	
 #ifdef RE_DEBUG
 	printf("match packet we are sending now: ");
@@ -1507,7 +1524,7 @@ void CyberOroConnection::timerEvent(QTimerEvent * event)
 		  event->timerId() == matchRequestKeepAliveTimerID)
 	{
 		Room * room = getDefaultRoom();
-		GameListing * listing = room->getGameListing(our_game_being_played);
+		GameListing * listing = room->getGameListing(match_negotiation_state->getGameId());
 		if(!listing)
 		{
 			qDebug("Can't send keepalive, no listing");
@@ -1825,39 +1842,6 @@ void CyberOroConnection::sendEndgame12Msg(unsigned int game_id, unsigned short m
 void CyberOroConnection::sendRequestCount(unsigned int game_id)
 {
 	sendEndgame12Msg(game_id, 0xc4b3);
-#ifdef OLD
-	unsigned int length = 0x0c;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_id);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us a request count");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xc4;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-
-	encode(packet, 0xc);
-	qDebug("Sending request count");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending request count packet");
-	delete[] packet;
-#endif //OLD
 	killActiveMatchTimers();
 }
 
@@ -1869,91 +1853,25 @@ void CyberOroConnection::sendAcceptCountRequest(GameData * data)
 void CyberOroConnection::sendRefuseCountRequest(GameData * data)
 {
 	sendEndgame12Msg(data->number, 0xceb3);
-#ifdef OLD
-	unsigned int length = 0x0c;
-	unsigned char * packet = new unsigned char[length];
 	BoardDispatch * boarddispatch = getIfBoardDispatch(data->number);
 	if(!boarddispatch)
 	{
-		qDebug("How can there not be a board dispatch, it just sent us a refuse count request");
+		qDebug("How can there not be a board dispatch, it just sent us a send refuse count request");
 		return;
 	}
-	packet[0] = 0xce;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = data->game_code & 0x00ff;
-	packet[7] = (data->game_code >> 8);
-	if(data->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-
-	encode(packet, 0xc);
-	qDebug("Sending refuse request count");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending refuse request count packet");
-	delete[] packet;
-#endif //OLD
+	startMatchTimers(boarddispatch->getBlackTurn() ? (data->black_name == getUsername()) : (data->white_name == getUsername()));
 }
 
-/* This isn't working FIXME */
 void CyberOroConnection::sendRequestMatchMode(unsigned int game_id)
 {
-#ifndef RE_DEBUG
-	qDebug("Return to match mode is not working right now!\n");
-	return;
-#endif // !RE_DEBUG
 	sendEndgame12Msg(game_id, 0x05b4);
-#ifdef OLD
-	unsigned int length = 0x0c;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_id);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us a request match mode");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0x05;
-	packet[1] = 0xb4;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-
-	encode(packet, 0xc);
-	qDebug("Sending request match mode");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending request match mode packet");
-	delete[] packet;
-#endif //OLD
-	killActiveMatchTimers();
+	killActiveMatchTimers();		//does killing the match timers like this also stop the clock from ticking doublecheck FIXME?
+	match_negotiation_state->sendMatchModeRequest();
 }
 
-/* Looks like this is the same as sendRequestMatchMode but we need to
- * really double check FIXME */
-/* FIXME see d2af, I don't think it works like this, I don't think there's two 05b4s
- * I think we get a d2af to restart the game */
 void CyberOroConnection::sendAcceptRequestMatchMode(unsigned int game_id)
 {
-	return;		//FIXME
-	unsigned int length = 0x0c;
+	unsigned int length = 0x08;
 	unsigned char * packet = new unsigned char[length];
 	GameData * aGameData;
 	BoardDispatch * boarddispatch = getIfBoardDispatch(game_id);
@@ -1963,66 +1881,27 @@ void CyberOroConnection::sendAcceptRequestMatchMode(unsigned int game_id)
 		return;
 	}
 	aGameData = boarddispatch->getGameData();
-	packet[0] = 0x05;
-	packet[1] = 0xb4;
-	packet[2] = 0x0c;
+	packet[0] = 0x8c;
+	packet[1] = 0xc3;
+	packet[2] = 0x08;
 	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;		//is it?
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
+	packet[4] = aGameData->game_code & 0x00ff;
+	packet[5] = (aGameData->game_code >> 8);
+	packet[6] = 0x00;
+	packet[7] = 0x00;
 
-	encode(packet, 0xc);
+	encode(packet, 0x8);
 	qDebug("Sending accept request match mode");
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending request match mode packet");
 	delete[] packet;
+	//FIXME this isn't starting thematch timers properly FIXME
 	startMatchTimers(boarddispatch->getBlackTurn() ? (aGameData->black_name == getUsername()) : (aGameData->white_name == getUsername()));
 }
 
 void CyberOroConnection::sendDeclineRequestMatchMode(unsigned int game_id)
 {
 	sendEndgame12Msg(game_id, 0x0ab4);
-#ifdef OLD
-	unsigned int length = 0x0c;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_id);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us a decline request match mode");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0x0a;
-	packet[1] = 0xb4;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-
-	encode(packet, 0xc);
-	qDebug("Sending decline request match mode");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending decline request match mode packet");
-	delete[] packet;
-#endif //OLD
 }
 
 void CyberOroConnection::sendTimeLoss(unsigned int game_id)
@@ -2090,7 +1969,6 @@ void CyberOroConnection::sendRemoveStones(unsigned int game_code, const MoveReco
 	
 	packet[14] = move->x;
 	packet[15] = move->y;
-	receivedOppDone = false;
 	
 	/*for(i = 0; i < deadStonesList.size(); i++)
 	{
@@ -2158,7 +2036,8 @@ void CyberOroConnection::sendDoneScoring(unsigned int game_code, unsigned short 
 	unsigned int length = 14 + (deadStonesList.size() * 2) + (deadStonesList.size() ? 2 : 0);
 	unsigned char * packet = new unsigned char[length];
 	int i;
-	
+	bool receivedOppDone = match_negotiation_state->receivedDoneCounting();
+
 	if(receivedOppDone)
 	{
 		packet[0] = 0xe7;
@@ -2194,14 +2073,20 @@ void CyberOroConnection::sendDoneScoring(unsigned int game_code, unsigned short 
 	//packet[10] = 0x00;		//possible scores, random?
 	if(receivedOppDone)
 	{
+		unsigned short done_response = match_negotiation_state->getCountingVerification();
 		packet[10] = done_response & 0x00ff;
 		packet[11] = (done_response >> 8);
 	}
 	else
 	{
 		//FIXME what the hell?
-		packet[10] = 0x82;		//these seems to be kept...
-		packet[11] = 0x45;		//should be random? = 63?
+		//packet[10] = 0x82;		//these seems to be kept...
+		//packet[11] = 0x45;		//should be random? = 63?
+		/* I'm going to assume that these are random, to ensure that scores can't be spoofed.
+		 * i.e., we should check their response */
+		packet[10] = rand() % 256;
+		packet[11] = rand() % 256;
+		match_negotiation_state->setCountingVerification(packet[10] + (packet[11] << 8));
 	}
 	
 	packet[12] = 0x01;
@@ -2234,8 +2119,11 @@ void CyberOroConnection::sendDoneScoring(unsigned int game_code, unsigned short 
 	
 	if(receivedOppDone)
 	{
+		match_negotiation_state->setDoneCounting();
 		sendMatchResult(game_code);
 	}
+	else
+		match_negotiation_state->sendDoneCounting();
 }
 
 /* I don't think we're allowed to send this in score phase or
@@ -2275,116 +2163,17 @@ void CyberOroConnection::sendResign(unsigned int game_code)
 
 void CyberOroConnection::sendAdjournRequest(void)
 {
-	sendEndgame12Msg(our_game_being_played, 0xb5b3);
-#ifdef OLD
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(our_game_being_played);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us an adjourn request");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xb5;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending adjourn request");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending adjourn request");
-	delete[] packet;
-#endif //OLD
+	sendEndgame12Msg(match_negotiation_state->getGameId(), 0xb5b3);
 }
 
 void CyberOroConnection::sendAdjourn(void)
 {
-	sendEndgame12Msg(our_game_being_played, 0xbab3);
-#ifdef OLD
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(our_game_being_played);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us an adjourn accept");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xba;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending adjourn accept");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending adjourn accept");
-	delete[] packet;
-#endif //OLD
+	sendEndgame12Msg(match_negotiation_state->getGameId(), 0xbab3);
 }
 
 void CyberOroConnection::sendRefuseAdjourn(void)
 {
-	sendEndgame12Msg(our_game_being_played, 0xbfb3);
-#ifdef OLD
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(our_game_being_played);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us an adjourn refusal");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xbf;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending adjourn refuse");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending adjourn refusal");
-	delete[] packet;
-#endif //OLD
+	sendEndgame12Msg(match_negotiation_state->getGameId(), 0xbfb3);
 }
 	
 	
@@ -2477,6 +2266,7 @@ void CyberOroConnection::sendRematchRequest(void)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending rematch request");
 	delete[] packet;
+	match_negotiation_state->sendRematch();
 }
 
 void CyberOroConnection::sendRematchAccept(void)
@@ -2511,7 +2301,7 @@ void CyberOroConnection::sendRematchAccept(void)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending rematch request accept");
 	delete[] packet;
-	playing_game_number = room_were_in;	//so d2af is ready
+	match_negotiation_state->sendRematchAccept();
 	//prepare for rematch func?
 }
 
@@ -2754,41 +2544,35 @@ void CyberOroConnection::handleAccountInfoMsg(int size, char * msg)
 void CyberOroConnection::sendLogin(void)
 {
 	//term code could be version
-		unsigned char term_code[2] = { 0x5b, 0x02 };
-		/* We send login and password */
-		// no hard coding!! FIXME
-		int length = 0x1a;	//10 + user and pass padded to 10
-		unsigned char * packet = new unsigned char[length];
-		unsigned char * p = packet;
-		int i;
-		
-		p[0] = 0x6e;
-		p[1] = 0xe2;
-		p[2] = length;
-		p[3] = 0x00;
-		p += 4;
-		/*for(i = 0; i < username.length(); i++)
-			p[i] = username.toLatin1().data()[i];
-		for(i = username.length(); i < 10; i++)
-			p[i] = 0x00;*/
-		writeZeroPaddedString((char *)p, username, 10);
-		p += 10;
-		/*for(i = 0; i < password.length(); i++)
-			p[i] = password.toLatin1().data()[i];
-		for(i = password.length(); i < 10; i++)
-			p[i] = 0x00;*/
-		writeZeroPaddedString((char *)p, password, 10);
-		p += 10;
-		for(i = 0; i < 2; i++)
-			p[i] = term_code[i];
+	unsigned char term_code[2] = { 0x5b, 0x02 };
+	/* We send login and password */
+	// no hard coding!! FIXME
+	int length = 0x1a;	//10 + user and pass padded to 10
+	unsigned char * packet = new unsigned char[length];
+	unsigned char * p = packet;
+	int i;
+	
+	p[0] = 0x6e;
+	p[1] = 0xe2;
+	p[2] = length;
+	p[3] = 0x00;
+	p += 4;
+
+	writeZeroPaddedString((char *)p, username, 10);
+	p += 10;
+	
+	writeZeroPaddedString((char *)p, password, 10);
+	p += 10;
+	for(i = 0; i < 2; i++)
+		p[i] = term_code[i];
 #ifdef RE_DEBUG
-		for(i = 0; i < length; i++)
-			printf("%02x ", packet[i]);
-		printf("\n");
-#endif //RE_DEBUG
-		if(write((const char *)packet, length) < 0)
-			qWarning("*** failed sending login packet to host");
-		delete[] packet;
+	for(i = 0; i < length; i++)
+		printf("%02x ", packet[i]);
+	printf("\n");
+#endif //RE_DEBUG		
+	if(write((const char *)packet, length) < 0)
+		qWarning("*** failed sending login packet to host");
+	delete[] packet;
 }
 
 void CyberOroConnection::sendInvitationSettings(bool invite)
@@ -3008,7 +2792,6 @@ void CyberOroConnection::sendChallengeResponse(void)
 	if(write((const char *)packet, 120) < 0)
 		qWarning("*** failed sending challenge response");
 }
-
 
 /* I think the codetable is used so that the session can't
  * be violated or forged.  In other words, since we're the
@@ -3257,7 +3040,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 			handleNigiri(msg, size);
 			break;
 		case 0x1e7d:	//match invite accept
-			handleMatchRoomOpen(msg, size);
+			handleMatchOfferPending(msg, size);
 			break;
 		case 0x147d:
 			handleAcceptMatchInvite(msg, size);
@@ -3402,7 +3185,16 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 #endif //RE_DEBUG
 			break;
+		//82c3: 0a00b60ca23a6816
 		//***
+		case 0x82c3:
+#ifdef RE_DEBUG
+			printf("0x82c3: ");
+			for(unsigned int i = 0; i < size; i++)
+				printf("%02x", msg[i]);
+			printf("\n");
+#endif //RE_DEBUG
+			break;
 		case 0xc4b3:
 			handleRequestCount(msg, size);
 			break;
@@ -3413,7 +3205,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 			handleRequestMatchMode(msg, size);
 			break;
 		case 0x0ab4:
-			handleRequestMatchMode(msg, size);
+			handleRejectMatchModeRequest(msg, size);
 			break;
 		case 0x20cb:
 		{
@@ -3436,7 +3228,6 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 			handleRematchAccept(msg, size);
 			break;
 		case ORO_SETPHRASECHAT:
-			//these are the cute messages
 			handleSetPhraseChatMsg(msg, size);
 			break;
 		case 0x327d:
@@ -3565,7 +3356,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 		case ORO_PERSONALCHAT:
 			handlePersonalChat(msg, size);
 			break;
-		case 0xe1af:
+		case 0xe1af:		//FIXME maybe not
 			handleGameEnded(msg, size);
 			break;
 		case 0x4a9c:
@@ -4474,6 +4265,7 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 		p += 2;
 		aGameListing->game_code = p[0] + (p[1] << 8);
+		game_code_to_number[aGameListing->game_code] = aGameListing->number;		//weird?
 		p += 2;
 		
 		id = p[0] + (p[1] << 8);
@@ -4684,10 +4476,11 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 
 	/* Doesn't help.  Looks like observer counts do not include the players playing themselves which makes some sense
 	 * but we need them in our little list and, well the whole thing is iffy FIXME */
+	/* Okay, we're adding observer counts here, we can check it later.  They're not in the data we get, so that's an issue */
 	game = getDefaultRoom()->getGameListing(game_id);
 	if(game)
 	{
-		//game->observers++;
+		game->observers++;
 		game->observer_list.push_back(player);
 	}
 
@@ -4949,15 +4742,13 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 			talk->recvTalk(QString((char *)text));
 			talk->updatePlayerListing();
 		}
-		//FIXME highlight or something
-		if(console_dispatch)
-			console_dispatch->recvText(player->name + "-> " + QString((char *)text));
+		//if(console_dispatch)
+		//	console_dispatch->recvText(player->name + "-> " + QString((char *)text));
 	}
 	else
 		printf("unknown player says something");
 	delete[] text;
 }
-
 
 //not disconnect, enter lobby? 0e56, really leaning towards enterlobby
 // or enter anything
@@ -5210,6 +5001,9 @@ void CyberOroConnection::handleObserverList(unsigned char * msg, unsigned int si
 	}
 }
 
+/* What if this wasn't game ended but instead game started and we got it when
+ * there were returns to match mode as well as rematches?!?! I'll try sending
+ * it as an accept. FIXME*/
 //0xe1af:
 void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 {
@@ -5236,13 +5030,12 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 		qDebug("e1af for no game\n");		//FIXME, we're getting this a good deal, probably chat rooms or something
 		return;
 	}
-	//our_game_being_played is no longer viable here because of handleScore
 	/* FIXME, what about owner_id???  this could be a room
 	 * closed message */
 	/* Room doesn't go away after game, one can still join it until
 	 * everyone is gone */
 #ifdef NOTREALLY
-	if(game->white)
+	/*if(game->white)
 	{
 		game->white->playing = 0;
 		game->white = 0;	//just in case
@@ -5254,7 +5047,7 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 	}
 	game->running = false;
 	room->recvGameListing(game);
-	game_code_to_number.erase(game_number);	// good?
+	game_code_to_number.erase(game_number);	// good?*/
 #endif //NOTREALLY
 	//the rest are pretty repetitive, non-specific FIXME
 #ifdef RE_DEBUG
@@ -5453,30 +5246,29 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 		return;
 		/* FIXME, if there's no room, we can't add the game. */
 	}
-	else
-	{
-		//detach owner if any, players are reattached
-		owner = room->getPlayerListing(aGameListing->owner_id);
-		if(owner && owner != black && owner != white)
-			setAttachedGame(owner, 0);
-		/* FIXME we may want to swap the colors? if they're now
-		 * legit, pending on nigiri comprehension?? */
-	}
+
+	game_code_to_number[game_code] = aGameListing->number;
+#ifdef RE_DEBUG
+	printf("Setting game code to game number %02x%02x %d\n", msg[0], msg[1], aGameListing->number);
+#endif //RE_DEBUG
 	aGameListing->black = black;
 	aGameListing->white = white;
+	owner = room->getPlayerListing(aGameListing->owner_id);
 	if(owner != black)
 		setAttachedGame(black, aGameListing->number);
 	if(owner != white)
 		setAttachedGame(white, aGameListing->number);
+	//detach owner if any, players are attached alread
+	if(owner && owner != black && owner != white)
+		setAttachedGame(owner, 0);
+	/* Its crashing below FIXME because the players aren't adding to the observers list and then setAttachedGame is deleting
+	 * the game */
+	/* FIXME we may want to swap the colors? if they're now
+	 * legit, pending on nigiri comprehension?? */
 	aGameListing->FR = QString::number(byte);		//should probably just be ->flags FIXME
 	aGameListing->game_code = game_code;
 	aGameListing->handicap = handicap;
 	aGameListing->isRoomOnly = false;
-	
-	//how is it necessary to do recv here if we got the listing previously?
-	//room->recvGameListing(aGameListing);
-	//FIXME test without delete
-	//delete aGameListing;
 }
 //1b00 2900 0100 0000 0600 2c01 6900 2500 0404 0000 1400 0400 0200 6b61 7365 697a 696e 0000
 //626d 7762 6d77 0000 0000 6b61 7365 697a 696e 0000 8df7 92ac 0000 0000 0000 0303 a8a8 0103
@@ -5695,8 +5487,6 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		room->recvGameListing(aGameListing);
 		//FIXME test without delete
 		//delete aGameListing;
-		//FIXME below delete causes crash
-		//delete aGameData;
 		return;
 	}
 	else
@@ -5728,7 +5518,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 #ifdef RE_DEBUG
 		//sanity check: for DEBUG ing
 		//FIXME for our games
-		if(game->observers != game->observer_list.size() && game_number != playing_game_number)
+		if(game->observers != game->observer_list.size() /*&& game_number != playing_game_number*/)
 			qDebug("Observers and observer list size mismatch on game %d!! (%d != %d)", game_number, game->observers, game->observer_list.size());
 #endif //RE_DEBUG
 		for(std::vector<PlayerListing *>::iterator oblistit = game->observer_list.begin();
@@ -5963,7 +5753,7 @@ void CyberOroConnection::handleNigiri(unsigned char * msg, unsigned int size)
 	/* Its also possible that we'd need to do this on games that
 	 * we joined.  Its even possible that this is sent all
 	 * the time for games that just started */
-	if(room_number == our_game_being_played)
+	if(match_negotiation_state->isOurGame(room_number))
 	{
 		if(we_send_nigiri)	//ignore
 			return;
@@ -6201,6 +5991,9 @@ void CyberOroConnection::handleRematchAccept(unsigned char * /*msg*/, unsigned i
 		qDebug("handle rematch accept has no board dispatch");
 		return;
 	}
+	if(!match_negotiation_state->sentRematch())
+		return;
+
 	MatchRequest * m = new MatchRequest();
 	GameData * gd = boarddispatch->getGameData();
 	m->number = room_were_in;
@@ -6245,16 +6038,17 @@ void CyberOroConnection::handleRematchAccept(unsigned char * /*msg*/, unsigned i
 	m->maintime = gd->maintime;
 	m->periodtime = gd->periodtime;
 	m->stones_periods = gd->stones_periods;
-	NetworkConnection::closeBoardDispatch(room_were_in);	//doesn't close window necessarily
+	
+	//d2af does this:
+	//NetworkConnection::closeBoardDispatch(room_were_in);	//doesn't close window necessarily
 	
 	
 	sendMatchOffer(*m, false);	//not counter offer
+	match_negotiation_state->offerMatchTerms(m);			//is this the right state? FIXME
 	delete m;
 	
 	//BoardDispatch * boarddispatch = getBoardDispatch(room_were_in);		//should open new game
 	//this needs also to send something else to trigger whatever
-	
-	playing_game_number = room_were_in;
 }
 
 /* This is also used during game negotiation, not just rematches */
@@ -6271,7 +6065,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 
 	if(p[0] + (p[1] << 8) != our_player_id)
 	{
-		qDebug("*** Woah, 327d rematch decline not meant for us!");
+		//qDebug("*** Woah, 327d rematch decline not meant for us!");		//this happens FIXME
 		return;
 	}
 	p += 2;
@@ -6286,6 +6080,10 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 #ifdef RE_DEBUG
 	printf("0x327d: unexplained bytes: %02x %02x\n", p[0], p[1]);
 #endif //RE_DEBUG
+	if(!match_negotiation_state->sentMatchOffer() && !match_negotiation_state->sentRematch())
+		return;
+	if(!match_negotiation_state->verifyPlayer(player))
+		return;
 	GameDialog * gameDialogDispatch = getIfGameDialog(*player);
 	if(gameDialogDispatch)
 	{
@@ -6297,7 +6095,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 			QMessageBox::NoButton, QMessageBox::NoButton);
 		mb.exec();
 	}
-	
+	match_negotiation_state->reset();
 #ifdef RE_DEBUG
 	printf("0x327d: ");
 	for(int i = 0; i < (int)size; i++)
@@ -6305,6 +6103,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 	printf("\n");
 #endif //RE_DEBUG
 }
+
 //b0b3
 void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 {
@@ -6325,7 +6124,7 @@ void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 		return;
 	}
 	p += 2;
-	unsigned short game_code = p[0] + (p[1] << 8);
+	unsigned short game_code = msg[2] + (msg[3] << 8);
 	unsigned short game_number = game_code_to_number[game_code];
 	boarddispatch = getIfBoardDispatch(game_number);
 	if(boarddispatch)
@@ -6351,8 +6150,12 @@ void CyberOroConnection::handleResign(unsigned char * msg, unsigned int size)
 			aGameResult.loser_name = gr->white_name;
 		}
 		boarddispatch->recvResult(&aGameResult);
-		if(game_number == our_game_being_played)
+		if(match_negotiation_state->isOurGame(game_number))
+		{
 			killActiveMatchTimers();
+			match_negotiation_state->reset();
+			//FIXME what about rematch?  what about other resets?!?!?FIXME
+		}
 	}
 }
 
@@ -6362,35 +6165,31 @@ void CyberOroConnection::handleEnterScoring(unsigned char * msg, unsigned int si
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
-	unsigned char * p = msg;
 	PlayerListing * player;
-	player = room->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(msg[0] + (msg[1] << 8));
 	
 	if(size != 8)
 	{
 		qDebug("Enter scoring message of strange size: %d", size);
 	}
-#ifdef RE_DEBUG
-	printf("c9b3 size: %d\n", size);
-#endif //RE_DEBUG
 	if(!player)
 	{
-		printf("Can't find player for id %02x%02x for enterscoremode\n", p[0], p[1]);
+		printf("Can't find player for id %02x%02x for enterscoremode\n", msg[0], msg[1]);
 		return;
 	}
-	p += 2;
-	unsigned short game_code = p[0] + (p[1] << 8);
-	boarddispatch = getIfBoardDispatch(game_code_to_number[game_code]);
+	unsigned short game_code = msg[2] + (msg[3] << 8);
+	unsigned short game_number = game_code_to_number[game_code];
+	boarddispatch = getIfBoardDispatch(game_number);
 	if(boarddispatch)
 	{
 #ifdef RE_DEBUG
 		qDebug("Entering scoring mode");
 #endif //RE_DEBUG
 		boarddispatch->recvEnterScoreMode();
-		if(game_code_to_number[game_code] == our_game_being_played)
+		if(match_negotiation_state->isOurGame(game_number))
 		{
+			match_negotiation_state->enterScoreMode();
 			deadStonesList.clear();
-			receivedOppDone = false;
 			killActiveMatchTimers();
 		}
 	}
@@ -6463,7 +6262,8 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 	}
 	p += 2;
 	unsigned short game_code = p[0] + (p[1] << 8);
-	boarddispatch = getIfBoardDispatch(game_code_to_number[game_code]);
+	unsigned short game_number = game_code_to_number[game_code];
+	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
 	{
 		printf("Can't get board dispatch for remove stones for %02x%02x\n", p[0], p[1]);
@@ -6495,8 +6295,10 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 	if(unremove)
 	{
 		aMove.flags = MoveRecord::UNREMOVE_AREA;
-		if(our_game_being_played == game_code_to_number[game_code])
+		if(match_negotiation_state->isOurGame(game_number))
 		{
+			if(!match_negotiation_state->counting())
+				return;
 			std::vector <MoveRecord>::iterator it;
 			for(it = deadStonesList.begin(); it != deadStonesList.end(); it++)
 			{
@@ -6513,9 +6315,11 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 	else
 	{
 		aMove.flags = MoveRecord::REMOVE_AREA;
-		if(our_game_being_played == game_code_to_number[game_code])
+		if(match_negotiation_state->isOurGame(game_number))
 		{
-		qDebug("pushing %d %d onto dead stones list\n", aMove.x, aMove.y);
+			if(!match_negotiation_state->counting())
+				return;
+			qDebug("pushing %d %d onto dead stones list\n", aMove.x, aMove.y);
 			deadStonesList.push_back(aMove);
 		}
 	}
@@ -6535,7 +6339,6 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 		}
 	*/
 }
-
 
 //f1b3
 /* This is definitely like an opponent has hit done kind of
@@ -6576,10 +6379,24 @@ void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int /*si
 	printf("\n");
 #endif //RE_DEBUG
 	//weird two bytes
-	if(game_number == our_game_being_played)
+	if(match_negotiation_state->isOurGame(game_number))
 	{
-		done_response = p[0] + (p[1] << 8);
-		receivedOppDone = true;
+		unsigned short done_response = p[0] + (p[1] << 8);
+		
+		if(match_negotiation_state->sentDoneCounting())
+		{
+			if(!match_negotiation_state->verifyCountDoneMessage(done_response))
+			{
+				qDebug("Count done fail!!\n");
+				//FIXME
+			}
+			match_negotiation_state->setDoneCounting();
+		}
+		else
+		{
+			match_negotiation_state->setCountingVerification(done_response);
+			match_negotiation_state->receiveDoneCounting();
+		}
 	}
 	p += 2;
 	// a 01 or 02
@@ -6655,6 +6472,16 @@ void CyberOroConnection::handleScore(unsigned char * msg, unsigned int /*size*/)
 	p++;
 	number_of_marks = p[0];
 	p++;
+
+	if(match_negotiation_state->isOurGame(game_id))
+	{
+		if(!match_negotiation_state->doneCounting())
+		{
+			printf("Not done counting and e7b3\n");
+			return;
+		}
+	}
+
 	/* First one is the new one, the rest is the full list */
 	MoveRecord aMove;
 	aMove.flags = MoveRecord::REMOVE;
@@ -6675,7 +6502,7 @@ void CyberOroConnection::handleScore(unsigned char * msg, unsigned int /*size*/)
 }
 	*/
 	boarddispatch->recvResult(0);
-	
+#ifdef OLD
 	//double check, this appropriate here? FIXME, we need a func for it
 	GameListing * aGameListing = room->getGameListing(game_id);
 	if(aGameListing)
@@ -6684,7 +6511,9 @@ void CyberOroConnection::handleScore(unsigned char * msg, unsigned int /*size*/)
 		//aGameListing->running = false;
 		//room->recvGameListing(aGameListing);
 		our_game_being_played = 0;
+		
 	}
+#endif //OLD
 }
 
 //c4b3
@@ -6708,18 +6537,18 @@ void CyberOroConnection::handleRequestCount(unsigned char * msg, unsigned int si
 		return;
 	}
 	p += 2;
-	game_code = msg[2] + (p[3] << 8);
+	game_code = msg[2] + (msg[3] << 8);
 	game_number = game_code_to_number[game_code];
 	
 	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
 	{
-		//FIXME why is it getting here?!?!?!
 		qDebug("Request count: No board dispatch for %02x%02x %d", msg[2], msg[3], game_number);
 		return;
 	}
 	p += 2;
 	//fe06 0d0d 0000 0060
+	killActiveMatchTimers();
 	boarddispatch->recvRequestCount();
 				
 #ifdef RE_DEBUG
@@ -6729,7 +6558,6 @@ void CyberOroConnection::handleRequestCount(unsigned char * msg, unsigned int si
 	printf("\n");
 #endif //RE_DEBUG
 }
-
 
 //0c00 fe06 ef08 0000 0021
 //ceb3
@@ -6781,7 +6609,6 @@ void CyberOroConnection::handleRequestMatchMode(unsigned char * msg, unsigned in
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
-	unsigned char * p = msg;
 	PlayerListing * player;
 	unsigned short game_code, game_number;
 	if(size != 8)
@@ -6790,25 +6617,24 @@ void CyberOroConnection::handleRequestMatchMode(unsigned char * msg, unsigned in
 	}
 
 	//4503 d802 0000 007c
-	player = room->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(msg[0] + (msg[1] << 8));
 	if(!player)
 	{
-		qDebug("No player for %02x %02x for request match mode!!\n", p[0], p[1]);
+		qDebug("No player for %02x %02x for request match mode!!\n", msg[0], msg[1]);
 		return;
 	}
-	p += 2;
-	game_code = p[0] + (p[1] << 8);
+	game_code = msg[2] + (msg[3] << 8);
 	game_number = game_code_to_number[game_code];
 	
 	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
 	{
-		qDebug("No board dispatch for %02x%02x", p[0], p[1]);
+		qDebug("No board dispatch for %02x%02x", msg[2], msg[3]);
 		return;
 	}
-	p += 2;
-	
-	boarddispatch->recvRequestMatchMode();
+
+	killActiveMatchTimers();		//okay?  what about cheating issues?? FIXME
+	boarddispatch->recvRequestMatchMode();	
 				
 #ifdef RE_DEBUG
 	printf("0x request match mode?: 05b4: ");
@@ -6839,13 +6665,13 @@ void CyberOroConnection::handleRejectMatchModeRequest(unsigned char * msg, unsig
 		return;
 	}
 	p += 2;
-	game_code = p[0] + (p[1] << 8);
+	game_code = msg[2] + (msg[3] << 8);
 	game_number = game_code_to_number[game_code];
 	
 	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
 	{
-		qDebug("No board dispatch for %02x%02x", p[0], p[1]);
+		qDebug("No board dispatch for %02x%02x", msg[2], msg[3]);
 		return;
 	}
 	p += 2;
@@ -6996,7 +6822,7 @@ void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 	aMove->y = p[1];
 	p += 2;
 #ifdef RE_DEBUG
-	for(unsigned int i = 0; i < 7; i++)	//8, 9 or 10?
+	for(unsigned int i = 0; i < 6; i++)	//8, 9 or 10?
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
@@ -7011,6 +6837,7 @@ void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 	if(aMove->x == 0 || aMove->y == 0)
 		aMove->flags = MoveRecord::PASS;
 	boarddispatch->recvMove(aMove);
+	/* FIXME color is not set!! */
 	if(aMove->color == stoneWhite)
 		boarddispatch->recvTime(TimeRecord(seconds, periods), TimeRecord(0, -1));
 	else
@@ -7018,7 +6845,7 @@ void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 	
 	
 	
-	if(our_game_being_played == game_number)
+	if(match_negotiation_state->isOurGame(game_number))
 	{
 		matchKeepAliveTimerID = startTimer(39000);		//keep alives
 		if(matchRequestKeepAliveTimerID)
@@ -7174,7 +7001,6 @@ void CyberOroConnection::handleAcceptUndo(unsigned char * msg, unsigned int size
 #endif //RE_DEBUG
 }
 
-
 //0x42f4: 4d75 bd00 0101 ea00 0d08 0200 0101 000b
 //0x42f4: 4d75 bd00 0101 ec00 0b02 0300 0101 000b
 //0x42f4: 4d75 bd00 0000 ed00 0201 0f00 0101 000b
@@ -7210,7 +7036,7 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 	p += 2;
 	p += 4;
 #ifdef RE_DEBUG
-	printf("Move List!!!!\n");
+	printf("Move List!!!! %d\n", number_of_moves);
 #endif //RE_DEBUG
 	//player = room->getPlayerListing(p[0] + (p[1] << 8));
 	aMove->flags = MoveRecord::NONE;
@@ -7250,9 +7076,12 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 	}
 	delete aMove;
 	if(p != (msg + size))
-		qDebug("Move list with strange size: %d", size);
+		qDebug("Move list with strange size: %d", size);	//20
 	if(enterScore)
+	{
 		boarddispatch->recvEnterScoreMode();
+		match_negotiation_state->enterScoreMode();
+	}
 }
 
 //4cf4 4 zeroes different FIXME join
@@ -7280,6 +7109,9 @@ void CyberOroConnection::handleMoveList2(unsigned char * msg, unsigned int size)
 	}
 	listing->game_code = game_id;
 	game_code_to_number[listing->game_code] = listing->number;
+#ifdef RE_DEBUG
+	printf("Setting game code to number broadcast %02x%02x %d\n", p[0], p[1], listing->number);
+#endif //RE_DEBUG
 	boarddispatch = getBoardDispatch(listing->number);
 	
 	room->recvGameListing(listing);	//okay?
@@ -7478,7 +7310,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	unsigned char * p = msg;
 	PlayerListing * player;
 	PlayerListing * playerA, * playerB;
-	GameData * aGameData;
+	GameData * aGameData = 0;
 	unsigned short player_id;
 	unsigned short game_id;
 	unsigned short game_number;
@@ -7508,7 +7340,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	player = room->getPlayerListing(player_id);
 #ifdef RE_DEBUG
 	if(player)
-		printf("Currently %s's turn...\n", player->name.toLatin1().constData());
+		printf("Currently %s's turn...\n", player->name.toLatin1().constData());	//not true for nigiri at least, FIXME
 	else
 		qDebug("Can't find player for for d2af\n");
 #endif //RE_DEBUG
@@ -7519,64 +7351,127 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	//	we_are_challenger = false;
 	p += 2;
 	game_id = msg[2] + (msg[3] << 8);
+	game_number = game_code_to_number[game_id];
+	if(!game_number)
+		printf("No game number for %02x%02x\n", msg[2], msg[3]);
 	/* FIXME, its apparently possible to get this on a match we're
 	 * already observing for some reason... if we haven't set a connecting
 	 * to number, this causes us to create an unnecessary board */
 	/* FIXME is this reliable for our games ? */
-	if(!connecting_to_game_number && !playing_game_number)
-	{
-		printf("Received unexpected observing match started msg: d2af\n");
-		//printf("Hopefully observering rematch\n");			//no
-		//return;
-	}
+
+	p += 2;
+	//b50d 7203 0002 01f0 0201 0300 0000 3c00 3c003c00
+	//0002
+	//I think this is the rematch number
+	//4 and 5 might be the ordinal of this game in a sequence
+	p += 2;
+
 	if(connecting_to_game_number)
-		game_number = connecting_to_game_number;
-	else if(playing_game_number)
 	{
-		//careful, could be rematch !!!
-		getAndCloseGameDialog(*player);	//FIXME okay?
-		game_number = playing_game_number;
-		our_game_being_played = game_number;
-		setRoomNumber(game_number);
+		if(connecting_to_game_number != game_number)
+		{
+			printf("Received unexpected d2af\n");
+		}
+		else
+			connecting_to_game_number = 0;
+#ifdef RE_DEBUG
+		//printf("d2af Setting game code to number %02x%02x %d\n", msg[2], msg[3], game_number);
+#endif //RE_DEBUG
+		//game_code_to_number[game_id] = game_number;
+	}
+	else if(match_negotiation_state->isOurGame(game_number))
+	{
+		if(!match_negotiation_state->verifyPlayer(player) &&
+                    (player_id != our_player_id || (!match_negotiation_state->sentRematch() && !match_negotiation_state->canEnterRematchAdjourned())))
+		{
+			//on resuming a game after being disconnected, we hit here
+			//it could be anything but its amazing that our game is set at all?!? FIXME
+			qDebug("Would have been a rematch but some issue");  //FIXME FIXME
+			//FIXME resetting here could be a problem with someone blocking games by causing us to reset when
+			//we shouldn't?  maybe not.  I'm being paranoid, this isn't udp
+			//match_negotiation_state->reset();
+			//return;
+			// so yeah, going to go ahead, assuming its okay though should still FIXME
+		}
+		boarddispatch = getIfBoardDispatch(game_number);
+		if(!boarddispatch)
+		{
+			getAndCloseGameDialog(*player);
+			setRoomNumber(game_number);
+		}
+		else
+		{
+			aGameData = boarddispatch->getGameData();
+			if(aGameData->game_code != game_id)
+			{
+				printf("our rematch\n");
+				NetworkConnection::closeBoardDispatch(game_number);
+				aGameData = 0;
+			}
+			else
+			{
+			
+#ifdef RE_DEBUG
+				printf("Maybe a return to match mode our game\n");
+#endif //RE_DEBUG
+				//if so, need to restart timers!!! FIXME, added to boarddispatch but doublecheck
+				boarddispatch->recvLeaveScoreMode();
+				return;
+			}
+		}
 	}
 	else
 	{
+		boarddispatch = getIfBoardDispatch(game_number);
+		if(!boarddispatch)
+		{
+			qDebug("Unexpected d2af\n");
+			return;
+		}
+		else
+		{
+			aGameData = boarddispatch->getGameData();
+			if(aGameData->game_code != game_id)
+			{
+				printf("observer rematch\n");
+				NetworkConnection::closeBoardDispatch(game_number);
+				aGameData = 0;
+			}
+			else
+			{
 #ifdef RE_DEBUG
-		printf("Maybe a return to match mode\n");
+				printf("Maybe a return to match mode observer\n");
 #endif //RE_DEBUG
-		/* We get here, and really this should be part of the new stuff for ensuring a
-		 * secure match chain FIXME... but basically this doubles as return to match
-		 * mode */
-		return;
+				boarddispatch->recvLeaveScoreMode();
+				return;
+			}
+		}
 	}
-	
-#ifdef RE_DEBUG
-	printf("Setting game code to number %02x%02x %d\n", msg[2], msg[3], game_number);
-#endif //RE_DEBUG
-	game_code_to_number[game_id] = game_number;
 	
 	/* In case of rematches, we close the existing board
 	 * dispatch, but only through the network
 	 * connection.  We don't want to send a leave msg*/
-	boarddispatch = getIfBoardDispatch(game_number);
-	if(boarddispatch)
-		NetworkConnection::closeBoardDispatch(game_number);
+	/* FIXME for observed games we need to distinguish here between rematches, return to match mode
+	 * and spoofed board open packets also see match mode comment above.*/
+	
+	
 	boarddispatch = getBoardDispatch(game_number);
-	//game->game_code = game_id;	//don't we already have this?
 	
 	/* Consider adding our name to observer list here: */
+	//FIXME shouldn't some other message do this?  doublecheck
 	if(room_were_in == game_number)
 	{
 		PlayerListing * our_player = room->getPlayerListing(our_player_id);
 		boarddispatch->recvObserver(our_player, true);
+		//if its our game and we want the 2 != 0 to stop,
+		//we need to add ourself and opponent to game or make on 1a81 or whatever
+		//to do it FIXME
 	}
 	
-	aGameData = boarddispatch->getGameData();
+	if(!aGameData)
+		aGameData = boarddispatch->getGameData();
 	
-	p += 2;
-	//b50d 7203 0002 01f0 0201 0300 0000 3c00 3c003c00
-	//0002
-	p += 2;
+	
 	//FIXME make sure this doesn't enable undo button
 	//in observed matches
 	aGameData->undoAllowed = p[1] & 0x80;
@@ -7710,14 +7605,20 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 //67 69 61 6E 74 63 61 74 00 00 D3 04 6C 75 63 6B  giantcat....luck
 //79 73 74 61 72 00 49 04
 	/* Double check for nigiri issues */
-	if(playerA->id == our_player_id)
+	if(match_negotiation_state->isOurGame(game_number))
 	{
-		aGameData->opponent_id = playerB->id;
-		if(nigiri)
-			we_are_challenger = true;
+		if(playerA->id == our_player_id)
+		{
+			aGameData->opponent_id = playerB->id;
+			if(nigiri)
+				we_are_challenger = true;
+		}
+		else
+		{
+			aGameData->opponent_id = playerA->id;
+		}
+		match_negotiation_state->startMatch();
 	}
-	else
-		aGameData->opponent_id = playerA->id;
 	aGameData->black_name = playerA->name;
 	aGameData->white_name = playerB->name;
 	aGameData->black_rank = playerA->rank;
@@ -7747,9 +7648,6 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	}
 	/* seems like color can get reversed */
 
-	connecting_to_game_number = 0;
-	playing_game_number = 0;
-	
 	/* And observers: */
 	GameListing * game = room->getGameListing(game_number);
 	if(game && room_were_in == game_number)		//no observing outside
@@ -7768,8 +7666,6 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	else
 		qDebug("Can't get game listing for game %d", game_number);		//FIXME we've hit this
 }
-
-
 
 //38 F4 78 00 01 00 00 08 18 00 00 00 06 00 50 46  8.x...........PF
 //2A 0B 3B 00 05 01 00 01 3C 00 05 00 02 00 4B 2E  *.;.....<.....K.
@@ -7896,7 +7792,8 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size
 		mr.opponent_id = id;
 		mr.opponent_is_challenger = true;
 	}
-	
+	/* FIXME I think its okay if we get this as long as we're in the same room with the opponent */
+
 	PlayerListing * player = room->getPlayerListing(mr.opponent_id);
 	PlayerListing * ourplayer = room->getPlayerListing(our_player_id);
 	
@@ -8116,9 +8013,23 @@ void CyberOroConnection::handleResumeMatch(unsigned char * msg, unsigned int siz
 {
 	unsigned char * p = msg;
 	unsigned short room_number = p[0] + (p[1] << 8);
+	unsigned short our_id, their_id;
+	PlayerListing * opponent;
 	p += 2;
-	//our id
-	//their id
+	our_id = msg[2] + (msg[3] << 8);
+	if(our_id != our_player_id)
+	{
+		qDebug("resume game not meant for us! %02x%02x", msg[2], msg[3]);
+		return;
+	}
+	their_id = msg[4] + (msg[5] << 8);
+	
+	opponent = getDefaultRoom()->getPlayerListing(their_id);
+	if(!opponent)
+	{
+		printf("can't get opponent for resume game: %02x%02x\n", msg[4], msg[5]);
+		return;
+	}
 	// ffs? lots of ffs?
 #ifdef RE_DEBUG
 	printf("resume adjourned? 5fc3?: ");
@@ -8129,7 +8040,7 @@ void CyberOroConnection::handleResumeMatch(unsigned char * msg, unsigned int siz
 	//resume adjourned? 5fc3?: 5a00 8d02 b50d ffffffffffffffffffffffff
 	//1a81 message: 6402 {1f 02008d02b50dcd059c023a0b5d00bd030f08} game of lostsoul 8d
 	//	02 and giantcat b50d
-	playing_game_number = room_number;
+	match_negotiation_state->setupRematchAdjourned(room_number, opponent->name);
 	/* It only get set as our game if its got our name in it
 	 * and even that may not be enough but... treat like
 	 * 0a7d from here.
@@ -8258,7 +8169,9 @@ void CyberOroConnection::handleMatchInvite(unsigned char * msg, unsigned int siz
 	/* FIXME, I really don't think we want to auto accept.  It puts one in
 	 * a special room And then if you go to observe after joining in
 	 * another game in progress, you leave the match room.  */
-	
+	/* FIXME blocks here right now because match_negotiation_state isn't properly reset */
+	if(!match_negotiation_state->newMatchAllowed())
+		return;
 	
 	MatchInviteDialog * mid = new MatchInviteDialog(player->name, player->rank);
 	int mid_return = mid->exec();
@@ -8284,7 +8197,10 @@ void CyberOroConnection::handleAcceptMatchInvite(unsigned char * msg, unsigned i
 		qDebug("MatchInviteAccept from unknown player");
 		return;
 	}
-	
+	if(!match_negotiation_state->sentMatchInvite())
+		return;
+	if(!match_negotiation_state->verifyPlayer(player))
+		return;
 	sendMatchOfferPending(*player);
 	
 #ifdef RE_DEBUG
@@ -8315,6 +8231,11 @@ void CyberOroConnection::handleDeclineMatchInvite(unsigned char * msg, unsigned 
 		qDebug("MatchInviteDecline from unknown player");
 		return;
 	}
+	if(!match_negotiation_state->sentMatchInvite())
+		return;
+	if(!match_negotiation_state->verifyPlayer(player))
+		return;
+	match_negotiation_state->reset();
 	QMessageBox mb(tr("Invite declined"), tr("%1 has declined invitation").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
 			QMessageBox::NoButton, QMessageBox::NoButton);
 	mb.exec();
@@ -8328,9 +8249,10 @@ void CyberOroConnection::handleDeclineMatchInvite(unsigned char * msg, unsigned 
 }
 
 //0x1e7d
-void CyberOroConnection::handleMatchRoomOpen(unsigned char * msg, unsigned int size)
+void CyberOroConnection::handleMatchOfferPending(unsigned char * msg, unsigned int size)
 {
-	/* I think this is in response to sendMatchOfferPending */
+	/* What's the difference between this and the accept match invite?  Any ?? */
+	/* This is the copyback of our own sendMatchOfferPending */
 #ifdef RE_DEBUG
 	printf("0x1e7d: ");
 	for(int i = 0; i < (int)size; i++)
@@ -8344,7 +8266,7 @@ void CyberOroConnection::handleMatchRoomOpen(unsigned char * msg, unsigned int s
 		qDebug("MatchRoomOpen of size %d\n", size);
 		// probably should print it out and exit FIXME
 	}
-	if(p[0] + (p[1] << 8) != our_player_id)
+	if(msg[0] + (msg[1] << 8) != our_player_id)
 	{
 		/* Actually, could this be the game id? FIXME
 		 * But we ignore it if... no, see because below, we're using it
@@ -8357,7 +8279,7 @@ void CyberOroConnection::handleMatchRoomOpen(unsigned char * msg, unsigned int s
 		return;
 	}
 	p += 2;
-	PlayerListing * player = getDefaultRoom()->getPlayerListing(p[0] + (p[1] << 8));
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(msg[2] + (msg[3] << 8));
 	if(!player)
 	{
 		qDebug("MatchInviteAccept from unknown player");
@@ -8366,6 +8288,11 @@ void CyberOroConnection::handleMatchRoomOpen(unsigned char * msg, unsigned int s
 	p += 2;
 	// no idea what this is
 	//setRoomNumber(p[0] + (p[1] << 8));
+
+	if(!match_negotiation_state->sentMatchOfferPending())
+		return;
+	if(!match_negotiation_state->verifyPlayer(player))
+		return;
 	
 	GameDialog * gd = getGameDialog(*player);
 	gd->recvRequest(0, getGameDialogFlags());

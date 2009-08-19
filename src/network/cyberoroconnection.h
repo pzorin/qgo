@@ -188,7 +188,7 @@ class CyberOroConnection : public NetworkConnection
 		void handleMatchDecline(unsigned char * msg, unsigned int size);
 		void handleAcceptMatchInvite(unsigned char * msg, unsigned int size);
 		void handleDeclineMatchInvite(unsigned char * msg, unsigned int size);
-		void handleMatchRoomOpen(unsigned char * msg, unsigned int size);
+		void handleMatchOfferPending(unsigned char * msg, unsigned int size);
 		void handleResign(unsigned char * msg, unsigned int size);
 		void handleEnterScoring(unsigned char * msg, unsigned int size);
 		void handleRemoveStones(unsigned char * msg, unsigned int size);
@@ -222,7 +222,7 @@ class CyberOroConnection : public NetworkConnection
 		QuickConnection * metaserverQC;
 		
 		/* Since 0a7d comes before 1a81 and one has the number for human
-		 * consumption and the other the game_code necessary for joinging,
+		 * consumption and the other the game_code necessary for joining,
 		 * etc., we'll just combine them both at 1a81, checking names */
 		std::vector <GameListing *> rooms_without_owners;
 		std::map <unsigned short, unsigned short> game_code_to_number;
@@ -235,16 +235,12 @@ class CyberOroConnection : public NetworkConnection
 		
 		unsigned short room_were_in;
 		unsigned short connecting_to_game_number;	//awkward FIXME
-		unsigned short playing_game_number;		//awkward
+		
 		bool we_send_nigiri;
 		
-		/* We can only play one game at a time so:...*/
-		unsigned short our_game_being_played;	//redundant with playing_game_number??
+		
 		int matchKeepAliveTimerID, matchRequestKeepAliveTimerID;
-		//unsigned short opp_requests_undo_move_number;
-		unsigned short done_response;
 		std::vector <MoveRecord> deadStonesList;
-		bool receivedOppDone;
 		
 	private slots:
 		virtual void OnConnected();
