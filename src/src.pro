@@ -84,6 +84,7 @@ network/igsconnection.h \
 network/lgs.h \
 network/login.h \
 network/matchinvitedialog.h \
+network/matchnegotiationstate.h \
 network/messages.h \
 network/networkconnection.h \
 network/orosetphrasechat.h \
@@ -145,6 +146,7 @@ SOURCES += displayboard.cpp \
 	   network/lgs.cpp \
  	   network/login.cpp \
 	   network/matchinvitedialog.cpp \
+	   network/matchnegotiationstate.cpp \
 	   network/messages.h \
 	   network/networkconnection.cpp \
 	   network/networkconnection.h \
