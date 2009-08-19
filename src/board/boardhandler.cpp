@@ -550,6 +550,7 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //		board->removeLastMoveMark();
 //		board->setCurStoneColor();
 //	}
+	updateButtons(m->getColor());
 	updateCursor(m->getColor());
 //	board->setCursorType(cur);
 	
@@ -573,20 +574,26 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 		boardwindow->getInterfaceHandler()->setCaptures(m->getCapturesBlack(), m->getCapturesWhite());
 
 	// Display times
-//	if (currentMove == 0)
-//	{
-//		if (gameData->timelimit == 0)
-//			board->getInterfaceHandler()->setTimes("00:00", "-1", "00:00", "-1");
-//		else
-//		{
-			// set Black's and White's time to timelimit
-//			board->getInterfaceHandler()->setTimes(true, gameData->timelimit, -1);
-//			board->getInterfaceHandler()->setTimes(false, gameData->timelimit, -1);
-//		}
-//	}
-//	else if (m->getTimeinfo())
-//		board->getInterfaceHandler()->setTimes(!getBlackTurn(), m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves());
-	
+	if(boardwindow->getGameMode() == modeNormal)
+	{
+		if(m->getMoveNumber() == 0)
+		{
+			GameData * gameData = boardwindow->getGameData();
+			if (gameData->timelimit == 0)
+				boardwindow->getClockDisplay()->setTimeInfo(0, -1, 0, -1);
+			else
+				boardwindow->getClockDisplay()->setTimeInfo(gameData->timelimit, -1, gameData->timelimit, -1);
+		}
+		else if(m->getTimeinfo())
+		{
+			int other_time = (m->parent && m->parent->getMoveNumber() != 0 ? (int)m->parent->getTimeLeft() : 0);
+			int other_stones_periods = (m->parent && m->parent->getMoveNumber() != 0 ? (m->parent->getOpenMoves() == 0 ? -1 : m->parent->getOpenMoves()): -1);
+			if(!boardwindow->qgoboard->getBlackTurn())
+				boardwindow->getClockDisplay()->setTimeInfo((int)m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves(), other_time, other_stones_periods);
+			else
+				boardwindow->getClockDisplay()->setTimeInfo(other_time, other_stones_periods, (int)m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves());
+		}
+	}
 	//board->updateCanvas();
 }
 
@@ -751,6 +758,34 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 //	return cursorIdle;
 }
 
+void BoardHandler::updateButtons(StoneColor currentMoveColor)
+{
+	switch (boardwindow->getGameMode())
+	{
+		case modeMatch:
+		case modeComputer:
+			//qgoboard_computer enables and disables the resign button, might want to move that here, maybe
+			//but only applies to modeComputer
+			if(boardwindow->getGamePhase() == phaseOngoing)
+			{
+				if((currentMoveColor == stoneBlack && boardwindow->getMyColorIsWhite()) || 
+				   (currentMoveColor == stoneWhite && boardwindow->getMyColorIsBlack()))
+				{
+					if(boardwindow->getUi()->passButton)
+						boardwindow->getUi()->passButton->setEnabled(true);
+				}
+				else if(currentMoveColor != stoneNone)
+				{
+					if(boardwindow->getUi()->passButton)
+						boardwindow->getUi()->passButton->setEnabled(false);
+				}
+			}
+			break;
+		default:
+			break;
+	}
+}
+
 /*
  * Update the variation marks on the board if any
  */
@@ -767,7 +802,6 @@ void BoardHandler::updateVariationGhosts(Move *move)
 		board->setVarGhost(m->getColor(), m->getX(), m->getY());
 	} while ((m = m->brother) != NULL);
 }
-
 
 void BoardHandler::slotWheelEvent(QWheelEvent *e)
 {

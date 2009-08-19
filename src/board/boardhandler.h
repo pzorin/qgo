@@ -1,7 +1,3 @@
-/*
- * boardhandler.h
- */
-
 #ifndef BOARDHANDLER_H
 #define BOARDHANDLER_H
 
@@ -29,6 +25,7 @@ public:
 	void updateMove(Move *m=0, bool ignore_update = false);
 	bool updateAll(Move *move, bool toDraw=true);
 	void updateCursor(StoneColor c=stoneNone);
+	void updateButtons(StoneColor c=stoneNone);
 	void gotoMove(Move *m);
 //	bool loadSGF(const QString fileName, const QString SGFLoaded=0, bool fastLoad=false);
 
