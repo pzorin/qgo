@@ -1,15 +1,8 @@
-/*
- * interfacehandler.h
- */
-
 #ifndef INTERFACEHANDLER_H
 #define INTERFACEHANDLER_H
 
 #include "defines.h"
-//#include "boardhandler.h"
 
-
-//struct ButtonState;
 class BoardWindow;
 class GameData;
 
@@ -30,10 +23,8 @@ public:
 	void setCaptures(float black, float white);
 	void clearComment();
 //	void toggleToolbarButtons(bool state);
-	void setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones);
 	void setScore(int terrB, int capB, int terrW, int capW, float komi=0);
-/*	void setTimes(bool, float, int);
-	QString getComment();
+/*	QString getComment();
 	QString getComment2();
 	void toggleSidebar(bool toggle);
 	QString getTextLabelInput(QWidget *parent, const QString &oldText);

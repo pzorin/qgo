@@ -552,29 +552,6 @@ void InterfaceHandler::toggleToolbarButtons(bool state)
 */
 
 /*
- * displays the remaining time for playing
- */
-/* FIXME shouldn't this be in the clockdisplay code?? */
-void InterfaceHandler::setTimes(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
-{
-	if (!btime.isEmpty())
-	{
-		if (bstones != QString("-1"))
-			boardwindow->getUi()->pb_timeBlack->setText(btime + " / " + bstones);
-		else
-			boardwindow->getUi()->pb_timeBlack->setText(btime);
-	}
-
-	if (!wtime.isEmpty())
-	{
-		if (wstones != QString("-1"))
-			boardwindow->getUi()->pb_timeWhite->setText(wtime + " / " + wstones);
-		else
-			boardwindow->getUi()->pb_timeWhite->setText(wtime);
-	}
-}
-
-/*
  * displays the score in the score layout
  */
 void InterfaceHandler::setScore(int terrB, int capB, int terrW, int capW, float komi)
