@@ -24,7 +24,7 @@
 class BoardHandler;
 
 BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
-	: QMainWindow((QWidget*)mainwindow, 0)
+	: QMainWindow((QWidget*)mainwindow, 0), addtime_menu(0)
 {
 	if(!gd)
 	{
@@ -153,6 +153,7 @@ BoardWindow::~BoardWindow()
 	delete tree;	//okay?
 	
 	delete gameData;
+	delete addtime_menu;
 	mainwindow->removeBoardWindow(this);
 }
 
@@ -355,6 +356,39 @@ void BoardWindow::setupBoardUI(void)
 		ui.countButton->setVisible(false);
 	if(dispatch && !dispatch->supportsRequestDraw())
 		ui.drawButton->setVisible(false);
+
+	if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
+	{
+		addtime_menu = new QMenu();
+		QAction * act = addtime_menu->addAction(tr("Add 1 min"));
+		act->setData(1);
+		act = addtime_menu->addAction(tr("Add 5 min"));
+		act->setData(5);
+		act = addtime_menu->addAction(tr("Add 10 min"));
+		act->setData(10);
+		act = addtime_menu->addAction(tr("Add 60 min"));
+		act->setData(60);
+		act = addtime_menu->addAction(tr("Cancel"));
+		act->setData(-1);
+	
+		/* Right now, IGS is the only server with addtime, but if nigiri is done in another order
+		 * this will have to be moved elsewhere: */
+		if(!gameData->nigiriToBeSettled)
+		{
+			if(myColorIsBlack)
+			{
+				ui.pb_timeWhite->setMenu(addtime_menu);
+			}
+			else if(myColorIsWhite)
+			{
+				ui.pb_timeBlack->setMenu(addtime_menu);
+			}
+			else
+				qDebug("Warning: Nigiri settled in match mode but player has no color");
+			connect(addtime_menu, SIGNAL(triggered(QAction*)), SLOT(slot_addtime_menu(QAction*)));	
+		}
+	}
+	
 	/* eb added this but I've had it in the setupUI function since
 	 * its more part of the UI than the board.  But maybe its better
 	 * or different here.  FIXME */
@@ -1013,6 +1047,28 @@ break;
 void BoardWindow::setBoardDispatch(BoardDispatch * d)
 {
 	dispatch = d;
+}
+
+//this seems like its more appropriately a qgoboard slot but...
+void BoardWindow::slot_addtime_menu(QAction * a)
+{
+	switch(a->data().toInt())
+	{
+		case -1:
+			break;
+		case 1:
+			dispatch->sendAddTime(1);
+			break;
+		case 5:
+			dispatch->sendAddTime(5);
+			break;
+		case 10:
+			dispatch->sendAddTime(10);
+			break;
+		case 60:
+			dispatch->sendAddTime(60);
+			break;
+	}
 }
 
 /*

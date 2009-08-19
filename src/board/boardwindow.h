@@ -102,13 +102,14 @@ public slots:
 	void slotDuplicate();
 	void keyPressEvent(QKeyEvent *e);
 	void slotToggleInsertStones(bool val);
-	
+	void slot_addtime_menu(QAction *);
 
 private:
 	void setupUI(void);
 	void setupBoardUI(void);
 
 	Ui::BoardWindow ui;
+	QMenu * addtime_menu;
 	Tree *tree;
 	int boardSize;		//the true boardsize
 	BoardHandler *boardHandler;
