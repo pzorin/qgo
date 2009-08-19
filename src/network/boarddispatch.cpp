@@ -46,7 +46,7 @@ BoardDispatch::~BoardDispatch()
 	if(boardwindow)
 	{
 		//clearObservers();
-		boardwindow->getUi()->observerView->setModel(0);
+		boardwindow->getUi()->observerView->setModel(0);		//crashhere maybe
 		boardwindow->setGamePhase(phaseEnded);		//disables all buttons
 		if(observerListModel)
 			delete observerListModel;
@@ -176,7 +176,7 @@ void BoardDispatch::sendRequestCount(void)
 {
 	if(connection)
 	{
-		stopTime();	//protocol specific or not?
+		stopTime();	//protocol specific or not?		FIXME, huge issue if protocol does this to!!! see cyberoro killActiveMatchTimers, figure out who should do this when
 		boardwindow->getUi()->countButton->setEnabled(false);
 		connection->sendRequestCount(gameData->number);
 	}
@@ -195,7 +195,11 @@ void BoardDispatch::sendRequestDraw(void)
 void BoardDispatch::sendRequestMatchMode(void)
 {
 	if(connection)
+	{
+		stopTime();		//maybe??
+		boardwindow->getUi()->undoButton->setEnabled(false);
 		connection->sendRequestMatchMode(gameData->number);
+	}
 }
 
 void BoardDispatch::sendTimeLoss(void)
@@ -254,8 +258,6 @@ void BoardDispatch::openBoard(void)
 	}
 	else
 	{
-		qDebug("Game data update");
-		
 		/* FIXME we now have a gameDataChanged() function, can we remove this? */
 		
 		/* Mainly to allow accurate IGS status lookups */
@@ -275,6 +277,25 @@ void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)
 						bt.stones_periods,
 						wt.time,
 						wt.stones_periods);
+}
+
+void BoardDispatch::recvAddTime(int minutes, QString player_name)
+{
+	if(gameData->white_name == player_name)
+	{
+		TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(false);
+		boardwindow->getClockDisplay()->setTimeInfo(0, -1,
+						t.time + (60 * minutes),
+						t.stones_periods);
+	}
+	else if(gameData->black_name == player_name)
+	{
+		TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(true);
+			boardwindow->getClockDisplay()->setTimeInfo(t.time + (60 * minutes),
+						t.stones_periods, 0, -1);
+	}
+	else
+		qDebug("Received add time for unknown player name %s", player_name.toLatin1().constData());
 }
 
 void BoardDispatch::recvResult(GameResult * r)
@@ -366,6 +387,14 @@ void BoardDispatch::recvEnterScoreMode(void)
 	boardwindow->qgoboard->enterScoreMode();
 }
 
+void BoardDispatch::recvLeaveScoreMode(void)
+{
+	if(!boardwindow)
+		return;
+	startTime();		//protocol specific or not?
+	boardwindow->qgoboard->leaveScoreMode();
+}
+
 void BoardDispatch::recvRequestCount(void)
 {
 	//this is those count messages before passes
@@ -426,11 +455,13 @@ void BoardDispatch::sendAcceptMatchModeRequest(void)
 
 void BoardDispatch::sendRefuseMatchModeRequest(void)
 {
+	startTime();		//protocol specific or not?
 	connection->sendDeclineRequestMatchMode(gameData->number);
 }
 
 void BoardDispatch::recvRejectMatchModeRequest(void)
 {
+	boardwindow->getUi()->undoButton->setEnabled(true);
 	if(boardwindow)
 		boardwindow->qgoboard->recvRefuseMatchMode();
 }
@@ -529,7 +560,7 @@ void BoardDispatch::sendRematchRequest(void)
 	connection->sendRematchRequest();
 }
 
-void BoardDispatch::recvRematchRequest(void)
+void BoardDispatch::recvRematchRequest(void)	//crash here somehow
 {
 	if(resultdialog)
 		resultdialog->recvRematchRequest();
@@ -543,6 +574,11 @@ void BoardDispatch::sendTime(void)
 {
 	if(connection)
 		connection->sendTime(this);
+}
+
+void BoardDispatch::sendAddTime(int minutes)
+{
+	connection->sendAddTime(minutes);
 }
 
 /* So far just to trigger timer */
@@ -743,6 +779,7 @@ bool BoardDispatch::supportsRequestMatchMode(void) { return connection->supports
 bool BoardDispatch::supportsRequestCount(void) { return connection->supportsRequestCount(); };
 bool BoardDispatch::supportsRequestDraw(void) { return connection->supportsRequestDraw(); };
 bool BoardDispatch::supportsRequestAdjourn(void) { return connection->supportsRequestAdjourn(); };
+bool BoardDispatch::supportsAddTime(void) { return connection->supportsAddTime(); };
 bool BoardDispatch::startTimerOnOpen(void) {return connection->startTimerOnOpen(); }
 bool BoardDispatch::clientCountsTime(void) { return connection->clientCountsTime(); }
 bool BoardDispatch::clientSendsTime(void) { return connection->clientSendsTime(); }

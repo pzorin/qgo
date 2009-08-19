@@ -18,12 +18,14 @@ class BoardDispatch
 		void gameDataChanged(void);
 		void openBoard(void);
 		void recvTime(const class TimeRecord & wt, const class TimeRecord & bt);
+		void recvAddTime(int minutes, QString player_name);
 		void recvResult(class GameResult * r);
 		void recvObserver(class PlayerListing * p, bool present);
 		void clearObservers(void);
 		void recvKibitz(QString name, QString text);
 		void sendKibitz(QString text);
 		void recvEnterScoreMode(void);
+		void recvLeaveScoreMode(void);
 		void createCountDialog(void);
 		void sendRequestCount(void);
 		void recvRequestCount(void);
@@ -59,6 +61,7 @@ class BoardDispatch
 		void sendRematchAccept(void);
 		void recvRematchRequest(void);
 		void sendTime(void);
+		void sendAddTime(int minutes);
 		void startGame(void);
 		bool isAttribBoard(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		bool isOpponentBoard(QString us, QString them);
@@ -75,6 +78,7 @@ class BoardDispatch
 		void setObserverListModel(class ObserverListModel * olm);
 		bool supportsMultipleUndo(void);
 		bool supportsRequestMatchMode(void);
+		bool supportsAddTime(void);
 		bool supportsRequestCount(void);
 		bool supportsRequestDraw(void);
 		bool supportsRequestAdjourn(void);
