@@ -158,4 +158,15 @@ class PlayerSortProxy : public QSortFilterProxyModel
 		unsigned char flags;
 };
 
+class GamesSortProxy : public QSortFilterProxyModel
+{
+	public:
+		GamesSortProxy() : watches(false) {};
+		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+		bool filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const;
+		void toggleWatches(void);
+	private:
+		bool watches;
+};
+
 extern std::map<class PlayerListing *, unsigned short> removed_player;

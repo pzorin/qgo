@@ -1148,3 +1148,29 @@ bool PlayerSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceP
 		return false;
 	return true;
 }
+
+void GamesSortProxy::sort(int column, Qt::SortOrder order)
+{
+	sourceModel()->sort(column, order);
+	invalidateFilter();
+}
+
+void GamesSortProxy::toggleWatches(void)
+{
+	watches = !watches;
+	sort(G_TOTALCOLUMNS);
+}
+
+bool GamesSortProxy::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+	QModelIndex whiteIndex = sourceModel()->index(sourceRow, GC_WHITENAME, sourceParent);
+	const GameListing * g = dynamic_cast<GamesListModel *>(sourceModel())->gameListingFromIndex(whiteIndex);
+	if(watches)
+	{
+		if((g->black && g->black->friendWatchType == PlayerListing::watched) ||
+			(g->white && g->white->friendWatchType == PlayerListing::watched))
+			return true;
+		return false;
+	}
+	return true;
+}

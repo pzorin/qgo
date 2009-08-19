@@ -14,6 +14,7 @@ class Talk;
 class PlayerListModel;
 class PlayerSortProxy;
 class GamesListModel;
+class GamesSortProxy;
 class MainWindow;
 
 class Room : public QObject
@@ -54,6 +55,7 @@ class Room : public QObject
 		PlayerListModel * playerListModel;
 		PlayerSortProxy * playerSortProxy;
 		GamesListModel * gamesListModel;
+		GamesSortProxy * gamesSortProxy;
 
 		QTreeView * playerView, * gamesView;
 		QToolButton * refreshGamesButton, * refreshPlayersButton;

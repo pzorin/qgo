@@ -42,12 +42,15 @@ Room::Room()
 
 void Room::setupUI(void)
 {
+	gamesSortProxy = new GamesSortProxy();
 	gamesListModel = new GamesListModel();
+	gamesSortProxy->setSourceModel(gamesListModel);
 
 	/*ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
 	ui.ListView_games->hideColumn(12);
 	ui.ListView_games->hideColumn(13);*/
-	gamesView->setModel(gamesListModel);
+	//gamesView->setModel(gamesListModel);
+	gamesView->setModel(gamesSortProxy);
 	/* Justifications??? */
 	/* No sort indicator??? */
 	/* Qt 4.4.1 made sortIndicatorShown necesssary for sort behavior
@@ -95,6 +98,7 @@ void Room::setupUI(void)
    // playerView->setIconSize(QSize(20, 20));
 	playerView->setModel(playerSortProxy);
 	playerSortProxy->setDynamicSortFilter(true);
+	gamesSortProxy->setDynamicSortFilter(true);
 	//connect(playerListModel, SIGNAL(dataChanged(QModelIndex())), playerSortProxy, SLOT(clear()));
 	playerView->header()->setSortIndicatorShown ( true );
 	playerView->setColumnWidth ( 0, 40 );
@@ -162,6 +166,7 @@ Room::~Room()
 	delete playerListModel;
 	delete playerSortProxy;
 	delete gamesListModel;
+	delete gamesSortProxy;
 	disconnect(whoBox1, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(whoBox2, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
@@ -294,7 +299,8 @@ void Room::slot_showGamesPopup(const QPoint & iPoint)
 	if (popup_item != QModelIndex())
 	{
 		/* Do not give options on rooms without games */
-		popup_gamelisting = gamesListModel->gameListingFromIndex(popup_item);
+		QModelIndex translated = gamesSortProxy->mapToSource(popup_item);
+		popup_gamelisting = gamesListModel->gameListingFromIndex(translated);
 		if(popup_gamelisting->isRoomOnly)
 			return;
 		QMenu menu(gamesView);
@@ -364,7 +370,8 @@ void Room::slot_popupJoinObserve(void)
 //observe
 void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 {
-	const GameListing * g = gamesListModel->gameListingFromIndex(index);
+	QModelIndex translated = gamesSortProxy->mapToSource(index);
+	const GameListing * g = gamesListModel->gameListingFromIndex(translated);
 	if(preferences.observe_outside_on_doubleclick &&
 		  connection->supportsObserveOutside() && !g->isRoomOnly)
 		connection->sendObserveOutside(*g);
@@ -478,6 +485,7 @@ void Room::slot_showFriends(int)
 void Room::slot_showWatches(int)
 {
 	playerSortProxy->setFilter(PlayerSortProxy::fans);
+	gamesSortProxy->toggleWatches();
 }
 
 void Room::slot_editFriendsWatchesList(void)
