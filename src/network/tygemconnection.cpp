@@ -2185,9 +2185,6 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	for(i = 64; i < 68; i++)
 		packet[i] = 0x00;
 	
-	//00 44 06 44 69 6e 74 72 75 73 69 6f 6e 00 00 00 00 00 
-	//00 09 69 6e 74 72 75 73 69 6f 6e 00 00 01 70 65 74 65 72 69 75 73 00 00 00 00 00 00 00 01 7
-	//0 65 74 65 72 69 75 73 00 00 00 02 01 02 00 00 00 00 00 00
 #ifdef RE_DEBUG
 	printf("match %s packet before encoding: ", (version == offer ? "offer" :
 						     (version == accept ? "accept" :
@@ -2445,36 +2442,6 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	
 	for(i = 88; i < 92; i++)
 		packet[i] = 0x00;
-	//005c 0645 696e 7472 7573 696f 6e00 0000
-	//0000 0009 7065 7465 7269 7573 0000 0000
-	//0000 0008 00ab 012c 2801 0100 0100 0002
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0000 0000 0000 0000 0000 7065 7465
-	//7269 7573 0000 0002 0000 0000
-	
-	//what we're sent from intrusion when intrusion offers
-	//7065 7465 7269 7573 0000 0000 0000 0008
-	//696e 7472 7573 696f 6e00 0000 0000 0009
-	//00ab 0bb8 2803 0100 0100 0002 0000 0000
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0000 0000 0000 696e 7472 7573 696f
-	//6e00 0002
-	
-	//we are peterius sending this
-	//005c0645
-	//696e 7472 7573 696f 6e00 0000 0000 0009
-	//7065 7465 7269 7573 0000 0000 0000 0008
-	//0011 012c 2801 0100 0100 0002 0000 0000
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0000 0000 0000 7065 7465 7269 7573
-	//0000 0002 0000 0000
-
-	//005c 0645 696e 7472 7573 696f 6e00 0000
-	//0000 0009 7065 7465 7269 7573 0000 0000
-	//0000 0008 0000 0258 5819 0000 0100 0002
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0000 0000 0000 0000 0000 7065 7465
-	//7269 7573 0000 0002 0000 0000 
 	
 #ifdef RE_DEBUG
 	printf("match packet we are sending now: ");
@@ -4481,28 +4448,6 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 	//i.e., cutting off last record, also check on ORO
 	while(p < (msg + size - 0x37) || (p < (msg + size - 19) && p[0] == 0x01))
 	{
-		//0002 009e 616c 6578 3238 3200 0000 0000 
-		//0000 0015 616c 6578 3238 3200 6100 0002 
-		//0000 0000 0000 00fd 0000 00de 0000 0006 
-		//0000 552f 0000 004b
-		
-		//longp7 103 84 28166 bu ke
-		//0002 009e 6c6f 6e67 7037 0000 0000 0000
-		//0000 0017 6c6f 6e67 7037 0069 6c00 0002
-		//0000 0000 0000 0067 0000 0054 0000 0003
-		//0000 6e06 0101 004b
-		
-		
-		//0100 0000 c1c9 c0ab befd 0000 0000 0000
-		//0000 0015 
-		//0002 009e d4c6 d6ae d7d3 a3b0
-		//a3b1 0000 0000 0013 796d 797a 7a006e616f7a000200000000
-
-		//FIXME this record displays username not nickname:
-		//0002 009e b4d3 cdb7 d4d9 c0b4 0000 0000
-		//0000 0017 7171 7137 3737 3737 3737 0002
-		//0000 0000 0000 0026 0000 0003 0000 0001
-		//0000 7132 0002 004b
 #ifdef PLAYERLIST_DEBUG
 		for(int j = 0; j < 0x38; j++)
 			printf("%c", p[j]);
@@ -4608,8 +4553,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		aPlayer->notnickname = encoded_name;
 		aPlayer->name = encoded_name2;
 		aPlayer->rank = rank;
-		//7065 7465 7269 7573 0000 0002
-		//0000 0000 0000 0013 0000 0008 0000 0001 000023c00000004b
+		
 		p += 11;
 		aPlayer->country_id = p[0];
 		p++;
@@ -4637,15 +4581,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		if(p[0] == 0xff && p[1] == 0xff)   //normally 0000 ----, then ffff ff40
 			no_rank = true;
 		p += 2;
-		//0002 009e 3737 3435 3532 0000 0000 0000 
-		//0000 0000 3737 3435 3532 006f 6f6e 0002
-		//0000 0000 0000 0064 0000 012b 0000 0000
-		//ffff ff40 0001 004b
 		
-		//0002 009e b4d3 cdb7 d4d9 c0b4 0000 0000
-		//0000 0017 7171 7137 3737 3737 3737 0002
-		//0000 0000 0000 0026 0000 0003 0000 0001
-		//0000 7132 0002 004b
 		if(no_rank)
 		{
 			aPlayer->rank_score = 0;
@@ -5025,10 +4961,6 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		}
 		printf("\n");
 #endif //GAMESLIST_DEBUG
-		//0003 0002 0201 0001 ff ff
-		//0006 0000 0001 0002 0000 ff00
-		//0001 0002 0201 0005 ffff 0200
-		//0003 0000 0002 0000 0001 0001 0000 ff00
 		p += 2;			//past id
 		//0000 0001 0002 0000 ff00 7978 7973 7a00 
 		p++;
@@ -5060,8 +4992,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		//aGameListing->FR = "";
 		//p += 2;
 		flags = p[0];
-		//0000 0001 0001 ffff ff00 7479633435320000000000000000001274796334353200003800000200000000000000000000000000000000003337323
-		//13535380000000000000003
+		
 		//FIXME we need a flag parse function		
 		//but note that we might want a variable return value in the sense
 		//that maybe we want to get the flags, maybe we want to set the name of the black
@@ -5166,12 +5097,6 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 			p += name_length;
 		}
 		p += 2;
-		//0002 0000 0000 0001 0000 ff00 6d6f746f6c6f323030370000000000166d6f746f6c6f323030370002b3d4d0c4b2bbb8c4000000000000
-		//0016 7379 756e 6a69 3300 6800 0002 0074 6f6c 6a72 3638 3131 0000 
-		//c0ba c7cf bcf6 b6f3 0000 0000 0000 0012 6575 6e68 6173 756c 6100 0000 0071 3535
-		//00030000
-		//0005 0000 0001 0003 0000 ff00 b0f4d7d3b2bbc8e7e4f3000000000002670073310002b9abc7d1c1a40000000000000000 0002 6d75 6861 6e6a 756e 6700 0000 0068 6a73 0003 0000
-		//00060000000000020000ff006c7962363433320000000000000000156c79
 		/* Don't remember why this can't get the info from the players? FIXME*/
 		if(aGameListing->white_first_flag)
 		{
@@ -5264,32 +5189,12 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 	unsigned char name[15];
 	name[14] = 0x00;
 	QString encoded_name, encoded_name2;
-	//unsigned int text_size = (size - 2) / 2;
-	//unsigned short * text = new unsigned short[text_size];
-	//unsigned short player_id;// = p[0] + (p[1] << 8);
-	//00 58 06 17 BB C6 D1 A9 D1 C7 00 00 00 00 00 00  .X..............
-	//00 00 00 04 7A 7A 7A 30 35 37 34 00 00 00 00 02  ....zzz0574.....
-	//00 00 00 00 2D 00 FF FF 33 31 31 31 31 31 31 31  ....-...31111111
-	//31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31  1111111111111111
-	//31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31  1111111111111111
-	//31 31 31 31 31 00 00 00                          11111...
 #ifdef RE_DEBUG
 	printf("serverchat: \n");
 	for(unsigned int i = 0; i < size; i++)
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	//00 A8 06 17 D2 C0 D2 C0 D4 C2 D4 C2 00 00 00 00  ................
-	//		00 00 00 00 71 71 35 32 32 32 00 00 00 00 00 02  ....qq5222......
-	//		00 00 00 00 7E 00 FF FF 33 32 32 32 32 32 32 32  ....~...32222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32  2222222222222222
-	//		32 32 32 32 32 32 00 00                          222222..
 	p += 4;
 	strncpy((char *)name, (char *)p, 14); 
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
@@ -5323,23 +5228,7 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 		printf("unknown player says something");*/
 	delete[] text;
 }
-//0x0661: 
-			//0003 0001 0000 0000 0000 0000 0000 0000
-			//0000 0002 696e 7472 7573 696f 6e00 0000
-			//0000 0009 696e 7472 7573 696f 6e00 0002
-			//0000 0000 0000 0000 0000 0000 0000 0000
-			//0700 0000 3368 656c 6c6f 2000 0000 0000
-			
-			//0003 0001 0000 0000 0000 0000 0000 0000
-			//0000 0001 6269 7473 0000 0000 0000 0000
-			//0000 0014 6269 7473 0000 0000 0000 0002
-			//0000 0000 0000 0000 0000 0000 8407 b900
-			//0c00 0000 32ca f3b1 eabb acb6 afc1 cb20
-			//0000 0000
 
-//why
-//00ab00010000000000000000000000000000000070657465726975730000000000000008706574657269757300
-//00000002000000000000000000000000000000040000003377687920000000
 //has garbled stuff on the end, maybe due to unicode, still FIXME
 //0661
 void TygemConnection::handleGameChat(unsigned char * msg, unsigned int size)
@@ -5394,12 +5283,7 @@ void TygemConnection::handleGameChat(unsigned char * msg, unsigned int size)
 		qDebug("Bad in game chat message size");
 		return;
 	}
-	//03d7 0001 0000 0000 0000 0000 0000 0000
-	//0000 0000
-	//696e 7472 7573 696f 6e00 0000 0000 0009
-	//696e 7472 7573 696f 6e00 0000 02
-	//0000 0000 0000 0000 0000 0000 0000 0003 0000 0033 796f 20
-
+	
 	p += 4;
 	//again, init number not part of text
 	p++;
@@ -5618,19 +5502,6 @@ void TygemConnection::handleConversationMsg(unsigned char * msg, unsigned int si
 	delete[] text;
 }
 
-//069f: 
-//069f
-//7065 7465 7269 7573 0000 0000 0000 0000
-//696e 7472 7573 696f 6e00 0000 0000 0009
-//696e 7472 7573 696f 6e00 0002 0001 0000
-//0c68 656c 6c6f 2074 6865 7265 0000 0000
-//you know; testing one more time
-//069f 
-//7065 7465 7269 7573 0000 0000 0000 0000 
-//696e 7472 7573 696f 6e00 0000 0000 0009
-//696e 7472 7573 696f 6e00 0002 0009 796f
-//7520 6b6e 6f77 0000 1674 6573 7469 6e67
-//206f 6e65 206d 6f72 6520 7469 6d65 0000
 /* I think these are actually supposed to be little email type msgs even though
  * they're small and conversations are supposed to be held over
  * something else that we have to respond to to open up */
@@ -5648,12 +5519,7 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 		printf("%02x", p[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	//** msg size: 72: 
-	//696e 7472 7573 696f 6e00 0000 0000 0000
-	//7065 7465 7269 7573 0000 0000 0000 0009
-	//7065 7465 7269 7573 0000 0002 0008 7375
-	//626a 6563 7400 0010 6865 6c6c 6f20 7468
-	//6572 6520 796f 7500
+	
 	strncpy((char *)name, (char *)p, 14);
 	our_name = QString((char *)name);
 	p += 15;
@@ -5661,10 +5527,7 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 15;
-	//7065 7465 7269 7573 0000 0000 0000 0000
-	//696e 7472 7573 696f 6e00 0000 0000 0009
-	//696e 7472 7573 696f 6e00 0002 0003 6161
-	//0000 0b61 6261 6261 6220 6162 6100 0000
+	
 	//rank byte
 	if(p[0] < 0x12)
 		rank = QString::number(0x12 - p[0]) + 'k';
@@ -5750,48 +5613,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 		qDebug("no board dispatch for observer list");
 		return;
 	}
-	//0x0667: 0002 0001 0002 009e 696e 7472 7573 696f 
-	//        6e00 0000 0000 0009 696e 7472 7573 696f
-	//        6e00 0002 0000 0000 0000 0000 0000 0000
-	//        0000 0000 0000 0005 6368 696e 61
-
-	//0x0667: 0002 0001 0100 0000 696e 7472 7573 696f 6e00 0000 0000 0009
-	//00ec 0666 00fa 0004 
-	//0002 
-	//009e b9ed c3c5 b9d8 0000 0000 0000 0000 
-	//0014 676d 6732 3030 3500 3000 0002 0000
-	//0000 0000 039d 0000 0391 0000 
-	//0003 0000 0005 6368 696e 61
-	//00 0200 9e69 6e74 7275
-	//7369 6f6e 0000 0000 0000 0969 6e74 7275
-	//7369 6f6e 0000 0200 0000 0000 0000 0000
-	//0000 0000 0000 0000 0000 0563 6869 6e61
 	
-	//0002 009e 7065 7465 7269 7573 0000 0000
-	//0000 0008 7065 7465 7269 7573 0000 0002
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0005 6368 696e 61
-	
-	//00 0200 9e62 6c61
-	//636b 736d 6972 6b00 0000 0000 1462 6c61
-	//636b 736d 6972 6b00 0200 0000 0000 0001
-	//2500 0001 2a00 0000 0400 0000 0563 6869
-	//6e61
-	//gmg2005, intrusion, peterius, blacksmirk, china china china china
-	
-	//0002 009e 7065 7465 7269 7573 0000 0000
-	//0000 0008 7065 7465 7269 7573 0000 0002
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0005 6368 696e 61
-	//00 0200 00b1 a8b9
-	//facb c2b6 b9cb bf00 0000 0000 1242 4753
-	//444f 5553 0000 0000 0200 0000 0000 0000
-	//0d00 0000 0000 0000 0100 0000 0c63 6869
-	//6e61 5f62 616f 6775 6f
-	//00 0200 9ec8 f1d3
-	//a500 0000 0000 0000 0000 0000 126a 7866
-	//006c 6f70 6500 0000 0200 0000 0000 000d
-	//2000 000e a800 0000 0700 0000 0563
 	p += 2;
 	number_of_observers = (p[0] << 8) + p[1];
 	p += 2;
@@ -5803,20 +5625,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 	/* FIXME possible issue with country name which is not included in
 	 * 0x34 */
-	//0002 ffff bbfe c5ac 0000 0000 0000 0000
-	//0000 0017 7368 6163 6c65 0030 0030 0000
-	//0000 0000 0000 00c7 0000 0099 0000 0002
-	//0000 0000 0000 0000
 	
-	//0002 ffff bbfe c5ac 0000 0000 0000 0000
-	//0000 0017 7368 6163 6c65 0030 0030 0000
-	//0000 0000 0000 00c7 0000 0099 0000 0002
-	//0000 0000 edb6 f000
-	
-	//0002 009e 7065 7465 7269 7573 0000 0000
-	//0000 0008 7065 7465 7269 7573 0000 0002
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0005 6368 696e 61
 	while(p < (msg + size - 0x33) || (p[0] == 0x01 && p < (msg + size - 19)))
 	{
 		if(p[0] == 0x01)
@@ -5949,15 +5758,6 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 			p += p[0] + 1;
 			continue;
 		}
-		//0002 019d 7866 6c73 6473 0000 0000 0000
-		//0000 000f 7866 6c73 6473 006c 6400 0002
-		//0000 0000 0000 00af 0000 00d3 0000 0001
-		//0000 000d 6368 696e 615f 6875 6469 6567
-		//75
-		//0002 015e cedd e9dc 0000 0000 0000 0000
-		//0000 0013 3139 3732 3035 0030 3000 0002
-		//0000 0000 0000 038c 0000 033e 0000 0003
-		//0000 000c 6368 696e 615f 6865 6962 6169
 		
 		/* I think p[0] is the flag icon, but it can be different
 		* pictures too so... */
@@ -5971,10 +5771,6 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 		encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 		p += 14;
 		p++;
-		//0002 ffff 6a75 6e67 616e 6732 3000 0000
-		//0000 0012 6a75 6e67 616e 6732 3000 0000
-		//0000 0000 0000 0152 0000 0171 0000 0004
-		//0000 0000
 		//rank byte
 		if(p[0] < 0x12)
 			rank = QString::number(0x12 - p[0]) + 'k';
@@ -6111,25 +5907,6 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 	
 	//delete newPlayer;
 }
-
-//1b00 2900 0100 0000 0600 2c01 6900 2500 0404 0000 1400 0400 0200 6b61 7365 697a 696e 0000
-//626d 7762 6d77 0000 0000 6b61 7365 697a 696e 0000 8df7 92ac 0000 0000 0000 0303 a8a8 0103
-//000200000000000042000000000000000000000000000000000000000000000000000000000000000000000b
-
-//1b00 ffff 0100 0000 0600 8403 8403 8403 0303 0000 1e00 0300 0200 7363 6879 3837 3337 0000
-//7968 6c65 6564 6562 0000 bcf8 bcf6 0000 0000 0000 c8ab c0ba b0c5 bbe7 0000 0101 a7a7 0105 
-//000200000000000000000000000000000000000000000000000000000000000000000000000000000001000b
-
-
-//1c00 ffff 0100 0000 0600 2c01 2c01 2c01 0505 0000 1400 0500 0200 7475 7266 6679 0000 0000
-//6c69 6831 3230 3600 0000 8b49 9656 0000 0000 0000 3132 3036 0000 0000 0000 0301 a7a7 0105
-//000200000000000000000000000000000000000000000000000000000000000000000000000000000001000b
-
-//1c00 ffff 0100 0000 0600 2c01 2c01 2c01 0303 0000 1e00 0300 0200 696e 796f 7000 0000 0000
-//6b6b 3036 3239 0000 0000 c7d1 bdb4 c7d1 bdb4 0000 6b6b 3036 3239 0000 0000 0101 a7a7 0101
-//00020000000000000000000000000000000000000000000000000000000000000000000000000
-//0000001000b
-
 
 /* I think we get these when we try to observe broadcasted, or betting games
  * as well. 
@@ -6303,32 +6080,6 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 	else if(f == WHITE_LOSES)
 		white_loses_on_time = true;
 	
-	//sent after surrender:
-	//0003 0101 c4ba d3ea b3bf d4c6 0000 0000
-	//0000 0014 0300 0000 0115 0000 0318 00a0
-	//021e 0060		
-	//winner color then name probably
-	//0002 0101 6164 3838 0000 0000 0000 0000 
-	//0000 0016 0100 002d 0147 0000 0312 0980
-	//032d 0740 02d0 0616
-	
-	//00e0 0001 cef2 b5bd 0000 0000 0000 0000 
-	//0000 0018 0100 0055 0124 0000 (wt)0214 00a0
-	//(bt)0114 0060 01b8 0616
-	
-	//time loss
-	//0002 0001 7365 7237 3031 3133 3000 0000
-	//0000 0012 0700 0000 00f7 0000 (wt)0000 00a0
-	//(bt)031e 0060
-	
-	//time loss, time loss name first
-	//0003 0001 7065 7465 7269 7573 0000 0000
-	//0000 0008 0900 0000 0000 0000 0100 0580
-	//0000 0080
-
-	//0259 0101 696e 7472 7573 696f 6e00 0000 
-	//0000 0009 0900 0000 0006 0000 0333 2780 
-	//0321 2650
 #ifdef RE_DEBUG
 	//B + R: white_wins2 = 1 here, FIXME
 	if(boarddispatch)
@@ -6339,8 +6090,6 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	//B + R:
-	//00060001696e74727573696f6e00000000000009030000000012000003261d8003191c40
 	
 	//FIXME not necessary:
 	GameResult aGameResult;
@@ -6912,14 +6661,6 @@ void TygemConnection::handleCountRequestResponse(unsigned char * msg, unsigned i
 	}
 }
 
-//these could be time messages
-//00 10 06 7D 01 8D 01 01 03 18 00 60 03 07 00 A0
-//00 10 06 7D 01 8D 01 01 03 17 00 60 03 07 00 A0
-//00 10 06 7D 01 8D 01 01 03 16 00 60 03 07 00 A0
-//00 10 06 7D 01 8D 01 01 03 15 00 60 03 07 00 A0  
-//00 10 06 7D 01 8D 00 01 03 1E 00 A0 03 11 00 60 
-//00 10 06 7D 01 8D 00 01 03 1D 00 A0 03 11 00 60
-//00 10 06 7D 01 8D 00 01 03 16 00 A0 03 11 00 60
 void TygemConnection::handleTime(unsigned char * msg, unsigned int size)
 {
 	BoardDispatch * boarddispatch;
@@ -6952,19 +6693,6 @@ void TygemConnection::handleTime(unsigned char * msg, unsigned int size)
 	printf("\n");
 //#endif //NOISY_DEBUG
 #endif //RE_DEBUG
-	//000f0101032b0b4003100480  blacks time first
-	//000f00010311048003300b40  whites time first
-	
-	//000f 0100 d0e9 bfd 5beb 2000000000000000000
-	//146875616e67736869313100020000000300bf000000ff000
-	//000000000
-
-	//00020001031f0c40032c0d80	//black
-	//00020101032a0d80031d0c40	//white
-	
-	//0002 0100 6164 3838 0000000000000000000000
-	//166164383800696a69750000020000000500aa000000ff000
-	//		000000000
 
 	p += 2;
 	// this gets reversed
@@ -7002,10 +6730,6 @@ enum TygemConnection::TimeFlags TygemConnection::handleTimeChunk(BoardDispatch *
 	int white_seconds, white_periods;
 	int black_seconds, black_periods;
 	bool black_loses_on_time = false, white_loses_on_time = false;
-	//03 17 00 60 03 07 00 A0
-	//00 00 00 a0 03 14 00 60	//white loses on time
-	//01 75 00 01 
-	//00 00 00 60 03 25 00 80
 	
 	/* Since we send time, we block it if its from us */
 	if(black_first && boarddispatch->getGameData()->black_name == getUsername())
@@ -7097,24 +6821,6 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	unsigned short game_number = (p[0] << 8) + p[1];
 	int player_number, player_number2, number0;
 	bool opponents_move = false;
-	//00 24 06 68 01 8D 01 01 FF FF FF FF 00 01  R`.$.h..........
-	//AF 00 53 54 4F 20 30 20 32 20 31 20 31 35 20 33  ..STO 0 2 1 15 3
-	//20 0A 00 00 00 00
-	
-	//00 24 06 68 01 8D 00 01 FF FF   ......$.h......
-	//FF FF 00 02 A3 00 53 54 4F 20 30 20 33 20 32 20  ......STO 0 3 2 
-	//33 20 31 35 20 0A 00 00 00 00
-	
-	//00 24 06 68 01 8D 01 01 FF FF FF FF 00 4B BD 00  .$.h.........K..
-	//53 54 4F 20 30 20 37 36 20 31 20 31 31 20 39 20  STO 0 76 1 11 9 
-	//0A 00 00 00 
-	//00 24 06 68 01 8D 00 01 FF FF FF FF 00 4C B2 00  .$.h.........L..
-	//53 54 4F 20 30 20 37 37 20 32 20 39 20 31 33 20  STO 0 77 2 9 13 
-	//0A 00 00 00  
-	//white resigns
-	//00 20 06 68 01 8D 00 01 FF FF FF FF 00 B3 D1 01  . .h............
-	//53 55 52 20 30 20 31 38 31 20 32 20 0A 00 00 00  SUR 0 181 2 ....
-	
 	if(size < 24)		//FIXME
 	{
 		qDebug("Bad move msg, size: %d", size);
@@ -7450,10 +7156,6 @@ void TygemConnection::handlePass(unsigned char * msg, unsigned int size, int /* 
 	
 	strncpy((char *)name, (char *)p, 14);
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	//0669 
-	//0002 0101 7065 7465 7269 7573 0000 
-	//0000 0000 0008 6574 6572 6975 7300 0000
-	//0002 0000 0000 0000 0000
 
 	p += 15;
 	
@@ -7543,10 +7245,6 @@ int TygemConnection::compareRanks(QString rankA, QString rankB)
 	}
 }
 
-//00 34 06 39 01 8D 01 00 E5 D0 D2 A3 C6 E5 C4 DA  .4.9............
-//CD E2 00 00 00 00 00 1A 78 69 61 6F 79 61 6F 38  ........xiaoyao8
-//38 00 00 02 00 00 00 B2 00 A0 00 00 00 FF 00 00  8...............
-//00 00 00 00  
 //0639
 void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int size)
 {
@@ -7558,15 +7256,10 @@ void TygemConnection::handleBoardOpened(unsigned char * msg, unsigned int size)
 	{
 		qDebug("board opened msg of strange size: %d\n", size);
 	}
-	//03fc 0200
 
 	game_number = (p[0] << 8) + p[1];
 	p += 2;
-	//this doesn't look like a match message
-	//0089 0100 696e 7472 7573 696f 6e00 0000
-	//0000 0008 696e 7472 7573 696f 6e00 0002
-	//0000 0001 0000 0000 00ff 0000 0000 0000
-	//001f010070657465726975730000000000000008706574657269757300000002000000010000000000ff000000000000
+	
 #ifdef RE_DEBUG
 	printf("0639 match: \n");
 	for(unsigned int i = 0; i < size; i++)
@@ -7808,16 +7501,6 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		qDebug("gl and 0671 white first flag differ !!!!!");
 	printf("Setting white first flag to: %d\n", aGameData->white_first_flag);
 #endif //RE_DEBUG
-	//000a000170657465726975730000000000000008696e74727573696f6e00000000000009
-	//04b0 1e03 0100 0000 0100 0002 ffff ffff ffff ffff 000d 0001
-	//7065 7465 7269 7573 0000 0001 696e 7472 7573 696f 6e00 0002 48fd 0098
-	
-	//0005000170657465726975730000000000000008696e74727573696f6e000000000000090e101e030100000001000002ffffff
-	//ffffffffff000f0001706574657269757300000001696e74727573696f6e00000248fd050a
-	
-	//challenger, second name is black
-	//0004000170657465726975730000000000000008696e74727573696f6e000000000000090e101e030100000001000002ffffff
-	//ffffffffff00100001706574657269757300000001696e74727573696f6e00000248fd0ce1
 
 	p += 4;
 	p += 4;
@@ -7939,46 +7622,11 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, MIVersion version)
 {
 	unsigned char * p = msg;
-	//0645 
-	//6269 7473 0000 0000 0000 0000 0000 0014
-	//c4ba d3ea b3bf d4c6 0000 0000 0000 0014
-	//0003 012c 1e03 0000 0000 001e 0000 0000
-	//0000 0000 0000 0000 0000 0100 6269 7473
-	//0000 0000 0000 0002 6a65 7070 3100 0000
-	//0000 0002
-			
-	//as we recv this, we are peterius, first name
-	//7065 7465 7269 7573 0000 0000 0000 0008
-	//696e 7472 7573 696f 6e00 0000 0000 0009
-	//0038 012c 2801 0100 0100 0002 0000 0000
-	//0000 0000 0000 0000 0000 0000 0000 0000
-	//0000 0000 0000 0000 696e 7472 7573 696f
-	//6e00 0002
-	
-	//this is rematch offer, in game we're observing
-	//d1e2c9bdd0e3d0d00000000000000017
-	//b8d5b8e7353535000000000000000017
-	//01c304b01e0300000000001effffffff
-	//ffffffff000100010000010073777765
-	//74000000000000023132333435363779
-	//00000002
-	
-	//and the accept
-	//d1e2c9bdd0e3d0d00000000000000017
-	//b8d5b8e7353535000000000000000017
-	//01c304b01e0300000000001effffffff
-	//ffffffff000100010000010073777765
-	//74000000000000023132333435363779
-	//00000002
 	if(size != 88)		//84
 	{
 		qDebug("Match offer msg of strange size: %d", size);
 	}
-	//696e74727573696f6e0000000000000a
-	//70657465726975730000000000000009
-	//0007
-	//04b0 1e 03 05 020001010200000000000000000000000000000000000000000000000000000000706574657269757300000002000061ea
-
+	
 	unsigned short game_number;
 	unsigned char name[15];
 	name[14] = 0x00;
@@ -8196,14 +7844,6 @@ void TygemConnection::handleResumeMatch(unsigned char * msg, unsigned int size)
 //0643
 void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 {
-	//7065 7465 7269 7573 0000 0000 0000 0001
-	//7065 7465 7269 7573 0000 0000 696e 7472
-	//7573 696f 6e00 0000 0000 0009 696e 7472
-	//7573 696f 6e00 0002 0100 ffff
-	
-	//696e74727573696f6e00000000000000000000000000000000000000706574657269757300000000000000087
-	//0657465726975730000000202003000
-
 	unsigned char * p = msg;
 	unsigned char name[15];
 	name[14] = 0x00;
@@ -8316,19 +7956,9 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 	}
 }
 
-//this is match invite response, auto refuse
-//0644: 
-//0644 7065 7465 7269 7573 0000 0000 0000
-//0008 0000 0000 0000 0000 0000 0000 696e
-//7472 7573 696f 6e00 0000 0000 0001 696e
-//7472 7573 696f 6e00 0002 010b ffff
+//0644
 void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned int size)
 {
-	//7065 7465 7269 7573 0000 0000 0000 0001
-	//7065 7465 7269 7573 0000 0000 696e 7472
-	//7573 696f 6e00 0000 0000 0009 696e 7472
-	//7573 696f 6e00 0002 0100 ffff
-			
 	unsigned char * p = msg;
 	unsigned char name[15];
 	name[14] = 0x00;
