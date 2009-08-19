@@ -314,6 +314,7 @@ void qGoBoard::setResult(GameResult & r)
 	if(boarddispatch && r.result != GameResult::NOGAME)
 	{
 		ResultDialog * rd = new ResultDialog(boardwindow, boarddispatch, boardwindow->getId(), &r);
+		boarddispatch->setRematchDialog(rd);		//necessary right?
 		rd->setWindowModality(Qt::WindowModal);
 		rd->show();
 	}
@@ -461,6 +462,14 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 		{
 			tree->addStoneOrLastValidMove();
 			setModified(true);
+			/* Not a great place for this, but maybe okay: */
+			TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());
+			if(t.time != 0 || t.stones_periods != -1)
+			{
+				tree->getCurrent()->setTimeinfo(true);
+				tree->getCurrent()->setTimeLeft(t.time);
+				tree->getCurrent()->setOpenMoves(t.stones_periods);
+			}
 		}
 	}
 	else
@@ -681,24 +690,7 @@ void qGoBoard::timerEvent(QTimerEvent*)
 //	if (mv_counter < 0 || id < 0 || game_paused)
 	if (boardwindow->getGamePhase() != phaseOngoing)
 		return;
-/*
-	if (getBlackTurn())
-	{
-		// B's turn
-//		bt_i--;
 
-		win->getInterfaceHandler()->setTimes(secToTime(bt_i), b_stones, wt, w_stones);
-
-	}
-	else	
-	{
-		// W's turn
-//		wt_i--;
-
-		win->getInterfaceHandler()->setTimes(bt, b_stones, secToTime(wt_i), w_stones);
-
-	}
-*/
 	boardwindow->getClockDisplay()->setTimeStep(getBlackTurn(true));
 /*
 	// warn if I am within the last 10 seconds

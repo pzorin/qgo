@@ -304,8 +304,7 @@ public:
 	~qGoBoardObserveInterface() {}
 
 	void setModified(bool)	{} //we don't modify an observed game
-	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
-
+	
 public slots:
 	void slotUpdateComment() {}		//what is this ?!?!?
 	virtual void slotUndoPressed(void){};
