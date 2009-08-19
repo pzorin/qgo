@@ -67,6 +67,7 @@ void qGoBoardMatchInterface::localMoveRequest(StoneColor c, int x, int y)
  */
 void qGoBoardMatchInterface::localMarkDeadRequest(int x,  int y)
 {
+	//color is ignored as far as I know, still iffy FIXME
 	sendMoveToInterface(stoneBlack,x,y);
 }
 
@@ -105,7 +106,6 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 	}		
 }
 
-
 /*
  *  time info has been send by parser
  *  TODO : make sure we won't need this in qgoboard (code duplicate)
@@ -115,8 +115,8 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
  * its all a little awkward. */
 void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &bstones, const QString &wtime, const QString &wstones)
 {
-	int bt_i = btime.toInt();
-	int wt_i = wtime.toInt();
+	//int bt_i = btime.toInt();
+	//int wt_i = wtime.toInt();
 //	b_stones = bstones;
 //	w_stones = wstones;
 /*
@@ -131,17 +131,18 @@ void qGoBoardMatchInterface::setTimerInfo(const QString &btime, const QString &b
 	// set string in any case
 //	bt = secToTime(bt_i);
 //	wt = secToTime(wt_i);
-	QTime t0 = QTime::QTime(0,0);
+	//QTime t0 = QTime::QTime(0,0);
 //	t0.addSecs(bt_i).toString("m:ss");
-	QTime t1 = t0;
+	//QTime t1 = t0;
 
 	// set initial timer until game is initialized
 //	if (!have_gameData)
 //		win->getInterfaceHandler()->setTimes(bt, bstones, wt, wstones);
 
+	//if (boardwindow->getGamePhase() != phaseInit)
+	//	boardwindow->getInterfaceHandler()->setTimes(t0.addSecs(bt_i).toString("m:ss"), bstones, t0.addSecs(wt_i).toString("m:ss"), wstones);
 	if (boardwindow->getGamePhase() != phaseInit)
-		boardwindow->getInterfaceHandler()->setTimes(t0.addSecs(bt_i).toString("m:ss"), bstones, t0.addSecs(wt_i).toString("m:ss"), wstones);
-
+		boardwindow->getClockDisplay()->setTimeInfo(btime.toInt(), bstones.toInt(), wtime.toInt(), wstones.toInt());
 	// if time info available, sound can be played
 	// cause no moves cmd in execution
 //	sound = true;
