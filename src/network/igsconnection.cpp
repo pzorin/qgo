@@ -1376,8 +1376,6 @@ void IGSConnection::handle_error(QString line)
 	}
 	else if(line.contains("wants Byomoves"))
 	{
-		/* FIXME note that we should really look up their match conditions
-		 * before even creating game dialog !!! */
 		//5 x wants Byomoves 1 - 1.
 		QString opponent = element(line, 0, " ");
 		PlayerListing * pl = getPlayerListingNeverFail(opponent);
@@ -1386,6 +1384,19 @@ void IGSConnection::handle_error(QString line)
 		MatchRequest * m = gameDialog->getMatchRequest();
 		MatchRequest * aMatch = new MatchRequest(*m);
 		aMatch->stones_periods = element(line, 3, " ").toInt();
+		gameDialog->recvRequest(aMatch);
+		gameDialog->recvRefuseMatch(GD_RESET);
+	}
+	else if(line.contains("wants Byotime"))
+	{
+		//5 x wants Byomoves 1 - 1.
+		QString opponent = element(line, 0, " ");
+		PlayerListing * pl = getPlayerListingNeverFail(opponent);
+		//QString timetochange = element(line, 2, " ");
+		GameDialog * gameDialog = getGameDialog(*pl);
+		MatchRequest * m = gameDialog->getMatchRequest();
+		MatchRequest * aMatch = new MatchRequest(*m);
+		aMatch->periodtime = element(line, 3, " ").toInt();
 		gameDialog->recvRequest(aMatch);
 		gameDialog->recvRefuseMatch(GD_RESET);
 	}
