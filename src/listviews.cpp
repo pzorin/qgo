@@ -94,7 +94,7 @@ QVariant ObserverListModel::data(const QModelIndex & index, int role) const
 		return item->data(index.column());
 	else if(role == Qt::ForegroundRole)
 	{
-		if(item->getListing()->name == account_name)
+		if(item->getListing() && item->getListing()->name == account_name)		//maybe fix?  bigger problem though FIXME
 			return Qt::blue;
 		else
 			return QVariant();
