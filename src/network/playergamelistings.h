@@ -58,6 +58,7 @@ struct PlayerListing
 	playing(0), 
 	extInfo(0),
 	email_address(0),
+	nmatch(0),
 	nmatch_handicapMin(0),
 	specialbyte(0),
 	pro(false),

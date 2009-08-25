@@ -430,7 +430,7 @@ void IGSConnection::acceptMatchOffer(const PlayerListing & /*opponent*/, MatchRe
 	sendMatchRequest(mr);
 }
 
-QTime IGSConnection::gd_checkMainTime(TimeSystem s, QTime & t)
+QTime IGSConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 {
 	// match settings are between 1 and 530 with seemingly
 	// infinite byo yomi time
@@ -457,16 +457,6 @@ QTime IGSConnection::gd_checkMainTime(TimeSystem s, QTime & t)
 				return QTime(8, 50, 0);
 			break;
 		case byoyomi:
-			/*if((flags & GDF_BY_CAN_MAIN_MIN) && v.second())
-			{
-				seconds = (v.minute() * 60);
-				ui.BYTimeSpin->setTime(QTime(0, v.minute(), 0));
-			}	
-			if((flags & GDF_CANADIAN300) && seconds >= 300)
-			{
-				ui.stonesTimeSpin->setTime(QTime(0, 4, 59));
-				seconds = 299;
-			}*/
 			if(seconds >= 300)
 				return QTime(0, 4, 0);
 			else
@@ -478,7 +468,7 @@ QTime IGSConnection::gd_checkMainTime(TimeSystem s, QTime & t)
 	return c;
 }
 
-QTime IGSConnection::gd_checkPeriodTime(TimeSystem s, QTime & t)
+QTime IGSConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 {
 	int seconds = (t.minute() * 60) + t.second();
 	switch(s)
@@ -490,6 +480,8 @@ QTime IGSConnection::gd_checkPeriodTime(TimeSystem s, QTime & t)
 		case byoyomi:
 			if(seconds > 299)
 				return QTime(0, 4, 59);
+			else if(seconds < 5)	//actually should depend on maintime but...
+				return QTime(0, 0, 5);
 			break;
 		default:
 			qDebug("unsupported IGS time type p");
@@ -503,7 +495,6 @@ unsigned int IGSConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 	switch(s)
 	{
 		case canadian:
-			//canadian might actually be stuck at 25
 			if(p > 25)
 				return 25;
 			else
@@ -513,6 +504,8 @@ unsigned int IGSConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 			// is this right? doublecheck
 			if(p > 100)
 				return 100;
+			else if(p < 1)
+				return 1;
 			else
 				return p;
 			break;
@@ -1442,23 +1435,27 @@ void IGSConnection::handle_error(QString line)
 			}
 			else
 			{
-			aMatch = new MatchRequest();
-			aMatch->opponent = p;
-			aMatch->nmatch = false;
-					
-			if(element(line, 2, " ") == "Black")
-				aMatch->color_request = MatchRequest::BLACK;
-			else if(element(line, 2, " ") == "Nigiri")//IGS handles this??
-				aMatch->color_request = MatchRequest::NIGIRI;
-			else
-				aMatch->color_request = MatchRequest::WHITE;
-			QString s = element(line, 5, " ");
-			
-			aMatch->board_size = element(s, 0, "x").toInt();
-			aMatch->maintime = element(line, 7, " ").toInt() * 60;
-			s = element(line, 9, " ");
-			aMatch->periodtime = element(s, 1, "(").toInt();
-			aMatch->stones_periods = 25;	// I assume IGS assumes this is always 25
+				aMatch = new MatchRequest();
+				aMatch->opponent = p;
+				aMatch->nmatch = false;
+						
+				if(element(line, 2, " ") == "Black")
+					aMatch->color_request = MatchRequest::BLACK;
+				else if(element(line, 2, " ") == "Nigiri")//IGS handles this??
+					aMatch->color_request = MatchRequest::NIGIRI;
+				else
+					aMatch->color_request = MatchRequest::WHITE;
+				QString s = element(line, 5, " ");
+				
+				aMatch->board_size = element(s, 0, "x").toInt();
+				aMatch->maintime = element(line, 7, " ").toInt() * 60;
+				s = element(line, 9, " ");
+				aMatch->periodtime = element(s, 1, "(").toInt();
+				aMatch->stones_periods = 25;	// I assume IGS assumes this is always 25
+				if(getCurrentRoom()->name.contains("No rated"))
+					aMatch->free_rated = FREE;
+				else
+					aMatch->free_rated = RATED;
 			}
 		}
 		else		//nmatch
@@ -1483,6 +1480,10 @@ void IGSConnection::handle_error(QString line)
 				aMatch->timeSystem = canadian;
 			else
 				aMatch->timeSystem = byoyomi;
+			if(getCurrentRoom()->name.contains("No rated"))
+				aMatch->free_rated = FREE;
+			else
+				aMatch->free_rated = RATED;
 		}				
 
 		if(!pl)		

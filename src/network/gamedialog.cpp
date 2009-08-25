@@ -28,8 +28,6 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	
 	current_match_request = new MatchRequest();
 	
-	
-	
 	/* FIXME, what about size 38 and larger boards ?? */
 	ui.boardSizeSpin->setRange(1,19);
 	ui.handicapSpin->setRange(1,9);
@@ -748,12 +746,9 @@ void GameDialog::slot_decline()
 	close();
 }
 
-/*
- * 'Cancel' button pressed
- */
 void GameDialog::slot_cancel()
 {
-	if(offered_and_unrefused)
+	if(offered_and_unrefused && ui.buttonDecline->isEnabled())
 		connection->declineMatchOffer(opponent);
 	else if(ui.buttonOffer->isEnabled() && ui.buttonOffer->text() == tr("Offer"))
 		connection->cancelMatchOffer(opponent);
@@ -815,6 +810,7 @@ void GameDialog::recvRefuseMatch(int motive)
 		ui.refusedLabel->setText(tr("Invalid Parameters!"));
 		ui.buttonOffer->setText(tr("Offer"));
 		ui.buttonOffer->setChecked(false);
+		ui.buttonDecline->setDisabled(true);
 		return;
 	}
 	else if(motive == GD_RESET)
@@ -1037,8 +1033,10 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		mr->number = connection->getRoomNumber();
 		mr->opponent_is_challenger = false;
 		mr->first_offer = true;
-		mr->free_rated = FREE;
-		
+		//mr->free_rated = FREE;
+		mr->free_rated = RATED;		/* its more typically rated by default, but we should get this from somewhere FIXME */
+		mr->nmatch = true;	//igs
+		current_match_request->nmatch = mr->nmatch;	//awkward, but not set anywhere else
 		dialog_changed = 10000;	//so it can't be anything but "Offer"
 	}
 	else
@@ -1134,7 +1132,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		//specific behavior here : IGS nmatch not totally supported
 		// disputes are hardly supported
 		set_is_nmatch(true);	//FIXME, change to is BY setting
-		
+		//mr->nmatch = true;
 		if(mr->maintime != current_match_request->maintime)
 			ui.BYTimeSpin->setPalette(p);
 		ui.BYTimeSpin->setTime(QTime(mr->maintime/3600, (mr->maintime % 3600)/60, mr->maintime%60));

@@ -37,8 +37,8 @@ class IGSConnection : public NetworkConnection
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void declineMatchOffer(const PlayerListing & opponent);
 		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr);
-		virtual QTime gd_checkMainTime(TimeSystem s, QTime & t);
-		virtual QTime gd_checkPeriodTime(TimeSystem s, QTime & t);
+		virtual QTime gd_checkMainTime(TimeSystem s, const QTime & t);
+		virtual QTime gd_checkPeriodTime(TimeSystem s, const QTime & t);
 		virtual unsigned int gd_checkPeriods(TimeSystem s, unsigned int p);
 		virtual void sendAdjournRequest(void);
 		virtual void sendAdjourn(void);
