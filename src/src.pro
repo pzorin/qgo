@@ -5,7 +5,7 @@ RESOURCES = application.qrc  \
 board/board.qrc
 QT = core gui \
 network
-TARGET = ../bin/qgo2
+TARGET = ../bin/qgo
 CONFIG += warn_on \
           qt \
           thread \
@@ -170,6 +170,8 @@ macx {
 }
 
 linux-g++ {
+    QGO_INSTALL_PATH = /usr/local/share/qgo
+    QGO_INSTALL_BIN_PATH = /usr/local/bin
     SOURCES += audio/alsa.cpp
     HEADERS += audio/alsa.h
 
@@ -183,3 +185,29 @@ game_interfaces \
 game_tree \
 board \
 sgf
+
+languages.path = $${QGO_INSTALL_PATH}/languages/
+languages.extra = $(QTDIR)/bin/lrelease src.pro
+languages.files = translations/*.qm
+INSTALLS += languages
+
+sounds.path = $${QGO_INSTALL_PATH}/sounds/
+sounds.files = ressources/sounds/*.wav
+INSTALLS += sounds
+
+boardpics.path = $${QGO_INSTALL_PATH}/boardtextures
+boardpics.files = board/ressources/pics/barcelona_cherry.png
+boardpics.files += board/ressources/pics/eurobeech.png
+boardpics.files += board/ressources/pics/goldenbeech.png
+boardpics.files += board/ressources/pics/lemontree.png
+boardpics.files += board/ressources/pics/manitoba.png
+boardpics.files += board/ressources/pics/maple.png
+boardpics.files += board/ressources/pics/paper.png
+boardpics.files += board/ressources/pics/wood.png
+boardpics.files += board/ressources/pics/wood3.png
+boardpics.files += board/ressources/pics/wood4.png
+boardpics.files += board/ressources/pics/wood5.png
+INSTALLS += boardpics
+
+target.path = $${QGO_INSTALL_BIN_PATH}/qgo
+INSTALLS += target
