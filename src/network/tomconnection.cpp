@@ -358,53 +358,5 @@ QByteArray TomConnection::getTygemGameRecordQByteArray(GameData * game)
 	string += getTygemGameTagQByteArray(game, white_level, black_level, margin);
 				//tag is simple of earlier info
 
-	/* the next huge chunk is some kind of record list
-	 * a lot of 0x5c '\' in it, maybe escaping '[' and ']'
-	 * the following fields are in this chunk, excepting
-	 * the weird stuff I couldn't easily type, also I may
-	 * have transcripted it wrong:
-		GIBOKIND=China
-		TYPE=0
-		GAMECONDITION=++-+
-		GAMETIME=
-		GAMERESULT=
-		GAMEZIPSU=60
-		GAMEDUM=0
-		GAMEGONGJE=0
-		GAMETOTALNUM=
-		SZAUDIO=0
-		GAMENAME=
-		GAMEDATE=
-		GAMEPLACE=
-		GAMELECNAME=\]	//empty
-		GAMEWHITENAME=
-		GAMEWHITELEVEL=
-		GAMEWHITENICK=intrusion
-		GAMEWHITECOUNTRY=2		//is this passed as 0x02 byte in places !!! FIXME
-		GAMEWAVATA=1
-		GAMEWIMAGE=\]	//empty
-		GAMEBLACKNAME=
-		GAMEBLACKLEVEL=
-		GAMEBLACKNICK=peterius
-		GAMEBLACKCOUNTRY=2
-		GAMEBAVATA=1
-		GAMEBIMAGE=
-		GAMECOMMENT=\]	//empty
-		GAMEINFOMAIN=GBKIND:2,GTYPE:0,GCDT:1,GTIME:1200-30-3,GRLT:0
-			,ZIPSU:60,DUM:0,GONGJE:0,TCNT:143,AUSZ:0
-		GAMEINFOSUB=GNAMEF:0,GPLCF:0,GNAME:(untypeable)
-			,GDATE:2009- 1-31-17-56-38,GPLC:(untypeable),GCMT:\]
-		WUSERINFO=WID:intrusion,WLV:9,WNICK:intrusion,WNCD:2,WAID:1,WIMG:\]
-		BUSERINFO=BID:peterius,BLV:8,BNICK:peterius,BNCD:2,BAID:1,BIMG:\]
-		GAMETAG=S0,R1,D0,G0,W0,Z60,T30-3-1200,C2009:01:31:17:56
-			,I:intrusion,L:9,M:peterius,N:8,A:intrusion,B:peterius
-			,J:2,K:2\]
-	
-		Also GAMETAG has some weird fields, and one can see date and time around
-		5pm in different places
-	
-		packet ends 8 0s, possibly padded out to 16 multiple
-	
-	*/
 	return string;
 }

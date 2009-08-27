@@ -2432,9 +2432,6 @@ void CyberOroConnection::requestAccountInfo(void)
 
 char * CyberOroConnection::sendRequestAccountInfo(int * size, void *)
 {
-	//8827 1a00 4000 6769 616e 7463 6174 0000
-	//4300 120f dc02 0000 0000
-	//88271a0040006c6f7374736f756c00004300120fdc0200000000
 	*size = 0x1a;
 	char * packet = new char[*size];
 	packet[0] = 0x88;
@@ -2496,10 +2493,8 @@ void CyberOroConnection::handleAccountInfoMsg(int size, char * msg)
 
 void CyberOroConnection::sendLogin(void)
 {
-	//term code could be version
+	//term code could be version, probably just junk
 	unsigned char term_code[2] = { 0x5b, 0x02 };
-	/* We send login and password */
-	// no hard coding!! FIXME
 	int length = 0x1a;	//10 + user and pass padded to 10
 	unsigned char * packet = new unsigned char[length];
 	unsigned char * p = packet;
@@ -2801,19 +2796,6 @@ void CyberOroConnection::encode(unsigned char * h, unsigned int cycle_size)
 			68 65 6C 6C 6F 20 61 6C  .*..iV..hello al
 }*/
 
-/*
-04 56 2E 00 90 B4 97 B4 00 00 00 00 00 00 74 6F  .V............to
-6E 62 69 35 35 00 00 00 29 08 58 00 07 00 08 00  nbi55...).X.....
-00 00 09 00 5D 5E 00 82 03 05 00 3C 00 00        ....]^.....<..
-*/
-
-/*
-Outgoing:
-	    44     03
-88 27 1A 00 53(9E) 01 6C 6F 73 74 73 6F 75 6C 00 00  .'..S.lostsoul..
-48(55) 01 40 41 40 00 BC FE 12 00                    H.@A@.....
-44 03
-*/
 
 void CyberOroConnection::handlePassword(QString)
 {
@@ -3887,7 +3869,7 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 		printf("\n");
 #endif //RE_DEBUG
 		if(p[4] & 0x70)
-			aGameListing->isLocked = true;
+			aGameListing->isLocked = true;		//I don't think this is always the case
 		//p[4] & 0x70 = locked game password 
 		/*
 		3c review game records 7d replay
@@ -3930,6 +3912,7 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 		}
 		else
 			aGameListing->FR = getRoomTag(p[4]);
+		
 		room->recvGameListing(aGameListing);
 		aGameListing = room->getGameListing(aGameListing->number);
 		aGameListing->observer_list.clear();
@@ -4530,12 +4513,7 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 void CyberOroConnection::handleServerAnnouncement(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
-	//0xf659: 690b018b819f91e63289f191e598618fd88c949474836c8362836788cd8ce98341837d83608385834191498ee88ca0
-	//819f82bd82ad82b382f182cc8a4682b382dc82c9834783938367838a815b92b882ab82dc82b582c482a082e882aa82c682a482
-	//b282b482a282dc82b78149323093fa82c991ce8bc7916782dd8d8782ed82b982f094ad955c82a282bd82b582dc82b7814291e5
-	//89ef82cc8fda8dd782e28e5189c18ff38bb582c882c782cd91e589ef90ea97708379815b835782c9838d834f8343839382cc8f
-	//e382b28a6d944682ad82be82b382a281a8687474703a2f2f752d67656e2e6e69686f6e6b69696e2e6f722e6a702f6461697761
-	//2f6130322f696e6465782e617370
+	
 #ifdef RE_DEBUG
 	printf("0xf659: ");
 	for(unsigned int i = 0; i < size; i++)
@@ -5021,6 +4999,8 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 	PlayerListing * white;
 	unsigned short id;
 	unsigned short number;
+	GameListing * aGameListing, * newGameListing = 0;
+	
 	if(size != 6 && size != 18)
 	{
 		qDebug("NewRoom of strange size: FIXME 18 %d", size);
@@ -5028,16 +5008,18 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 		// fix that... 
 		//return;
 	}
-	GameListing * newGameListing = new GameListing();
-	GameListing * aGameListing;
-	newGameListing->running = true;
+	
 	
 	number = p[0] + (p[1] << 8);
 	if(!number)
 		qDebug("0a7d on number 0");
 	aGameListing = room->getGameListing(number);
 	if(!aGameListing)
+	{
+		newGameListing = new GameListing();
+		newGameListing->running = true;
 		aGameListing = newGameListing;
+	}
 	aGameListing->number = number;
 	p += 2;
 	/* Why does ORO 0a7d have white then black, but 1a81 has
@@ -5089,12 +5071,14 @@ void CyberOroConnection::handleNewRoom(unsigned char * msg, unsigned int size)
 	/* FIXME, no recv, no game yet, maybe there should be. */
 	aGameListing->white = white;
 	aGameListing->black = black;
+	
 #ifdef RE_DEBUG
-	printf("0a7d for game with no game code: %d %s size(%d) %s\n", aGameListing->number, white->name.toLatin1().constData(), size, black->name.toLatin1().constData());
+	if(newGameListing)
+		printf("0a7d for game with no game code: %d %s size(%d) %s\n", aGameListing->number, white->name.toLatin1().constData(), size, black->name.toLatin1().constData());
 #endif //RE_DEBUG
 	room->recvGameListing(aGameListing);
-	//FIXME test without delete
-	//delete newGameListing;
+	
+	delete newGameListing;
 	aGameListing = room->getGameListing(number);
 }
 
@@ -7525,10 +7509,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	p += 2;
 	/* FIXME It looks like its possible to reverse the ranks here and
 	 * we need to find out why and how */
-//00 00 00 00 00 00 00 00  ................
-//00 00 00 00 1F 00 00 00 00 00 00 00 00 00 00 AA  ................
-//67 69 61 6E 74 63 61 74 00 00 D3 04 6C 75 63 6B  giantcat....luck
-//79 73 74 61 72 00 49 04
+
 	/* Double check for nigiri issues */
 	if(match_negotiation_state->isOurGame(game_number))
 	{

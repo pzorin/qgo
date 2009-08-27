@@ -3851,55 +3851,6 @@ QByteArray TygemConnection::getTygemGameRecordQByteArray(GameData * game)
 	string += getTygemGameTagQByteArray(game, white_level, black_level, margin);
 	
 				//tag is simple of earlier info
-
-	/* the next huge chunk is some kind of record list
-	 * a lot of 0x5c '\' in it, maybe escaping '[' and ']'
-	 * the following fields are in this chunk, excepting
-	 * the weird stuff I couldn't easily type, also I may
-	 * have transcripted it wrong:
-		GIBOKIND=China
-		TYPE=0
-		GAMECONDITION=++-+
-		GAMETIME=
-		GAMERESULT=
-		GAMEZIPSU=60
-		GAMEDUM=0
-		GAMEGONGJE=0
-		GAMETOTALNUM=
-		SZAUDIO=0
-		GAMENAME=
-		GAMEDATE=
-		GAMEPLACE=
-		GAMELECNAME=\]	//empty
-		GAMEWHITENAME=
-		GAMEWHITELEVEL=
-		GAMEWHITENICK=intrusion
-		GAMEWHITECOUNTRY=2		//is this passed as 0x02 byte in places !!! FIXME
-		GAMEWAVATA=1
-		GAMEWIMAGE=\]	//empty
-		GAMEBLACKNAME=
-		GAMEBLACKLEVEL=
-		GAMEBLACKNICK=peterius
-		GAMEBLACKCOUNTRY=2
-		GAMEBAVATA=1
-		GAMEBIMAGE=
-		GAMECOMMENT=\]	//empty
-		GAMEINFOMAIN=GBKIND:2,GTYPE:0,GCDT:1,GTIME:1200-30-3,GRLT:0
-			,ZIPSU:60,DUM:0,GONGJE:0,TCNT:143,AUSZ:0
-		GAMEINFOSUB=GNAMEF:0,GPLCF:0,GNAME:(untypeable)
-			,GDATE:2009- 1-31-17-56-38,GPLC:(untypeable),GCMT:\]
-		WUSERINFO=WID:intrusion,WLV:9,WNICK:intrusion,WNCD:2,WAID:1,WIMG:\]
-		BUSERINFO=BID:peterius,BLV:8,BNICK:peterius,BNCD:2,BAID:1,BIMG:\]
-		GAMETAG=S0,R1,D0,G0,W0,Z60,T30-3-1200,C2009:01:31:17:56
-			,I:intrusion,L:9,M:peterius,N:8,A:intrusion,B:peterius
-			,J:2,K:2\]
-	
-		Also GAMETAG has some weird fields, and one can see date and time around
-		5pm in different places
-	
-		packet ends 8 0s, possibly padded out to 16 multiple
-	
-	*/
 	return string;
 }
 
@@ -4278,7 +4229,6 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 			break;
 			//an REM -1 -1 likely proceeds these as meaning done?
-			//this is intrusion to peterius after marking all of his black stones dead
 		case TYGEM_ENDGAMEMSG:   
 			handleEndgameMsg(msg, size);
 			break;
@@ -5963,12 +5913,6 @@ void TygemConnection::handleGameResult2(unsigned char * msg, unsigned int size)
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-		//peterius resigns, peterius is black and not invite:
-			//also, we use white_first_flag which might look
-			//the same as the invite flag...
-			//0002 0101 696e 7472 7573 696f 6e00 0000
-			//0000 0009 696e 7472 7573 696f 6e00 0002
-			//0000 0000 0000 0000
 			//I think we need to respond to this with 0672
 			//otherwise no result posted
 			//sendLongMatchResult FIXME but only if this is
@@ -6029,8 +5973,7 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 	//0000 001a 0400 0000 0076 0000 0204 00a0
 	//021c 0060
 
-	//intrusion gets this, presumably after intrusion
-	//sends a timeloss prematurely due to some 0 period count error...
+	//gets this after sends a timeloss prematurely due to some 0 period count error...
 	//FIXME
  	//038d0001696e74727573696f6e000000000000090900000000010000000000a0011d0060
 
@@ -6283,13 +6226,6 @@ void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int /*size*/
 }
 
 //an REM -1 -1 likely proceeds these as meaning done?
-//this is intrusion to peterius after marking all of his black stones dead
-//002c067b
-//0002 0101 7065746572697573000000000000000865746572697573000000000200c5000000000000
-//0x0683: 0002aa0103000000012a0480012c0440
-//067b  black keeps hitting confirm confirm c7 versus c5 is likely score?
-//0010 0101 7065746572697573000000000000000865746572697573000000000200c7000000000000
-//0x067b:   
 void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 {
 	BoardDispatch * boarddispatch;
