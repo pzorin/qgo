@@ -2,7 +2,8 @@
 
 #message($${CONFIG})
 RESOURCES = application.qrc  \
-board/board.qrc
+	    sounds.qrc \
+	    board/board.qrc
 QT = core gui \
 network
 TARGET = ../bin/qgo
@@ -190,10 +191,6 @@ languages.path = $${QGO_INSTALL_PATH}/languages/
 languages.extra = $(QTDIR)/bin/lrelease src.pro
 languages.files = translations/*.qm
 INSTALLS += languages
-
-sounds.path = $${QGO_INSTALL_PATH}/sounds/
-sounds.files = ressources/sounds/*.wav
-INSTALLS += sounds
 
 boardpics.path = $${QGO_INSTALL_PATH}/boardtextures
 boardpics.files = board/ressources/pics/barcelona_cherry.png

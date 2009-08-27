@@ -22,7 +22,8 @@
 #include "audio/audio.h"
 #include <alsa/asoundlib.h>
 
- #include <QThread>
+#include <QThread>
+#include <QFile>
 
 typedef  struct
 {	u_int32_t  dwSize ;
@@ -42,7 +43,6 @@ public :
 	QAlsaSound( const QString& filename, QObject* parent=0) ;
 	~QAlsaSound() {};
 
-	QString Path ;
 	bool initialise() ; 
 	bool isAvailable() { return is_available ; }
 	bool is_available;
@@ -57,7 +57,7 @@ private:
 	size_t bits_per_sample, bits_per_frame, chunk_bytes;
 
 	/* File parser */
-	int	fd;				/* Open file descriptor or -1 */
+	QFile qfile;
 	char* findchunk(char* pstart, char* fourcc, size_t n);
 	WAVEFORMAT waveformat ;
 	u_long samples, datastart;

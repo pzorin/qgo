@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>ressources/sounds/buzzer.wav</file>
+	<file>ressources/sounds/static.wav</file>
+	<file>ressources/sounds/ns.wav</file>
+	<file>ressources/sounds/doorbell.wav</file>
+	<file>ressources/sounds/timer.wav</file>
+	<file>ressources/sounds/stone.wav</file>
+	<file>ressources/sounds/blip.wav</file>
+	<file>ressources/sounds/pop.wav</file>
+    </qresource>
+</RCC>

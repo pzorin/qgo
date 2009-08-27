@@ -41,12 +41,9 @@
 
 
 QAlsaSound::QAlsaSound( const QString& filename, QObject* parent):
-	Sound(filename,parent) 
+	Sound(filename,parent), qfile(filename)
 {
-
-	Path = filename;
 	is_available = initialise();
-
 }
 
 
@@ -63,22 +60,21 @@ bool QAlsaSound::initialise()
 	snd_pcm_hw_params_t *params;
 	
         int err;
-
+	
 	/*
 	 * Open the file for reading:
 	 */
-	if ( (fd = open(Path.toLatin1().constData(),O_RDONLY)) < 0 ) {
-		qDebug("Error Opening WAV file %s\n",Path.toLatin1().constData());
+	if (!qfile.open(QIODevice::ReadOnly)) {
+		qDebug("Error Opening WAV file %s\n", qfile.fileName().toLatin1().constData());
 		return FALSE;
 	}
 
-	if ( lseek(fd,0L,SEEK_SET) != 0L ) {
-		qDebug("Error Rewinding WAV file %s\n",Path.toLatin1().constData());
+	if(!qfile.seek(0L)) {
+		qDebug("Error Rewinding WAV file %s\n", qfile.fileName().toLatin1().constData());
 		return FALSE;		/* Wav file must be seekable device */
 	}
 
-
-	::read (fd, buffer, BUFFERSIZE) ;
+	qfile.read(buffer, BUFFERSIZE);
 
 	if (findchunk (buffer, (char*)"RIFF", BUFFERSIZE) != buffer) {
 		qDebug("Bad format: Cannot find RIFF file marker\n");	/* wwg: Report error */
@@ -234,13 +230,13 @@ void QAlsaSound::run()
 
 //	snd_pcm_drop(handle);
 
-	err=lseek(fd,datastart,SEEK_SET);
+	err = qfile.seek(datastart);
 
 	//int written;
 	int count,f;
 	char *buffer2;
 	buffer2 = (char *)malloc (buffer_size);
-        while ((count = ::read (fd, buffer2,buffer_size))) 
+        while((count = qfile.read(buffer2, buffer_size)))
 	{
 		f=count*8/bits_per_frame;
 //		while ((frames = snd_pcm_writei(handle, buffer2, f)) < 0) 

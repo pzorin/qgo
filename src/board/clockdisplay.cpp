@@ -50,7 +50,7 @@ ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _pe
 	playWarningSound = settings.value("BYO_SOUND_WARNING").toBool();
 	warningSecs = settings.value("BYO_SEC_WARNING").toInt();
 
-	warningSound = 	SoundFactory::newSound( "/usr/share/qgo2/sounds/timer.wav" );
+	warningSound = 	SoundFactory::newSound(":/ressources/sounds/timer.wav");
 }
 
 void ClockDisplay::setTimeSettings(TimeSystem s, int m, int p, int o)
@@ -121,6 +121,9 @@ void ClockDisplay::setTimeStep(bool black)
 			}
 			else
 				printf("other timesystem\n");
+			/* IGS gets here a lot due to lag.  I.e., canadian time steps down to 0 with stones
+			 * still remainaining to be played, then opponent plays and turns out they have five
+			 * seconds left or something.  Would be neat to adjust for lag or something. FIXME */
 		}
 		/* FIXME
 		 * major thing, we need to get time to switch
