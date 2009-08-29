@@ -66,9 +66,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	tree = new Tree(&boardSize);
 
 	setupUI();
-
-	ui.actionInsertStone->setChecked(false);
-	ui.actionInsertStone->setEnabled(false);
 	
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
@@ -79,7 +76,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	{
 		case modeNormal :
 			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
-			ui.actionInsertStone->setEnabled(true);
 			break;
 		case modeComputer :
 			try
@@ -293,7 +289,7 @@ void BoardWindow::setupUI(void)
 	//Connects the 'edit' buttons to the slots
 	connect(editButtons, SIGNAL(buttonPressed ( int )), 
 		this, SLOT(slotEditButtonPressed( int )));
-	connect(ui.actionInsertStone, SIGNAL(toggled(bool)), SLOT(slotToggleInsertStones(bool)));
+	connect(ui.insertMoveButton, SIGNAL(toggled(bool)), SLOT(slotToggleInsertStones(bool)));
 	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
 
@@ -357,6 +353,11 @@ void BoardWindow::setupBoardUI(void)
 	if(dispatch && !dispatch->supportsRequestDraw())
 		ui.drawButton->setVisible(false);
 
+	ui.insertMoveButton->setChecked(false);
+	if(gameData->gameMode == modeNormal)
+		ui.insertMoveButton->setEnabled(true);
+	else
+		ui.insertMoveButton->setEnabled(false);
 	if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
 	{
 		addtime_menu = new QMenu();
