@@ -103,14 +103,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 {
 	username = user;
 	password = pass;
-	/*if(openConnection(info))
-	{
-		connectionState = LOGIN;
-		
-	}
-	else
-		qDebug("Can't open Connection\n");	//throw error?
-*/
+
 	textCodec = QTextCodec::codecForLocale();
 	serverCodec = QTextCodec::codecForLocale();
 	//FIXME check for validity of codecs ??? 
@@ -156,7 +149,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	}
 }
 
-/* I think we can't request this too often which is why hitting cancel and
+/* I think we must not request this too often which is why hitting cancel and
  * trying to reconnect screws things up.  So I'm thinking we need to store
  * this some where for at least the three tygem protocols and possibly oro
  * as well. retrieve on application start, gray out the tabs if we can't
@@ -304,45 +297,6 @@ void TygemConnection::sendJoin(unsigned short game_number)
 		qWarning("*** failed sending observe outside");
 	delete[] packet;
 }
-
-#ifdef OLD
-/* This is sent after "sendObserve" when we join a match */
-/* FIXME if it ever becomes an issue, we might want to have
- * the 0639 message handleBoardOpen or whatever sendJoin
- * instead of just calling them one after the other.  Can't
- * see why it would be an issue though */
-void TygemConnection::sendJoin(unsigned short game_number)
-{
-	unsigned int length = 12;
-	char * packet = new char[length];
-	int i;
-	
-	packet[0] = 0x00;
-	packet[1] = 0x0c;
-	packet[2] = 0x06;
-	packet[3] = 0x65;
-	packet[4] = (game_number >> 8);
-	packet[5] = game_number & 0x00ff;
-	for(i = 6; i < 12; i++)
-		packet[i] = 0x00;
-#ifdef RE_DEBUG
-	printf("Sending join %d", game_number);
-	for(i = 0; i < (int)length; i++)
-		printf("%02x ", (unsigned char)packet[i]);
-	printf("\n");
-#endif //RE_DEBUG
-	encode((unsigned char *)packet, (length / 4) - 2);
-#ifdef RE_DEBUG
-	printf("After encode\n");
-	for(i = 0; i < (int)length; i++)
-		printf("%02x ", (unsigned char)packet[i]);
-	printf("\n");
-#endif //RE_DEBUG
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending observe outside");
-	delete[] packet;
-}
-#endif //OLD
 
 /* This is sent after sendJoin when we've been disconnected.
  * Presumably its to resume the game */
@@ -7705,16 +7659,6 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		//above is probably better
 		//FIXME there's an issue here
 		//when we negotiate an offer... not clear yet
-#ifdef OLD
-		if(mr->periodtime != tempmr->periodtime)
-		{
-			//FIXME we need probably more checks here actually... 
-			//but I'm not even sure real client has them.
-			//also, technically should be such checks on startGame
-			//as well
-			qDebug("Match requests don't match, no pun intended!");
-		}
-#endif //OLD
 		sendStartGame(*tempmr);
 	}
 	else if(version == decline)
@@ -7805,25 +7749,9 @@ void TygemConnection::handleMatchInvite(unsigned char * msg, unsigned int size)
 	//invite_byte = p[1];		//probably not
 	p += 2;
 	p += 12;
-#ifdef OLD
-	Room * room = getDefaultRoom();
-	/* Can't we make a special thing to do all these repetitive string copies? */
-	strncpy((char *)name, (char *)p, 14);
-	QString encoded_name = QString((char *)name);
-	//QString encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 14;
-	p += 2;
-	strncpy((char *)name, (char *)p, 11);
-	QString encoded_name2 = QString((char *)name);
-	PlayerListing * player = room->getPlayerListing(encoded_name2);
-	if(!player)
-	{
-		qDebug("Match invite from unknown player");
-		return;
-	}
-#else
+
 	p += 16;
-#endif //OLD
+
 	PlayerListing * player = getOrCreatePlayerListingFromRecord((char *)&(msg[28]));
 	p += 10;
 	p++;
