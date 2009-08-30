@@ -147,7 +147,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	serverliststorage = new ServerListStorage();
 
 	//sound
-	connectSound = 	SoundFactory::newSound(":resources/sounds/static.wav");
+	connectSound = 	SoundFactory::newSound(SOUND_PATH_PREFIX"static.wav");
 }
 
 MainWindow::~MainWindow()
