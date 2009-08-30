@@ -1,7 +1,5 @@
-/*
-* defines.h
-*/
-
+/* Can we clean this file up?  It has way too many definitions specific to one or two other files,
+ * takes too long to compile everything when its altered.  FIXME */
 #ifndef DEFINES_H
 #define DEFINES_H
 
@@ -130,7 +128,6 @@ enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS,
  * Go Text Protocol (GnuGo) enums
  */
 enum CommandType {PROTOCOL, BOARDSIZE, KNOWN_COMMAND, LEVEL, KOMI, PLAY_BLACK, PLAY_WHITE, GENMOVE};
-
 
 
 /*
@@ -309,6 +306,17 @@ extern class MainWindow * mainwindow;
 
 #ifdef Q_WS_WIN
 extern QString applicationPath;
+#endif
+
+/* Non alsa, i.e., windows and mac use QSound which cannot use embedded resources.
+ * Phonon fixes this but it doesn't compile with mingw on windows.  So Sounds will
+ * only be embedded on linux and mac and windows will have to install them. */
+#ifdef Q_OS_LINUX
+	#define SOUND_PATH_PREFIX			":/ressources/sounds/"
+#elif defined(Q_OS_MAC)
+	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
+#else //Q_OS_WIN or Q_WSWIN?
+	#define SOUND_PATH_PREFIX			"ressources/sounds/"
 #endif
 
 void startqGo(void);
