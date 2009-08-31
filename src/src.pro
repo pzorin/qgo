@@ -2,8 +2,10 @@
 
 #message($${CONFIG})
 RESOURCES = application.qrc  \
-	    sounds.qrc \
 	    board/board.qrc
+linux-g++ {
+RESOURCES += sounds.qrc
+}
 QT = core gui \
 network
 TARGET = ../bin/qgo
