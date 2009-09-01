@@ -9,6 +9,6 @@ Terminal=false
 MimeType=text/plain;text/sgf;
 Categories=Qt;KDE;Game;BoardGame;
 X-KDE-SubstituteUID=false
-X-DCOP-ServiceType-Multi
+X-DCOP-ServiceType=Multi
 X-KDE-StartupNotify=true
 
