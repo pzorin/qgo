@@ -76,7 +76,7 @@ void installTranslator(enum Language l)
 			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_de");	
 			return;
 		case French:
-			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_fr");			//path?!?
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_fr");
 			break;
 		case Italian:
 			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_it");	
@@ -103,7 +103,7 @@ void installTranslator(enum Language l)
 			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_ru");	
 			break;
 		case Turkish:
-			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_tr");			//path?!?
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_tr");
 			break;
 		case None:
 		default:
