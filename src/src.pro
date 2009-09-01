@@ -214,5 +214,5 @@ boardpics.files += board/ressources/pics/wood4.png
 boardpics.files += board/ressources/pics/wood5.png
 INSTALLS += boardpics
 
-target.path = $${QGO_INSTALL_BIN_PATH}/qgo
+target.path = $${QGO_INSTALL_BIN_PATH}
 INSTALLS += target
