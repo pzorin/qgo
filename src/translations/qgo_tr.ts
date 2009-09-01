@@ -12,76 +12,76 @@
 <context>
     <name>BoardWindow</name>
     <message>
-        <location filename="../board/boardwindow.cpp" line="173"/>
+        <location filename="../board/boardwindow.cpp" line="169"/>
         <source>You modified the game.
 Do you want to save your changes?</source>
         <translation>Oyunda değişiklik yaptınız.
 Değişiklikleri kaydetmek istermisiniz?</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
-        <location filename="../board/boardwindow.cpp" line="371"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
+        <location filename="../board/boardwindow.cpp" line="372"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="363"/>
+        <location filename="../board/boardwindow.cpp" line="364"/>
         <source>Add 1 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="365"/>
+        <location filename="../board/boardwindow.cpp" line="366"/>
         <source>Add 5 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="367"/>
+        <location filename="../board/boardwindow.cpp" line="368"/>
         <source>Add 10 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="369"/>
+        <location filename="../board/boardwindow.cpp" line="370"/>
         <source>Add 60 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="597"/>
-        <location filename="../board/boardwindow.cpp" line="658"/>
+        <location filename="../board/boardwindow.cpp" line="598"/>
+        <location filename="../board/boardwindow.cpp" line="659"/>
         <source>Export</source>
         <translation>Dışarı aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="597"/>
+        <location filename="../board/boardwindow.cpp" line="598"/>
         <source>Could not export  the game to clipboard</source>
         <translation>Oyun panoya aktarılamadı</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="613"/>
+        <location filename="../board/boardwindow.cpp" line="614"/>
         <source>Export image as</source>
         <translation>Görüntüyü farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="658"/>
+        <location filename="../board/boardwindow.cpp" line="659"/>
         <source>Could not duplicate the game</source>
         <translation>Oyun kopyalanamadı</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="769"/>
+        <location filename="../board/boardwindow.cpp" line="770"/>
         <source>Save File</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="769"/>
+        <location filename="../board/boardwindow.cpp" line="770"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
         <translation>SGF dosyaları (*.sgf);;Tüm Dosyalar (*)</translation>
     </message>
@@ -90,7 +90,7 @@ Değişiklikleri kaydetmek istermisiniz?</translation>
         <translation type="obsolete">Bu dosya halihazırda var. Üstüne yazmak ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="788"/>
+        <location filename="../board/boardwindow.cpp" line="789"/>
         <source>Cannot save SGF file.</source>
         <translation>SGF dosyası kaydedilemedi.</translation>
     </message>
@@ -513,69 +513,65 @@ Tahtadaki kare imlerini düzenler. İmlemek için sol, kaldırmak için sağ tı
         <translation>Oyun ağacı araçları</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4894"/>
         <source>swap variations</source>
-        <translation>dalları değiştokuş eder</translation>
+        <translation type="obsolete">dalları değiştokuş eder</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4897"/>
-        <location filename="../board/boardwindow.ui" line="4947"/>
-        <location filename="../board/boardwindow.ui" line="4997"/>
-        <location filename="../board/boardwindow.ui" line="5047"/>
+        <location filename="../board/boardwindow.ui" line="4900"/>
+        <location filename="../board/boardwindow.ui" line="4950"/>
+        <location filename="../board/boardwindow.ui" line="5000"/>
+        <location filename="../board/boardwindow.ui" line="5100"/>
         <source>Empty variatonreate an empty branch</source>
         <translation>Boş dal
 Boş bir dal yaratır</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4944"/>
         <source>delete current move</source>
-        <translation>bulunulan hamleyi sil</translation>
+        <translation type="obsolete">bulunulan hamleyi sil</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4994"/>
         <source>duplicate the current node</source>
-        <translation>bulunulan dalı kopyala</translation>
+        <translation type="obsolete">bulunulan dalı kopyala</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5044"/>
         <source>create an empty branch</source>
-        <translation>boş bir dal yarat</translation>
+        <translation type="obsolete">boş bir dal yarat</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5076"/>
+        <location filename="../board/boardwindow.ui" line="5130"/>
         <source>Clipboard tools</source>
         <translation>Pano araçları</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5109"/>
+        <location filename="../board/boardwindow.ui" line="5163"/>
         <source>cut</source>
         <translation>kes</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5159"/>
+        <location filename="../board/boardwindow.ui" line="5213"/>
         <source>paste</source>
         <translation>yapıştır</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5209"/>
+        <location filename="../board/boardwindow.ui" line="5263"/>
         <source>paste as variation</source>
         <translation>dal olarak yapıştır</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5277"/>
-        <location filename="../board/boardwindow.ui" line="5392"/>
-        <location filename="../board/boardwindow.ui" line="5495"/>
-        <location filename="../board/boardwindow.ui" line="5525"/>
-        <location filename="../board/boardwindow.ui" line="5555"/>
+        <location filename="../board/boardwindow.ui" line="5331"/>
+        <location filename="../board/boardwindow.ui" line="5446"/>
+        <location filename="../board/boardwindow.ui" line="5549"/>
+        <location filename="../board/boardwindow.ui" line="5579"/>
+        <location filename="../board/boardwindow.ui" line="5609"/>
         <source>Pass move</source>
         <translation>Pas geç</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5280"/>
-        <location filename="../board/boardwindow.ui" line="5395"/>
-        <location filename="../board/boardwindow.ui" line="5498"/>
-        <location filename="../board/boardwindow.ui" line="5528"/>
-        <location filename="../board/boardwindow.ui" line="5558"/>
+        <location filename="../board/boardwindow.ui" line="5334"/>
+        <location filename="../board/boardwindow.ui" line="5449"/>
+        <location filename="../board/boardwindow.ui" line="5552"/>
+        <location filename="../board/boardwindow.ui" line="5582"/>
+        <location filename="../board/boardwindow.ui" line="5612"/>
         <source>Pass
 
 Pass your turn.</source>
@@ -584,19 +580,19 @@ Pass your turn.</source>
 Sıranızı hamle yapmadan geçirin.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5285"/>
-        <location filename="../board/boardwindow.ui" line="5400"/>
+        <location filename="../board/boardwindow.ui" line="5339"/>
+        <location filename="../board/boardwindow.ui" line="5454"/>
         <source>Pass</source>
         <translation>Pas</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5301"/>
+        <location filename="../board/boardwindow.ui" line="5355"/>
         <source>switch to score mode</source>
         <translation>sayma kipine geç</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5304"/>
-        <location filename="../board/boardwindow.ui" line="5468"/>
+        <location filename="../board/boardwindow.ui" line="5358"/>
+        <location filename="../board/boardwindow.ui" line="5522"/>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
@@ -605,17 +601,17 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
 Rakibinize ara verme isteğinizi iletir. Eğer kabul ederse oyna ara verilir ve oyununuz kaydedilir.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5309"/>
+        <location filename="../board/boardwindow.ui" line="5363"/>
         <source>Score</source>
         <translation>Skor</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5422"/>
+        <location filename="../board/boardwindow.ui" line="5476"/>
         <source>Refresh display</source>
         <translation>Görüntüyü tazele</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5425"/>
+        <location filename="../board/boardwindow.ui" line="5479"/>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
@@ -624,37 +620,63 @@ Refresh board. Use this if you cannot see any stones on the board.</source>
 Tahtayı tazeler. Tahtada hiç ya da yeni taş göremiyorsanız kullanın.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5430"/>
+        <location filename="../board/boardwindow.ui" line="5484"/>
         <source>Refresh</source>
         <translation>Tazele</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5465"/>
+        <location filename="../board/boardwindow.ui" line="5519"/>
         <source>Request adjournment</source>
         <translation>Ara verme isteği iletir</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5473"/>
+        <location filename="../board/boardwindow.ui" line="5527"/>
         <source>Adjourn</source>
         <translation>Ara ver</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6387"/>
+        <location filename="../board/boardwindow.ui" line="6439"/>
         <source>InsertStone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6390"/>
+        <location filename="../board/boardwindow.ui" line="6442"/>
         <source>Insert stone to position (no variation)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5362"/>
+        <location filename="../board/boardwindow.ui" line="5416"/>
         <source>Undo last move</source>
         <translation>Son hamleyi geri al</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5365"/>
+        <location filename="../board/boardwindow.ui" line="4897"/>
+        <source>Create an empty branch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="4947"/>
+        <source>Duplicate the current node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="4997"/>
+        <source>Swap variations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5047"/>
+        <location filename="../board/boardwindow.ui" line="5050"/>
+        <source>Insert move mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5097"/>
+        <source>Delete current move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5419"/>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
@@ -663,23 +685,23 @@ Undo the opponent&apos;s last move.</source>
 Rakibin son hamlesini geri al.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="839"/>
-        <location filename="../board/boardwindow.ui" line="5370"/>
+        <location filename="../board/boardwindow.cpp" line="840"/>
+        <location filename="../board/boardwindow.ui" line="5424"/>
         <source>Undo</source>
         <translation>Geri al</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5563"/>
+        <location filename="../board/boardwindow.ui" line="5617"/>
         <source>Done</source>
         <translation>Bitti</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6054"/>
+        <location filename="../board/boardwindow.ui" line="6108"/>
         <source>Default Loss</source>
         <translation>Yenilgi</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6057"/>
+        <location filename="../board/boardwindow.ui" line="6111"/>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
@@ -688,12 +710,12 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
 Anında oyundan çekildiğinizi bildirir. Buraya tıklamak yenilgi kabulüdür. Rakibiniz kazanır. Oyun biter.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6062"/>
+        <location filename="../board/boardwindow.ui" line="6116"/>
         <source>RESIGN</source>
         <translation>PES/TERK</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6091"/>
+        <location filename="../board/boardwindow.ui" line="6145"/>
         <source>Review</source>
         <translation>İnceleme</translation>
     </message>
@@ -706,77 +728,77 @@ Anında oyundan çekildiğinizi bildirir. Buraya tıklamak yenilgi kabulüdür. 
         <translation type="obsolete">Seviye</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6240"/>
+        <location filename="../board/boardwindow.ui" line="6292"/>
         <source>fileSave</source>
         <translation>dosyaKaydet</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6249"/>
+        <location filename="../board/boardwindow.ui" line="6301"/>
         <source>fileSaveAs</source>
         <translation>dosyayıFarklıKaydet</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6252"/>
+        <location filename="../board/boardwindow.ui" line="6304"/>
         <source>Save file as ...</source>
         <translation>Dosyayı farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6261"/>
+        <location filename="../board/boardwindow.ui" line="6313"/>
         <source>quit</source>
         <translation>kapat</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6276"/>
+        <location filename="../board/boardwindow.ui" line="6328"/>
         <source>export</source>
         <translation>dışarı aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6279"/>
+        <location filename="../board/boardwindow.ui" line="6331"/>
         <source>export  export to several formats</source>
         <translation>dışarı aktar birkaç formatta dışarı aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6291"/>
+        <location filename="../board/boardwindow.ui" line="6343"/>
         <source>import</source>
         <translation>içeri aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6300"/>
+        <location filename="../board/boardwindow.ui" line="6352"/>
         <source>gameInfo</source>
         <translation>oyunBilgisi</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6312"/>
+        <location filename="../board/boardwindow.ui" line="6364"/>
         <source>sound</source>
         <translation>ses</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6321"/>
+        <location filename="../board/boardwindow.ui" line="6373"/>
         <source>whatsThis</source>
         <translation>buNe</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6330"/>
+        <location filename="../board/boardwindow.ui" line="6382"/>
         <source>duplicate</source>
         <translation>kopyala</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6342"/>
+        <location filename="../board/boardwindow.ui" line="6394"/>
         <source>coordinates</source>
         <translation>koordinatlar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6354"/>
+        <location filename="../board/boardwindow.ui" line="6406"/>
         <source>play</source>
         <translation>oynat</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6359"/>
+        <location filename="../board/boardwindow.ui" line="6411"/>
         <source>Export &amp;ASCII</source>
         <translation>&amp;ASCII olarak dışarı aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6362"/>
+        <location filename="../board/boardwindow.ui" line="6414"/>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
@@ -785,32 +807,32 @@ Export current board to ASCII.</source>
 Görüntülenmekte olan tahtayı ASCII olarak dışarı aktarır.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6369"/>
+        <location filename="../board/boardwindow.ui" line="6421"/>
         <source>Export SGF &amp;to clipboard</source>
         <translation>SGF&apos;yi &amp;panoya aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6374"/>
+        <location filename="../board/boardwindow.ui" line="6426"/>
         <source>Export &amp;Image</source>
         <translation>&amp;Resme aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6379"/>
+        <location filename="../board/boardwindow.ui" line="6431"/>
         <source>E&amp;xport Image to clipboard</source>
         <translation>Resim &amp;olarak panoya aktar</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="868"/>
+        <location filename="../board/boardwindow.cpp" line="869"/>
         <source>Match Mode</source>
         <translation>Oyun Kipi</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5503"/>
+        <location filename="../board/boardwindow.ui" line="5557"/>
         <source>Draw</source>
         <translation>Berabere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5533"/>
+        <location filename="../board/boardwindow.ui" line="5587"/>
         <source>Count</source>
         <translation>Puanlama</translation>
     </message>
@@ -1486,32 +1508,32 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>CyberOroConnection</name>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3303"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3232"/>
         <source>Server full</source>
         <translation>Sunucu dolu</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3303"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3232"/>
         <source>Server full, try another</source>
         <translation>Sunucu dolu, başkasını deneyin</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6094"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6037"/>
         <source>Rematch declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6094"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6037"/>
         <source>%1 has declined rematch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8239"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8093"/>
         <source>Invite declined</source>
         <translation>Davet reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8239"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8093"/>
         <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1620,37 +1642,37 @@ Varsayılanı kullanıyorum</translation>
         <location filename="../network/gamedialog.cpp" line="525"/>
         <location filename="../network/gamedialog.cpp" line="624"/>
         <location filename="../network/gamedialog.cpp" line="735"/>
-        <location filename="../network/gamedialog.cpp" line="757"/>
-        <location filename="../network/gamedialog.cpp" line="795"/>
-        <location filename="../network/gamedialog.cpp" line="815"/>
-        <location filename="../network/gamedialog.cpp" line="821"/>
+        <location filename="../network/gamedialog.cpp" line="754"/>
+        <location filename="../network/gamedialog.cpp" line="792"/>
+        <location filename="../network/gamedialog.cpp" line="812"/>
+        <location filename="../network/gamedialog.cpp" line="819"/>
         <location filename="../network/gamedialog.cpp" line="1233"/>
         <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
         <translation>Teklif et</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="768"/>
+        <location filename="../network/gamedialog.cpp" line="765"/>
         <source>Teaching</source>
         <translation>Öğretme</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="801"/>
+        <location filename="../network/gamedialog.cpp" line="798"/>
         <source>%1 not open for matches</source>
         <translation>%1 oyun oynamaya açık değil</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="803"/>
+        <location filename="../network/gamedialog.cpp" line="800"/>
         <source>%1 declined the match request</source>
         <translation>%1 oyun teklifinizi geri çevirdi</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="805"/>
+        <location filename="../network/gamedialog.cpp" line="802"/>
         <source>%1 canceled the match request</source>
         <translation>%1 oyun teklifinizi iptal etti</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="807"/>
+        <location filename="../network/gamedialog.cpp" line="804"/>
         <source>%1 already playing a game</source>
         <translation>%1 zaten oyunda</translation>
     </message>
@@ -1786,17 +1808,17 @@ Varsayılanı kullanıyorum</translation>
         <translation>Kabul</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="809"/>
+        <location filename="../network/gamedialog.cpp" line="806"/>
         <source>%1 does not accept direct matches</source>
         <translation>%1 doğrudan oyunları kabul etmiyor.</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="811"/>
+        <location filename="../network/gamedialog.cpp" line="808"/>
         <source>%1&apos;s client does not support nmatch</source>
         <translation>Rakibinizin (%1) istemcisi nmatch&apos;i desteklemiyor</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="814"/>
+        <location filename="../network/gamedialog.cpp" line="811"/>
         <source>Invalid Parameters!</source>
         <translation>Parametreler Geçersiz!</translation>
     </message>
@@ -2024,17 +2046,17 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="188"/>
+        <location filename="../mainwindow.cpp" line="186"/>
         <source>Ready.</source>
         <translation>Hazır.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="208"/>
+        <location filename="../mainwindow.cpp" line="206"/>
         <source>Current online players / watched players</source>
         <translation>Halihazırda çevrimiçi oyuncular / izlenen oyuncular</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="207"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
@@ -2043,32 +2065,32 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
 İzlediğiniz oyuncunun &apos;izlenen oyuncu:&apos; alanında adı bulunur.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.cpp" line="214"/>
         <source>Current online games / observed games + matches</source>
         <translation>Halihazırda çevrimiçi oyunlar / izlenen oyunlar + maçlarınız</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="217"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
         <translation>Halihazırda bulunduğunuz sunucuda oynan oyunların sayısını ve izlemekte ya da oynamakta olduğunuz oyunların sayısını gösterir</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="224"/>
+        <location filename="../mainwindow.cpp" line="222"/>
         <source>Current server</source>
         <translation>Halihazırdaki sunucu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="223"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
         <translation>Halihazırdaki sunucunun adını ya da çevrimdışıysanız OFFLINE ibaresini gösterir.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="240"/>
+        <location filename="../mainwindow.cpp" line="238"/>
         <source>Online Time</source>
         <translation>Çevrimiçi Süre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="239"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
@@ -2077,7 +2099,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
 (Hold) -&gt; hattı açık tut</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="492"/>
+        <location filename="../mainwindow.cpp" line="490"/>
         <source>*** Both players are the same ! ***</source>
         <translation>*** İki oyuncu da aynı! ***</translation>
     </message>
@@ -3235,7 +3257,7 @@ avans:</translation>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="302"/>
-        <location filename="../mainwindow_server.cpp" line="1100"/>
+        <location filename="../mainwindow_server.cpp" line="1150"/>
         <source>Connect with</source>
         <translation>Bağlan</translation>
     </message>
@@ -3245,12 +3267,12 @@ avans:</translation>
         <translation>Bağlantıyı kopar</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="870"/>
+        <location filename="../mainwindow_server.cpp" line="920"/>
         <source>msg*</source>
         <translation>ilt*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="896"/>
+        <location filename="../mainwindow_server.cpp" line="946"/>
         <source>Shouts*</source>
         <translation>İlanlar*</translation>
     </message>
@@ -3713,26 +3735,41 @@ avans:</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="71"/>
-        <source>Nice to meet you everyone</source>
+        <source>How do you do?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="72"/>
-        <source>How are you everyone?</source>
+        <source>Nice to meet you everyone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="73"/>
-        <source>Anyone want a quick game?</source>
+        <source>How are you everyone?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="74"/>
-        <source>I&apos;m looking for a friendly match.</source>
+        <source>Anyone want a quick game?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="75"/>
+        <source>I&apos;m looking for a friendly match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="76"/>
+        <source>Strong players!  How about playing handicap with me?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="77"/>
+        <source>Anyone want to play a game with me?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="78"/>
         <source>I don&apos;t mind any sorts of games with anyone.  Just request me.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3823,8 +3860,8 @@ avans:</translation>
         <translation>alt dal</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="91"/>
-        <location filename="../board/boardwindow.cpp" line="110"/>
+        <location filename="../board/boardwindow.cpp" line="87"/>
+        <location filename="../board/boardwindow.cpp" line="106"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
@@ -3908,32 +3945,32 @@ avans:</translation>
 <context>
     <name>Room</name>
     <message>
-        <location filename="../network/room.cpp" line="267"/>
+        <location filename="../network/room.cpp" line="269"/>
         <source>Match</source>
         <translation>Oyun</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="276"/>
+        <location filename="../network/room.cpp" line="278"/>
         <source>Talk</source>
         <translation>Sohbet</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="279"/>
+        <location filename="../network/room.cpp" line="281"/>
         <source>Remove from Friends</source>
         <translation>Arkadaşlıktan çık</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="281"/>
+        <location filename="../network/room.cpp" line="283"/>
         <source>Add to Friends</source>
         <translation>Arkadaş ol</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="283"/>
+        <location filename="../network/room.cpp" line="285"/>
         <source>Remove from Watches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="285"/>
+        <location filename="../network/room.cpp" line="287"/>
         <source>Add to Watches</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3946,19 +3983,19 @@ avans:</translation>
         <translation type="obsolete">Hayran ol</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="286"/>
+        <location filename="../network/room.cpp" line="288"/>
         <source>Block</source>
         <translation>Engelle</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="309"/>
-        <location filename="../network/room.cpp" line="315"/>
+        <location filename="../network/room.cpp" line="311"/>
+        <location filename="../network/room.cpp" line="317"/>
         <source>Observe Outside</source>
         <translation>Dışarıdan İzle</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="310"/>
-        <location filename="../network/room.cpp" line="314"/>
+        <location filename="../network/room.cpp" line="312"/>
+        <location filename="../network/room.cpp" line="316"/>
         <source>Join and Observe</source>
         <translation>Katıl ve İzle</translation>
     </message>
@@ -4050,80 +4087,80 @@ avans:</translation>
 <context>
     <name>TygemConnection</name>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="269"/>
-        <location filename="../network/tygemconnection.cpp" line="2074"/>
+        <location filename="../network/tygemconnection.cpp" line="262"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
         <source>3 Boards Open</source>
         <translation type="unfinished">3 Tahta Açık</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="269"/>
+        <location filename="../network/tygemconnection.cpp" line="262"/>
         <source>You must close a board before you can open another one</source>
         <translation type="unfinished">Yeni bir tahta açmadan önce açıklardan birini kapatmalısınız</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="696"/>
+        <location filename="../network/tygemconnection.cpp" line="650"/>
         <source>Server full</source>
         <translation>Sunucu dolu</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="696"/>
+        <location filename="../network/tygemconnection.cpp" line="650"/>
         <source>Server full, try another</source>
         <translation>Sunucu dolu, başkasını deneyin</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2074"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
         <source>You must close a board before you can start a game</source>
         <translation type="unfinished">Yeni oyuna başlamadan önce açık olanı kapatmalısınız</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2077"/>
-        <location filename="../network/tygemconnection.cpp" line="8395"/>
-        <location filename="../network/tygemconnection.cpp" line="8402"/>
+        <location filename="../network/tygemconnection.cpp" line="2031"/>
+        <location filename="../network/tygemconnection.cpp" line="7889"/>
+        <location filename="../network/tygemconnection.cpp" line="7896"/>
         <source>Not open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2077"/>
-        <location filename="../network/tygemconnection.cpp" line="8386"/>
-        <location filename="../network/tygemconnection.cpp" line="8395"/>
+        <location filename="../network/tygemconnection.cpp" line="2031"/>
+        <location filename="../network/tygemconnection.cpp" line="7880"/>
+        <location filename="../network/tygemconnection.cpp" line="7889"/>
         <source>%1 is not accepting invitations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5221"/>
+        <location filename="../network/tygemconnection.cpp" line="5050"/>
         <source>Resume match?</source>
         <translation type="unfinished">Oyuna devam?</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5222"/>
+        <location filename="../network/tygemconnection.cpp" line="5051"/>
         <source>Resume match in progress with %1?
 </source>
         <translation type="unfinished">%1 ile olan oyununuza devam etmek istermisiniz?
 </translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8373"/>
-        <location filename="../network/tygemconnection.cpp" line="8410"/>
+        <location filename="../network/tygemconnection.cpp" line="7867"/>
+        <location filename="../network/tygemconnection.cpp" line="7904"/>
         <source>Invite declined</source>
         <translation>Davet reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8373"/>
+        <location filename="../network/tygemconnection.cpp" line="7867"/>
         <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8386"/>
+        <location filename="../network/tygemconnection.cpp" line="7880"/>
         <source>In game?</source>
         <translation type="unfinished">Oyunda?</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8402"/>
+        <location filename="../network/tygemconnection.cpp" line="7896"/>
         <source>%1 has the maximum boards (3) open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8410"/>
+        <location filename="../network/tygemconnection.cpp" line="7904"/>
         <source>%1 has declined all invitations</source>
         <translation type="unfinished"></translation>
     </message>

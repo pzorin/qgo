@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="it">
 <context>
     <name></name>
     <message>
         <source>Teaching</source>
-        <translation type="obsolete">教學</translation>
+        <translation type="obsolete">Lectio</translation>
     </message>
     <message>
         <source>Offer</source>
-        <translation type="obsolete">提出/接受</translation>
+        <translation type="obsolete">Praebere</translation>
     </message>
 </context>
 <context>
     <name>Board</name>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">虛手</translation>
+        <translation type="obsolete">Omittere</translation>
     </message>
     <message>
         <source>vs.</source>
-        <translation type="obsolete">對</translation>
+        <translation type="obsolete">vs.</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">白棋</translation>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>W</source>
-        <translation type="obsolete">白</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">黑棋</translation>
+        <translation type="obsolete">Niger</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="obsolete">黑</translation>
+        <translation type="obsolete">N</translation>
     </message>
     <message>
         <location filename="../board/board.cpp" line="1269"/>
         <source>Failed to save image!</source>
-        <translation>儲存圖像失敗！</translation>
+        <translation>Imaginem servare nequivi!</translation>
     </message>
     <message>
         <source>Black wins with %1</source>
-        <translation type="obsolete">黑棋贏 %1</translation>
+        <translation type="obsolete">Niger vincit cum %1</translation>
     </message>
     <message>
         <source>White wins with %1</source>
-        <translation type="obsolete">白棋贏 %1</translation>
+        <translation type="obsolete">Albus vincit cum %1</translation>
     </message>
     <message>
         <source>Jigo</source>
-        <translation type="obsolete">Jigo</translation>
+        <translation type="obsolete">Aequalitas</translation>
     </message>
     <message>
         <source>XML</source>
@@ -61,120 +61,120 @@
     </message>
     <message>
         <source>Could not find file:</source>
-        <translation type="obsolete">無法找到檔案：</translation>
+        <translation type="obsolete">Plicam invenire nequivi:</translation>
     </message>
     <message>
         <source>Could not open file:</source>
-        <translation type="obsolete">無法開啟檔案：</translation>
+        <translation type="obsolete">Plicam aperire nequivi:</translation>
     </message>
     <message>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation type="obsolete">文字編碼方式無效。請檢查你的偏好設定！</translation>
+        <translation type="obsolete">Codex verborum non legitimus. Praepositiones inspice!</translation>
     </message>
     <message>
         <source>Reading sgf file...</source>
-        <translation type="obsolete">讀取 SGF 棋譜檔中…</translation>
+        <translation type="obsolete">plicam sgf legens...</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation type="obsolete">中止</translation>
+        <translation type="obsolete">Interrumpere</translation>
     </message>
     <message>
         <source>Corrupt SGF file at position</source>
-        <translation type="obsolete">SGF 棋譜檔損壞</translation>
+        <translation type="obsolete">Plica SGF laesa in numero octeti</translation>
     </message>
     <message>
         <source>No filename given!</source>
-        <translation type="obsolete">沒有檔案名稱！</translation>
+        <translation type="obsolete">Nomen plicae non datum!</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation type="obsolete">匯入 ASCII 失敗！剪貼簿為空白？</translation>
+        <translation type="obsolete">ASCII importare nequivi. Latibulum inane?</translation>
     </message>
 </context>
 <context>
     <name>BoardWindow</name>
     <message>
-        <location filename="../board/boardwindow.cpp" line="173"/>
+        <location filename="../board/boardwindow.cpp" line="169"/>
         <source>You modified the game.
 Do you want to save your changes?</source>
-        <translation type="unfinished">你已修改對局
-你想要儲存這些變更嗎?</translation>
+        <translation type="unfinished">Certatio correcta.
+Correctiones servandae sunt?</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="unfinished">Sic</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="unfinished">Non</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
-        <location filename="../board/boardwindow.cpp" line="371"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
+        <location filename="../board/boardwindow.cpp" line="372"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation type="unfinished">Tollere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="363"/>
+        <location filename="../board/boardwindow.cpp" line="364"/>
         <source>Add 1 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="365"/>
+        <location filename="../board/boardwindow.cpp" line="366"/>
         <source>Add 5 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="367"/>
+        <location filename="../board/boardwindow.cpp" line="368"/>
         <source>Add 10 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="369"/>
+        <location filename="../board/boardwindow.cpp" line="370"/>
         <source>Add 60 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="597"/>
-        <location filename="../board/boardwindow.cpp" line="658"/>
+        <location filename="../board/boardwindow.cpp" line="598"/>
+        <location filename="../board/boardwindow.cpp" line="659"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="597"/>
+        <location filename="../board/boardwindow.cpp" line="598"/>
         <source>Could not export  the game to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="613"/>
+        <location filename="../board/boardwindow.cpp" line="614"/>
         <source>Export image as</source>
-        <translation type="unfinished">匯出圖案.. </translation>
+        <translation type="unfinished">Imaginem exportare sicut</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="658"/>
+        <location filename="../board/boardwindow.cpp" line="659"/>
         <source>Could not duplicate the game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="769"/>
+        <location filename="../board/boardwindow.cpp" line="770"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="769"/>
+        <location filename="../board/boardwindow.cpp" line="770"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
-        <translation type="unfinished">SGF (*.sgf);;所有檔案 (*)</translation>
+        <translation type="unfinished">Plicae SGF (*.sgf);;Omnia (*)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="788"/>
+        <location filename="../board/boardwindow.cpp" line="789"/>
         <source>Cannot save SGF file.</source>
-        <translation type="unfinished">存取 SGF檔案</translation>
+        <translation type="unfinished">Plicam modo SGF compositam servare nequivi.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="868"/>
+        <location filename="../board/boardwindow.cpp" line="869"/>
         <source>Match Mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,9 +188,9 @@ Do you want to save your changes?</source>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation type="unfinished">捲軸最大值
+        <translation type="unfinished">Maximum trahae
 
-顯示目前對局的最大落子手數.</translation>
+Maximus motus certationis ostendendus traha.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="107"/>
@@ -207,37 +207,37 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation type="unfinished">點選棋盤放置棋石
+        <translation type="unfinished">Lapidem colloca murem tangens in tabulam.
 
-在一般模式時, 顏色自動轉換於滑鼠左鍵進行落子
-Shift + ← 到全譜的第一手
-Shift + → 到目前變化的下一手
-在編輯模式並結束落子時, 左鍵放置黑棋, 右鍵放置白棋, 點選已存在的棋子則移除
-在編輯標示時, 左鍵設定, 右鍵移除標示. 當編輯文字標示時, shift-點選能夠自訂標示文字
-在計地模式時, 左鍵標示棋塊為死子, 右鍵標示活棋或雙活. 再次點擊則取消標示.</translation>
+Modo recto, laevo muris lapides alternis coloribus collocantur.
+Shift + laevo primum motum principis rami agit.
+Shift + dextero primum motum huius rami.
+Modo correctionis, laevo tacto niger, dextero albus lapis collocatur; supra collocatum tacto amovetur.
+Signa corrigens, laevus collocat, dexterus amovet. Litteram corrigens, shif+mure notam corrigit.
+Modo punctorum, laevus cohortem lapidum mortuam notat, dexterus vivam in seki. Murem iterum tange ad vivam revertendam.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="155"/>
         <source>Navigate through the game</source>
-        <translation type="unfinished">逐步巡覽對局</translation>
+        <translation type="unfinished">Certationem navigare</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="158"/>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation type="unfinished">巡覽落子
+        <translation type="unfinished">Ad motum navigare
 
-使用捲軸快速巡覽目前對局分支.</translation>
+In hoc ramo certationis traha celer navigas.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="187"/>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation type="unfinished">捲軸最小值
+        <translation type="unfinished">Minimum trahae
 
-顯示目前對局的最小落子手數.</translation>
+Minimus motus certationis ostendendus traha.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="192"/>
@@ -257,35 +257,35 @@ Minimum game move the slider can currently show.</source>
     <message>
         <location filename="../board/boardwindow.ui" line="725"/>
         <source>Move number</source>
-        <translation type="unfinished">落子數</translation>
+        <translation type="unfinished">Numerus moti</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="728"/>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation type="unfinished">落子數
+        <translation type="unfinished">Motus
 
-顯示目前的落子手數</translation>
+Numerus moti ostenti.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="742"/>
         <source>Move 0</source>
-        <translation type="unfinished">開始對局</translation>
+        <translation type="unfinished">Motus 0</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1221"/>
         <source>Player to play</source>
-        <translation type="unfinished">輪到棋友落子</translation>
+        <translation type="unfinished">Ludendum est</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1224"/>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation type="unfinished">玩家進行對局
+        <translation type="unfinished">Ludendum est
 
-表示任意持白或持黑。</translation>
+Nigro vel albo motum hunc ostendit. </translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1238"/>
@@ -295,35 +295,35 @@ Indicates whether it is black&apos;s or white&apos;s turn.</source>
     <message>
         <location filename="../board/boardwindow.ui" line="1714"/>
         <source>Variations</source>
-        <translation type="unfinished">變化</translation>
+        <translation type="unfinished">Variationes</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1717"/>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation type="unfinished">變化
+        <translation type="unfinished">Variationes
 
-顯示主或支數目於現在節點.</translation>
+Numerum filiorum fratrumque in hoc nodo ostendit.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1731"/>
         <source>0 brothers
 0 sons</source>
-        <translation type="unfinished">0 之後變化型
-0 之前變化型</translation>
+        <translation type="unfinished">0 fratres
+0 filii</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1782"/>
         <location filename="../board/boardwindow.ui" line="2988"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Albus</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2289"/>
         <location filename="../board/boardwindow.ui" line="2884"/>
         <source>remaining time / stones</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">tempus et lapides reliqui</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2292"/>
@@ -335,13 +335,13 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation type="unfinished">計時器
+        <translation type="unfinished">Horologium
 
-顯示「剩餘時間」或「讀秒 / 剩餘落子數」
+Tempus reliquum aut tempus byoyomi / lapides reliquos ostendit.
 
-點選將會
-- 你的計時器: 暫停要求 (NNGS)
-- 對手計時器: 加時1分鐘</translation>
+Muris malleolum tange supra
+- horologium tuum ut moram petatur (NNGS) aut
+- horologium hostis ut ei minutum unum temporis addititici donetur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2301"/>
@@ -355,13 +355,13 @@ Click on
         <location filename="../board/boardwindow.ui" line="3125"/>
         <location filename="../board/boardwindow.ui" line="3430"/>
         <source>Captures:</source>
-        <translation type="unfinished">提子:</translation>
+        <translation type="unfinished">Captivi:</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2377"/>
         <location filename="../board/boardwindow.ui" line="3296"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niger</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3032"/>
@@ -373,7 +373,7 @@ Click on
         <location filename="../board/boardwindow.ui" line="3210"/>
         <location filename="../board/boardwindow.ui" line="3955"/>
         <source>komi points</source>
-        <translation type="unfinished">讓子點數</translation>
+        <translation type="unfinished">komi numeri</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3213"/>
@@ -382,16 +382,16 @@ Click on
 
 Add komi points to white because black has the advantage to set the first stone.
 Use &quot;komi x&quot; to request a komi of x (number).</source>
-        <translation type="unfinished">讓子:
+        <translation type="unfinished">komi:
 
-增加讓子給白棋因為黑棋具有先手優勢
-使用 &quot;komi x&quot; 要求讓子數(x)</translation>
+Albi puncta komi adicit quod nigro est commoditas primi lapidis collocandi.
+&quot;komi x&quot; imperatum mitte ut komi numero x punctorum petatur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3219"/>
         <location filename="../board/boardwindow.ui" line="3964"/>
         <source>Komi:</source>
-        <translation type="unfinished">讓子:</translation>
+        <translation type="unfinished">Komi:</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3260"/>
@@ -402,45 +402,45 @@ Use &quot;komi x&quot; to request a komi of x (number).</source>
     <message>
         <location filename="../board/boardwindow.ui" line="3888"/>
         <source>free/rated game</source>
-        <translation type="unfinished">不計分/計分棋</translation>
+        <translation type="unfinished">certatio censita/non censita</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3891"/>
         <source>free game:
 
 use &quot;free&quot; command to make game rated or unrated (free)</source>
-        <translation type="unfinished">不計分:
+        <translation type="unfinished">certatio non censita:
 
-使用&quot;free&quot;命令讓對局計分或不計分</translation>
+&quot;free&quot; iussum mitte ut certationem censitam aut non censitam eliges</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3896"/>
         <source>free</source>
-        <translation type="unfinished">不計分</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3920"/>
         <source>Handicap</source>
-        <translation type="unfinished">授子</translation>
+        <translation type="unfinished">Detrimenta</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3923"/>
         <source>Handicap
 
 Number of stones placed by black as his first move.</source>
-        <translation type="unfinished">授子
+        <translation type="unfinished">Detrimenta
 
-多少黑棋於棋局開始時先放置</translation>
+Lapides primo moto a nigro collocati.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3928"/>
         <source>H:</source>
-        <translation type="unfinished">授:</translation>
+        <translation type="unfinished">D:</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3988"/>
         <source>byoyomi time (minutes)</source>
-        <translation type="unfinished">讀秒時間(分)</translation>
+        <translation type="unfinished">tempus byoyomi (minuta)</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3991"/>
@@ -456,23 +456,23 @@ Absolute: Byo = 0, no additional time after main time is zero.
 Canadian: e.g. Byo = 6/25, 25 stones to place in 6 minutes; if all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
 
 byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 30 seconds, time is reset to 30 seconds, if not placed within 30 seconds, period will be decreased by one, a new period of 30 seconds starts; if period is zero and last time interval is over then game ends.</source>
-        <translation type="unfinished">讀秒時間
+        <translation type="unfinished">Tempus byoyomi
 
-增加額外時間於落子
-如果答到0之前所有的棋子尚未落完, 對局將會立即結束: &quot;... 違規超時&quot;
+Tempus additicium quo lapides ulli collocandi sunt.
+Si tempus exhaustum est ante omnes lapides collocatos, certatio statim perficitur: &quot;... tempore victum&quot;.
 
-系統時間 (離線):
+De temporis modo (ex conexu):
 
-包辦制: 讀秒 = 0, 於時盡之後不加時
+Absolutum: Byo = 0, nihil temporis additicii postquam tempus princeps exhaustum est.
 
-加拿大式: 例如 讀秒 = 6/25, 於6分鐘內必須落下25子; 假如棋子全部落畢. 讀秒週期重設會此職於相同的落子數於開始落子到棋局結束.
+Canadiense: e.g. Byo = 6/25, XXV lapides collocandi intra VI minuta. Si lapides omnes collocati sunt, tempus byoyomi iterum ad hoc inditur atque numerus idem lapidum collocandus est.
 
-計次讀秒: 例如 讀秒: 7x30s, 7 次 30 秒; 如果在 30 秒之內落子, 時間將會回復到 30 秒, 如果沒有在 30 秒之內落子, 讀秒次數將會減少一次, 新一次的讀秒將會由 30 開始計時; 假如讀秒次數為零並且最後時間結束則對局結束</translation>
+byo-yomi: e.g. Byo = 7x30s, VII spatia XXX secundorum; si lapis intra XXX secunda collocatur tempus ad XXX secunda revertit, aliter spatia decrescuntur atque novum spatium XXX secundorum incipit; si nullum spatium superest atque tempus postremum exhaustum est, certatio perficitur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4005"/>
         <source>Byo:</source>
-        <translation type="unfinished">讀秒:</translation>
+        <translation type="unfinished">Byo:</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4417"/>
@@ -482,112 +482,114 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
     <message>
         <location filename="../board/boardwindow.ui" line="4458"/>
         <source>Stone</source>
-        <translation type="unfinished">棋子</translation>
+        <translation type="unfinished">Lapis</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4461"/>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation type="unfinished">棋子
+        <translation type="unfinished">Lapis
 
-編輯棋子於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Lapides in tabulam collocat. Laevo nigros, dextero albos.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4510"/>
         <source>Color of next move</source>
-        <translation type="unfinished">下一手顏色</translation>
+        <translation type="unfinished">Color motus sequentis</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4513"/>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation type="unfinished">顏色
+        <translation type="unfinished">Color
 
-設定下一手顏色. 假如之前沒按, 將會選用預設顏色.</translation>
+Motus sequentis colorem eligit. Color paratus eligitur si non tangitur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4567"/>
         <source>Number</source>
-        <translation type="unfinished">數字</translation>
+        <translation type="unfinished">Numerus</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4570"/>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="unfinished">數字
+        <translation type="unfinished">Numerus
 
-編輯數字標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Numerum in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4619"/>
         <source>Letter</source>
-        <translation type="unfinished">文字</translation>
+        <translation type="unfinished">Littera</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4622"/>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation type="unfinished">文字
+        <translation type="unfinished">Littera
 
-數入文字標記於棋盤. 左鍵設定標示, 右鍵移除. 按下Shift讓你編輯自訂文字</translation>
+Litteram in tabulam collocat. Laevo muris collocatur, dextero amovetur. &apos;Shift&apos; tacto murem tange ut nota corrigatur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4671"/>
         <source>Cross</source>
-        <translation type="unfinished">Ｘ</translation>
+        <translation type="unfinished">Crux</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4674"/>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="unfinished">Ｘ
+        <translation type="unfinished">Crux
 
-編輯Ｘ標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Signa forma crucis in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4717"/>
         <source>Triangle</source>
-        <translation type="unfinished">三角</translation>
+        <translation type="unfinished">Triangulum</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4720"/>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="unfinished">三角
+        <translation type="unfinished">Triangulum
 
-編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Signa forma trianguli in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4769"/>
         <source>Circle</source>
-        <translation type="unfinished">圓形</translation>
+        <translation type="unfinished">Circulus</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4772"/>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="unfinished">圓形
+        <translation type="unfinished">Circulus
 
-編輯圓形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
+Signa forma circuli in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4821"/>
         <source>Square</source>
-        <translation type="unfinished">方形</translation>
+        <translation type="unfinished">Quadratum</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4824"/>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quadratum
+
+Signa forma quadrati in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4861"/>
@@ -595,470 +597,491 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4894"/>
-        <source>swap variations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="4897"/>
-        <location filename="../board/boardwindow.ui" line="4947"/>
-        <location filename="../board/boardwindow.ui" line="4997"/>
-        <location filename="../board/boardwindow.ui" line="5047"/>
+        <location filename="../board/boardwindow.ui" line="4900"/>
+        <location filename="../board/boardwindow.ui" line="4950"/>
+        <location filename="../board/boardwindow.ui" line="5000"/>
+        <location filename="../board/boardwindow.ui" line="5100"/>
         <source>Empty variatonreate an empty branch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4944"/>
-        <source>delete current move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="4994"/>
-        <source>duplicate the current node</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="5044"/>
-        <source>create an empty branch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="5076"/>
+        <location filename="../board/boardwindow.ui" line="5130"/>
         <source>Clipboard tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5109"/>
+        <location filename="../board/boardwindow.ui" line="5163"/>
         <source>cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5159"/>
+        <location filename="../board/boardwindow.ui" line="5213"/>
         <source>paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5209"/>
+        <location filename="../board/boardwindow.ui" line="5263"/>
         <source>paste as variation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5277"/>
-        <location filename="../board/boardwindow.ui" line="5392"/>
-        <location filename="../board/boardwindow.ui" line="5495"/>
-        <location filename="../board/boardwindow.ui" line="5525"/>
-        <location filename="../board/boardwindow.ui" line="5555"/>
+        <location filename="../board/boardwindow.ui" line="5331"/>
+        <location filename="../board/boardwindow.ui" line="5446"/>
+        <location filename="../board/boardwindow.ui" line="5549"/>
+        <location filename="../board/boardwindow.ui" line="5579"/>
+        <location filename="../board/boardwindow.ui" line="5609"/>
         <source>Pass move</source>
-        <translation type="unfinished">虛手</translation>
+        <translation type="unfinished">Motum omittit</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5280"/>
-        <location filename="../board/boardwindow.ui" line="5395"/>
-        <location filename="../board/boardwindow.ui" line="5498"/>
-        <location filename="../board/boardwindow.ui" line="5528"/>
-        <location filename="../board/boardwindow.ui" line="5558"/>
+        <location filename="../board/boardwindow.ui" line="5334"/>
+        <location filename="../board/boardwindow.ui" line="5449"/>
+        <location filename="../board/boardwindow.ui" line="5552"/>
+        <location filename="../board/boardwindow.ui" line="5582"/>
+        <location filename="../board/boardwindow.ui" line="5612"/>
         <source>Pass
 
 Pass your turn.</source>
-        <translation type="unfinished">虛手
+        <translation type="unfinished">Omittere
 
-此次落子虛手</translation>
+Motum omittit.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5285"/>
-        <location filename="../board/boardwindow.ui" line="5400"/>
+        <location filename="../board/boardwindow.ui" line="5339"/>
+        <location filename="../board/boardwindow.ui" line="5454"/>
         <source>Pass</source>
-        <translation type="unfinished">虛手</translation>
+        <translation type="unfinished">Omittere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5301"/>
+        <location filename="../board/boardwindow.ui" line="5355"/>
         <source>switch to score mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5304"/>
-        <location filename="../board/boardwindow.ui" line="5468"/>
+        <location filename="../board/boardwindow.ui" line="5358"/>
+        <location filename="../board/boardwindow.ui" line="5522"/>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Differre.
+
+Hosti dilationem petit. Si accipit, certatio delata atque servata erit.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5309"/>
+        <location filename="../board/boardwindow.ui" line="5363"/>
         <source>Score</source>
-        <translation type="unfinished">計地</translation>
+        <translation type="unfinished">Puncta</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5422"/>
+        <location filename="../board/boardwindow.ui" line="5476"/>
         <source>Refresh display</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Scrinium quaerere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5425"/>
+        <location filename="../board/boardwindow.ui" line="5479"/>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quaerere
+
+Tabulam quaerit. Age si in tabula lapides non videntur.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5430"/>
+        <location filename="../board/boardwindow.ui" line="5484"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quaerere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5465"/>
+        <location filename="../board/boardwindow.ui" line="5519"/>
         <source>Request adjournment</source>
-        <translation type="unfinished">要求打掛</translation>
+        <translation type="unfinished">Dilationem petere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5473"/>
+        <location filename="../board/boardwindow.ui" line="5527"/>
         <source>Adjourn</source>
-        <translation type="unfinished">打掛</translation>
+        <translation type="unfinished">Differre</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5503"/>
+        <location filename="../board/boardwindow.ui" line="5557"/>
         <source>Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5533"/>
+        <location filename="../board/boardwindow.ui" line="5587"/>
         <source>Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6387"/>
+        <location filename="../board/boardwindow.ui" line="6439"/>
         <source>InsertStone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6390"/>
+        <location filename="../board/boardwindow.ui" line="6442"/>
         <source>Insert stone to position (no variation)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5362"/>
+        <location filename="../board/boardwindow.ui" line="5416"/>
         <source>Undo last move</source>
+        <translation type="unfinished">Novissimum motum tollit</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="4897"/>
+        <source>Create an empty branch</source>
+        <translation type="unfinished">Ramum inanem creat</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="4947"/>
+        <source>Duplicate the current node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5365"/>
+        <location filename="../board/boardwindow.ui" line="4997"/>
+        <source>Swap variations</source>
+        <translation type="unfinished">Variationes permutare</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5047"/>
+        <location filename="../board/boardwindow.ui" line="5050"/>
+        <source>Insert move mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5097"/>
+        <source>Delete current move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5419"/>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tollere
+
+Novissimum motum hostis tollit.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="839"/>
-        <location filename="../board/boardwindow.ui" line="5370"/>
+        <location filename="../board/boardwindow.cpp" line="840"/>
+        <location filename="../board/boardwindow.ui" line="5424"/>
         <source>Undo</source>
-        <translation type="unfinished">回手</translation>
+        <translation type="unfinished">Tollere</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5563"/>
+        <location filename="../board/boardwindow.ui" line="5617"/>
         <source>Done</source>
-        <translation type="unfinished">完成</translation>
+        <translation type="unfinished">Perfectum</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6054"/>
+        <location filename="../board/boardwindow.ui" line="6108"/>
         <source>Default Loss</source>
-        <translation type="unfinished">判定輸棋</translation>
+        <translation type="unfinished">Clades</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6057"/>
+        <location filename="../board/boardwindow.ui" line="6111"/>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation type="unfinished">投子
+        <translation type="unfinished">Deditio.
 
-立即投子. 對手獲勝. 遊戲結束</translation>
+Deditionem facis. Hoc mure tacto cladis est. Hostis vincit. Certatio perficitur.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6062"/>
+        <location filename="../board/boardwindow.ui" line="6116"/>
         <source>RESIGN</source>
-        <translation type="unfinished">投子</translation>
+        <translation type="unfinished">DEDITIO</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6091"/>
+        <location filename="../board/boardwindow.ui" line="6145"/>
         <source>Review</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6240"/>
+        <location filename="../board/boardwindow.ui" line="6292"/>
         <source>fileSave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6249"/>
+        <location filename="../board/boardwindow.ui" line="6301"/>
         <source>fileSaveAs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6252"/>
+        <location filename="../board/boardwindow.ui" line="6304"/>
         <source>Save file as ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6261"/>
+        <location filename="../board/boardwindow.ui" line="6313"/>
         <source>quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6276"/>
+        <location filename="../board/boardwindow.ui" line="6328"/>
         <source>export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6279"/>
+        <location filename="../board/boardwindow.ui" line="6331"/>
         <source>export  export to several formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6291"/>
+        <location filename="../board/boardwindow.ui" line="6343"/>
         <source>import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6300"/>
+        <location filename="../board/boardwindow.ui" line="6352"/>
         <source>gameInfo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6312"/>
+        <location filename="../board/boardwindow.ui" line="6364"/>
         <source>sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6321"/>
+        <location filename="../board/boardwindow.ui" line="6373"/>
         <source>whatsThis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6330"/>
+        <location filename="../board/boardwindow.ui" line="6382"/>
         <source>duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6342"/>
+        <location filename="../board/boardwindow.ui" line="6394"/>
         <source>coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6354"/>
+        <location filename="../board/boardwindow.ui" line="6406"/>
         <source>play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6359"/>
+        <location filename="../board/boardwindow.ui" line="6411"/>
         <source>Export &amp;ASCII</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6362"/>
+        <location filename="../board/boardwindow.ui" line="6414"/>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation type="unfinished">匯出 ASCII
+        <translation type="unfinished">ASCII Exportare
 
-匯出現在盤面為 ASCII</translation>
+Tabulam modo ASCII exportat.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6369"/>
+        <location filename="../board/boardwindow.ui" line="6421"/>
         <source>Export SGF &amp;to clipboard</source>
-        <translation type="unfinished">匯出 SGF 到剪貼簿(&amp;T)</translation>
+        <translation type="unfinished">SGF ad la&amp;tibulum exportare</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6374"/>
+        <location filename="../board/boardwindow.ui" line="6426"/>
         <source>Export &amp;Image</source>
-        <translation type="unfinished">匯出圖像(&amp;I)</translation>
+        <translation type="unfinished">&amp;Imaginem Exportare</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6379"/>
+        <location filename="../board/boardwindow.ui" line="6431"/>
         <source>E&amp;xport Image to clipboard</source>
-        <translation type="unfinished">匯出圖像到剪貼簿(&amp;X)</translation>
+        <translation type="unfinished">Imaginem ad latibulum E&amp;xportare</translation>
     </message>
 </context>
 <context>
     <name>ClientWindow</name>
     <message>
         <source>Ready.</source>
-        <translation type="obsolete">備妥</translation>
+        <translation type="obsolete">Paratus.</translation>
     </message>
     <message>
         <source>Current online players / watched players</source>
-        <translation type="obsolete">目前的 線上人數 / 監看人數</translation>
+        <translation type="obsolete">Lusores conexi / lusores perspecti</translation>
     </message>
     <message>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
-        <translation type="obsolete">顯示目前的線上人數及你監看的人數
-你正在監看的棋友已經加進「監看棋友」欄位</translation>
+        <translation type="obsolete">Numerum lusorum conexorum
+et numerum lusorum perspectorum ostendit.
+Lusor perspectus in &apos;lusores perspecti:&apos; regione apparet.</translation>
     </message>
     <message>
         <source>Current online games / observed games + matches</source>
-        <translation type="obsolete">目前的 線上局數 / 你的局數（觀局 ＋ 對局）</translation>
+        <translation type="obsolete">Certationes in moderatro / certationes spectatae + provocationes</translation>
     </message>
     <message>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
-        <translation type="obsolete">顯示目前的線上對局數目和你目前的對局數或觀局數</translation>
+        <translation type="obsolete">Numerum certationum lusarum in hoc moderatro ostendit atque numerum certationum a te spectatarum vel lusarum</translation>
     </message>
     <message>
         <source>Current server</source>
-        <translation type="obsolete">目前所在的伺服器</translation>
+        <translation type="obsolete">Hoc moderatrum</translation>
     </message>
     <message>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
-        <translation type="obsolete">顯示目前所在的伺服器名稱或者是 OFFLINE (離線)</translation>
+        <translation type="obsolete">Nomen huius moderatri aut OFFLINE si non conexus interreti ostendit.</translation>
     </message>
     <message>
         <source>Current channels and users</source>
-        <translation type="obsolete">目前所在的頻道及棋友</translation>
+        <translation type="obsolete">canales atque utentes</translation>
     </message>
     <message>
         <source>Displays the current channels you are in and the number of users inthere.
 The tooltip text contains the channels&apos; title and users&apos; names</source>
-        <translation type="obsolete">顯示目前你所在的頻道名稱及使用者人數
-工具提示文字包含頻道標題及使用者名稱</translation>
+        <translation type="obsolete">Hos canales ubi es atque numerum utentium ostendit.
+Titulus canalis at nomen utentis est in suggestione</translation>
     </message>
     <message>
         <source>Online Time</source>
-        <translation type="obsolete">連線時間</translation>
+        <translation type="obsolete">Tempus Conexi</translation>
     </message>
     <message>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
-        <translation type="obsolete">顯示目前的連線時間
-(A) -&gt;  自動回應
-(Hold) - &gt; 鎖定行</translation>
+        <translation type="obsolete">Tempus conexi ostendit.
+(A) -&gt; ipsum respondit
+(Hold) -&gt; conexum sustentat</translation>
     </message>
     <message>
         <source>Bytes in:</source>
-        <translation type="obsolete">流入位元:</translation>
+        <translation type="obsolete">Octeti ingressi:</translation>
     </message>
     <message>
         <source>Bytes out:</source>
-        <translation type="obsolete">流出位元: </translation>
+        <translation type="obsolete">Octeti egressi:</translation>
     </message>
     <message>
         <source>Connect with</source>
-        <translation type="obsolete">連線在</translation>
+        <translation type="obsolete">Conectere</translation>
     </message>
     <message>
         <source>Disconnect from</source>
-        <translation type="obsolete">斷線於</translation>
+        <translation type="obsolete">Disconectere</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation type="obsolete">資訊</translation>
+        <translation type="obsolete">Informationes</translation>
     </message>
     <message>
         <source>Won</source>
-        <translation type="obsolete">勝</translation>
+        <translation type="obsolete">Vicit</translation>
     </message>
     <message>
         <source>Lost</source>
-        <translation type="obsolete">負</translation>
+        <translation type="obsolete">Victum</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="obsolete">國家</translation>
+        <translation type="obsolete">Natio</translation>
     </message>
     <message>
-        <source>Lang</source>
-        <translation type="obsolete">語系</translation>
+        <source>Match prefs</source>
+        <translation type="obsolete">Praepositiones provocationis</translation>
     </message>
     <message>
         <source>observe</source>
-        <translation type="obsolete">觀局</translation>
+        <translation type="obsolete">spectare</translation>
     </message>
     <message>
         <source>stats W</source>
-        <translation type="obsolete">白方描述</translation>
+        <translation type="obsolete">stat A</translation>
     </message>
     <message>
         <source>stats B</source>
-        <translation type="obsolete">黑方描述</translation>
+        <translation type="obsolete">stat N</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">新對局</translation>
+        <translation type="obsolete">Nova Certatio</translation>
     </message>
     <message>
         <source>Teaching</source>
-        <translation type="obsolete">教學</translation>
+        <translation type="obsolete">Lectio</translation>
     </message>
     <message>
-        <source>W</source>
-        <translation type="obsolete">白</translation>
+        <source> Byoyomi Time : (</source>
+        <translation type="obsolete"> Tempus Byoyomi : (</translation>
+    </message>
+    <message>
+        <source> stones)</source>
+        <translation type="obsolete"> lapides)</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation type="obsolete">接受</translation>
+        <translation type="obsolete">Accipere</translation>
     </message>
     <message>
         <source>match</source>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">provocatio</translation>
+    </message>
+    <message>
+        <source>match within his prefs</source>
+        <translation type="obsolete">provocatio ex illius praepositionibus</translation>
     </message>
     <message>
         <source>talk</source>
-        <translation type="obsolete">交談</translation>
+        <translation type="obsolete">fabulari</translation>
     </message>
     <message>
         <source>stats</source>
-        <translation type="obsolete">描述</translation>
+        <translation type="obsolete">stat</translation>
     </message>
     <message>
         <source>stored games</source>
-        <translation type="obsolete">打掛棋局</translation>
+        <translation type="obsolete">certationes servatae</translation>
     </message>
     <message>
         <source>results</source>
-        <translation type="obsolete">結果</translation>
+        <translation type="obsolete">effectus</translation>
     </message>
     <message>
         <source>rating</source>
-        <translation type="obsolete">積分</translation>
+        <translation type="obsolete">ordo</translation>
     </message>
     <message>
         <source>observe game</source>
-        <translation type="obsolete">觀局</translation>
+        <translation type="obsolete">certationem spectare</translation>
+    </message>
+    <message>
+        <source>trail</source>
+        <translation type="obsolete">sequi</translation>
     </message>
     <message>
         <source>toggle watch list</source>
-        <translation type="obsolete">切換是否監看</translation>
+        <translation type="obsolete">index perspectorum</translation>
     </message>
     <message>
         <source>toggle exclude list</source>
-        <translation type="obsolete">切換是否排除</translation>
+        <translation type="obsolete">exclusi</translation>
     </message>
     <message>
         <source>USER NOT LOGGED IN.</source>
-        <translation type="obsolete">使用者尚未登入</translation>
+        <translation type="obsolete">NON INITUM.</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation type="obsolete">訊息*</translation>
+        <translation type="obsolete">msg*</translation>
+    </message>
+    <message>
+        <source>Shouts*</source>
+        <translation type="obsolete">Voces*</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation type="obsolete">訊息</translation>
+        <translation type="obsolete">Nuntium</translation>
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation type="obsolete">視窗大小已儲存</translation>
+        <translation type="obsolete">Amplitudo fenestrae servata.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation type="obsolete">還原視窗大小</translation>
-    </message>
-    <message>
-        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation type="obsolete">SGF (*.sgf);;MGT (*.mgt);;XML (*.xml);;所有檔案 (*)</translation>
-    </message>
-    <message>
-        <source>You did not set the Computer program path !</source>
-        <translation type="obsolete">你沒有設定電腦圍棋程式的路徑 !</translation>
+        <translation type="obsolete">Amplitudo fenestrae collecta.</translation>
     </message>
     <message>
         <source>Table of games
@@ -1078,23 +1101,23 @@ FR	free (FI), rated (I) or teach (TI) game
 (Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation type="obsolete">對局列表
+        <translation type="obsolete">Tabula certationum
 
-滑鼠右鍵進行觀局
+dextero muris specta
 
-符號說明: (依照工具列排序)
-棋桌 對局號碼
-白棋/棋力 持白者的名稱及棋力
-黑棋/棋力 持黑者的名稱及棋力
-落子 最後更新時的落子數
-路數 棋盤大小
-授子 授子數
-讓子 讓子數
-讀秒 讀秒時間
-類別 不計分 (FI), 計分棋 (I) 或 教學棋 (TI)
-觀局 最後更新時觀局人數
+Legenda: (in pittacium ordinandum murem tange)
+Id	numerus certationis
+A/AO	albi lusoris nomen atque ordo
+N/NO	nigri lusoris nomen atque ordo
+Mo	moti ut quaesivi
+Am	amplitudo tabulae
+De	detrimenta
+K	komi
+by	byoyomi
+NC	certatio non censita (NC), censita (C) aut lectio (L)
+(Sp)	spectatores ut quaesivi
 
-表單可經由更新進行重新整理</translation>
+Haec tabula a &apos;Certationem Quaerere&apos; quaesita est</translation>
     </message>
     <message>
         <source>Table of players
@@ -1138,87 +1161,71 @@ observe game	show game currently played by player
 ----
 toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
 toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation type="obsolete">棋友名單
+        <translation type="obsolete">Tabella lusorum
 
-滑鼠右鍵開啟目錄
+dextero muris indicem evoca
 
-符號說明: (依照工具列排序)
-狀態 棋友狀態:
- X...關閉對局
- !...尋求 = 正在尋求對局
- Q...消音 = 不接收系統訊息
- S...呼叫 = 無法接受呼叫
- ??...未知 - 棋友在前次更新名單之後進入
-名稱 棋友名稱
-棋力 棋友棋力
-對局 正在進行的棋局 (僅能看見一項)
-觀局 正在觀看的棋局 (僅能看見一項)
-閒置 閒置時間
-X 私人訊息:
- M..自己
- X..排除呼叫
- W..監看 (排序: X欄位, 棋力)
-及, 假如有棋友延伸資訊則能夠於工具盒中看見 (僅IGS):
-資訊 棋友相關資訊
-勝 棋友勝局數
-敗 棋友敗局數
-國家 棋友來源 (電子信箱)
-語言 偏好的語言
+Legenda: (pittacium ordinandum mure tange)
+Stat	statistica lusoris:
+	X...concludere
+	!...petens=certationem appetit
+	Q...quietus=nuntios systematis non accipit
+	V...voces=voces non accipit
+	??...ignota - lusor post tabellam lectam ingressus est
+nomen	nomen lusoris
+Or	ordo lusoris
+lu	ludens in certatione (una tantum ostenditur)
+sp	spectans certationem (una tantum ostenditur)
+Immotus	tempus immotus
+X	informationes:
+	E..ego
+	X..voces non accipit
+	S..spectatum (ordinare: X, deinde Or)
+atque, si informationes additiciae excitatae sunt (&quot;Toolbox&quot;, in IGS tantum):
+	Nota..lusoris nota
+	Vicit..victoriae lusoris
+	Victum..clades lusoris
+	Natio..natales lusoris (ex inscriptione electronica)
+	lingua..lingua electa
 
-此項目可由 &apos;重新整理使用者&apos; 更新
+Haec tabula a &apos;Lusores quaerere&apos; quaesita est
 
-目錄項 (右鍵):
-對局 要求對局 (對話框)
-交談 與棋友交談 (標籤)
+Index (dextero muris):
+provocatio	certationem petit (dialogus viderit)
+fabulari	lusore fabularis (pittacium viderit)
 ----
-描述 顯示棋友描述
-打掛 顯示打掛棋局
-結果 顯示對局結果
-等級 顯示等級 (僅NNGS/IGS)
-觀局 顯示棋友正在進行的對局
+stat	statistica lusoris ostendit
+certationes servatae	certationes servatas ostendit
+effectus	effectus ostendit
+ordo	ordinem ostendit (NNGS/IGS tantum)
+certationem spectare	In qua ludit certationem ostendit
 ----
-切換監看名單 加入或移除棋友於監看名單 - 標示 &apos;W&apos; 符號於 &apos;X&apos; 欄位; 已開啟登入離線時播放音效
-切換排除名單 相似於監看 - 標示 &apos;X&apos; 符號; 棋友的呼叫將不會顯示</translation>
+lusores perspecti	lusorem in indicem perspectorum addicit aut ex indice amovet - &apos;W&apos; in &apos;X&apos; regione creat; sonos ingredientibus/discedentibus excitat
+exclusi	similis indici perspectorum - &apos;X&apos; creat; voces lusoris non videbuntur</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation type="obsolete">狀態列
+        <translation type="obsolete">Status
 
-啟用或停用狀態列</translation>
+Regulam status  excitat aut extinguit.</translation>
     </message>
     <message>
-        <source>Shouts*</source>
-        <translation type="obsolete">公眾*</translation>
+        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="obsolete">Plicae SGF (*.sgf);;Plicae MGT (*.mgt);;Plicae XML (*.xml);;Omnia (*)</translation>
+    </message>
+    <message>
+        <source>You did not set the Computer program path !</source>
+        <translation type="obsolete">Index plicarum programmatis Computatri non impositus !</translation>
     </message>
     <message>
         <source>rooms left</source>
-        <translation type="obsolete">棋室置左</translation>
+        <translation type="obsolete">camerae reliquae</translation>
     </message>
     <message>
         <source>Room </source>
-        <translation type="obsolete">棋室</translation>
-    </message>
-    <message>
-        <source> Byoyomi Time : (</source>
-        <translation type="obsolete"> 讀秒時間 : (</translation>
-    </message>
-    <message>
-        <source> stones)</source>
-        <translation type="obsolete"> 落子)</translation>
-    </message>
-    <message>
-        <source>Match prefs</source>
-        <translation type="obsolete">對局偏好</translation>
-    </message>
-    <message>
-        <source>match within his prefs</source>
-        <translation type="obsolete">使用他的對局偏好</translation>
-    </message>
-    <message>
-        <source>trail</source>
-        <translation type="obsolete">拖曳</translation>
+        <translation type="obsolete">Camera </translation>
     </message>
 </context>
 <context>
@@ -1229,7 +1236,7 @@ Enables/disables the statusbar.</source>
     </message>
     <message>
         <source>Players</source>
-        <translation type="obsolete">棋友</translation>
+        <translation type="obsolete">Lusores</translation>
     </message>
     <message>
         <source>1p-9p</source>
@@ -1305,7 +1312,7 @@ Enables/disables the statusbar.</source>
     </message>
     <message>
         <source>9k</source>
-        <translation type="obsolete">10k</translation>
+        <translation type="obsolete">9k</translation>
     </message>
     <message>
         <source>10k</source>
@@ -1393,105 +1400,164 @@ Enables/disables the statusbar.</source>
     </message>
     <message>
         <source>Select players rank boundaries</source>
-        <translation type="obsolete">選擇棋友棋力範圍</translation>
+        <translation type="obsolete">Limites ordinum lusorum eligere</translation>
     </message>
     <message>
         <source>Select players ranks boundaries
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</source>
-        <translation type="obsolete">選擇棋友棋力範圍
+        <translation type="obsolete">Limites ordinum lusorum eligere
 
-選擇你想於棋友列表中顯示的棋友棋力範圍
-將會於重新整理棋友列表之後顯示</translation>
+Ex his indicibus ordines lusorum conspicendorum indice elige
+Post indicem lusorum quaesitum efficietur.</translation>
     </message>
     <message>
         <source>open</source>
-        <translation type="obsolete">套用到名單</translation>
+        <translation type="obsolete">accipientes</translation>
     </message>
     <message>
         <source>toggle for displaying only open players</source>
-        <translation type="obsolete">切換顯示棋力範圍內的棋友</translation>
+        <translation type="obsolete">lusores accipientes solos ostendere</translation>
     </message>
     <message>
         <source>Open players
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</source>
-        <translation type="obsolete">切換顯示棋力範圍內的棋友
+        <translation type="obsolete">Lusores accipientes
 
-點選此對話方塊之後將會套用你想要於棋友列表中顯示的棋友棋力範圍
-(顯示全部棋友不用選取)
-
-將會於重新整理棋友列表之後顯示</translation>
+Excita ut lusores accipientes tantum ostendantur (extingue ut omnes).
+Post indicem lusorum quaesitum efficietur.</translation>
+    </message>
+    <message>
+        <source>Rooms*</source>
+        <translation type="obsolete">Camerae*</translation>
     </message>
     <message>
         <source>Msg*</source>
-        <translation type="obsolete">訊息*</translation>
+        <translation type="obsolete">Nuntii*</translation>
     </message>
     <message>
         <source>Close all talk tabs</source>
-        <translation type="obsolete">關閉所有交談頁籤</translation>
+        <translation type="obsolete">Pittacia colloquii omnia concludit</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">Certationes</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation type="obsolete">往來於伺服器的重要訊息</translation>
+        <translation type="obsolete">nuntii ad/a moderatrum/o</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="obsolete">檔案(&amp;F)</translation>
+        <translation type="obsolete">&amp;Plica</translation>
     </message>
     <message>
         <source>&amp;Connections</source>
-        <translation type="obsolete">連線(&amp;C)</translation>
+        <translation type="obsolete">Cone&amp;xi</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation type="obsolete">設定(&amp;S)</translation>
+        <translation type="obsolete">Praepo&amp;sitiones</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="obsolete">檢視(&amp;V)</translation>
+        <translation type="obsolete">&amp;Aspectus</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="obsolete">協助(&amp;H)</translation>
+        <translation type="obsolete">&amp;Enchiridion</translation>
     </message>
     <message>
-        <source>Tools</source>
-        <translation type="obsolete">工具列</translation>
+        <source>main toolbar</source>
+        <translation type="obsolete">regula princeps</translation>
     </message>
     <message>
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
-        <translation type="obsolete">連線
+        <translation type="obsolete">Conectere
 
-自選擇的伺服器連線或斷線</translation>
+Moderatrum Gois conectit/disconectit.</translation>
+    </message>
+    <message>
+        <source>choose server</source>
+        <translation type="obsolete">moderatrum eligere</translation>
     </message>
     <message>
         <source>chose Go server to connect to or use &apos;Preferences&apos; to add/change a Go server entry</source>
-        <translation type="obsolete">選擇伺服器連線或使用&quot;偏好設定&quot;進行新增或修改伺服器項目</translation>
+        <translation type="obsolete">moderatrum Gois conectendum eligit aut &apos;Praepositiones&apos; age ad moderatrum addicendum/corrigendum</translation>
+    </message>
+    <message>
+        <source>Seek game</source>
+        <translation type="obsolete">Certationem quaerere</translation>
+    </message>
+    <message>
+        <source>Seek game
+
+Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
+The server will automatically launch a game against an opponent with matching settings.</source>
+        <translation type="obsolete">Certationem petere
+
+Hunc malleolum tange ut certatio petatur selectis tempore (in indice erumpente) et comprehensione detrimentorum (in tabula iuxta).</translation>
+    </message>
+    <message>
+        <source>even</source>
+        <translation type="obsolete">par</translation>
+    </message>
+    <message>
+        <source>within 2 stones</source>
+        <translation type="obsolete">intra lapides II</translation>
+    </message>
+    <message>
+        <source>within 5 stones</source>
+        <translation type="obsolete">intra lapides V</translation>
+    </message>
+    <message>
+        <source>anyone</source>
+        <translation type="obsolete">omnes</translation>
+    </message>
+    <message>
+        <source>same or stronger</source>
+        <translation type="obsolete">par vel superior</translation>
+    </message>
+    <message>
+        <source>same or weaker</source>
+        <translation type="obsolete">par vel inferior</translation>
+    </message>
+    <message>
+        <source>Set the handicap range you want for seeking games</source>
+        <translation type="obsolete">Comprehensionem detrimentorum certationum quaerendarum imponit</translation>
+    </message>
+    <message>
+        <source>handicap range
+
+Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
+        <translation type="obsolete">comprehensio detrimentorum
+
+Comprehensionem detrimentorum certationum quaerendarum imponit. &apos;quaerere&apos; vise</translation>
+    </message>
+    <message>
+        <source>user defined toolbar</source>
+        <translation type="obsolete">regula utentis</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="obsolete">開啟</translation>
+        <translation type="obsolete">Aperire</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation type="obsolete">開啟(&amp;O)...</translation>
+        <translation type="obsolete">&amp;Aperire...</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation type="obsolete">開啟
+        <translation type="obsolete">Aperire
 
-開啟 SGF 棋譜案</translation>
+Plicam sgf aperit.</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
@@ -1499,23 +1565,23 @@ Open a sgf file.</source>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="obsolete">使用者手冊</translation>
+        <translation type="obsolete">Enchiridion</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="obsolete">使用者手冊(&amp;M)</translation>
+        <translation type="obsolete">E&amp;nchiridion</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation type="obsolete">開啟手冊</translation>
+        <translation type="obsolete">Enchiridion aperit</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation type="obsolete">協助
+        <translation type="obsolete">Enchiridion
 
-開啟本程式的手冊.</translation>
+Enchiridion programmatis aperit.</translation>
     </message>
     <message>
         <source>F1</source>
@@ -1523,87 +1589,79 @@ Opens the manual of the application.</source>
     </message>
     <message>
         <source>About</source>
-        <translation type="obsolete">關於</translation>
+        <translation type="obsolete">De qGo</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation type="obsolete">關於(&amp;A)</translation>
+        <translation type="obsolete">Circ&amp;a</translation>
     </message>
     <message>
         <source>About the application.</source>
-        <translation type="obsolete">關於此程式</translation>
+        <translation type="obsolete">De programmate.</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation type="obsolete">關於
+        <translation type="obsolete">De programmate
 
-關於此程式</translation>
+De programmate.</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="obsolete">斷線</translation>
+        <translation type="obsolete">Disconectere</translation>
     </message>
     <message>
         <source>&amp;Disconnect</source>
-        <translation type="obsolete">斷線(&amp;D)</translation>
+        <translation type="obsolete">&amp;Disconectere</translation>
     </message>
     <message>
         <source>Disconnect from server</source>
-        <translation type="obsolete">從伺服器斷線</translation>
+        <translation type="obsolete">Moderatrum disconectere</translation>
     </message>
     <message>
         <source>Looking</source>
-        <translation type="obsolete">尋求對局</translation>
+        <translation type="obsolete">Petens</translation>
     </message>
     <message>
         <source>&amp;Looking</source>
-        <translation type="obsolete">尋求對局(&amp;L)</translation>
+        <translation type="obsolete">&amp;Petens</translation>
     </message>
     <message>
         <source>toggles looking for matches</source>
-        <translation type="obsolete">切換是否尋求對局</translation>
+        <translation type="obsolete">certationem petens</translation>
     </message>
     <message>
         <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &apos;!&apos; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &apos;X&apos;)!</source>
-        <translation type="obsolete">假如點選之後你將尋求對局, 這代表你準備進行對局. 在重新整理之後棋友列表會出線 ! 標示指示正在尋求對局. 點選這個選取方塊切換模式. 假如你正尋求對局而你點選. 則, 伺服器設定為接受對局(在沒有 &apos;X&apos; 情況之下)!</translation>
+        <translation type="obsolete">Excita ut certationes petas, id est ad ludere paratus es. Post indicem lusorum quaesitum signo &apos;!&apos; petentes notantur. Murem tange ut modus commutetur. Petens accipens quoque est. Itaque moderatrum accipientem notat (non &apos;X&apos;)!</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation type="obsolete">接受對局(&amp;O)</translation>
+        <translation type="obsolete">&amp;Accipiens</translation>
     </message>
     <message>
         <source>toggles open for matches</source>
-        <translation type="obsolete">切換是否接受對局</translation>
+        <translation type="obsolete">certationes accipiens</translation>
     </message>
     <message>
         <source>If checked you are open for matches. After refreshing the player table having a &apos;X&apos; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
-        <translation type="obsolete">假如在你開啟接受對局之後按下。重新整理之後棋友列中將會有 &apos;X&apos; 符號，代表不接受邀局。點選此按鈕進行切換。</translation>
+        <translation type="obsolete">Excita ut accipiens notaris. Post indicem lusorum quaesitum signum &apos;X&apos; NON accipientes notat. Murem tange ut modus commutetur.</translation>
     </message>
     <message>
         <source>Play with program</source>
-        <translation type="obsolete">和電腦對戰</translation>
+        <translation type="obsolete">Contra programma ludere</translation>
     </message>
     <message>
         <source>&amp;Play with program</source>
-        <translation type="obsolete">和電腦對戰(&amp;P)</translation>
-    </message>
-    <message>
-        <source>Menubar
-
-Enables/disables the menubar.</source>
-        <translation type="obsolete">功能表列
-
-啟用或停用 功能表列</translation>
+        <translation type="obsolete">Contra &amp;programma ludere</translation>
     </message>
     <message>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation type="obsolete">和電腦對戰
+        <translation type="obsolete">Cum programmate ludere
 
-設定與 qGo 對局時的程式 (使用 GTP 如 GNUGO)</translation>
+Contra Go programma in GTP instructum (e.g. GNUGO) ludis</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
@@ -1611,31 +1669,31 @@ Sets a playing session with a pGo program using GTP (like GNUGO)</source>
     </message>
     <message>
         <source>Refresh players</source>
-        <translation type="obsolete">更新棋友</translation>
+        <translation type="obsolete">Lusores quaerere</translation>
     </message>
     <message>
         <source>Get new players table from server</source>
-        <translation type="obsolete">由伺服器取得新棋友名單</translation>
+        <translation type="obsolete">Novum indicem lusorum e moderatro petere</translation>
     </message>
     <message>
         <source>Refresh Games</source>
-        <translation type="obsolete">更新對局</translation>
+        <translation type="obsolete">Certationes Quaerere</translation>
     </message>
     <message>
         <source>Get new games table from server</source>
-        <translation type="obsolete">由伺服器取得新對局列表</translation>
+        <translation type="obsolete">Novum indicem certationum e moderatro petere</translation>
     </message>
     <message>
         <source>Quiet</source>
-        <translation type="obsolete">消音</translation>
+        <translation type="obsolete">Quietus</translation>
     </message>
     <message>
         <source>&amp;Quiet</source>
-        <translation type="obsolete">消音(&amp;Q)</translation>
+        <translation type="obsolete">&amp;Quietus</translation>
     </message>
     <message>
         <source>toggles system messages</source>
-        <translation type="obsolete">切換消音模式</translation>
+        <translation type="obsolete">nuntii systematis</translation>
     </message>
     <message>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
@@ -1643,39 +1701,39 @@ Sets a playing session with a pGo program using GTP (like GNUGO)</source>
 Note : some features cannot work if set to quiet (checked box):
 	- sound when watched players enter/leave
 	- update of player/gamestable</source>
-        <translation type="obsolete">點選後你將不會接收系統訊息, 這代表你不會收到棋友的上下線及對局等資訊. 點選這個按鈕切換模式. 消音指示為 &apos;Q&apos; 於棋友表.
+        <translation type="obsolete">Excita ne nuntios systematis accipere, videlicet de lusoribus conectentibus/disconectentibus et de certationibus inceptis/confectis et ceteris non doctus eris. Murem tange ut modum commutare. In tabula lusorum quietus signo &apos;Q&apos; notatur.
 
-註 : 某些功能於消音無法作業 (對話方塊已勾選):
- - 棋友登入或離線播放音效
- - 更新棋友及對局表</translation>
+Nota: si modus quietus excitatur aliqua non movebuntur:
+	- soni lusoribus perspectis ingredientibus/discedentibus
+	- quaerere lusorum/certationum</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation type="obsolete">連線</translation>
+        <translation type="obsolete">Conectere</translation>
     </message>
     <message>
         <source>&amp;Connect</source>
-        <translation type="obsolete">連線(&amp;C)</translation>
+        <translation type="obsolete">&amp;Conectere</translation>
     </message>
     <message>
         <source>Connects to the server</source>
-        <translation type="obsolete">連線到伺服器</translation>
+        <translation type="obsolete">Moderatrum conectere</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation type="obsolete">偏好設定</translation>
+        <translation type="obsolete">Praepositiones</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation type="obsolete">編輯偏好設定</translation>
+        <translation type="obsolete">Praepositiones corrigit</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation type="obsolete">偏好設定
+        <translation type="obsolete">Praepositiones
 
-編緝程式偏好設定</translation>
+Praepositiones corrigit.</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -1683,47 +1741,47 @@ Edit the applications preferences.</source>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="obsolete">離開</translation>
+        <translation type="obsolete">Exit</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="obsolete">離開(&amp;X)</translation>
+        <translation type="obsolete">E&amp;xit</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation type="obsolete">離開本程式</translation>
+        <translation type="obsolete">Programma concludit</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation type="obsolete">離開
+        <translation type="obsolete">Exit
 
-離開本程式.</translation>
+Programma concludit.</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="obsolete">Ctrl+Q</translation>
+        <translation type="obsolete">Ctrl+X</translation>
     </message>
     <message>
         <source>New Board 19x19</source>
-        <translation type="obsolete">新棋盤 - 19路</translation>
+        <translation type="obsolete">Tabula Nova XIX*XIX</translation>
     </message>
     <message>
         <source>New &amp;Board 19x19</source>
-        <translation type="obsolete">新棋盤 - 19路(&amp;B)</translation>
+        <translation type="obsolete">Ta&amp;bula Nova XIX*XIX</translation>
     </message>
     <message>
         <source>Creates a new board with size 19x19</source>
-        <translation type="obsolete">新棋盤 - 19路</translation>
+        <translation type="obsolete">Tabulam novam XIX latere creat</translation>
     </message>
     <message>
         <source>New
 
 Creates a new 19x19 board.</source>
-        <translation type="obsolete">新增
+        <translation type="obsolete">Nova
 
-新棋盤 19路.</translation>
+Tabulam novam XIX latere creat.</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
@@ -1731,43 +1789,43 @@ Creates a new 19x19 board.</source>
     </message>
     <message>
         <source>ToolBar</source>
-        <translation type="obsolete">工具列</translation>
+        <translation type="obsolete">Regula</translation>
     </message>
     <message>
         <source>&amp;ToolBar</source>
-        <translation type="obsolete">工具列(&amp;T)</translation>
+        <translation type="obsolete">&amp;Regula</translation>
     </message>
     <message>
         <source>Enables/disables the toolbar</source>
-        <translation type="obsolete">啟用或停用 工具列</translation>
+        <translation type="obsolete">Regulam instrumentorum excitat aut extinguit</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
-        <translation type="obsolete">巡覽工具列
+        <translation type="obsolete">Regula navigationis
 
-啟用或停用 工具列</translation>
+Regulam navigationis  excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Edit servers</source>
-        <translation type="obsolete">編輯伺服器</translation>
+        <translation type="obsolete">Moderatra corrigere</translation>
     </message>
     <message>
         <source>&amp;Edit servers</source>
-        <translation type="obsolete">編輯伺服器(&amp;E)</translation>
+        <translation type="obsolete">Moderatra corrig&amp;ere</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation type="obsolete">功能表列</translation>
+        <translation type="obsolete">Index</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation type="obsolete">功能表列(&amp;M)</translation>
+        <translation type="obsolete">I&amp;ndex</translation>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation type="obsolete">啟用或停用功能表列</translation>
+        <translation type="obsolete">Regulam indicis excitat aut extinguit</translation>
     </message>
     <message>
         <source>F7</source>
@@ -1775,173 +1833,101 @@ Enables/disables the toolbar.</source>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation type="obsolete">狀態列</translation>
+        <translation type="obsolete">Status</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation type="obsolete">狀態列(&amp;S)</translation>
+        <translation type="obsolete">&amp;Status</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation type="obsolete">啟用或停用狀態列</translation>
+        <translation type="obsolete">Regulam status excitat aut extinguit</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation type="obsolete">狀態列
-
-啟用或停用 狀態列</translation>
+        <translation type="obsolete">Regulam status excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="obsolete">音效</translation>
+        <translation type="obsolete">Sonus</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation type="obsolete">音效(&amp;S)</translation>
+        <translation type="obsolete">&amp;Sonus</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation type="obsolete">短訊息音效可用</translation>
+        <translation type="obsolete">Nuntius brevis de sono</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation type="obsolete">音效資訊
+        <translation type="obsolete">De Sono
 
-檢視訊息框有關於音效的短訊息註解</translation>
+Thecam cum nota de sono.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation type="obsolete">關於 QT</translation>
+        <translation type="obsolete">De Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation type="obsolete">關於 &amp;QT</translation>
+        <translation type="obsolete">De &amp;Qt</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation type="obsolete">關於 QT
+        <translation type="obsolete">De Qt
 
-關於 QT</translation>
+De Qt.</translation>
     </message>
     <message>
         <source>New Board</source>
-        <translation type="obsolete">新棋盤</translation>
+        <translation type="obsolete">Nova Tabula</translation>
     </message>
     <message>
         <source>&amp;New Board</source>
-        <translation type="obsolete">新棋盤(&amp;N)</translation>
+        <translation type="obsolete">&amp;Nova Tabula</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation type="obsolete">新棋盤</translation>
+        <translation type="obsolete">Tabulam novam creat</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
         <translation type="obsolete">Ctrl+N</translation>
     </message>
     <message>
-        <source>Toolbar_2</source>
-        <translation type="obsolete"> 自訂工具列</translation>
-    </message>
-    <message>
         <source>View user toolbar</source>
-        <translation type="obsolete">檢視自訂工具列</translation>
+        <translation type="obsolete">Regulam utentis ostendere</translation>
     </message>
     <message>
         <source>View &amp;user toolbar</source>
-        <translation type="obsolete">檢視自訂工具列(&amp;U)</translation>
-    </message>
-    <message>
-        <source>Rooms*</source>
-        <translation type="obsolete">棋廳*</translation>
-    </message>
-    <message>
-        <source>main toolbar</source>
-        <translation type="obsolete">主要工具列</translation>
-    </message>
-    <message>
-        <source>choose server</source>
-        <translation type="obsolete">選擇伺服器</translation>
-    </message>
-    <message>
-        <source>Seek game</source>
-        <translation type="obsolete">自動尋找對局</translation>
-    </message>
-    <message>
-        <source>Seek game
-
-Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
-The server will automatically launch a game against an opponent with matching settings.</source>
-        <translation type="obsolete">自動尋找對局
-
-使用此按鈕來&apos; 自動尋找對局&apos; ，給予時間設定(跳出功能表)，及授子範圍(列表旁)
-伺服器將會自動開始一個對局且對方棋手符合對局設定。</translation>
-    </message>
-    <message>
-        <source>even</source>
-        <translation type="obsolete">棋力相同</translation>
-    </message>
-    <message>
-        <source>within 2 stones</source>
-        <translation type="obsolete">授2子內</translation>
-    </message>
-    <message>
-        <source>within 5 stones</source>
-        <translation type="obsolete">授5子內</translation>
-    </message>
-    <message>
-        <source>anyone</source>
-        <translation type="obsolete">任何棋友</translation>
-    </message>
-    <message>
-        <source>same or stronger</source>
-        <translation type="obsolete">相同或更強</translation>
-    </message>
-    <message>
-        <source>same or weaker</source>
-        <translation type="obsolete">相同或更弱</translation>
-    </message>
-    <message>
-        <source>Set the handicap range you want for seeking games</source>
-        <translation type="obsolete">設定你在自動尋找對局時的授子數範圍</translation>
-    </message>
-    <message>
-        <source>handicap range
-
-Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
-        <translation type="obsolete">授子範圍
-
-設定當自動搜尋對局時你希望的授子數範圍。 查看 &apos;seek&apos; 按鈕取得更多訊息。</translation>
-    </message>
-    <message>
-        <source>user defined toolbar</source>
-        <translation type="obsolete">使用者定義工具列</translation>
+        <translation type="obsolete">&amp;Regulam utentis ostendere</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation type="obsolete">動作</translation>
+        <translation type="obsolete">Actio</translation>
     </message>
     <message>
         <source>New version message</source>
-        <translation type="obsolete">新版本訊息</translation>
+        <translation type="obsolete">Nuntium novi programmatis</translation>
     </message>
     <message>
         <source>shows new version message</source>
-        <translation type="obsolete">顯示新版本訊息</translation>
+        <translation type="obsolete">Nuntium novi programmatis ostendit</translation>
     </message>
     <message>
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
-        <translation type="obsolete">新版本訊息
+        <translation type="obsolete">nuntium novi programmatis
 
-使用顯示執行新版本訊息方塊</translation>
+Nuntii thecam, quae novo programmate primum operato apparet, ostendit</translation>
     </message>
 </context>
 <context>
@@ -1996,7 +1982,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="28"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation type="unfinished">Tollere</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="35"/>
@@ -2106,7 +2092,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="243"/>
         <source>Games</source>
-        <translation type="unfinished">對局</translation>
+        <translation type="unfinished">Certationes</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="248"/>
@@ -2468,7 +2454,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="621"/>
         <source>Teaching</source>
-        <translation type="unfinished">教學</translation>
+        <translation type="unfinished">Lectio</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="628"/>
@@ -2598,12 +2584,12 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="1025"/>
         <source>Name:</source>
-        <translation type="unfinished">名稱:</translation>
+        <translation type="unfinished">Nomen:</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="1047"/>
         <source>Password:</source>
-        <translation type="unfinished">密碼:</translation>
+        <translation type="unfinished">Signum:</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="1057"/>
@@ -2614,32 +2600,32 @@ Using default</source>
 <context>
     <name>CyberOroConnection</name>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3303"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3232"/>
         <source>Server full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3303"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3232"/>
         <source>Server full, try another</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6094"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6037"/>
         <source>Rematch declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6094"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6037"/>
         <source>%1 has declined rematch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8239"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8093"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8239"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8093"/>
         <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2648,7 +2634,7 @@ Using default</source>
     <name>Debug_Dialog</name>
     <message>
         <source>Debug</source>
-        <translation type="obsolete">除錯</translation>
+        <translation type="obsolete">Emendatio</translation>
     </message>
 </context>
 <context>
@@ -2657,13 +2643,13 @@ Using default</source>
         <location filename="../network/friendslistdialog.cpp" line="110"/>
         <location filename="../network/friendslistdialog.cpp" line="132"/>
         <source>Match</source>
-        <translation type="unfinished">對局</translation>
+        <translation type="unfinished">Provocatio</translation>
     </message>
     <message>
         <location filename="../network/friendslistdialog.cpp" line="111"/>
         <location filename="../network/friendslistdialog.cpp" line="133"/>
         <source>Talk</source>
-        <translation type="unfinished">交談</translation>
+        <translation type="unfinished">Fabulari</translation>
     </message>
     <message>
         <location filename="../network/friendslistdialog.cpp" line="113"/>
@@ -2721,11 +2707,11 @@ Using default</source>
     <name>GameDialog</name>
     <message>
         <source>you</source>
-        <translation type="obsolete">你</translation>
+        <translation type="obsolete">tu</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="obsolete">是</translation>
+        <translation type="obsolete">sic</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.cpp" line="101"/>
@@ -2747,19 +2733,19 @@ Using default</source>
         <location filename="../network/gamedialog.cpp" line="525"/>
         <location filename="../network/gamedialog.cpp" line="624"/>
         <location filename="../network/gamedialog.cpp" line="735"/>
-        <location filename="../network/gamedialog.cpp" line="757"/>
-        <location filename="../network/gamedialog.cpp" line="795"/>
-        <location filename="../network/gamedialog.cpp" line="815"/>
-        <location filename="../network/gamedialog.cpp" line="821"/>
+        <location filename="../network/gamedialog.cpp" line="754"/>
+        <location filename="../network/gamedialog.cpp" line="792"/>
+        <location filename="../network/gamedialog.cpp" line="812"/>
+        <location filename="../network/gamedialog.cpp" line="819"/>
         <location filename="../network/gamedialog.cpp" line="1233"/>
         <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
-        <translation>提出/接受</translation>
+        <translation>Praebere</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="768"/>
+        <location filename="../network/gamedialog.cpp" line="765"/>
         <source>Teaching</source>
-        <translation>教學</translation>
+        <translation>Lectio</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.cpp" line="95"/>
@@ -2781,41 +2767,41 @@ Using default</source>
         <location filename="../network/gamedialog.cpp" line="520"/>
         <location filename="../network/gamedialog.cpp" line="1240"/>
         <source>Accept</source>
-        <translation>接受</translation>
+        <translation>Accipere</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="801"/>
+        <location filename="../network/gamedialog.cpp" line="798"/>
         <source>%1 not open for matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="803"/>
+        <location filename="../network/gamedialog.cpp" line="800"/>
         <source>%1 declined the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="805"/>
+        <location filename="../network/gamedialog.cpp" line="802"/>
         <source>%1 canceled the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="807"/>
+        <location filename="../network/gamedialog.cpp" line="804"/>
         <source>%1 already playing a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="809"/>
+        <location filename="../network/gamedialog.cpp" line="806"/>
         <source>%1 does not accept direct matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="814"/>
+        <location filename="../network/gamedialog.cpp" line="811"/>
         <source>Invalid Parameters!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source> stones)</source>
-        <translation type="obsolete"> 落子)</translation>
+        <translation type="obsolete"> lapides)</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="19"/>
@@ -2892,22 +2878,22 @@ Using default</source>
     <message>
         <location filename="../network/gamedialog.ui" line="703"/>
         <source>Handicap :</source>
-        <translation type="unfinished">授子 :</translation>
+        <translation type="unfinished">Detrimenta:</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="728"/>
         <source>Nigiri</source>
-        <translation type="unfinished">猜先</translation>
+        <translation type="unfinished">Sortiri</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="735"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Albus</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="742"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niger</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="752"/>
@@ -2927,7 +2913,7 @@ Using default</source>
     <message>
         <location filename="../network/gamedialog.ui" line="835"/>
         <source>Game against :</source>
-        <translation type="unfinished">對局對手:</translation>
+        <translation type="unfinished">Certatio contra:</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="863"/>
@@ -2937,7 +2923,7 @@ Using default</source>
     <message>
         <location filename="../network/gamedialog.ui" line="870"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation type="unfinished">Tollere</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="898"/>
@@ -2950,7 +2936,7 @@ Using default</source>
         <translation type="unfinished">.5</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="811"/>
+        <location filename="../network/gamedialog.cpp" line="808"/>
         <source>%1&apos;s client does not support nmatch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2959,59 +2945,59 @@ Using default</source>
     <name>GameInfoDialog</name>
     <message>
         <source>Game Information</source>
-        <translation type="obsolete">對局資訊</translation>
+        <translation type="obsolete">De Certatione</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation type="obsolete">確認(&amp;O)</translation>
+        <translation type="obsolete">&amp;Recte</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">黑方</translation>
+        <translation type="obsolete">Niger</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">白方</translation>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>Rank</source>
-        <translation type="obsolete">棋力</translation>
+        <translation type="obsolete">Ordo</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">名稱</translation>
+        <translation type="obsolete">Nomen</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
+        <translation type="obsolete">Komi:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">授子:</translation>
+        <translation type="obsolete">Detrimenta:</translation>
     </message>
     <message>
         <source>Result:</source>
-        <translation type="obsolete">結果:</translation>
+        <translation type="obsolete">Effectus:</translation>
     </message>
     <message>
         <source>Game Name:</source>
-        <translation type="obsolete">對局名稱:</translation>
+        <translation type="obsolete">Nomen Certationis:</translation>
     </message>
     <message>
         <source>Date:</source>
-        <translation type="obsolete">日期:</translation>
+        <translation type="obsolete">Dies:</translation>
     </message>
     <message>
         <source>Played at:</source>
-        <translation type="obsolete">對局於:</translation>
+        <translation type="obsolete">Lusum est in:</translation>
     </message>
     <message>
         <source>Copyright:</source>
-        <translation type="obsolete">版權:</translation>
+        <translation type="obsolete">© Ius Transcribendi:</translation>
     </message>
 </context>
 <context>
@@ -3019,47 +3005,47 @@ Using default</source>
     <message>
         <location filename="../board/gameinfo.ui" line="13"/>
         <source>Game Information</source>
-        <translation type="unfinished">對局資訊</translation>
+        <translation type="unfinished">De Certatione</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="33"/>
         <source>Game Name:</source>
-        <translation type="unfinished">對局名稱:</translation>
+        <translation type="unfinished">Nomen Certationis:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="67"/>
         <source>Result:</source>
-        <translation type="unfinished">結果:</translation>
+        <translation type="unfinished">Effectus:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="130"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Albus</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="143"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niger</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="160"/>
         <source>Name</source>
-        <translation type="unfinished">名稱</translation>
+        <translation type="unfinished">Nomen</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="183"/>
         <source>Rank</source>
-        <translation type="unfinished">棋力</translation>
+        <translation type="unfinished">Ordo</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="221"/>
         <source>Komi:</source>
-        <translation type="unfinished">讓子:</translation>
+        <translation type="unfinished">Komi:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="260"/>
         <source>Handicap:</source>
-        <translation type="unfinished">授子:</translation>
+        <translation type="unfinished">Detrimenta:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="299"/>
@@ -3069,23 +3055,23 @@ Using default</source>
     <message>
         <location filename="../board/gameinfo.ui" line="329"/>
         <source>Copyright:</source>
-        <translation type="unfinished">版權:</translation>
+        <translation type="unfinished">© Ius Transcribendi:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="353"/>
         <source>Played at:</source>
-        <translation type="unfinished">對局於:</translation>
+        <translation type="unfinished">Lusum est in:</translation>
     </message>
 </context>
 <context>
     <name>IGSConnection</name>
     <message>
         <source>...send password</source>
-        <translation type="obsolete">...傳送密碼</translation>
+        <translation type="obsolete">..signum mitte</translation>
     </message>
     <message>
         <source>Trying to connect to</source>
-        <translation type="obsolete">嘗試連線到</translation>
+        <translation type="obsolete">Conectens</translation>
     </message>
 </context>
 <context>
@@ -3168,12 +3154,12 @@ Using default</source>
     <message>
         <location filename="../network/login.ui" line="28"/>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation type="unfinished">Tollere</translation>
     </message>
     <message>
         <location filename="../network/login.ui" line="35"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Conectere</translation>
     </message>
     <message>
         <location filename="../network/login.ui" line="54"/>
@@ -3183,7 +3169,7 @@ Using default</source>
     <message>
         <location filename="../network/login.ui" line="83"/>
         <source>Password:</source>
-        <translation type="unfinished">密碼:</translation>
+        <translation type="unfinished">Signum:</translation>
     </message>
     <message>
         <location filename="../network/login.ui" line="96"/>
@@ -3195,7 +3181,7 @@ Using default</source>
     <name>MainAppWidget</name>
     <message>
         <source>MainAppWidget</source>
-        <translation type="obsolete">MinaAppWidget</translation>
+        <translation type="obsolete">MainAppWidget</translation>
     </message>
     <message>
         <source>Command line
@@ -3205,13 +3191,12 @@ Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos
 Starting with &apos;#&apos; is a internal command as if the server sent the line (without &apos;#&apos;).
 
 In order to open a window use the mouse click instead of entering the &apos;observe&apos; command.</source>
-        <translation type="obsolete">命令列
+        <translation type="obsolete">Iussum
+&lt;iussum&gt;+&lt;ENTER&gt; scribe ad moderatrum Gois mittendum. &apos;conectere&apos; utere si non conexus.
 
-輸入 &lt;命令&gt;+&lt;ENTER&gt; 傳送到伺服器. 假如未連線請先按下「連線」鈕
+Iussum incipiens cum &apos;#&apos; internum est, velut ab moderatro missum (sine &apos;#&apos;).
 
-開啟於 &apos;#&apos; 是個內部命令像是假如伺服器送出單行 (不包含 &apos;#&apos;)
-
-為了使用滑鼠點選代替輸入 &apos;observe&apos; 指令來開啟視窗.</translation>
+Ad fenestram aperendam malleolum muris tange, &apos;observe&apos; iussum scribere noli.</translation>
     </message>
 </context>
 <context>
@@ -3234,31 +3219,31 @@ FR	free (FI), rated (I) or teach (TI) game
 (Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation type="obsolete">對局列表
+        <translation type="obsolete">Tabula certationum
 
-滑鼠右鍵進行觀局
+dextero muris specta
 
-解釋符號: (依工具列順序)
-棋號 對局號碼
-白棋/棋力 持白者的名稱及棋力
-黑棋/棋力 持黑者的名稱及棋力
-落子 最後更新的落子數
-路數 棋盤大小
-授子 授子數
-讓子 讓子數
-讀秒 讀秒時間
-類別 不計分 (FI), 計分棋 (I) 或 教學棋 (TI)
-觀局 最後更新時觀局人數
+Legenda: (in pittacium ordinandum murem tange)
+Id	numerus certationis
+A/AO	albi lusoris nomen atque ordo
+N/NO	nigri lusoris nomen atque ordo
+Mo	moti ut quaesivi
+Am	amplitudo tabulae
+De	detrimenta
+K	komi
+by	byoyomi
+NC	certatio non censita (NC), censita (C) aut lectio (L)
+(Sp)	spectatores ut quaesivi
 
-此表單可經由更新重新整理</translation>
+Haec tabula a &apos;Certationem Quaerere&apos; quaesita est</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">Certationes</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation type="obsolete">往來於伺服器的重要訊息</translation>
+        <translation type="obsolete">nuntii ad/a moderatrum/o</translation>
     </message>
     <message>
         <source>Table of players
@@ -3302,82 +3287,82 @@ observe game	show game currently played by player
 ----
 toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
 toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation type="obsolete">棋友列表
+        <translation type="obsolete">Tabella lusorum
 
-滑鼠右鍵開啟目錄
+dextero muris indicem evoca
 
-解釋符號: (依照工具列排序)
-狀態 棋友狀態:
- X...關閉
- !...尋求 = 正在尋求對局
- Q...消音 = 不接收系統訊息
- S...呼叫 = 無法接受呼叫
- ??...未知 - 使用者進入在最後列表更新之後
-名稱 使用者名稱
-棋力 使用者棋力
-對局 正在對局 (只有在對局可觀看)
-觀局 正在觀局 (只有在對局可觀看)
-閒置 閒置時間
-X 私人訊息:
- M..me
- X..由呼叫中排除
- W..觀局 (排序: X 進入, 依棋力排序)
-及, 假如有棋友延伸資訊 (工具盒) 可以進行 (僅IGS):
-資訊 棋友相關資訊
-勝 棋友勝場
-敗 棋友敗場
-國家 棋友來源 (電子信箱)
-語言 偏好的語言
+Legenda: (pittacium ordinandum mure tange)
+Stat	statistica lusoris:
+	X...concludere
+	!...petens=certationem appetit
+	Q...quietus=nuntios systematis non accipit
+	V...voces=voces non accipit
+	??...ignota - lusor post tabellam lectam ingressus est
+nomen	nomen lusoris
+Or	ordo lusoris
+lu	ludens in certatione (una tantum ostenditur)
+sp	spectans certationem (una tantum ostenditur)
+Immotus	tempus immotus
+X	informationes:
+	E..ego
+	X..voces non accipit
+	S..spectatum (ordinare: X, deinde Or)
+atque, si informationes additiciae excitatae sunt (&quot;Toolbox&quot;, in IGS tantum):
+	Nota..lusoris nota
+	Vicit..victoriae lusoris
+	Victum..clades lusoris
+	Natio..natales lusoris (ex inscriptione electronica)
+	lingua..lingua electa
 
-此項目可由 &apos;重新整理使用者&apos; 更新
+Haec tabula a &apos;Lusores quaerere&apos; quaesita est
 
-目錄項 (右鍵):
-對局 要求對局 (對話框)
-交談 與棋友交談 (標籤)
+Index (dextero muris):
+provocatio	certationem petit (dialogus viderit)
+fabulari	lusore fabularis (pittacium viderit)
 ----
-資訊 顯示棋友資訊
-打掛 顯示打掛棋局
-結果 顯示結果
-積分 顯示積分 (僅NNGS/IGS)
-觀局 顯示棋友正在進行的對局
+stat	statistica lusoris ostendit
+certationes servatae	certationes servatas ostendit
+effectus	effectus ostendit
+ordo	ordinem ostendit (NNGS/IGS tantum)
+certationem spectare	In qua ludit certationem ostendit
 ----
-切換觀看列表 放置/移除 棋友 往來 觀看列表 - 按 &apos;W&apos; 進入 於 &apos;X&apos; 欄位; 進入/離開 播放音效已開啟
-切換排除列表 相似的觀局 - 按 &apos;X&apos; 進入; 棋友的呼叫無法更大顯示</translation>
+lusores perspecti	lusorem in indicem perspectorum addicit aut ex indice amovet - &apos;W&apos; in &apos;X&apos; regione creat; sonos ingredientibus/discedentibus excitat
+exclusi	similis indici perspectorum - &apos;X&apos; creat; voces lusoris non videbuntur</translation>
     </message>
     <message>
         <source>Players</source>
-        <translation type="obsolete">棋友</translation>
+        <translation type="obsolete">Lusores</translation>
     </message>
     <message>
         <source>Log online-time and name of arriving message</source>
-        <translation type="obsolete">記錄時間及訊息</translation>
+        <translation type="obsolete">Tempus conexi et nomines nuntiorum perventorum adnotare</translation>
     </message>
     <message>
         <source>Close all talk tabs</source>
-        <translation type="obsolete">關閉所有交談頁籤</translation>
+        <translation type="obsolete">Pittacia dialogi omnia concludere</translation>
     </message>
     <message>
         <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation type="obsolete">關閉所有標籤包含棋友名稱(未取得&apos;*&apos;). 訊息不會被刪除. 假如你想觀看點選右鍵於棋友名稱然後選擇交談 (像是 &apos;#24 *name*&apos;)</translation>
+        <translation type="obsolete">Pittacia nomine lusoris (sine &apos;*&apos;) inscripta omnia concludit. Nuntii non amovebuntur. Dexterum muris super nominem lusoris tange et fabulari elige (sicut &apos;#24 *name*&apos;) ut ab integro reverteri</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation type="obsolete">訊息*</translation>
+        <translation type="obsolete">msg*</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
         <source>Edit</source>
-        <translation type="obsolete">編輯</translation>
+        <translation type="obsolete">Corrigere</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="obsolete">完成</translation>
+        <translation type="obsolete">Perfectum</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">虛手</translation>
+        <translation type="obsolete">Omittere</translation>
     </message>
 </context>
 <context>
@@ -3395,14 +3380,14 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation type="obsolete">點選棋盤放置棋石
+        <translation type="obsolete">Lapidem colloca murem tangens in tabulam.
 
-在一般模式時, 顏色自動轉換於滑鼠左鍵進行落子
-Shift + ← 到全譜的第一手
-Shift + → 到目前變化的下一手
-在編輯模式並結束落子時, 左鍵放置黑棋, 右鍵放置白棋, 點選已存在的棋子則移除
-在編輯標示時, 左鍵設定, 右鍵移除標示. 當編輯文字標示時, shift-點選能夠自訂標示文字
-在計地模式時, 左鍵標示棋塊為死子, 右鍵標示活棋或雙活. 再次點擊則取消標示.</translation>
+Modo recto, laevo muris lapides alternis coloribus collocantur.
+Shift + laevo primum motum principis rami agit.
+Shift + dextero primum motum huius rami.
+Modo correctionis, laevo tacto niger, dextero albus lapis collocatur; supra collocatum tacto amovetur.
+Signa corrigens, laevus collocat, dexterus amovet. Litteram corrigens, shif+mure notam corrigit.
+Modo punctorum, laevus cohortem lapidum mortuam notat, dexterus vivam in seki. Murem iterum tange ad vivam revertendam.</translation>
     </message>
     <message>
         <source>0</source>
@@ -3412,25 +3397,167 @@ Shift + → 到目前變化的下一手
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation type="obsolete">捲軸最小值
+        <translation type="obsolete">Minimum trahae
 
-顯示目前對局的最小落子手數.</translation>
+Minimus motus certationis ostendendus traha.</translation>
+    </message>
+    <message>
+        <source>Navigate through the game</source>
+        <translation type="obsolete">Certationem navigare</translation>
     </message>
     <message>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation type="obsolete">巡覽落子
+        <translation type="obsolete">Ad motum navigare
 
-使用捲軸快速巡覽目前對局分支.</translation>
+In hoc ramo certationis traha celer navigas.</translation>
+    </message>
+    <message>
+        <source>000</source>
+        <translation type="obsolete">000</translation>
     </message>
     <message>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation type="obsolete">捲軸最大值
+        <translation type="obsolete">Maximum trahae
 
-顯示目前對局的最大落子手數.</translation>
+Maximus motus certationis ostendendus traha.</translation>
+    </message>
+    <message>
+        <source>Move 0</source>
+        <translation type="obsolete">Motus 0</translation>
+    </message>
+    <message>
+        <source>Move number</source>
+        <translation type="obsolete">Numerus moti</translation>
+    </message>
+    <message>
+        <source>Move number
+
+Number of the currently displayed move.</source>
+        <translation type="obsolete">Motus
+
+Numerus moti ostenti.</translation>
+    </message>
+    <message>
+        <source>Black to play</source>
+        <translation type="obsolete">Nigro ludendum est</translation>
+    </message>
+    <message>
+        <source>Player to play</source>
+        <translation type="obsolete">Ludendum est</translation>
+    </message>
+    <message>
+        <source>Player to play
+
+Indicates whether it is black&apos;s or white&apos;s turn.</source>
+        <translation type="obsolete">Ludendum est
+
+Nigro vel albo motum hunc ostendit. </translation>
+    </message>
+    <message>
+        <source>0 brothers
+0 sons</source>
+        <translation type="obsolete">0 fratres
+0 filii</translation>
+    </message>
+    <message>
+        <source>Variations</source>
+        <translation type="obsolete">Variationes</translation>
+    </message>
+    <message>
+        <source>Variations
+
+Shows the number of sons and brothers within the current node.</source>
+        <translation type="obsolete">Variationes
+
+Numerum filiorum fratrumque in hoc nodo ostendit.</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="obsolete">Quaerere</translation>
+    </message>
+    <message>
+        <source>Refresh display</source>
+        <translation type="obsolete">Scrinium quaerere</translation>
+    </message>
+    <message>
+        <source>Refresh
+
+Refresh board. Use this if you cannot see any stones on the board.</source>
+        <translation type="obsolete">Quaerere
+
+Tabulam quaerit. Age si in tabula lapides non videntur.</translation>
+    </message>
+    <message>
+        <source>Pass</source>
+        <translation type="obsolete">Omittere</translation>
+    </message>
+    <message>
+        <source>Pass move</source>
+        <translation type="obsolete">Motum omittit</translation>
+    </message>
+    <message>
+        <source>Pass
+
+Pass your turn.</source>
+        <translation type="obsolete">Omittere
+
+Motum omittit.</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="obsolete">Tollere</translation>
+    </message>
+    <message>
+        <source>Undo last move</source>
+        <translation type="obsolete">Novissimum motum tollit</translation>
+    </message>
+    <message>
+        <source>Undo
+
+Undo the opponent&apos;s last move.</source>
+        <translation type="obsolete">Tollere
+
+Novissimum motum hostis tollit.</translation>
+    </message>
+    <message>
+        <source>Adjourn</source>
+        <translation type="obsolete">Differre</translation>
+    </message>
+    <message>
+        <source>Request adjournment</source>
+        <translation type="obsolete">Dilationem petere</translation>
+    </message>
+    <message>
+        <source>Adjourn.
+
+Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
+        <translation type="obsolete">Differre.
+
+Hosti dilationem petit. Si accipit, certatio delata atque servata erit.</translation>
+    </message>
+    <message>
+        <source>Score</source>
+        <translation type="obsolete">Puncta</translation>
+    </message>
+    <message>
+        <source>RESIGN</source>
+        <translation type="obsolete">DEDITIO</translation>
+    </message>
+    <message>
+        <source>Default Loss</source>
+        <translation type="obsolete">Clades</translation>
+    </message>
+    <message>
+        <source>Resign.
+
+Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
+        <translation type="obsolete">Deditio.
+
+Deditionem facis. Hoc mure tacto cladis est. Hostis vincit. Certatio perficitur.</translation>
     </message>
     <message>
         <source>Tools tab
@@ -3438,367 +3565,198 @@ Maximum game move the slider can currently show.</source>
 N/S	normal/score tools
 E	edit tools
 TG	teach tools / game tree</source>
-        <translation type="obsolete">工具頁籤
+        <translation type="obsolete">Instrumenta
 
-一般 一般/計地 工具
-編輯 編輯工具
-教學 教學工具 / 對局變化</translation>
+R/P	recta / punctis
+C	ut corrigere
+LC	lectio / arbor certationis</translation>
     </message>
     <message>
         <source>NS</source>
-        <translation type="obsolete">一般</translation>
+        <translation type="obsolete">RP</translation>
     </message>
     <message>
         <source>E</source>
-        <translation type="obsolete">編輯</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation type="obsolete">編輯工具</translation>
+        <translation type="obsolete">Corrector</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation type="obsolete">修改編輯工具</translation>
+        <translation type="obsolete">Correctorem utare</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation type="obsolete">修改編輯模式
+        <translation type="obsolete">Modum correctionis mutare
 
-在編輯時, 你能夠選擇你想要編輯的, 像是設定棋石建立標記.</translation>
+Modo correctionis quod corrigitur eligit, e.g. lapides aut signa.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation type="obsolete">方形</translation>
+        <translation type="obsolete">Quadratum</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">方形
+        <translation type="obsolete">Quadratum
 
-編輯方形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
+Signa forma quadrati in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation type="obsolete">圓形</translation>
+        <translation type="obsolete">Circulus</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">圓形
+        <translation type="obsolete">Circulus
 
-編輯圓形標示於棋盤. 左鍵設定標示, 右鍵移除</translation>
+Signa forma circuli in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="obsolete">文字</translation>
+        <translation type="obsolete">Littera</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation type="obsolete">文字
+        <translation type="obsolete">Littera
 
-數入文字標記於棋盤. 左鍵設定標示, 右鍵移除. 按下Shift讓你編輯自訂文字</translation>
+Litteram in tabulam collocat. Laevo muris collocatur, dextero amovetur. &apos;Shift&apos; tacto murem tange ut nota corrigatur.</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="obsolete">Ｘ</translation>
+        <translation type="obsolete">Crux</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Ｘ
+        <translation type="obsolete">Crux
 
-編輯Ｘ標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Signa forma crucis in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation type="obsolete">三角</translation>
+        <translation type="obsolete">Triangulum</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">三角
+        <translation type="obsolete">Triangulum
 
-編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Signa forma trianguli in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="obsolete">數字</translation>
+        <translation type="obsolete">Numerus</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">數字
+        <translation type="obsolete">Numerus
 
-編輯數字標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Numerum in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation type="obsolete">棋子</translation>
+        <translation type="obsolete">Lapis</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation type="obsolete">棋子
+        <translation type="obsolete">Lapis
 
-編輯棋子於棋盤. 左鍵設定標示, 右鍵移除.</translation>
+Lapides in tabulam collocat. Laevo nigros, dextero albos.</translation>
     </message>
     <message>
         <source>Color of next move</source>
-        <translation type="obsolete">下一手顏色</translation>
+        <translation type="obsolete">Color motus sequentis</translation>
     </message>
     <message>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation type="obsolete">顏色
+        <translation type="obsolete">Color
 
-設定下一手顏色. 假如之前沒按, 將會選用預設顏色.</translation>
+Motus sequentis colorem eligit. Color paratus eligitur si non tangitur.</translation>
     </message>
     <message>
         <source>TG</source>
-        <translation type="obsolete">教學</translation>
+        <translation type="obsolete">LC</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation type="obsolete">對手:</translation>
+        <translation type="obsolete">hostis:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation type="obsolete">-- 無 --</translation>
+        <translation type="obsolete">-- nemo --</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation type="obsolete">對手: 要求教學棋</translation>
+        <translation type="obsolete">hostis: convocatus a magistro</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation type="obsolete">對手
+        <translation type="obsolete">hostis
 
-由列表選擇的對手與許他與你進行教學局.</translation>
+hostem tecum in lectione ludentem ex indice elige.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation type="obsolete">控制</translation>
+        <translation type="obsolete">imperium</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation type="obsolete">結束控制對手落子</translation>
+        <translation type="obsolete">imperium hosti dare</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation type="obsolete">結束控制對手落子讓對方能夠落子或回手等.
+        <translation type="obsolete">imperium hosti dat ut albos nigrosque lapides poneat, etc.
 
-僅教學者能夠給予控制, 教學者及學生都能釋出控制</translation>
+Imperium dare magister solus,
+relinquere discipulus quoque.</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation type="obsolete">標示</translation>
+        <translation type="obsolete">signum</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation type="obsolete">記憶快速返回落子點</translation>
+        <translation type="obsolete">locum regressus celeris memorare</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation type="obsolete">於啟始點按下按鈕開始記憶
-之後放置且或回手釋放返回按鈕到自動開始點</translation>
-    </message>
-    <message>
-        <source>Move 0</source>
-        <translation type="obsolete">開始對局</translation>
-    </message>
-    <message>
-        <source>Move number</source>
-        <translation type="obsolete">落子數</translation>
-    </message>
-    <message>
-        <source>Move number
-
-Number of the currently displayed move.</source>
-        <translation type="obsolete">落子數
-
-顯示目前的落子手數</translation>
-    </message>
-    <message>
-        <source>Black to play</source>
-        <translation type="obsolete">輪到黑棋落子</translation>
-    </message>
-    <message>
-        <source>Player to play</source>
-        <translation type="obsolete">輪到棋友落子</translation>
-    </message>
-    <message>
-        <source>Player to play
-
-Indicates wether it is black&apos;s or white&apos;s turn.</source>
-        <translation type="obsolete">棋友落子
-
-指示無論持黑棋或白棋</translation>
-    </message>
-    <message>
-        <source>0 brothers
-0 sons</source>
-        <translation type="obsolete">0 之後變化型
-0 之前變化型</translation>
-    </message>
-    <message>
-        <source>Variations</source>
-        <translation type="obsolete">變化</translation>
-    </message>
-    <message>
-        <source>Variations
-
-Shows the number of sons and brothers within the current node.</source>
-        <translation type="obsolete">變化
-
-顯示主或支數目於現在節點.</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">更新</translation>
-    </message>
-    <message>
-        <source>Refresh display</source>
-        <translation type="obsolete">更新顯示</translation>
-    </message>
-    <message>
-        <source>Refresh
-
-Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation type="obsolete">更新
-
-更新棋盤. 請使用當你看不到棋盤上的棋子時</translation>
-    </message>
-    <message>
-        <source>Pass</source>
-        <translation type="obsolete">虛手</translation>
-    </message>
-    <message>
-        <source>Pass move</source>
-        <translation type="obsolete">虛手</translation>
-    </message>
-    <message>
-        <source>Pass
-
-Pass your turn.</source>
-        <translation type="obsolete">虛手
-
-此次落子虛手</translation>
-    </message>
-    <message>
-        <source>Undo</source>
-        <translation type="obsolete">回手</translation>
-    </message>
-    <message>
-        <source>Undo last move</source>
-        <translation type="obsolete">打回上一手</translation>
-    </message>
-    <message>
-        <source>Undo
-
-Undo the opponent&apos;s last move.</source>
-        <translation type="obsolete">回手
-
-替對手打回一手</translation>
-    </message>
-    <message>
-        <source>Adjourn</source>
-        <translation type="obsolete">打掛</translation>
-    </message>
-    <message>
-        <source>Request adjournment</source>
-        <translation type="obsolete">要求打掛</translation>
-    </message>
-    <message>
-        <source>Adjourn.
-
-Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation type="obsolete">打掛
-
-送出打掛請求給對手. 假如對方同意, 此對局將會打掛並儲存.</translation>
-    </message>
-    <message>
-        <source>Score</source>
-        <translation type="obsolete">計地</translation>
-    </message>
-    <message>
-        <source>Score/Edit</source>
-        <translation type="obsolete">計地/編輯</translation>
-    </message>
-    <message>
-        <source>Score
-
-Left click on a group to mark it as dead.
-Right click on a group to mark it alive in seki.
-Click a second time on a group to unmark it as dead or seki.
-
-Edit
-
-Click to get a new, editable offline window.</source>
-        <translation type="obsolete">計地
-
-左鍵點擊棋塊標示為死子
-右鍵點擊棋塊標示為活棋或雙活
-第二次點擊棋塊時將不標示為死活子
-
-編輯
-
-點選後開啟新視窗, 可離線編輯</translation>
-    </message>
-    <message>
-        <source>RESIGN</source>
-        <translation type="obsolete">投子</translation>
-    </message>
-    <message>
-        <source>Default Loss</source>
-        <translation type="obsolete">判定輸棋</translation>
-    </message>
-    <message>
-        <source>Resign.
-
-Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation type="obsolete">投子
-
-立即投子. 對手獲勝. 遊戲結束</translation>
-    </message>
-    <message>
-        <source>Navigate through the game</source>
-        <translation type="obsolete">逐步巡覽對局</translation>
-    </message>
-    <message>
-        <source>000</source>
-        <translation type="obsolete">000</translation>
-    </message>
-    <message>
-        <source>Player to play
-
-Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation type="obsolete">玩家進行對局
-
-表示任意持白或持黑。</translation>
+        <translation type="obsolete">malleolum in principio memorando tange.
+Post collocationes malleolum extingue ut revertitur ad principium.</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Observers</source>
-        <translation type="obsolete">觀局者</translation>
+        <translation type="obsolete">Spectatores</translation>
+    </message>
+    <message>
+        <source>Rk</source>
+        <translation type="obsolete">Or</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
@@ -3810,11 +3768,11 @@ Indicates whether it is black&apos;s or white&apos;s turn.</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">新增</translation>
+        <translation type="obsolete">Nova</translation>
     </message>
     <message>
         <source>New &amp;Board</source>
-        <translation type="obsolete">新增棋盤(&amp;B)</translation>
+        <translation type="obsolete">Nova Ta&amp;bula</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
@@ -3822,25 +3780,25 @@ Indicates whether it is black&apos;s or white&apos;s turn.</source>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation type="obsolete">建立新棋盤</translation>
+        <translation type="obsolete">Tabulam novam creat</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board.</source>
-        <translation type="obsolete">新增
+        <translation type="obsolete">Nova
 
-建立新棋盤.</translation>
+Tabulam novam creat.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1111"/>
         <location filename="../mainwindow.ui" line="1334"/>
         <source>New game</source>
-        <translation>新增對局</translation>
+        <translation>Nova certatio</translation>
     </message>
     <message>
         <source>&amp;New game</source>
-        <translation type="obsolete">新增對局(&amp;N)</translation>
+        <translation type="obsolete">&amp;Nova certatio</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
@@ -3848,50 +3806,48 @@ Creates a new board.</source>
     </message>
     <message>
         <source>Creates a new game on this board</source>
-        <translation type="obsolete">新增
-
-新增對局</translation>
+        <translation type="obsolete">Novam certationem in hac tabula creat</translation>
     </message>
     <message>
         <source>New
 
 Creates a new game on this board.</source>
-        <translation type="obsolete">新增
+        <translation type="obsolete">Nova
 
-新增對局</translation>
+Novam certationem in hac tabula creat.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="774"/>
         <source>Open</source>
-        <translation>開啟</translation>
+        <translation>Aperire</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation type="obsolete">開啟(&amp;O)</translation>
+        <translation type="obsolete">&amp;Aperire</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="obsolete">Ctrl+O</translation>
+        <translation type="obsolete">Ctrl+A</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation type="obsolete">開啟 SGF 棋譜檔案</translation>
+        <translation type="obsolete">Plicam sgf aperire</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation type="obsolete">開啟
+        <translation type="obsolete">Aperire
 
-開啟 SGF 棋譜檔案</translation>
+Plicam sgf aperit.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="obsolete">儲存</translation>
+        <translation type="obsolete">Servare</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation type="obsolete">儲存(&amp;S)</translation>
+        <translation type="obsolete">&amp;Servare</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
@@ -3899,43 +3855,43 @@ Open a sgf file.</source>
     </message>
     <message>
         <source>Save a sgf file</source>
-        <translation type="obsolete">儲存SGF棋譜</translation>
+        <translation type="obsolete">Plicam sgf servare</translation>
     </message>
     <message>
         <source>Save
 
 Save a sgf file.</source>
-        <translation type="obsolete">儲存
+        <translation type="obsolete">Servare
 
-儲存SGF棋譜</translation>
+Plicam modo SGF compositam servat.</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation type="obsolete">另存新檔</translation>
+        <translation type="obsolete">Servare Nomine</translation>
     </message>
     <message>
         <source>Save &amp;As</source>
-        <translation type="obsolete">另存新檔(&amp;A)</translation>
+        <translation type="obsolete">Serv&amp;are Nomine</translation>
     </message>
     <message>
         <source>Save a sgf file under a new name</source>
-        <translation type="obsolete">儲存 SGF 棋譜於新名稱</translation>
+        <translation type="obsolete">Plicam sgf novo nomine servat</translation>
     </message>
     <message>
         <source>Save As
 
 Save a sgf file under a new name.</source>
-        <translation type="obsolete">另存新檔
+        <translation type="obsolete">Servare Sicut
 
-儲存SGF檔案於新名稱</translation>
+Plicam sgf novo nomine servat.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="obsolete">關閉</translation>
+        <translation type="obsolete">Concludere</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="obsolete">關閉(&amp;C)</translation>
+        <translation type="obsolete">&amp;Concludere</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
@@ -3943,255 +3899,254 @@ Save a sgf file under a new name.</source>
     </message>
     <message>
         <source>Close this board</source>
-        <translation type="obsolete">關閉此棋盤</translation>
+        <translation type="obsolete">Tabulam concludere</translation>
     </message>
     <message>
         <source>Exit
 
 Close this board.</source>
-        <translation type="obsolete">離開
+        <translation type="obsolete">Exit
 
-關閉此棋盤</translation>
+Tabulam concludit.</translation>
     </message>
     <message>
         <source>Import ASCII</source>
-        <translation type="obsolete">匯入 ASCII</translation>
+        <translation type="obsolete">ASCII importare</translation>
     </message>
     <message>
         <source>Import &amp;ASCII</source>
-        <translation type="obsolete">匯入 &amp;ASCII </translation>
+        <translation type="obsolete">&amp;ASCII importare</translation>
     </message>
     <message>
         <source>Import an ASCII file as new variation</source>
-        <translation type="obsolete">匯入 ASCII 檔案新變量</translation>
+        <translation type="obsolete">ASCII plicam velut novam variationem importat</translation>
     </message>
     <message>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
-        <translation type="obsolete">匯入 ASCII
+        <translation type="obsolete">ASCII importare
 
-匯入 ASCII 檔新變量</translation>
+ASCII plicam velut novam variationem importat.</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard</source>
-        <translation type="obsolete">由剪貼簿匯入ASCII</translation>
+        <translation type="obsolete">E latibulo ASCII importare</translation>
     </message>
     <message>
         <source>Import ASCII from &amp;clipboard</source>
-        <translation type="obsolete">由剪貼簿匯入ASCII(&amp;C)</translation>
+        <translation type="obsolete">E latibulo AS&amp;CII importare</translation>
     </message>
     <message>
         <source>Import an ASCII board as new variation from the clipboard</source>
-        <translation type="obsolete">由剪貼簿匯入 ASCII 棋盤新變量</translation>
+        <translation type="obsolete">Tabulam ASCII e latibulo velut novam variationem importat</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
-        <translation type="obsolete">由剪貼簿匯入ASCII
+        <translation type="obsolete">ASCII e latibulo importare
 
-由剪貼簿匯入 ASCII 檔案於新變量.</translation>
+Plicam ASCII e latibulo velut novam variationem importat.</translation>
     </message>
     <message>
         <source>Export ASCII</source>
-        <translation type="obsolete">匯出 ASCII</translation>
+        <translation type="obsolete">ASCII exportare</translation>
     </message>
     <message>
         <source>&amp;Export ASCII</source>
-        <translation type="obsolete">匯出 ASCII(&amp;E)</translation>
+        <translation type="obsolete">ASCII &amp;exportare</translation>
     </message>
     <message>
         <source>Export current board to ASCII</source>
-        <translation type="obsolete">匯出現在盤面為 ASCII</translation>
+        <translation type="obsolete">Tabulam modo ASCII exportare</translation>
     </message>
     <message>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation type="obsolete">匯出 ASCII
+        <translation type="obsolete">ASCII Exportare
 
-匯出現在盤面為 ASCII</translation>
+Tabulam modo ASCII exportat.</translation>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation type="obsolete">由剪貼簿匯入 SGF 棋譜</translation>
+        <translation type="obsolete">SGF e latibulo importare</translation>
     </message>
     <message>
         <source>Import SGF &amp;from clipboard</source>
-        <translation type="obsolete">由剪貼簿匯入 SGF 棋譜(&amp;F)</translation>
+        <translation type="obsolete">SG&amp;F e latibulo importare</translation>
     </message>
     <message>
         <source>Import a complete game in SGF format from clipboard</source>
-        <translation type="obsolete">由剪貼簿匯入 SGF 格式完整棋局</translation>
+        <translation type="obsolete">Certationem integram modo SGF compositam e latibulo importat</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
-        <translation type="obsolete">由剪貼簿匯入 SGF 棋譜
+        <translation type="obsolete">SGF e latibulo importare
 
-由剪貼簿匯入 SGF 格式完整棋局</translation>
+Certationem integram modo SGF compositam e latibulo importat.</translation>
     </message>
     <message>
         <source>Export SGF to clipboard</source>
-        <translation type="obsolete">匯出 SGF 到剪貼簿</translation>
+        <translation type="obsolete">SGF ad latibulum exportare</translation>
     </message>
     <message>
         <source>Export SGF &amp;to clipboard</source>
-        <translation type="obsolete">匯出 SGF 到剪貼簿(&amp;T)</translation>
+        <translation type="obsolete">SGF ad la&amp;tibulum exportare</translation>
     </message>
     <message>
         <source>Export a complete game in SGF format to clipboard</source>
-        <translation type="obsolete">由剪貼簿匯出 SGF 格式完整棋局</translation>
+        <translation type="obsolete">Certationem integram modo SGF compositam ad latibulum exportat</translation>
     </message>
     <message>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
-        <translation type="obsolete">由剪貼簿匯入 SGF 棋譜
-
-由剪貼簿匯入 SGF 格式完整棋局.</translation>
+        <translation type="obsolete">SGF ad latibulum exportare
+Certationem integram modo SGF compositam ad latibulum exportat.</translation>
     </message>
     <message>
         <source>Export Image</source>
-        <translation type="obsolete">匯出圖像</translation>
+        <translation type="obsolete">Imaginem Exportare</translation>
     </message>
     <message>
         <source>Export &amp;Image</source>
-        <translation type="obsolete">匯出圖像(&amp;I)</translation>
+        <translation type="obsolete">&amp;Imaginem Exportare</translation>
     </message>
     <message>
         <source>Export current board to an image</source>
-        <translation type="obsolete">匯出現在的棋盤為圖像</translation>
+        <translation type="obsolete">Tabulam ad imaginem exportare</translation>
     </message>
     <message>
         <source>Export Image
 
 Export current board to an image.</source>
-        <translation type="obsolete">匯出圖像
+        <translation type="obsolete">Imaginem Exportare
 
-匯出現在的棋盤為圖像</translation>
+Tabulam ad imaginem exportare.</translation>
     </message>
     <message>
         <source>Export Image to clipboard</source>
-        <translation type="obsolete">匯出圖像到剪貼簿</translation>
+        <translation type="obsolete">Imaginem ad latibulum Exportare</translation>
     </message>
     <message>
         <source>E&amp;xport Image to clipboard</source>
-        <translation type="obsolete">匯出圖像到剪貼簿(&amp;X)</translation>
+        <translation type="obsolete">Imaginem ad latibulum E&amp;xportare</translation>
     </message>
     <message>
         <source>Export current board to the clipboard as image</source>
-        <translation type="obsolete">匯出現在的棋盤圖像到剪貼簿</translation>
+        <translation type="obsolete">Tabulam ad latibulum modo imagine exportat</translation>
     </message>
     <message>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
-        <translation type="obsolete">匯出圖像到剪貼簿
+        <translation type="obsolete">Export Image to clipboard
 
-匯出現在的棋盤圖像到剪貼簿</translation>
+Tabulam ad latibulum modo imagine exportat.</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="obsolete">離開</translation>
+        <translation type="obsolete">Exit</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="obsolete">離開(&amp;E)</translation>
+        <translation type="obsolete">E&amp;xit</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="obsolete">Ctrl+Q</translation>
+        <translation type="obsolete">Ctrl+X</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation type="obsolete">離開本程式</translation>
+        <translation type="obsolete">Programma concludit</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation type="obsolete">離開
+        <translation type="obsolete">Exit
 
-離開本程式</translation>
+Programma concludit.</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="obsolete">剪下</translation>
+        <translation type="obsolete">Secare</translation>
     </message>
     <message>
         <source>&amp;Cut</source>
-        <translation type="obsolete">剪下(&amp;C)</translation>
+        <translation type="obsolete">Se&amp;care</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation type="obsolete">Ctrl+X</translation>
+        <translation type="obsolete">Ctrl+C</translation>
     </message>
     <message>
         <source>Cut this and all following positions</source>
-        <translation type="obsolete">剪下此項及之後位置</translation>
+        <translation type="obsolete">Hunc et sequentes motus secat</translation>
     </message>
     <message>
         <source>Cut
 
 Cut this and all following positions.</source>
-        <translation type="obsolete">剪下
+        <translation type="obsolete">Secare
 
-剪下並之後位置.</translation>
+Hunc et sequentes motus secat.</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="obsolete">貼上</translation>
+        <translation type="obsolete">Conglutinare</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation type="obsolete">貼上(&amp;P)</translation>
+        <translation type="obsolete">Con&amp;glutinare</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="obsolete">Ctrl+P</translation>
+        <translation type="obsolete">Ctrl+V</translation>
     </message>
     <message>
         <source>Paste as son of the current move</source>
-        <translation type="obsolete">於目前落子之後貼上變化型</translation>
+        <translation type="obsolete">Pro filio huius motus conglutinat</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as son of the current move.</source>
-        <translation type="obsolete">貼上
+        <translation type="obsolete">Conglutinare
 
-於目前落子之後貼上變化型.</translation>
+Pro filio huius motus conglutinat.</translation>
     </message>
     <message>
         <source>Paste as brother</source>
-        <translation type="obsolete">貼上為之前變化型</translation>
+        <translation type="obsolete">Pro fratre conglutinare</translation>
     </message>
     <message>
         <source>Paste as &amp;brother</source>
-        <translation type="obsolete">貼上為之前變化型 (&amp;B)</translation>
+        <translation type="obsolete">Pro &amp;fratre conglutinare</translation>
     </message>
     <message>
         <source>Paste as brother of the current move</source>
-        <translation type="obsolete">於目前落子之前貼上變化型</translation>
+        <translation type="obsolete">Pro fratre huius motus conglutinat</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as brother of the current move.</source>
-        <translation type="obsolete">貼上
+        <translation type="obsolete">Conglutinare
 
-於目前落子之前貼上變化型.</translation>
+Pro fratre huius motus conglutinat.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">刪除</translation>
+        <translation type="obsolete">Delere</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="obsolete">刪除(&amp;D)</translation>
+        <translation type="obsolete">&amp;Delere</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
@@ -4199,23 +4154,23 @@ Paste as brother of the current move.</source>
     </message>
     <message>
         <source>Delete this and all following positions</source>
-        <translation type="obsolete">刪除此項及所有之後的部份</translation>
+        <translation type="obsolete">Hunc motusque sequentes delet</translation>
     </message>
     <message>
         <source>Delete
 
 Delete this and all following positions.</source>
-        <translation type="obsolete">刪除
+        <translation type="obsolete">Delere
 
-刪除此項及所有之後的部份.</translation>
+Hunc motusque sequentes delet.</translation>
     </message>
     <message>
         <source>Number Moves</source>
-        <translation type="obsolete">落子手數</translation>
+        <translation type="obsolete">Motus Numerare</translation>
     </message>
     <message>
         <source>&amp;Number Moves</source>
-        <translation type="obsolete">落子手數(&amp;N)</translation>
+        <translation type="obsolete">Motus &amp;Numerare</translation>
     </message>
     <message>
         <source>Shift+F2</source>
@@ -4223,23 +4178,23 @@ Delete this and all following positions.</source>
     </message>
     <message>
         <source>Mark all moves with the number of their turn</source>
-        <translation type="obsolete">標示所有落子手數</translation>
+        <translation type="obsolete">Motus omnes numero ordinis notat</translation>
     </message>
     <message>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
-        <translation type="obsolete">落子手數
+        <translation type="obsolete">Motus Numerare
 
-標示所有落子手數.</translation>
+Motus omnes numero ordinis notat.</translation>
     </message>
     <message>
         <source>Mark brothers</source>
-        <translation type="obsolete">標記之前變化型</translation>
+        <translation type="obsolete">Fratres notare</translation>
     </message>
     <message>
         <source>Mark &amp;brothers</source>
-        <translation type="obsolete">標記之前變化型(&amp;B)</translation>
+        <translation type="obsolete">&amp;Fratres notare</translation>
     </message>
     <message>
         <source>Shift+F3</source>
@@ -4247,23 +4202,23 @@ Mark all moves with the number of their turn.</source>
     </message>
     <message>
         <source>Mark all brothers of the current move</source>
-        <translation type="obsolete">標記目前落子所有的之前變化型</translation>
+        <translation type="obsolete">Fratres huius motus omnes notat</translation>
     </message>
     <message>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
-        <translation type="obsolete">標記之前變化型
+        <translation type="obsolete">Fratres notare
 
-標記目前落子所有的之前變化型.</translation>
+Fratres huius motus omnes notat.</translation>
     </message>
     <message>
         <source>Mark sons</source>
-        <translation type="obsolete">標記之後變化型</translation>
+        <translation type="obsolete">Filios notare</translation>
     </message>
     <message>
         <source>Mark &amp;sons</source>
-        <translation type="obsolete">標記之後變化型(&amp;S)</translation>
+        <translation type="obsolete">F&amp;ilios notare</translation>
     </message>
     <message>
         <source>Shift+F4</source>
@@ -4271,388 +4226,396 @@ Mark all brothers of the current move.</source>
     </message>
     <message>
         <source>Mark all sons of the current move</source>
-        <translation type="obsolete">標示所有目前落子之後的變化型</translation>
+        <translation type="obsolete">Filios huius motus omnes notat</translation>
     </message>
     <message>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
-        <translation type="obsolete">標記之後的變化型
+        <translation type="obsolete">Filios notare
 
-標示所有目前落子之後的變化型.</translation>
+Filios huius motus omnes notat.</translation>
     </message>
     <message>
         <source>Previous move (Left)</source>
-        <translation type="obsolete">上一手 (←)</translation>
+        <translation type="obsolete">Motus antecedens (Laeva)</translation>
     </message>
     <message>
         <source>&amp;Previous move</source>
-        <translation type="obsolete">上一手 (&amp;P)</translation>
+        <translation type="obsolete">Motus &amp;antecedens</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="obsolete">左方向鍵</translation>
+        <translation type="obsolete">Laeva</translation>
     </message>
     <message>
         <source>To previous move</source>
-        <translation type="obsolete">上一步</translation>
+        <translation type="obsolete">Ad motum antecedentem</translation>
     </message>
     <message>
         <source>Previous move
 
 Move one move backward.</source>
-        <translation type="obsolete">上一手
+        <translation type="obsolete">Motus antecedens
 
-移動落子到前一手.</translation>
+Uno moto recedere.</translation>
     </message>
     <message>
         <source>Next move (Right)</source>
-        <translation type="obsolete">下一手 (→)</translation>
+        <translation type="obsolete">Motus sequens (Dextera)</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
-        <translation type="obsolete">下一手 (&amp;N)</translation>
+        <translation type="obsolete">Motus &amp;sequens</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="obsolete">右鍵</translation>
+        <translation type="obsolete">Dextera</translation>
     </message>
     <message>
         <source>To next move</source>
-        <translation type="obsolete">下一手</translation>
+        <translation type="obsolete">Ad motum sequentem</translation>
     </message>
     <message>
         <source>Next move
 
 Move one move forward.</source>
-        <translation type="obsolete">下一手
+        <translation type="obsolete">Motus sequens
 
-移動到之後的一手.</translation>
+Uno moto incedit.</translation>
     </message>
     <message>
         <source>First move (Home)</source>
-        <translation type="obsolete">棋局開始 (Home)</translation>
+        <translation type="obsolete">Motus primus (Domus)</translation>
     </message>
     <message>
         <source>&amp;First move</source>
-        <translation type="obsolete">棋局開始(&amp;F)</translation>
+        <translation type="obsolete">Motus &amp;primus</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="obsolete">Home</translation>
+        <translation type="obsolete">Domus</translation>
     </message>
     <message>
         <source>To first move</source>
-        <translation type="obsolete">到棋局開始</translation>
+        <translation type="obsolete">Ad motum primum</translation>
     </message>
     <message>
         <source>First move
 
 Move to first move.</source>
-        <translation type="obsolete">棋局開始
+        <translation type="obsolete">Motus primus
 
-移到棋局開始.</translation>
+Motum primum adit.</translation>
     </message>
     <message>
         <source>Last move (End)</source>
-        <translation type="obsolete">最後一手 (End)</translation>
+        <translation type="obsolete">Motus novissimus (Exitus)</translation>
     </message>
     <message>
         <source>&amp;Last move</source>
-        <translation type="obsolete">最後一手 (&amp;L)</translation>
+        <translation type="obsolete">Motus &amp;novissimus</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="obsolete">End</translation>
+        <translation type="obsolete">Exitus</translation>
     </message>
     <message>
         <source>To last move</source>
-        <translation type="obsolete">到最後一手</translation>
+        <translation type="obsolete">Ad motum postremum</translation>
     </message>
     <message>
         <source>Last move
 
 Move to last move.</source>
-        <translation type="obsolete">最後一手
+        <translation type="obsolete">Motus postremus
 
-移動到最後一手.</translation>
+Motum postremum adit.</translation>
     </message>
     <message>
         <source>Previous variation (Up)</source>
-        <translation type="obsolete">之前變化 (↑)</translation>
+        <translation type="obsolete">Variatio antecedens (Supra)</translation>
     </message>
     <message>
         <source>P&amp;revious variation</source>
-        <translation type="obsolete">之前變化 (&amp;R)</translation>
+        <translation type="obsolete">Va&amp;riatio antecedens</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="obsolete">上</translation>
+        <translation type="obsolete">Supra</translation>
     </message>
     <message>
         <source>To previous variation</source>
-        <translation type="obsolete">到之前變化</translation>
+        <translation type="obsolete">Ad variationem antecedentem</translation>
     </message>
     <message>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
-        <translation type="obsolete">之前變化
+        <translation type="obsolete">Variatio antecedens
 
-移動到此落子的之前變化.</translation>
+Variationem antecedentem adit.</translation>
     </message>
     <message>
         <source>Next variation (Down)</source>
-        <translation type="obsolete">下一變量(Down)</translation>
+        <translation type="obsolete">Variatio sequens (Infra)</translation>
     </message>
     <message>
         <source>N&amp;ext variation</source>
-        <translation type="obsolete">下一變量(&amp;E)</translation>
+        <translation type="obsolete">Variatio s&amp;equens</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="obsolete">下</translation>
+        <translation type="obsolete">Infra</translation>
     </message>
     <message>
         <source>To next variation</source>
-        <translation type="obsolete">到下一變量</translation>
+        <translation type="obsolete">Ad variationem sequentem</translation>
     </message>
     <message>
         <source>Next variation
 
 Move to the next variation of this move.</source>
-        <translation type="obsolete">下一變量
+        <translation type="obsolete">Variatio sequens
 
-移到到下一變量於此落子.</translation>
+Variationem sequentem adit.</translation>
     </message>
     <message>
         <source>Main Branch</source>
-        <translation type="obsolete">主要分支</translation>
+        <translation type="obsolete">Ramus Princeps</translation>
     </message>
     <message>
         <source>&amp;Main branch</source>
-        <translation type="obsolete">主要分支(&amp;M)</translation>
+        <translation type="obsolete">&amp;Ramus Princeps</translation>
     </message>
     <message>
         <source>To main branch</source>
-        <translation type="obsolete">到主要分支</translation>
+        <translation type="obsolete">Ad ramum principem</translation>
     </message>
     <message>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
-        <translation type="obsolete">主分支
+        <translation type="obsolete">Ramus Princeps
 
-移到主分支變化開始處.</translation>
+Ramum principem adit ubi variatio incepit.</translation>
     </message>
     <message>
         <source>Variation start</source>
-        <translation type="obsolete">變化開始</translation>
+        <translation type="obsolete">Principium variationis</translation>
     </message>
     <message>
         <source>Variation &amp;start</source>
-        <translation type="obsolete">變化開始(&amp;S)</translation>
+        <translation type="obsolete">&amp;Principium variationis</translation>
     </message>
     <message>
         <source>To top of variation</source>
-        <translation type="obsolete">變化起始點</translation>
+        <translation type="obsolete">Ad principium variationis</translation>
     </message>
     <message>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
-        <translation type="obsolete">變化開始
+        <translation type="obsolete">Principium variationis
 
-移到主分支變化開始.</translation>
+Principium variationis huius rami adit.</translation>
     </message>
     <message>
         <source>Next branch</source>
-        <translation type="obsolete">下一分支</translation>
+        <translation type="obsolete">Ramus sequens</translation>
     </message>
     <message>
         <source>Next &amp;branch</source>
-        <translation type="obsolete">下一分支(&amp;B)</translation>
+        <translation type="obsolete">&amp;Ramus sequens</translation>
     </message>
     <message>
         <source>To next branch starting a variation</source>
-        <translation type="obsolete">到下一個分支變化開始</translation>
+        <translation type="obsolete">Ad ramum sequentem variationem incipientem</translation>
     </message>
     <message>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
-        <translation type="obsolete">下一分支
+        <translation type="obsolete">Ramus sequens
 
-到下一個分支變化開始.</translation>
+Ramum senquentem variationem incipientem adit.</translation>
     </message>
     <message>
         <source>Goto move</source>
-        <translation type="obsolete">前進到手數</translation>
+        <translation type="obsolete">Motum adire</translation>
     </message>
     <message>
         <source>&amp;Goto Move</source>
-        <translation type="obsolete">前進到手數(&amp;G)</translation>
+        <translation type="obsolete">&amp;Motum adire</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation type="obsolete">Ctrl+G</translation>
+        <translation type="obsolete">Ctrl+M</translation>
     </message>
     <message>
         <source>Goto a move of main branch by number</source>
-        <translation type="obsolete">前往主分支的落子手數</translation>
+        <translation type="obsolete">Motum rami principis numero adit</translation>
     </message>
     <message>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
-        <translation type="obsolete">前進到手數
+        <translation type="obsolete">Motum adit
 
-前往主分支的落子手數.</translation>
+Motum rami principis numero adit.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation type="obsolete">自動播放</translation>
+        <translation type="obsolete">Sponte ludere</translation>
     </message>
     <message>
         <source>&amp;Autoplay</source>
-        <translation type="obsolete">自動播放(&amp;A)</translation>
+        <translation type="obsolete">&amp;Sponte ludere</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation type="obsolete">Ctrl+A</translation>
+        <translation type="obsolete">Ctrl+S</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
-        <translation type="obsolete">開啟或停止 自動播放目前棋局</translation>
+        <translation type="obsolete">Hanc certationem sponte ludere incipit/concludit</translation>
     </message>
     <message>
         <source>Autoplay
 
 Start/Stop autoplaying current game.</source>
-        <translation type="obsolete">自動播放
+        <translation type="obsolete">Sponte ludere
 
-開始或停止 自動播放現在棋局.</translation>
+Hanc certationem sponte ludere incipit/concludit.</translation>
     </message>
     <message>
         <source>Empty branch</source>
-        <translation type="obsolete">空白分支</translation>
+        <translation type="obsolete">Ramus inanis</translation>
     </message>
     <message>
         <source>Empt&amp;y branch</source>
-        <translation type="obsolete">空白分支(&amp;Y)</translation>
+        <translation type="obsolete">Ramus &amp;inanis</translation>
     </message>
     <message>
         <source>Create an empty branch</source>
-        <translation type="obsolete">建立空白分支</translation>
+        <translation type="obsolete">Ramum inanem creat</translation>
     </message>
     <message>
         <source>Empty branch
 
 Create an empty branch.</source>
-        <translation type="obsolete">空白分支
+        <translation type="obsolete">Ramus inanis
 
-建立空白分支.</translation>
+Ramum inanem creat.</translation>
     </message>
     <message>
         <source>Duplicate move</source>
-        <translation type="obsolete">重製落子</translation>
+        <translation type="obsolete">Motum duplicare</translation>
     </message>
     <message>
         <source>D&amp;uplicate move</source>
-        <translation type="obsolete">重製落子(&amp;U)</translation>
+        <translation type="obsolete">Motum &amp;duplicare</translation>
     </message>
     <message>
         <source>Copies and duplicates this move</source>
-        <translation type="obsolete">複製及重製這個落子</translation>
+        <translation type="obsolete">Hunc motum transcribit atque duplicat</translation>
     </message>
     <message>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
-        <translation type="obsolete">重製落子
+        <translation type="obsolete">Motum duplicare
 
-複製及重製這個落子</translation>
+Hunc motum transcribit atque duplicat.</translation>
     </message>
     <message>
         <source>Swap variations</source>
-        <translation type="obsolete">交換變化</translation>
+        <translation type="obsolete">Variationes permutare</translation>
     </message>
     <message>
         <source>S&amp;wap variations</source>
-        <translation type="obsolete">交換變化(&amp;W)</translation>
+        <translation type="obsolete">Variationes &amp;permutare</translation>
     </message>
     <message>
         <source>Swap current move with previous variation</source>
-        <translation type="obsolete">交換目前落子於之前變化</translation>
+        <translation type="obsolete">Hanc et antecedentem variationem permutat</translation>
     </message>
     <message>
         <source>Swap variations
 
 Swap current move with previous variation.</source>
-        <translation type="obsolete">交換變化
+        <translation type="obsolete">Variationes permutare
 
-交換目前落子於之前變化.</translation>
+Hanc et antecedentem variationem permutat.</translation>
     </message>
     <message>
         <source>Previous commented move</source>
-        <translation type="obsolete">前一個落子註解</translation>
+        <translation type="obsolete">Nota antecedens</translation>
     </message>
     <message>
         <source>Previous &amp;commented move</source>
-        <translation type="obsolete">前一個落子註解(&amp;C)</translation>
+        <translation type="obsolete">Nota &amp;antecedens</translation>
     </message>
     <message>
         <source>To previous comment</source>
-        <translation type="obsolete">到前一個註解</translation>
+        <translation type="obsolete">Ad notam antecedentem</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
-        <translation type="obsolete">前一個註解
+        <translation type="obsolete">Nota antecedens
 
-移動到前一個有註解的落子</translation>
+Antecedentem motum cum nota adit</translation>
     </message>
     <message>
         <source>Next commented move</source>
-        <translation type="obsolete">下一個註解落子</translation>
+        <translation type="obsolete">Nota sequens</translation>
     </message>
     <message>
         <source>Next c&amp;ommented move</source>
-        <translation type="obsolete">下一個註解落子(&amp;O)</translation>
+        <translation type="obsolete">Nota se&amp;quens</translation>
     </message>
     <message>
         <source>To next comment</source>
-        <translation type="obsolete">到下一註解</translation>
+        <translation type="obsolete">Ad notam sequentem</translation>
+    </message>
+    <message>
+        <source>Next comment
+
+Move to the next move that has a comment</source>
+        <translation type="obsolete">Nota sequens
+
+Sequentem motum cum nota adit</translation>
     </message>
     <message>
         <source>Goto stone at clicked move</source>
-        <translation type="obsolete">前往點選棋子的落子</translation>
+        <translation type="obsolete">Ad lapidem mure tactum</translation>
     </message>
     <message>
         <source>Goto clic&amp;ked move</source>
-        <translation type="obsolete">前往已點選落子(&amp;K)</translation>
+        <translation type="obsolete">Ad &amp;lapidem mure tactum</translation>
     </message>
     <message>
         <source>To clicked move</source>
-        <translation type="obsolete">已點選落子</translation>
+        <translation type="obsolete">Ad motum mure actum</translation>
     </message>
     <message>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
-        <translation type="obsolete">點選棋盤交錯點
+        <translation type="obsolete">In locum murem tangere
 
-下棋落子於這個交錯點 (任意)</translation>
+Lapidem in hoc loco collocatum adit (si ullum)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="127"/>
         <source>Preferences</source>
-        <translation>偏好設定</translation>
+        <translation>Praepositiones</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation type="obsolete">偏好設定(&amp;P)</translation>
+        <translation type="obsolete">&amp;Praepositiones</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -4660,107 +4623,129 @@ Move to the stone played at this intersection (if any)</source>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation type="obsolete">編輯偏好設定</translation>
+        <translation type="obsolete">Praepositiones corrigit</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation type="obsolete">偏好設定
+        <translation type="obsolete">Praepositiones
 
-編輯程式偏好設定.</translation>
+Praepositiones corrigit.</translation>
     </message>
     <message>
         <source>Game Info</source>
-        <translation type="obsolete">對局資訊</translation>
+        <translation type="obsolete">De Certatione</translation>
     </message>
     <message>
         <source>&amp;Game Info</source>
-        <translation type="obsolete">對局資訊(&amp;G)</translation>
+        <translation type="obsolete">De &amp;Certatione</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="obsolete">Ctrl+I</translation>
+        <translation type="obsolete">Ctrl+C</translation>
     </message>
     <message>
         <source>Display game information</source>
-        <translation type="obsolete">顯示對局資訊</translation>
+        <translation type="obsolete">De certatione</translation>
     </message>
     <message>
         <source>Game Info
 
 Display game information.</source>
-        <translation type="obsolete">對局資訊
+        <translation type="obsolete">De Certatione
 
-顯示對局資訊.</translation>
+Informationes de certatione.</translation>
+    </message>
+    <message>
+        <source>Mute stones sound</source>
+        <translation type="obsolete">Lapides muti</translation>
+    </message>
+    <message>
+        <source>&amp;Mute stones sound</source>
+        <translation type="obsolete">Lapides &amp;muti</translation>
+    </message>
+    <message>
+        <source>Toggle stones sound on/off</source>
+        <translation type="obsolete">Lapdides mutos/sonantes commutare</translation>
+    </message>
+    <message>
+        <source>Stones sound
+
+Toggle stones sound on/off
+this toggles only the stones sounds</source>
+        <translation type="obsolete">Sonus lapidum
+
+Lapdides mutos/sonantes commutare
+sonum lapidum solum afficit</translation>
     </message>
     <message>
         <source>File toolbar</source>
-        <translation type="obsolete">檔案工具列</translation>
+        <translation type="obsolete">Regula plicarum</translation>
     </message>
     <message>
         <source>&amp;File toolbar</source>
-        <translation type="obsolete">檔案工具列(&amp;F)</translation>
+        <translation type="obsolete">&amp;Regula plicarum</translation>
     </message>
     <message>
         <source>Enables/disables the file toolbar</source>
-        <translation type="obsolete">啟用或停用 檔案工具列</translation>
+        <translation type="obsolete">Regulam plicarum excitat aut extinguit</translation>
     </message>
     <message>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
-        <translation type="obsolete">檔案工具列
+        <translation type="obsolete">Regula plicarum
 
-啟用或停用 檔案工具列</translation>
+Regulam plicarum  excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Navigation toolbar</source>
-        <translation type="obsolete">巡覽工具列</translation>
+        <translation type="obsolete">Regula navigationis</translation>
     </message>
     <message>
         <source>Navigation &amp;toolbar</source>
-        <translation type="obsolete">巡覽工具列(&amp;T)</translation>
+        <translation type="obsolete">Regula naviga&amp;tionis</translation>
     </message>
     <message>
         <source>Enables/disables the navigation toolbar</source>
-        <translation type="obsolete">啟用或停用 巡覽工具列</translation>
+        <translation type="obsolete">Regulam navigationis  excitat aut extinguit</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
-        <translation type="obsolete">巡覽工具列
+        <translation type="obsolete">Regula navigationis
 
-啟用或停用 巡覽工具列.</translation>
+Regulam navigationis excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Edit toolbar</source>
-        <translation type="obsolete">編輯工具列</translation>
+        <translation type="obsolete">Regula correctoris</translation>
     </message>
     <message>
         <source>&amp;Edit toolbar</source>
-        <translation type="obsolete">編輯工具列(&amp;E)</translation>
+        <translation type="obsolete">Regula corr&amp;ectoris</translation>
     </message>
     <message>
         <source>Enables/disables the edit toolbar</source>
-        <translation type="obsolete">啟用或停用 編輯工具列</translation>
+        <translation type="obsolete">Regulam correctioni excitat aut extinguit</translation>
     </message>
     <message>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
-        <translation type="obsolete">編輯工具列
+        <translation type="obsolete">Regula correctoris
 
-啟用或停用 編輯工具列.</translation>
+Regulam correctoris excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation type="obsolete">目錄列</translation>
+        <translation type="obsolete">Index</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation type="obsolete">目錄列(&amp;M)</translation>
+        <translation type="obsolete">I&amp;ndex</translation>
     </message>
     <message>
         <source>F7</source>
@@ -4768,43 +4753,43 @@ Enables/disables the edit toolbar.</source>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation type="obsolete">啟用或停用 目錄列</translation>
+        <translation type="obsolete">Regulam indicis excitat aut extinguit</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation type="obsolete">目錄列
+        <translation type="obsolete">Index
 
-啟用或停用目錄列.</translation>
+Regulam indicis excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation type="obsolete">狀態列</translation>
+        <translation type="obsolete">Status</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation type="obsolete">狀態列(&amp;S)</translation>
+        <translation type="obsolete">&amp;Status</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation type="obsolete">啟用或停用 狀態列</translation>
+        <translation type="obsolete">Regulam status excitat aut extinguit</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation type="obsolete">狀態列
+        <translation type="obsolete">Status
 
-啟用或停用 狀態列.</translation>
+Regulam status excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation type="obsolete">座標</translation>
+        <translation type="obsolete">Coordinata</translation>
     </message>
     <message>
         <source>C&amp;oordinates</source>
-        <translation type="obsolete">座標(&amp;O)</translation>
+        <translation type="obsolete">&amp;Coordinata</translation>
     </message>
     <message>
         <source>F8</source>
@@ -4812,23 +4797,23 @@ Enables/disables the statusbar.</source>
     </message>
     <message>
         <source>Enables/disables the coordinates</source>
-        <translation type="obsolete">啟用或停用 座標</translation>
+        <translation type="obsolete">Coordinata excitat aut extinguit</translation>
     </message>
     <message>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
-        <translation type="obsolete">座標
+        <translation type="obsolete">Coordinata
 
-啟用或停用 座標.</translation>
+Coordinata excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation type="obsolete">捲軸</translation>
+        <translation type="obsolete">Traha</translation>
     </message>
     <message>
         <source>Sli&amp;der</source>
-        <translation type="obsolete">捲軸(&amp;D)</translation>
+        <translation type="obsolete">Tra&amp;ha</translation>
     </message>
     <message>
         <source>Ctrl+F8</source>
@@ -4836,23 +4821,23 @@ Enables/disables the coordinates.</source>
     </message>
     <message>
         <source>Enables/disables the slider</source>
-        <translation type="obsolete">允許或停用 捲軸</translation>
+        <translation type="obsolete">Traham excitat aut extinguit</translation>
     </message>
     <message>
         <source>Slider
 
 Enables/disables the slider.</source>
-        <translation type="obsolete">捲軸
+        <translation type="obsolete">Traha
 
-允許或停用 捲軸.</translation>
+Traham excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation type="obsolete">側邊列</translation>
+        <translation type="obsolete">Regula lateralis</translation>
     </message>
     <message>
         <source>Side&amp;bar</source>
-        <translation type="obsolete">側邊列(&amp;B)</translation>
+        <translation type="obsolete">&amp;Regula lateralis</translation>
     </message>
     <message>
         <source>F9</source>
@@ -4860,23 +4845,23 @@ Enables/disables the slider.</source>
     </message>
     <message>
         <source>Enables/disables the sidebar</source>
-        <translation type="obsolete">允許或停用 邊側列</translation>
+        <translation type="obsolete">Regulam lateralem excitat aut extinguit</translation>
     </message>
     <message>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
-        <translation type="obsolete">邊側列
+        <translation type="obsolete">Regula lateralis
 
-允許或停用 邊側列.</translation>
+Regulam lateralem excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="obsolete">註解</translation>
+        <translation type="obsolete">Nota</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation type="obsolete">註解(&amp;C)</translation>
+        <translation type="obsolete">&amp;Nota</translation>
     </message>
     <message>
         <source>F10</source>
@@ -4884,23 +4869,23 @@ Enables/disables the sidebar.</source>
     </message>
     <message>
         <source>Enables/disables the comment field</source>
-        <translation type="obsolete">允許或停用 註解欄</translation>
+        <translation type="obsolete">Regionem notarum excitat aut extinguit</translation>
     </message>
     <message>
         <source>Comment field
 
 Enables/disables the comment field.</source>
-        <translation type="obsolete">註解欄
+        <translation type="obsolete">Regio annotationum
 
-允許或停用 註解欄.</translation>
+Regionem annotationum  excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Vertical comment</source>
-        <translation type="obsolete">垂直註解</translation>
+        <translation type="obsolete">Nota derecta</translation>
     </message>
     <message>
         <source>&amp;Vertical comment</source>
-        <translation type="obsolete">垂直註解(&amp;V)</translation>
+        <translation type="obsolete">&amp;Annotatio derecta</translation>
     </message>
     <message>
         <source>Shift+F10</source>
@@ -4908,7 +4893,7 @@ Enables/disables the comment field.</source>
     </message>
     <message>
         <source>Enables/disables a vertical direction of the comment field</source>
-        <translation type="obsolete">啟用或停用 垂直方向於命令欄</translation>
+        <translation type="obsolete">Cursum derectum notae excitat aut extinguit</translation>
     </message>
     <message>
         <source>Vertical comment field
@@ -4916,19 +4901,19 @@ Enables/disables the comment field.</source>
 Enables/disables a vertical direction of the comment field.
 
 Note: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use &apos;Preferences&apos;.</source>
-        <translation type="obsolete">垂直命令欄
+        <translation type="obsolete">Nota derecta
 
-啟用或停用 垂直方向於命令欄
+Excitat/extinguit cursum derectum notae.
 
-備註: 這項設定為暫時於本局. 請使用 &apos;偏好設定&apos; 設定永久水平/垂直註解.</translation>
+Cave: hui tabulae prasepositio volatilis est. &apos;Praepositiones&apos; age ut notae derectae aut ad libram figantur.</translation>
     </message>
     <message>
         <source>Pin comment</source>
-        <translation type="obsolete">固定註解</translation>
+        <translation type="obsolete">Notam affigere</translation>
     </message>
     <message>
         <source>&amp;Pin comment</source>
-        <translation type="obsolete">固定註解(&amp;P)</translation>
+        <translation type="obsolete">Notam a&amp;ffigere</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
@@ -4936,23 +4921,23 @@ Note: This setting is temporary for this board. In order to set permanent horizo
     </message>
     <message>
         <source>Enables/disables pinning the comment field</source>
-        <translation type="obsolete">允許或停用 固定註解欄</translation>
+        <translation type="obsolete">Notam affigere excitat aut extinguit</translation>
     </message>
     <message>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
-        <translation type="obsolete">固定註解欄
+        <translation type="obsolete">Notam affigere
 
-允許或停用 固定註解欄.</translation>
+Notam affictam excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation type="obsolete">放大</translation>
+        <translation type="obsolete">Appropinquare</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation type="obsolete">放大(&amp;I)</translation>
+        <translation type="obsolete">A&amp;ppropinquare</translation>
     </message>
     <message>
         <source>Alt++</source>
@@ -4960,23 +4945,23 @@ Enables/disables pinning the comment field.</source>
     </message>
     <message>
         <source>Zooms in the board</source>
-        <translation type="obsolete">放大於棋盤</translation>
+        <translation type="obsolete">Proprior tabulae it</translation>
     </message>
     <message>
         <source>Zoom In
 
 Zooms in the board.</source>
-        <translation type="obsolete">放大
+        <translation type="obsolete">Appropinquare
 
-放大棋盤.</translation>
+Proprior tabulae it.</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation type="obsolete">縮小</translation>
+        <translation type="obsolete">Abire</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation type="obsolete">縮小(&amp;O)</translation>
+        <translation type="obsolete">A&amp;bire</translation>
     </message>
     <message>
         <source>Alt+-</source>
@@ -4984,27 +4969,27 @@ Zooms in the board.</source>
     </message>
     <message>
         <source>Zooms out the board</source>
-        <translation type="obsolete">縮小棋盤</translation>
+        <translation type="obsolete">Longius e tabula it</translation>
     </message>
     <message>
         <source>Zoom Out
 
 Zooms out the board.</source>
-        <translation type="obsolete">縮小
+        <translation type="obsolete">Abire
 
-縮小棋盤.</translation>
+Longius e tabula it.</translation>
     </message>
     <message>
         <source>Save size</source>
-        <translation type="obsolete">儲存大小</translation>
+        <translation type="obsolete">Amplitudinem servare</translation>
     </message>
     <message>
         <source>Save si&amp;ze</source>
-        <translation type="obsolete">儲存大小(&amp;Z)</translation>
+        <translation type="obsolete">&amp;Amplitudinem servare</translation>
     </message>
     <message>
         <source>Save the current window size</source>
-        <translation type="obsolete">儲存現在的視窗大小</translation>
+        <translation type="obsolete">Amplitudinem fenestrae servat</translation>
     </message>
     <message>
         <source>Save size
@@ -5016,23 +5001,23 @@ Restore with CTRL + &lt;number key&gt;
 
 &lt;0&gt; is default value at program start.
 &lt;9&gt; is default for edit window.</source>
-        <translation type="obsolete">儲存大小
+        <translation type="obsolete">Amplitudinem servare
 
-儲存目前視窗大小及在下次啟動程式時套用
+Amplitudinem huius fenestrae servat atque post qGo iterum operatum colligit.
 
-使用 ALT + &lt;數字&gt; 儲存使用大小
-欲恢復時使用 CTRL + &lt;數字&gt;
+ALT + &lt;malleolum numeri&gt; ut servetur
+CTRL + &lt;malleolum numeri&gt; ut colligatur
 
-&lt;0&gt; 當程式開啟的預設值
-&lt;9&gt; 編輯視窗預設值.</translation>
+&lt;0&gt; paratum programmate incipiente.
+&lt;9&gt; paratum fenestrae correctionis.</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="obsolete">全螢幕</translation>
+        <translation type="obsolete">Scrinium plenum</translation>
     </message>
     <message>
         <source>&amp;Fullscreen</source>
-        <translation type="obsolete">全螢幕(&amp;F)</translation>
+        <translation type="obsolete">&amp;Scrinium plenum</translation>
     </message>
     <message>
         <source>F11</source>
@@ -5040,23 +5025,23 @@ Restore with CTRL + &lt;number key&gt;
     </message>
     <message>
         <source>Enable/disable fullscreen mode</source>
-        <translation type="obsolete">允許或停用 全螢幕模式</translation>
+        <translation type="obsolete">Scrinium plenum excitat aut extinguit</translation>
     </message>
     <message>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
-        <translation type="obsolete">全螢幕
+        <translation type="obsolete">Scrinium plenum
 
-允許或停用 全螢幕模式.</translation>
+Scrinium plenum excitat aut extinguit.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="obsolete">使用手冊</translation>
+        <translation type="obsolete">Enchiridion</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="obsolete">使用手冊 (&amp;M)</translation>
+        <translation type="obsolete">E&amp;nchiridion</translation>
     </message>
     <message>
         <source>F1</source>
@@ -5064,160 +5049,160 @@ Enable/disable fullscreen mode.</source>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation type="obsolete">開啟使用手冊</translation>
+        <translation type="obsolete">Enchiridion aperit</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation type="obsolete">協助
+        <translation type="obsolete">Enchiridion
 
-開啟程式使用手冊.</translation>
+Enchiridion programmatis aperit.</translation>
     </message>
     <message>
         <source>Sound Info</source>
-        <translation type="obsolete">音效資訊</translation>
+        <translation type="obsolete">De Sono</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation type="obsolete">音效(&amp;S)</translation>
+        <translation type="obsolete">&amp;Sonus</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation type="obsolete">短資訊於音效可用</translation>
+        <translation type="obsolete">Nuntius brevis de sono</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation type="obsolete">音效資訊
+        <translation type="obsolete">De Sono
 
-檢視訊息框有關於音效短註解.</translation>
+Theca cum breve nota de sono.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="obsolete">關於</translation>
+        <translation type="obsolete">De qGo</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="obsolete">關於(&amp;A)...</translation>
+        <translation type="obsolete">Circ&amp;a...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation type="obsolete">關於此程式</translation>
+        <translation type="obsolete">De programmate</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation type="obsolete">觀於
+        <translation type="obsolete">De programmate
 
-觀於程式.</translation>
+De programmate.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation type="obsolete">關於 QT</translation>
+        <translation type="obsolete">De Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="obsolete">關於 &amp;QT</translation>
+        <translation type="obsolete">De &amp;Qt...</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation type="obsolete">關於 QT
+        <translation type="obsolete">De Qt
 
-關於 QT</translation>
+De Qt.</translation>
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation type="obsolete">匯入/匯出(&amp;I)</translation>
+        <translation type="obsolete">&amp;Importare/Exportare</translation>
     </message>
     <message>
         <source>What&apos;s &amp;This?</source>
-        <translation type="obsolete">這是什麼?(&amp;T)</translation>
+        <translation type="obsolete">&amp;Quid Est?</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="obsolete">檔案(&amp;F)</translation>
+        <translation type="obsolete">&amp;Plica</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="obsolete">編輯(&amp;E)</translation>
+        <translation type="obsolete">&amp;Corrigere</translation>
     </message>
     <message>
         <source>&amp;Navigation</source>
-        <translation type="obsolete">巡覽(&amp;N)</translation>
+        <translation type="obsolete">&amp;Navigatio</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation type="obsolete">設定(&amp;S)</translation>
+        <translation type="obsolete">Praepo&amp;sitiones</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="obsolete">檢視(&amp;V)</translation>
+        <translation type="obsolete">&amp;Aspectus</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="obsolete">協助(&amp;H)</translation>
+        <translation type="obsolete">&amp;Enchiridion</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="188"/>
+        <location filename="../mainwindow.cpp" line="186"/>
         <source>Ready.</source>
-        <translation>備妥</translation>
+        <translation>Paratus.</translation>
     </message>
     <message>
         <source>Current move</source>
-        <translation type="obsolete">目前落子</translation>
+        <translation type="obsolete">Hic motus</translation>
     </message>
     <message>
         <source>Move
 Displays the number of the current turn and the last move played.</source>
-        <translation type="obsolete">落子
-顯示目前落子數及落下的最後一手.</translation>
+        <translation type="obsolete">Motus
+Numerum atque locum moti novissimi ostendit.</translation>
     </message>
     <message>
         <source>Brothers / sons</source>
-        <translation type="obsolete">前變化 / 後變化</translation>
+        <translation type="obsolete">Fratres / filii</translation>
     </message>
     <message>
         <source>Navigation
 Shows the brothers and sons of the current move.</source>
-        <translation type="obsolete">巡覽
-顯示目前落子之前及之後的變化.</translation>
+        <translation type="obsolete">Navigatio
+Fratres filiosque huius motus ostendit.</translation>
     </message>
     <message>
         <source>Current mode</source>
-        <translation type="obsolete">同步模式</translation>
+        <translation type="obsolete">Modus</translation>
     </message>
     <message>
         <source>Mode
 Shows the current mode. &apos;N&apos; for normal mode, &apos;E&apos; for edit mode.</source>
-        <translation type="obsolete">模式
-顯示目前模式. &apos;N&apos; 代表一般, &apos;E&apos; 代表編輯模式.</translation>
+        <translation type="obsolete">Modus
+Modum ostendit. &apos;R&apos; rectum, &apos;C&apos; ut corrigere.</translation>
     </message>
     <message>
         <source>Current edit mark</source>
-        <translation type="obsolete">同步編輯標示</translation>
+        <translation type="obsolete">Signum correctioni</translation>
     </message>
     <message>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
-        <translation type="obsolete">標記
-顯示正在編輯標記. &apos;-&apos; 於一般模式.</translation>
+        <translation type="obsolete">Signum
+Signum correctioni ostendit. &apos;-&apos; modo recto.</translation>
     </message>
     <message>
         <source>newgame</source>
-        <translation type="obsolete">新對局</translation>
+        <translation type="obsolete">novacertatio</translation>
     </message>
     <message>
         <source>New board prepared.</source>
-        <translation type="obsolete">新棋盤備妥</translation>
+        <translation type="obsolete">Tabula nova instructa.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation type="obsolete">SGF (*.sgf);;MGF (*,mgt);;XML (*.xml);;全部格式 (*)</translation>
+        <translation type="obsolete">Plicae SGF (*.sgf);;Plicae MGT (*.mgt);;Plicae XML (*.xml);;Omnia (*)</translation>
     </message>
     <message>
         <source>SGF</source>
@@ -5225,207 +5210,174 @@ Shows the current edit mark. &apos;-&apos; in normal mode.</source>
     </message>
     <message>
         <source>loaded.</source>
-        <translation type="obsolete">已讀取.</translation>
+        <translation type="obsolete">collectum.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;All Files (*)</source>
-        <translation type="obsolete">SGF (*.sgf);;所有檔案 (*)</translation>
+        <translation type="obsolete">Plicae SGF (*.sgf);;Omnia (*)</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation type="obsolete">此檔案已經存在. 你要取代他嗎?</translation>
+        <translation type="obsolete">Plica iam est. Delere atque perscribere visne?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="obsolete">是</translation>
+        <translation type="obsolete">Sic</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="obsolete">否</translation>
+        <translation type="obsolete">Non</translation>
     </message>
     <message>
         <source>Cannot save SGF file.</source>
-        <translation type="obsolete">存取 SGF檔案</translation>
+        <translation type="obsolete">Plicam modo SGF compositam servare nequivi.</translation>
     </message>
     <message>
         <source>saved.</source>
-        <translation type="obsolete">己新檔</translation>
+        <translation type="obsolete">servatam.</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="obsolete">更新</translation>
+        <translation type="obsolete">Quaerere</translation>
     </message>
     <message>
         <source>Cannot load from clipboard. Is it empty?</source>
-        <translation type="obsolete">無法讀取剪貼簿. 可能為空白?</translation>
+        <translation type="obsolete">Latibulo importare nequivi. Inane?</translation>
     </message>
     <message>
         <source>SGF imported.</source>
-        <translation type="obsolete">SGF 匯入.</translation>
+        <translation type="obsolete">SGF importatum.</translation>
     </message>
     <message>
         <source>Failed to export SGF to clipboard.</source>
-        <translation type="obsolete">匯出SGF棋譜到剪貼簿失敗.</translation>
+        <translation type="obsolete">SGF ad latibulum exportare nequivi.</translation>
     </message>
     <message>
         <source>SGF exported.</source>
-        <translation type="obsolete">SGF匯出.</translation>
+        <translation type="obsolete">SGF exportatum.</translation>
     </message>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation type="obsolete">文字檔 (*.txt);;所有檔案(*)</translation>
+        <translation type="obsolete">Plicae Verborum (*.txt);;Omnia (*)</translation>
     </message>
     <message>
         <source>ASCII imported.</source>
-        <translation type="obsolete">ASCII 匯入</translation>
+        <translation type="obsolete">ASCII importatum.</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation type="obsolete">匯入 ASCII 失敗. Clipboar empty?</translation>
+        <translation type="obsolete">ASCII importare nequivi. Latibulum inane?</translation>
     </message>
     <message>
         <source>Export image as</source>
-        <translation type="obsolete">匯出圖案.. </translation>
+        <translation type="obsolete">Imaginem exportare sicut</translation>
     </message>
     <message>
         <source>entermove</source>
-        <translation type="obsolete">輸入手數</translation>
+        <translation type="obsolete">motusscribere</translation>
     </message>
     <message>
         <source>Autoplay stopped.</source>
-        <translation type="obsolete">自動播放已停止.</translation>
+        <translation type="obsolete">Sponte ludere conclusum.</translation>
     </message>
     <message>
         <source>Autoplay started.</source>
-        <translation type="obsolete">自動播放已開始.</translation>
+        <translation type="obsolete">Sponte ludere inceptum.</translation>
     </message>
     <message>
         <source>Variation duplicated.</source>
-        <translation type="obsolete">變化已重製.</translation>
+        <translation type="obsolete">Variatio duplicata.</translation>
     </message>
     <message>
         <source>Variations swapped.</source>
-        <translation type="obsolete">變化已交換.</translation>
+        <translation type="obsolete">Variationes permutatae.</translation>
     </message>
     <message>
         <source>No previous variation available.</source>
-        <translation type="obsolete">先前沒有變化.</translation>
+        <translation type="obsolete">Variatio antecedens non datur.</translation>
     </message>
     <message>
         <source>preferences</source>
-        <translation type="obsolete">偏好設定</translation>
+        <translation type="obsolete">praepositiones</translation>
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation type="obsolete">視窗大小已儲存.</translation>
+        <translation type="obsolete">Amplitudo fenestrae servata.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation type="obsolete">還原視窗.</translation>
+        <translation type="obsolete">Amplitudo fenestrae collecta.</translation>
     </message>
     <message>
         <source>You modified the game.
 Do you want to save your changes?</source>
-        <translation type="obsolete">你已修改對局
-你想要儲存這些變更嗎?</translation>
+        <translation type="obsolete">Certatio correcta.
+Correctiones servandae sunt?</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1947"/>
         <location filename="../mainwindow.ui" line="3239"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>Tollere</translation>
     </message>
     <message>
         <source>Update from online game</source>
-        <translation type="obsolete">更新線上對局</translation>
+        <translation type="obsolete">Certatio e moderatro </translation>
     </message>
     <message>
         <source>Update from online game to local board and supersede own changes.</source>
-        <translation type="obsolete">由線上對局改變取代本機棋盤</translation>
+        <translation type="obsolete">E moderatro certationem reficit correctiones suae tabellae negligens.</translation>
     </message>
     <message>
-        <source>Next comment
-
-Move to the next move that has a comment</source>
-        <translation type="obsolete">下一個註解
-
-移動到下一個有註解的落子</translation>
-    </message>
-    <message>
-        <source>Rk</source>
-        <translation type="obsolete">棋力</translation>
-    </message>
-    <message>
-        <source>Mute stones sound</source>
-        <translation type="obsolete">落子無聲</translation>
-    </message>
-    <message>
-        <source>&amp;Mute stones sound</source>
-        <translation type="obsolete">落子無聲(&amp;M)</translation>
-    </message>
-    <message>
-        <source>Toggle stones sound on/off</source>
-        <translation type="obsolete">切換落子音效 開啟/關閉</translation>
-    </message>
-    <message>
-        <source>Stones sound
-
-Toggle stones sound on/off
-this toggles only the stones sounds</source>
-        <translation type="obsolete">落子音效
-
-切換落子音效 開啟/關閉
-這項切換只用於落子的音效</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="208"/>
+        <location filename="../mainwindow.cpp" line="206"/>
         <source>Current online players / watched players</source>
-        <translation type="unfinished">目前的 線上人數 / 監看人數</translation>
+        <translation type="unfinished">Lusores conexi / lusores perspecti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="207"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
-        <translation type="unfinished">顯示目前的線上人數及你監看的人數
-你正在監看的棋友已經加進「監看棋友」欄位</translation>
+        <translation type="unfinished">Numerum lusorum conexorum
+et numerum lusorum perspectorum ostendit.
+Lusor perspectus in &apos;lusores perspecti:&apos; regione apparet.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.cpp" line="214"/>
         <source>Current online games / observed games + matches</source>
-        <translation type="unfinished">目前的 線上局數 / 你的局數（觀局 ＋ 對局）</translation>
+        <translation type="unfinished">Certationes in moderatro / certationes spectatae + provocationes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="217"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
-        <translation type="unfinished">顯示目前的線上對局數目和你目前的對局數或觀局數</translation>
+        <translation type="unfinished">Numerum certationum lusarum in hoc moderatro ostendit atque numerum certationum a te spectatarum vel lusarum</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="224"/>
+        <location filename="../mainwindow.cpp" line="222"/>
         <source>Current server</source>
-        <translation type="unfinished">目前所在的伺服器</translation>
+        <translation type="unfinished">Hoc moderatrum</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="223"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
-        <translation type="unfinished">顯示目前所在的伺服器名稱或者是 OFFLINE (離線)</translation>
+        <translation type="unfinished">Nomen huius moderatri aut OFFLINE si non conexus interreti ostendit.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="240"/>
+        <location filename="../mainwindow.cpp" line="238"/>
         <source>Online Time</source>
-        <translation type="unfinished">連線時間</translation>
+        <translation type="unfinished">Tempus Conexi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="239"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
-        <translation type="unfinished">顯示目前的連線時間
-(A) -&gt;  自動回應
-(Hold) - &gt; 鎖定行</translation>
+        <translation type="unfinished">Tempus conexi ostendit.
+(A) -&gt; ipsum respondit
+(Hold) -&gt; conexum sustentat</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="492"/>
+        <location filename="../mainwindow.cpp" line="490"/>
         <source>*** Both players are the same ! ***</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5505,7 +5457,7 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
     <message>
         <location filename="../mainwindow.ui" line="268"/>
         <source>Set the handicap range you want for seeking games</source>
-        <translation type="unfinished">設定你在自動尋找對局時的授子數範圍</translation>
+        <translation type="unfinished">Comprehensionem detrimentorum certationum quaerendarum imponit</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
@@ -5679,7 +5631,7 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
         <location filename="../mainwindow.ui" line="582"/>
         <location filename="../mainwindow.ui" line="726"/>
         <source>9k</source>
-        <translation type="unfinished">10k</translation>
+        <translation type="unfinished">9k</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="587"/>
@@ -5766,7 +5718,7 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
         <location filename="../mainwindow.ui" line="1226"/>
         <location filename="../mainwindow.ui" line="1461"/>
         <source>Handicap</source>
-        <translation type="unfinished">授子</translation>
+        <translation type="unfinished">Detrimenta</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1013"/>
@@ -5780,7 +5732,7 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
         <location filename="../mainwindow.ui" line="1395"/>
         <location filename="../mainwindow.ui" line="3150"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Albus</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1037"/>
@@ -5794,7 +5746,7 @@ A player you are watching has an entry in the &apos;watch player:&apos; field.</
         <location filename="../mainwindow.ui" line="1358"/>
         <location filename="../mainwindow.ui" line="3143"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niger</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1074"/>
@@ -5844,14 +5796,14 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation type="unfinished">點選棋盤放置棋石
+        <translation type="unfinished">Lapidem colloca murem tangens in tabulam.
 
-在一般模式時, 顏色自動轉換於滑鼠左鍵進行落子
-Shift + ← 到全譜的第一手
-Shift + → 到目前變化的下一手
-在編輯模式並結束落子時, 左鍵放置黑棋, 右鍵放置白棋, 點選已存在的棋子則移除
-在編輯標示時, 左鍵設定, 右鍵移除標示. 當編輯文字標示時, shift-點選能夠自訂標示文字
-在計地模式時, 左鍵標示棋塊為死子, 右鍵標示活棋或雙活. 再次點擊則取消標示.</translation>
+Modo recto, laevo muris lapides alternis coloribus collocantur.
+Shift + laevo primum motum principis rami agit.
+Shift + dextero primum motum huius rami.
+Modo correctionis, laevo tacto niger, dextero albus lapis collocatur; supra collocatum tacto amovetur.
+Signa corrigens, laevus collocat, dexterus amovet. Litteram corrigens, shif+mure notam corrigit.
+Modo punctorum, laevus cohortem lapidum mortuam notat, dexterus vivam in seki. Murem iterum tange ad vivam revertendam.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1346"/>
@@ -5901,12 +5853,12 @@ Shift + → 到目前變化的下一手
     <message>
         <location filename="../mainwindow.ui" line="1717"/>
         <source>Language</source>
-        <translation type="unfinished">語言</translation>
+        <translation type="unfinished">Lingua</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1725"/>
         <source>System default</source>
-        <translation type="unfinished">系統預設</translation>
+        <translation type="unfinished">Lingua systematis</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1730"/>
@@ -5931,7 +5883,7 @@ Shift + → 到目前變化的下一手
     <message>
         <location filename="../mainwindow.ui" line="1809"/>
         <source>None</source>
-        <translation type="unfinished">無</translation>
+        <translation type="unfinished">Nihil</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1954"/>
@@ -5966,16 +5918,16 @@ Shift + → 到目前變化的下一手
     <message>
         <location filename="../mainwindow.ui" line="2030"/>
         <source>Time interval for autoplay</source>
-        <translation type="unfinished">自動播放時間間隔</translation>
+        <translation type="unfinished">Tempus sponte ludente</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2033"/>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation type="unfinished">自動播放時間間隔
+        <translation type="unfinished">Tempus sponte ludente
 
-延遲自動播放落子秒數間隔</translation>
+Tempus intra motus cum ludit sponte.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2039"/>
@@ -6015,7 +5967,7 @@ Delay between the moves in autoplay mode in seconds.</source>
     <message>
         <location filename="../mainwindow.ui" line="1820"/>
         <source>Sound</source>
-        <translation type="unfinished">音效</translation>
+        <translation type="unfinished">Sonus</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1832"/>
@@ -6035,22 +5987,22 @@ Delay between the moves in autoplay mode in seconds.</source>
     <message>
         <location filename="../mainwindow.ui" line="1856"/>
         <source>Stones</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lapides</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1868"/>
         <source>Ugly 2D</source>
-        <translation type="unfinished">醜醜的 2D</translation>
+        <translation type="unfinished">Turpe II-D</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1875"/>
         <source>Plain 3D</source>
-        <translation type="unfinished">純3D</translation>
+        <translation type="unfinished">III-D simplex</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1882"/>
         <source>Realistic</source>
-        <translation type="unfinished">逼真的</translation>
+        <translation type="unfinished">verisimilis</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1898"/>
@@ -6061,7 +6013,7 @@ Delay between the moves in autoplay mode in seconds.</source>
         <location filename="../mainwindow.ui" line="1910"/>
         <location filename="../mainwindow_settings.cpp" line="387"/>
         <source>Table picture</source>
-        <translation type="unfinished">表格圖片</translation>
+        <translation type="unfinished">Imago pavimenti</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1917"/>
@@ -6071,11 +6023,11 @@ Delay between the moves in autoplay mode in seconds.</source>
     </message>
     <message>
         <source>Title:</source>
-        <translation type="obsolete">標題:</translation>
+        <translation type="obsolete">Titulus:</translation>
     </message>
     <message>
         <source>title, e.g.: guest account at NNGS</source>
-        <translation type="obsolete">標題, 例如: guest account at NNGS</translation>
+        <translation type="obsolete">titulus, e.g.: hospes apud NNGS</translation>
     </message>
     <message>
         <source>unique title, e.g.:
@@ -6087,44 +6039,43 @@ xyz
 The title field is used to chose a server connection.
 
 Note: don&apos;t use a default server name, i.e. &apos;-- Aurora --&apos; etc.</source>
-        <translation type="obsolete">獨一標題, 例如:
+        <translation type="obsolete">titulus univocus, e.g.:
 
-guest account at NNGS
+hospes apud NNGS
 qGo1234 (IGS)
 xyz
 
-標題欄位是使用於選擇伺服器連線
+Titulus adhibetur ad conexum moderatri eligere.
 
-備註: 不要使用預設伺服器名稱, 例如 &apos;-- Aurora --&apos; 等
-(使用中文標題時系統有時無法判別, 請注意)</translation>
+Cave: noli nomina parata transcribere, i.e. &apos;-- Aurora --&apos; etc.</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="obsolete">標題</translation>
+        <translation type="obsolete">Titulus</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="obsolete">主機</translation>
+        <translation type="obsolete">Hostes</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="obsolete">通訊埠</translation>
+        <translation type="obsolete">Portus</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">名稱</translation>
+        <translation type="obsolete">Nomen</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">虛手</translation>
+        <translation type="obsolete">Omittere</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="obsolete">名稱:</translation>
+        <translation type="obsolete">Nomen:</translation>
     </message>
     <message>
         <source>use your login name; if unregistered use a unique name like &apos;hotdog17&apos; (NNGS, CWS) or guest (other servers)</source>
-        <translation type="obsolete">使用你的名稱登入; 假如尚未註冊使用單一名稱如 &apos;hotdog17&apos; (NNGS, CWS) 或 &apos;guest&apos; (其他伺服器)</translation>
+        <translation type="obsolete">nomen accessus scribe; si additus non es, nomen univocum sicut &apos;caniscalidusXVII&apos; (NNGS, CWS) vel &apos;guest&apos; (ceteris moderatris) scribe</translation>
     </message>
     <message>
         <source>name
@@ -6135,18 +6086,18 @@ use your login name and password provided by the go server operator after regist
 New users: depends on server
 NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
 others:		guest</source>
-        <translation type="obsolete">名稱
+        <translation type="obsolete">nomen
 
-已註冊使用者: 
-使用你伺服器提供給你或註冊之後的登入名稱及密碼
+Utentibus additis: 
+nomen signumque a Go moderatro suppedita post registrationem scribe
 
-新使用者(需伺服器支援):
-NNGS, CWS: 使用單一名稱如 &apos;hotdog17&apos;
-其他:  guest</translation>
+Utentibus novis: per moderatrum stat
+NNGS, CWS:	nomen univocum sicut &apos;caniscalidusXVII&apos; scribe
+allia:	&apos;guest&apos;</translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation type="obsolete">主機:</translation>
+        <translation type="obsolete">Hospes:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="186"/>
@@ -6170,23 +6121,23 @@ NNGS, CWS: 使用單一名稱如 &apos;hotdog17&apos;
     </message>
     <message>
         <source>port address, e.g.: 9696</source>
-        <translation type="obsolete">通訊埠位址, 例如: 9696</translation>
+        <translation type="obsolete">inscriptio porti,  e.g.: 9696</translation>
     </message>
     <message>
         <source>port address, e.g.: 9696
 
 Port address is defined for each go server. It&apos;s a fixed number. See Host for predefined server names.</source>
-        <translation type="obsolete">連接埠位址, 例如:9696
+        <translation type="obsolete">inscriptio porti,  e.g.: 9696
 
-定義伺服器連接埠數字. 那是固定數字. 看先前定義的伺服器主機位址</translation>
+Omnibus moderatris Gois inscriptio porti, quae numerus est, addicta est. &apos;Hostes&apos; vise.</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="obsolete">密碼:</translation>
+        <translation type="obsolete">Signum:</translation>
     </message>
     <message>
         <source>your password; if unregistered: blank field</source>
-        <translation type="obsolete">你的密碼; 如果尚未註冊: 留空</translation>
+        <translation type="obsolete">signum; si non additus es: vacuum</translation>
     </message>
     <message>
         <source>password
@@ -6195,32 +6146,32 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: leave blank!</source>
-        <translation type="obsolete">密碼
+        <translation type="obsolete">signum
 
-已註冊使用者:
-使用你伺服器提供給你或註冊之後的登入名稱及密碼
+Utentibus additis: 
+nomen signumque a Go moderatro suppedita post registrationem scribe
 
-新使用者: 留空</translation>
+Utentibus novis: nihil scribe!</translation>
     </message>
     <message>
         <source>Codec:</source>
-        <translation type="obsolete">編碼:</translation>
+        <translation type="obsolete">Codec:</translation>
     </message>
     <message>
         <source>clear form</source>
-        <translation type="obsolete">清除表單</translation>
+        <translation type="obsolete">indicem delere</translation>
     </message>
     <message>
         <source>New
 
 clear form; doesn&apos;t make any changes to the entries</source>
-        <translation type="obsolete">新增表單
+        <translation type="obsolete">Novus
 
-清除表單; 不改變任何項目</translation>
+indicem delet; lineas nullas corrigit</translation>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation type="obsolete">新增/變更 目前項目</translation>
+        <translation type="obsolete">hanc lineam adicere/corrigere</translation>
     </message>
     <message>
         <source>Add or Change
@@ -6228,15 +6179,19 @@ clear form; doesn&apos;t make any changes to the entries</source>
 Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
 
 Label &apos;Add&apos; is default. The given entries will be saved under the given title.</source>
-        <translation type="obsolete">新增或修改
+        <translation type="obsolete">Adicere aut Corrigere
 
-標籤 &apos;修改&apos; 顯示於你的標題有重複, 換言之目前的項目將取代已儲存的項目標題
+&apos;Corrigere&apos; inscriptio apparet si titulus non univocus est, i.e. linea serbata cum hoc titulo ex haec linea substituenda est.
 
-標籤 &apos;新增&apos; 為預設. 給予的項目將儲存於標題之上</translation>
+&apos;Adicere&apos; inscriptio parata est. Nova linea cum novo titulo serbabuntur.</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="obsolete">Adicere</translation>
     </message>
     <message>
         <source>delete current entry</source>
-        <translation type="obsolete">刪除目前項目</translation>
+        <translation type="obsolete">hanc lineam delere</translation>
     </message>
     <message>
         <source>Delete
@@ -6244,11 +6199,11 @@ Label &apos;Add&apos; is default. The given entries will be saved under the give
 Deletes the saved entries with same Title.
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="obsolete">刪除
+        <translation type="obsolete">Delere
 
-刪除儲存欄位相同標題
+Lineam serbatam cum hoc titulo delet.
 
-備註: &apos;刪除&apos; 涉及儲存記錄</translation>
+Cave: &apos;Delere&apos; ad lineas serbatas pertinet.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3254"/>
@@ -6258,7 +6213,7 @@ Note: &apos;Delete&apos; concerns saved records.</source>
     <message>
         <location filename="../mainwindow.ui" line="2583"/>
         <source>Score/Edit</source>
-        <translation type="unfinished">計地/編輯</translation>
+        <translation type="unfinished">Puncta/Corrigere</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="799"/>
@@ -6321,15 +6276,15 @@ Click a second time on a group to unmark it as dead or seki.
 Edit
 
 Click to get a new, editable offline window.</source>
-        <translation type="unfinished">計地
+        <translation type="unfinished">Puncta
 
-左鍵點擊棋塊標示為死子
-右鍵點擊棋塊標示為活棋或雙活
-第二次點擊棋塊時將不標示為死活子
+Laevo muris cohortem lapidum mortuam nota.
+Dextero vivam in seki.
+Murem iterum in cohortem tange ad vivam revertendam.
 
-編輯
+Corrigere
 
-點選後開啟新視窗, 可離線編輯</translation>
+Murem tange ut fenestra nova corrigenda creatur.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2610"/>
@@ -6349,7 +6304,7 @@ Click to get a new, editable offline window.</source>
     <message>
         <location filename="../mainwindow.ui" line="2656"/>
         <source>Autosave</source>
-        <translation type="unfinished">自動儲存</translation>
+        <translation type="unfinished">Sponte serbare</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2668"/>
@@ -6372,28 +6327,28 @@ Click to get a new, editable offline window.</source>
         <location filename="../mainwindow.ui" line="3176"/>
         <location filename="../mainwindow.ui" line="3196"/>
         <source>board size</source>
-        <translation type="unfinished">棋盤大小</translation>
+        <translation type="unfinished">amplitudo tabellae</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2724"/>
         <source>Board size:</source>
-        <translation type="unfinished">棋盤大小:</translation>
+        <translation type="unfinished">Amplitudo tabellae:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2766"/>
         <location filename="../mainwindow.ui" line="2785"/>
         <source>Komi: added to white&apos;s result</source>
-        <translation type="unfinished">讓子: 加到白地數目</translation>
+        <translation type="unfinished">Komi: punctis albi adiectum</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2769"/>
         <source>Komi:</source>
-        <translation type="unfinished">讓子:</translation>
+        <translation type="unfinished">Komi:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2809"/>
         <source>allow client to negotiate automatic</source>
-        <translation type="unfinished">允許用戶端自動巡覽</translation>
+        <translation type="unfinished">Cliens ipse de komi agit</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2812"/>
@@ -6402,18 +6357,18 @@ Click to get a new, editable offline window.</source>
 Allow client to negotiate komi automatic.
 
 Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</source>
-        <translation type="unfinished">自動協議
+        <translation type="unfinished">Selectio automata
 
-允許用戶端自動協議讓子數
+Cliens ipse de komi agit.
 
-注意: 這可能造成困擾如果對受不想同意你的預設甚至如果你的預設之前有送至對手. 這可能固有不同內部使用於 用戶端協議值</translation>
+Cave: molestum est si hostis accipere praepositiones tuas nolit etsi hosti antea missae sunt. Hoc ex dissimilibus regulis selectionis inter clientes pendere potest.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2819"/>
         <source>Automatic komi 
 negotiation</source>
-        <translation type="unfinished">自動讓子
-協議</translation>
+        <translation type="unfinished">Automata komi 
+selectio</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2837"/>
@@ -6427,8 +6382,8 @@ negotiation</source>
         <location filename="../mainwindow.ui" line="2840"/>
         <source>Byoyomi
 time:</source>
-        <translation type="unfinished">讀秒
-時間 :</translation>
+        <translation type="unfinished">Tempus byoyomi
+tempus:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2886"/>
@@ -6436,55 +6391,55 @@ time:</source>
         <location filename="../mainwindow.ui" line="3013"/>
         <location filename="../mainwindow.ui" line="3033"/>
         <source>Playing time</source>
-        <translation type="unfinished">對局時間</translation>
+        <translation type="unfinished">Tempus certationis</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2889"/>
         <source>Main 
 time :</source>
-        <translation type="unfinished">主要
-時間 :</translation>
+        <translation type="unfinished">Princeps 
+tempus:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2946"/>
         <source>All servers settings</source>
-        <translation type="unfinished">所有伺服器設定</translation>
+        <translation type="unfinished">Praepositiones omnibus moreratris</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2979"/>
         <source>IGS &apos;nmatch&apos; specific settings</source>
-        <translation type="unfinished">IGS 特有的 &apos;nmatch&apos; 指令設定</translation>
+        <translation type="unfinished">praepositiones circa iussum &apos;nmatch&apos; IGS</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3016"/>
         <source>Main time 
 up to :</source>
-        <translation type="unfinished">主要時間
-增加到 :</translation>
+        <translation type="unfinished">Tempus princeps 
+ad :</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3065"/>
         <source>Byo time
 up to :</source>
-        <translation type="unfinished">讀秒時間
-增加到 :</translation>
+        <translation type="unfinished">Tempus byo
+ad :</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3128"/>
         <source>Play as :</source>
-        <translation type="unfinished">持子 :</translation>
+        <translation type="unfinished">Lude velut :</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3157"/>
         <source>Nigiri</source>
-        <translation type="unfinished">猜先</translation>
+        <translation type="unfinished">Sortiri</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3179"/>
         <source>Handicap 
 up to :</source>
-        <translation type="unfinished">授子
-提升到 :</translation>
+        <translation type="unfinished">Detrimenta 
+ad :</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3199"/>
@@ -6498,14 +6453,14 @@ up to :</source>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="302"/>
-        <location filename="../mainwindow_server.cpp" line="1100"/>
+        <location filename="../mainwindow_server.cpp" line="1150"/>
         <source>Connect with</source>
-        <translation type="unfinished">連線在</translation>
+        <translation type="unfinished">Conectere</translation>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="114"/>
         <source>Disconnect from</source>
-        <translation type="unfinished">斷線於</translation>
+        <translation type="unfinished">Disconectere</translation>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="350"/>
@@ -6518,22 +6473,22 @@ up to :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="870"/>
+        <location filename="../mainwindow_server.cpp" line="920"/>
         <source>msg*</source>
-        <translation type="unfinished">訊息*</translation>
+        <translation type="unfinished">msg*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="896"/>
+        <location filename="../mainwindow_server.cpp" line="946"/>
         <source>Shouts*</source>
-        <translation type="unfinished">公眾*</translation>
+        <translation type="unfinished">Voces*</translation>
     </message>
     <message>
         <source> stones)</source>
-        <translation type="obsolete"> 落子)</translation>
+        <translation type="obsolete"> lapides)</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation type="obsolete">接受</translation>
+        <translation type="obsolete">Accipere</translation>
     </message>
     <message>
         <location filename="../mainwindow_settings.cpp" line="67"/>
@@ -6551,7 +6506,7 @@ up to :</source>
         <location filename="../mainwindow_settings.cpp" line="375"/>
         <location filename="../mainwindow_settings.cpp" line="388"/>
         <source>All Files (*)</source>
-        <translation type="unfinished">所有檔案 (*)</translation>
+        <translation type="unfinished">Omnia (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1087"/>
@@ -6592,7 +6547,7 @@ up to :</source>
     <message>
         <location filename="../network/matchinvitedialog.cpp" line="18"/>
         <source>&amp;Decline</source>
-        <translation type="unfinished">拒絕(&amp;D)</translation>
+        <translation type="unfinished">&amp;Negare</translation>
     </message>
     <message>
         <location filename="../network/matchinvitedialog.cpp" line="20"/>
@@ -6642,216 +6597,208 @@ up to :</source>
     <name>NewGameDialog</name>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">新對局</translation>
-    </message>
-    <message>
-        <source>&amp;Decline</source>
-        <translation type="obsolete">拒絕(&amp;D)</translation>
-    </message>
-    <message>
-        <source>&amp;Offer</source>
-        <translation type="obsolete">提出/接受 (&amp;O)</translation>
-    </message>
-    <message>
-        <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <translation type="obsolete">Nova Certatio</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation type="obsolete">棋盤大小:</translation>
+        <translation type="obsolete">Amplitudo tabellae:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">授子:</translation>
+        <translation type="obsolete">Detrimenta:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
+        <translation type="obsolete">Komi:</translation>
     </message>
     <message>
         <source>Free game</source>
-        <translation type="obsolete">記分</translation>
+        <translation type="obsolete">Certatio non censita</translation>
     </message>
     <message>
         <source>no</source>
-        <translation type="obsolete">記分</translation>
+        <translation type="obsolete">non</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="obsolete">不計分</translation>
+        <translation type="obsolete">sic</translation>
     </message>
     <message>
         <source>Byoyomi Time:</source>
-        <translation type="obsolete">讀秒時間:</translation>
+        <translation type="obsolete">Tempus Byoyomi:</translation>
     </message>
     <message>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="obsolete">25手落子的時間; 過了25手後, 時間會重新開始計時</translation>
+        <translation type="obsolete">Tempus additicium motibus XXV; motibus XXV excessis tempus byoyomi iterum incipit</translation>
     </message>
     <message>
         <source>Time:</source>
-        <translation type="obsolete">基本時間:</translation>
+        <translation type="obsolete">Tempus:</translation>
     </message>
     <message>
         <source>Playing time</source>
-        <translation type="obsolete">對局時間</translation>
+        <translation type="obsolete">Tempus certationis</translation>
     </message>
     <message>
-        <source>s&amp;wap colors</source>
-        <translation type="obsolete">持子對換(&amp;W)</translation>
+        <source>&amp;Decline</source>
+        <translation type="obsolete">&amp;Negare</translation>
     </message>
     <message>
-        <source>&amp;suggest</source>
-        <translation type="obsolete">對局建議(&amp;S)</translation>
-    </message>
-    <message>
-        <source>Black</source>
-        <translation type="obsolete">黑棋</translation>
-    </message>
-    <message>
-        <source>White</source>
-        <translation type="obsolete">白棋</translation>
-    </message>
-    <message>
-        <source>Black player:</source>
-        <translation type="obsolete">持黑者:</translation>
-    </message>
-    <message>
-        <source>White player:</source>
-        <translation type="obsolete">持白者:</translation>
-    </message>
-    <message>
-        <source>suggest proper handicap according to players ranks</source>
-        <translation type="obsolete">依照對局者棋力建議適當授子數</translation>
-    </message>
-    <message>
-        <source>swap players colors</source>
-        <translation type="obsolete">持子對換</translation>
-    </message>
-    <message>
-        <source>S&amp;tats</source>
-        <translation type="obsolete">棋友狀態(&amp;T)</translation>
-    </message>
-    <message>
-        <source>query the other players stats</source>
-        <translation type="obsolete">查詢邀局棋友資訊</translation>
+        <source>&amp;Offer</source>
+        <translation type="obsolete">&amp;Praebere</translation>
     </message>
     <message>
         <source>Alt+O</source>
-        <translation type="obsolete">Alt+O</translation>
+        <translation type="obsolete">Alt+P</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
     <message>
         <source>Opponent</source>
-        <translation type="obsolete">對手</translation>
+        <translation type="obsolete">Hostis</translation>
     </message>
     <message>
         <source>Game against :</source>
-        <translation type="obsolete">對局對手:</translation>
+        <translation type="obsolete">Certatio contra:</translation>
+    </message>
+    <message>
+        <source>S&amp;tats</source>
+        <translation type="obsolete">&amp;Stat</translation>
     </message>
     <message>
         <source>Alt+T</source>
-        <translation type="obsolete">Alt+T</translation>
+        <translation type="obsolete">Alt+H</translation>
+    </message>
+    <message>
+        <source>query the other players stats</source>
+        <translation type="obsolete">statistica alterius lusoris quaerere</translation>
     </message>
     <message>
         <source>You play</source>
-        <translation type="obsolete">你持</translation>
+        <translation type="obsolete">Tibi ludendum</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>Nigiri</source>
-        <translation type="obsolete">猜先</translation>
+        <translation type="obsolete">Sortiri</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="obsolete">Niger</translation>
+    </message>
+    <message>
+        <source>&amp;suggest</source>
+        <translation type="obsolete">&amp;proponere</translation>
     </message>
     <message>
         <source>Alt+S</source>
-        <translation type="obsolete">Alt+S</translation>
+        <translation type="obsolete">Alt+P</translation>
+    </message>
+    <message>
+        <source>suggest proper handicap according to players ranks</source>
+        <translation type="obsolete">detrimenta aequa proponit ex lusorum ordinibus</translation>
     </message>
 </context>
 <context>
     <name>NewLocalGameDialog</name>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">新對局</translation>
+        <translation type="obsolete">Nova Certatio</translation>
     </message>
     <message>
         <source>White:</source>
-        <translation type="obsolete">白棋:</translation>
+        <translation type="obsolete">Albus:</translation>
     </message>
     <message>
         <source>Black:</source>
-        <translation type="obsolete">黑棋:</translation>
+        <translation type="obsolete">Niger:</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">黑棋</translation>
+        <translation type="obsolete">Niger</translation>
     </message>
     <message>
         <source>Player Name:</source>
-        <translation type="obsolete">棋友名稱:</translation>
+        <translation type="obsolete">Nomen Lusoris:</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">白棋</translation>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>Rank:</source>
-        <translation type="obsolete">棋力:</translation>
+        <translation type="obsolete">Ordo:</translation>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation type="obsolete">確認(&amp;O)</translation>
+        <translation type="obsolete">&amp;Recte</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation type="obsolete">棋盤大小:</translation>
+        <translation type="obsolete">Amplitudo tabellae:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">授子:</translation>
+        <translation type="obsolete">Detrimenta:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
+        <translation type="obsolete">Komi:</translation>
     </message>
     <message>
         <source>Byoyomi Time:</source>
-        <translation type="obsolete">讀秒時間:</translation>
+        <translation type="obsolete">Tempus Byoyomi:</translation>
     </message>
     <message>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="obsolete">手落子的時間; 過了25手後, 時間會重新開始計時</translation>
+        <translation type="obsolete">Tempus additicium motibus XXV; motibus XXV excessis tempus byoyomi iteratur</translation>
     </message>
     <message>
         <source>Time:</source>
-        <translation type="obsolete">基本時間:</translation>
+        <translation type="obsolete">Tempus:</translation>
     </message>
     <message>
         <source>Playing time</source>
-        <translation type="obsolete">對局時間</translation>
+        <translation type="obsolete">Tempus certationis</translation>
     </message>
 </context>
 <context>
     <name>NodeResultsGUI</name>
     <message>
         <source>Results</source>
-        <translation type="obsolete">結果</translation>
+        <translation type="obsolete">Effectus</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="obsolete">關閉</translation>
+        <translation type="obsolete">Concludere</translation>
     </message>
 </context>
 <context>
     <name>NormalTools</name>
     <message>
         <source>NormalTools</source>
-        <translation type="obsolete">一般工具</translation>
+        <translation type="obsolete">Instrumenta</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">白棋</translation>
+        <translation type="obsolete">Albus</translation>
+    </message>
+    <message>
+        <source>Captures:</source>
+        <translation type="obsolete">Captivi:</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation type="obsolete">0</translation>
     </message>
     <message>
         <source>00:00</source>
@@ -6859,7 +6806,7 @@ up to :</source>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation type="obsolete">剩餘時間 / 手數</translation>
+        <translation type="obsolete">tempus et lapides reliqui</translation>
     </message>
     <message>
         <source>Clock
@@ -6869,71 +6816,79 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation type="obsolete">計時器
+        <translation type="obsolete">Horologium
 
-顯示「剩餘時間」或「讀秒 / 剩餘落子數」
+Tempus reliquum aut tempus byoyomi / lapides reliquos ostendit.
 
-點選將會
-- 你的計時器: 暫停要求 (NNGS)
-- 對手計時器: 加時1分鐘</translation>
-    </message>
-    <message>
-        <source>Captures:</source>
-        <translation type="obsolete">提子:</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
+Muris malleolum tange supra
+- horologium tuum ut moram petatur (NNGS) aut
+- horologium hostis ut ei minutum unum temporis addititici donetur.</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">黑棋</translation>
+        <translation type="obsolete">Niger</translation>
+    </message>
+    <message>
+        <source>H:</source>
+        <translation type="obsolete">D:</translation>
+    </message>
+    <message>
+        <source>Handicap</source>
+        <translation type="obsolete">Detrimenta</translation>
+    </message>
+    <message>
+        <source>Handicap
+
+Number of stones placed by black as his first move.</source>
+        <translation type="obsolete">Detrimenta
+
+Lapides primo moto a nigro collocati.</translation>
+    </message>
+    <message>
+        <source>free</source>
+        <translation type="obsolete">gratis</translation>
+    </message>
+    <message>
+        <source>free/rated game</source>
+        <translation type="obsolete">certatio censita/non censita</translation>
+    </message>
+    <message>
+        <source>free game:
+
+use &quot;free&quot; command to make game rated or unrated (free)</source>
+        <translation type="obsolete">certatio non censita:
+
+&quot;free&quot; iussum mitte ut certationem censitam aut non censitam eliges</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
+        <translation type="obsolete">Komi:</translation>
     </message>
     <message>
         <source>komi points</source>
-        <translation type="obsolete">讓子點數</translation>
+        <translation type="obsolete">komi numeri</translation>
     </message>
     <message>
         <source>komi:
 
 Add komi points to white because black has the advantage to set the first stone.
 Use &quot;komi x&quot; to request a komi of x (number).</source>
-        <translation type="obsolete">讓子:
+        <translation type="obsolete">komi:
 
-增加讓子給白棋因為黑棋具有先手優勢
-使用 &quot;komi x&quot; 要求讓子數(x)</translation>
+Albi puncta komi adicit quod nigro est commoditas primi lapidis collocandi.
+&quot;komi x&quot; imperatum mitte ut komi numero x punctorum petatur.</translation>
     </message>
     <message>
         <source>5.5</source>
         <translation type="obsolete">5.5</translation>
     </message>
     <message>
-        <source>H:</source>
-        <translation type="obsolete">授:</translation>
-    </message>
-    <message>
-        <source>Handicap</source>
-        <translation type="obsolete">授子</translation>
-    </message>
-    <message>
-        <source>Handicap
-
-Number of stones placed by black as his first move.</source>
-        <translation type="obsolete">授子
-
-多少黑棋於棋局開始時先放置</translation>
-    </message>
-    <message>
         <source>Byo:</source>
-        <translation type="obsolete">讀秒:</translation>
+        <translation type="obsolete">Byo:</translation>
     </message>
     <message>
         <source>byoyomi time (minutes)</source>
-        <translation type="obsolete">讀秒時間(分)</translation>
+        <translation type="obsolete">tempus byoyomi (minuta)</translation>
     </message>
     <message>
         <source>Byoyomi time
@@ -6948,53 +6903,37 @@ Absolute: Byo = 0, no additional time after main time is zero.
 Canadian: e.g. Byo = 6/25, 25 stones to place in 6 minutes; if all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
 
 byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 30 seconds, time is reset to 30 seconds, if not placed within 30 seconds, period will be decreased by one, a new period of 30 seconds starts; if period is zero and last time interval is over then game ends.</source>
-        <translation type="obsolete">讀秒時間
+        <translation type="obsolete">Tempus byoyomi
 
-增加額外時間於落子
-如果答到0之前所有的棋子尚未落完, 對局將會立即結束: &quot;... 違規超時&quot;
+Tempus additicium quo lapides ulli collocandi sunt.
+Si tempus exhaustum est ante omnes lapides collocatos, certatio statim perficitur: &quot;... tempore victum&quot;.
 
-系統時間 (離線):
+De temporis modo (ex conexu):
 
-包辦制: 讀秒 = 0, 於時盡之後不加時
+Absolutum: Byo = 0, nihil temporis additicii postquam tempus princeps exhaustum est.
 
-加拿大式: 例如 讀秒 = 6/25, 於6分鐘內必須落下25子; 假如棋子全部落畢. 讀秒週期重設會此職於相同的落子數於開始落子到棋局結束.
+Canadiense: e.g. Byo = 6/25, XXV lapides collocandi intra VI minuta. Si lapides omnes collocati sunt, tempus byoyomi iterum ad hoc inditur atque numerus idem lapidum collocandus est.
 
-計次讀秒: 例如 讀秒: 7x30s, 7 次 30 秒; 如果在 30 秒之內落子, 時間將會回復到 30 秒, 如果沒有在 30 秒之內落子, 讀秒次數將會減少一次, 新一次的讀秒將會由 30 開始計時; 假如讀秒次數為零並且最後時間結束則對局結束</translation>
-    </message>
-    <message>
-        <source>free</source>
-        <translation type="obsolete">不計分</translation>
-    </message>
-    <message>
-        <source>free/rated game</source>
-        <translation type="obsolete">不計分/計分棋</translation>
-    </message>
-    <message>
-        <source>free game:
-
-use &quot;free&quot; command to make game rated or unrated (free)</source>
-        <translation type="obsolete">不計分:
-
-使用&quot;free&quot;命令讓對局計分或不計分</translation>
+byo-yomi: e.g. Byo = 7x30s, VII spatia XXX secundorum; si lapis intra XXX secunda collocatur tempus ad XXX secunda revertit, aliter spatia decrescuntur atque novum spatium XXX secundorum incipit; si nullum spatium superest atque tempus postremum exhaustum est, certatio perficitur.</translation>
     </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
     <message>
         <source>Move Number</source>
-        <translation type="obsolete">落子手數</translation>
+        <translation type="obsolete">Numerus Moti</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
     <message>
         <source>Enter move number:</source>
-        <translation type="obsolete">輸入落子手數:</translation>
+        <translation type="obsolete">Numerum moti scribe:</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation type="obsolete">確定(&amp;O)</translation>
+        <translation type="obsolete">&amp;Recte</translation>
     </message>
 </context>
 <context>
@@ -7237,26 +7176,41 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="71"/>
-        <source>Nice to meet you everyone</source>
+        <source>How do you do?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="72"/>
-        <source>How are you everyone?</source>
+        <source>Nice to meet you everyone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="73"/>
-        <source>Anyone want a quick game?</source>
+        <source>How are you everyone?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="74"/>
-        <source>I&apos;m looking for a friendly match.</source>
+        <source>Anyone want a quick game?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="75"/>
+        <source>I&apos;m looking for a friendly match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="76"/>
+        <source>Strong players!  How about playing handicap with me?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="77"/>
+        <source>Anyone want to play a game with me?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="78"/>
         <source>I don&apos;t mind any sorts of games with anyone.  Just request me.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7275,460 +7229,829 @@ use &quot;free&quot; command to make game rated or unrated (free)</source>
     <name>Parser</name>
     <message>
         <source>msg*</source>
-        <translation type="obsolete">訊息*</translation>
+        <translation type="obsolete">msg*</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
     <message>
         <source>Change</source>
-        <translation type="obsolete">修改</translation>
+        <translation type="obsolete">Corrigere</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="obsolete">加入</translation>
+        <translation type="obsolete">Adicere</translation>
     </message>
     <message>
         <source>Stones</source>
-        <translation type="obsolete">落子</translation>
+        <translation type="obsolete">Lapides</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">虛手</translation>
+        <translation type="obsolete">Omittere</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation type="obsolete">自動播放</translation>
+        <translation type="obsolete">Sponte ludere</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="obsolete">時間</translation>
+        <translation type="obsolete">Tempus</translation>
     </message>
     <message>
         <source>Talk</source>
-        <translation type="obsolete">交談</translation>
+        <translation type="obsolete">Fabulari</translation>
     </message>
     <message>
         <source>Say</source>
-        <translation type="obsolete">發言</translation>
+        <translation type="obsolete">Dicere</translation>
     </message>
     <message>
         <source>Match</source>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">Provocatio</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">進入</translation>
+        <translation type="obsolete">Ingredi</translation>
     </message>
     <message>
         <source>Game end</source>
-        <translation type="obsolete">對局結束</translation>
+        <translation type="obsolete">Exitus</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="obsolete">離開</translation>
+        <translation type="obsolete">Discedere</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="obsolete">斷線</translation>
+        <translation type="obsolete">Disconectere</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation type="obsolete">連線</translation>
+        <translation type="obsolete">Conectere</translation>
     </message>
     <message>
         <source>All Files (*)</source>
-        <translation type="obsolete">所有檔案 (*)</translation>
-    </message>
-    <message>
-        <source>Images (*.png *.jpg *.xpm *.ico)</source>
-        <translation type="obsolete">圖像 (*.png *.jpg *.xpm *.ico)</translation>
+        <translation type="obsolete">Omnia (*)</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
-        <translation type="obsolete">圖像 (*.png *.xpm *.jpg)</translation>
+        <translation type="obsolete">Imagines (*.png *.xpm *.jpg)</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.xpm *.ico)</source>
+        <translation type="obsolete">Imagines (*.png *.jpg *.xpm *.ico)</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialogGui</name>
     <message>
         <source>Preferences</source>
-        <translation type="obsolete">偏好設定</translation>
+        <translation type="obsolete">Praepositiones</translation>
     </message>
     <message>
         <source>&amp;Apply</source>
-        <translation type="obsolete">套用(&amp;A)</translation>
+        <translation type="obsolete">&amp;Perficere</translation>
+    </message>
+    <message>
+        <source>Alt+A</source>
+        <translation type="obsolete">Alt+P</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation type="obsolete">確認(&amp;O)</translation>
+        <translation type="obsolete">&amp;Recte</translation>
+    </message>
+    <message>
+        <source>Alt+O</source>
+        <translation type="obsolete">Alt+R</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation type="obsolete">記錄快速返回點</translation>
+        <translation type="obsolete">locum regressus celeris memorare</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation type="obsolete">於啟始點按下按鈕開始記憶
-之後放置且或回手釋放返回按鈕到自動開始點</translation>
+        <translation type="obsolete">malleolum in principio memorando tange.
+Post collocationes malleolum extingue ut ad principium revertatur.</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation type="obsolete">結束控制對手落子讓對方能夠落子或回手等</translation>
+        <translation type="obsolete">imperium hosti dare</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation type="obsolete">結束控制對手落子讓對方能夠落子或回手等.
+        <translation type="obsolete">imperium hosti dat ut albos nigrosque lapides poneat, etc.
 
-僅教學者能夠給予控制, 教學者及學生都能釋出控制.</translation>
+Imperium dare magister solus, relinquere discipulus quoque.</translation>
     </message>
     <message>
-        <source>Stones</source>
-        <translation type="obsolete">棋子</translation>
+        <source>Main Interface</source>
+        <translation type="obsolete">Facies Princeps</translation>
     </message>
     <message>
-        <source>Shadow</source>
-        <translation type="obsolete">陰影</translation>
+        <source>Font</source>
+        <translation type="obsolete">Typi</translation>
     </message>
     <message>
-        <source>show white stones with shadow</source>
-        <translation type="obsolete">顯示白棋陰影</translation>
+        <source>font: standard</source>
+        <translation type="obsolete">typus: rectus</translation>
     </message>
     <message>
-        <source>Show white stones with shadow. Contrast may be better then.</source>
-        <translation type="obsolete">顯示白棋陰影.  增加顏色對比</translation>
+        <source>Current font</source>
+        <translation type="obsolete">Hic typus</translation>
     </message>
     <message>
-        <source>Shell look</source>
-        <translation type="obsolete">貝瞉樣式</translation>
+        <source>Select new font</source>
+        <translation type="obsolete">Typum novum eligere</translation>
     </message>
     <message>
-        <source>let the stones look like shell stones</source>
-        <translation type="obsolete">讓棋石看起來像貝殼</translation>
-    </message>
-    <message>
-        <source>Shell look
+        <source>Select new font
 
-Use this to let stones look like shell stones with random stripes.</source>
-        <translation type="obsolete">貝瞉樣式
+Select the font for the application.</source>
+        <translation type="obsolete">Typum novum eligere
 
-讓棋石看起來像是貝殼棋石(線條樣式使用隨機方向)
+Typum programmatis eligit.</translation>
+    </message>
+    <message>
+        <source>font: marks</source>
+        <translation type="obsolete">typus: signa</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select the font for marks on the board.</source>
+        <translation type="obsolete">Typum novum eligere
+
+Typum signorum tabulae eligit.</translation>
+    </message>
+    <message>
+        <source>font: comments</source>
+        <translation type="obsolete">typus: notae</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select font used in all text input/output fields.</source>
+        <translation type="obsolete">Typum novum eligere
+
+Typum omnium regionum initus/exitus eligit.</translation>
+    </message>
+    <message>
+        <source>font: lists</source>
+        <translation type="obsolete">typus: indices</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select the font for lists.</source>
+        <translation type="obsolete">Typum novum eligere
+
+Typum indicum eligit.</translation>
+    </message>
+    <message>
+        <source>font: clocks</source>
+        <translation type="obsolete">typus: horologium</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select the font for the clocks.</source>
+        <translation type="obsolete">Typum novum eligere
+
+Typum horologii eligit.</translation>
+    </message>
+    <message>
+        <source>font: console</source>
+        <translation type="obsolete">typus: iussum</translation>
+    </message>
+    <message>
+        <source>font for the server console</source>
+        <translation type="obsolete">typus iussi moderatri</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select the font for the server console (fixed font preferably).</source>
+        <translation type="obsolete">Typum novum eligere
+
+Typum (rigidum potius) imperii moderatri eligit.</translation>
+    </message>
+    <message>
+        <source>User buttons toolbar</source>
+        <translation type="obsolete">Regula utentis</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="obsolete">Novus</translation>
+    </message>
+    <message>
+        <source>clear form</source>
+        <translation type="obsolete">indicem delere</translation>
+    </message>
+    <message>
+        <source>New
+
+clear form; doesn&apos;t make any changes to the entries</source>
+        <translation type="obsolete">Novus
+
+indicem delet; lineas nullas corrigit</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="obsolete">Adicere</translation>
+    </message>
+    <message>
+        <source>add/change current entry</source>
+        <translation type="obsolete">hanc lineam adicere/corrigere</translation>
+    </message>
+    <message>
+        <source>Add or Change
+
+Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
+
+Label &apos;Add&apos; is default. The given entries will be saved under the given title.</source>
+        <translation type="obsolete">Adicere aut Corrigere
+
+&apos;Corrigere&apos; inscriptio apparet si titulus non univocus est, i.e. linea serbata cum hoc titulo ex haec linea substituenda est.
+
+&apos;Adicere&apos; inscriptio parata est. Nova linea cum novo titulo serbabuntur.</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="obsolete">Delere</translation>
+    </message>
+    <message>
+        <source>delete current entry</source>
+        <translation type="obsolete">hanc lineam delere</translation>
+    </message>
+    <message>
+        <source>Delete
+
+Deletes the saved entries with same label
+
+Note: &apos;Delete&apos; concerns saved records.</source>
+        <translation type="obsolete">Delere
+
+Lineam serbatam cum hoc titulo delet
+
+Cave: &apos;Delere&apos; ad lineas serbatas pertinet.</translation>
+    </message>
+    <message>
+        <source>Help text:</source>
+        <translation type="obsolete">Auxilium:</translation>
+    </message>
+    <message>
+        <source>Help text, displayed as tooltip</source>
+        <translation type="obsolete">Auxilium, pro suggestione ostentum</translation>
+    </message>
+    <message>
+        <source>help text
+
+This text is displayed as tooltip of the created button</source>
+        <translation type="obsolete">auxilium
+
+Auxilium ostenditur pro suggestione malleoli creati</translation>
+    </message>
+    <message>
+        <source>Command:</source>
+        <translation type="obsolete">Iussum:</translation>
+    </message>
+    <message>
+        <source>command passed to the server</source>
+        <translation type="obsolete">iussum ad moderatrum missum</translation>
+    </message>
+    <message>
+        <source>command
+
+the command is passed to the server</source>
+        <translation type="obsolete">iussum
+
+iussum ad moderatrum mittitur</translation>
+    </message>
+    <message>
+        <source>Pixmap file:</source>
+        <translation type="obsolete">Plica imaginis:</translation>
+    </message>
+    <message>
+        <source>file path to the button pixmap</source>
+        <translation type="obsolete">index plicarum imaginis malleoli</translation>
+    </message>
+    <message>
+        <source>file path to the button pixmap
+
+Set it with the file chooser</source>
+        <translation type="obsolete">index plicarum imaginis malleoli
+
+Ex indice plicarum elige</translation>
+    </message>
+    <message>
+        <source>pixmap file chooser</source>
+        <translation type="obsolete">index plicarum imaginis</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation type="obsolete">Inscriptio:</translation>
+    </message>
+    <message>
+        <source>Button label</source>
+        <translation type="obsolete">Inscriptio malleoli</translation>
+    </message>
+    <message>
+        <source>unique label, 
+
+The label is displayed as button text.</source>
+        <translation type="obsolete">inscriptio univoca, 
+
+Inscriptio in melleolo ostenditur.</translation>
+    </message>
+    <message>
+        <source>Pixmap</source>
+        <translation type="obsolete">Imago</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation type="obsolete">Inscriptio</translation>
+    </message>
+    <message>
+        <source>Command</source>
+        <translation type="obsolete">Iussum</translation>
+    </message>
+    <message>
+        <source>Help Text</source>
+        <translation type="obsolete">Auxilium</translation>
+    </message>
+    <message>
+        <source>User defined button list</source>
+        <translation type="obsolete">Index malleolorum utentis</translation>
+    </message>
+    <message>
+        <source>Button Entries
+
+Select &apos;New&apos; to clear input fields. After filling in at least label and command use Add/Change.
+
+Select an entry to edit, change (label keeps unchanged) or delete a line.
+</source>
+        <translation type="obsolete">Index malleolorum
+
+&apos;Novum&apos; tange ad regionem initus delendam. Post titulum iussumque scriptum Adicere/Corrigere age.
+
+Rigam creandam, corrigendam (titulus non mutabitur) aut delendam elige.
 </translation>
-    </message>
-    <message>
-        <source>Smaller stones</source>
-        <translation type="obsolete">較小的棋子</translation>
-    </message>
-    <message>
-        <source>Draw stones slightly smaller</source>
-        <translation type="obsolete">用較小的棋子</translation>
-    </message>
-    <message>
-        <source>Draw stones slightly smaller
-
-If activated, stones on the board will be drawn slightly smaller and the underlaying grid lines can be seen.</source>
-        <translation type="obsolete">用小細的棋子
-
-如果開啟, 在棋盤上的棋子將會較小並能夠看見格線</translation>
-    </message>
-    <message>
-        <source>Board</source>
-        <translation type="obsolete">棋盤</translation>
-    </message>
-    <message>
-        <source>Coordinates</source>
-        <translation type="obsolete">坐標</translation>
-    </message>
-    <message>
-        <source>Show board coordinates</source>
-        <translation type="obsolete">顯示坐標</translation>
-    </message>
-    <message>
-        <source>Show board coordinates
-
-Toggles if the board coordinates are shown.</source>
-        <translation type="obsolete">顯示棋盤座標
-
-切換假如棋盤座標已經顯示</translation>
-    </message>
-    <message>
-        <source>Slider</source>
-        <translation type="obsolete">捲軸</translation>
-    </message>
-    <message>
-        <source>Show slider</source>
-        <translation type="obsolete">顯示捲軸</translation>
-    </message>
-    <message>
-        <source>Show slider
-
-Toggles the slider on the bottom of the board on or off.</source>
-        <translation type="obsolete">顯示捲軸
-
-切換顯示或關閉捲軸於棋盤</translation>
-    </message>
-    <message>
-        <source>Cursor</source>
-        <translation type="obsolete">游標</translation>
-    </message>
-    <message>
-        <source>Show a ghost stone at mouse pointer</source>
-        <translation type="obsolete">顯示死子於滑鼠指標</translation>
-    </message>
-    <message>
-        <source>Show a ghost stone at mouse pointer
-
-Have a ghost stone showing the current position of the mouse pointer on the board?</source>
-        <translation type="obsolete">顯示死子於滑鼠指標
-
-棋盤會顯示死子位置於目前滑鼠指標上?</translation>
-    </message>
-    <message>
-        <source>ToolTip coords</source>
-        <translation type="obsolete">工具提示座標</translation>
-    </message>
-    <message>
-        <source>Show coordinates as ToolTip</source>
-        <translation type="obsolete">顯示座標於工具提示</translation>
-    </message>
-    <message>
-        <source>Show coordinates as ToolTip
-
-When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
-        <translation type="obsolete">顯示座標於工具提示
-
-當滑鼠移到棋盤上的點時, 於工具列顯示目前座標.
-</translation>
-    </message>
-    <message>
-        <source>Variable mark font</source>
-        <translation type="obsolete">變化標示字型</translation>
-    </message>
-    <message>
-        <source>Variable font size for marks</source>
-        <translation type="obsolete">變化標示字型大小</translation>
-    </message>
-    <message>
-        <source>Variable font size for marks 
-
-Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
-        <translation type="obsolete">變化標示字型
-
-忽略選擇標示的文字字型大小並設定為相對於棋石大小</translation>
-    </message>
-    <message>
-        <source>Disable tooltips</source>
-        <translation type="obsolete">取消工具提示</translation>
-    </message>
-    <message>
-        <source>Disable Tool Tips</source>
-        <translation type="obsolete">取消工具提示</translation>
-    </message>
-    <message>
-        <source>Disable Tool Tips
-
-Globally disables all tool tips that would show up if the mouse hovers over a GUI element.</source>
-        <translation type="obsolete">取消工具提示
-
-全面取消所有當滑鼠停留時顯示的工具提示於一般使用者介面元素</translation>
-    </message>
-    <message>
-        <source>Smaller marks</source>
-        <translation type="obsolete">小標記</translation>
-    </message>
-    <message>
-        <source>Draw marks slightly smaller</source>
-        <translation type="obsolete">繪製更小的標記</translation>
-    </message>
-    <message>
-        <source>Draw marks slightly smaller
-
-If activated, all types of marks on the board will be drawn slightly smaller.</source>
-        <translation type="obsolete">繪製更小的標記
-
-假如允許, 所有棋盤上的標籤將會繪製成更小的標記</translation>
-    </message>
-    <message>
-        <source>Adjust font size</source>
-        <translation type="obsolete">調整字形大小</translation>
-    </message>
-    <message>
-        <source>Adjust font size for text and number labels</source>
-        <translation type="obsolete">調整標籤文字及數字字形大小</translation>
-    </message>
-    <message>
-        <source>Adjust font size for text and number labels
-
-This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
-When editing only single digit marks, it might be convinient to switch this off.</source>
-        <translation type="obsolete">調整標籤文字及數字字形大小
-
-這是常用於對局實際計算落子數的, 所以1, 2, 3 數位數字的字型大小將會相等
-當編輯單一數位標示時, 關閉此項可能會過於集中</translation>
-    </message>
-    <message>
-        <source>Bold marks</source>
-        <translation type="obsolete">粗體字</translation>
-    </message>
-    <message>
-        <source>Draw marks bold</source>
-        <translation type="obsolete">繪製粗體標示</translation>
-    </message>
-    <message>
-        <source>Draw marks bold
-
-If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
-        <translation type="obsolete">繪製粗體標示
-
-假如啟動, 所有於棋盤上的例外文字或數字將會標示為粗體</translation>
-    </message>
-    <message>
-        <source>Sidebar</source>
-        <translation type="obsolete">邊側列</translation>
-    </message>
-    <message>
-        <source>Show sidebar</source>
-        <translation type="obsolete">顯示邊側列</translation>
-    </message>
-    <message>
-        <source>Show sidebar
-
-Enables or disables the navigation and tool sidebar.</source>
-        <translation type="obsolete">顯示邊側列
-
-允許或取消巡覽及邊側工具列</translation>
-    </message>
-    <message>
-        <source>left</source>
-        <translation type="obsolete">左方</translation>
-    </message>
-    <message>
-        <source>Show sidebar on the left</source>
-        <translation type="obsolete">顯示邊側列於左方</translation>
-    </message>
-    <message>
-        <source>Show sidebar on the left
-
-Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
-        <translation type="obsolete">顯示邊側列於左方
-
-交換邊側列與棋盤, 如此的話棋盤會在左邊而邊側列會在右邊</translation>
     </message>
     <message>
         <source>Play sound for</source>
-        <translation type="obsolete">音效設定</translation>
+        <translation type="obsolete">Soni</translation>
     </message>
     <message>
-        <source>Pass</source>
-        <translation type="obsolete">虛手</translation>
+        <source>Say</source>
+        <translation type="obsolete">Dicere</translation>
     </message>
     <message>
-        <source>Play sound for pass move</source>
-        <translation type="obsolete">當虛手時播放音效</translation>
-    </message>
-    <message>
-        <source>Play sound when placing a stone</source>
-        <translation type="obsolete">當落子時播放音效</translation>
-    </message>
-    <message>
-        <source>Play sound when placing a stone
-
-Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
-        <translation type="obsolete">當落子時播放音效
-
-允許此項當你進行對局時想聽到落子聲</translation>
+        <source>Play sound for incoming say message while playing a game</source>
+        <translation type="obsolete">Nuntiis in certatione sonat</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation type="obsolete">自動播放</translation>
+        <translation type="obsolete">Sponte ludere</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode</source>
-        <translation type="obsolete">播放音效於自動播放模式</translation>
+        <translation type="obsolete">Sponte ludente sonare</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode
 
 Play a sound when a stone is placed in autoplay mode.</source>
-        <translation type="obsolete">播放音效於自動播放模式
+        <translation type="obsolete">Sponte ludente sonare
 
-當自動播放棋子落下時播放音效</translation>
+Lapide sponte collocata sonat.</translation>
     </message>
     <message>
-        <source>Talk</source>
-        <translation type="obsolete">交談</translation>
+        <source>Stones</source>
+        <translation type="obsolete">Lapides</translation>
     </message>
     <message>
-        <source>Play sound for incoming talk message</source>
-        <translation type="obsolete">當有交談訊息時播放音效</translation>
+        <source>Play sound when placing a stone</source>
+        <translation type="obsolete">Lapide collocato sonat</translation>
     </message>
     <message>
-        <source>Game end</source>
-        <translation type="obsolete">對局結束</translation>
-    </message>
-    <message>
-        <source>Play sound when played or observed game has ended</source>
-        <translation type="obsolete">當賽局結束時播放音效</translation>
-    </message>
-    <message>
-        <source>Say</source>
-        <translation type="obsolete">說</translation>
-    </message>
-    <message>
-        <source>Play sound for incoming say message while playing a game</source>
-        <translation type="obsolete">在對局時有訊息流入播放音效</translation>
+        <source>Play sound when placing a stone
+
+Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
+        <translation type="obsolete">Lapide collocato sonat
+
+Hoc excita si sonum lapidis in tabulam collocati vis.</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">輸入</translation>
+        <translation type="obsolete">Ingredi</translation>
     </message>
     <message>
         <source>Play sound when a watched player enters the room</source>
-        <translation type="obsolete">當有觀局棋友進入時播放音效</translation>
-    </message>
-    <message>
-        <source>Leave</source>
-        <translation type="obsolete">離開</translation>
-    </message>
-    <message>
-        <source>Play sound when a watched player leaves the room</source>
-        <translation type="obsolete">當觀局棋友離開時播放音效</translation>
+        <translation type="obsolete">Lusore perspecto cameram ingrediente sonat</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="obsolete">斷線</translation>
+        <translation type="obsolete">Disconectere</translation>
     </message>
     <message>
         <source>Play sound when disconnected from server</source>
-        <translation type="obsolete">當從伺服器斷開時播放音效</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="obsolete">連結</translation>
-    </message>
-    <message>
-        <source>Play sound when connected to server</source>
-        <translation type="obsolete">連結伺服器時播放音效</translation>
+        <translation type="obsolete">E moderatro disconexu sonat</translation>
     </message>
     <message>
         <source>Match</source>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">Provocatio</translation>
     </message>
     <message>
         <source>Play sound for incoming match request</source>
-        <translation type="obsolete">當有對局要求時播放音效</translation>
+        <translation type="obsolete">Provocatione recepta sonat</translation>
+    </message>
+    <message>
+        <source>Time (secs.)</source>
+        <translation type="obsolete">Tempus (s.)</translation>
+    </message>
+    <message>
+        <source>Play sound for remaining seconds of own time</source>
+        <translation type="obsolete">Secundis temporis reliquis sonat</translation>
+    </message>
+    <message>
+        <source>Check this box if you want to be warned when Byo Yomi ends.
+You can set the warning time besides</source>
+        <translation type="obsolete">Hoc excitat si moneri Byoyomi temporis exhausti vis.
+Tempus monitus imponi potest</translation>
+    </message>
+    <message>
+        <source>Warning time</source>
+        <translation type="obsolete">Tempus monitus</translation>
+    </message>
+    <message>
+        <source>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</source>
+        <translation type="obsolete">Quot secunda ante Byoyomi exitum excitatum esse vis elige</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation type="obsolete">Conectere</translation>
+    </message>
+    <message>
+        <source>Play sound when connected to server</source>
+        <translation type="obsolete">Moderatrum conexu sonat</translation>
+    </message>
+    <message>
+        <source>Pass</source>
+        <translation type="obsolete">Omittere</translation>
+    </message>
+    <message>
+        <source>Play sound for pass move</source>
+        <translation type="obsolete">Moto omisso sonat</translation>
+    </message>
+    <message>
+        <source>Leave</source>
+        <translation type="obsolete">Discedere</translation>
+    </message>
+    <message>
+        <source>Play sound when a watched player leaves the room</source>
+        <translation type="obsolete">Lusore perspecto e camera discesso sonat</translation>
+    </message>
+    <message>
+        <source>Talk</source>
+        <translation type="obsolete">Fabulari</translation>
+    </message>
+    <message>
+        <source>Play sound for incoming talk message</source>
+        <translation type="obsolete">Fabulationibus sonat</translation>
+    </message>
+    <message>
+        <source>Game end</source>
+        <translation type="obsolete">Exitus</translation>
+    </message>
+    <message>
+        <source>Play sound when played or observed game has ended</source>
+        <translation type="obsolete">Certationibus lusis aut spectatis perfectis sonat</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation type="obsolete">Lingua</translation>
+    </message>
+    <message>
+        <source>Set application language</source>
+        <translation type="obsolete">Linguam programmatis eligere</translation>
+    </message>
+    <message>
+        <source>Set application language
+
+Choose your language for qGo.
+If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
+
+This change will take effect only after qGo has been restarted.
+
+If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
+        <translation type="obsolete">Linguam programmatis eligere
+
+Linguam qGo elige.
+&apos;Linguam systematis&apos; electam, qGo linguam paratam systamatis utitur. In Linux variabiliscirumiectorum LANG, in Windows praepositio linguae inspecta est.
+
+Post qGo iterum operatum mutatio efficetur.
+
+Si lingua tua non adest, qGo convertere pondera. qGo domum ade:  http://qgo.sourceforge.net</translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation type="obsolete">Lingua systematis</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="obsolete">Colores</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="obsolete">Ima</translation>
+    </message>
+    <message>
+        <source>Current background color</source>
+        <translation type="obsolete">Color imorum</translation>
+    </message>
+    <message>
+        <source>Select new color</source>
+        <translation type="obsolete">Novum colorem eligere</translation>
+    </message>
+    <message>
+        <source>Select new color
+
+Select the color for dialog background in the application.</source>
+        <translation type="obsolete">Novum colorem eligere
+
+Colorem imorum dialogorum programmatis eligit.</translation>
+    </message>
+    <message>
+        <source>Alternate (lists)</source>
+        <translation type="obsolete">Indices</translation>
+    </message>
+    <message>
+        <source>Board Window</source>
+        <translation type="obsolete">Fenestra Tabellae</translation>
+    </message>
+    <message>
+        <source>Board</source>
+        <translation type="obsolete">Tabella</translation>
+    </message>
+    <message>
+        <source>Coordinates</source>
+        <translation type="obsolete">Coordinata</translation>
+    </message>
+    <message>
+        <source>Show board coordinates</source>
+        <translation type="obsolete">Coordinata tabellae ostendere</translation>
+    </message>
+    <message>
+        <source>Show board coordinates
+
+Toggles if the board coordinates are shown.</source>
+        <translation type="obsolete">Coordinata tabellae ostendere
+
+Coordinata tabellae ostenta excitat.</translation>
+    </message>
+    <message>
+        <source>SGF Style</source>
+        <translation type="obsolete">SGF Modus</translation>
+    </message>
+    <message>
+        <source>Show SGF board coordinates</source>
+        <translation type="obsolete">Coordinata tabellae SGF ostendere</translation>
+    </message>
+    <message>
+        <source>Show SGF board coordinates
+										
+Toggles if SGF style board coordinates are shown.</source>
+        <translation type="obsolete">Coordinata tabellae SGF ostendere
+	
+Coordinata tabellae modo SGF ostenta excitat.</translation>
+    </message>
+    <message>
+        <source>Slider</source>
+        <translation type="obsolete">Traha</translation>
+    </message>
+    <message>
+        <source>Show slider</source>
+        <translation type="obsolete">Traham ostendere</translation>
+    </message>
+    <message>
+        <source>Show slider
+
+Toggles the slider on the bottom of the board on or off.</source>
+        <translation type="obsolete">Traham ostendere
+
+Traham sub tabella excitat aut extinguit.</translation>
+    </message>
+    <message>
+        <source>Cursor</source>
+        <translation type="obsolete">Cursor</translation>
+    </message>
+    <message>
+        <source>Show a ghost stone at mouse pointer</source>
+        <translation type="obsolete">Sub muris indice simulacrum lapidis ostendere</translation>
+    </message>
+    <message>
+        <source>Show a ghost stone at mouse pointer
+
+Have a ghost stone showing the current position of the mouse pointer on the board?</source>
+        <translation type="obsolete">Sub muris indice simulacrum lapidis ostendere
+
+In loco indicis muris in tabella simulacrum lapidis ostendo?</translation>
+    </message>
+    <message>
+        <source>ToolTip coords</source>
+        <translation type="obsolete">Coordinata pro suggestionibus</translation>
+    </message>
+    <message>
+        <source>Show coordinates as ToolTip</source>
+        <translation type="obsolete">Coordinata pro suggestionibus ostendere</translation>
+    </message>
+    <message>
+        <source>Show coordinates as ToolTip
+
+When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
+        <translation type="obsolete">Coordinata pro suggestionibus ostendere
+
+In loco indicis muris in tabella, suggestionem cum coordinatis ostendit.</translation>
+    </message>
+    <message>
+        <source>Variable mark font</source>
+        <translation type="obsolete">Typus notarum mutabilis</translation>
+    </message>
+    <message>
+        <source>Variable font size for marks</source>
+        <translation type="obsolete">Amplitudo mutabilis typi notarum</translation>
+    </message>
+    <message>
+        <source>Variable font size for marks 
+
+Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
+        <translation type="obsolete">Amplitudo mutabilis typi notarum 
+
+Amplitudinem delectam typi notarum ignorat atque sicut lapidem defigit.</translation>
+    </message>
+    <message>
+        <source>Disable tooltips</source>
+        <translation type="obsolete">Suggestiones extinguere</translation>
+    </message>
+    <message>
+        <source>Disable Tool Tips</source>
+        <translation type="obsolete">Suggestiones extinguere</translation>
+    </message>
+    <message>
+        <source>Disable Tool Tips
+
+Globally disables all tool tips that would show up if the mouse hovers over a GUI element.</source>
+        <translation type="obsolete">Suggestiones extinguere
+
+Omnes suggestiones quae mure super elementum GUI apparent extinguit.</translation>
+    </message>
+    <message>
+        <source>Smaller marks</source>
+        <translation type="obsolete">Parvae notae</translation>
+    </message>
+    <message>
+        <source>Draw marks slightly smaller</source>
+        <translation type="obsolete">Notas paulo parviores scribere</translation>
+    </message>
+    <message>
+        <source>Draw marks slightly smaller
+
+If activated, all types of marks on the board will be drawn slightly smaller.</source>
+        <translation type="obsolete">Notas paulo parviores scribere
+
+Notae in tabella omnes paulo parviores scribentur.</translation>
+    </message>
+    <message>
+        <source>Adjust font size</source>
+        <translation type="obsolete">Amplitudinem typi accomodare</translation>
+    </message>
+    <message>
+        <source>Adjust font size for text and number labels</source>
+        <translation type="obsolete">Amplitudinem typi litterarum numerorumque accomodare</translation>
+    </message>
+    <message>
+        <source>Adjust font size for text and number labels
+
+This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
+When editing only single digit marks, it might be convenient to switch this off.</source>
+        <translation type="obsolete">Amplitudinem typorum litterarum numerorumque accomodare
+
+Hoc ad omnes motus certationis numeris notandos prodest, ut amplitudo typi unius, duarum aut trium litterarum eadem sit.</translation>
+    </message>
+    <message>
+        <source>Bold marks</source>
+        <translation type="obsolete">Grandes notae</translation>
+    </message>
+    <message>
+        <source>Draw marks bold</source>
+        <translation type="obsolete">Notas grandes scribere</translation>
+    </message>
+    <message>
+        <source>Draw marks bold
+
+If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
+        <translation type="obsolete">Notas grandes scribere
+
+Si excitatur notae omnes, praeter litteras numerosque in tabella,grandes scribentur.</translation>
+    </message>
+    <message>
+        <source>Sidebar</source>
+        <translation type="obsolete">Regula lateralis</translation>
+    </message>
+    <message>
+        <source>Show sidebar</source>
+        <translation type="obsolete">Regulam lateralem ostendere</translation>
+    </message>
+    <message>
+        <source>Show sidebar
+
+Enables or disables the navigation and tool sidebar.</source>
+        <translation type="obsolete">Regulam lateralem ostendere
+
+Regulas laterales navigationis atque instrumentorum excitat aut extinguit.</translation>
+    </message>
+    <message>
+        <source>left</source>
+        <translation type="obsolete">laeva</translation>
+    </message>
+    <message>
+        <source>Show sidebar on the left</source>
+        <translation type="obsolete">Regulam lateralem laeva ostendere</translation>
+    </message>
+    <message>
+        <source>Show sidebar on the left
+
+Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
+        <translation type="obsolete">Regulam lateralem laeva ostendere
+
+Regulam cum tabella commutat, ita tabella laeva atque regula dextera est.</translation>
+    </message>
+    <message>
+        <source>Goban</source>
+        <translation type="obsolete">Tabella</translation>
+    </message>
+    <message>
+        <source>Board picture</source>
+        <translation type="obsolete">Imago tabellae</translation>
+    </message>
+    <message>
+        <source>Path to the goban picture</source>
+        <translation type="obsolete">Index plicarum imaginis tabellae</translation>
+    </message>
+    <message>
+        <source>Path to the goban picture.
+If the picture is not set, or unvalid, a default goban is used by qgo</source>
+        <translation type="obsolete">Index plicarum imaginis tabellae.
+Si index aut imago non legitimi sunt, tabellam paratam qgo eligit</translation>
+    </message>
+    <message>
+        <source>Table picture</source>
+        <translation type="obsolete">Imago pavimenti</translation>
+    </message>
+    <message>
+        <source>Path to the table picture</source>
+        <translation type="obsolete">Index plicarum imaginis pavimenti</translation>
+    </message>
+    <message>
+        <source>Path to the table picture.
+If the picture is not set, or unvalid, a default picture is used by qgo</source>
+        <translation type="obsolete">Index plicarum imaginis pavimenti.
+Si index aut imago non legitimi sunt, imaginem paratam qgo eligit</translation>
+    </message>
+    <message>
+        <source>On line games</source>
+        <translation type="obsolete">Certationes in moderatro</translation>
+    </message>
+    <message>
+        <source>Anti clicko (1/4 second click latency)</source>
+        <translation type="obsolete">Anti-tactio (cunctatio quadrante secundi)</translation>
+    </message>
+    <message>
+        <source>Check for setting an anti cliko delay for on line games</source>
+        <translation type="obsolete">Elige cuntationem anti-tactione pro certationibus conexis</translation>
+    </message>
+    <message>
+        <source>Anti Clicko
+
+Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
+        <translation type="obsolete">Anti-tactio
+
+Elige ut cunctatio anti-tactione (quadrante secundi) pro certationibus conexis excitatur.
+Cum mus ad motum in tabellam collocandum tangitur, motus non perficitur malleolo propere dimisso.</translation>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="obsolete">間格:</translation>
+        <translation type="obsolete">Tempus:</translation>
     </message>
     <message>
         <source>0.1</source>
@@ -7743,88 +8066,58 @@ Play a sound when a stone is placed in autoplay mode.</source>
         <translation type="obsolete">1</translation>
     </message>
     <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
+        <source>2.5</source>
+        <translation type="obsolete">2.5</translation>
     </message>
     <message>
         <source>5</source>
         <translation type="obsolete">5</translation>
     </message>
     <message>
+        <source>7.5</source>
+        <translation type="obsolete">7.5</translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="obsolete">10</translation>
+    </message>
+    <message>
         <source>Time interval for autoplay</source>
-        <translation type="obsolete">自動播放時間間隔</translation>
+        <translation type="obsolete">Tempus sponte ludente</translation>
     </message>
     <message>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation type="obsolete">自動播放時間間隔
+        <translation type="obsolete">Tempus sponte ludente
 
-延遲自動播放落子秒數間隔</translation>
+Tempus intra motus cum ludit sponte.</translation>
     </message>
     <message>
         <source>sgf time tags</source>
-        <translation type="obsolete">SGF時間標籤</translation>
+        <translation type="obsolete">notae temporis sgf</translation>
     </message>
     <message>
         <source>use time info of input file</source>
-        <translation type="obsolete">使用輸入檔案時間資訊</translation>
+        <translation type="obsolete">notae temporis plicae</translation>
     </message>
     <message>
         <source>sgf time tags
 
 Use time info of input file. The autoplay speed is same as recorded.
 If not available then interval time is used.</source>
-        <translation type="obsolete">SGF時間標籤
+        <translation type="obsolete">notae temporis sgf
 
-使用時間資訊或輸入檔案. 自動播放的速度會與錄製的相同
-假如取消此項將會使用間隔時間</translation>
-    </message>
-    <message>
-        <source>Interface Style</source>
-        <translation type="obsolete">界面風格</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation type="obsolete">語言</translation>
-    </message>
-    <message>
-        <source>Set application language</source>
-        <translation type="obsolete">設定程式語言</translation>
-    </message>
-    <message>
-        <source>Set application language
-
-Choose your language for qGo.
-If &apos;System default&apos; is selected, qGo will use the standard language of your system. On Linux this will check the environment variable LANG, on Windows simply the language you have set in your preferences.
-
-This change will take effect only after qGo has been restarted.
-
-If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation type="obsolete">設定程式語言
-
-選擇你要在qGo上使用的語言
-如果選擇「系統預設」， qGo 將會使用你的系統的標準語言. 於 Linux 此將會檢查LANG環境變數, 於 Windows 設定於你的偏好設定中
-
-將套用於 qGo 重新啟動之後
-
-假如你的語言尚未支援, 你可以考慮進行翻譯 qGo. 請查看 qGo 網站於 http://qgo.sourceforge.net</translation>
-    </message>
-    <message>
-        <source>System default</source>
-        <translation type="obsolete">系統預設</translation>
+Notas temporis plicae uterit. Tam celeriter quam serbatum est ludit.
+Tempus paratum uterit si in plica notae temporis non inventae sunt.</translation>
     </message>
     <message>
         <source>Comment orientation</source>
-        <translation type="obsolete">註解方向</translation>
+        <translation type="obsolete">Cursus notarum</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation</source>
-        <translation type="obsolete">水平或垂直註解方向</translation>
+        <translation type="obsolete">Libratae vel derectae notae</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation
@@ -7834,29 +8127,29 @@ The comment field will either be displayed on the bottom of the board or on the 
 For more dynamic display, pin off the comment field in the View menu.
 
 If None is selected, the comment field is by default hidden.</source>
-        <translation type="obsolete">水平或垂直註解方向
+        <translation type="obsolete">Libratae vel derectae notae
 
-註解欄將會出現在棋盤的按鈕上或右邊
+Notae sub tabella vel dextera ostendentur.
 
-為了更多動態面板在清單上固定註解欄
+Ad aspectum variandum in &apos;Aspectus&apos; indice regionem notarum solve.
 
-如果 None 沒有選擇, 註解欄預設則為隱藏</translation>
+Nihil delectu notae non videntur.</translation>
     </message>
     <message>
         <source>as saved</source>
-        <translation type="obsolete">已儲存</translation>
+        <translation type="obsolete">sicut serbatum</translation>
     </message>
     <message>
         <source>horizontal</source>
-        <translation type="obsolete">水平</translation>
+        <translation type="obsolete">libratum</translation>
     </message>
     <message>
         <source>vertical</source>
-        <translation type="obsolete">垂直</translation>
+        <translation type="obsolete">derectum</translation>
     </message>
     <message>
         <source>choose default comment orientation</source>
-        <translation type="obsolete">選擇預設註解方向</translation>
+        <translation type="obsolete">cursum notarum elige</translation>
     </message>
     <message>
         <source>default comment field orientation
@@ -7867,312 +8160,150 @@ horizontal	always show horizontal comment field
 vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation type="obsolete">使用 ALT+&lt;0-9&gt; 儲存位置,大小及註解方向, 
-  回復使用 CTRL+&lt;0-9&gt;
-水平 顯示註解欄位為水平
-垂直 顯示註解欄位為垂直
+        <translation type="obsolete">cursum notarum elige
 
-使用已儲存註解欄方向你必須選擇 &apos;另存為&apos;. 使用 ALT/CTRL+&lt;數子&gt; 當水平或垂直被選擇時, 儲存註解欄方向將會被忽視</translation>
+sicut serbatum	ALT+&lt;0..9&gt; tange ad locum, amplitudinem cursumque serbandum, 
+	CTRL+&lt;0..9&gt; ad colligendum
+libratum	notas libratas ostendit
+derectum	notas derectas ostendit
+
+&apos;Sicut serbatum&apos; age ut cursus serbetur. ALT/CTRL+&lt;numerum&gt; tange cum librato/derecto delecto ut cursus serbatus ignoretur.</translation>
     </message>
     <message>
         <source>Variation display</source>
-        <translation type="obsolete">顯示變化</translation>
+        <translation type="obsolete">Variationes ostendere</translation>
     </message>
     <message>
         <source>Display variations</source>
-        <translation type="obsolete">顯示變化</translation>
+        <translation type="obsolete">Variationes ostendere</translation>
     </message>
     <message>
         <source>Display variations
 
 Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</source>
-        <translation type="obsolete">顯示變化
+        <translation type="obsolete">Variationes ostendere
 
-選擇如何顯示目前落子的之前變化型. 或者完全沒有, 死子或為小棋子.</translation>
+Quomodo omnes fratres huius motus ostendentur elige: non ostenti aut simulacra aut parvi lapides.</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="obsolete">無</translation>
+        <translation type="obsolete">Nihil</translation>
     </message>
     <message>
         <source>Ghosts</source>
-        <translation type="obsolete">死子</translation>
+        <translation type="obsolete">Simulacra</translation>
     </message>
     <message>
         <source>Small stones</source>
-        <translation type="obsolete">小棋子</translation>
+        <translation type="obsolete">Lapides parvi</translation>
     </message>
     <message>
-        <source>Windows</source>
-        <translation type="obsolete">視窗樣式</translation>
+        <source>Ugly 2D</source>
+        <translation type="obsolete">Turpe II-D</translation>
     </message>
     <message>
-        <source>Platinum</source>
-        <translation type="obsolete">Platinum</translation>
+        <source>flat circled ... ugly but asked for ...</source>
+        <translation type="obsolete">disci plani ... turpes sed petiti ...</translation>
     </message>
     <message>
-        <source>Motif</source>
-        <translation type="obsolete">Motif</translation>
-    </message>
-    <message>
-        <source>Motif Plus</source>
-        <translation type="obsolete">Motif Plus</translation>
-    </message>
-    <message>
-        <source>CDE</source>
-        <translation type="obsolete">CDE</translation>
-    </message>
-    <message>
-        <source>SGI</source>
-        <translation type="obsolete">SGI</translation>
-    </message>
-    <message>
-        <source>Choose your interface style</source>
-        <translation type="obsolete">選擇你的界面風格</translation>
-    </message>
-    <message>
-        <source>Choose interface style
+        <source>Stone appearance
 
-Choose one of the styles for the look-and-feel of this program.</source>
-        <translation type="obsolete">選擇你的界面風格
+This will display back and white circles</source>
+        <translation type="obsolete">Facies lapidis
 
-選擇這個程式的外觀界面風格</translation>
+Circulos nigros atque albos ostendit</translation>
     </message>
     <message>
-        <source>Light wood</source>
-        <translation type="obsolete">亮紋</translation>
+        <source>Plain 3D</source>
+        <translation type="obsolete">III-D simplex</translation>
     </message>
     <message>
-        <source>Dark wood</source>
-        <translation type="obsolete">暗紋</translation>
+        <source>plain 3D (no shadow, no stripes)</source>
+        <translation type="obsolete">III-D simplex (sine umbra, sine venis)</translation>
     </message>
     <message>
-        <source>Wood 3</source>
-        <translation type="obsolete">木紋3</translation>
-    </message>
-    <message>
-        <source>Wood 4</source>
-        <translation type="obsolete">木紋4</translation>
-    </message>
-    <message>
-        <source>Wood 5</source>
-        <translation type="obsolete">木紋5</translation>
-    </message>
-    <message>
-        <source>Choose your board style</source>
-        <translation type="obsolete">選擇你的棋盤樣式</translation>
-    </message>
-    <message>
-        <source>Choose your board style
+        <source>Stone appearance
 
-Choose a style for the board.</source>
-        <translation type="obsolete">選擇你的棋盤樣式
+this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
+        <translation type="obsolete">Facies lapidis
 
-替棋盤選擇樣式</translation>
+simplices III-D lapides ostendit, sine umbra atque sine venis alborum lapidum</translation>
     </message>
     <message>
-        <source>Font</source>
-        <translation type="obsolete">字型</translation>
+        <source>Realistic</source>
+        <translation type="obsolete">verisimilis</translation>
     </message>
     <message>
-        <source>font: standard</source>
-        <translation type="obsolete">字型: 標準</translation>
+        <source>Realistic 3D stones with stripes and shadow</source>
+        <translation type="obsolete">Verisimiles III-D lapides cum venis et umbra</translation>
     </message>
     <message>
-        <source>Current font</source>
-        <translation type="obsolete">目前字型</translation>
-    </message>
-    <message>
-        <source>Select new font</source>
-        <translation type="obsolete">選擇新字型</translation>
-    </message>
-    <message>
-        <source>Select new font
+        <source>Stone appearance
 
-Select the font for the application.</source>
-        <translation type="obsolete">選擇新字型
+This will display realistic 3D stones with stripes and shadow</source>
+        <translation type="obsolete">Facies lapidis
 
-選擇程式的字形.</translation>
+verisimiles III-D lapides ostendit, cum venis et umbra</translation>
     </message>
     <message>
-        <source>font: marks</source>
-        <translation type="obsolete">字型: 標記</translation>
+        <source>Computer Go</source>
+        <translation type="obsolete">Go Computatro</translation>
     </message>
     <message>
-        <source>Select new font
-
-Select the font for marks on the board.</source>
-        <translation type="obsolete">選擇新字型
-
-選擇棋盤標記新字型.</translation>
+        <source>Go Engine</source>
+        <translation type="obsolete">Go Programma</translation>
     </message>
     <message>
-        <source>font: comments</source>
-        <translation type="obsolete">字型: 註解</translation>
+        <source>Path to the Go program</source>
+        <translation type="obsolete">Index plicarum Go programmatis</translation>
     </message>
     <message>
-        <source>Select new font
-
-Select font used in all text input/output fields.</source>
-        <translation type="obsolete">選擇新字型
-
-選擇自行使用於所有文字輸入輸出欄位</translation>
+        <source>Path to the Go playing program, e.g. GnuGo</source>
+        <translation type="obsolete">Index plicarum programmatis Go ludentis, e.g. GnuGo</translation>
     </message>
     <message>
-        <source>font: lists</source>
-        <translation type="obsolete">字型: 列表</translation>
+        <source>Default for White</source>
+        <translation type="obsolete">Parata Albo</translation>
     </message>
     <message>
-        <source>Select new font
-
-Select the font for lists.</source>
-        <translation type="obsolete">選擇新字型
-
-選擇列表新字型</translation>
+        <source>Computer</source>
+        <translation type="obsolete">Computatrum</translation>
     </message>
     <message>
-        <source>font: clocks</source>
-        <translation type="obsolete">字型: 計時器</translation>
+        <source>Human</source>
+        <translation type="obsolete">Homo</translation>
     </message>
     <message>
-        <source>Select new font
-
-Select the font for the clocks.</source>
-        <translation type="obsolete">選擇新字型
-
-選擇計時器新字型</translation>
+        <source>Default for Black</source>
+        <translation type="obsolete">Parata Nigro</translation>
     </message>
     <message>
-        <source>Color</source>
-        <translation type="obsolete">顏色</translation>
+        <source>Default games settings</source>
+        <translation type="obsolete">Praepositiones paratae certationum</translation>
     </message>
     <message>
-        <source>color: Background</source>
-        <translation type="obsolete">顏色: 背景</translation>
+        <source>Handicap :</source>
+        <translation type="obsolete">Detrimenta:</translation>
     </message>
     <message>
-        <source>Current background color</source>
-        <translation type="obsolete">現在的背景顏色</translation>
+        <source>Playing time</source>
+        <translation type="obsolete">Tempus certationis</translation>
     </message>
     <message>
-        <source>Select new color</source>
-        <translation type="obsolete">選擇新顏色</translation>
+        <source>Board size:</source>
+        <translation type="obsolete">Amplitudo tabellae:</translation>
     </message>
     <message>
-        <source>Select new color
-
-Select the color for dialog background in the application.</source>
-        <translation type="obsolete">選擇新顏色
-
-選擇程式對話方塊背景顏色</translation>
+        <source>board size</source>
+        <translation type="obsolete">amplitudo tabellae</translation>
     </message>
     <message>
-        <source>ASCII Characters</source>
-        <translation type="obsolete">ASCII 符號</translation>
-    </message>
-    <message>
-        <source>ASCII character for import/export</source>
-        <translation type="obsolete">ASCII符號匯入/匯出</translation>
-    </message>
-    <message>
-        <source>ASCII character for import
-
-When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
-        <translation type="obsolete">匯入ASCII符號
-
-當匯入或匯出 ASCII 檔案時, 使用這些符號指示棋盤上的其實或點</translation>
-    </message>
-    <message>
-        <source>Black stone:</source>
-        <translation type="obsolete">黑子棋石:</translation>
-    </message>
-    <message>
-        <source>#</source>
-        <translation type="obsolete">#</translation>
-    </message>
-    <message>
-        <source>White stone:</source>
-        <translation type="obsolete">白子棋石:</translation>
-    </message>
-    <message>
-        <source>O</source>
-        <translation type="obsolete">O</translation>
-    </message>
-    <message>
-        <source>Star point:</source>
-        <translation type="obsolete">星位點:</translation>
-    </message>
-    <message>
-        <source>,</source>
-        <translation type="obsolete">,</translation>
-    </message>
-    <message>
-        <source>Empty point:</source>
-        <translation type="obsolete">空白點:</translation>
-    </message>
-    <message>
-        <source>.</source>
-        <translation type="obsolete">.</translation>
-    </message>
-    <message>
-        <source>Horizontal border:</source>
-        <translation type="obsolete">水平框架:</translation>
-    </message>
-    <message>
-        <source>|</source>
-        <translation type="obsolete">|</translation>
-    </message>
-    <message>
-        <source>Vertical border:</source>
-        <translation type="obsolete">垂直框架:</translation>
-    </message>
-    <message>
-        <source>-</source>
-        <translation type="obsolete">-</translation>
-    </message>
-    <message>
-        <source>Add as brother</source>
-        <translation type="obsolete">加入為之前變化</translation>
-    </message>
-    <message>
-        <source>Add imported position as brother</source>
-        <translation type="obsolete">新增匯入部份為之前變化</translation>
-    </message>
-    <message>
-        <source>Add imported position as brother
-
-If disabled, the imported position is added as son.</source>
-        <translation type="obsolete">新增匯入部份為之前變化
-
-假如停用, 匯入部份會新增到之後變化.</translation>
-    </message>
-    <message>
-        <source>Square</source>
-        <translation type="obsolete">方形</translation>
-    </message>
-    <message>
-        <source>Square
-
-Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">方形
-
-編輯三角標示於棋盤. 左鍵設定標示, 右鍵移除.</translation>
-    </message>
-    <message>
-        <source>Remember last directory</source>
-        <translation type="obsolete">記住最後的目錄</translation>
-    </message>
-    <message>
-        <source>Remember last directory
-
-When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
-        <translation type="obsolete">記錄最後目錄
-
-在切換之後, 最後使用於讀取或儲存SGF棋譜檔的目錄將會被記錄</translation>
+        <source>Import / Export</source>
+        <translation type="obsolete">Importare / Exportare</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving</source>
-        <translation type="obsolete">讀取或儲存的文字編碼</translation>
+        <translation type="obsolete">Conversio litterarum octetis ad colligendum et servandum</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving
@@ -8180,15 +8311,19 @@ When toggled on, the last used directory when loading or saving sgf files will b
 This is used for loading and saving files containing asian letters.
 If &apos;None&apos; is selected, Latin1 encoding will be used, common in western world.
 &apos;None&apos; will speed up loading large files like Kogos Joseki dictionary significantly.</source>
-        <translation type="obsolete">讀取或儲存的文字編碼
+        <translation type="obsolete">Codex litterarum ad colligendum et servandum
 
-此被正在使用於讀取或儲存檔案中包含亞洲文字
-假如選擇 &apos;None&apos; , 將會使用 Latin1 編碼, 通常使用於歐美世界.
-&apos;None&apos; 將會加速大檔案讀取像是重要目錄 Kogos Joseki</translation>
+Ad colligendum et servandum plicas compositas in linguis Asiae.
+Si &apos;Nihil&apos; electum est Latin1 codice, consueto in occasu, uterit.
+&apos;Nihil&apos; magnopere accelerat collectionem plicarum magnarum sicut &quot;Kogo Joseki thesauri&quot;.</translation>
     </message>
     <message>
         <source>Text encoding:</source>
-        <translation type="obsolete">文字編碼:</translation>
+        <translation type="obsolete">Codex litterarum:</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="obsolete">Big5</translation>
     </message>
     <message>
         <source>EUC-JP</source>
@@ -8216,171 +8351,159 @@ If &apos;None&apos; is selected, Latin1 encoding will be used, common in western
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation type="obsolete">要求打掛</translation>
+        <translation type="obsolete">Dilationem petere</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation type="obsolete">打掛
+        <translation type="obsolete">Differre.
 
-送出打掛請求給對手. 假如對方同意, 此對局將會打掛並儲存</translation>
+Hosti dilationem petit. Si accipit, certatio delata atque servata erit.</translation>
     </message>
     <message>
         <source>Fast loading (EXPERIMENTAL)</source>
-        <translation type="obsolete">快速讀取 (測試中)</translation>
+        <translation type="obsolete">Collectio celeris (EXPERIMENTIS CONSTAT)</translation>
     </message>
     <message>
         <source>Enable fast loading</source>
-        <translation type="obsolete">允許快速讀取</translation>
+        <translation type="obsolete">Collectionem celerem excitat</translation>
     </message>
     <message>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
-        <translation type="obsolete">允許快速讀取
+        <translation type="obsolete">Collectionem celerem excitat
 
-警告: 此為試驗中並且無法作業特性!</translation>
+Cave: experimentis constat et optime non movetur!</translation>
     </message>
     <message>
         <source>Fast loading is experimental right now and does not work completely!</source>
-        <translation type="obsolete">快速讀取目前為試驗階段並且無法完整作業!</translation>
+        <translation type="obsolete">Collectio celeris nunc experimentis constat et optime non movetur!</translation>
     </message>
     <message>
-        <source>Special players</source>
-        <translation type="obsolete">特殊棋友</translation>
+        <source>Imported game position</source>
+        <translation type="obsolete">Status certationis importatus</translation>
     </message>
     <message>
-        <source>watch players:</source>
-        <translation type="obsolete">監看棋友:</translation>
+        <source>Add as brother</source>
+        <translation type="obsolete">Pro fratre  addicere</translation>
     </message>
     <message>
-        <source>players to be colored red</source>
-        <translation type="obsolete">棋友標示為紅色</translation>
+        <source>Add imported position as brother</source>
+        <translation type="obsolete">Pro fratre statum importatum addicit</translation>
     </message>
     <message>
-        <source>add players you want to
+        <source>Add imported position as brother
 
-- see red coloured and
-- hear sound if entering/leaving.
+If disabled, the imported position is added as son.</source>
+        <translation type="obsolete">Pro fratre statum importatum addicit
 
-Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
-        <translation type="obsolete">新增你想要的棋友
-
-- 設定為紅色並
-- 如果上限或離線聽見聲音
-
-使用分號 &quot;;&quot; 為分隔符號 (無空白)</translation>
+Aliter pro filio.</translation>
     </message>
     <message>
-        <source>players to be colored green</source>
-        <translation type="obsolete">棋友標示為綠色</translation>
+        <source>Square</source>
+        <translation type="obsolete">Quadratum</translation>
     </message>
     <message>
-        <source>add players you want to
+        <source>Square
 
-- see green coloured and
-- exclude from shouting.
+Edit square marks on the board. Left click sets a mark, right click removes it.</source>
+        <translation type="obsolete">Quadratum
 
-Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
-        <translation type="obsolete">新增你想要的棋友
-
-- 設定為綠色並
-- 如果上限或離線聽見聲音
-
-使用分號 &quot;;&quot; 為分隔符號 (無空白)</translation>
+Signa forma quadrati in tabulam collocat. Laevo muris collocatur, dextero amovetur.</translation>
     </message>
     <message>
-        <source>exclude players:</source>
-        <translation type="obsolete">排除棋友:</translation>
+        <source>Remember last directory</source>
+        <translation type="obsolete">Indicem plicarum novissimum memorare</translation>
     </message>
     <message>
-        <source>IGS</source>
-        <translation type="obsolete">IGS</translation>
-    </message>
-    <message>
-        <source>Extended user info</source>
-        <translation type="obsolete">延伸使用者資訊</translation>
-    </message>
-    <message>
-        <source>see more information from users -&gt; slow!</source>
-        <translation type="obsolete">檢視更多棋友訊息 -&gt; 緩慢!</translation>
-    </message>
-    <message>
-        <source>If checked then additional information is requested from server.
+        <source>Remember last directory
 
-&apos;user&apos; cmd instead of &apos;who&apos;, thus, info string, won/lost, country and language settings are available.
+When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
+        <translation type="obsolete">Indicem plicarum recentiorem memorare
 
-Works slow! User &apos;Refresh players&apos; after changing.
-
-On IGS only.</source>
-        <translation type="obsolete">如果點選將會由伺服器要求加入的資訊
-
-&apos;user&apos;  指令代替 &apos;who&apos;, 如此, 資訊串, 勝/負, 國家及語言設定開啟
-
-作業緩慢! 使用者 &apos;重新整理棋友&apos; 於改變後
-
-僅適用於 IGS.</translation>
+In sgf plicas colligendo aut servando, indicem novissimum memorat.</translation>
     </message>
     <message>
-        <source>Go Engine</source>
-        <translation type="obsolete">圍棋引擎</translation>
+        <source>ASCII Characters</source>
+        <translation type="obsolete">ASCII Signa</translation>
     </message>
     <message>
-        <source>Path to the Go program</source>
-        <translation type="obsolete">圍棋程式路徑</translation>
+        <source>ASCII character for import/export</source>
+        <translation type="obsolete">ASCII signa ad importandum/exportandum</translation>
     </message>
     <message>
-        <source>Path to the Go playing program, e.g. GnuGo</source>
-        <translation type="obsolete">圍棋對局程式路徑, 例如 GnuGo</translation>
+        <source>ASCII character for import
+
+When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
+        <translation type="obsolete">ASCII signa ad importandum
+
+ASCII plicas importans aut exportans, his signis uterit ut lapides aut loci in tabulam notentur.</translation>
+    </message>
+    <message>
+        <source>Black stone:</source>
+        <translation type="obsolete">Lapis niger:</translation>
+    </message>
+    <message>
+        <source>#</source>
+        <translation type="obsolete">#</translation>
+    </message>
+    <message>
+        <source>White stone:</source>
+        <translation type="obsolete">Lapis albus:</translation>
+    </message>
+    <message>
+        <source>O</source>
+        <translation type="obsolete">O</translation>
+    </message>
+    <message>
+        <source>Star point:</source>
+        <translation type="obsolete">Locus sidereus:</translation>
+    </message>
+    <message>
+        <source>,</source>
+        <translation type="obsolete">,</translation>
+    </message>
+    <message>
+        <source>Empty point:</source>
+        <translation type="obsolete">Locus inaniss:</translation>
+    </message>
+    <message>
+        <source>.</source>
+        <translation type="obsolete">.</translation>
+    </message>
+    <message>
+        <source>Horizontal border:</source>
+        <translation type="obsolete">Latus libratum:</translation>
+    </message>
+    <message>
+        <source>|</source>
+        <translation type="obsolete">|</translation>
+    </message>
+    <message>
+        <source>Vertical border:</source>
+        <translation type="obsolete">Latus derectum:</translation>
+    </message>
+    <message>
+        <source>-</source>
+        <translation type="obsolete">-</translation>
     </message>
     <message>
         <source>Go Server</source>
-        <translation type="obsolete">圍棋伺服器</translation>
+        <translation type="obsolete">Moderatrum Gois</translation>
     </message>
     <message>
-        <source>Title</source>
-        <translation type="obsolete">標題</translation>
-    </message>
-    <message>
-        <source>Host</source>
-        <translation type="obsolete">主機</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="obsolete">通訊埠</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">名稱</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">密碼</translation>
-    </message>
-    <message>
-        <source>Host Entries
-
-Select &apos;New&apos; to clear input fields. After filling in at least Title and Host use Add/Change.
-
-Select an entry to edit, change (Title keeps unchanged) or delete a line.
-
-Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
-        <translation type="obsolete">主機欄位
-
-選擇 &apos;新增&apos; 清除輸入欄位. 填入之後使用新增或修改標題及主機
-
-選擇一個欄位編輯, 修正 (不要改變標題) 或刪除一行
-
-選擇使用預先設定的主機名稱 -- xxx -- 並加入標題</translation>
+        <source>Codec:</source>
+        <translation type="obsolete">Codec:</translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation type="obsolete">標題:</translation>
+        <translation type="obsolete">Titulus:</translation>
     </message>
     <message>
         <source>title, e.g.: guest account at NNGS</source>
-        <translation type="obsolete">標題, 例如: guest account at NNGS</translation>
+        <translation type="obsolete">titulus, e.g.: hospes apud NNGS</translation>
     </message>
     <message>
         <source>unique title, e.g.:
@@ -8392,36 +8515,23 @@ xyz
 The title field is used to chose a server connection.
 
 Note: don&apos;t use a default server name, i.e. &apos;-- Aurora --&apos; etc.</source>
-        <translation type="obsolete">獨一標題, 例如:
+        <translation type="obsolete">titulus univocus, e.g.:
 
-guest account at NNGS
+hospes apud NNGS
 qGo1234 (IGS)
 xyz
 
-標題欄位是使用於選擇伺服器連線
+Titulus adhibetur ad conexum moderatri eligere.
 
-備註: 不要使用預設伺服器名稱, 例如 &apos;-- Aurora --&apos; 等
-(使用中文標題時系統有時無法判別, 請注意)</translation>
-    </message>
-    <message>
-        <source>Refresh display</source>
-        <translation type="obsolete">重新整理顯示</translation>
-    </message>
-    <message>
-        <source>Refresh
-
-Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation type="obsolete">重新整理
-
-重新整理棋盤. 當你無法看見任何落子變化時可以使用本項</translation>
+Cave: noli nomina parata transcribere, i.e. &apos;-- Aurora --&apos; etc.</translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation type="obsolete">主機:</translation>
+        <translation type="obsolete">Hospes:</translation>
     </message>
     <message>
         <source>hostname, e.g.: nngs.cosmic.org</source>
-        <translation type="obsolete">主機名稱, 例如: nngs.cosmic.org</translation>
+        <translation type="obsolete">nomen hospitis, e.g.: nngs.cosmic.org</translation>
     </message>
     <message>
         <source>hostname
@@ -8436,9 +8546,9 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
 -- LGS --
 -- NNGS --
 -- WING --</source>
-        <translation type="obsolete">主機名稱
+        <translation type="obsolete">nomen hospitis
 
-使用一個主機名稱或IP位址. 可預先選擇替代主機資料輸入:
+Legitimum nomen hospis aut numera scribe. Si scribere non vis, unum ex hostibus paratis elige:
 
 -- Aurora --
 -- CTN --
@@ -8451,39 +8561,27 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
     </message>
     <message>
         <source>Port:</source>
-        <translation type="obsolete">通訊埠 :</translation>
+        <translation type="obsolete">Portus:</translation>
     </message>
     <message>
         <source>port address, e.g.: 9696</source>
-        <translation type="obsolete">通訊埠位址, 例如: 9696</translation>
+        <translation type="obsolete">inscriptio porti,  e.g.: 9696</translation>
     </message>
     <message>
         <source>port address, e.g.: 9696
 
 Port address is defined for each go server. It&apos;s a fixed number. See Host for predefined server names.</source>
-        <translation type="obsolete">連接埠位址, 例如:9696
+        <translation type="obsolete">inscriptio porti,  e.g.: 9696
 
-定義伺服器連接埠數字. 那是固定數字. 看先前定義的伺服器主機位址</translation>
-    </message>
-    <message>
-        <source>Undo last move</source>
-        <translation type="obsolete">打回一手</translation>
-    </message>
-    <message>
-        <source>Undo
-
-Undo the opponent&apos;s last move.</source>
-        <translation type="obsolete">回手
-
-替對手回一手.</translation>
+Omnibus moderatris Gois inscriptio porti, quae numerus est, addicta est. &apos;Hostes&apos; vise.</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="obsolete">名稱:</translation>
+        <translation type="obsolete">Nomen:</translation>
     </message>
     <message>
         <source>use your login name; if unregistered use a unique name like &apos;hotdog17&apos; (NNGS, CWS) or guest (other servers)</source>
-        <translation type="obsolete">使用你的名稱登入; 假如尚未註冊使用單一名稱如 &apos;hotdog17&apos; (NNGS, CWS) 或 &apos;guest&apos; (其他伺服器)</translation>
+        <translation type="obsolete">nomen accessus scribe; si additus non es, nomen univocum sicut &apos;caniscalidusXVII&apos; (NNGS, CWS) vel &apos;guest&apos; (ceteris moderatris) scribe</translation>
     </message>
     <message>
         <source>name
@@ -8494,22 +8592,22 @@ use your login name and password provided by the go server operator after regist
 New users: depends on server
 NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
 others:		guest</source>
-        <translation type="obsolete">名稱
+        <translation type="obsolete">nomen
 
-已註冊使用者: 
-使用你伺服器提供給你或註冊之後的登入名稱及密碼
+Utentibus additis: 
+nomen signumque a Go moderatro suppedita post registrationem scribe
 
-新使用者(需伺服器支援):
-NNGS, CWS: 使用單一名稱如 &apos;hotdog17&apos;
-其他:  guest</translation>
+Utentibus novis: per moderatrum stat
+NNGS, CWS:	nomen univocum sicut &apos;caniscalidusXVII&apos; scribe
+allia:	&apos;guest&apos;</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="obsolete">密碼:</translation>
+        <translation type="obsolete">Signum:</translation>
     </message>
     <message>
         <source>your password; if unregistered: blank field</source>
-        <translation type="obsolete">你的密碼; 如果尚未註冊: 留空</translation>
+        <translation type="obsolete">signum; si non additus es: vacuum</translation>
     </message>
     <message>
         <source>password
@@ -8518,16 +8616,16 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: leave blank!</source>
-        <translation type="obsolete">密碼
+        <translation type="obsolete">signum
 
-已註冊使用者:
-使用你伺服器提供給你或註冊之後的登入名稱及密碼
+Utentibus additis: 
+nomen signumque a Go moderatro suppedita post registrationem scribe
 
-新使用者: 留空</translation>
+Utentibus novis: nihil scribe!</translation>
     </message>
     <message>
         <source>Score/Edit</source>
-        <translation type="obsolete">計地/編輯</translation>
+        <translation type="obsolete">Puncta/Corrigere</translation>
     </message>
     <message>
         <source>Score
@@ -8539,59 +8637,15 @@ Click a second time on a group to unmark it as dead or seki.
 Edit
 
 Click to get a new, editable offline window.</source>
-        <translation type="obsolete">計地
+        <translation type="obsolete">Puncta
 
-左鍵點擊棋塊標示為死子
-右鍵點擊棋塊標示為活棋或雙活
-第二次點擊棋塊時將不標示為死活子
+Laevo muris cohortem lapidum mortuam nota.
+Dextero vivam in seki.
+Murem iterum in cohortem tange ad vivam revertendam.
 
-編輯
+Corrigere
 
-點選後開啟新視窗, 可離線編輯</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">新增表單</translation>
-    </message>
-    <message>
-        <source>clear form</source>
-        <translation type="obsolete">清除表單</translation>
-    </message>
-    <message>
-        <source>New
-
-clear form; doesn&apos;t make any changes to the entries</source>
-        <translation type="obsolete">新增表單
-
-清除表單; 不改變任何項目</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="obsolete">增加</translation>
-    </message>
-    <message>
-        <source>add/change current entry</source>
-        <translation type="obsolete">新增/變更 目前項目</translation>
-    </message>
-    <message>
-        <source>Add or Change
-
-Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
-
-Label &apos;Add&apos; is default. The given entries will be saved under the given title.</source>
-        <translation type="obsolete">新增或修改
-
-標籤 &apos;修改&apos; 顯示於你的標題有重複, 換言之目前的項目將取代已儲存的項目標題
-
-標籤 &apos;新增&apos; 為預設. 給予的項目將儲存於標題之上</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">刪除</translation>
-    </message>
-    <message>
-        <source>delete current entry</source>
-        <translation type="obsolete">刪除目前項目</translation>
+Murem tange ut fenestra nova corrigenda creatur.</translation>
     </message>
     <message>
         <source>Delete
@@ -8599,331 +8653,59 @@ Label &apos;Add&apos; is default. The given entries will be saved under the give
 Deletes the saved entries with same Title.
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="obsolete">刪除
+        <translation type="obsolete">Delere
 
-刪除儲存欄位相同標題
+Lineam serbatam cum hoc titulo delet.
 
-備註: &apos;刪除&apos; 涉及儲存記錄</translation>
+Cave: &apos;Delere&apos; ad lineas serbatas pertinet.</translation>
     </message>
     <message>
-        <source>Default games settings</source>
-        <translation type="obsolete">預設遊戲設定</translation>
+        <source>Title</source>
+        <translation type="obsolete">Titulus</translation>
     </message>
     <message>
-        <source>Board size:</source>
-        <translation type="obsolete">棋盤大小:</translation>
+        <source>Host</source>
+        <translation type="obsolete">Hostes</translation>
     </message>
     <message>
-        <source>Time:</source>
-        <translation type="obsolete">基本時間:</translation>
+        <source>Port</source>
+        <translation type="obsolete">Portus</translation>
     </message>
     <message>
-        <source>Playing time</source>
-        <translation type="obsolete">對局時間</translation>
+        <source>Name</source>
+        <translation type="obsolete">Nomen</translation>
     </message>
     <message>
-        <source>Byoyomi Time:</source>
-        <translation type="obsolete">讀秒時間:</translation>
+        <source>Password</source>
+        <translation type="obsolete">Signum</translation>
     </message>
     <message>
-        <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="obsolete">加入25手的落子時間; 25手之後將會重新計時</translation>
-    </message>
-    <message>
-        <source>Default (OS style)</source>
-        <translation type="obsolete">預設(系統樣式)</translation>
-    </message>
-    <message>
-        <source>font: console</source>
-        <translation type="obsolete">字型: 主機命令框架</translation>
-    </message>
-    <message>
-        <source>font for the server console</source>
-        <translation type="obsolete">選擇主機命令框架字型</translation>
-    </message>
-    <message>
-        <source>Select new font
+        <source>Host Entries
 
-Select the font for the server console (fixed font preferably).</source>
-        <translation type="obsolete">選擇新字型
+Select &apos;New&apos; to clear input fields. After filling in at least Title and Host use Add/Change.
 
-選擇主機命令框架字型 (修正先前字型)</translation>
-    </message>
-    <message>
-        <source>Time (secs.)</source>
-        <translation type="obsolete">時間 (秒)</translation>
-    </message>
-    <message>
-        <source>Play sound for remaining seconds of own time</source>
-        <translation type="obsolete">當餘下數秒時間時,播放音效</translation>
-    </message>
-    <message>
-        <source>Check this box if you want to be warned when Byo Yomi ends.
-You can set the warning time besides</source>
-        <translation type="obsolete">勾選此項 當計次讀秒結束時給你警告
-除此之外你能夠設定時間</translation>
-    </message>
-    <message>
-        <source>Warning time</source>
-        <translation type="obsolete">警告時間</translation>
-    </message>
-    <message>
-        <source>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</source>
-        <translation type="obsolete">設定你在結束讀秒之前多久提出警告</translation>
-    </message>
-    <message>
-        <source>Default for White</source>
-        <translation type="obsolete">預設白棋</translation>
-    </message>
-    <message>
-        <source>Computer</source>
-        <translation type="obsolete">電腦</translation>
-    </message>
-    <message>
-        <source>Human</source>
-        <translation type="obsolete">玩家</translation>
-    </message>
-    <message>
-        <source>Default for Black</source>
-        <translation type="obsolete">預設黑棋</translation>
-    </message>
-    <message>
-        <source>board size</source>
-        <translation type="obsolete">棋盤大小</translation>
-    </message>
-    <message>
-        <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
-    </message>
-    <message>
-        <source>Komi: added to white&apos;s result</source>
-        <translation type="obsolete">讓子: 加到白地數目</translation>
-    </message>
-    <message>
-        <source>.5</source>
-        <translation type="obsolete">.5</translation>
-    </message>
-    <message>
-        <source>Automatic Negotiation of Komi</source>
-        <translation type="obsolete">自動巡覽讓子數</translation>
-    </message>
-    <message>
-        <source>allow client to negotiate automatic</source>
-        <translation type="obsolete">允許用戶端自動巡覽</translation>
-    </message>
-    <message>
-        <source>Automatic Negotiation
+Select an entry to edit, change (Title keeps unchanged) or delete a line.
 
-Allow client to negotiate komi automatic.
+Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
+        <translation type="obsolete">Hostes
 
-Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</source>
-        <translation type="obsolete">自動協議
+&apos;Novum&apos; elige ad lineam delendam. Titulo vel Hoste saltem scripto Adicere/Corrigere age.
 
-允許用戶端自動協議讓子數
+Rigam creandam, corrigendam (titulus non mutabitur) aut delendam elige.
 
-注意: 這可能造成困擾如果對受不想同意你的預設甚至如果你的預設之前有送至對手. 這可能固有不同內部使用於 用戶端協議值</translation>
+Unum ex hostibus paratis -- xxx -- elige atque titulum addice.</translation>
     </message>
     <message>
-        <source>Main Interface</source>
-        <translation type="obsolete">主要樣式</translation>
+        <source>IGS</source>
+        <translation type="obsolete">IGS</translation>
     </message>
     <message>
-        <source>User buttons toolbar</source>
-        <translation type="obsolete">使用者按鈕工具列</translation>
+        <source>Extended user info</source>
+        <translation type="obsolete">Informationes additiciae de lusore</translation>
     </message>
     <message>
-        <source>Delete
-
-Deletes the saved entries with same label
-
-Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="obsolete">刪除
-
-刪除已儲存的相同標籤項目
-
-備註: &apos;Delete&apos;  涉及儲存記錄</translation>
-    </message>
-    <message>
-        <source>Help text:</source>
-        <translation type="obsolete">協助文字:</translation>
-    </message>
-    <message>
-        <source>Help text, displayed as tooltip</source>
-        <translation type="obsolete">協助文字, 顯示為工具提示</translation>
-    </message>
-    <message>
-        <source>help text
-
-This text is displayed as tooltip of the created button</source>
-        <translation type="obsolete">協助文字
-
-此文字顯示類似工具提示於建立的按鈕</translation>
-    </message>
-    <message>
-        <source>Command:</source>
-        <translation type="obsolete">指令:</translation>
-    </message>
-    <message>
-        <source>command passed to the server</source>
-        <translation type="obsolete">指令已傳送到伺服器</translation>
-    </message>
-    <message>
-        <source>command
-
-the command is passed to the server</source>
-        <translation type="obsolete">指令
-
-指令已傳送到伺服器</translation>
-    </message>
-    <message>
-        <source>Pixmap file:</source>
-        <translation type="obsolete">圖示檔:</translation>
-    </message>
-    <message>
-        <source>file path to the button pixmap</source>
-        <translation type="obsolete">按鈕圖像檔案路徑</translation>
-    </message>
-    <message>
-        <source>file path to the button pixmap
-
-Set it with the file chooser</source>
-        <translation type="obsolete">按鈕圖像檔案路徑
-
-於選擇檔案中設定</translation>
-    </message>
-    <message>
-        <source>pixmap file chooser</source>
-        <translation type="obsolete">選擇圖示檔</translation>
-    </message>
-    <message>
-        <source>Label:</source>
-        <translation type="obsolete">標籤:</translation>
-    </message>
-    <message>
-        <source>Button label</source>
-        <translation type="obsolete">按鈕標籤</translation>
-    </message>
-    <message>
-        <source>unique label, 
-
-The label is displayed as button text.</source>
-        <translation type="obsolete">唯一頁籤
-
-標籤顯示於按鈕文字</translation>
-    </message>
-    <message>
-        <source>Pixmap</source>
-        <translation type="obsolete">圖示</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="obsolete">標籤</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation type="obsolete">命令</translation>
-    </message>
-    <message>
-        <source>Help Text</source>
-        <translation type="obsolete">協助文字</translation>
-    </message>
-    <message>
-        <source>User defined button list</source>
-        <translation type="obsolete">自訂按鈕列表</translation>
-    </message>
-    <message>
-        <source>Button Entries
-
-Select &apos;New&apos; to clear input fields. After filling in at least label and command use Add/Change.
-
-Select an entry to edit, change (label keeps unchanged) or delete a line.
-</source>
-        <translation type="obsolete">按鈕欄
-
-選擇 &apos;新增&apos; 清除輸入欄位. 填入之後使用新增或修改標籤及命令
-
-選擇一個欄位編輯, 修正 (保持標籤名稱不變) 或刪除一行
-</translation>
-    </message>
-    <message>
-        <source>Board Window</source>
-        <translation type="obsolete">棋盤視窗</translation>
-    </message>
-    <message>
-        <source>Goban</source>
-        <translation type="obsolete">棋盤</translation>
-    </message>
-    <message>
-        <source>Computer Go</source>
-        <translation type="obsolete">電腦圍棋</translation>
-    </message>
-    <message>
-        <source>Import / Export</source>
-        <translation type="obsolete">匯入/匯出</translation>
-    </message>
-    <message>
-        <source>Imported game position</source>
-        <translation type="obsolete">已匯入對局部份</translation>
-    </message>
-    <message>
-        <source>Handicap :</source>
-        <translation type="obsolete">授子 :</translation>
-    </message>
-    <message>
-        <source>Big5</source>
-        <translation type="obsolete">Big5</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation type="obsolete">Alt+A</translation>
-    </message>
-    <message>
-        <source>Alt+O</source>
-        <translation type="obsolete">Alt+O</translation>
-    </message>
-    <message>
-        <source>SGF Style</source>
-        <translation type="obsolete">SGF 格式</translation>
-    </message>
-    <message>
-        <source>Show SGF board coordinates</source>
-        <translation type="obsolete">顯示 SGF 棋盤座標</translation>
-    </message>
-    <message>
-        <source>Show SGF board coordinates
-										
-Toggles if SGF style board coordinates are shown.</source>
-        <translation type="obsolete">顯示 SGF 棋盤座標
-
-切換顯示  SGF 格是棋盤座標。</translation>
-    </message>
-    <message>
-        <source>Adjust font size for text and number labels
-
-This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
-When editing only single digit marks, it might be convenient to switch this off.</source>
-        <translation type="obsolete">調整自行大小及數字標籤
-
-這是有用於編號中的落子在對局當中，因此字型大小於所有一、二或三位數字都相等。
-檔編輯中只有單一標示，他可能會轉換切換成關閉。</translation>
-    </message>
-    <message>
-        <source>On line games</source>
-        <translation type="obsolete">線上對局</translation>
-    </message>
-    <message>
-        <source>Anti clicko (1/4 second click latency)</source>
-        <translation type="obsolete">反制 clicko (1/4 秒點擊因素)</translation>
-    </message>
-    <message>
-        <source>Anti Clicko
-
-Check the box for setting an anti clicko delay (1/4 second) for on line games.
-If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
-        <translation type="obsolete">反制 Cliko
-
-點選方塊設定反制 clicko 延遲 (1/4 秒) 於線上對局
-如果你按下enter或下棋子於棋盤，落子將不會被公認如果滑鼠釋出太早</translation>
+        <source>see more information from users -&gt; slow!</source>
+        <translation type="obsolete">informationes de lusoribus plurimas ostendit -&gt; diuturnum!</translation>
     </message>
     <message>
         <source>If checked then additional information is requested from server.
@@ -8933,362 +8715,282 @@ If you press to enter a move on the board, the move will not be acknowledged if 
 Works slow! Use &apos;Refresh players&apos; after changing.
 
 On IGS only.</source>
-        <translation type="obsolete">如果選取新增資料已向伺服器請求
+        <translation type="obsolete">Informationes additiciae e moderatro petuntur.
 
-&apos;user&apos; 指令替代  &apos;who&apos;，因此，資訊字串， won/lost, country 及 language 設定將會啟用
+&apos;user&apos; iussum pro &apos;who&apos; mittitur, deinde notae, victoriae/clades atque lingua in promptu habentur.
 
-作業慢速! 使用 &apos;Refresh players&apos; 之後的變化。
+Diuturnum est! &apos;Lusores quaerere&apos; tange post excitatum.
 
-僅在IGS。</translation>
-    </message>
-    <message>
-        <source>Check for setting an anti cliko delay for on line games</source>
-        <translation type="obsolete">勾選則設定反制 cliko 延遲於線上對局</translation>
-    </message>
-    <message>
-        <source>shadow</source>
-        <translation type="obsolete">陰影</translation>
-    </message>
-    <message>
-        <source>check for shadowed stones</source>
-        <translation type="obsolete">勾選為陰影棋石</translation>
-    </message>
-    <message>
-        <source>shadow
-
-Check the box for haveing a shadow displayed under the stones.</source>
-        <translation type="obsolete">陰影
-
-勾選對話方塊則棋石上會有陰影顯示。</translation>
-    </message>
-    <message>
-        <source>shell look</source>
-        <translation type="obsolete">貝殼樣式</translation>
-    </message>
-    <message>
-        <source>check for striped white stones (shell looking)</source>
-        <translation type="obsolete">勾選為條紋棋石 (貝殼樣式)</translation>
-    </message>
-    <message>
-        <source>shell look
-
-Check the box for having striped, shell looking, white stones.</source>
-        <translation type="obsolete">貝殼樣式
-
-勾選核選方塊則有條文、貝殼樣式、白色棋石。</translation>
+In IGS tantum.</translation>
     </message>
     <message>
         <source>Autosave</source>
-        <translation type="obsolete">自動儲存</translation>
+        <translation type="obsolete">Sponte serbare</translation>
     </message>
     <message>
-        <source>Autosave observed games</source>
-        <translation type="obsolete">自動儲存觀棋對局</translation>
+        <source>observed games</source>
+        <translation type="obsolete">certationes spectatae</translation>
     </message>
     <message>
         <source>check for automatic saving observed games</source>
-        <translation type="obsolete">勾選則自動儲存中的已觀局對局</translation>
+        <translation type="obsolete">excita ut certationes spectatae sponte serbentur</translation>
     </message>
     <message>
         <source>Autosave
 
 If checked then when an observed game completes, it is automatically saved in the working directory</source>
-        <translation type="obsolete">自動儲存
+        <translation type="obsolete">Sponte serbare
 
-如果核選則當觀看對局完畢時，他會自動儲存於作業中資料夾。</translation>
-    </message>
-    <message>
-        <source>Board picture</source>
-        <translation type="obsolete">棋盤圖檔</translation>
-    </message>
-    <message>
-        <source>observed games</source>
-        <translation type="obsolete">已觀局棋局</translation>
+Certatio spectata exhausta sponte serbatur in hac plica</translation>
     </message>
     <message>
         <source>played games</source>
-        <translation type="obsolete">已對局棋局</translation>
+        <translation type="obsolete">ludens in certationibus</translation>
     </message>
     <message>
-        <source>check for automatic saving for your games games</source>
-        <translation type="obsolete">選擇則會自動儲存你的對局</translation>
+        <source>check for automatic saving for your games</source>
+        <translation type="obsolete">Excita ut certationes tuae sponte serbentur</translation>
     </message>
     <message>
         <source>Autosave
 
 If checked then when a game you played completes, it is automatically saved in the working directory</source>
-        <translation type="obsolete">自動儲存
+        <translation type="obsolete">Sponte serbare
 
-如果選取的話當你一個棋局對局結束時， 他會自動儲存於工作資料夾。</translation>
+Certatio lusa exhausta sponte serbatur in hac plica</translation>
     </message>
     <message>
-        <source>Background</source>
-        <translation type="obsolete">背景</translation>
+        <source>Special players</source>
+        <translation type="obsolete">Lusores peculiares</translation>
     </message>
     <message>
-        <source>Alternate (lists)</source>
-        <translation type="obsolete">替代 (列表)</translation>
+        <source>watch players:</source>
+        <translation type="obsolete">lusores perspecti:</translation>
     </message>
     <message>
-        <source>Path to the goban picture</source>
-        <translation type="obsolete">棋盤圖片路徑</translation>
+        <source>players to be colored red</source>
+        <translation type="obsolete">lusores rubefaciendi</translation>
     </message>
     <message>
-        <source>Path to the goban picture.
-If the picture is not set, or unvalid, a default goban is used by qgo</source>
-        <translation type="obsolete">棋盤圖片路徑
-如果圖片還沒設定或者設定無效，qGo則會使用預設的棋盤。</translation>
-    </message>
-    <message>
-        <source>Table picture</source>
-        <translation type="obsolete">表格圖片</translation>
-    </message>
-    <message>
-        <source>Path to the table picture</source>
-        <translation type="obsolete">表格圖片路徑</translation>
-    </message>
-    <message>
-        <source>Path to the table picture.
-If the picture is not set, or unvalid, a default picture is used by qgo</source>
-        <translation type="obsolete">表格圖片路徑
-如果圖片還沒設定或者設定無效，qGo則會使用預設的圖片。</translation>
-    </message>
-    <message>
-        <source>2.5</source>
-        <translation type="obsolete">2.5</translation>
-    </message>
-    <message>
-        <source>7.5</source>
-        <translation type="obsolete">7.5</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation type="obsolete">10</translation>
-    </message>
-    <message>
-        <source>Codec:</source>
-        <translation type="obsolete">編碼:</translation>
-    </message>
-    <message>
-        <source>check for automatic saving for your games</source>
-        <translation type="obsolete">選取則會自動儲存你的對局</translation>
-    </message>
-    <message>
-        <source>use new &apos;nmatch&apos; feature</source>
-        <translation type="obsolete">使用 &apos;nmatch&apos; 新功能</translation>
-    </message>
-    <message>
-        <source>If checked then match offers will use the new &apos;nmatch&apos; protocol.</source>
-        <translation type="obsolete">選取的話將會在對局建議中使用 &apos;nmatch&apos; 新協定。</translation>
-    </message>
-    <message>
-        <source>If checked then match offers will use the new &apos;nmatch&apos; protocol.
+        <source>add players you want to
 
-When both players use this protocol, they can set handicap before playing, have &apos;nigiri&apos; for even games. IGS also permits the japanese Byo yomi clock, but it&apos;s not yet supported by qGo</source>
-        <translation type="obsolete">選取的話將會在對局建議中使用 &apos;nmatch&apos; 新協定。
+- see red coloured and
+- hear sound if entering/leaving.
 
-當雙方對局者使用這個協定石，他們能夠在對局之前設定授子數，即使是有猜先&apos;nigiri&apos;的對局。 IGS 能夠容許日式讀秒倒數，但是它並不能夠被qGo所支援。</translation>
-    </message>
-    <message>
-        <source>Ugly 2D</source>
-        <translation type="obsolete">醜醜的 2D</translation>
-    </message>
-    <message>
-        <source>flat circled ... ugly but asked for ...</source>
-        <translation type="obsolete">平面圓圈 ... 醜醜的但是仍舊要求 ...</translation>
-    </message>
-    <message>
-        <source>Stone appearance
+Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">addice lusores qui
 
-This will display back and white circles</source>
-        <translation type="obsolete">棋石外觀
+- rubri colorabuntur atque
+- ineuntes/exeuntes sonabunt.
 
-此項將會顯示黑和白的外緣</translation>
+Separa nomines signo &quot;;&quot; (non spatiis)</translation>
     </message>
     <message>
-        <source>Plain 3D</source>
-        <translation type="obsolete">純3D</translation>
+        <source>players to be colored green</source>
+        <translation type="obsolete">lusores viridandi</translation>
     </message>
     <message>
-        <source>plain 3D (no shadow, no stripes)</source>
-        <translation type="obsolete">純 3D (沒有陰影, 沒有紋路)</translation>
-    </message>
-    <message>
-        <source>Stone appearance
+        <source>add players you want to
 
-this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
-        <translation type="obsolete">棋石外觀
+- see green coloured and
+- exclude from shouting.
 
-此項將會顯示簡單的 3D 棋石, 包含陰影和條紋於白棋上</translation>
+Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">addice lusores qui
+
+- virides colorabuntur atque
+- e vocibus excludentur.
+
+Separa nomines signo &quot;;&quot; (non spatiis)</translation>
     </message>
     <message>
-        <source>Realistic</source>
-        <translation type="obsolete">逼真的</translation>
-    </message>
-    <message>
-        <source>Realistic 3D stones with stripes and shadow</source>
-        <translation type="obsolete">逼真的3D棋石具有紋路跟陰影</translation>
-    </message>
-    <message>
-        <source>Stone appearance
-
-This will display realistic 3D stones with stripes and shadow</source>
-        <translation type="obsolete">棋石外觀
-
-此項將會顯逼真的 3D 棋石具有紋路和陰影</translation>
+        <source>exclude players:</source>
+        <translation type="obsolete">lusores excludere:</translation>
     </message>
     <message>
         <source>All servers settings</source>
-        <translation type="obsolete">所有伺服器設定</translation>
+        <translation type="obsolete">Praepositiones omnibus moreratris</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="obsolete">Komi:</translation>
+    </message>
+    <message>
+        <source>Komi: added to white&apos;s result</source>
+        <translation type="obsolete">Komi: punctis albi adiectum</translation>
+    </message>
+    <message>
+        <source>.5</source>
+        <translation type="obsolete">.5</translation>
     </message>
     <message>
         <source>Automatic komi 
 negotiation</source>
-        <translation type="obsolete">自動讓子
-協議</translation>
+        <translation type="obsolete">Automata komi 
+selectio</translation>
+    </message>
+    <message>
+        <source>allow client to negotiate automatic</source>
+        <translation type="obsolete">Cliens ipse de komi agit</translation>
+    </message>
+    <message>
+        <source>Automatic Negotiation
+
+Allow client to negotiate komi automatic.
+
+Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</source>
+        <translation type="obsolete">Selectio automata
+
+Cliens ipse de komi agit.
+
+Cave: molestum est si hostis accipere praepositiones tuas nolit etsi hosti antea missae sunt. Hoc ex dissimilibus regulis selectionis inter clientes pendere potest.</translation>
     </message>
     <message>
         <source>Main 
 time :</source>
-        <translation type="obsolete">主要
-時間 :</translation>
+        <translation type="obsolete">Princeps 
+tempus:</translation>
     </message>
     <message>
         <source>Byoyomi
 time:</source>
-        <translation type="obsolete">讀秒
-時間 :</translation>
+        <translation type="obsolete">Tempus byoyomi
+tempus:</translation>
+    </message>
+    <message>
+        <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
+        <translation type="obsolete">Tempus additicium motibus XXV; motibus XXV excessis tempus byoyomi iteratur</translation>
     </message>
     <message>
         <source>IGS &apos;nmatch&apos; specific settings</source>
-        <translation type="obsolete">IGS 特有的 &apos;nmatch&apos; 指令設定</translation>
+        <translation type="obsolete">praepositiones circa iussum &apos;nmatch&apos; IGS</translation>
     </message>
     <message>
         <source>Main time 
 up to :</source>
-        <translation type="obsolete">主要時間
-增加到 :</translation>
+        <translation type="obsolete">Tempus princeps 
+ad :</translation>
     </message>
     <message>
         <source>Byo time
 up to :</source>
-        <translation type="obsolete">讀秒時間
-增加到 :</translation>
+        <translation type="obsolete">Tempus byo
+ad :</translation>
     </message>
     <message>
         <source>Play as :</source>
-        <translation type="obsolete">持子 :</translation>
+        <translation type="obsolete">Lude velut :</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">黑棋</translation>
+        <translation type="obsolete">Niger</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">白棋</translation>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>Nigiri</source>
-        <translation type="obsolete">猜先</translation>
+        <translation type="obsolete">Sortiri</translation>
     </message>
     <message>
         <source>Handicap 
 up to :</source>
-        <translation type="obsolete">授子
-提升到 :</translation>
+        <translation type="obsolete">Detrimenta 
+ad :</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>free</source>
-        <translation type="obsolete">不計分</translation>
+        <translation type="obsolete">gratis</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation type="obsolete">計分棋</translation>
+        <translation type="obsolete">censita</translation>
     </message>
     <message>
         <source>teach</source>
-        <translation type="obsolete">教學棋</translation>
+        <translation type="obsolete">lectio</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlg</name>
     <message>
         <source>Human</source>
-        <translation type="obsolete">玩家</translation>
+        <translation type="obsolete">Homo</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation type="obsolete">電腦</translation>
-    </message>
-    <message>
-        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation type="obsolete">SGF (*.sgf);;MGT (*.mgt);;XML (*.xml);;所有檔案 (*)</translation>
+        <translation type="obsolete">Computatrum</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="obsolete">錯誤</translation>
+        <translation type="obsolete">Erratum</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation type="obsolete">你輸入的授子數不正確 (1並不合理)</translation>
+        <translation type="obsolete">Detrimenta non legitima scripsis (I non valet)</translation>
+    </message>
+    <message>
+        <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
+        <translation type="obsolete">Plicae SGF (*.sgf);;Plicae MGT (*.mgt);;Plicae XML (*.xml);;Omnia (*)</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
         <source>Computer Game</source>
-        <translation type="obsolete">電腦圍棋</translation>
-    </message>
-    <message>
-        <source>White Player</source>
-        <translation type="obsolete">持白棋者</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">名稱</translation>
-    </message>
-    <message>
-        <source>Computer Level</source>
-        <translation type="obsolete">電腦等級</translation>
-    </message>
-    <message>
-        <source>Black Player</source>
-        <translation type="obsolete">持黑棋者</translation>
+        <translation type="obsolete">Certatio cum Computatro</translation>
     </message>
     <message>
         <source>Load game</source>
-        <translation type="obsolete">讀取對局</translation>
+        <translation type="obsolete">Certationem colligere</translation>
     </message>
     <message>
-        <source>&amp;OK</source>
-        <translation type="obsolete">確認(&amp;O)</translation>
+        <source>Black Player</source>
+        <translation type="obsolete">Lusor Niger</translation>
     </message>
     <message>
-        <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <source>Computer Level</source>
+        <translation type="obsolete">Ordo Computatri</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Nomen</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">新對局</translation>
+        <translation type="obsolete">Nova Certatio</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation type="obsolete">棋盤大小:</translation>
-    </message>
-    <message>
-        <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
+        <translation type="obsolete">Amplitudo tabellae:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">授子:</translation>
+        <translation type="obsolete">Detrimenta:</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="obsolete">Komi:</translation>
     </message>
     <message>
         <source>One Color Go</source>
-        <translation type="obsolete">一色棋</translation>
+        <translation type="obsolete">Go Colore Uno</translation>
+    </message>
+    <message>
+        <source>White Player</source>
+        <translation type="obsolete">Lusor Albus</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation type="obsolete">&amp;Recte</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
 </context>
 <context>
@@ -9300,7 +9002,7 @@ up to :</source>
         <location filename="../board/interfacehandler.cpp" line="583"/>
         <location filename="../gamedata.h" line="15"/>
         <source>Black</source>
-        <translation>黑棋</translation>
+        <translation>Niger</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="106"/>
@@ -9309,152 +9011,163 @@ up to :</source>
         <location filename="../board/interfacehandler.cpp" line="565"/>
         <location filename="../gamedata.h" line="14"/>
         <source>White</source>
-        <translation>白棋</translation>
+        <translation>Albus</translation>
     </message>
     <message>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
-        <translation type="obsolete">棋桌</translation>
+        <translation type="obsolete">Id</translation>
     </message>
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation type="obsolete">白棋</translation>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation type="obsolete">棋力</translation>
+        <translation type="obsolete">AO</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation type="obsolete">黑棋</translation>
+        <translation type="obsolete">Niger</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation type="obsolete">棋力</translation>
+        <translation type="obsolete">NO</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation type="obsolete">手數</translation>
+        <translation type="obsolete">Mo</translation>
     </message>
     <message>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
-        <translation type="obsolete">路數</translation>
+        <translation type="obsolete">Am</translation>
     </message>
     <message>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
-        <translation type="obsolete">授子</translation>
+        <translation type="obsolete">De</translation>
     </message>
     <message>
         <source>K</source>
         <comment>GamesTable Komi</comment>
-        <translation type="obsolete">讓子</translation>
+        <translation type="obsolete">K</translation>
     </message>
     <message>
         <source>By</source>
         <comment>GamesTable Byoyomi time</comment>
-        <translation type="obsolete">讀秒</translation>
+        <translation type="obsolete">By</translation>
     </message>
     <message>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
-        <translation type="obsolete">類</translation>
+        <translation type="obsolete">NC</translation>
     </message>
     <message>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
-        <translation type="obsolete">觀局</translation>
+        <translation type="obsolete">Sp</translation>
     </message>
     <message>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
-        <translation type="obsolete">狀態</translation>
+        <translation type="obsolete">Stat</translation>
     </message>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation type="obsolete">名稱</translation>
+        <translation type="obsolete">Nomen</translation>
     </message>
     <message>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
-        <translation type="obsolete">棋力</translation>
+        <translation type="obsolete">Or</translation>
     </message>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">lu</translation>
     </message>
     <message>
         <source>ob</source>
         <comment>PlayerTable: observing game</comment>
-        <translation type="obsolete">觀局</translation>
+        <translation type="obsolete">sp</translation>
     </message>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation type="obsolete">閒置</translation>
+        <translation type="obsolete">Immotus</translation>
     </message>
     <message>
         <source>Refresh</source>
         <comment>button label</comment>
-        <translation type="obsolete">重新整理</translation>
+        <translation type="obsolete">Quaerere</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.cpp" line="87"/>
+        <location filename="../board/boardwindow.cpp" line="106"/>
+        <source>Error</source>
+        <translation>Erratum</translation>
+    </message>
+    <message>
+        <location filename="../game_interfaces/qgoboard_computer.cpp" line="42"/>
+        <source>Error opening program: %1</source>
+        <translation>Erratum programmatis aperiendi: %1</translation>
     </message>
     <message>
         <source>Score</source>
         <comment>button label</comment>
-        <translation type="obsolete">計地</translation>
+        <translation type="obsolete">Puncta</translation>
     </message>
     <message>
         <source>N</source>
         <comment>Board status line: normal mode</comment>
-        <translation type="obsolete">一般</translation>
+        <translation type="obsolete">R</translation>
     </message>
     <message>
         <source>E</source>
         <comment>Board status line: edit mode</comment>
-        <translation type="obsolete">編輯</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
         <source>Edit</source>
         <comment>button label</comment>
-        <translation type="obsolete">編輯</translation>
+        <translation type="obsolete">Corrigere</translation>
     </message>
     <message>
         <source>O</source>
         <comment>Board status line: observe mode</comment>
-        <translation type="obsolete">觀</translation>
+        <translation type="obsolete">S</translation>
     </message>
     <message>
         <source>Pass</source>
         <comment>button label</comment>
-        <translation type="obsolete">虛手</translation>
+        <translation type="obsolete">Omittere</translation>
     </message>
     <message>
         <source>P</source>
         <comment>Board status line: play mode</comment>
-        <translation type="obsolete">P</translation>
+        <translation type="obsolete">Lu</translation>
     </message>
     <message>
         <source>T</source>
         <comment>Board status line: teach mode</comment>
-        <translation type="obsolete">T</translation>
+        <translation type="obsolete">Le</translation>
     </message>
     <message>
         <source>S</source>
         <comment>Board status line: score mode</comment>
-        <translation type="obsolete">計地</translation>
+        <translation type="obsolete">Pu</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="159"/>
         <source>Move</source>
-        <translation>手數</translation>
+        <translation>Motus</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="114"/>
@@ -9464,7 +9177,7 @@ up to :</source>
         <location filename="../board/interfacehandler.cpp" line="572"/>
         <location filename="../board/interfacehandler.cpp" line="574"/>
         <source>W</source>
-        <translation>白</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="132"/>
@@ -9474,62 +9187,51 @@ up to :</source>
         <location filename="../board/interfacehandler.cpp" line="590"/>
         <location filename="../board/interfacehandler.cpp" line="592"/>
         <source>B</source>
-        <translation>黑</translation>
+        <translation>N</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="176"/>
         <source>Pass</source>
-        <translation>虛手</translation>
+        <translation>Omittere</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="185"/>
         <source>Black to play</source>
-        <translation>現在是黑棋落子</translation>
+        <translation>Niger movens</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="185"/>
         <source>White to play</source>
-        <translation>現在是白棋落子</translation>
+        <translation>Albus movens</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="194"/>
         <source>brother</source>
-        <translation>之前變化型</translation>
+        <translation>frater</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="196"/>
         <source>brothers</source>
-        <translation>之前變化型</translation>
+        <translation>fratres</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="200"/>
         <source>son</source>
-        <translation>之後變化型</translation>
+        <translation>filius</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="202"/>
         <source>sons</source>
-        <translation>之後變化型</translation>
+        <translation>filii</translation>
     </message>
     <message>
         <source>textedit</source>
-        <translation type="obsolete">文字編輯</translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.cpp" line="91"/>
-        <location filename="../board/boardwindow.cpp" line="110"/>
-        <source>Error</source>
-        <translation>錯誤</translation>
-    </message>
-    <message>
-        <location filename="../game_interfaces/qgoboard_computer.cpp" line="42"/>
-        <source>Error opening program: %1</source>
-        <translation>開啟程式錯誤?: %1</translation>
+        <translation type="obsolete">corrigere</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="95"/>
         <source>vs.</source>
-        <translation type="unfinished">對</translation>
+        <translation type="unfinished">vs.</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="54"/>
@@ -9539,41 +9241,41 @@ up to :</source>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="260"/>
         <source>Could not find file:</source>
-        <translation type="unfinished">無法找到檔案：</translation>
+        <translation type="unfinished">Plicam invenire nequivi:</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="266"/>
         <location filename="../sgf/sgfparser.cpp" line="1553"/>
         <source>Could not open file:</source>
-        <translation type="unfinished">無法開啟檔案：</translation>
+        <translation type="unfinished">Plicam aperire nequivi:</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="274"/>
         <location filename="../sgf/sgfparser.cpp" line="1578"/>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation type="unfinished">文字編碼方式無效。請檢查你的偏好設定！</translation>
+        <translation type="unfinished">Codex verborum non legitimus. Praepositiones inspice!</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="455"/>
         <source>Reading sgf file...</source>
-        <translation type="unfinished">讀取 SGF 棋譜檔中…</translation>
+        <translation type="unfinished">plicam sgf legens...</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="455"/>
         <source>Abort</source>
-        <translation type="unfinished">中止</translation>
+        <translation type="unfinished">Interrumpere</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="1258"/>
         <source>Corrupt SGF file at position</source>
-        <translation type="unfinished">SGF 棋譜檔損壞</translation>
+        <translation type="unfinished">Plica SGF laesa in numero octeti</translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Move</source>
-        <translation type="obsolete">手數</translation>
+        <translation type="obsolete">Motus</translation>
     </message>
 </context>
 <context>
@@ -9609,49 +9311,49 @@ up to :</source>
 <context>
     <name>Room</name>
     <message>
-        <location filename="../network/room.cpp" line="267"/>
+        <location filename="../network/room.cpp" line="269"/>
         <source>Match</source>
-        <translation type="unfinished">對局</translation>
+        <translation type="unfinished">Provocatio</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="276"/>
+        <location filename="../network/room.cpp" line="278"/>
         <source>Talk</source>
-        <translation type="unfinished">交談</translation>
+        <translation type="unfinished">Fabulari</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="279"/>
+        <location filename="../network/room.cpp" line="281"/>
         <source>Remove from Friends</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="281"/>
+        <location filename="../network/room.cpp" line="283"/>
         <source>Add to Friends</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="283"/>
+        <location filename="../network/room.cpp" line="285"/>
         <source>Remove from Watches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="285"/>
+        <location filename="../network/room.cpp" line="287"/>
         <source>Add to Watches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="286"/>
+        <location filename="../network/room.cpp" line="288"/>
         <source>Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="309"/>
-        <location filename="../network/room.cpp" line="315"/>
+        <location filename="../network/room.cpp" line="311"/>
+        <location filename="../network/room.cpp" line="317"/>
         <source>Observe Outside</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="310"/>
-        <location filename="../network/room.cpp" line="314"/>
+        <location filename="../network/room.cpp" line="312"/>
+        <location filename="../network/room.cpp" line="316"/>
         <source>Join and Observe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9660,15 +9362,15 @@ up to :</source>
     <name>ScoreTools</name>
     <message>
         <source>ScoreTools</source>
-        <translation type="obsolete">計地工具</translation>
+        <translation type="obsolete">Puncta</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">白棋</translation>
+        <translation type="obsolete">Albus</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation type="obsolete">總共:</translation>
+        <translation type="obsolete">Summa:</translation>
     </message>
     <message>
         <source>0</source>
@@ -9676,19 +9378,19 @@ up to :</source>
     </message>
     <message>
         <source>Cap:</source>
-        <translation type="obsolete">提子:</translation>
+        <translation type="obsolete">Cap.:</translation>
     </message>
     <message>
         <source>Terr.:</source>
-        <translation type="obsolete">地:</translation>
+        <translation type="obsolete">Ager:</translation>
     </message>
     <message>
         <source>Komi:</source>
-        <translation type="obsolete">讓子:</translation>
+        <translation type="obsolete">Komi:</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">黑棋</translation>
+        <translation type="obsolete">Niger</translation>
     </message>
 </context>
 <context>
@@ -9696,12 +9398,12 @@ up to :</source>
     <message>
         <location filename="../network/serverlistdialog.cpp" line="9"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Conectere</translation>
     </message>
     <message>
         <location filename="../network/serverlistdialog.cpp" line="12"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished">取消(&amp;C)</translation>
+        <translation type="unfinished">&amp;Tollere</translation>
     </message>
     <message>
         <location filename="../network/serverlistdialog.cpp" line="30"/>
@@ -9723,13 +9425,6 @@ up to :</source>
     </message>
 </context>
 <context>
-    <name>Talk</name>
-    <message>
-        <source>close</source>
-        <translation type="obsolete">關閉</translation>
-    </message>
-</context>
-<context>
     <name>TalkGui</name>
     <message>
         <source>Form1</source>
@@ -9743,17 +9438,17 @@ up to :</source>
 
 
 in this box you see the conversation with the player whose name appears on the tab label</source>
-        <translation type="obsolete">對話
+        <translation type="obsolete">dialogus
 
 
 
 
 
-在這個方塊你能夠看見顯示於標籤中棋友名稱的交談對話</translation>
+in hac theca est dialogus lusorum nomines quorum in pittacis apparent</translation>
     </message>
     <message>
         <source>match</source>
-        <translation type="obsolete">對局</translation>
+        <translation type="obsolete">provocatio</translation>
     </message>
     <message>
         <source>match
@@ -9763,17 +9458,17 @@ in this box you see the conversation with the player whose name appears on the t
 
 
 proposes a match to this player</source>
-        <translation type="obsolete">對局
+        <translation type="obsolete">provocatio
 
 
 
 
 
-巷這個棋友提出對局建議</translation>
+huic lusori certationem praebet</translation>
     </message>
     <message>
         <source>close</source>
-        <translation type="obsolete">關閉</translation>
+        <translation type="obsolete">concludere</translation>
     </message>
     <message>
         <source>close
@@ -9783,17 +9478,17 @@ proposes a match to this player</source>
 
 
 closes the tab (and dialog)</source>
-        <translation type="obsolete">關閉
+        <translation type="obsolete">concludere
 
 
 
 
 
-關閉標籤 (以及對話)</translation>
+pittacium (dialogumque) concludit</translation>
     </message>
     <message>
         <source>dialog with this player</source>
-        <translation type="obsolete">與這個棋友對話</translation>
+        <translation type="obsolete">cum hunc lusore colloqueris</translation>
     </message>
     <message>
         <location filename="../network/talk_gui.ui" line="297"/>
@@ -9808,37 +9503,37 @@ closes the tab (and dialog)</source>
     <message>
         <location filename="../network/talk_gui.ui" line="327"/>
         <source>Idle :</source>
-        <translation>閒置 :</translation>
+        <translation>Immotus :</translation>
     </message>
     <message>
         <location filename="../network/talk_gui.ui" line="415"/>
         <source>Rating :</source>
-        <translation>積分 :</translation>
+        <translation>Ordo :</translation>
     </message>
     <message>
         <source>Rated games :</source>
-        <translation type="obsolete">計分棋局 :</translation>
+        <translation type="obsolete">Certationes censitae:</translation>
     </message>
     <message>
         <source>Country :</source>
-        <translation type="obsolete">國家 :</translation>
+        <translation type="obsolete">Natio:</translation>
     </message>
     <message>
         <source>Wins :</source>
-        <translation type="obsolete">勝 :</translation>
+        <translation type="obsolete">Victoriae :</translation>
     </message>
     <message>
         <source>Loss :</source>
-        <translation type="obsolete">敗 :</translation>
+        <translation type="obsolete">Clades :</translation>
     </message>
     <message>
         <source>playing game :</source>
-        <translation type="obsolete">目前對局 :</translation>
+        <translation type="obsolete">certatione ludens :</translation>
     </message>
     <message>
         <location filename="../network/talk_gui.ui" line="178"/>
         <source>Address :</source>
-        <translation>位址 :</translation>
+        <translation>Inscriptio :</translation>
     </message>
     <message>
         <location filename="../network/talk_gui.ui" line="13"/>
@@ -9866,151 +9561,151 @@ closes the tab (and dialog)</source>
     <name>TextEditDialog</name>
     <message>
         <source>Text Label</source>
-        <translation type="obsolete">文字標籤</translation>
+        <translation type="obsolete">Inscriptio</translation>
     </message>
     <message>
         <source>Enter the text for this label:</source>
-        <translation type="obsolete">輸入標籤文字標題:</translation>
+        <translation type="obsolete">Inscriptionem scribe:</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation type="obsolete">確認(&amp;O)</translation>
+        <translation type="obsolete">&amp;Recte</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">取消(&amp;C)</translation>
+        <translation type="obsolete">&amp;Tollere</translation>
     </message>
 </context>
 <context>
     <name>TextView</name>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation type="obsolete">文字檔案 (*.txt);;所有檔案 (*)</translation>
+        <translation type="obsolete">Plicae verborum (*.txt);;Omnia(*)</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation type="obsolete">此檔案己存在.是否覆蓋?</translation>
+        <translation type="obsolete">Plica iam est. Delere atque perscribere visne?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="obsolete">是</translation>
+        <translation type="obsolete">Sic</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="obsolete">否</translation>
+        <translation type="obsolete">Non</translation>
     </message>
     <message>
         <source>Failed to write to file</source>
-        <translation type="obsolete">寫入檔案失敗</translation>
+        <translation type="obsolete">In plicam scribere nescit</translation>
     </message>
 </context>
 <context>
     <name>TextViewGUI</name>
     <message>
         <source>Text View</source>
-        <translation type="obsolete">檢視文字</translation>
+        <translation type="obsolete">Aspectus Litterarum</translation>
     </message>
     <message>
         <source>&amp;To clipboard</source>
-        <translation type="obsolete">到剪貼簿(&amp;T)</translation>
+        <translation type="obsolete">&amp;Latibulo</translation>
     </message>
     <message>
         <source>Copy position to clipboard</source>
-        <translation type="obsolete">複製選取範圍到剪貼簿</translation>
+        <translation type="obsolete">Latibulo statum transcribit</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation type="obsolete">儲存(&amp;S)</translation>
+        <translation type="obsolete">&amp;Servare</translation>
     </message>
     <message>
         <source>Save position to file</source>
-        <translation type="obsolete">儲存選取範圍到檔案</translation>
+        <translation type="obsolete">Statum in plica servat</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="obsolete">關閉(&amp;C)</translation>
+        <translation type="obsolete">&amp;Concludere</translation>
     </message>
     <message>
         <source>Close this window</source>
-        <translation type="obsolete">關閉本視窗</translation>
+        <translation type="obsolete">Fenestram concludit</translation>
     </message>
 </context>
 <context>
     <name>TygemConnection</name>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="269"/>
-        <location filename="../network/tygemconnection.cpp" line="2074"/>
+        <location filename="../network/tygemconnection.cpp" line="262"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
         <source>3 Boards Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="269"/>
+        <location filename="../network/tygemconnection.cpp" line="262"/>
         <source>You must close a board before you can open another one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="696"/>
+        <location filename="../network/tygemconnection.cpp" line="650"/>
         <source>Server full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="696"/>
+        <location filename="../network/tygemconnection.cpp" line="650"/>
         <source>Server full, try another</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2074"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
         <source>You must close a board before you can start a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2077"/>
-        <location filename="../network/tygemconnection.cpp" line="8395"/>
-        <location filename="../network/tygemconnection.cpp" line="8402"/>
+        <location filename="../network/tygemconnection.cpp" line="2031"/>
+        <location filename="../network/tygemconnection.cpp" line="7889"/>
+        <location filename="../network/tygemconnection.cpp" line="7896"/>
         <source>Not open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2077"/>
-        <location filename="../network/tygemconnection.cpp" line="8386"/>
-        <location filename="../network/tygemconnection.cpp" line="8395"/>
+        <location filename="../network/tygemconnection.cpp" line="2031"/>
+        <location filename="../network/tygemconnection.cpp" line="7880"/>
+        <location filename="../network/tygemconnection.cpp" line="7889"/>
         <source>%1 is not accepting invitations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5221"/>
+        <location filename="../network/tygemconnection.cpp" line="5050"/>
         <source>Resume match?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5222"/>
+        <location filename="../network/tygemconnection.cpp" line="5051"/>
         <source>Resume match in progress with %1?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8373"/>
-        <location filename="../network/tygemconnection.cpp" line="8410"/>
+        <location filename="../network/tygemconnection.cpp" line="7867"/>
+        <location filename="../network/tygemconnection.cpp" line="7904"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8373"/>
+        <location filename="../network/tygemconnection.cpp" line="7867"/>
         <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8386"/>
+        <location filename="../network/tygemconnection.cpp" line="7880"/>
         <source>In game?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8402"/>
+        <location filename="../network/tygemconnection.cpp" line="7896"/>
         <source>%1 has the maximum boards (3) open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8410"/>
+        <location filename="../network/tygemconnection.cpp" line="7904"/>
         <source>%1 has declined all invitations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10020,7 +9715,7 @@ closes the tab (and dialog)</source>
     <message>
         <location filename="../network/gamedialog.cpp" line="18"/>
         <source>New Game</source>
-        <translation type="unfinished">新對局</translation>
+        <translation type="unfinished">Nova Certatio</translation>
     </message>
 </context>
 <context>
@@ -10053,7 +9748,7 @@ closes the tab (and dialog)</source>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="33"/>
         <source>&amp;Decline</source>
-        <translation type="unfinished">拒絕(&amp;D)</translation>
+        <translation type="unfinished">&amp;Negare</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="37"/>
@@ -10063,7 +9758,7 @@ closes the tab (and dialog)</source>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="40"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished">取消(&amp;C)</translation>
+        <translation type="unfinished">&amp;Tollere</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="58"/>
@@ -10081,116 +9776,26 @@ closes the tab (and dialog)</source>
     <message>
         <source>At least one board is modified.
 If you exit the application now, all changes will be lost!
-Exit anyways?</source>
-        <translation type="obsolete">棋盤已經被修改過
-如果你現在離開程式, 所有修改將不會被儲存!
-是否要離開?</translation>
+Exit anyway?</source>
+        <translation type="obsolete">Aliqua tabella correcta est.
+Si programma nunc concluditur, correctiones amittintur!
+Exire tamen?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="obsolete">是</translation>
+        <translation type="obsolete">Sic</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="obsolete">否</translation>
+        <translation type="obsolete">Non</translation>
     </message>
     <message>
         <source>No sound available.</source>
-        <translation type="obsolete">無法使用音效</translation>
+        <translation type="obsolete">Sonare nequit.</translation>
     </message>
     <message>
         <source>No sound available. Qt on Mac uses QuickTime sound.</source>
-        <translation type="obsolete">無法使用音效. Qt 於 Mac 使用 QuickTime 音效</translation>
-    </message>
-    <message>
-        <source>You are not running the Network Audio sytem.
-If you have the `au&apos; command, run it in the background before this program. The latest release of the Network Audio System can be obtained from:
-
-ftp.ncd.com:/pub/ncd/technology/src/nas
-ftp.x.org:/contrib/audio/nas
-
-Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
-
-Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation type="obsolete">你現在沒有執行 Network Audio 系統
-如果你有 `au&apos; 命令, 於本程式之前於背景執行. 最後釋出的 Network Audio System 能夠取得於:
-
-ftp.ncd.com:/pub/ncd/technology/src/nas
-ftp.x.org:/contrib/audio/nas
-
-釋出 1.2  於 NAS 能夠包含於 X11R6 促成分配. 在安裝 NAS 之後, 你需要重新組態 Qt 的 NAS 音效支援
-
-然而, 假如你有 oss, 音效應該能夠作業並指向 /dev/dsp</translation>
-    </message>
-    <message>
-        <source>Sound available.</source>
-        <translation type="obsolete">音效可用</translation>
-    </message>
-    <message>
-        <source>Sound files not found.</source>
-        <translation type="obsolete">找不到音效檔</translation>
-    </message>
-    <message>
-        <source>Please check for the directories</source>
-        <translation type="obsolete">請檢查資料夾</translation>
-    </message>
-    <message>
-        <source>or</source>
-        <translation type="obsolete">或</translation>
-    </message>
-    <message>
-        <source>depending on your installation.</source>
-        <translation type="obsolete">相依於你的安裝過程</translation>
-    </message>
-    <message>
-        <source>You can navigate to the main qGo directory (for example:</source>
-        <translation type="obsolete">你能夠巡覽qGo主資料夾 (例如:</translation>
-    </message>
-    <message>
-        <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
-anymore except you install qGo again into a different directory.
-To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
-        <translation type="obsolete">假如資料夾正確, 此資料將會被儲存並且你不詢問任何人除非你再次安裝 qGo 於不同的目錄
-中止此程序, 點選 &apos;取消&apos; 於之後的對話方塊</translation>
-    </message>
-    <message>
-        <source>qGo directory</source>
-        <translation type="obsolete">qGo 資料夾</translation>
-    </message>
-    <message>
-        <source>No valid directory was given. Sound is not available.</source>
-        <translation type="obsolete">沒有給予合法資料夾. 無法使用音效</translation>
-    </message>
-    <message>
-        <source>About...</source>
-        <translation type="obsolete">關於...</translation>
-    </message>
-    <message>
-        <source>GTP code from Goliath, thanks to:</source>
-        <translation type="obsolete">GTP 碼源於 Goliath, 感謝:</translation>
-    </message>
-    <message>
-        <source>English translation by:
-Peter Strempel
-Johannes Mesa
-Emmanuel Beranger</source>
-        <comment>Please set your own language and your name! Use your own language!</comment>
-        <translation type="obsolete">正體中文翻譯:
-wex
-CHI KWOK yEUNG</translation>
-    </message>
-    <message>
-        <source>No sound files in bundle, strange.
-</source>
-        <translation type="obsolete">沒有音效檔案於包裝, 別處.</translation>
-    </message>
-    <message>
-        <source>At least one board is modified.
-If you exit the application now, all changes will be lost!
-Exit anyway?</source>
-        <translation type="obsolete">最後盤面已經變更
-如果你現在離開程式，所有的變化將會遺失
-卻要離開嗎?</translation>
+        <translation type="obsolete">Sonare nequit. Qt in Mac sono QuikTime utitur.</translation>
     </message>
     <message>
         <source>You are not running the Network Audio system.
@@ -10202,67 +9807,133 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation type="obsolete">你目前沒有執行 Network Audio system
-如果你有使用 `au&apos; 指令，在開啟這個程式之前於背景執行它。最後釋出的Network Audio System能夠獲得於:
-
+        <translation type="obsolete">&apos;Network Audio System&apos; non operatur.
+Si iussum &apos;au&apos; adest, in ima ante programma operandum est. Novissimum NAS capiendum est ex:
 ftp.ncd.com:/pub/ncd/technology/src/nas
 ftp.x.org:/contrib/audio/nas
 
-釋出 1.2 於 NAS 為包含於 X11R6 contrib distribution. 之後安裝 NAS, 你將需要重新設定 Qt 跟 NAS 音效支援。
+NAS 1.2 in X11R6 contrib distributione quoque includitur. Post NAS installatum, Qt cum opzione soni NAS re-configurandum est.
 
-然而，如果你有 oss， 音效應該已經在執行對應到 /dev/dsp</translation>
+Quamquam, si &apos;oss&apos; adest, sonus ad /dev/dsp missus fungendus est</translation>
+    </message>
+    <message>
+        <source>Sound available.</source>
+        <translation type="obsolete">Sonare potest.</translation>
+    </message>
+    <message>
+        <source>No sound files in bundle, strange.
+</source>
+        <translation type="obsolete">Plicae soni in sarcina non inventae, singulare.
+</translation>
+    </message>
+    <message>
+        <source>Sound files not found.</source>
+        <translation type="obsolete">Plicae soniti non inventae.</translation>
+    </message>
+    <message>
+        <source>Please check for the directories</source>
+        <translation type="obsolete">Quaeso indices inspice</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation type="obsolete">aut</translation>
+    </message>
+    <message>
+        <source>depending on your installation.</source>
+        <translation type="obsolete">ex tua instructione.</translation>
+    </message>
+    <message>
+        <source>You can navigate to the main qGo directory (for example:</source>
+        <translation type="obsolete">Navigare ad indicem plicarum principem qGo potes (e.g.:</translation>
+    </message>
+    <message>
+        <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
+anymore except you install qGo again into a different directory.
+To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
+        <translation type="obsolete">Si index plicarum emendatus est, hoc datum serbabitur neque iterum petetur
+nisi forte qGo in alium indicem instruetur.
+&apos;Tollere&apos; in dialogo sequente tange ut processus interrumpatur.</translation>
+    </message>
+    <message>
+        <source>qGo directory</source>
+        <translation type="obsolete">index plicarum qGo</translation>
+    </message>
+    <message>
+        <source>No valid directory was given. Sound is not available.</source>
+        <translation type="obsolete">Index plicarum mendosus. Sonare nequit.</translation>
+    </message>
+    <message>
+        <source>GTP code from Goliath, thanks to:</source>
+        <translation type="obsolete">GTP textu programmatis ex Goliath, gratias agimus:</translation>
+    </message>
+    <message>
+        <source>English translation by:
+Peter Strempel
+Johannes Mesa
+Emmanuel Beranger</source>
+        <comment>Please set your own language and your name! Use your own language!</comment>
+        <translation type="obsolete">Lingua latina conversum:
+Davide &lt;dave9000@cheapnet.it&gt;
+(errata atque emendationes mitte!)</translation>
+    </message>
+    <message>
+        <source>About...</source>
+        <translation type="obsolete">De...</translation>
     </message>
 </context>
 <context>
     <name>qGoBoard</name>
     <message>
         <source>free</source>
-        <translation type="obsolete">不計分</translation>
+        <translation type="obsolete">non censita</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation type="obsolete">計分棋</translation>
+        <translation type="obsolete">censita</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation type="obsolete">對手:</translation>
+        <translation type="obsolete">hostis:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation type="obsolete">-- 無 --</translation>
+        <translation type="obsolete">-- nemo --</translation>
     </message>
     <message>
         <source>Failed to play the stone within program 
 </source>
-        <translation type="obsolete">程式播放棋子失敗</translation>
+        <translation type="obsolete">Lapidem collocare nequivi in programma 
+</translation>
     </message>
     <message>
         <source>Failed to pass within program 
 </source>
-        <translation type="obsolete">程式虛手失敗</translation>
-    </message>
-    <message>
-        <source>Failed to have the program play its stone
-</source>
-        <translation type="obsolete">程式播放棋子失敗</translation>
-    </message>
-    <message>
-        <source>remaining time / stones</source>
-        <translation type="obsolete">剩時 / 落子</translation>
-    </message>
-    <message>
-        <source>click to pause/unpause the game</source>
-        <translation type="obsolete">暫停 / 取消暫停對局</translation>
-    </message>
-    <message>
-        <source>click to add 1 minute to your opponent&apos;s clock</source>
-        <translation type="obsolete">替你的對手加時一分鐘</translation>
+        <translation type="obsolete">Motum omittere nequivi in programma 
+</translation>
     </message>
     <message>
         <source>Failed to undo within program 
 </source>
-        <translation type="obsolete">程式回手失敗
+        <translation type="obsolete">Tollere nequivi in programma 
 </translation>
+    </message>
+    <message>
+        <source>Failed to have the program play its stone
+</source>
+        <translation type="obsolete">Programma lapidem collocare nequivit
+</translation>
+    </message>
+    <message>
+        <source>remaining time / stones</source>
+        <translation type="obsolete">tempus et lapides reliqui</translation>
+    </message>
+    <message>
+        <source>click to pause/unpause the game</source>
+        <translation type="obsolete">murem tange ut certationem suspendantur/resumantur</translation>
+    </message>
+    <message>
+        <source>click to add 1 minute to your opponent&apos;s clock</source>
+        <translation type="obsolete">murem tange ut minutum I tempori hostis adicitur</translation>
     </message>
 </context>
 <context>
@@ -10272,7 +9943,8 @@ ftp.x.org:/contrib/audio/nas
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="176"/>
         <source>Failed to play the stone within program 
 </source>
-        <translation type="unfinished">程式播放棋子失敗</translation>
+        <translation type="unfinished">Lapidem collocare nequivi in programma 
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="209"/>
@@ -10280,14 +9952,16 @@ ftp.x.org:/contrib/audio/nas
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="235"/>
         <source>Failed to have the program play its stone
 </source>
-        <translation type="unfinished">程式播放棋子失敗</translation>
+        <translation type="unfinished">Programma lapidem collocare nequivit
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="310"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="323"/>
         <source>Failed to pass within program 
 </source>
-        <translation type="unfinished">程式虛手失敗</translation>
+        <translation type="unfinished">Motum omittere nequivi in programma 
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="367"/>
@@ -10305,7 +9979,7 @@ ftp.x.org:/contrib/audio/nas
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="163"/>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation type="unfinished">計地模式: 點選棋石標示為死子...</translation>
+        <translation type="unfinished">PUNCTA: in lapidem mortuum notandum murem tange ...</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="178"/>
@@ -10502,7 +10176,7 @@ Do you accept ?
     <name>qGoBoardObserveInterface</name>
     <message>
         <source>Game n° </source>
-        <translation type="obsolete">對局 n° </translation>
+        <translation type="obsolete">Certatio </translation>
     </message>
 </context>
 <context>
@@ -10522,100 +10196,81 @@ Do you accept ?
     <name>qGoIF</name>
     <message>
         <source>Game continued as Game number %1</source>
-        <translation type="obsolete">遊戲繼續 遊戲數目 %1</translation>
-    </message>
-    <message>
-        <source>Game has adjourned</source>
-        <translation type="obsolete">棋局打掛</translation>
-    </message>
-    <message>
-        <source>White forfeits on time</source>
-        <translation type="obsolete">白棋時盡</translation>
-    </message>
-    <message>
-        <source>Black forfeits on time</source>
-        <translation type="obsolete">黑棋時盡</translation>
-    </message>
-    <message>
-        <source>White resigns</source>
-        <translation type="obsolete">白棋投子</translation>
-    </message>
-    <message>
-        <source>Black resigns</source>
-        <translation type="obsolete">黑棋投子</translation>
+        <translation type="obsolete">Certatio resumpta velut Certatio numero %1</translation>
     </message>
     <message>
         <source>LOAD</source>
-        <translation type="obsolete">讀取</translation>
+        <translation type="obsolete">LOAD</translation>
+    </message>
+    <message>
+        <source>Game n° </source>
+        <translation type="obsolete">Certatio </translation>
     </message>
     <message>
         <source>*** Both players are Human ! ***</source>
-        <translation type="obsolete">*** 雙方都為玩家 ***</translation>
+        <translation type="obsolete">*** Uterque lusores Homines sunt ! ***</translation>
     </message>
     <message>
         <source>komi </source>
-        <translation type="obsolete">讓子</translation>
+        <translation type="obsolete">komi </translation>
     </message>
     <message>
         <source>decline</source>
-        <translation type="obsolete">拒絕</translation>
+        <translation type="obsolete">negare</translation>
     </message>
     <message>
         <source>Opponent</source>
-        <translation type="obsolete">對手</translation>
+        <translation type="obsolete">Hostis</translation>
     </message>
     <message>
         <source>Request of Opponent</source>
-        <translation type="obsolete">對手要求</translation>
+        <translation type="obsolete">Petitio Hostis</translation>
     </message>
     <message>
         <source>%1 wants to %2
 YES = %3
 CANCEL = %4</source>
-        <translation type="obsolete">%1 到 %2
-是 = %3
-取消 = %4</translation>
+        <translation type="obsolete">%1 vult %2
+SIC = %3
+NON = %4</translation>
     </message>
     <message>
         <source>ignore request</source>
-        <translation type="obsolete">忽略要求</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <translation type="obsolete">完成</translation>
-    </message>
-    <message>
-        <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
-        <translation type="obsolete">計地模式: 重置 - 點選棋石標示為死子...</translation>
-    </message>
-    <message>
-        <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation type="obsolete">計地模式: 點選棋石標示為死子...</translation>
-    </message>
-    <message>
-        <source>GAME MODE: place stones...</source>
-        <translation type="obsolete">對局模式: 落子區域...</translation>
-    </message>
-    <message>
-        <source>Game Status: W:</source>
-        <translation type="obsolete">對局狀態: 白:</translation>
-    </message>
-    <message>
-        <source>B:</source>
-        <translation type="obsolete">黑:</translation>
-    </message>
-    <message>
-        <source>Game n° </source>
-        <translation type="obsolete">對局 n° </translation>
+        <translation type="obsolete">petitionem ignorare</translation>
     </message>
     <message>
         <source>%1 wants to %2
 
 Do you accept ? 
 </source>
-        <translation type="obsolete">%1 想要 %2
+        <translation type="obsolete">%1 %2 petit
 
-你同意嗎 ? </translation>
+Accipis ? 
+</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="obsolete">Perfectum</translation>
+    </message>
+    <message>
+        <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
+        <translation type="obsolete">PUNCTA: INITIUM - in lapidem mortuum notandum murem tange ...</translation>
+    </message>
+    <message>
+        <source>SCORE MODE: click on a stone to mark as dead...</source>
+        <translation type="obsolete">PUNCTA: in lapidem mortuum notandum murem tange ...</translation>
+    </message>
+    <message>
+        <source>GAME MODE: place stones...</source>
+        <translation type="obsolete">CERTATIO: lapides collocare ...</translation>
+    </message>
+    <message>
+        <source>Game Status: W:</source>
+        <translation type="obsolete">Status Certationis: A:</translation>
+    </message>
+    <message>
+        <source>B:</source>
+        <translation type="obsolete">N:</translation>
     </message>
 </context>
 </TS>

@@ -4,31 +4,19 @@
 <context>
     <name></name>
     <message>
-        <source>English</source>
-        <translation type="obsolete">Anglais</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="obsolete">Fran</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="obsolete">Allemand</translation>
-    </message>
-    <message>
         <source>Teaching</source>
-        <translation type="obsolete">Ensinar</translation>
+        <translation type="obsolete">Lektion (T)</translation>
     </message>
     <message>
         <source>Offer</source>
-        <translation type="obsolete">Oferecer</translation>
+        <translation type="obsolete">Offerieren</translation>
     </message>
 </context>
 <context>
     <name>Board</name>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
     </message>
     <message>
         <source>vs.</source>
@@ -37,23 +25,23 @@
     <message>
         <location filename="../board/board.cpp" line="1269"/>
         <source>Failed to save image!</source>
-        <translation>Falha ao salvar imagem!</translation>
+        <translation>Konnte Bild nicht speichern!</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>Black wins with</source>
-        <translation type="obsolete">Noir gagne de</translation>
+        <translation type="obsolete">Schwarz gewinnt mit</translation>
     </message>
     <message>
         <source>White wins with</source>
-        <translation type="obsolete">Blanc gagne de</translation>
+        <translation type="obsolete">Weiß gewinnt mit</translation>
     </message>
     <message>
         <source>Jigo</source>
@@ -61,7 +49,7 @@
     </message>
     <message>
         <source>Game Over</source>
-        <translation type="obsolete">Partie termin</translation>
+        <translation type="obsolete">Spiel zu Ende</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -69,7 +57,7 @@
     </message>
     <message>
         <source>Update gameinfo</source>
-        <translation type="obsolete">Mise </translation>
+        <translation type="obsolete">Spielinfo aktualisieren</translation>
     </message>
     <message>
         <source>XML</source>
@@ -77,136 +65,136 @@
     </message>
     <message>
         <source>Could not find file:</source>
-        <translation type="obsolete">Impossível achar o arquivo:</translation>
+        <translation type="obsolete">Konnte die Datei nicht finden:</translation>
     </message>
     <message>
         <source>Could not open file:</source>
-        <translation type="obsolete">Impossível abrir o arquivo:</translation>
+        <translation type="obsolete">Konnte die Datei nicht öffnen:</translation>
     </message>
     <message>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation type="obsolete">Codificação do texto inválida. Por favor, cheque as preferências!</translation>
+        <translation type="obsolete">Ungültige Textkodierung! Bitte überprüfen Sie die Einstellungen!</translation>
     </message>
     <message>
         <source>Reading sgf file...</source>
-        <translation type="obsolete">Lendo o arquivo sgf...</translation>
+        <translation type="obsolete">Lese SGF-Datei ...</translation>
     </message>
     <message>
         <source>Abort</source>
-        <translation type="obsolete">Abortar</translation>
+        <translation type="obsolete">Abbrechen</translation>
     </message>
     <message>
         <source>Corrupt SGF file at position</source>
-        <translation type="obsolete">Erro no arquivo SGF, na posição</translation>
+        <translation type="obsolete">Fehlerhafte SGF-Datei bei Position</translation>
     </message>
     <message>
         <source>No filename given!</source>
-        <translation type="obsolete">O nome do arquivo não foi informado!</translation>
+        <translation type="obsolete">Kein Dateiname angegeben!</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation type="obsolete">Falha ao importar ASCII. Área de transferência vazia?</translation>
+        <translation type="obsolete">ASCII-Import scheiterte. Zwischenablage leer?</translation>
     </message>
     <message>
         <source>W</source>
-        <translation type="obsolete">B</translation>
+        <translation type="obsolete">W</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="obsolete">P</translation>
+        <translation type="obsolete">S</translation>
     </message>
     <message>
         <source>Black wins with %1</source>
-        <translation type="obsolete">Preto ganha com %1</translation>
+        <translation type="obsolete">Schwarz gewinnt mit %1</translation>
     </message>
     <message>
         <source>White wins with %1</source>
-        <translation type="obsolete">Branco ganha com %1</translation>
+        <translation type="obsolete">Weiß gewinnt mit %1</translation>
     </message>
 </context>
 <context>
     <name>BoardWindow</name>
     <message>
-        <location filename="../board/boardwindow.cpp" line="173"/>
+        <location filename="../board/boardwindow.cpp" line="169"/>
         <source>You modified the game.
 Do you want to save your changes?</source>
-        <translation type="unfinished">Você modificou o jogo.
-Quer salvar as modificações?</translation>
+        <translation type="unfinished">Das Spiel wurde geändert.
+Sollen die Änderungen gespeichert werden?</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
         <source>Yes</source>
-        <translation type="unfinished">Sim</translation>
+        <translation type="unfinished">Ja</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nein</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="174"/>
-        <location filename="../board/boardwindow.cpp" line="371"/>
+        <location filename="../board/boardwindow.cpp" line="170"/>
+        <location filename="../board/boardwindow.cpp" line="372"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="363"/>
+        <location filename="../board/boardwindow.cpp" line="364"/>
         <source>Add 1 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="365"/>
+        <location filename="../board/boardwindow.cpp" line="366"/>
         <source>Add 5 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="367"/>
+        <location filename="../board/boardwindow.cpp" line="368"/>
         <source>Add 10 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="369"/>
+        <location filename="../board/boardwindow.cpp" line="370"/>
         <source>Add 60 min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="597"/>
-        <location filename="../board/boardwindow.cpp" line="658"/>
+        <location filename="../board/boardwindow.cpp" line="598"/>
+        <location filename="../board/boardwindow.cpp" line="659"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="597"/>
+        <location filename="../board/boardwindow.cpp" line="598"/>
         <source>Could not export  the game to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="613"/>
+        <location filename="../board/boardwindow.cpp" line="614"/>
         <source>Export image as</source>
-        <translation type="unfinished">Exportar imagem como</translation>
+        <translation type="unfinished">Exportiere Bild als</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="658"/>
+        <location filename="../board/boardwindow.cpp" line="659"/>
         <source>Could not duplicate the game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="769"/>
+        <location filename="../board/boardwindow.cpp" line="770"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="769"/>
+        <location filename="../board/boardwindow.cpp" line="770"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
-        <translation type="unfinished">Arquivos SGF (*.sgf);;Todos os arquivos (*)</translation>
+        <translation type="unfinished">SGF-Dateien (*.sgf);;All Dateien (*)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="788"/>
+        <location filename="../board/boardwindow.cpp" line="789"/>
         <source>Cannot save SGF file.</source>
-        <translation type="unfinished">Impossível salvar arquivo SGF.</translation>
+        <translation type="unfinished">Konnte SGF-Datei nicht speichern.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="868"/>
+        <location filename="../board/boardwindow.cpp" line="869"/>
         <source>Match Mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -220,9 +208,9 @@ Quer salvar as modificações?</translation>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation type="unfinished">Valor máximo da barra deslizante
+        <translation type="unfinished">Schieber Max Wert
 
-A maior jogada da partida que a barra pode mostrar agora.</translation>
+Größter vom Schieber momentan anzeigbarer Spielzug.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="107"/>
@@ -244,25 +232,25 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <message>
         <location filename="../board/boardwindow.ui" line="155"/>
         <source>Navigate through the game</source>
-        <translation type="unfinished">Navegar através da partida</translation>
+        <translation type="unfinished">Navigiere durch das Spiel</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="158"/>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation type="unfinished">Navegar para a jogada
+        <translation type="unfinished">Gehe zu Zug
 
-Utilize a barra deslizante para se mover rapidamente através do braço atual da partida.</translation>
+Benutzen Sie den Schieber, um schnell durch die aktuelle Variation zu gehen.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="187"/>
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation type="unfinished">Valor mínimo da barra deslizante
+        <translation type="unfinished">Schieber Min Wert
 
-A menor jogada da partida que a barra pode mostrar agora.</translation>
+Kleinster vom Schieber momentan anzeigbarer Spielzug.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="192"/>
@@ -282,73 +270,73 @@ A menor jogada da partida que a barra pode mostrar agora.</translation>
     <message>
         <location filename="../board/boardwindow.ui" line="725"/>
         <source>Move number</source>
-        <translation type="unfinished">Número da jogada</translation>
+        <translation type="unfinished">Zug Nummer</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="728"/>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation type="unfinished">Número da jogada
+        <translation type="unfinished">Zug Nummer
 
-Número da jogada mostrada atualmente.</translation>
+Nummer des aktuell angezeigten Zuges.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="742"/>
         <source>Move 0</source>
-        <translation type="unfinished">Jogada 0</translation>
+        <translation type="unfinished">Zug 0</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1221"/>
         <source>Player to play</source>
-        <translation type="unfinished">Jogador a jogar</translation>
+        <translation type="unfinished">Spieler am Zug</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1224"/>
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation type="unfinished">Jogador a jogar
+        <translation type="unfinished">Spieler am Zug
 
-Indica se é a vez do preto ou do branco jogar.</translation>
+Zeigt an, welcher Spieler am Zug ist.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1238"/>
         <source>Black to play</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarz am Zug</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1714"/>
         <source>Variations</source>
-        <translation type="unfinished">Variações</translation>
+        <translation type="unfinished">Variationen</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1717"/>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation type="unfinished">Variações
+        <translation type="unfinished">Variationen
 
-Mostra o número de derivações e variações dentro do nó atual.</translation>
+Zeigt die Anzahl der Söhne und Brüder des aktuellen Knotens.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1731"/>
         <source>0 brothers
 0 sons</source>
-        <translation type="unfinished">0 variações
-0 derivações</translation>
+        <translation type="unfinished">0 Brüder
+0 Söhne</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="1782"/>
         <location filename="../board/boardwindow.ui" line="2988"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiß</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2289"/>
         <location filename="../board/boardwindow.ui" line="2884"/>
         <source>remaining time / stones</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">verbleibende Zeit / Steine</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2292"/>
@@ -360,13 +348,13 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation type="unfinished">Relógio
+        <translation type="unfinished">Uhr
 
-mostra o tempo restante ou o tempo de byoyomi / pedras restantes.
+zeigt die verbleibende Zeit oder Byoyomi-Zeit / verbleibende Steine.
 
-Clique em
-- seu próprio relógio para requisitar pausas (NNGS) ou
-- o relógio do oponente para lhe dar um minuto a mais de tempo.</translation>
+Klick auf
+- eigene Uhr: Pause anfragen (NNGS)
+- gegnerische Uhr: Zeit des Gegners um eine Minute erhöhen.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2301"/>
@@ -380,13 +368,13 @@ Clique em
         <location filename="../board/boardwindow.ui" line="3125"/>
         <location filename="../board/boardwindow.ui" line="3430"/>
         <source>Captures:</source>
-        <translation type="unfinished">Capturas:</translation>
+        <translation type="unfinished">Gefangene:</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="2377"/>
         <location filename="../board/boardwindow.ui" line="3296"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarz</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3032"/>
@@ -398,7 +386,7 @@ Clique em
         <location filename="../board/boardwindow.ui" line="3210"/>
         <location filename="../board/boardwindow.ui" line="3955"/>
         <source>komi points</source>
-        <translation type="unfinished">pontos de komi</translation>
+        <translation type="unfinished">Komi-Punkte</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3213"/>
@@ -407,10 +395,10 @@ Clique em
 
 Add komi points to white because black has the advantage to set the first stone.
 Use &quot;komi x&quot; to request a komi of x (number).</source>
-        <translation type="unfinished">komi:
+        <translation type="unfinished">Komi
 
-Adicionar pontos komi ao branco porque o preto tem a vantagem de colocar a primeira pedra.
-Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
+Durch den Vorteil von Schwarz, den ersten Zug machen zu dürfen, werden Weiß Komi-Punkte zum Ergebnis hinzugezählt.
+Mit &quot;komi x&quot; wird der Gegner aufgefordert, das Komi auf x (eine Zahl) festzulegen.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3219"/>
@@ -422,40 +410,40 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
         <location filename="../board/boardwindow.ui" line="3260"/>
         <location filename="../board/boardwindow.ui" line="3971"/>
         <source>5.5</source>
-        <translation type="unfinished">5,5</translation>
+        <translation type="unfinished">5.5</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3888"/>
         <source>free/rated game</source>
-        <translation type="unfinished">partida livre/qualificada</translation>
+        <translation type="unfinished">freies/gewertetes Spiel</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3891"/>
         <source>free game:
 
 use &quot;free&quot; command to make game rated or unrated (free)</source>
-        <translation type="unfinished">partida livre:
+        <translation type="unfinished">Freies Spiel
 
-use o comando &quot;livre&quot; para fazer uma partida classificada ou não (livre)</translation>
+Mit dem Kommando &apos;free&apos; kann ein Spiel für frei oder gewerted gesetzt werden</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3896"/>
         <source>free</source>
-        <translation type="unfinished">livre</translation>
+        <translation type="unfinished">frei</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3920"/>
         <source>Handicap</source>
-        <translation type="unfinished">Vantagem</translation>
+        <translation type="unfinished">Vorgabe</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3923"/>
         <source>Handicap
 
 Number of stones placed by black as his first move.</source>
-        <translation type="unfinished">Vantagem
+        <translation type="unfinished">Vorgabe
 
-Número de pedras colocadas pelo preto em sua primeira jogada.</translation>
+Zahl der Steine, die von Schwarz im ersten Zug aufs Brett gelegt werden.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3928"/>
@@ -465,7 +453,7 @@ Número de pedras colocadas pelo preto em sua primeira jogada.</translation>
     <message>
         <location filename="../board/boardwindow.ui" line="3988"/>
         <source>byoyomi time (minutes)</source>
-        <translation type="unfinished">Tempo de byoyomi (minutos)</translation>
+        <translation type="unfinished">Byoyomi-Periode (Minuten)</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="3991"/>
@@ -481,18 +469,18 @@ Absolute: Byo = 0, no additional time after main time is zero.
 Canadian: e.g. Byo = 6/25, 25 stones to place in 6 minutes; if all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
 
 byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 30 seconds, time is reset to 30 seconds, if not placed within 30 seconds, period will be decreased by one, a new period of 30 seconds starts; if period is zero and last time interval is over then game ends.</source>
-        <translation type="unfinished">Tempos de Byoyomi
+        <translation type="unfinished">Byoyomi-Zeit
 
-Tempo adicional para colocar certa quantidade de pedras.
-Se o tempo se esgotar antes que todas as pedras sejam colocadas, o jogo termina imediatamete: &quot;...estouro do tempo.&quot;
+Eine zusätzliche Zeit, während der eine bestimmte Anzahl Steine plaziert werden muss.
+Läuft einem Spieler die Zeit ab, bevor alle Steine plaziert sind, endet das Spiel mit Niederlage auf Zeit: &quot;... forfeits on time.&quot;
 
-Sistemas de tempo (desconectado):
+Zeitsysteme (offline):
 
-Absoluto : Byo = 0, sem tempo adicional após o tempo principal se esgotar.
+Absolut: Byo = 0; nach Ablauf der Zeit wird keine zusätzliche Zeit  gewährt.
 
-Canadense: ex. Byo = 6/25, 25 pedras para colocar em 6 minutos; se todas as pedras são colocadas, o tempo de byoyomi é reiniciado para este valor e o mesmo número de pedras deve ser colocado até o jogo terminar.
+Kanadisch: z.B. Byo = 6/25; 25 Steine sind in 6 Minuten zu setzen. Sind alle 25 Steine gesetzt, werden weitere 6 Minuten gewährt und so weiter.
 
-byo-yomi: ex. Byo 7x30, 7 períodos de 30 segundos; se uma pedra é colocada dentro de 30 segundos, o tempo é reiniciado, senão, a contagem de períodos é decrementada e uma nova temporização recomeça; quando o tempo do último período se esgotar, a partida termina.</translation>
+Byoyomi: z.B. Byo: 7x30s; 7 Perioden zu je 30 Sekunden stehen zur Verfügung, wobei ein Stein innerhalb von 30 Sekunden zu setzen ist. Wird ein Stein innerhalb der 30 Sekunden gesetzt, wird die Uhr auf 30 Sekunden zurückgestellt; andernfalls wird eine Periode abgezogen und die nächsten 30 Sekunden beginnen. Laufen die 30 Sekunden ab und stehen keine Perioden mehr zur Verfügung, dann ist das Spiel auf Zeit verloren.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4005"/>
@@ -507,7 +495,7 @@ byo-yomi: ex. Byo 7x30, 7 períodos de 30 segundos; se uma pedra é colocada den
     <message>
         <location filename="../board/boardwindow.ui" line="4458"/>
         <source>Stone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stein</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4461"/>
@@ -519,21 +507,21 @@ Edit stones on the board. Left click for a black, right click for a white stone.
     <message>
         <location filename="../board/boardwindow.ui" line="4510"/>
         <source>Color of next move</source>
-        <translation type="unfinished">Cor da próxima jogada</translation>
+        <translation type="unfinished">Farbe des nächsten Zugs</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4513"/>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation type="unfinished">Cor
+        <translation type="unfinished">Farbe
 
-Deifinir a cor da próxima jogada. Se deixar intacta, a cor padrão será usada.</translation>
+Setzt die Farbe des nächsten Zugs.</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4567"/>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zahl</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4570"/>
@@ -545,7 +533,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
     <message>
         <location filename="../board/boardwindow.ui" line="4619"/>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Buchstabe</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4622"/>
@@ -557,7 +545,7 @@ Edit letter marks on the board. Left click sets a mark, right click removes it. 
     <message>
         <location filename="../board/boardwindow.ui" line="4671"/>
         <source>Cross</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kreuz</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4674"/>
@@ -569,7 +557,7 @@ Edit cross marks on the board. Left click sets a mark, right click removes it.</
     <message>
         <location filename="../board/boardwindow.ui" line="4717"/>
         <source>Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dreieck</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4720"/>
@@ -581,7 +569,7 @@ Edit triangle marks on the board. Left click sets a mark, right click removes it
     <message>
         <location filename="../board/boardwindow.ui" line="4769"/>
         <source>Circle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kreis</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4772"/>
@@ -593,7 +581,7 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
     <message>
         <location filename="../board/boardwindow.ui" line="4821"/>
         <source>Square</source>
-        <translation type="unfinished">Quadrado</translation>
+        <translation type="unfinished">Rechteck</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="4824"/>
@@ -608,503 +596,523 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4894"/>
-        <source>swap variations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="4897"/>
-        <location filename="../board/boardwindow.ui" line="4947"/>
-        <location filename="../board/boardwindow.ui" line="4997"/>
-        <location filename="../board/boardwindow.ui" line="5047"/>
+        <location filename="../board/boardwindow.ui" line="4900"/>
+        <location filename="../board/boardwindow.ui" line="4950"/>
+        <location filename="../board/boardwindow.ui" line="5000"/>
+        <location filename="../board/boardwindow.ui" line="5100"/>
         <source>Empty variatonreate an empty branch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="4944"/>
-        <source>delete current move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="4994"/>
-        <source>duplicate the current node</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="5044"/>
-        <source>create an empty branch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../board/boardwindow.ui" line="5076"/>
+        <location filename="../board/boardwindow.ui" line="5130"/>
         <source>Clipboard tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5109"/>
+        <location filename="../board/boardwindow.ui" line="5163"/>
         <source>cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5159"/>
+        <location filename="../board/boardwindow.ui" line="5213"/>
         <source>paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5209"/>
+        <location filename="../board/boardwindow.ui" line="5263"/>
         <source>paste as variation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5277"/>
-        <location filename="../board/boardwindow.ui" line="5392"/>
-        <location filename="../board/boardwindow.ui" line="5495"/>
-        <location filename="../board/boardwindow.ui" line="5525"/>
-        <location filename="../board/boardwindow.ui" line="5555"/>
+        <location filename="../board/boardwindow.ui" line="5331"/>
+        <location filename="../board/boardwindow.ui" line="5446"/>
+        <location filename="../board/boardwindow.ui" line="5549"/>
+        <location filename="../board/boardwindow.ui" line="5579"/>
+        <location filename="../board/boardwindow.ui" line="5609"/>
         <source>Pass move</source>
-        <translation type="unfinished">Passar a jogada</translation>
+        <translation type="unfinished">einen Zug aussetzen (pass)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5280"/>
-        <location filename="../board/boardwindow.ui" line="5395"/>
-        <location filename="../board/boardwindow.ui" line="5498"/>
-        <location filename="../board/boardwindow.ui" line="5528"/>
-        <location filename="../board/boardwindow.ui" line="5558"/>
+        <location filename="../board/boardwindow.ui" line="5334"/>
+        <location filename="../board/boardwindow.ui" line="5449"/>
+        <location filename="../board/boardwindow.ui" line="5552"/>
+        <location filename="../board/boardwindow.ui" line="5582"/>
+        <location filename="../board/boardwindow.ui" line="5612"/>
         <source>Pass
 
 Pass your turn.</source>
-        <translation type="unfinished">Passar
+        <translation type="unfinished">Passen
 
-Passar sua vez.</translation>
+Zug passen.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5285"/>
-        <location filename="../board/boardwindow.ui" line="5400"/>
+        <location filename="../board/boardwindow.ui" line="5339"/>
+        <location filename="../board/boardwindow.ui" line="5454"/>
         <source>Pass</source>
-        <translation type="unfinished">Passar</translation>
+        <translation type="unfinished">Passen</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5301"/>
+        <location filename="../board/boardwindow.ui" line="5355"/>
         <source>switch to score mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5304"/>
-        <location filename="../board/boardwindow.ui" line="5468"/>
+        <location filename="../board/boardwindow.ui" line="5358"/>
+        <location filename="../board/boardwindow.ui" line="5522"/>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5309"/>
+        <location filename="../board/boardwindow.ui" line="5363"/>
         <source>Score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5422"/>
+        <location filename="../board/boardwindow.ui" line="5476"/>
         <source>Refresh display</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anzeige erneuern</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5425"/>
+        <location filename="../board/boardwindow.ui" line="5479"/>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5430"/>
+        <location filename="../board/boardwindow.ui" line="5484"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5465"/>
+        <location filename="../board/boardwindow.ui" line="5519"/>
         <source>Request adjournment</source>
-        <translation type="unfinished">Requisitar adiamento</translation>
+        <translation type="unfinished">Unterbrechung erbitten (adjourn)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5473"/>
+        <location filename="../board/boardwindow.ui" line="5527"/>
         <source>Adjourn</source>
-        <translation type="unfinished">Adiar</translation>
+        <translation type="unfinished">Vertagen</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5503"/>
+        <location filename="../board/boardwindow.ui" line="5557"/>
         <source>Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5533"/>
+        <location filename="../board/boardwindow.ui" line="5587"/>
         <source>Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6387"/>
+        <location filename="../board/boardwindow.ui" line="6439"/>
         <source>InsertStone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6390"/>
+        <location filename="../board/boardwindow.ui" line="6442"/>
         <source>Insert stone to position (no variation)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5362"/>
+        <location filename="../board/boardwindow.ui" line="5416"/>
         <source>Undo last move</source>
+        <translation type="unfinished">letzten Zug zurücknehmen (undo)</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="4897"/>
+        <source>Create an empty branch</source>
+        <translation type="unfinished">Erstellt einen leeren Ast</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="4947"/>
+        <source>Duplicate the current node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5365"/>
+        <location filename="../board/boardwindow.ui" line="4997"/>
+        <source>Swap variations</source>
+        <translation type="unfinished">Variationen tauschen</translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5047"/>
+        <location filename="../board/boardwindow.ui" line="5050"/>
+        <source>Insert move mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5097"/>
+        <source>Delete current move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../board/boardwindow.ui" line="5419"/>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation type="unfinished">Desfazer
+        <translation type="unfinished">Rücknahme (undo)
 
-Desfazer a última jogada do oponente.</translation>
+Nimmt den letzten Zug des Gegners zurück.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="839"/>
-        <location filename="../board/boardwindow.ui" line="5370"/>
+        <location filename="../board/boardwindow.cpp" line="840"/>
+        <location filename="../board/boardwindow.ui" line="5424"/>
         <source>Undo</source>
-        <translation type="unfinished">Desfazer</translation>
+        <translation type="unfinished">Zurück</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="5563"/>
+        <location filename="../board/boardwindow.ui" line="5617"/>
         <source>Done</source>
-        <translation type="unfinished">Feito</translation>
+        <translation type="unfinished">Fertig</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6054"/>
+        <location filename="../board/boardwindow.ui" line="6108"/>
         <source>Default Loss</source>
-        <translation type="unfinished">Perda da partida</translation>
+        <translation type="unfinished">sofortige Niederlage (resign)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6057"/>
+        <location filename="../board/boardwindow.ui" line="6111"/>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation type="unfinished">Desistir.
+        <translation type="unfinished">Aufgeben.
 
-Abandonar a partida imediatamente. Clicar aqui significa uma perda da partida, ou seja, seu oponente ganha. A partida termina.</translation>
+Das Spiel wird aufgegeben und als verloren gewertet. Der Gegner gewinnt und das Spiel ist beendet.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6062"/>
+        <location filename="../board/boardwindow.ui" line="6116"/>
         <source>RESIGN</source>
-        <translation type="unfinished">DESISTIR</translation>
+        <translation type="unfinished">Aufgeben</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6091"/>
+        <location filename="../board/boardwindow.ui" line="6145"/>
         <source>Review</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6240"/>
+        <location filename="../board/boardwindow.ui" line="6292"/>
         <source>fileSave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6249"/>
+        <location filename="../board/boardwindow.ui" line="6301"/>
         <source>fileSaveAs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6252"/>
+        <location filename="../board/boardwindow.ui" line="6304"/>
         <source>Save file as ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6261"/>
+        <location filename="../board/boardwindow.ui" line="6313"/>
         <source>quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6276"/>
+        <location filename="../board/boardwindow.ui" line="6328"/>
         <source>export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6279"/>
+        <location filename="../board/boardwindow.ui" line="6331"/>
         <source>export  export to several formats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6291"/>
+        <location filename="../board/boardwindow.ui" line="6343"/>
         <source>import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6300"/>
+        <location filename="../board/boardwindow.ui" line="6352"/>
         <source>gameInfo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6312"/>
+        <location filename="../board/boardwindow.ui" line="6364"/>
         <source>sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6321"/>
+        <location filename="../board/boardwindow.ui" line="6373"/>
         <source>whatsThis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6330"/>
+        <location filename="../board/boardwindow.ui" line="6382"/>
         <source>duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6342"/>
+        <location filename="../board/boardwindow.ui" line="6394"/>
         <source>coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6354"/>
+        <location filename="../board/boardwindow.ui" line="6406"/>
         <source>play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6359"/>
+        <location filename="../board/boardwindow.ui" line="6411"/>
         <source>Export &amp;ASCII</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6362"/>
+        <location filename="../board/boardwindow.ui" line="6414"/>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation type="unfinished">Exportar ASCII
+        <translation type="unfinished">ASCII exportieren
 
-Exportar o tabuleiro atual no formato ASCII.</translation>
+Aktuelle Position als ASCII exportieren.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6369"/>
+        <location filename="../board/boardwindow.ui" line="6421"/>
         <source>Export SGF &amp;to clipboard</source>
-        <translation type="unfinished">Exportar SGF &amp;para a área de trasferência</translation>
+        <translation type="unfinished">SGF &amp;in die Zwischenablage exportieren</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6374"/>
+        <location filename="../board/boardwindow.ui" line="6426"/>
         <source>Export &amp;Image</source>
-        <translation type="unfinished">Exportar &amp;imagem</translation>
+        <translation type="unfinished">&amp;Bild exportieren</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.ui" line="6379"/>
+        <location filename="../board/boardwindow.ui" line="6431"/>
         <source>E&amp;xport Image to clipboard</source>
-        <translation type="unfinished">E&amp;xportar imagem para a área de transferência</translation>
+        <translation type="unfinished">Bild in die Zwischenablage e&amp;xportieren</translation>
     </message>
 </context>
 <context>
     <name>ClientWindow</name>
     <message>
         <source>Current online players / watched players</source>
-        <translation type="obsolete">Jogadores conectados agora / jogadores observados</translation>
+        <translation type="obsolete">Spieler online / beobachtete Spieler</translation>
     </message>
     <message>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
-        <translation type="obsolete">Exibe o número de jogadores conectados agora
-e o número de jogadores que você está observando.
-Um jogador que você estiver observando terá uma entrada no campo &apos;observar jogador:&apos; .</translation>
+        <translation type="obsolete">Zeigt die Anzahl der gegenwärtig am Server angemeldeten Spieler
+sowie die Zahl der beobachteten Spieler, die angemeldet sind.
+Um einen Spieler zu beobachten ,genügt ein Eintrag in das Feld &quot;beobachtete Spieler&quot;.</translation>
     </message>
     <message>
         <source>Current online games / observed games + matches</source>
-        <translation type="obsolete">Jogos conectados agora / jogos observados + partidas</translation>
+        <translation type="obsolete">Derzeitig laufende Spiele / zugeschaute Spiele + eigene Spiele</translation>
     </message>
     <message>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
-        <translation type="obsolete">Mostra o número de jogos em andamento neste servidor e o número de jogos que você estiver observando ou participando</translation>
+        <translation type="obsolete">Zeigt die Anzahl der Spiele, die gerade auf dem Go-Server laufen und die Zahl der Spiele, denen man zuschaut oder die man selbst spielt</translation>
     </message>
     <message>
         <source>Current server</source>
-        <translation type="obsolete">Servidor atual</translation>
+        <translation type="obsolete">Derzeitiger Server</translation>
     </message>
     <message>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
-        <translation type="obsolete">Mostra o nome do servidor atual ou &apos;OFFLINE&apos; se você não estiver conectado à internete.</translation>
+        <translation type="obsolete">Zeigt den Namen des Servers, mit dem derzeitig kommuniziert wird, oder OFFLINE, falls keine Internetverbindung hergestellt worden ist.</translation>
     </message>
     <message>
         <source>Online Time</source>
-        <translation type="obsolete">Tempo Conectado</translation>
+        <translation type="obsolete">Online-Zeit</translation>
     </message>
     <message>
         <source>Displays the current online time.</source>
-        <translation type="obsolete">Affiche la dur</translation>
+        <translation type="obsolete">Zeigt die Zeit, die seit dem Verbinden verstrichen ist.</translation>
     </message>
     <message>
         <source>left click to talk to channel</source>
-        <translation type="obsolete">click gauche pour parler dans le canal</translation>
+        <translation type="obsolete">linke Maustaste um im Kanal zu sprechen</translation>
     </message>
     <message>
         <source>Go Server:</source>
-        <translation type="obsolete">Serveur :</translation>
+        <translation type="obsolete">Go Server:</translation>
     </message>
     <message>
         <source>-- edit --</source>
-        <translation type="obsolete">-- edit --</translation>
+        <translation type="obsolete">-- editieren --</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">Nova partida</translation>
+        <translation type="obsolete">Neues Spiel</translation>
     </message>
     <message>
         <source>Teaching</source>
-        <translation type="obsolete">Ensinar</translation>
+        <translation type="obsolete">Lektion (T)</translation>
     </message>
     <message>
         <source>W</source>
-        <translation type="obsolete">B</translation>
+        <translation type="obsolete">W</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation type="obsolete">Aceitar</translation>
+        <translation type="obsolete">Annehmen</translation>
+    </message>
+    <message>
+        <source>SEND TO MYSELF???
+</source>
+        <translation type="obsolete">AN MICH SELBST SENDEN???</translation>
+    </message>
+    <message>
+        <source>USER NOT LOGGED IN.
+</source>
+        <translation type="obsolete">SPIELER DERZEIT NICHT EINGELOGGT.&quot;n</translation>
     </message>
     <message>
         <source>SEND TO MYSELF???</source>
-        <translation type="obsolete">ENVOYER A MOI MEME ???</translation>
+        <translation type="obsolete">AN MICH SELBST SENDEN???</translation>
     </message>
     <message>
         <source>USER NOT LOGGED IN.</source>
-        <translation type="obsolete">USUÁRIO NÃO CONECTADO.</translation>
+        <translation type="obsolete">SPIELER NICHT ANGEMELDET.</translation>
+    </message>
+    <message>
+        <source>User definable button</source>
+        <translation type="obsolete">Benutzerdefinierte Taste</translation>
     </message>
     <message>
         <source>User defineable button</source>
-        <translation type="obsolete">Bouton d</translation>
+        <translation type="obsolete">Benutzerdefinierte Taste</translation>
     </message>
     <message>
         <source>talk</source>
-        <translation type="obsolete">conversar</translation>
+        <translation type="obsolete">sprechen</translation>
     </message>
     <message>
         <source>list all channels</source>
-        <translation type="obsolete">liste tous les canaux</translation>
+        <translation type="obsolete">alle Kanäle auflisten</translation>
     </message>
     <message>
         <source>leave channel</source>
-        <translation type="obsolete">quitte le canal</translation>
+        <translation type="obsolete">Kanal verlassen</translation>
     </message>
     <message>
         <source>match</source>
-        <translation type="obsolete">disputa</translation>
+        <translation type="obsolete">spielen</translation>
     </message>
     <message>
         <source>status</source>
-        <translation type="obsolete">statut</translation>
+        <translation type="obsolete">Status</translation>
     </message>
     <message>
         <source>stored games</source>
-        <translation type="obsolete">jogos armazenados</translation>
+        <translation type="obsolete">unbeendete Spiele</translation>
     </message>
     <message>
         <source>results</source>
-        <translation type="obsolete">resultados</translation>
+        <translation type="obsolete">Ergebnisse</translation>
     </message>
     <message>
         <source>rating</source>
-        <translation type="obsolete">classificação</translation>
+        <translation type="obsolete">Einschätzung</translation>
     </message>
     <message>
         <source>toggle watch list</source>
-        <translation type="obsolete">alternar lista de observação</translation>
+        <translation type="obsolete">in/aus Beobachtungsliste</translation>
     </message>
     <message>
         <source>toggle exclude list</source>
-        <translation type="obsolete">alternar lista de exclusão</translation>
+        <translation type="obsolete">in/aus Ausschlußliste</translation>
     </message>
     <message>
         <source>use &apos;channel&apos; cmd to enter a channel</source>
-        <translation type="obsolete">employez la commande &apos;channel&apos;  pour entrer dans un canal</translation>
+        <translation type="obsolete">Befehl &apos;channel&apos; verwenden um einen Kanal zu betreten</translation>
     </message>
     <message>
         <source>Idle</source>
-        <translation type="obsolete">Inactif</translation>
+        <translation type="obsolete">Still</translation>
     </message>
     <message>
         <source>Info [Won/Lost] Idle (Country/Language)</source>
-        <translation type="obsolete">Info [Gagn</translation>
+        <translation type="obsolete">Info [Siege/Niederlagen]  Still  (Land/Sprache)</translation>
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation type="obsolete">Tamanho da janela foi salvo.</translation>
+        <translation type="obsolete">Fenstergröße gespeichert.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation type="obsolete">Tamanho da janela foi restaurado.</translation>
+        <translation type="obsolete">Fenstergröße wieder hergestellt.</translation>
     </message>
     <message>
         <source>observe game</source>
-        <translation type="obsolete">observar partida</translation>
+        <translation type="obsolete">Spiel zuschauen</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation type="obsolete">msg*</translation>
+        <translation type="obsolete">info*</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation type="obsolete">Mensagem</translation>
+        <translation type="obsolete">Nachricht</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation type="obsolete">Informação</translation>
+        <translation type="obsolete">Info</translation>
     </message>
     <message>
         <source>Won</source>
-        <translation type="obsolete">Ganhou</translation>
+        <translation type="obsolete">Siege</translation>
     </message>
     <message>
         <source>Lost</source>
-        <translation type="obsolete">Perdeu</translation>
+        <translation type="obsolete">Niederlagen</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="obsolete">País</translation>
+        <translation type="obsolete">Land</translation>
     </message>
     <message>
         <source>Lang</source>
-        <translation type="obsolete">Idioma</translation>
+        <translation type="obsolete">Sprache</translation>
     </message>
     <message>
         <source>stats</source>
-        <translation type="obsolete">estatísticas</translation>
+        <translation type="obsolete">stats</translation>
     </message>
     <message>
         <source>Ready.</source>
-        <translation type="obsolete">Pronto.</translation>
+        <translation type="obsolete">Bereit.</translation>
     </message>
     <message>
         <source>Connect with</source>
-        <translation type="obsolete">Conectar a</translation>
+        <translation type="obsolete">Verbinden mit</translation>
     </message>
     <message>
         <source>Disconnect from</source>
-        <translation type="obsolete">Desconectar de</translation>
+        <translation type="obsolete">Trennen von</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="obsolete">&amp;Arquivo</translation>
+        <translation type="obsolete">&amp;Datei</translation>
     </message>
     <message>
         <source>&amp;Connections</source>
-        <translation type="obsolete">&amp;Conec</translation>
+        <translation type="obsolete">&amp;Verbindung</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation type="obsolete">&amp;Op</translation>
+        <translation type="obsolete">&amp;Optionen</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="obsolete">&amp;Exibir</translation>
+        <translation type="obsolete">&amp;Ansicht</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="obsolete">A&amp;juda</translation>
+        <translation type="obsolete">&amp;Hilfe</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">Novo</translation>
+        <translation type="obsolete">Neu</translation>
     </message>
     <message>
         <source>New &amp;Board 19x19</source>
-        <translation type="obsolete">Novo &amp;Tabuleiro 19x19</translation>
+        <translation type="obsolete">Neues &amp;Brett 19x19</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
@@ -1112,19 +1120,19 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
     </message>
     <message>
         <source>Creates a new board with size 19x19</source>
-        <translation type="obsolete">Cria um novo tabuleiro com tamanho 19x19</translation>
+        <translation type="obsolete">Erstellt ein neues Brett der Größe 19x19</translation>
     </message>
     <message>
         <source>New
 
 Creates a new 19x19 board.</source>
-        <translation type="obsolete">Novo
+        <translation type="obsolete">Neu
 
-Cria um novo tabuleiro 19x19.</translation>
+Erstellt ein neues Brett der Größe 19x19.</translation>
     </message>
     <message>
         <source>&amp;New Board</source>
-        <translation type="obsolete">&amp;Novo Tabuleiro</translation>
+        <translation type="obsolete">&amp;Neues Brett</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
@@ -1132,47 +1140,47 @@ Cria um novo tabuleiro 19x19.</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation type="obsolete">Cria um novo tabuleiro</translation>
+        <translation type="obsolete">Erstellt ein neues Brett</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board. Parameters will be asked.</source>
-        <translation type="obsolete">Novo
+        <translation type="obsolete">Neu
 
-Cria um novo tabuleiro. Par</translation>
+Erstellt ein neues Brett. Parameter werden abgefragt.</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="obsolete">Ouvrir</translation>
+        <translation type="obsolete">Laden</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation type="obsolete">&amp;Ouvrir</translation>
+        <translation type="obsolete">&amp;Laden</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="obsolete">Ctrl+O</translation>
+        <translation type="obsolete">Ctrl+L</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation type="obsolete">Abrir um arquivo SGF</translation>
+        <translation type="obsolete">Lädt eine SGF Datei</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation type="obsolete">Abrir
+        <translation type="obsolete">Laden
 
-Abrir um arquivo SGF.</translation>
+Lädt eine SGF Datei.</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="obsolete">Sair</translation>
+        <translation type="obsolete">Beenden</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="obsolete">Sai&amp;r</translation>
+        <translation type="obsolete">B&amp;eenden</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -1180,55 +1188,55 @@ Abrir um arquivo SGF.</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation type="obsolete">Terminar o aplicativo</translation>
+        <translation type="obsolete">Beendet das Programm</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation type="obsolete">Sair
+        <translation type="obsolete">Beenden
 
-Termina o programa.</translation>
+Beendet das Programm.</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation type="obsolete">Conectar</translation>
+        <translation type="obsolete">Verbinden</translation>
     </message>
     <message>
         <source>&amp;Connect</source>
-        <translation type="obsolete">&amp;Conectar</translation>
+        <translation type="obsolete">&amp;Verbinden</translation>
     </message>
     <message>
         <source>Connects to the server</source>
-        <translation type="obsolete">Conecta ao servidor</translation>
+        <translation type="obsolete">Verbinden mit dem  gewählten Server</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="obsolete">Desconectar</translation>
+        <translation type="obsolete">Verbindung trennen</translation>
     </message>
     <message>
         <source>&amp;Disconnect</source>
-        <translation type="obsolete">&amp;Desconectar</translation>
+        <translation type="obsolete">Verbindung &amp;trennen</translation>
     </message>
     <message>
         <source>Disconnect from server</source>
-        <translation type="obsolete">Desconectar do servidor</translation>
+        <translation type="obsolete">Trennen von</translation>
     </message>
     <message>
         <source>Edit servers</source>
-        <translation type="obsolete">Editar servidores</translation>
+        <translation type="obsolete">Server editieren</translation>
     </message>
     <message>
         <source>&amp;Edit servers</source>
-        <translation type="obsolete">&amp;Editar servidores</translation>
+        <translation type="obsolete">Server &amp;editieren</translation>
     </message>
     <message>
         <source>Preferences</source>
-        <translation type="obsolete">Prefer</translation>
+        <translation type="obsolete">Einstellungen</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation type="obsolete">&amp;Prefer</translation>
+        <translation type="obsolete">&amp;Einstellungen</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -1236,49 +1244,54 @@ Termina o programa.</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation type="obsolete">Editar as prefer</translation>
+        <translation type="obsolete">Einstellungen ändern</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation type="obsolete">Prefer</translation>
+        <translation type="obsolete">Einstellungen
+
+Einstellungen ändern.</translation>
     </message>
     <message>
         <source>toggles open for matches</source>
-        <translation type="obsolete">ativa/desativa disponibilidade para partidas</translation>
+        <translation type="obsolete">ändere Zustand: &apos;offen für Spiele&apos; (open)</translation>
     </message>
     <message>
         <source>If checked you are open for matches. After refreshing the player table having a &apos;X&apos; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
-        <translation type="obsolete">Se estiver marcado, voc</translation>
+        <translation type="obsolete">Falls markiert offen für Spiele. Nach Auffrischen der Spielertabelle zeigen &apos;X&apos; Markierungen an, welche Spieler gegenwärtig NICHT offen sind.
+Ein Klick invertiert den jeweiligen Zustand.</translation>
     </message>
     <message>
         <source>Looking</source>
-        <translation type="obsolete">Procura</translation>
+        <translation type="obsolete">Spielwunsch</translation>
     </message>
     <message>
         <source>&amp;Looking</source>
-        <translation type="obsolete">Pr&amp;ocura</translation>
+        <translation type="obsolete">&amp;Spielwunsch</translation>
     </message>
     <message>
         <source>toggles looking for matches</source>
-        <translation type="obsolete">ativa/desativa a procura por jogos</translation>
+        <translation type="obsolete">Ändert den Zustand: suche Gegner (looking)</translation>
     </message>
     <message>
         <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &apos;!&apos; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &apos;X&apos;)!</source>
-        <translation type="obsolete">Se estiver marcado </translation>
+        <translation type="obsolete">Falls markiert, wird anderen Spielern angezeigt, dass ein Spielwunsch besteht.
+In der Spielertabelle wird dies durch ein &quot;!&apos; angegeben.
+Durch Klick wird der jeweilige Zustand geändert. Eine Markierung setzt voraus, dass der Spieler offen für Spiele ist. Daher wird vom Go Server i.a. der Spieler auf offen gesetzt (kein &apos;X&apos;)!</translation>
     </message>
     <message>
         <source>Quiet</source>
-        <translation type="obsolete">Quieto</translation>
+        <translation type="obsolete">Ruhig</translation>
     </message>
     <message>
         <source>&amp;Quiet</source>
-        <translation type="obsolete">&amp;Quieto</translation>
+        <translation type="obsolete">&amp;Ruhig</translation>
     </message>
     <message>
         <source>toggles system messages</source>
-        <translation type="obsolete">ativa/desativa mensagens do sistema</translation>
+        <translation type="obsolete">Schaltet Systemmeldungen ein/aus (quiet)</translation>
     </message>
     <message>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
@@ -1286,33 +1299,42 @@ Edit the applications preferences.</source>
 Note: some features cannot work if set to quiet (checked box):
 - sound when watched players enter/leave
 - update of player/gamestable</source>
-        <translation type="obsolete">Se estiver marcado, voc</translation>
+        <translation type="obsolete">Falls ausgewählt, werden keine Systemmeldungen empfangen, das heisst, es erfolgt keine Information über ankommende/abgehende Spieler, startende/beendete Spiele, etc.
+
+Klicken auf diese Box ändert den Zustand. Der Zustand &quot;Ruhe&quot; wird auch durch ein &quot;Q&quot; (Quiet) in der Spielerliste vermerkt.
+
+Beachte: manche Funktionen funktionieren im Zusaten &quot;Ruhe&quot; nicht:
+
+- sound für ankommende/abgehende Spieler, die beobachtet werden sollen,
+- Richtigstellung von Spielerliste und Liste der Spiele</translation>
     </message>
     <message>
         <source>Toolbar</source>
-        <translation type="obsolete">Barra de ferramentas</translation>
+        <translation type="obsolete">Werkzeugleiste</translation>
     </message>
     <message>
         <source>&amp;Toolbar</source>
-        <translation type="obsolete">&amp;Barra de ferramentas</translation>
+        <translation type="obsolete">&amp;Werkzeugleiste</translation>
     </message>
     <message>
         <source>Enables/disables the toolbar</source>
-        <translation type="obsolete">Ativar/dasativar a barra de ferramentas</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Werkzeugleiste</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the toolbar.</source>
-        <translation type="obsolete">Barra de navega</translation>
+        <translation type="obsolete">Navigationsleiste
+
+Aktiviert/deaktiviert die Navigationsleiste.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation type="obsolete">Barra de menus</translation>
+        <translation type="obsolete">Menüleiste</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation type="obsolete">Barra de &amp;menus</translation>
+        <translation type="obsolete">&amp;Menüleiste</translation>
     </message>
     <message>
         <source>F7</source>
@@ -1320,43 +1342,43 @@ Enables/disables the toolbar.</source>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation type="obsolete">Ativar/desativar a barra de menus</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Menüleiste</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation type="obsolete">Barre de menus
+        <translation type="obsolete">Menüleiste
 
-Ativar/desativar a barra de menus.</translation>
+Aktiviert/deaktiviert die Menüleiste.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation type="obsolete">Barra de estado</translation>
+        <translation type="obsolete">Statuszeile</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation type="obsolete">Barra de &amp;Estado</translation>
+        <translation type="obsolete">&amp;Statuszeile</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation type="obsolete">Ativar/desativar a barra de estado</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Statuszeile</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation type="obsolete">Barra de estado
+        <translation type="obsolete">Statuszeile
 
-Ativa/desativa a barra de estado.</translation>
+Aktiviert/deaktiviert die Statuszeile.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="obsolete">Manual</translation>
+        <translation type="obsolete">Handbuch</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="obsolete">&amp;Manual</translation>
+        <translation type="obsolete">&amp;Handbuch</translation>
     </message>
     <message>
         <source>F1</source>
@@ -1364,184 +1386,187 @@ Ativa/desativa a barra de estado.</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation type="obsolete">Abrir o manual</translation>
+        <translation type="obsolete">Öffnet das Handbuch</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation type="obsolete">Ajuda
+        <translation type="obsolete">Hilfe
 
-Abrir o manual do aplicativo.</translation>
+Öffnet das Handbuch.</translation>
     </message>
     <message>
         <source>Sound Info</source>
-        <translation type="obsolete">Informa</translation>
+        <translation type="obsolete">Soundinformation</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation type="obsolete">&amp;Som</translation>
+        <translation type="obsolete">&amp;Sound</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation type="obsolete">Breve informa</translation>
+        <translation type="obsolete">Kurzinfo zur Sound Verfügbarkeit</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation type="obsolete">Informa</translation>
+        <translation type="obsolete">Soundinformation
+
+Ein kurzer Kommentar zur Verfügbarkeit von Sound wird angezeigt.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="obsolete">Sobre</translation>
+        <translation type="obsolete">Über</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="obsolete">S&amp;obre...</translation>
+        <translation type="obsolete">Ü&amp;ber...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation type="obsolete">Sobre o aplicativo</translation>
+        <translation type="obsolete">Über das Programm</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation type="obsolete">Sobre
+        <translation type="obsolete">Über
 
-Sobre o aplicativo.</translation>
+Über das Programm.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation type="obsolete">Sobre o Qt</translation>
+        <translation type="obsolete">Über Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="obsolete">Sobre o &amp;Qt...</translation>
+        <translation type="obsolete">Über &amp;Qt...</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation type="obsolete">Sobre o Qt
+        <translation type="obsolete">Über Qt
 
-Sobre o Qt.</translation>
+Über Qt.</translation>
     </message>
     <message>
         <source>Connect
 
 Connect with/Disconnect from selected Go server.</source>
-        <translation type="obsolete">Conectar
+        <translation type="obsolete">Verbinden
 
-Conectar/desconectar do servidor de Go selecionado.</translation>
+Verbinden mit/Trennen vom gewählten Go Server.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation type="obsolete">Arquivos SGF (*.sgf);;Arquivos MGT (*.mgt);;Arquivos XML (*.xml);;Todos Arquivos (*)</translation>
+        <translation type="obsolete">SGF-Dateien (*.sgf);;MGT-Dateien (*.mgt);;XML-Dateien (*.xml);;Alle Dateien (*)</translation>
     </message>
     <message>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.</source>
-        <translation type="obsolete">Se estiver marcado, voc</translation>
+        <translation type="obsolete">Falls ausgewählt, werden keine Systemmeldungen empfangen, das heisst, es erfolgt keine Information über ankommende/abgehende Spieler, startende/beendete Spiele, etc.
+
+Klicken auf diese Box ändert den Zustand. Der Zustand &quot;Ruhe&quot; wird auch durch ein &quot;Q&quot; (Quiet) in der Spielerliste vermerkt.</translation>
     </message>
     <message>
         <source>Current channels and users</source>
-        <translation type="obsolete">Canal e usuários correntes</translation>
+        <translation type="obsolete">Aktuelle Kanäle und Spieler</translation>
     </message>
     <message>
         <source>Displays the current channels you are in and the number of users inthere.
 The tooltip text contains the channels&apos; title and users&apos; names</source>
-        <translation type="obsolete">Mostra os canais onde você está conectado e o número de usários lá.
-A dica contém o título do canal e o nome do usuário</translation>
+        <translation type="obsolete">Aktivierte Kanäle mit der Zahl der sich darin befindlichen Spielern. Der Tooltip-Text zeigt zugehörige Titel und Namen der Spieler</translation>
     </message>
     <message>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
-        <translation type="obsolete">Mostra a hora de coneção atual.
-(A)  -&gt;  resposta automática
-(Hold)  -&gt;  segura a linha</translation>
+        <translation type="obsolete">Aktuelle Online-Zeit.
+(A) -&gt; automatische Antwort.
+(Hold) -&gt; Verbindung halten</translation>
     </message>
     <message>
         <source>Bytes in:</source>
-        <translation type="obsolete">Baites recebidos:</translation>
+        <translation type="obsolete">Bytes ein:</translation>
     </message>
     <message>
         <source>Bytes out:</source>
-        <translation type="obsolete">Baites enviados:</translation>
+        <translation type="obsolete">Bytes aus:</translation>
     </message>
     <message>
         <source>observe</source>
-        <translation type="obsolete">observar</translation>
+        <translation type="obsolete">zuschauen</translation>
     </message>
     <message>
         <source>stats W</source>
-        <translation type="obsolete">estat. B</translation>
+        <translation type="obsolete">stats W</translation>
     </message>
     <message>
         <source>stats B</source>
-        <translation type="obsolete">estat. P</translation>
+        <translation type="obsolete">stats S</translation>
     </message>
     <message>
         <source>Open</source>
         <comment>open a file</comment>
-        <translation type="obsolete">Ouvrir</translation>
+        <translation type="obsolete">Laden</translation>
     </message>
     <message>
         <source>Open</source>
         <comment>open for matches</comment>
-        <translation type="obsolete">Ouvert</translation>
+        <translation type="obsolete">Offen</translation>
     </message>
     <message>
         <source>Open</source>
         <comment>open a sgf file</comment>
-        <translation type="obsolete">Ouvrir</translation>
+        <translation type="obsolete">Laden</translation>
     </message>
     <message>
         <source>chose Go server to connect to or use &apos;Preferences&apos; to add/change a Go server entry</source>
-        <translation type="obsolete">escolha o servidor Go para conectar-se ou use &apos;Prefer</translation>
+        <translation type="obsolete">Go Server, mit dem verbunden werden soll, wählen oder &apos;Einstellungen&apos; wählen zum Hinzufügen/Ändern eines Go Server Eintrags</translation>
     </message>
     <message>
         <source>Refresh Players</source>
-        <translation type="obsolete">Atualizar Jogadores</translation>
+        <translation type="obsolete">Spielerliste erneuern</translation>
     </message>
     <message>
         <source>Get new players table from server</source>
-        <translation type="obsolete">Obter nova tabela de jogadores do servidor</translation>
+        <translation type="obsolete">Eine neue Spielerliste von Server laden</translation>
     </message>
     <message>
         <source>Refresh Games</source>
-        <translation type="obsolete">Atualizar Partidas</translation>
+        <translation type="obsolete">Liste der Spiele erneuern</translation>
     </message>
     <message>
         <source>Get new games table from server</source>
-        <translation type="obsolete">Obter nova tabela de partidas do servidor</translation>
+        <translation type="obsolete">Liste der Spiele vom Server laden</translation>
     </message>
     <message>
         <source>User defineable button %1</source>
-        <translation type="obsolete">Bot</translation>
+        <translation type="obsolete">Benutzerdefinierbare Taste %1</translation>
     </message>
     <message>
         <source>Add the command you want</source>
-        <translation type="obsolete">Adicione o comando que voc</translation>
+        <translation type="obsolete">Beliebigen Befehl hinzufügen</translation>
     </message>
     <message>
         <source>&amp;Open</source>
         <comment>open for matches</comment>
-        <translation type="obsolete">&amp;Ouvert</translation>
+        <translation type="obsolete">&amp;Offen</translation>
     </message>
     <message>
         <source>&amp;Open</source>
         <comment>open a file</comment>
-        <translation type="obsolete">&amp;Ouvrir</translation>
+        <translation type="obsolete">&amp;Laden</translation>
     </message>
     <message>
         <source>Play with program</source>
-        <translation type="obsolete">Jogar contra programa</translation>
+        <translation type="obsolete">Gegen Programm spielen</translation>
     </message>
     <message>
         <source>Play with &amp;program</source>
-        <translation type="obsolete">Jogar contra &amp;programa</translation>
+        <translation type="obsolete">Gegen &amp;Programm spielen</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
@@ -1549,59 +1574,23 @@ A dica contém o título do canal e o nome do usuário</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="obsolete">Jogar</translation>
+        <translation type="obsolete">Spielen</translation>
     </message>
     <message>
         <source>Play with a program
 
 Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation type="obsolete">Jogar contra um programa
+        <translation type="obsolete">Gegen ein Programm spielen
 
-Define uma sess</translation>
+Aufsetzen eines Spiels mit einem Go Programm mittels GTP (z.B. GnuGo)</translation>
+    </message>
+    <message>
+        <source>COMPUTER_PATH</source>
+        <translation type="obsolete">Computer_Pfad</translation>
     </message>
     <message>
         <source>You did not set the Computer program path !</source>
-        <translation type="obsolete">Você não definiu o caminho para o programa do Computador !</translation>
-    </message>
-    <message>
-        <source>Shouts*</source>
-        <translation type="obsolete">Gritos*</translation>
-    </message>
-    <message>
-        <source>number of observers at last refresh
-
-This table can be updated by &apos;Refresh games&apos;</source>
-        <translation type="obsolete">número de observadores na última atualização
-
-Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
-    </message>
-    <message>
-        <source>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation type="obsolete">similar a assistir - faz uma entrada &apos;X&apos;; os gritos do usuário não mais são mostrados</translation>
-    </message>
-    <message>
-        <source>rooms left</source>
-        <translation type="obsolete">salas deixadas</translation>
-    </message>
-    <message>
-        <source>Room </source>
-        <translation type="obsolete">Sala</translation>
-    </message>
-    <message>
-        <source> Byoyomi Time : (</source>
-        <translation type="obsolete">Tempo Byoyomi : (</translation>
-    </message>
-    <message>
-        <source> stones)</source>
-        <translation type="obsolete">pedras)</translation>
-    </message>
-    <message>
-        <source>Match prefs</source>
-        <translation type="obsolete">Preferências de disputa</translation>
-    </message>
-    <message>
-        <source>match within his prefs</source>
-        <translation type="obsolete">Disputas dentro de suas preferências</translation>
+        <translation type="obsolete">Sie haben keinen Programmpfad angegeben!</translation>
     </message>
     <message>
         <source>Table of games
@@ -1621,23 +1610,23 @@ FR	free (FI), rated (I) or teach (TI) game
 (Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation type="obsolete">Tabela de jogos
+        <translation type="obsolete">Liste der Spiele
 
-clique com o botão à direita para observar
+Rechtsklick zum Zuschauen
 
-Expliação sobre símbolos: (clique na aba para ordenar por)
-Id	número do jogo
-Branco/CB	nome e colocação do jogador branco
-Preto/CP		nome e colocação do jogador preto
-Jg	número de jogadas na última atualização
-Tm	tamanho do tabuleiro
-V	vantagens
-K	komi
-By	tempo byoyomi
-LC	jogo livre (FI), classificado (l) ou didático (Tl)
-Ob	número de observadores na última atualização
+Zeichenerklärung: (zum Sortieren auf den Titel klicken)
+Id		Spielnummer
+Weiß/WR		Name und Rang des weißen Spielers
+Schwarz/SR	Name und Rang des schwarzen Spielers
+Zg		Anzahl der Züge bei letzter Aktualisierung
+Gr		Brettgröße
+H		Vorgabe (Handicap)
+K		Komi
+By		Byoyomi-Periodendauer
+FR		frei (FI), gewertet (I) oder Lektion (TI)
+(Zu)		Zuschauer bei letzter Aktualisierung
 
-Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
+Diese Liste kann mit der Taste &apos;Liste der Spiele&apos; aktualisiert werden</translation>
     </message>
     <message>
         <source>Table of players
@@ -1681,65 +1670,511 @@ observe game	show game currently played by player
 ----
 toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
 toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation type="obsolete">Tabela de jogadores
+        <translation type="obsolete">Spielerliste
 
-clique com o botão à direita para ver o menu
+Rechtsklick für Menü
 
-Explicação sobre os símbolos: (clique na aba para ordenar por)
+Zeichenerklärung: (zum Sortieren auf den Titel klicken)
+Stat	Status:
+	X ... nicht offen
+	! ... möchte spielen (looking)
+	Q ... empfängt keine Systemmeldungen (quiet)
+	S ... empfängt keine Rufe (shouts)
+	?? ... unbekannt - der Spieler kam nach letzter Aktualisierung
+Name	Spielername
+Rg	Rang
+sp	spielend in Spiel Nummer ... (nur ein Spiel sichtbar)
+ob	sieht zu in Spiel Nummer ... (nur ein Spiel sichtbar)
+Still	Zeit seit der letzten Aktivität
+X	privater Eintrag:
+	M ... selbst
+	X ... exkludiert
+	W ... beobachtet (sortieren: X Einträge, danach Rg)
+und, falls erweiterte Spielerinformation aktiv (Werzeuge, nur IGS):
+Info		Info des Spielers
+Siege		Anzahl der gewonnenen Spiele
+Niederlagen	Anzahl der verlorenen Spiele
+Land		Herkunft (der E-Mail-Adresse)
+Sprache		bevorzugte Sprache des Spielers
 
-Est	estatísticas sobre o jogador
-	X...fechar
-	!...procurando = quer iniciar uma partida
-	Q...quieto = não recebe mensagens do sistema
-	S...gritos = não pode receber gritos
-	??...desconhecido = jogador que entrou após a última atualização da tabela
-nome	nome do jogador
-Cl	classificação do jogador
-jg	jogo em andamento (somente um jogo visível)
-ob	jogo em observação (somente um jogo visível)
-Inat	tempo inativo
-X	informação privada:
-	M..mim
-	X..excluído dos gritos
-	W..observado (ordenação: entradas X, e então Cl)
-e, se as informações extendidas (Ferramentas) estiverem ativas (só IGS):
-Info	informações sobre o jogador
-Ganhou	número de partidas vencidas pelo jogador
-Perdeu	número de partidas perdidas pelo jogador
-País	origem do jogador (do endereço de emeil)
-Idioma	idioma preferido
+Diese Liste kann mit der Taste &apos;Spielerliste&apos; aktualisiert werden
 
-Esta tabela pode ser atualizada por &apos;Atualizar jogadores&apos;
-
-Entradas de menu (clique à direita):
-partida		requisitar uma partida (surge uma janela de diálogo)
-conversar	conversar com jogador (surge uma aba)
+Menüeinträge (rechts klicken):
+spielen		zum Spielen auffordern (Dialog erscheint)
+sprechen		mit dem Spieler sprechen (Reiter erscheint)
 ----
-estatísticas	mostra as estatísticas do jogador
-jogos salvos	mostra os jogos que foram salvos
-resultados	mostra os resultados
-classificação	mostra a classificação (só NNGS/IGS)
-observar jogo	mostra o jogo em andamento para o jogador
+Stats		zeigt den Spielerstatus
+unbeendete Spiele	zeigt gespeicherte Spiele
+Ergebnisse	zeigt Ergebnisse
+Einschätzung	zeigt Spielstärke (nur NNGS)
+Spiel zuschauen	der laufenden Partie zuschauen
 ----
-alternar lista de observação		insere/remove o jogador na/da lista de observação - faz uma entrada &apos;W&apos; na coluna &apos;X&apos;; sons de entrada/saída são ativados
-alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&apos;; os gritos do jogador não mais são mostrados
-
+in/aus Beobachtungsliste	Spieler in/aus Beobachtungsliste: erzeugt Eintrag &apos;W&apos; in Spalte &apos;X&apos;; aktiviert Klänge beim Eintreten/Verlassen
+in/aus Ausschlußliste	Spieler in/aus Ausschlußliste: erzeugt Eintrag &apos;X&apos;; Rufe (shouts) des Spielers werden ignoriert</translation>
+    </message>
+    <message>
+        <source>Shouts*</source>
+        <translation type="obsolete">Shouts*
 </translation>
+    </message>
+    <message>
+        <source>rooms left</source>
+        <translation type="obsolete">Räume verlassen</translation>
+    </message>
+    <message>
+        <source>Room </source>
+        <translation type="obsolete">Raum</translation>
+    </message>
+    <message>
+        <source> Byoyomi Time : (</source>
+        <translation type="obsolete">Byoyomi-Zeit : (</translation>
+    </message>
+    <message>
+        <source> stones)</source>
+        <translation type="obsolete">Steine)</translation>
+    </message>
+    <message>
+        <source>Match prefs</source>
+        <translation type="obsolete">Spieleinstellungen</translation>
+    </message>
+    <message>
+        <source>match within his prefs</source>
+        <translation type="obsolete">spielen mit den Einstellungen des Gegners</translation>
+    </message>
+    <message>
+        <source>trail</source>
+        <translation type="obsolete">verfolgen</translation>
     </message>
 </context>
 <context>
     <name>ClientWindowGui</name>
     <message>
-        <source>qGo Client V2</source>
-        <translation type="obsolete">qGo Cliente V2</translation>
+        <source>Players</source>
+        <translation type="obsolete">Spieler</translation>
     </message>
     <message>
-        <source>Players</source>
-        <translation type="obsolete">Jogadores</translation>
+        <source>Msg*</source>
+        <translation type="obsolete">info*</translation>
+    </message>
+    <message>
+        <source>Close all talk tabs</source>
+        <translation type="obsolete">Alle Reiter der Gesprächsfenser verbergen</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation type="obsolete">Spiele</translation>
+    </message>
+    <message>
+        <source>relevant messages from/to server</source>
+        <translation type="obsolete">relevante Meldungen zum/vom Server</translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="obsolete">&amp;Datei</translation>
+    </message>
+    <message>
+        <source>&amp;Connections</source>
+        <translation type="obsolete">&amp;Verbindung</translation>
+    </message>
+    <message>
+        <source>&amp;Settings</source>
+        <translation type="obsolete">&amp;Optionen</translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation type="obsolete">&amp;Ansicht</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="obsolete">&amp;Hilfe</translation>
+    </message>
+    <message>
+        <source>Tools</source>
+        <translation type="obsolete">Werkzeuge</translation>
+    </message>
+    <message>
+        <source>Connect
+
+Connect with/Disconnect from selected Go server.</source>
+        <translation type="obsolete">Verbinden
+
+Verbinden mit/Trennen vom gewählten Go-Server.</translation>
+    </message>
+    <message>
+        <source>chose Go server to connect to or use &apos;Preferences&apos; to add/change a Go server entry</source>
+        <translation type="obsolete">Wählen Sie den Go-Server, mit dem verbunden werden soll, oder &apos;Einstellungen&apos;, um einen Server-Eintrag hinzufügen oder zu ändern</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="obsolete">Laden</translation>
+    </message>
+    <message>
+        <source>&amp;Open...</source>
+        <translation type="obsolete">&amp;Laden ...</translation>
+    </message>
+    <message>
+        <source>Open
+
+Open a sgf file.</source>
+        <translation type="obsolete">Laden
+
+Lädt eine SGF-Datei.</translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation type="obsolete">Strg+L</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation type="obsolete">Handbuch</translation>
+    </message>
+    <message>
+        <source>&amp;Manual</source>
+        <translation type="obsolete">&amp;Handbuch</translation>
+    </message>
+    <message>
+        <source>Opens the manual</source>
+        <translation type="obsolete">Öffnet das Handbuch</translation>
+    </message>
+    <message>
+        <source>Help
+
+Opens the manual of the application.</source>
+        <translation type="obsolete">Hilfe
+
+Öffnet das Handbuch.</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation type="obsolete">Über</translation>
+    </message>
+    <message>
+        <source>&amp;About</source>
+        <translation type="obsolete">Ü&amp;ber</translation>
+    </message>
+    <message>
+        <source>About the application.</source>
+        <translation type="obsolete">Über das Programm.</translation>
+    </message>
+    <message>
+        <source>About
+
+About the application.</source>
+        <translation type="obsolete">Über
+
+Über das Programm.</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation type="obsolete">Verbindung trennen</translation>
+    </message>
+    <message>
+        <source>&amp;Disconnect</source>
+        <translation type="obsolete">Verbindung &amp;trennen</translation>
+    </message>
+    <message>
+        <source>Disconnect from server</source>
+        <translation type="obsolete">Trennen von</translation>
+    </message>
+    <message>
+        <source>Looking</source>
+        <translation type="obsolete">Spielwunsch</translation>
+    </message>
+    <message>
+        <source>&amp;Looking</source>
+        <translation type="obsolete">&amp;Spielwunsch</translation>
+    </message>
+    <message>
+        <source>toggles looking for matches</source>
+        <translation type="obsolete">Ändert den Zustand: suche Gegner (looking)</translation>
+    </message>
+    <message>
+        <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &apos;!&apos; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &apos;X&apos;)!</source>
+        <translation type="obsolete">Falls markiert, wird anderen Spielern angezeigt, dass ein Spielwunsch besteht.
+In der Spielertabelle wird dies durch ein &apos;!&apos; angegeben.
+Durch einen Klick wird der jeweilige Zustand geändert. Eine Markierung setzt voraus, dass der Spieler offen für Spiele ist. Daher wird vom Go-Server i.a. der Spieler auf offen gesetzt (kein &apos;X&apos;)!</translation>
+    </message>
+    <message>
+        <source>&amp;Open</source>
+        <translation type="obsolete">&amp;Offen</translation>
+    </message>
+    <message>
+        <source>toggles open for matches</source>
+        <translation type="obsolete">ändere Zustand &apos;offen für Spiele&apos; (open)</translation>
+    </message>
+    <message>
+        <source>If checked you are open for matches. After refreshing the player table having a &apos;X&apos; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
+        <translation type="obsolete">Falls markiert, ist man offen für Spiele. Nach der Aktualisierung der Spielertabelle zeigen Markierungen &apos;X&apos; an, welche Spieler gegenwärtig NICHT offen sind. Ein Klick wechselt den jeweiligen Zustand.</translation>
+    </message>
+    <message>
+        <source>Play with program</source>
+        <translation type="obsolete">Gegen Programm spielen</translation>
+    </message>
+    <message>
+        <source>&amp;Play with program</source>
+        <translation type="obsolete">Gegen Programm &amp;spielen</translation>
+    </message>
+    <message>
+        <source>Menubar
+
+Enables/disables the menubar.</source>
+        <translation type="obsolete">Menüleiste
+
+Aktiviert/deaktiviert die Menüleiste.</translation>
+    </message>
+    <message>
+        <source>Play with a program
+
+Sets a playing session with a pGo program using GTP (like GNUGO)</source>
+        <translation type="obsolete">Gegen ein Programm spielen
+
+Beginnt ein Spiel mit einem Go-Programm mittels GTP (z. B. GnuGo)</translation>
+    </message>
+    <message>
+        <source>Ctrl+P</source>
+        <translation type="obsolete">Strg+P</translation>
+    </message>
+    <message>
+        <source>Refresh players</source>
+        <translation type="obsolete">Spielerliste aktualisieren</translation>
+    </message>
+    <message>
+        <source>Get new players table from server</source>
+        <translation type="obsolete">Eine neue Spielerliste von Server holen</translation>
+    </message>
+    <message>
+        <source>Refresh Games</source>
+        <translation type="obsolete">Liste der Spiele aktualisieren</translation>
+    </message>
+    <message>
+        <source>Get new games table from server</source>
+        <translation type="obsolete">Liste der Spiele vom Server holen</translation>
+    </message>
+    <message>
+        <source>Quiet</source>
+        <translation type="obsolete">Ruhig</translation>
+    </message>
+    <message>
+        <source>&amp;Quiet</source>
+        <translation type="obsolete">&amp;Ruhig</translation>
+    </message>
+    <message>
+        <source>toggles system messages</source>
+        <translation type="obsolete">Schaltet Systemmeldungen ein/aus (quiet)</translation>
+    </message>
+    <message>
+        <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
+
+Note : some features cannot work if set to quiet (checked box):
+	- sound when watched players enter/leave
+	- update of player/gamestable</source>
+        <translation type="obsolete">Falls ausgewählt, werden keine Systemmeldungen empfangen, das heisst, es erfolgt keine Information über ankommende oder verlassende Spieler, startende oder beendete Spiele usw.
+
+Ein Klick ändert den Zustand. Der Zustand &quot;Ruhe&quot; wird auch durch ein &quot;Q&quot; (Quiet) in der Spielerliste vermerkt.
+
+Anmerkung: manche Funktionen funktionieren im Zusaten &quot;Ruhe&quot; nicht:
+- Klang für ankommende oder verlassende Spieler, die beobachtet werden sollen
+- Aktualisierung von Spieler- und Spieleliste</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation type="obsolete">Verbinden</translation>
+    </message>
+    <message>
+        <source>&amp;Connect</source>
+        <translation type="obsolete">&amp;Verbinden</translation>
+    </message>
+    <message>
+        <source>Connects to the server</source>
+        <translation type="obsolete">Verbindet zum ausgewählten Server</translation>
+    </message>
+    <message>
+        <source>Preferences</source>
+        <translation type="obsolete">Einstellungen</translation>
+    </message>
+    <message>
+        <source>Edit the preferences</source>
+        <translation type="obsolete">Einstellungen ändern</translation>
+    </message>
+    <message>
+        <source>Preferences
+
+Edit the applications preferences.</source>
+        <translation type="obsolete">Einstellungen
+
+Einstellungen ändern.</translation>
+    </message>
+    <message>
+        <source>Alt+P</source>
+        <translation type="obsolete">Alt+P</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation type="obsolete">Beenden</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation type="obsolete">Be&amp;enden</translation>
+    </message>
+    <message>
+        <source>Quits the application</source>
+        <translation type="obsolete">Beendet das Programm</translation>
+    </message>
+    <message>
+        <source>Exit
+
+Quits the application.</source>
+        <translation type="obsolete">Beenden
+
+Beendet das Programm.</translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation type="obsolete">Strg+Q</translation>
+    </message>
+    <message>
+        <source>New Board 19x19</source>
+        <translation type="obsolete">Neues Brett 19x19</translation>
+    </message>
+    <message>
+        <source>New &amp;Board 19x19</source>
+        <translation type="obsolete">Neues &amp;Brett 19x19</translation>
+    </message>
+    <message>
+        <source>Creates a new board with size 19x19</source>
+        <translation type="obsolete">Erstellt ein neues Brett der Größe 19x19</translation>
+    </message>
+    <message>
+        <source>New
+
+Creates a new 19x19 board.</source>
+        <translation type="obsolete">Neu
+
+Erstellt ein neues Brett der Größe 19x19.</translation>
+    </message>
+    <message>
+        <source>Ctrl+B</source>
+        <translation type="obsolete">Strg+B</translation>
+    </message>
+    <message>
+        <source>ToolBar</source>
+        <translation type="obsolete">Werkzeugleiste</translation>
+    </message>
+    <message>
+        <source>&amp;ToolBar</source>
+        <translation type="obsolete">&amp;Werkzeugleiste</translation>
+    </message>
+    <message>
+        <source>Enables/disables the toolbar</source>
+        <translation type="obsolete">Aktiviert/deaktiviert die Werkzeugleiste</translation>
+    </message>
+    <message>
+        <source>Navigation toolbar
+
+Enables/disables the toolbar.</source>
+        <translation type="obsolete">Navigationsleiste
+
+Aktiviert/deaktiviert die Navigationsleiste.</translation>
+    </message>
+    <message>
+        <source>Edit servers</source>
+        <translation type="obsolete">Server editieren</translation>
+    </message>
+    <message>
+        <source>&amp;Edit servers</source>
+        <translation type="obsolete">Server &amp;editieren</translation>
+    </message>
+    <message>
+        <source>Menubar</source>
+        <translation type="obsolete">Menüleiste</translation>
+    </message>
+    <message>
+        <source>&amp;Menubar</source>
+        <translation type="obsolete">&amp;Menüleiste</translation>
+    </message>
+    <message>
+        <source>Enables/disables the menubar</source>
+        <translation type="obsolete">Aktiviert/deaktiviert die Menüleiste</translation>
+    </message>
+    <message>
+        <source>F7</source>
+        <translation type="obsolete">F7</translation>
+    </message>
+    <message>
+        <source>Statusbar</source>
+        <translation type="obsolete">Statuszeile</translation>
+    </message>
+    <message>
+        <source>&amp;Statusbar</source>
+        <translation type="obsolete">&amp;Statuszeile</translation>
+    </message>
+    <message>
+        <source>Enables/disables the statusbar</source>
+        <translation type="obsolete">Aktiviert/deaktiviert die Statuszeile</translation>
+    </message>
+    <message>
+        <source>Statusbar
+
+Enables/disables the statusbar.</source>
+        <translation type="obsolete">Statuszeile
+
+Aktiviert/deaktiviert die Statuszeile.</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation type="obsolete">Sound</translation>
+    </message>
+    <message>
+        <source>&amp;Sound</source>
+        <translation type="obsolete">&amp;Sound</translation>
+    </message>
+    <message>
+        <source>Short info on sound availability</source>
+        <translation type="obsolete">Kurzinfo zur Ton-Verfügbarkeit</translation>
+    </message>
+    <message>
+        <source>Sound Info
+
+Views a message box with a short comment about sound.</source>
+        <translation type="obsolete">Toninformation
+
+Ein kurzer Kommentar zur Ton-Verfügbarkeit wird angezeigt.</translation>
+    </message>
+    <message>
+        <source>About Qt</source>
+        <translation type="obsolete">Über Qt</translation>
+    </message>
+    <message>
+        <source>About &amp;Qt</source>
+        <translation type="obsolete">Über &amp;Qt</translation>
+    </message>
+    <message>
+        <source>About Qt
+
+About Qt.</source>
+        <translation type="obsolete">Über Qt
+
+Über Qt.</translation>
+    </message>
+    <message>
+        <source>New Board</source>
+        <translation type="obsolete">Neues Brett</translation>
+    </message>
+    <message>
+        <source>&amp;New Board</source>
+        <translation type="obsolete">&amp;Neues Brett</translation>
+    </message>
+    <message>
+        <source>Creates a new board</source>
+        <translation type="obsolete">Erstellt ein neues Brett</translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation type="obsolete">Strg+N</translation>
     </message>
     <message>
         <source>1p-9p</source>
-        <translation type="obsolete">1j-9j</translation>
+        <translation type="obsolete">1p-9p</translation>
     </message>
     <message>
         <source>9d</source>
@@ -1899,558 +2334,133 @@ alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&a
     </message>
     <message>
         <source>Select players rank boundaries</source>
-        <translation type="obsolete">Selecionar faixa de classificação de jogadores</translation>
+        <translation type="obsolete">Grenzen der Spielstärken wählen</translation>
     </message>
     <message>
         <source>Select players ranks boundaries
 
 Use these lists to select the rank of players you want to see in the list
 This will take effect after refreshing the players list.</source>
-        <translation type="obsolete">Selecionar faixa de classificação de jogadores
+        <translation type="obsolete">Grenzen der Spielstärken wählen
 
-Use estas listas para selecionar a classificação de jogadores que você quer ver na lista
-
-Isto terá efeito após atualizar a lista de jogadores.</translation>
+Nur Spieler innerhalb dieser Grenzen werden in der Liste angezeigt.
+Dies wird erst nach der Aktualisierung der Spielerliste angewendet.</translation>
     </message>
     <message>
         <source>open</source>
-        <translation type="obsolete">abrir</translation>
+        <translation type="obsolete">offen</translation>
     </message>
     <message>
         <source>toggle for displaying only open players</source>
-        <translation type="obsolete">mude para mostrar somente jogadores disponíveis ou não</translation>
+        <translation type="obsolete">nur Spieler anzeigen, die offen sind</translation>
     </message>
     <message>
         <source>Open players
 
 Check this box if you want the list to display only open players (uncheck if you want all players).
 This will take effect after refreshing the players list.</source>
-        <translation type="obsolete">Jogadores disponíveis
+        <translation type="obsolete">Offene Spieler
 
-Marque esta caixa se você quiser que a lista mostre só jogares disponíveis (desmarque se você quiser todos os jogadores).
-Isto terá efeito após atualizar a lista de jogadores.</translation>
-    </message>
-    <message>
-        <source>Rooms*</source>
-        <translation type="obsolete">Salas*</translation>
-    </message>
-    <message>
-        <source>Msg*</source>
-        <translation type="obsolete">Msg*</translation>
-    </message>
-    <message>
-        <source>Close all talk tabs</source>
-        <translation type="obsolete">Fechar todas as abas de conversa</translation>
-    </message>
-    <message>
-        <source>Games</source>
-        <translation type="obsolete">Partidas</translation>
-    </message>
-    <message>
-        <source>relevant messages from/to server</source>
-        <translation type="obsolete">mensagens relevantes do/para o servidor</translation>
-    </message>
-    <message>
-        <source>&amp;File</source>
-        <translation type="obsolete">&amp;Arquivo</translation>
-    </message>
-    <message>
-        <source>&amp;Connections</source>
-        <translation type="obsolete">&amp;Conexões</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation type="obsolete">Con&amp;figurações</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation type="obsolete">&amp;Ver</translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation type="obsolete">A&amp;juda</translation>
-    </message>
-    <message>
-        <source>Tools</source>
-        <translation type="obsolete">Ferramentas</translation>
-    </message>
-    <message>
-        <source>Connect
-
-Connect with/Disconnect from selected Go server.</source>
-        <translation type="obsolete">Conectar
-
-Conectar/desconectar do servidor de Go selecionado.</translation>
-    </message>
-    <message>
-        <source>chose Go server to connect to or use &apos;Preferences&apos; to add/change a Go server entry</source>
-        <translation type="obsolete">escolha o servidor de Go para conectar-se ou use &apos;Preferências&apos; para adicionar/mudar uma entrada de servidor de Go</translation>
+Falls markiert, werden nur die Spieler angezeigt, die offen für Spiele sind (nicht markiert: alle Spieler)
+Dies wird erst nach der Aktualisierung der Spielerliste angewendet.</translation>
     </message>
     <message>
         <source>Toolbar_2</source>
-        <translation type="obsolete">Barra_de_Ferramenta_2</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="obsolete">Abrir</translation>
-    </message>
-    <message>
-        <source>&amp;Open...</source>
-        <translation type="obsolete">&amp;Abrir...</translation>
-    </message>
-    <message>
-        <source>Open
-
-Open a sgf file.</source>
-        <translation type="obsolete">Abrir
-
-Abrir um arquivo SGF.</translation>
-    </message>
-    <message>
-        <source>Ctrl+O</source>
-        <translation type="obsolete">Ctrl+O</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="obsolete">Manual</translation>
-    </message>
-    <message>
-        <source>&amp;Manual</source>
-        <translation type="obsolete">&amp;Manual</translation>
-    </message>
-    <message>
-        <source>Opens the manual</source>
-        <translation type="obsolete">Abrir o manual</translation>
-    </message>
-    <message>
-        <source>Help
-
-Opens the manual of the application.</source>
-        <translation type="obsolete">Ajuda
-
-Abre o manual do aplicativo.</translation>
-    </message>
-    <message>
-        <source>F1</source>
-        <translation type="obsolete">F1</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="obsolete">Sobre</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation type="obsolete">&amp;Sobre</translation>
-    </message>
-    <message>
-        <source>About the application.</source>
-        <translation type="obsolete">Sobre o aplicativo.</translation>
-    </message>
-    <message>
-        <source>About
-
-About the application.</source>
-        <translation type="obsolete">Sobre
-
-Sobre o aplicativo.</translation>
-    </message>
-    <message>
-        <source>Disconnect</source>
-        <translation type="obsolete">Desconectar</translation>
-    </message>
-    <message>
-        <source>&amp;Disconnect</source>
-        <translation type="obsolete">&amp;Desconectar</translation>
-    </message>
-    <message>
-        <source>Disconnect from server</source>
-        <translation type="obsolete">Desconectar do servidor</translation>
-    </message>
-    <message>
-        <source>Looking</source>
-        <translation type="obsolete">Procurando</translation>
-    </message>
-    <message>
-        <source>&amp;Looking</source>
-        <translation type="obsolete">&amp;Procurando</translation>
-    </message>
-    <message>
-        <source>toggles looking for matches</source>
-        <translation type="obsolete">alterna entre procurando por disputas ou não</translation>
-    </message>
-    <message>
-        <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &apos;!&apos; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &apos;X&apos;)!</source>
-        <translation type="obsolete">Se marcado, então você está procurando disputas, o que significa que você está pronto para jogar. Após atualizar, a tabela de jogador que tiver uma marca &apos;!&apos; indicará estar procurando por disputas. Clicando nesta caixa alternará o modo. Você deve estar disponível também, se estiver procurando. Assim, o servidor de Go coloca define você como aberto a disputas (sem &apos;X&apos;)!</translation>
-    </message>
-    <message>
-        <source>&amp;Open</source>
-        <translation type="obsolete">&amp;Disponível</translation>
-    </message>
-    <message>
-        <source>toggles open for matches</source>
-        <translation type="obsolete">alterna entre disponível para disputas ou não</translation>
-    </message>
-    <message>
-        <source>If checked you are open for matches. After refreshing the player table having a &apos;X&apos; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
-        <translation type="obsolete">Se marcado, você está aberto a disputas. Após atualizar, a tabela de jogador que tiver uma marca &apos;X&apos; indicará não estar aberto a disputas. Clicando nesta caixa alterna o modo.</translation>
-    </message>
-    <message>
-        <source>Play with program</source>
-        <translation type="obsolete">Jogar com um programa</translation>
-    </message>
-    <message>
-        <source>&amp;Play with program</source>
-        <translation type="obsolete">&amp;Jogar com um programa</translation>
-    </message>
-    <message>
-        <source>Menubar
-
-Enables/disables the menubar.</source>
-        <translation type="obsolete">Barra de menu
-
-Ativa/desativa a barra de menu.</translation>
-    </message>
-    <message>
-        <source>Play with a program
-
-Sets a playing session with a pGo program using GTP (like GNUGO)</source>
-        <translation type="obsolete">Jogar contra um programa
-
-Define uma sessão de partidas com um programa pGo que use GTP (como GNUGO)</translation>
-    </message>
-    <message>
-        <source>Ctrl+P</source>
-        <translation type="obsolete">Ctrl+P</translation>
-    </message>
-    <message>
-        <source>Refresh players</source>
-        <translation type="obsolete">Atualizar jogadores</translation>
-    </message>
-    <message>
-        <source>Get new players table from server</source>
-        <translation type="obsolete">Obter nova tabela de jogadores do servidor</translation>
-    </message>
-    <message>
-        <source>Refresh Games</source>
-        <translation type="obsolete">Atualizar Partidas</translation>
-    </message>
-    <message>
-        <source>Get new games table from server</source>
-        <translation type="obsolete">Obter nova tabela de partidas do servidor</translation>
-    </message>
-    <message>
-        <source>Quiet</source>
-        <translation type="obsolete">Quieto</translation>
-    </message>
-    <message>
-        <source>&amp;Quiet</source>
-        <translation type="obsolete">&amp;Quieto</translation>
-    </message>
-    <message>
-        <source>toggles system messages</source>
-        <translation type="obsolete">alterna as mensagens do sistema</translation>
-    </message>
-    <message>
-        <source>- update of player/gamestable</source>
-        <translation type="obsolete">- atualização do jogador/tabela do jogo</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="obsolete">Conectar</translation>
-    </message>
-    <message>
-        <source>&amp;Connect</source>
-        <translation type="obsolete">&amp;Conectar</translation>
-    </message>
-    <message>
-        <source>Connects to the server</source>
-        <translation type="obsolete">Conecta ao servidor</translation>
-    </message>
-    <message>
-        <source>Preferences</source>
-        <translation type="obsolete">Preferências</translation>
-    </message>
-    <message>
-        <source>Edit the preferences</source>
-        <translation type="obsolete">Editar as preferências</translation>
-    </message>
-    <message>
-        <source>Preferences
-
-Edit the applications preferences.</source>
-        <translation type="obsolete">Preferências
-
-Editar as preferências sobre o aplicativo.</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation type="obsolete">Alt+P</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="obsolete">Sair</translation>
-    </message>
-    <message>
-        <source>E&amp;xit</source>
-        <translation type="obsolete">&amp;Sair</translation>
-    </message>
-    <message>
-        <source>Quits the application</source>
-        <translation type="obsolete">Sai do aplicativo</translation>
-    </message>
-    <message>
-        <source>Exit
-
-Quits the application.</source>
-        <translation type="obsolete">Sair
-
-Sai do aplicativo.</translation>
-    </message>
-    <message>
-        <source>Ctrl+Q</source>
-        <translation type="obsolete">Ctrl+Q</translation>
-    </message>
-    <message>
-        <source>New Board 19x19</source>
-        <translation type="obsolete">Novo Tabuleiro 19x19</translation>
-    </message>
-    <message>
-        <source>New &amp;Board 19x19</source>
-        <translation type="obsolete">Novo &amp;Tabuleiro 19x19</translation>
-    </message>
-    <message>
-        <source>Creates a new board with size 19x19</source>
-        <translation type="obsolete">Cria um novo tabuleiro com tamanho 19x19</translation>
-    </message>
-    <message>
-        <source>New
-
-Creates a new 19x19 board.</source>
-        <translation type="obsolete">Novo
-
-Cria um novo tabuleiro 19x19.</translation>
-    </message>
-    <message>
-        <source>Ctrl+B</source>
-        <translation type="obsolete">Ctrl+B</translation>
-    </message>
-    <message>
-        <source>ToolBar</source>
-        <translation type="obsolete">Barra de Ferramentas</translation>
-    </message>
-    <message>
-        <source>&amp;ToolBar</source>
-        <translation type="obsolete">&amp;Barra de Ferramentas</translation>
-    </message>
-    <message>
-        <source>Enables/disables the toolbar</source>
-        <translation type="obsolete">Ativar/dasativar a barra de ferramentas</translation>
-    </message>
-    <message>
-        <source>Navigation toolbar
-
-Enables/disables the toolbar.</source>
-        <translation type="obsolete">Barra de navegação
-
-Ativa/desativa a barra de navegação.</translation>
-    </message>
-    <message>
-        <source>Edit servers</source>
-        <translation type="obsolete">Editar servidores</translation>
-    </message>
-    <message>
-        <source>&amp;Edit servers</source>
-        <translation type="obsolete">&amp;Editar servidores</translation>
-    </message>
-    <message>
-        <source>Menubar</source>
-        <translation type="obsolete">Barra de menus</translation>
-    </message>
-    <message>
-        <source>&amp;Menubar</source>
-        <translation type="obsolete">Barra de &amp;menus</translation>
-    </message>
-    <message>
-        <source>Enables/disables the menubar</source>
-        <translation type="obsolete">Ativar/desativar a barra de menus</translation>
-    </message>
-    <message>
-        <source>F7</source>
-        <translation type="obsolete">F7</translation>
-    </message>
-    <message>
-        <source>Statusbar</source>
-        <translation type="obsolete">Barra de estado</translation>
-    </message>
-    <message>
-        <source>&amp;Statusbar</source>
-        <translation type="obsolete">Barra de e&amp;stado</translation>
-    </message>
-    <message>
-        <source>Enables/disables the statusbar</source>
-        <translation type="obsolete">Ativar/desativar a barra de estado</translation>
-    </message>
-    <message>
-        <source>Statusbar
-
-Enables/disables the statusbar.</source>
-        <translation type="obsolete">Barra de estado
-
-Ativa/desativa a barra de estado.</translation>
-    </message>
-    <message>
-        <source>Sound</source>
-        <translation type="obsolete">Som</translation>
-    </message>
-    <message>
-        <source>&amp;Sound</source>
-        <translation type="obsolete">&amp;Som</translation>
-    </message>
-    <message>
-        <source>Short info on sound availability</source>
-        <translation type="obsolete">Curta informação sobre a disponibilidade do som</translation>
-    </message>
-    <message>
-        <source>Sound Info
-
-Views a message box with a short comment about sound.</source>
-        <translation type="obsolete">Informação de Som
-
-Mostra uma caixa de mensagens com um curto comentário sobre o som.</translation>
-    </message>
-    <message>
-        <source>About Qt</source>
-        <translation type="obsolete">Sobre o Qt</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation type="obsolete">Sobre o &amp;Qt</translation>
-    </message>
-    <message>
-        <source>About Qt
-
-About Qt.</source>
-        <translation type="obsolete">Sobre o Qt
-
-Sobre o Qt.</translation>
-    </message>
-    <message>
-        <source>New Board</source>
-        <translation type="obsolete">Novo Tabuleiro</translation>
-    </message>
-    <message>
-        <source>&amp;New Board</source>
-        <translation type="obsolete">&amp;Novo Tabuleiro</translation>
-    </message>
-    <message>
-        <source>Creates a new board</source>
-        <translation type="obsolete">Cria um novo tabuleiro</translation>
-    </message>
-    <message>
-        <source>Ctrl+N</source>
-        <translation type="obsolete">Ctrl+N</translation>
+        <translation type="obsolete">Werkzeugleiste_2</translation>
     </message>
     <message>
         <source>View user toolbar</source>
-        <translation type="obsolete">Ver ferramentas do usuário</translation>
+        <translation type="obsolete">Zeige die Werkzeugleiste für den Benutzer</translation>
     </message>
     <message>
         <source>View &amp;user toolbar</source>
-        <translation type="obsolete">Ver ferramentas do &amp;usuário</translation>
+        <translation type="obsolete">Zeige die Werkzeugleiste für den Ben&amp;utzer</translation>
+    </message>
+    <message>
+        <source>Rooms*</source>
+        <translation type="obsolete">Räume*</translation>
     </message>
     <message>
         <source>main toolbar</source>
-        <translation type="obsolete">barra de ferramentas principal</translation>
+        <translation type="obsolete">Hauptwerkzeugleiste</translation>
     </message>
     <message>
         <source>choose server</source>
-        <translation type="obsolete">escolha o servidor</translation>
+        <translation type="obsolete">Server wählen</translation>
     </message>
     <message>
         <source>Seek game</source>
-        <translation type="obsolete">Procurar jogo</translation>
+        <translation type="obsolete">Spiel suchen</translation>
     </message>
     <message>
         <source>Seek game
 
 Use this button to &apos;seek&apos; a game, with the given time settings (popup menu), and handicap range (list beside)
 The server will automatically launch a game against an opponent with matching settings.</source>
-        <translation type="obsolete">Procurar jogo
+        <translation type="obsolete">Spiel suchen
 
-Use este botão para &apos;procurar&apos; um jogo, com as configurações de tempo dadas (menu de contexto), e gama de vantagens (lista ao lado)
-O servidor automaticamente lançará um jogo contra um oponente que se enquadre nas configurações.</translation>
+Suche ein Spiel mit den vorgegebenen Einstellungen der Zeit (Popup-Menü) und des Vorgabenbereichs (daneben gelistet)
+Der Server startet das Spiel gegen einen Gegner mit passenden Einstellungen automatisch.</translation>
     </message>
     <message>
         <source>even</source>
-        <translation type="obsolete">par (igual)</translation>
+        <translation type="obsolete">gleichauf</translation>
     </message>
     <message>
         <source>within 2 stones</source>
-        <translation type="obsolete">ao alcance de 2 pedras</translation>
+        <translation type="obsolete">innerhalb von 2 Steinen</translation>
     </message>
     <message>
         <source>within 5 stones</source>
-        <translation type="obsolete">ao alcance de 5 pedras</translation>
+        <translation type="obsolete">innerhalb von 5 Steinen</translation>
     </message>
     <message>
         <source>anyone</source>
-        <translation type="obsolete">qualquer um</translation>
+        <translation type="obsolete">beliebig</translation>
     </message>
     <message>
         <source>same or stronger</source>
-        <translation type="obsolete">o mesmo ou mais forte</translation>
+        <translation type="obsolete">gleich oder stärker</translation>
     </message>
     <message>
         <source>same or weaker</source>
-        <translation type="obsolete">o mesmo ou mais fraco</translation>
+        <translation type="obsolete">gleich oder schwächer</translation>
     </message>
     <message>
         <source>Set the handicap range you want for seeking games</source>
-        <translation type="obsolete">Defina a gama de vantagens que você quer para procurar jogos</translation>
+        <translation type="obsolete">Vorgabebereich für zu suchendes Spiel setzen</translation>
     </message>
     <message>
         <source>handicap range
 
 Set the handicap range you wish when seeking a game. See &apos;seek&apos; button for more</source>
-        <translation type="obsolete">gama de vantagens
+        <translation type="obsolete">Vorgabebereich
 
-Defina a gama de vantagens que você quiser ao procurar jogos. Veja o botão &apos;procurar&apos; para saber mais</translation>
+Setzen Sie den gewünschten Vorgabebereich für das Suchen eines Spiels. Weiter Infos unter &apos;Spiel suchen&apos;</translation>
     </message>
     <message>
         <source>user defined toolbar</source>
-        <translation type="obsolete">barra de ferramentas personalizada</translation>
+        <translation type="obsolete">Benutzerdefinierte Werkzeugleiste</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation type="obsolete">Ação</translation>
-    </message>
-    <message>
-        <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc. Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q&apos; in the playertable.
-
-Note : some features cannot work if set to quiet (checked box):
-	- sound when watched players enter/leave
-	- update of player/gamestable</source>
-        <translation type="obsolete">Se ativado então você não recebe mensagens do sistema, ou seja, você não é informado sobre conexão/desconexão de jogadores, início/fim de partidas, etc. Clicando nesta caixa de verificação alterna o modo. Estar quieto é indicado com um &apos;Q&apos; na tabela de jogadores.
-
-Nota: algumas funções podem não funcionar se for ativado o modo quieto (caixa verificada):
-	- som para a entrada/saída de jogadores observados
-	- atualização da tabela de jogador/partidas</translation>
+        <translation type="obsolete">Aktion</translation>
     </message>
     <message>
         <source>New version message</source>
-        <translation type="obsolete">Mensagem de nova versão</translation>
+        <translation type="obsolete">Hinweis auf eine neue Version</translation>
     </message>
     <message>
         <source>shows new version message</source>
-        <translation type="obsolete">mostra uma mensagem de nova versão</translation>
+        <translation type="obsolete">Hinweis der neuen Version anzeigen</translation>
     </message>
     <message>
         <source>new version message
 
 displays the message box that appears at launch of a new version</source>
-        <translation type="obsolete">mensagem de nova versão
+        <translation type="obsolete">Hinweis einer neuen Version
 
-mostra a caixa de mensagem que surge quando uma nova versão é lançada</translation>
+Zeigt beim Starten einen Hinweis auf eine neue Version an</translation>
     </message>
 </context>
 <context>
@@ -2505,7 +2515,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="28"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="35"/>
@@ -2615,7 +2625,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="243"/>
         <source>Games</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spiele</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="248"/>
@@ -2977,7 +2987,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="621"/>
         <source>Teaching</source>
-        <translation type="unfinished">Ensinar</translation>
+        <translation type="unfinished">Lektion (T)</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="628"/>
@@ -3107,7 +3117,7 @@ Using default</source>
     <message>
         <location filename="../network/createroomdialog.ui" line="1025"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Name:</translation>
     </message>
     <message>
         <location filename="../network/createroomdialog.ui" line="1047"/>
@@ -3123,32 +3133,32 @@ Using default</source>
 <context>
     <name>CyberOroConnection</name>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3303"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3232"/>
         <source>Server full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3303"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3232"/>
         <source>Server full, try another</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6094"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6037"/>
         <source>Rematch declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6094"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6037"/>
         <source>%1 has declined rematch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8239"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8093"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8239"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8093"/>
         <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3157,106 +3167,114 @@ Using default</source>
     <name>Debug_Dialog</name>
     <message>
         <source>Debug</source>
-        <translation type="obsolete">Depurar</translation>
+        <translation type="obsolete">Debug</translation>
     </message>
 </context>
 <context>
     <name>EditTools</name>
     <message>
         <source>EditTools</source>
-        <translation type="obsolete">Outils d&apos;</translation>
+        <translation type="obsolete">Bearbeitungswerkzeuge</translation>
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation type="obsolete">Outils d&apos;</translation>
+        <translation type="obsolete">Werkzeuge</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation type="obsolete">Choisir l&apos;outil d&apos;</translation>
+        <translation type="obsolete">Werkzeug wählen</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation type="obsolete">Modifier le mode d&apos;</translation>
+        <translation type="obsolete">Werkzeug wählen
+
+Im Bearbeiten Modus kann hier das Werkzeug eingestellt werden, z.B. Steine oder Markierungen setzen.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation type="obsolete">Pierre</translation>
+        <translation type="obsolete">Stein</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation type="obsolete">Pierre
+        <translation type="obsolete">Stein
 
-Modifier les pierres. Click gauche pour noir, click droit pour blanc.</translation>
+Steine auf dem Brett editieren. Klick links setzt einen schwarzen, Klick rechts einen weißen Stein.</translation>
+    </message>
+    <message>
+        <source>Square</source>
+        <translation type="obsolete">Rechteck</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Carr</translation>
+        <translation type="obsolete">Rechteck
+
+Rechteckige Markierung editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese.</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation type="obsolete">Cercle</translation>
+        <translation type="obsolete">Kreis</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="obsolete">Lettre</translation>
+        <translation type="obsolete">Buchstabe</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation type="obsolete">Lettres
+        <translation type="obsolete">Buchstabe
 
-Modifier les marques lettres. Click gauche pour placer une marque, click droit pour l&apos;enlever. Shift-click permet de placer une lettre personnalis</translation>
+Buchstaben editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese. Shift-klick zum Erstellen eines freien Textes.</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="obsolete">Croix</translation>
+        <translation type="obsolete">Kreuz</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Croix
+        <translation type="obsolete">Kreuz
 
-Modifier les marques croix. Click gauche pour placer une marque, click droit pour l&apos;enlever.</translation>
+Kreuförmige Markierung editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation type="obsolete">Triangle</translation>
+        <translation type="obsolete">Dreieck</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Triangle
+        <translation type="obsolete">Dreieck
 
-Modifier les marques triangle. Click gauche pour placer une marque, click droit pour l&apos;enlever.</translation>
+Dreieckige Markierung editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="obsolete">Chiffres</translation>
+        <translation type="obsolete">Zahl</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Chiffres
+        <translation type="obsolete">Zahl
 
-Modifier les marques chiffres. Click gauche pour placer une marque, click droit pour l&apos;enlever.</translation>
+Zahl editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese.</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Cercle
+        <translation type="obsolete">Kreis
 
-Modifier les marques cercle. Click gauche pour placer une marque, click droit pour l&apos;enlever.</translation>
+Kreisförmige Markierung editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese.</translation>
     </message>
 </context>
 <context>
@@ -3265,7 +3283,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <location filename="../network/friendslistdialog.cpp" line="110"/>
         <location filename="../network/friendslistdialog.cpp" line="132"/>
         <source>Match</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spielanfrage</translation>
     </message>
     <message>
         <location filename="../network/friendslistdialog.cpp" line="111"/>
@@ -3329,11 +3347,11 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <name>GameDialog</name>
     <message>
         <source>yes</source>
-        <translation type="obsolete">sim</translation>
+        <translation type="obsolete">ja</translation>
     </message>
     <message>
         <source>you</source>
-        <translation type="obsolete">você</translation>
+        <translation type="obsolete">Sie</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.cpp" line="101"/>
@@ -3355,19 +3373,19 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <location filename="../network/gamedialog.cpp" line="525"/>
         <location filename="../network/gamedialog.cpp" line="624"/>
         <location filename="../network/gamedialog.cpp" line="735"/>
-        <location filename="../network/gamedialog.cpp" line="757"/>
-        <location filename="../network/gamedialog.cpp" line="795"/>
-        <location filename="../network/gamedialog.cpp" line="815"/>
-        <location filename="../network/gamedialog.cpp" line="821"/>
+        <location filename="../network/gamedialog.cpp" line="754"/>
+        <location filename="../network/gamedialog.cpp" line="792"/>
+        <location filename="../network/gamedialog.cpp" line="812"/>
+        <location filename="../network/gamedialog.cpp" line="819"/>
         <location filename="../network/gamedialog.cpp" line="1233"/>
         <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
-        <translation>Oferecer</translation>
+        <translation>Offerieren</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="768"/>
+        <location filename="../network/gamedialog.cpp" line="765"/>
         <source>Teaching</source>
-        <translation>Ensinar</translation>
+        <translation>Lektion (T)</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.cpp" line="95"/>
@@ -3389,41 +3407,41 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <location filename="../network/gamedialog.cpp" line="520"/>
         <location filename="../network/gamedialog.cpp" line="1240"/>
         <source>Accept</source>
-        <translation>Aceitar</translation>
+        <translation>Annehmen</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="801"/>
+        <location filename="../network/gamedialog.cpp" line="798"/>
         <source>%1 not open for matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="803"/>
+        <location filename="../network/gamedialog.cpp" line="800"/>
         <source>%1 declined the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="805"/>
+        <location filename="../network/gamedialog.cpp" line="802"/>
         <source>%1 canceled the match request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="807"/>
+        <location filename="../network/gamedialog.cpp" line="804"/>
         <source>%1 already playing a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="809"/>
+        <location filename="../network/gamedialog.cpp" line="806"/>
         <source>%1 does not accept direct matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="814"/>
+        <location filename="../network/gamedialog.cpp" line="811"/>
         <source>Invalid Parameters!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source> stones)</source>
-        <translation type="obsolete">pedras)</translation>
+        <translation type="obsolete">Steine)</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="19"/>
@@ -3500,22 +3518,22 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <location filename="../network/gamedialog.ui" line="703"/>
         <source>Handicap :</source>
-        <translation type="unfinished">Vantagem :</translation>
+        <translation type="unfinished">Vorgabe:</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="728"/>
         <source>Nigiri</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nigiri</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="735"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiß</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="742"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarz</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="752"/>
@@ -3535,7 +3553,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <location filename="../network/gamedialog.ui" line="835"/>
         <source>Game against :</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spiel gegen:</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="863"/>
@@ -3545,7 +3563,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <location filename="../network/gamedialog.ui" line="870"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.ui" line="898"/>
@@ -3558,7 +3576,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
         <translation type="unfinished">.5</translation>
     </message>
     <message>
-        <location filename="../network/gamedialog.cpp" line="811"/>
+        <location filename="../network/gamedialog.cpp" line="808"/>
         <source>%1&apos;s client does not support nmatch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3567,7 +3585,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <name>GameInfoDialog</name>
     <message>
         <source>Game Information</source>
-        <translation type="obsolete">Informaçã da Partida</translation>
+        <translation type="obsolete">Spielinformation</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -3575,23 +3593,23 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">A&amp;bbrechen</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>Rank</source>
-        <translation type="obsolete">Classificação</translation>
+        <translation type="obsolete">Rang</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Nome</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -3599,27 +3617,27 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">Vantagens (handicap):</translation>
+        <translation type="obsolete">Vorgabe:</translation>
     </message>
     <message>
         <source>Result:</source>
-        <translation type="obsolete">Resultado:</translation>
+        <translation type="obsolete">Ergebnis:</translation>
     </message>
     <message>
         <source>Game Name:</source>
-        <translation type="obsolete">Nome da partida:</translation>
+        <translation type="obsolete">Spielname:</translation>
     </message>
     <message>
         <source>Date:</source>
-        <translation type="obsolete">Data:</translation>
+        <translation type="obsolete">Datum:</translation>
     </message>
     <message>
         <source>Played at:</source>
-        <translation type="obsolete">Jogado em:</translation>
+        <translation type="obsolete">Gespielt am:</translation>
     </message>
     <message>
         <source>Copyright:</source>
-        <translation type="obsolete">Direitos de cópia:</translation>
+        <translation type="obsolete">Urheberrecht:</translation>
     </message>
 </context>
 <context>
@@ -3627,37 +3645,37 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <location filename="../board/gameinfo.ui" line="13"/>
         <source>Game Information</source>
-        <translation type="unfinished">Informaçã da Partida</translation>
+        <translation type="unfinished">Spielinformation</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="33"/>
         <source>Game Name:</source>
-        <translation type="unfinished">Nome da partida:</translation>
+        <translation type="unfinished">Spielname:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="67"/>
         <source>Result:</source>
-        <translation type="unfinished">Resultado:</translation>
+        <translation type="unfinished">Ergebnis:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="130"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiß</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="143"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarz</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="160"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Name</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="183"/>
         <source>Rank</source>
-        <translation type="unfinished">Classificação</translation>
+        <translation type="unfinished">Rang</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="221"/>
@@ -3667,7 +3685,7 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <location filename="../board/gameinfo.ui" line="260"/>
         <source>Handicap:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vorgabe:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="299"/>
@@ -3677,12 +3695,12 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <location filename="../board/gameinfo.ui" line="329"/>
         <source>Copyright:</source>
-        <translation type="unfinished">Direitos de cópia:</translation>
+        <translation type="unfinished">Urheberrecht:</translation>
     </message>
     <message>
         <location filename="../board/gameinfo.ui" line="353"/>
         <source>Played at:</source>
-        <translation type="unfinished">Jogado em:</translation>
+        <translation type="unfinished">Gespielt am:</translation>
     </message>
 </context>
 <context>
@@ -3693,31 +3711,31 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Blanc</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>WR</source>
-        <translation type="obsolete">RB</translation>
+        <translation type="obsolete">WR</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Noir</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>BR</source>
-        <translation type="obsolete">RN</translation>
+        <translation type="obsolete">SR</translation>
     </message>
     <message>
         <source>Mv</source>
-        <translation type="obsolete">Cp</translation>
+        <translation type="obsolete">Zg</translation>
     </message>
     <message>
         <source>Sz H K By Fr (Ob)</source>
-        <translation type="obsolete">T H K By L (Ob)</translation>
+        <translation type="obsolete">Gr H K By Fr (Zu)</translation>
     </message>
     <message>
         <source>Sz H K By FR (Ob)</source>
-        <translation type="obsolete">T H K By L (Ob)</translation>
+        <translation type="obsolete">Gr H K By FR (Zu)</translation>
     </message>
     <message>
         <source>Id</source>
@@ -3727,69 +3745,69 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation type="obsolete">Blanc</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation type="obsolete">RB</translation>
+        <translation type="obsolete">WR</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation type="obsolete">Noir</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation type="obsolete">RN</translation>
+        <translation type="obsolete">SR</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation type="obsolete">Cp</translation>
+        <translation type="obsolete">Zg</translation>
     </message>
 </context>
 <context>
     <name>HostTable</name>
     <message>
         <source>-- new --</source>
-        <translation type="obsolete">-- nouveau --</translation>
+        <translation type="obsolete">-- neu --</translation>
     </message>
     <message>
         <source>Change</source>
-        <translation type="obsolete">Modifier</translation>
+        <translation type="obsolete">Ändern</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="obsolete">Ajouter</translation>
+        <translation type="obsolete">Hinzufügen</translation>
     </message>
 </context>
 <context>
     <name>HostTableWidget</name>
     <message>
         <source>Go Server</source>
-        <translation type="obsolete">Serveur </translation>
+        <translation type="obsolete">Go Server</translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation type="obsolete">Titre:</translation>
+        <translation type="obsolete">Titel:</translation>
     </message>
     <message>
         <source>-- new --</source>
-        <translation type="obsolete">-- nouveau --</translation>
+        <translation type="obsolete">-- neu --</translation>
     </message>
     <message>
-        <source>use a unique Title - do not use &apos;:&apos; sign!</source>
-        <translation type="obsolete">utiliser un titre unique - ne pas utiliser de signe &apos;:&apos; !</translation>
+        <source>use a unique Title - do not use &quot;:&quot; sign!</source>
+        <translation type="obsolete">einzigartigen Titel benutzen - bitte nicht &quot;:&quot; verwenden!</translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation type="obsolete">URL:</translation>
+        <translation type="obsolete">Host:</translation>
     </message>
     <message>
         <source>hostname, e.g.: nngs.cosmic.org</source>
-        <translation type="obsolete">Adresse, p.ex : nngs.cosmic.org</translation>
+        <translation type="obsolete">Hostname, z.B.: nngs.cosmic.org</translation>
     </message>
     <message>
         <source>Port:</source>
@@ -3797,47 +3815,48 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
     <message>
         <source>port address, e.g.: 9696</source>
-        <translation type="obsolete">adresse du port, p. ex : 9696</translation>
+        <translation type="obsolete">Portadresse, z.B.: 9696</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="obsolete">Nom:</translation>
+        <translation type="obsolete">Name:</translation>
     </message>
     <message>
         <source>use your login name; if unregistered use a unique name like &apos;hotdog17&apos; (NNGS, CWS) or guest (other servers)</source>
-        <translation type="obsolete">Utiliser votre login. Si vous n&apos;</translation>
+        <translation type="obsolete">eigenen Loginnamen eingeben;
+falls unregistriert, bitte einzigartigen Namen benutzen, z.B. &apos;blauebohne45&apos; (NNGS, CWS) oder &apos;guest&apos; (andere Server)</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="obsolete">Mot de passe:</translation>
+        <translation type="obsolete">Paßwort:</translation>
     </message>
     <message>
         <source>your password; if unregistered: blank field</source>
-        <translation type="obsolete">Votre mot de passe. Si vous n</translation>
+        <translation type="obsolete">Paßwort einsetzen; falls unregistriert: leeres Feld</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="obsolete">Ajoute</translation>
+        <translation type="obsolete">Hinzufügen</translation>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation type="obsolete">Ajoute / change le champ courant</translation>
+        <translation type="obsolete">Eingaben hinzufügen/ändern</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Supprime</translation>
+        <translation type="obsolete">Löschen</translation>
     </message>
     <message>
         <source>delete current entry</source>
-        <translation type="obsolete">Supprime le champ en cours</translation>
+        <translation type="obsolete">Eintrag löschen</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">Annu&amp;ler</translation>
+        <translation type="obsolete">A&amp;bbrechen</translation>
     </message>
     <message>
         <source>drop changes</source>
-        <translation type="obsolete">Annule les changements</translation>
+        <translation type="obsolete">Änderungen verwerfen</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -3845,15 +3864,15 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
     <message>
         <source>close window &amp; save settings</source>
-        <translation type="obsolete">Ferme la fen</translation>
+        <translation type="obsolete">Fenster schließen &amp; Änderungen übernehemen</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="obsolete">Titre</translation>
+        <translation type="obsolete">Titel</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="obsolete">URL</translation>
+        <translation type="obsolete">Host</translation>
     </message>
     <message>
         <source>Port</source>
@@ -3861,11 +3880,11 @@ Modifier les marques cercle. Click gauche pour placer une marque, click droit po
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Nom</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="obsolete">Mot de passe</translation>
+        <translation type="obsolete">Passwort</translation>
     </message>
     <message>
         <source>Host Entries
@@ -3875,26 +3894,60 @@ Select &apos;New&apos; to clear input fields. After filling in at least Title an
 Select an entry to edit, change (Title keeps unchanged) or delete a line.
 
 Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
-        <translation type="obsolete">Param</translation>
+        <translation type="obsolete">Host Einträge
+
+&quot;Neu&quot; setzt die Eingabefelder zurück. Nach Einfüllen von Midestens Titel und Host Hinzufügen/Ändern verwenden.
+
+Eintrag wählen zum Editieren, Ändern (Titel bleibt gleich) oder löschen.
+
+Einen vordefinierten Go Server -- xxx -- wählen und Titel eintragen um diesen benützen zu können.</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">Nouveau</translation>
+        <translation type="obsolete">Neu</translation>
     </message>
     <message>
         <source>clear form</source>
-        <translation type="obsolete">Effacer les donn</translation>
+        <translation type="obsolete">Formular zurücksetzen</translation>
     </message>
 </context>
 <context>
     <name>IGSConnection</name>
     <message>
         <source>...send password</source>
-        <translation type="obsolete">... enviar senha</translation>
+        <translation type="obsolete">... sende Paßwort</translation>
+    </message>
+    <message>
+        <source>Connected to </source>
+        <translation type="obsolete">Verbunden mit</translation>
+    </message>
+    <message>
+        <source>Connection closed by foreign host.
+</source>
+        <translation type="obsolete">Verbindung durch fremden Host getrennt.&quot;n</translation>
+    </message>
+    <message>
+        <source>Connection closed.
+</source>
+        <translation type="obsolete">Verbindung getrennt.&quot;n</translation>
+    </message>
+    <message>
+        <source>ERROR - Connection closed.
+</source>
+        <translation type="obsolete">FEHLER - Verbindung getrennt.&quot;n</translation>
+    </message>
+    <message>
+        <source>Trying to connect to </source>
+        <translation type="obsolete">Verbindungsversuch mit</translation>
+    </message>
+    <message>
+        <source>...send password
+</source>
+        <translation type="obsolete">...sende Passwort&quot;n</translation>
     </message>
     <message>
         <source>Trying to connect to</source>
-        <translation type="obsolete">Tentando se conectar a</translation>
+        <translation type="obsolete">Verbindungsversuch mit</translation>
     </message>
 </context>
 <context>
@@ -3977,12 +4030,12 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
     <message>
         <location filename="../network/login.ui" line="28"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../network/login.ui" line="35"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verbinden</translation>
     </message>
     <message>
         <location filename="../network/login.ui" line="54"/>
@@ -4007,28 +4060,41 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
         <translation type="obsolete">MainAppWidget</translation>
     </message>
     <message>
+        <source>right click to get column dependent info, left click to play (pl) or talk (name)</source>
+        <translation type="obsolete">klicke
+
+rechte Maustaste:
+Name -&gt; stats
+Rg -&gt; rating
+sp -&gt; results
+
+linke Maustaste:
+Name -&gt; sprechen mit
+Rg -&gt; spiele gegen</translation>
+    </message>
+    <message>
         <source>right click to observe</source>
-        <translation type="obsolete">click droit pour observer</translation>
+        <translation type="obsolete">rechts klicken zum Anschauen</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation type="obsolete">Parties</translation>
+        <translation type="obsolete">Spiele</translation>
     </message>
     <message>
         <source>Playerinfo</source>
-        <translation type="obsolete">Information sur le joueur</translation>
+        <translation type="obsolete">Spielerinfo</translation>
     </message>
     <message>
         <source>available sgf-file</source>
-        <translation type="obsolete">fichier sgf disponible</translation>
+        <translation type="obsolete">verfügbare sgf-Dateien</translation>
     </message>
     <message>
         <source>-- no files found --</source>
-        <translation type="obsolete">-- aucun fichier trouv</translation>
+        <translation type="obsolete">-- keine Datenen gefunden --</translation>
     </message>
     <message>
         <source>double click to mail</source>
-        <translation type="obsolete">clik double pour mail</translation>
+        <translation type="obsolete">mail: doppelklick</translation>
     </message>
     <message>
         <source>sgf</source>
@@ -4036,83 +4102,91 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
     </message>
     <message>
         <source>local Board</source>
-        <translation type="obsolete">Plateau en local</translation>
+        <translation type="obsolete">Lokales Brett</translation>
     </message>
     <message>
         <source>open a local Board</source>
-        <translation type="obsolete">Ouvre un plateau en local</translation>
+        <translation type="obsolete">öffne lokales Brett</translation>
     </message>
     <message>
         <source>Local</source>
-        <translation type="obsolete">Local</translation>
+        <translation type="obsolete">Lokal</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation type="obsolete">messages utiles de/vers le serveur</translation>
+        <translation type="obsolete">relevante Meldungen zum/vom Server</translation>
     </message>
     <message>
         <source>Survey</source>
-        <translation type="obsolete">Etude</translation>
+        <translation type="obsolete">Überblick</translation>
     </message>
     <message>
         <source>all messages from/to server</source>
-        <translation type="obsolete">tous messages de/vers le serveur</translation>
+        <translation type="obsolete">alle Meldungen vom/zum Server</translation>
     </message>
     <message>
         <source>Messages</source>
-        <translation type="obsolete">Messages</translation>
+        <translation type="obsolete">Meldungen</translation>
     </message>
     <message>
         <source>Connect as:</source>
-        <translation type="obsolete">Se connecter en tant que :</translation>
+        <translation type="obsolete">Verbinde als:</translation>
     </message>
     <message>
         <source>-- edit --</source>
-        <translation type="obsolete">-- </translation>
+        <translation type="obsolete">-- editieren --</translation>
     </message>
     <message>
         <source>chose Go server to connect to or use -edit- to add/change a Go server entry</source>
-        <translation type="obsolete">choisissez le serveur auquel se connecter, ou utilisez -edit- pour ajouter / modifier un serveur</translation>
+        <translation type="obsolete">Wähle einen Go Server zum Verbinden oder
+verwende --edit-- um die Einträge zu ändern/ergänzen</translation>
     </message>
     <message>
         <source>connect</source>
-        <translation type="obsolete">connexion</translation>
+        <translation type="obsolete">verbinden</translation>
+    </message>
+    <message>
+        <source>connect to above selected Go server</source>
+        <translation type="obsolete">verbinde mit dem oben gewählten Go Server</translation>
     </message>
     <message>
         <source>Your Stats:</source>
-        <translation type="obsolete">Vos Stats:</translation>
+        <translation type="obsolete">Status:</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="obsolete">Ouvrir</translation>
+        <translation type="obsolete">Offen</translation>
     </message>
     <message>
         <source>toggles open for matches</source>
-        <translation type="obsolete">ouvert au matches</translation>
+        <translation type="obsolete">ändere Zustand: &apos;offen für Spiele&apos; (open)</translation>
     </message>
     <message>
-        <source>If checked you are open for matches. After refreshing the player table having a &apos;X&apos; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
-        <translation type="obsolete">Si coch</translation>
+        <source>If checked you are open for matches. After refreshing the player table having a &quot;X&quot; mark indicates to be NOT open for matches. Clicking this checkbox toggles the mode.</source>
+        <translation type="obsolete">Falls markiert offen für Spiele. Nach Auffrischen der Spielertabelle zeigen &apos;X&apos; Markierungen an, welche Spieler gegenwärtig NICHT offen sind.
+Ein Klick invertiert den jeweiligen Zustand.</translation>
     </message>
     <message>
         <source>Looking</source>
-        <translation type="obsolete">En recherche</translation>
+        <translation type="obsolete">Spielwunsch</translation>
     </message>
     <message>
         <source>toggles looking for matches</source>
-        <translation type="obsolete">recherche de matches</translation>
+        <translation type="obsolete">Ändert den Zustand: suche Gegner (looking)</translation>
     </message>
     <message>
-        <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &apos;!&apos; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &apos;X&apos;)!</source>
-        <translation type="obsolete">Si coch</translation>
+        <source>If checked then you are looking for matches, that means you are ready to play. After refreshing the player table having a &quot;!&quot; mark indicates to be looking for matches. Clicking this checkbox toggles the mode. You have to be open too, if you are looking. Thus, the Go server sets you open for matches (no &quot;X&quot;)!</source>
+        <translation type="obsolete">Falls markiert, wird anderen Spielern angezeigt, dass ein Spielwunsch besteht.
+In der Spielertabelle wird dies durch ein &quot;!&apos; angegeben.
+Durch Klick wird der jeweilige Zustand geändert. Eine Markierung setzt voraus, dass der Spieler offen für Spiele ist. Daher wird vom Go Server i.a. der Spieler auf offen gesetzt (kein &apos;X&apos;)!</translation>
     </message>
     <message>
         <source>you&apos;re in Channel:</source>
-        <translation type="obsolete">Vous </translation>
+        <translation type="obsolete">In folgenden Kanälen drin:</translation>
     </message>
     <message>
         <source>Ch</source>
-        <translation type="obsolete">Cl</translation>
+        <translation type="obsolete">K</translation>
     </message>
     <message>
         <source>#</source>
@@ -4120,47 +4194,49 @@ Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
     </message>
     <message>
         <source>left click to talk to channel</source>
-        <translation type="obsolete">click gauche pour parler dans le canal</translation>
+        <translation type="obsolete">linke Maustaste um im Kanal zu sprechen</translation>
     </message>
     <message>
         <source>channelinfo: see &apos;help channel&apos; to see how to enter/leave channel; if you are in you can see the number of players are in each channel; left click to talk to channel</source>
-        <translation type="obsolete">channelinfo: voir &apos;help channel&apos; pour voir comment entre / quitter un canal; si vous y </translation>
+        <translation type="obsolete">Kanalinfo: siehe auch &apos;help channel&apos; um zu erfahren, wie man in einen Kanal eintreten/diesen verlassen kann; nach dem Eintreten in einen Kanal werden die Anzahl der Spieler im jeweiligen Kanal angezeigt;
+linke Maustaste um im Kanal zu sprechen</translation>
     </message>
     <message>
         <source>watch players:</source>
-        <translation type="obsolete">Observer les joueurs:</translation>
+        <translation type="obsolete">beobachte Spieler:</translation>
     </message>
     <message>
         <source>players to be colored red</source>
-        <translation type="obsolete">Joueurs </translation>
+        <translation type="obsolete">Spieler, die rot eingefärbt werden</translation>
     </message>
     <message>
-        <source>add players you want to see in red and hear sound if entering/leaving. Use semicolon &apos;;&apos; as delimiter (no spaces)</source>
-        <translation type="obsolete">ajoute les joueurs que vous voulez en rouge, ainsi qu&apos;un avertissement sonore lors de l&apos;entr</translation>
+        <source>add players you want to see in red and hear sound if entering/leaving. Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spielertabelle und Spieletabelle rot eingefärbt; beim Eintreten/Verlassen des Servers ist für solche Spiele ein Ton zu hören.
+Als Trennzeichen zwischen den Spielern &quot;;&quot; benutzen (keine Leerzeichen!)</translation>
     </message>
     <message>
         <source>Refresh &amp;Games</source>
-        <translation type="obsolete">Mise </translation>
+        <translation type="obsolete">&amp;Liste der Spiele</translation>
     </message>
     <message>
         <source>Get new games table from server</source>
-        <translation type="obsolete">Rafra</translation>
+        <translation type="obsolete">Liste der Spiele vom Server neu anfordern</translation>
     </message>
     <message>
         <source>Refresh &amp;Players</source>
-        <translation type="obsolete">Mise </translation>
+        <translation type="obsolete">&amp;Spielerliste</translation>
     </message>
     <message>
         <source>Get new player table from server</source>
-        <translation type="obsolete">Rafra</translation>
+        <translation type="obsolete">Spielerliste vom Server neu anfordern</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="obsolete">Fermer</translation>
+        <translation type="obsolete">Schließen</translation>
     </message>
     <message>
         <source>Close Application and Save Settings</source>
-        <translation type="obsolete">Ferme le programme et enregistre les param</translation>
+        <translation type="obsolete">Schließe Anwendung und Speichere Einstellungen</translation>
     </message>
     <message>
         <source>click
@@ -4173,33 +4249,34 @@ sp -&gt; results
 left:
 name -&gt; talk to
 Rk -&gt; match</source>
-        <translation type="obsolete">click
+        <translation type="obsolete">klicke
 
-droit:
-nom -&gt; stats
-Rg -&gt; classement
-?? -&gt; r</translation>
-    </message>
-    <message>
-        <source>Pick at &apos;Toolbox&apos; and enter function definitions.</source>
-        <translation type="obsolete">S</translation>
+rechte Maustaste:
+Name -&gt; stats
+Rg -&gt; rating
+sp -&gt; results
+
+linke Maustaste:
+Name -&gt; sprechen mit
+Rg -&gt; spielen gegen</translation>
     </message>
     <message>
         <source>exclude players:</source>
-        <translation type="obsolete">exclure les joueurs:</translation>
-    </message>
-    <message>
-        <source>add players you want to
-
-- see in red and
-- hear sound if entering/leaving.
-
-Use semicolon &apos;;&apos; as delimiter (no spaces)</source>
-        <translation type="obsolete">tous les joueurs que vous voulez </translation>
+        <translation type="obsolete">Spieler ausschließen:</translation>
     </message>
     <message>
         <source>players to be colored green</source>
-        <translation type="obsolete">Joueurs </translation>
+        <translation type="obsolete">Spieler, die grün eingefärbt werden</translation>
+    </message>
+    <message>
+        <source>add players you want to be excluded from shouting. Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spielertabelle und Spieletabelle grün eingefärbt und für shouts (Ausrufe an alle Spieler) ausgeschlossen!
+
+Als Trennzeichen zwischen den Spielern &quot;;&quot; benutzen (keine Leerzeichen!)</translation>
+    </message>
+    <message>
+        <source>Tool box</source>
+        <translation type="obsolete">Werkzeuge</translation>
     </message>
     <message>
         <source>add players you want to
@@ -4207,44 +4284,103 @@ Use semicolon &apos;;&apos; as delimiter (no spaces)</source>
 - see in green and
 - exclude from shouting.
 
-Use semicolon &apos;;&apos; as delimiter (no spaces)</source>
-        <translation type="obsolete">ous les joueurs que vous voulez </translation>
+Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spielertabelle und Spieletabelle
+
+- grün eingefärbt und 
+- für shouts (Ausrufe an alle Spieler) ausgeschlossen!
+
+Als Trennzeichen zwischen den Spielern &quot;;&quot; benutzen (keine Leerzeichen!)</translation>
+    </message>
+    <message>
+        <source>add players you want to
+
+- see in red and
+- hear sound if entering/leaving.
+
+Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spielertabelle und Spieletabelle
+
+- rot eingefärbt und 
+- beim Eintreten/Verlassen des Servers ist für solche Spiele ein Ton zu hören.
+
+Als Trennzeichen zwischen den Spielern &quot;;&quot; benutzen (keine Leerzeichen!)</translation>
+    </message>
+    <message>
+        <source>user1</source>
+        <translation type="obsolete">user1</translation>
+    </message>
+    <message>
+        <source>User definable button</source>
+        <translation type="obsolete">Benutzerdefinierte Taste</translation>
+    </message>
+    <message>
+        <source>Pick at &apos;Toolbox&apos; and enter function definitions.</source>
+        <translation type="obsolete">Unter der Schaltfläche &apos;Werkzeug&apos; können die Funktionen definiert werden.</translation>
+    </message>
+    <message>
+        <source>user2</source>
+        <translation type="obsolete">user2</translation>
+    </message>
+    <message>
+        <source>user3</source>
+        <translation type="obsolete">user3</translation>
+    </message>
+    <message>
+        <source>user4</source>
+        <translation type="obsolete">user4</translation>
     </message>
     <message>
         <source>define:</source>
-        <translation type="obsolete">d</translation>
+        <translation type="obsolete">def:</translation>
+    </message>
+    <message>
+        <source>user1:</source>
+        <translation type="obsolete">user1:</translation>
+    </message>
+    <message>
+        <source>user2:</source>
+        <translation type="obsolete">user2:</translation>
+    </message>
+    <message>
+        <source>user3:</source>
+        <translation type="obsolete">user3:</translation>
+    </message>
+    <message>
+        <source>user4:</source>
+        <translation type="obsolete">user4:</translation>
     </message>
     <message>
         <source>button label:</source>
-        <translation type="obsolete">texte du bouton:</translation>
+        <translation type="obsolete">Beschriftung:</translation>
     </message>
     <message>
         <source>define button label</source>
-        <translation type="obsolete">d</translation>
+        <translation type="obsolete">Tastenbeschriftung definieren</translation>
     </message>
     <message>
         <source>command:</source>
-        <translation type="obsolete">commande:</translation>
+        <translation type="obsolete">Befehl:</translation>
     </message>
     <message>
         <source>go server command: e.g. stats</source>
-        <translation type="obsolete">commande du serveur go: par exemple &apos;stats&apos;</translation>
+        <translation type="obsolete">Go Server Kommando: z.B. stats</translation>
     </message>
     <message>
         <source>help text:</source>
-        <translation type="obsolete">texte d&apos;aide:</translation>
+        <translation type="obsolete">Hilfetext:</translation>
     </message>
     <message>
         <source>tooltip - shown when mouse moves over button</source>
-        <translation type="obsolete">tooltip - affich</translation>
+        <translation type="obsolete">Tooltip - wird angezeigt, wenn die Maus über die Taste geführt wird</translation>
     </message>
     <message>
         <source>Quiet</source>
-        <translation type="obsolete">Silencieux</translation>
+        <translation type="obsolete">Ruhig</translation>
     </message>
     <message>
         <source>toggles system messages</source>
-        <translation type="obsolete">Affichage des messages syst</translation>
+        <translation type="obsolete">Schaltet Systemmeldungen ein/aus (quiet)</translation>
     </message>
     <message>
         <source>If checked then you don&apos;t receive system messages, that means you are informed about connecting/disconnecting players, started/finished games etc.
@@ -4254,7 +4390,36 @@ Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q
 Note: some features cannot work if set to quiet (checked box):
 - sound when watched players enter/leave
 - update of player/gamestable</source>
-        <translation type="obsolete">Si coch</translation>
+        <translation type="obsolete">Falls ausgewählt, werden keine Systemmeldungen empfangen, das heißt, es erfolgt keine Information über ankommende/abgehende Spieler, startende/beendete Spiele, etc.
+
+Klicken auf diese Box ändert den Zustand. Der Zustand &apos;Ruhe&apos; wird auch durch ein &apos;Q&apos; (Quiet) in der Spielerliste vermerkt.
+
+Beachte: manche Funktionen funktionieren im Zusaten &apos;Ruhe&apos; nicht:
+
+- sound für ankommende/abgehende Spieler, die beobachtet werden sollen,
+- Richtigstellung von Spielerliste und Liste der Spiele</translation>
+    </message>
+    <message>
+        <source>click
+
+right:
+name -&gt; stats
+Rk -&gt; rating
+pl -&gt; results
+
+left:
+name -&gt; talk to
+Rk -&gt; match</source>
+        <translation type="obsolete">klicke
+
+rechte Maustaste:
+Name -&gt; stats
+Rg -&gt; rating
+sp -&gt; results
+
+linke Maustaste:
+Name -&gt; sprechen mit
+Rg -&gt; spielen gegen</translation>
     </message>
     <message>
         <source>1:</source>
@@ -4274,21 +4439,23 @@ Note: some features cannot work if set to quiet (checked box):
     </message>
     <message>
         <source>Connect with:</source>
-        <translation type="obsolete">Se connecter </translation>
+        <translation type="obsolete">Verbinden mit:</translation>
     </message>
     <message>
         <source>Toolbox</source>
-        <translation type="obsolete">Bo</translation>
+        <translation type="obsolete">Werkzeuge</translation>
     </message>
     <message>
         <source>use &apos;channel&apos; cmd to enter a channel</source>
-        <translation type="obsolete">employez la commande &apos;channel&apos;  pour entrer dans un canal</translation>
+        <translation type="obsolete">Befehl &apos;channel&apos; verwenden um einen Kanal zu betreten</translation>
     </message>
     <message>
         <source>channelinfo: see &apos;help channel&apos; to see how to enter/leave channel; if you are in you can see the number of players are in each channel; 
 
 right click for menu</source>
-        <translation type="obsolete">information sur le canal: voyez &apos;help channel&apos; pour voir comment pour entrer/sortir  d&apos;un canal; si vous </translation>
+        <translation type="obsolete">Kanalinformation: Zum Eintreten/Verlassen von Kanälen bitte &apos;help channel&apos; verwenden; einmal im Kanal drin zeigt die Übersicht die Kanalnummer und die Anzahl der Spieler in diesem Kanal;
+
+rechte Maustaste für Menü</translation>
     </message>
     <message>
         <source>If checked then you don&apos;t receive system messages, that means you are not informed about connecting/disconnecting players, started/finished games etc.
@@ -4298,15 +4465,22 @@ Clicking this checkbox toggles the mode. To be quiet is indicated with a &apos;Q
 Note: some features cannot work if set to quiet (checked box):
 - sound when watched players enter/leave
 - update of player/gamestable</source>
-        <translation type="obsolete">Si coch</translation>
+        <translation type="obsolete">Falls ausgewählt, werden keine Systemmeldungen empfangen, das heißt, es erfolgt keine Information über ankommende/abgehende Spieler, startende/beendete Spiele, etc.
+
+Klicken auf diese Box ändert den Zustand. Der Zustand &apos;Ruhe&apos; wird auch durch ein &apos;Q&apos; (Quiet) in der Spielerliste vermerkt.
+
+Beachte: manche Funktionen funktionieren im Zusaten &apos;Ruhe&apos; nicht:
+
+- sound für ankommende/abgehende Spieler, die beobachtet werden sollen,
+- Richtigstellung von Spielerliste und Liste der Spiele</translation>
     </message>
     <message>
         <source>Extended user info</source>
-        <translation type="obsolete">Information compl</translation>
+        <translation type="obsolete">Erweiterte Spielerinformation</translation>
     </message>
     <message>
         <source>see more information from users -&gt; slow!</source>
-        <translation type="obsolete">Voir plus d&apos;informations sur les utilisateurs -&gt; attention, c&apos;est lent !</translation>
+        <translation type="obsolete">mehr Information über den Spieler sehen -&gt; langsam!</translation>
     </message>
     <message>
         <source>If checked then additional information is requested from server.
@@ -4316,11 +4490,17 @@ Note: some features cannot work if set to quiet (checked box):
 Works slow!
 
 On IGS only.</source>
-        <translation type="obsolete">Si la case est coch</translation>
+        <translation type="obsolete">Falls gewählt werden zusätzliche Informationen vom Server angefordert.
+
+&apos;user&apos; Befehl statt &apos;who&apos;. Daher werden Infotext, Siege/Niederlagen, Land und Sprachsetzung verfügbar.
+
+Sehr langsamer Befehl!
+
+Funktioniert nur auf IGS.</translation>
     </message>
     <message>
         <source>Close application and save settings. The settings supersede the ones stored with &lt;ALT&gt;+&lt;0&gt;.</source>
-        <translation type="obsolete">Ferme le programme et enregistre les param</translation>
+        <translation type="obsolete">Anwendung schließen und Einstellungen speichern. Wurden Einstellungen mittels &lt;ALT&gt;+&lt;0&gt; gespeichert, werden sie überschrieben.</translation>
     </message>
     <message>
         <source>Command line
@@ -4330,21 +4510,21 @@ Type &lt;command&gt;+&lt;ENTER&gt; to send to Go server. If not online use &apos
 Starting with &apos;#&apos; is a internal command as if the server sent the line (without &apos;#&apos;).
 
 In order to open a window use the mouse click instead of entering the &apos;observe&apos; command.</source>
-        <translation type="obsolete">Linha de comando
+        <translation type="obsolete">Kommandozeile
 
-Digite &lt;comando&gt;+&lt;ENTER&gt; para enviar ao servidor Go. Se não estiver conectado use o botão &apos;conectar&apos; primeiro.
+&lt;Befehl&gt;+&lt;EINGABE&gt; sendet &apos;Befehl&apos; an den Go Server. Falls offline bitte zuerst &apos;verbinden&apos; Taste benutzen.
 
-Começar com &apos;#&apos; é um comando interno como se o servidor tivesse enviado a linha (sem &apos;#&apos;).
+Beginnt ein Befehl mit &apos;#&apos;, so wird dies als interner Befehl interpretiert, so als hätte der Go Server den Befehl (ohne #) gesendet.
 
-Para abrir uma janela use o clique de mause ao invés de entrar com o comando &apos;observar&apos;.</translation>
+Um ein Fenster zu öffnen bitte die Maus benutzen. Durch Eingabe von &apos;observe&apos; wird kein Fenster geöffnet.</translation>
     </message>
     <message>
         <source>Free button label</source>
-        <translation type="obsolete">Texte de bouton libre</translation>
+        <translation type="obsolete">Freie Tastenbeschriftung</translation>
     </message>
     <message>
         <source>Go server command: e.g. &apos;stats&apos;</source>
-        <translation type="obsolete">commande du serveur go: par exemple &apos;stats&apos;</translation>
+        <translation type="obsolete">Go Server Kommando: z.B. stats</translation>
     </message>
     <message>
         <source>add players you want to
@@ -4352,13 +4532,13 @@ Para abrir uma janela use o clique de mause ao invés de entrar com o comando &a
 - see red coloured and
 - hear sound if entering/leaving.
 
-Use semicolon &apos;;&apos; as delimiter (no spaces)</source>
-        <translation type="obsolete">marque les joueurs que vous voulez :
+Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spielertabelle und Spieletabelle
 
-- voir en rouge 
-- entrendre lorsqu&apos;ils entrent/partent
+- rot eingefärbt und 
+- beim Eintreten/Verlassen des Servers ist für solche Spiele ein Ton zu hören.
 
-Employez le point-virgule &apos;;&apos; comme d</translation>
+Als Trennzeichen zwischen den Spielern &quot;;&quot; benutzen (keine Leerzeichen!)</translation>
     </message>
     <message>
         <source>add players you want to
@@ -4366,23 +4546,25 @@ Employez le point-virgule &apos;;&apos; comme d</translation>
 - see green coloured and
 - exclude from shouting.
 
-Use semicolon &apos;;&apos; as delimiter (no spaces)</source>
-        <translation type="obsolete">marque les joueurs que vous voulez :
+Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spielertabelle und Spieletabelle
 
-- voir en vert
-- filtrer du &apos;shout&apos;
+- grün eingefärbt und 
+- für shouts (Ausrufe an alle Spieler) ausgeschlossen!
 
-Employez le point-virgule &apos;;&apos; comme d</translation>
+Als Trennzeichen zwischen den Spielern &quot;;&quot; benutzen (keine Leerzeichen!)</translation>
     </message>
     <message>
         <source>Open a local Board</source>
-        <translation type="obsolete">Ouvre un plateau en local</translation>
+        <translation type="obsolete">Ein lokales Brett öffnen</translation>
     </message>
     <message>
         <source>Open a local board to play or replay a game.
 
 If you want to play simultaneously to an online game use &apos;edit&apos; button at the online game&apos;s board instead.</source>
-        <translation type="obsolete">Ouvre un plateau en local pour jouer ou r</translation>
+        <translation type="obsolete">Ein lokales Brett öffnen um Partien zu spielen bzw. nachzuspielen.
+
+Um eine online Partie simultan mitspielen zu können sollte die &apos;editieren&apos; Taste auf dem Fenster des jeweiligen Spiels benutzt werden.</translation>
     </message>
     <message>
         <source>If checked then additional information is requested from server.
@@ -4392,118 +4574,94 @@ If you want to play simultaneously to an online game use &apos;edit&apos; button
 Works slow! User &apos;Refresh players&apos; after changing.
 
 On IGS only.</source>
-        <translation type="obsolete">Si la case est coch</translation>
+        <translation type="obsolete">Falls gewählt werden zusätzliche Informationen vom Server angefordert.
+
+&apos;user&apos; Befehl statt &apos;who&apos;. Daher werden Infotext, Siege/Niederlagen, Land und Sprachsetzung verfügbar.
+
+Sehr langsamer Befehl!
+
+Funktioniert nur auf IGS.</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation type="obsolete">&amp;Pr</translation>
+        <translation type="obsolete">&amp;Einstellungen</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation type="obsolete">Edite les pr</translation>
+        <translation type="obsolete">Einstellungen ändern</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation type="obsolete">Pr</translation>
+        <translation type="obsolete">Einstellungen
+
+Einstellungen ändern.</translation>
     </message>
     <message>
         <source>local 19x19</source>
-        <translation type="obsolete">local 19x19</translation>
+        <translation type="obsolete">lokal 19x19</translation>
     </message>
     <message>
         <source>Bytes in:</source>
-        <translation type="obsolete">Octets entrants :</translation>
+        <translation type="obsolete">Bytes ein:</translation>
     </message>
     <message>
         <source>Bytes out:</source>
-        <translation type="obsolete">Octets sortants :</translation>
-    </message>
-    <message>
-        <source>add players you want to
-
-- see red coloured and
-- hear sound if entering/leaving.
-
-Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
-        <translation type="obsolete">ajouter les joueurs que vous voulez 
-
-- voir color</translation>
-    </message>
-    <message>
-        <source>add players you want to
-
-- see green coloured and
-- exclude from shouting.
-
-Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
-        <translation type="obsolete">ajouter les joueurs que vous voulez </translation>
+        <translation type="obsolete">Bytes aus:</translation>
     </message>
 </context>
 <context>
     <name>MainTable</name>
     <message>
         <source>right click to observe</source>
-        <translation type="obsolete">click droit pour observer</translation>
+        <translation type="obsolete">rechts klicken zum Anschauen</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation type="obsolete">Partidas</translation>
+        <translation type="obsolete">Spiele</translation>
     </message>
     <message>
         <source>relevant messages from/to server</source>
-        <translation type="obsolete">mensagens relevantes de/para o servidor</translation>
+        <translation type="obsolete">relevante Meldungen zum oder vom Server</translation>
+    </message>
+    <message>
+        <source>click
+
+right:
+name -&gt; stats
+Rk -&gt; rating
+pl -&gt; results
+
+left:
+name -&gt; talk to
+Rk -&gt; match</source>
+        <translation type="obsolete">klicke
+
+rechte Maustaste:
+Name -&gt; stats
+Rg -&gt; rating
+sp -&gt; results
+
+linke Maustaste:
+Name -&gt; sprechen mit
+Rg -&gt; spielen gegen</translation>
+    </message>
+    <message>
+        <source>Shouts</source>
+        <translation type="obsolete">Rufe</translation>
     </message>
     <message>
         <source>msg*</source>
-        <translation type="obsolete">msg*</translation>
+        <translation type="obsolete">info*</translation>
     </message>
     <message>
         <source>right click for menu</source>
-        <translation type="obsolete">click droit pour menu</translation>
+        <translation type="obsolete">rechts klicken für Menü</translation>
     </message>
     <message>
         <source>Hide all talk tabs</source>
-        <translation type="obsolete">cachez toutes les </translation>
-    </message>
-    <message>
-        <source>number of observers at last refresh
-
-This table can be updated by &apos;Refresh games&apos;</source>
-        <translation type="obsolete">número de observadores na última atualização
-
-Esta tabela pode ser atualizada por &apos; Atualizar jogos&apos;</translation>
-    </message>
-    <message>
-        <source>same as watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown
-
-use &apos;Refresh players&apos; after changing exclude/watch list (even if manually changed)</source>
-        <translation type="obsolete">ajoute/enl</translation>
-    </message>
-    <message>
-        <source>Log online-time and name of arriving message</source>
-        <translation type="obsolete">Registrar o tempo e o nome das mensagens que chegam</translation>
-    </message>
-    <message>
-        <source>Hide all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation type="obsolete">cache toutes les </translation>
-    </message>
-    <message>
-        <source>similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation type="obsolete">similar a assistir - faz uma entrada &apos;X&apos;; os gritos do usuário não mais são mostrados</translation>
-    </message>
-    <message>
-        <source>Players</source>
-        <translation type="obsolete">Jogadores</translation>
-    </message>
-    <message>
-        <source>Close all talk tabs</source>
-        <translation type="obsolete">Fechar todas as abas de conversa</translation>
-    </message>
-    <message>
-        <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
-        <translation type="obsolete">Fechar todas as abas contendo um nome de jogador (sem &apos;*&apos;). As mensagesns não serão apagadas. Se você quiser as mostrar novamente, clique à direita sobre o nome do jogador e escolha conversar (o mesmo que &apos;#24 *name*&apos;)</translation>
+        <translation type="obsolete">Griffe der Gesprächsfenster verstecken</translation>
     </message>
     <message>
         <source>Table of games
@@ -4523,23 +4681,269 @@ FR	free (FI), rated (I) or teach (TI) game
 (Ob)	number of observers at last refresh
 
 This table can be updated by &apos;Refresh games&apos;</source>
-        <translation type="obsolete">Tabela de jogos
+        <translation type="obsolete">Liste der Spiele
 
-clique com o botão à direita para observar
+Rechtsklick zum Zuschauen
 
-Expliação sobre símbolos: (clique na aba para ordenar por)
-Id	número do jogo
-Branco/CB	nome e colocação do jogador branco
-Preto/CP		nome e colocação do jogador preto
-Jg	número de jogadas na última atualização
-Tm	tamanho do tabuleiro
-V	vantagens
-K	komi
-By	tempo byoyomi
-LC	jogo livre (FI), classificado (l) ou didático (Tl)
-Ob	número de observadores na última atualização
+Zeichenerklärung: (zum Sortieren auf den Titel klicken)
+Id		Spielnummer
+Weiß/WR		Name und Rang des weißen Spielers
+Schwarz/SR	Name und Rang des schwarzen Spielers
+Zg		Anzahl der Züge bei letzter Aktualisierung
+Gr		Brettgröße
+H		Vorgabe (Handicap)
+K		Komi
+By		Byoyomi-Periodendauer
+FR		frei (FI), gewertet (I) oder Lektion (TI)
+(Zu)		Zuschauer bei letzter Aktualisierung
 
-Esta tabela pode ser atualizada por &apos;Atualizar jogos&apos;</translation>
+Diese Liste kann mit der Taste &apos;Liste der Spiele&apos; aktualisiert werden</translation>
+    </message>
+    <message>
+        <source>Table of players
+
+right click for menu
+
+Symbol explanation: (click on tab to sort by)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info: M..me, X..excluded from shout, W..watched (sort: X entries, then Rk)
+
+or, if extended user info (Toolbox) is active (IGS only):
+Info [Won/Lost] Idle (Country/Language)	I could make a more cute table if someone is interesed in -&gt; send mail
+
+This table can be updated by &apos;Refresh players&apos;
+
+Menu entries (right click):
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
+----
+status	show player&apos;s stats
+stored games	show stored games
+results	show results
+rating	show rating (NNGS only)
+----
+toggle watch list	put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	same as watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown
+
+use &apos;Refresh players&apos; after changing exclude/watch list (even if manually changed)</source>
+        <translation type="obsolete">Spielerliste
+
+rechts klicken für Menü
+
+Zeichenerklärung: (zum Sortieren auf Titel klicken)
+Stat	Status:
+	X...nicht offen
+	!...möchte spielen (looking)
+	Q...empfängt keine Systemmeldungen (quiet)
+	S...empfängt keine Rufe (shouts)
+	??...unbkannt - Spieler ist nach dem letzten Update angekommen
+Name	Spielername
+Rg	Rang
+sp	spielend in Spiel Nummer ... (nur ein Spiel sichtbar)
+ob	sieht zu in Spiel Nummer ... (nur ein Spiel sichtbar)
+Still	Zeit seit der letzten Aktivität
+X	privater Eintrag: M..selbst, X..exkludiert, W..beobachtet (sort: X Einträge, danach Rg)
+
+oder, falls erweiterte Spielerinformation  aktiv (Werzeuge, nur IGS):
+Info [Siege/Niederlagen]  Still  (Land/Sprache)	Diese Einträge könnte ich etwas schöner gestalten, falls Interesse besteht -&gt; mail senden
+
+Diese Liste kann mit der Taste &apos;Spielerliste&apos; erneuert werden
+
+Menüeinträge (rechts klicken):
+spielen		zum Spielen auffordern (Dialog erscheint)
+sprechen	mit Spieler sprechen (Griff erscheint)
+----
+Status			zeige Spielerstatus
+unbeendete Spiele	zeige gespeicherte Spiele am Server
+Ergebnisse		zeige Ergebnisse
+Einschätzung		zeige Spielstärke (nur NNGS)
+----
+in/aus Watchliste	Spieler in/aus Watchliste: erzeugt &apos;W&apos; Eintrag in &apos;X&apos; Spalte; Klang für Spieler beim Eintreten/Verlassen aktivieren
+in/aus Ausschlußliste	Spieler in/aus Ausschlußliste: erzeugt &apos;X&apos; Eintrag; Rufe (shouts) des Spielers werden überdies ignoriert
+
+Nach Änderungen der Watchliste oder Ausschlußliste Taste &apos;Spielerliste&apos; benutzen (selbst wenn die Änderungen manuell vorgenommen worden sind)</translation>
+    </message>
+    <message>
+        <source>Log online-time and name of arriving message</source>
+        <translation type="obsolete">Protokolliere Online-Zeit und Name bei eingehender Nachricht</translation>
+    </message>
+    <message>
+        <source>Hide all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again use right mouse menu over player&apos;s name (same as &apos;#24 *name*&apos;)</source>
+        <translation type="obsolete">Alle Griffe mit Spielernamen (ohne &apos;*&apos;) verstecken. Die Nachrichten werden dabei nicht gelöscht. Falls eine Nachricht wiedergeholt werden soll, einfach mit rechter Maustaste auf den Spieler klicken und sprechen wählen (identisch mit &apos;#24 *name*)</translation>
+    </message>
+    <message>
+        <source>Hide all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
+        <translation type="obsolete">Alle Griffe mit Spielernamen (ohne &apos;*&apos;) verstecken. Die Nachrichten werden dabei nicht gelöscht. Falls eine Nachricht wiedergeholt werden soll, einfach mit rechter Maustaste auf den Spieler klicken und sprechen wählen (identisch mit &apos;#24 *name*)</translation>
+    </message>
+    <message>
+        <source>Table of players
+
+right click for menu
+
+Symbol explanation: (click on tab to sort by)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
+and, if extended user info (Toolbox) is active (IGS only):
+Info	user&apos;s info string
+Won	number of games won by user
+Lost	number of games lost by user
+Country	origin of user (from e-mail address)
+Lang	preferred language
+
+This table can be updated by &apos;Refresh players&apos;
+
+Menu entries (right click):
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
+----
+status	show player&apos;s stats
+stored games	show stored games
+results	show results
+rating	show rating (NNGS/IGS only)
+----
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+        <translation type="obsolete">Spielerliste
+
+rechts klicken für Menü
+
+Zeichenerklärung: (zum Sortieren auf Titel klicken)
+Stat	Status:
+	X...nicht offen
+	!...möchte spielen (looking)
+	Q...empfängt keine Systemmeldungen (quiet)
+	S...empfängt keine Rufe (shouts)
+	??...unbkannt - Spieler ist nach dem letzten Update angekommen
+Name	Spielername
+Rg	Rang
+sp	spielend in Spiel Nummer ... (nur ein Spiel sichtbar)
+ob	sieht zu in Spiel Nummer ... (nur ein Spiel sichtbar)
+Still	Zeit seit der letzten Aktivität
+X	privater Eintrag: M..selbst, X..exkludiert, W..beobachtet (sort: X Einträge, danach Rg)
+
+oder, falls erweiterte Spielerinformation aktiv (Werzeuge, nur IGS):
+Info	Benuterinfo
+Siege/Niederlagen
+Land	aus der e-mail Adresse
+Sprache	bevorzugte Sprache
+
+Diese Liste kann mit der Taste &apos;Spielerliste&apos; erneuert werden
+
+Menüeinträge (rechts klicken):
+spielen		zum Spielen auffordern (Dialog erscheint)
+sprechen	mit Spieler sprechen (Griff erscheint)
+----
+Status			zeige Spielerstatus
+unbeendete Spiele	zeige gespeicherte Spiele am Server
+Ergebnisse		zeige Ergebnisse
+Einschätzung		zeige Spielstärke (nur NNGS)
+----
+in/aus Watchliste	Spieler in/aus Watchliste: erzeugt &apos;W&apos; Eintrag in &apos;X&apos; Spalte; Klang für Spieler beim Eintreten/Verlassen aktivieren
+in/aus Ausschlußliste	Spieler in/aus Ausschlußliste: erzeugt &apos;X&apos; Eintrag; Rufe (shouts) des Spielers werden überdies ignoriert</translation>
+    </message>
+    <message>
+        <source>Table of players
+
+right click for menu
+
+Symbol explanation: (click on tab to sort by)
+Stat	player&apos;s stats:
+	X...close
+	!...looking = wants to play a game
+	Q...quiet = doesn&apos;t receive system messages
+	S...shout = can&apos;t receive shouts
+	??...unknown - player entered after last table update
+name	player&apos;s name
+Rk	player&apos;s rank
+pl	playing game (only one game visible)
+ob	observing game (only one game visible)
+Idle	idle time
+X	private info:
+	M..me
+	X..excluded from shout
+	W..watched (sort: X entries, then Rk)
+and, if extended player info (Toolbox) is active (IGS only):
+Info	player&apos;s info string
+Won	number of games won by player
+Lost	number of games lost by player
+Country	origin of player (from e-mail address)
+Lang	preferred language
+
+This table can be updated by &apos;Refresh players&apos;
+
+Menu entries (right click):
+match	request for match (dialog arises)
+talk	talk to player (tab arises)
+----
+status		show player&apos;s stats
+stored games	show stored games
+results		show results
+rating		show rating (NNGS/IGS only)
+observe game	show game currently played by player
+----
+toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
+toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
+        <translation type="obsolete">Spielerliste
+
+rechts klicken für Menü
+
+Zeichenerklärung: (zum Sortieren auf Titel klicken)
+Stat	Status:
+	X...nicht offen
+	!...möchte spielen (looking)
+	Q...empfängt keine Systemmeldungen (quiet)
+	S...empfängt keine Rufe (shouts)
+	??...unbkannt - Spieler ist nach dem letzten Update angekommen
+Name	Spielername
+Rg	Rang
+sp	spielend in Spiel Nummer ... (nur ein Spiel sichtbar)
+ob	sieht zu in Spiel Nummer ... (nur ein Spiel sichtbar)
+Still	Zeit seit der letzten Aktivität
+X	privater Eintrag: M..selbst, X..exkludiert, W..beobachtet (sort: X Einträge, danach Rg)
+
+oder, falls erweiterte Spielerinformation aktiv (Werzeuge, nur IGS):
+Info	Benuterinfo
+Siege/Niederlagen
+Land	aus der e-mail Adresse
+Sprache	bevorzugte Sprache
+
+Diese Liste kann mit der Taste &apos;Spielerliste&apos; erneuert werden
+
+Menüeinträge (rechts klicken):
+spielen		zum Spielen auffordern (Dialog erscheint)
+sprechen	mit Spieler sprechen (Griff erscheint)
+----
+Status			zeige Spielerstatus
+unbeendete Spiele	zeige gespeicherte Spiele am Server
+Ergebnisse		zeige Ergebnisse
+Einschätzung		zeige Spielstärke (nur NNGS)
+Spiel zuschauen		aktelles Spiel zuschauen
+----
+in/aus Watchliste	Spieler in/aus Watchliste: erzeugt &apos;W&apos; Eintrag in &apos;X&apos; Spalte; Klang für Spieler beim Eintreten/Verlassen aktivieren
+in/aus Ausschlußliste	Spieler in/aus Ausschlußliste: erzeugt &apos;X&apos; Eintrag; Rufe (shouts) des Spielers werden überdies ignoriert</translation>
     </message>
     <message>
         <source>Table of players
@@ -4583,103 +4987,114 @@ observe game	show game currently played by player
 ----
 toggle watch list		put/remove player to/from watch list - make &apos;W&apos; entry at &apos;X&apos; column; entry/leave sounds are activated
 toggle exclude list	similar to watch - make &apos;X&apos; entry; player&apos;s shouts are no longer shown</source>
-        <translation type="obsolete">Tabela de jogadores
+        <translation type="obsolete">Spielerliste
 
-clique com o botão à direita para ver o menu
+Rechtsklick für Menü
 
-Explicação sobre os símbolos: (clique na aba para ordenar por)
+Zeichenerklärung: (zum Sortieren auf den Titel klicken)
+Stat	Status:
+	X ... nicht offen
+	! ... möchte spielen (looking)
+	Q ... empfängt keine Systemmeldungen (quiet)
+	S ... empfängt keine Rufe (shouts)
+	?? ... unbkannt - Spieler kam nach letzter Aktualisierung
+Name	Spielername
+Rg	Rang
+sp	spielend in Spiel Nummer ... (nur ein Spiel sichtbar)
+ob	sieht zu in Spiel Nummer ... (nur ein Spiel sichtbar)
+Still	Zeit seit der letzten Aktivität
+X	privater Eintrag:
+	M ... selbst
+	X ... exkludiert
+	W ... beobachtet (sortieren: X Einträge, danach Rg)
+und, falls erweiterte Spielerinformation aktiv (Werzeuge, nur IGS):
+Info		Info des Spielers
+Siege		Anzahl der gewonnenen Spiele
+Niederlagen	Anzahl der verlorenen Spiele
+Land		Herkunft (der E-Mail-Adresse)
+Sprache		bevorzugte Sprache des Spielers
 
-Est	estatísticas sobre o jogador
-	X...fechar
-	!...procurando = quer iniciar uma partida
-	Q...quieto = não recebe mensagens do sistema
-	S...gritos = não pode receber gritos
-	??...desconhecido = jogador que entrou após a última atualização da tabela
-nome	nome do jogador
-Cl	classificação do jogador
-jg	jogo em andamento (somente um jogo visível)
-ob	jogo em observação (somente um jogo visível)
-Inat	tempo inativo
-X	informação privada:
-	M..mim
-	X..excluído dos gritos
-	W..observado (ordenação: entradas X, e então Cl)
-e, se as informações extendidas (Ferramentas) estiverem ativas (só IGS):
-Info	informações sobre o jogador
-Ganhou	número de partidas vencidas pelo jogador
-Perdeu	número de partidas perdidas pelo jogador
-País	origem do jogador (do endereço de emeil)
-Idioma	idioma preferido
+Diese Liste kann mit der Taste &apos;Spielerliste&apos; aktualisiert werden
 
-Esta tabela pode ser atualizada por &apos;Atualizar jogadores&apos;
-
-Entradas de menu (clique à direita):
-partida		requisitar uma partida (surge uma janela de diálogo)
-conversar	conversar com jogador (surge uma aba)
+Menüeinträge (rechts klicken):
+spielen		zum Spielen auffordern (Dialog erscheint)
+sprechen		mit dem Spieler sprechen (Reiter erscheint)
 ----
-estatísticas	mostra as estatísticas do jogador
-jogos salvos	mostra os jogos que foram salvos
-resultados	mostra os resultados
-classificação	mostra a classificação (só NNGS/IGS)
-observar jogo	mostra o jogo em andamento para o jogador
+Stats		zeige Spielerstatus
+unbeendete Spiele	zeige gespeicherte Spiele am Server
+Ergebnisse	zeige Ergebnisse
+Einschätzung	zeige Spielstärke (nur NNGS)
+Spiel zuschauen	bei laufender Partie zuschauen
 ----
-alternar lista de observação		insere/remove o jogador na/da lista de observação - faz uma entrada &apos;W&apos; na coluna &apos;X&apos;; sons de entrada/saída são ativados
-alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&apos;; os gritos do jogador não mais são mostrados</translation>
+in/aus Beobachtungsliste	Spieler in/aus Beobachtungsliste: erzeugt Eintrag &apos;W&apos; in Spalte &apos;X&apos;; Klang beim Eintreten/Verlassen aktivieren
+in/aus Ausschlußliste	Spieler in/aus Ausschlußliste: erzeugt Eintrag &apos;X&apos;; Rufe (shouts) des Spielers werden ignoriert</translation>
+    </message>
+    <message>
+        <source>Players</source>
+        <translation type="obsolete">Spieler</translation>
+    </message>
+    <message>
+        <source>Close all talk tabs</source>
+        <translation type="obsolete">Alle Reiter der Gesprächsfenser verbergen</translation>
+    </message>
+    <message>
+        <source>Close all tabs containing a player&apos;s name (without &apos;*&apos;). The messages will not be deleted. If you want to see it again click with right button on player&apos;s name and choose talk (same as &apos;#24 *name*&apos;)</source>
+        <translation type="obsolete">Verbirgt alle Reiter der Gesprächsfenster, die einen Spielernamen (ohne &apos;*&apos;) enthalten, um Platz zu schaffen. Die Dialoge werden nicht gelöscht und können durch Rechtsklick auf den Spielernamen und Wahl von &apos;sprechen&apos; wieder angezeigt werden (gleichwertig: &apos;#24 *name*&apos;)</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
         <source>Points</source>
-        <translation type="obsolete">Points</translation>
+        <translation type="obsolete">Punkte</translation>
     </message>
     <message>
         <source>Captures</source>
-        <translation type="obsolete">Prisonners</translation>
+        <translation type="obsolete">Gefangene</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="obsolete">Feito</translation>
+        <translation type="obsolete">Fertig</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
     </message>
     <message>
         <source>Black to play</source>
-        <translation type="obsolete">A noir de jouer</translation>
+        <translation type="obsolete">Schwarz am Zug</translation>
     </message>
     <message>
         <source>White to play</source>
-        <translation type="obsolete">A blanc de jouer</translation>
+        <translation type="obsolete">Weiß am Zug</translation>
     </message>
     <message>
         <source>brother</source>
-        <translation type="obsolete">variante</translation>
+        <translation type="obsolete">Bruder</translation>
     </message>
     <message>
         <source>brothers</source>
-        <translation type="obsolete">variantes</translation>
+        <translation type="obsolete">Brüder</translation>
     </message>
     <message>
         <source>son</source>
-        <translation type="obsolete">branche</translation>
+        <translation type="obsolete">Sohn</translation>
     </message>
     <message>
         <source>sons</source>
-        <translation type="obsolete">branches</translation>
+        <translation type="obsolete">Söhne</translation>
     </message>
     <message>
         <source>W</source>
-        <translation type="obsolete">B</translation>
+        <translation type="obsolete">W</translation>
     </message>
     <message>
         <source>B</source>
-        <translation type="obsolete">N</translation>
+        <translation type="obsolete">S</translation>
     </message>
     <message>
         <source>Move</source>
-        <translation type="obsolete">Coup</translation>
+        <translation type="obsolete">Zug</translation>
     </message>
     <message>
         <source>N</source>
@@ -4695,23 +5110,19 @@ alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&a
     </message>
     <message>
         <source>P</source>
-        <translation type="obsolete">J</translation>
+        <translation type="obsolete">S</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="obsolete">R</translation>
+        <translation type="obsolete">L</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation type="obsolete">Score</translation>
+        <translation type="obsolete">Ergebnis</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="obsolete">Editar</translation>
-    </message>
-    <message>
-        <source>textedit</source>
-        <translation type="obsolete">textedit</translation>
+        <translation type="obsolete">Editieren</translation>
     </message>
     <message>
         <source>N</source>
@@ -4731,12 +5142,12 @@ alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&a
     <message>
         <source>P</source>
         <comment>Board status line: play mode</comment>
-        <translation type="obsolete">J</translation>
+        <translation type="obsolete">S</translation>
     </message>
     <message>
         <source>T</source>
         <comment>Board status line: teach mode</comment>
-        <translation type="obsolete">R</translation>
+        <translation type="obsolete">L</translation>
     </message>
 </context>
 <context>
@@ -4747,69 +5158,69 @@ alternar lista de exclusão		similar à observação - faz uma entrada &apos;X&a
     </message>
     <message>
         <source>Move 0</source>
-        <translation type="obsolete">Jogada 0</translation>
+        <translation type="obsolete">Zug 0</translation>
     </message>
     <message>
         <source>Move number</source>
-        <translation type="obsolete">Número da jogada</translation>
+        <translation type="obsolete">Zug Nummer</translation>
     </message>
     <message>
         <source>Move number
 
 Number of the currently displayed move.</source>
-        <translation type="obsolete">Número da jogada
+        <translation type="obsolete">Zug Nummer
 
-Número da jogada mostrada atualmente.</translation>
+Nummer des aktuell angezeigten Zuges.</translation>
     </message>
     <message>
         <source>Black to play</source>
-        <translation type="obsolete">Preto a jogar</translation>
+        <translation type="obsolete">Schwarz am Zug</translation>
     </message>
     <message>
         <source>Player to play</source>
-        <translation type="obsolete">Jogador a jogar</translation>
+        <translation type="obsolete">Spieler am Zug</translation>
     </message>
     <message>
         <source>Player to play
 
 Indicates wether it is black&apos;s or white&apos;s turn.</source>
-        <translation type="obsolete">Jogador a jogar
+        <translation type="obsolete">Spieler am Zug
 
-Indica se é a vez do preto ou do branco.</translation>
+Zeigt an, ob Schwarz oder Weiß am Zug ist.</translation>
     </message>
     <message>
         <source>0 brothers
 0 sons</source>
-        <translation type="obsolete">0 variações
-0 derivações</translation>
+        <translation type="obsolete">0 Brüder
+0 Söhne</translation>
     </message>
     <message>
         <source>Variations</source>
-        <translation type="obsolete">Variações</translation>
+        <translation type="obsolete">Variationen</translation>
     </message>
     <message>
         <source>Variations
 
 Shows the number of sons and brothers within the current node.</source>
-        <translation type="obsolete">Variações
+        <translation type="obsolete">Variationen
 
-Mostra o número de derivações e variações dentro do nó atual.</translation>
+Zeigt die Anzahl der Söhne und Brüder des aktuellen Knotens.</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
     </message>
     <message>
         <source>Pass
 
 Pass your turn.</source>
-        <translation type="obsolete">Passar
+        <translation type="obsolete">Passen
 
-Passar sua vez.</translation>
+Zug passen.</translation>
     </message>
     <message>
         <source>Score</source>
-        <translation type="obsolete">Pontuação</translation>
+        <translation type="obsolete">Zählen</translation>
     </message>
     <message>
         <source>Score
@@ -4817,26 +5228,29 @@ Passar sua vez.</translation>
 Left click on a group to mark it as dead.
 Right click on a group to mark it alive in seki.
 Click a second time on a group to unmark it as dead or seki.</source>
-        <translation type="obsolete">Score
+        <translation type="obsolete">Ergebnis
 
-Un click gauche sur un groupe le marque comme mort.
-Un click droit sur un groupe le marque comme Seki.
-Un second click sur un groupe enl</translation>
+Klick links auf eine Gruppe markiert diese als tot.
+Klick rechts auf eine Gruppe markiert diese als lebending in Seki.
+Nochmaliger Klick auf eine Gruppe entfernt die Markierung als tot oder Seki.</translation>
     </message>
     <message>
         <source>Edit mode</source>
-        <translation type="obsolete">Mode </translation>
+        <translation type="obsolete">Bearbeiten</translation>
     </message>
     <message>
         <source>Switch to edit mode (Ctrl+E)</source>
-        <translation type="obsolete">Passer en mode </translation>
+        <translation type="obsolete">Zum Bearbeiten Modus umschalten (Ctrl+E)</translation>
     </message>
     <message>
         <source>Switch to edit mode
 
 Toggle from normal mode to edit mode, or vice versa.
 &apos;Ctrl+E&apos; can be used as keyboard shortcut.</source>
-        <translation type="obsolete">Passer en mode </translation>
+        <translation type="obsolete">Zum Bearbeiten Modus umschalten
+
+Schaltet um vom normalen Modus in den Bearbeiten Modus, oder umgekehrt.
+&apos;Ctrl+E&apos; kann als Tastaturkürzel verwendet werden.</translation>
     </message>
     <message>
         <source>Click on the board to place a stone.
@@ -4847,14 +5261,14 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation type="obsolete">Clique sobre o tabuleiro para colocar uma pedra.
+        <translation type="obsolete">Ein Klick auf das Brett spielt einen Stein.
 
-Em modo normal, o clique à esquerda faz jogadas alternando as cores.
-&apos;Shift&apos; + clique à esquerda move para a primeira jogada dentro do braço principal.
-&apos;Shift&apos; + clique à direita move para a próxima jogada dentro do braço atual.
-Quando no modo de edição, editando pedras, um clique à esquerda posiciona o preto, um clique à direita posiciona o branco e um clique sobre uma pedra já existente remove-a.
-Quando editando marcas, os cliques à esquerda as definem e os à direita as removem. Quando editando marcas literais, um &apos;shift&apos; + clique permite ajustar o texto delas.
-Quando no modo de pontuação, um clique à esquerda marca um grupo como morto e um clique à direita o marca como sobrevivente no Seki. Clique de novo para o desmarcar como morto ou Seki.</translation>
+Im normalen Modus spielt ein Linksklick einen Zug mit abwechselnden Farben.
+Umschalttaste + Linksklick geht zum ersten Zug in der Hauptvariation.
+Umschalttaste + Rechtsklick geht zum nächsten Zug in der aktuellen Variation.
+Im Bearbeitenmodus beim Editieren von Steinen setzt ein Linksklick einen schwarzen, ein Rechtsklick einen weißen Stein. Ein Klick auf einen Stein entfernt diesen.
+Beim Bearbeiten von Markierungen setzt ein Linksklick eine Markierung, ein Rechtsklick löscht diese. Beim Bearbeiten von Buchstaben erlaubt Umschalttaste + Klick die Eingabe eines freien Textes.
+Beim Berechnen des Ergebnisses markiert ein Linksklick eine Gruppe als tot, ein Rechtsklick eine Gruppe als lebend in Seki. Ein erneuter Klick auf eine Gruppe entfernt die vorherige Markierung.</translation>
     </message>
     <message>
         <source>0</source>
@@ -4864,9 +5278,9 @@ Quando no modo de pontuação, um clique à esquerda marca um grupo como morto e
         <source>Slider min value
 
 Minimum game move the slider can currently show.</source>
-        <translation type="obsolete">Valor mínimo da barra deslizante
+        <translation type="obsolete">Schieber Min Wert
 
-A menor jogada da partida que a barra pode mostrar agora.</translation>
+Kleinster vom Schieber momentan anzeigbarer Spielzug.</translation>
     </message>
     <message>
         <source>10</source>
@@ -4876,45 +5290,45 @@ A menor jogada da partida que a barra pode mostrar agora.</translation>
         <source>Slider max value
 
 Maximum game move the slider can currently show.</source>
-        <translation type="obsolete">Valor máximo da barra deslizante
+        <translation type="obsolete">Schieber Max Wert
 
-A maior jogada da partida que a barra pode mostrar agora.</translation>
+Größter vom Schieber momentan anzeigbarer Spielzug.</translation>
     </message>
     <message>
         <source>Navigate to move
 
 Use the slider to quickly navigate through the current branch of the game.</source>
-        <translation type="obsolete">Navegar para a jogada
+        <translation type="obsolete">Gehe zu Zug
 
-Utilize a barra deslizante para se mover rapidamente através do braço atual da partida.</translation>
+Benutzen Sie den Schieber, um schnell durch die aktuelle Variation zu gehen.</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="obsolete">Desfazer</translation>
+        <translation type="obsolete">Zurück</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="obsolete">Atualizar</translation>
+        <translation type="obsolete">Aktualisieren</translation>
     </message>
     <message>
         <source>Adjourn</source>
-        <translation type="obsolete">Adiar</translation>
+        <translation type="obsolete">Vertagen</translation>
     </message>
     <message>
         <source>Request Adjourn</source>
-        <translation type="obsolete">Demander un ajournement</translation>
+        <translation type="obsolete">Geger um Unterbrechung/Vertagung bitten</translation>
     </message>
     <message>
         <source>RESIGN</source>
-        <translation type="obsolete">DESISTIR</translation>
+        <translation type="obsolete">Aufgeben</translation>
     </message>
     <message>
         <source>Default Loss</source>
-        <translation type="obsolete">Perda da partida</translation>
+        <translation type="obsolete">sofortige Niederlage (resign)</translation>
     </message>
     <message>
         <source>Score/Edit</source>
-        <translation type="obsolete">Pontuação/Editar</translation>
+        <translation type="obsolete">Auszählen/Editieren</translation>
     </message>
     <message>
         <source>Score
@@ -4926,71 +5340,90 @@ Click a second time on a group to unmark it as dead or seki.
 Edit
 
 Click to get a new, editable offline window.</source>
-        <translation type="obsolete">Pontuação
+        <translation type="obsolete">Auszählen
 
-Clique à direita sobre um grupo para o marcar como morto.
-Clique à direita sobre um grupo para o marcar como sobrevivente no Seki.
-Clique uma segunda vez sobre um grupo para o desmarcar como morto ou Seki.
+Klick links auf eine Gruppe markiert diese als tot.
+Klick rechts auf eine Gruppe markiert diese als lebending in Seki.
+Nochmaliger Klick auf eine Gruppe entfernt die Markierung als tot oder Seki.
 
-Editar
 
-Clique para obter uma nova janela desconectada que pode ser editada.</translation>
+Editieren
+
+Klick öffnet ein neues, editierbares Brett zur offline-Bearbeitung.</translation>
     </message>
     <message>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation type="obsolete">Desfazer
+        <translation type="obsolete">Rücknahme (undo)
 
-Desfazer a última jogada do oponente.</translation>
+Nimmt den letzten Zug des Gegners zurück.</translation>
+    </message>
+    <message>
+        <source>Refresh
+
+Refresh board.
+If title is &apos;White vs. black&apos; without stones on the board, then try &apos;Refresh Games&apos; on the client window first.</source>
+        <translation type="obsolete">Auffrischen
+
+Auffrischen des Bretts.
+Falls im Titel &apos;Weiß vs. Schwarz&apos; steht und keine Steine zu sehen sind, sollte &apos;Spielerliste&apos; im Hauptfenster zuerst gedrückt werden.</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation type="obsolete">Adiar
+        <translation type="obsolete">Unterbrechen. (adjourn)
 
-Envie uma requisição de adiamento para seu oponente. Se ele a aceitar, a partida será adiada e salva.</translation>
+Sendet eine Unterbrechungsaufforderung an den Gegner. Das Spiel wird bei Annahme unterbrochen und gespeichert.</translation>
     </message>
     <message>
         <source>Resign.
 
 Resign the game immediately. Clicking here is a default loss. Your opponent wins. Game ends.</source>
-        <translation type="obsolete">Desistir.
+        <translation type="obsolete">Aufgeben.
 
-Abandonar a partida imediatamente. Clicar aqui significa uma perda da partida, ou seja, seu oponente ganha. A partida termina.</translation>
+Das Spiel wird aufgegeben und als verloren gewertet. Der Gegner gewinnt und das Spiel ist beendet.</translation>
     </message>
     <message>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation type="obsolete">Atualizar
+        <translation type="obsolete">Anzeige aktualisieren
 
-Atualizar o tabuleiro. Use isto se você não puder ver nenhuma pedra no tabuleiro.</translation>
+Aktualisiert das Bretts. Benutzen Sie diese Funktion, wenn Sie keine Steine auf dem Brett sehen können.</translation>
     </message>
     <message>
         <source>Pass move</source>
-        <translation type="obsolete">Passar a jogada</translation>
+        <translation type="obsolete">einen Zug aussetzen (pass)</translation>
     </message>
     <message>
         <source>Undo last move</source>
-        <translation type="obsolete">Desfazer a última jogada</translation>
+        <translation type="obsolete">letzten Zug zurücknehmen (undo)</translation>
     </message>
     <message>
         <source>Refresh display</source>
-        <translation type="obsolete">Redesenhar a tela</translation>
+        <translation type="obsolete">Anzeige erneuern</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation type="obsolete">Requisitar adiamento</translation>
+        <translation type="obsolete">Unterbrechung erbitten (adjourn)</translation>
     </message>
     <message>
-        <source>teach tools / game tree</source>
-        <translation type="obsolete">ferramentas didáticas / árvore de jogo</translation>
+        <source>Tools tab
+
+N/S	normal/score tools
+E	edit tools
+TF	teach tools / game tree</source>
+        <translation type="obsolete">Werkzeuge Tab
+
+N/Z	normal/zählen
+E	editieren
+L / B	Lektionen/Baum</translation>
     </message>
     <message>
         <source>NS</source>
-        <translation type="obsolete">NP</translation>
+        <translation type="obsolete">NZ</translation>
     </message>
     <message>
         <source>E</source>
@@ -4998,175 +5431,281 @@ Atualizar o tabuleiro. Use isto se você não puder ver nenhuma pedra no tabulei
     </message>
     <message>
         <source>Edit Tools</source>
-        <translation type="obsolete">Ferramentas de edição</translation>
+        <translation type="obsolete">Werkzeuge</translation>
     </message>
     <message>
         <source>Change the edit tool</source>
-        <translation type="obsolete">Mudar a ferramenta de edição</translation>
+        <translation type="obsolete">Werkzeug wählen</translation>
     </message>
     <message>
         <source>Change the edit mode
 
 When in edit mode, you can choose what you want to edit, like setting stones or certain marks.</source>
-        <translation type="obsolete">Mudar o modo de edição
+        <translation type="obsolete">Werkzeug wählen
 
-Em modo de edição, você pode escolher o que editar, como posicionar pedras ou certificar marcas.</translation>
+Im Bearbeitenmodus kann hier das Werkzeug eingestellt werden, z. B. Steine oder Markierungen setzen.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation type="obsolete">Quadrado</translation>
+        <translation type="obsolete">Rechteck</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Quadrado
+        <translation type="obsolete">Rechteck
 
-Modificar as marcas quadradas. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
+Rechteckige Markierung editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese.</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation type="obsolete">Círculo</translation>
+        <translation type="obsolete">Kreis</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Círculo
+        <translation type="obsolete">Kreis
 
-Modificar as marcas circulares. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
+Kreisförmige Markierung editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese.</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="obsolete">Letra</translation>
+        <translation type="obsolete">Buchstabe</translation>
     </message>
     <message>
         <source>Letter
 
 Edit letter marks on the board. Left click sets a mark, right click removes it. Shift-click lets you edit a custom text.</source>
-        <translation type="obsolete">Letra
+        <translation type="obsolete">Buchstabe
 
-Modificar as marcas literais. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
+Buchstaben editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese. Umschalttaste + Klick zum Erstellen eines freien Textes.</translation>
     </message>
     <message>
         <source>Cross</source>
-        <translation type="obsolete">Cruz</translation>
+        <translation type="obsolete">Kreuz</translation>
     </message>
     <message>
         <source>Cross
 
 Edit cross marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Cruz
+        <translation type="obsolete">Kreuz
 
-Modificar as marcas em cruz. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
+Kreuförmige Markierung editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese.</translation>
     </message>
     <message>
         <source>Triangle</source>
-        <translation type="obsolete">Triângulo</translation>
+        <translation type="obsolete">Dreieck</translation>
     </message>
     <message>
         <source>Triangle
 
 Edit triangle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Triângulo
+        <translation type="obsolete">Dreieck
 
-Modificar as marcas triangulares. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
+Dreieckige Markierung editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese.</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="obsolete">Número</translation>
+        <translation type="obsolete">Zahl</translation>
     </message>
     <message>
         <source>Number
 
 Edit Number marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Nmero
+        <translation type="obsolete">Zahl
 
-Modificar as marcas numéricas. Um clique à esquerda define a marca, um clique à direita a remove.</translation>
+Zahl editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese.</translation>
     </message>
     <message>
         <source>Stone</source>
-        <translation type="obsolete">Pedra</translation>
+        <translation type="obsolete">Stein</translation>
     </message>
     <message>
         <source>Stone
 
 Edit stones on the board. Left click for a black, right click for a white stone.</source>
-        <translation type="obsolete">Pedra
+        <translation type="obsolete">Stein
 
-Modificar as pedras no tabuleiro. Um clique à esquerda para a preta, um clique à direita para a pedra branca.</translation>
+Steine auf dem Brett editieren. Ein Linksklick setzt einen schwarzen, ein Rechtsklick einen weißen Stein.</translation>
     </message>
     <message>
         <source>Color of next move</source>
-        <translation type="obsolete">Cor da próxima jogada</translation>
+        <translation type="obsolete">Farbe des nächsten Zugs</translation>
     </message>
     <message>
         <source>Color
 
 Set the color of next move. If left untouched, default color is chosen.</source>
-        <translation type="obsolete">Cor
+        <translation type="obsolete">Farbe
 
-Deifinir a cor da próxima jogada. Se deixar intacta, a cor padrão será usada.</translation>
+Setzt die Farbe des nächsten Zugs.</translation>
     </message>
     <message>
         <source>TG</source>
-        <translation type="obsolete">DJ</translation>
+        <translation type="obsolete">LB</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation type="obsolete">oponente:</translation>
+        <translation type="obsolete">Gegner:</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation type="obsolete">-- ninguém --</translation>
+        <translation type="obsolete">-- leer --</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation type="obsolete">oponente: convidado pelo instrutor</translation>
+        <translation type="obsolete">Gegner: vom Lehrer eingeladen</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation type="obsolete">oponente
+        <translation type="obsolete">Gegner:
 
-Escolha um oponente da lista para permitir que ele jogue com você uma partida pedagógica.</translation>
+einen Spieler aus der Liste wählen, um ihm das Mitspielen in einer Lektion zu ermöglichen.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation type="obsolete">controles</translation>
+        <translation type="obsolete">Kontrolle</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation type="obsolete">dar o controle para o oponente</translation>
+        <translation type="obsolete">Die Kontrolle an den Gegner abgeben</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation type="obsolete">dar o controle ao oponente para permitir a ele colocar pedras pretas e brancas, desfazer, etc.
+        <translation type="obsolete">Übergeben der Kontrolle an den Geger ermöglicht diesem, schwarze und weiße Steine zu setzen, Rücknahme usw.
 
-Só o instrutor pode passar o controle, 
-Tanto o aprendiz como o instrutor podem liberar o controle.</translation>
+Nur der Lehrer kann die Kontrolle übergeben,
+Lehrer und Schüler können die Kontrolle zurücksetzen.</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation type="obsolete">marcar</translation>
+        <translation type="obsolete">Merker</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation type="obsolete">memorizar este ponto para retornar rapidamente</translation>
+        <translation type="obsolete">merken eines Punktes zur schnellen Rückkehr</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation type="obsolete">Pressione o botão no início para habilitar a memorização.
-Após colocar e/ou desfazer, solte o botão para retornar ao ponto inicial automaticamente.</translation>
+        <translation type="obsolete">Taste drücken, um den jetzigen Spielstand zu speichern.
+Nach platzieren und/oder Rücknahmen Taste wieder lösen, um in den gespeicherten Spielzustand zurückzukehren.</translation>
+    </message>
+    <message>
+        <source>Tools tab
+
+N/S	normal/score tools
+E	edit tools
+TG	teach tools / game tree</source>
+        <translation type="obsolete">Werkzeuge Tab
+
+N/Z	normal / zählen
+E	editieren
+L/B	Lektionen / Baum</translation>
+    </message>
+    <message>
+        <source>Click on the board to place a stone.
+
+When in normal mode, left click plays moves in alternating colors.
+
+Shift + left click moves to the first move in the main branch.
+
+Shift + right click moves to the next move in the current branch.
+
+When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
+
+When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
+
+When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
+        <translation type="obsolete">Klick auf das Brett spielt einen Stein.
+
+
+Im normalen Modus spielt ein Linksklick einen Zug mit abwechselnden Farben.
+
+Shift + Linksklick geht zum ersten Zug in der Hauptvariation.
+
+Shift + Rechtsklick geht zum nächsten Zug in der aktuellen Variation.
+
+Im Bearbeitenmodus beim Editieren von Steinen setzt ein Linksklick einen schwarzen, ein Rechtsklick einen weißen Stein. Klick auf einen existierenden Stein entfernt diesen wieder.
+
+Beim Bearbeiten von Markierungen setzt ein Linksklick eine Markierung, ein Rechtsklick löscht diese wieder. Beim Bearbeiten von Buchstaben erlaubt Shift-Klick die Eingabe eines freien Textes.
+
+Beim Berechnen des Ergebnisses markiert ein Linksklick eine Gruppe als tot, ein Rechtsklick eine Gruppe als lebend in Seki. Ein erneuter Klick auf eine Gruppe entfernt die vorherige Markierung als tot oder Seki wieder.</translation>
+    </message>
+    <message>
+        <source>Tools tab
+
+N/S	normal/score tools
+
+E	edit tools
+
+TG	teach tools / game tree</source>
+        <translation type="obsolete">Werkzeuge Griff
+
+N/Z	normal/zählen
+E	editieren
+L/B	Lektionen/Baum</translation>
+    </message>
+    <message>
+        <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
+
+Only teacher can give control,
+
+both teacher and pupil can release control.</source>
+        <translation type="obsolete">Übergeben der Kontrolle an den Geger ermöglicht diesem schwarze und weiße Steine zu setzen, Rücknahme, etc.
+
+Nur der Lehrer kann die Kontrolle übergeben,
+
+Leher und Schüler können die Kontrolle zurücksetzen.</translation>
+    </message>
+    <message>
+        <source>push button at starting point to enable remembering.
+
+After placing and/or undo release button for returning to starting point automatically.</source>
+        <translation type="obsolete">Taste drücken um den jetzigen Spielstand zu speichern.
+
+Nach platzieren und/oder Rücknahmen Taste wieder lösen zur sofortigen Rückkehr in den gespeicherten Spielzustand.</translation>
+    </message>
+    <message>
+        <source>0 brothers
+
+0 sons</source>
+        <translation type="obsolete">0 Brüder
+
+0 Söhne</translation>
+    </message>
+    <message>
+        <source>Score
+
+Left click on a group to mark it as dead.
+
+Right click on a group to mark it alive in seki.
+
+Click a second time on a group to unmark it as dead or seki.
+
+Edit
+
+Click to get a new, editable offline window.</source>
+        <translation type="obsolete">Auszählen
+
+Klick links auf eine Gruppe markiert diese als tot.
+Klick rechts auf eine Gruppe markiert diese als lebending in Seki.
+Nochmaliger Klick auf eine Gruppe entfernt die Markierung als tot oder Seki.
+
+
+Editieren
+
+Klick öffnet ein neues, editierbares Brett zur offline-Bearbeitung.</translation>
     </message>
     <message>
         <source>Navigate through the game</source>
-        <translation type="obsolete">Navegar através da partida</translation>
+        <translation type="obsolete">Navigiere durch das Spiel</translation>
     </message>
     <message>
         <source>000</source>
@@ -5176,279 +5715,267 @@ Após colocar e/ou desfazer, solte o botão para retornar ao ponto inicial autom
         <source>Player to play
 
 Indicates whether it is black&apos;s or white&apos;s turn.</source>
-        <translation type="obsolete">Jogador a jogar
+        <translation type="obsolete">Spieler am Zug
 
-Indica se é a vez do preto ou do branco jogar.</translation>
-    </message>
-    <message>
-        <source>Tools tab
-
-N/S	normal/score tools
-E	edit tools
-TG	teach tools / game tree</source>
-        <translation type="obsolete">Aba de ferramentas
-
-N/P	ferramentas normais ou de pontuação
-E	ferramentas de edição
-DJ	ferramentas didáticas ou árvore do jogo</translation>
+Zeigt an, welcher Spieler am Zug ist.</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Ctrl+E</source>
-        <translation type="obsolete">Ctrl+E</translation>
+        <translation type="obsolete">Strg+E</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="obsolete">Ctrl+T</translation>
+        <translation type="obsolete">Strg+T</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">Novo</translation>
+        <translation type="obsolete">Neu</translation>
     </message>
     <message>
         <source>New &amp;Board</source>
-        <translation type="obsolete">Novo &amp;Tabuleiro</translation>
+        <translation type="obsolete">Neues &amp;Brett</translation>
     </message>
     <message>
         <source>Ctrl+B</source>
-        <translation type="obsolete">Ctrl+B</translation>
+        <translation type="obsolete">Strg+B</translation>
     </message>
     <message>
         <source>Creates a new board</source>
-        <translation type="obsolete">Criar um novo tabuleiro</translation>
+        <translation type="obsolete">Erstellt ein neues Brett</translation>
     </message>
     <message>
         <source>New
 
 Creates a new board.</source>
-        <translation type="obsolete">Novo
+        <translation type="obsolete">Neu
 
-Cria um novo tabuleiro.</translation>
+Erstellt ein neues Brett.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1111"/>
         <location filename="../mainwindow.ui" line="1334"/>
         <source>New game</source>
-        <translation>Nova partida</translation>
+        <translation>Neues Spiel</translation>
     </message>
     <message>
         <source>&amp;New game</source>
-        <translation type="obsolete">&amp;Nova partida</translation>
+        <translation type="obsolete">&amp;Neues Spiel</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation type="obsolete">Ctrl+N</translation>
+        <translation type="obsolete">Strg+N</translation>
     </message>
     <message>
         <source>Creates a new game on this board</source>
-        <translation type="obsolete">Cria uma nova partida neste tabuleiro</translation>
+        <translation type="obsolete">Erstellt ein neues Spiel auf diesem Brett</translation>
     </message>
     <message>
         <source>New
 
 Creates a new game on this board.</source>
-        <translation type="obsolete">Novo
+        <translation type="obsolete">Neu
 
-Cria uma nova partida neste tabuleiro.</translation>
+Erstellt ein neues Spiel auf diesem Brett.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="774"/>
         <source>Open</source>
-        <translation>Abrir</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation type="obsolete">&amp;Abrir</translation>
+        <translation type="obsolete">&amp;Laden</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="obsolete">Ctrl+O</translation>
+        <translation type="obsolete">Strg+O</translation>
     </message>
     <message>
         <source>Open a sgf file</source>
-        <translation type="obsolete">Abrir um arquivo SGF</translation>
+        <translation type="obsolete">Lädt eine SGF-Datei</translation>
     </message>
     <message>
         <source>Open
 
 Open a sgf file.</source>
-        <translation type="obsolete">Abrir
+        <translation type="obsolete">Laden
 
-Abrir um arquivo SGF.</translation>
+Lädt eine SGF-Datei.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="obsolete">Salvar</translation>
+        <translation type="obsolete">Speichern</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation type="obsolete">&amp;Salvar</translation>
+        <translation type="obsolete">&amp;Speichern</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="obsolete">Ctrl+S</translation>
+        <translation type="obsolete">Strg+S</translation>
     </message>
     <message>
         <source>Save a sgf file</source>
-        <translation type="obsolete">Salvar um arquivo SGF</translation>
+        <translation type="obsolete">Speichert eine SGF-Datei</translation>
     </message>
     <message>
         <source>Save
 
 Save a sgf file.</source>
-        <translation type="obsolete">Salvar
+        <translation type="obsolete">Speichern
 
-Salvar um arquivo SGF.</translation>
+Speichert eine SGF-Datei.</translation>
     </message>
     <message>
         <source>Save As</source>
-        <translation type="obsolete">Salvar Como</translation>
+        <translation type="obsolete">Speichern als</translation>
     </message>
     <message>
         <source>Save &amp;As</source>
-        <translation type="obsolete">Salvar &amp;Como</translation>
+        <translation type="obsolete">Speichern &amp;als</translation>
     </message>
     <message>
         <source>Save a sgf file under a new name</source>
-        <translation type="obsolete">Salvar um arquivo SGF sobre um novo nome</translation>
+        <translation type="obsolete">Speichert eine SGF-Datei unter einem neuen Namen</translation>
     </message>
     <message>
         <source>Save As
 
 Save a sgf file under a new name.</source>
-        <translation type="obsolete">Salvar Como
+        <translation type="obsolete">Speichern als
 
-Salvar um arquivo SGF sobre um novo nome.</translation>
+Speichert eine SGF-Datei unter einem neuen Namen.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="obsolete">Fechar</translation>
+        <translation type="obsolete">Schließen</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="obsolete">&amp;Fechar</translation>
+        <translation type="obsolete">S&amp;chließen</translation>
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation type="obsolete">Ctrl+W</translation>
+        <translation type="obsolete">Strg+W</translation>
     </message>
     <message>
         <source>Close this board</source>
-        <translation type="obsolete">Fechar este tabuleiro</translation>
+        <translation type="obsolete">Schließt dieses Brett</translation>
     </message>
     <message>
         <source>Exit
 
 Close this board.</source>
-        <translation type="obsolete">Sair
+        <translation type="obsolete">Beenden
 
-Fechar este tabuleiro.</translation>
+Schließt dieses Brett.</translation>
     </message>
     <message>
         <source>Import SGF from clipboard</source>
-        <translation type="obsolete">Importar SGF da </translation>
+        <translation type="obsolete">SGF von Zwischenablage importieren</translation>
     </message>
     <message>
         <source>Import a complete game in SGF format from clipboard</source>
-        <translation type="obsolete">Importar uma partida completa no formato SGF a partir da área de transferência</translation>
+        <translation type="obsolete">Ein komplettes Spiel im SGF-Format von der Zwischenablage importieren</translation>
     </message>
     <message>
         <source>Import SGF from clipboard
 
 Import a complete game in SGF format from clipboard.</source>
-        <translation type="obsolete">Importar SGF da área de transferência
+        <translation type="obsolete">SGF von der Zwischenablage importieren
 
-Importar uma partida completa no formato SGF a partir da área de transferência.</translation>
+Ein komplettes Spiel im SGF-Format von der Zwischenablage importieren.</translation>
     </message>
     <message>
         <source>Import ASCII</source>
-        <translation type="obsolete">Importar ASCII</translation>
+        <translation type="obsolete">ASCII importieren</translation>
     </message>
     <message>
         <source>Import an ASCII file as new variation</source>
-        <translation type="obsolete">Importar um arquivo ASCII como sendo uma nova variação</translation>
+        <translation type="obsolete">ASCII-Datei als neue Variation importieren</translation>
     </message>
     <message>
         <source>Import ASCII
 
 Import an ASCII file as new variation.</source>
-        <translation type="obsolete">Importar ASCII
+        <translation type="obsolete">ASCII importieren
 
-Importar um arquivo ASCII como sendo uma nova variação.</translation>
+ASCII-Datei als neue Variation importieren.</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard</source>
-        <translation type="obsolete">Importar ASCII da área de transferência</translation>
+        <translation type="obsolete">ASCII von der Zwischenablage importieren</translation>
     </message>
     <message>
         <source>Import ASCII from &amp;clipboard</source>
-        <translation type="obsolete">Importar ASCII da área de &amp;transferência</translation>
+        <translation type="obsolete">ASCII von der &amp;Zwischenablage importieren</translation>
     </message>
     <message>
         <source>Import an ASCII board as new variation from the clipboard</source>
-        <translation type="obsolete">Importar um tabuleiro ASCII como sendo uma nova variação, a partir da área de transferência</translation>
+        <translation type="obsolete">ASCII-Position als neue Variation von der Zwischenablage importieren</translation>
     </message>
     <message>
         <source>Import ASCII from clipboard
 
 Import an ASCII file as new variation from the clipboard.</source>
-        <translation type="obsolete">Importar ASCII da área de transferência
+        <translation type="obsolete">ASCII von der Zwischenablage importieren
 
-Importar um arquivo ASCII como sendo uma nova variação, a partir da área de transferência.</translation>
+ASCII-Datei als neue Variation von der Zwischenablage importieren.</translation>
     </message>
     <message>
         <source>Export ASCII</source>
-        <translation type="obsolete">Exportar ASCII</translation>
+        <translation type="obsolete">ASCII exportieren</translation>
     </message>
     <message>
         <source>Export current board to ASCII</source>
-        <translation type="obsolete">Exportar o tabuleiro atual no formato ASCII</translation>
+        <translation type="obsolete">Aktuelle Position als ASCII exportieren</translation>
     </message>
     <message>
         <source>Export ASCII
 
 Export current board to ASCII.</source>
-        <translation type="obsolete">Exportar ASCII
+        <translation type="obsolete">ASCII exportieren
 
-Exportar o tabuleiro atual no formato ASCII.</translation>
+Aktuelle Position als ASCII exportieren.</translation>
     </message>
     <message>
         <source>Export Image</source>
-        <translation type="obsolete">Exportar imagem</translation>
+        <translation type="obsolete">Bild exportieren</translation>
     </message>
     <message>
         <source>Export current board to an image</source>
-        <translation type="obsolete">Exportar o tabuleiro atual como uma imagem</translation>
+        <translation type="obsolete">Exportiert das aktuelle Brett als Bild</translation>
     </message>
     <message>
         <source>Export Image
 
 Export current board to an image.</source>
-        <translation type="obsolete">Exportar Imagem
+        <translation type="obsolete">Bild exportieren
 
-Exportar o tabuleiro atual como uma imagem.</translation>
+Exportiert das aktuelle Brett als Bild.</translation>
     </message>
     <message>
         <source>Export Image to clipboard</source>
-        <translation type="obsolete">Exportar imagem para a área de transferência</translation>
+        <translation type="obsolete">Bild in die Zwischenablage exportieren</translation>
     </message>
     <message>
         <source>E&amp;xport Image to clipboard</source>
-        <translation type="obsolete">E&amp;xportar imagem para a área de transferência</translation>
+        <translation type="obsolete">Bild in die Zwischenablage e&amp;xportieren</translation>
     </message>
     <message>
         <source>Export current board to the clipboard as image</source>
-        <translation type="obsolete">Exportar o tabuleiro atual como imagem para a área de transferência</translation>
+        <translation type="obsolete">Exportiert das aktuelle Brett als Bild in die Zwischenablage</translation>
     </message>
     <message>
         <source>Export Image to clipboard
 
 Export current board to the clipboard as image.</source>
-        <translation type="obsolete">Exportar imagem para a área de transferência
+        <translation type="obsolete">Bild in die Zwischenablage exportieren
 
-Exportar o tabuleiro atual como imagem para a área de transferência.</translation>
+Exportiert das aktuelle Brett als Bild in die Zwischenablage.</translation>
     </message>
     <message>
         <source>Telnet</source>
@@ -5460,7 +5987,7 @@ Exportar o tabuleiro atual como imagem para a área de transferência.</translat
     </message>
     <message>
         <source>Opens a telnet window</source>
-        <translation type="obsolete">Ouvre une fen</translation>
+        <translation type="obsolete">Öffnet ein Telnet Fenster</translation>
     </message>
     <message>
         <source>Telnet
@@ -5468,472 +5995,472 @@ Exportar o tabuleiro atual como imagem para a área de transferência.</translat
 Opens a telnet window to play on the internet.</source>
         <translation type="obsolete">Telnet
 
-Ouvre une fen</translation>
+Öffnet ein Telnet Fenster, um im Internet zu spielen.</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="obsolete">Sair</translation>
+        <translation type="obsolete">Beenden</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation type="obsolete">&amp;Sair</translation>
+        <translation type="obsolete">Be&amp;enden</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="obsolete">Ctrl+Q</translation>
+        <translation type="obsolete">Strg+Q</translation>
     </message>
     <message>
         <source>Quits the application</source>
-        <translation type="obsolete">Sai do aplicativo</translation>
+        <translation type="obsolete">Beendet das Programm</translation>
     </message>
     <message>
         <source>Exit
 
 Quits the application.</source>
-        <translation type="obsolete">Sair
+        <translation type="obsolete">Beenden
 
-Sai do aplicativo.</translation>
+Beendet das Programm.</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="obsolete">Cortar</translation>
+        <translation type="obsolete">Ausschneiden</translation>
     </message>
     <message>
         <source>&amp;Cut</source>
-        <translation type="obsolete">&amp;Cortar</translation>
+        <translation type="obsolete">&amp;Ausschneiden</translation>
     </message>
     <message>
         <source>Ctrl+X</source>
-        <translation type="obsolete">Ctrl+X</translation>
+        <translation type="obsolete">Strg+X</translation>
     </message>
     <message>
         <source>Cut this and all following positions</source>
-        <translation type="obsolete">Cortar esta e todas as posições seguintes</translation>
+        <translation type="obsolete">Diese und alle folgenden Positionen ausschneiden</translation>
     </message>
     <message>
         <source>Cut
 
 Cut this and all following positions.</source>
-        <translation type="obsolete">Cortar
+        <translation type="obsolete">Ausschneiden
 
-Cortar esta e todas as posições seguintes.</translation>
+Diese und alle folgenden Positionen ausschneiden.</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="obsolete">Colar</translation>
+        <translation type="obsolete">Einfügen</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation type="obsolete">C&amp;olar</translation>
+        <translation type="obsolete">&amp;Einfügen</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="obsolete">Ctrl+P</translation>
+        <translation type="obsolete">Strg+P</translation>
     </message>
     <message>
         <source>Paste as son of the current move</source>
-        <translation type="obsolete">Colar como derivação da jogada atual</translation>
+        <translation type="obsolete">Als Sohn des aktuellen Zuges einfügen</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as son of the current move.</source>
-        <translation type="obsolete">Colar
+        <translation type="obsolete">Einfügen
 
-Colar como derivação da jogada atual.</translation>
+Als Sohn des aktuellen Zuges einfügen.</translation>
     </message>
     <message>
         <source>Paste as brother</source>
-        <translation type="obsolete">Colar como variação</translation>
+        <translation type="obsolete">Als Bruder einfügen</translation>
     </message>
     <message>
         <source>Paste as &amp;brother</source>
-        <translation type="obsolete">Colar como &amp;variação</translation>
+        <translation type="obsolete">Als &amp;Bruder einfügen</translation>
     </message>
     <message>
         <source>Paste as brother of the current move</source>
-        <translation type="obsolete">Colar como variação da jogada atual</translation>
+        <translation type="obsolete">Als Bruder des aktuellen Zuges einfügen</translation>
     </message>
     <message>
         <source>Paste
 
 Paste as brother of the current move.</source>
-        <translation type="obsolete">Colar
+        <translation type="obsolete">Einfügen
 
-Colar como variação da jogada atual.</translation>
+Als Bruder des aktuellen Zuges einfügen.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Apagar</translation>
+        <translation type="obsolete">Löschen</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="obsolete">&amp;Apagar</translation>
+        <translation type="obsolete">&amp;Löschen</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation type="obsolete">Ctrl+D</translation>
+        <translation type="obsolete">Strg+D</translation>
     </message>
     <message>
         <source>Delete this and all following positions</source>
-        <translation type="obsolete">Apagar esta e todas as posições seguintes</translation>
+        <translation type="obsolete">Diese und alle folgenden Positionen löschen</translation>
     </message>
     <message>
         <source>Delete
 
 Delete this and all following positions.</source>
-        <translation type="obsolete">Apagar
+        <translation type="obsolete">Löschen
 
-Apagar esta e todas as posições seguintes.</translation>
+Diese und alle folgenden Positionen löschen.</translation>
     </message>
     <message>
         <source>Number Moves</source>
-        <translation type="obsolete">Numerar jogadas</translation>
+        <translation type="obsolete">Züge nummerieren</translation>
     </message>
     <message>
         <source>&amp;Number Moves</source>
-        <translation type="obsolete">&amp;Numerar jogadas</translation>
+        <translation type="obsolete">Züge &amp;nummerieren</translation>
     </message>
     <message>
         <source>Shift+F2</source>
-        <translation type="obsolete">Shift+F2</translation>
+        <translation type="obsolete">Umschalttaste + F2</translation>
     </message>
     <message>
         <source>Mark all moves with the number of their turn</source>
-        <translation type="obsolete">Marcar todas as jogadas com o número de sua vez</translation>
+        <translation type="obsolete">Alle Züge mit ihrer Zugnummer markieren</translation>
     </message>
     <message>
         <source>Number moves
 
 Mark all moves with the number of their turn.</source>
-        <translation type="obsolete">Numerar jogadas
+        <translation type="obsolete">Züge nummerieren
 
-Marcar todas as jogadas com o número de sua vez.</translation>
+Alle Züge mit ihrer Zugnummer markieren.</translation>
     </message>
     <message>
         <source>Mark brothers</source>
-        <translation type="obsolete">Marcar variações</translation>
+        <translation type="obsolete">Brüder markieren</translation>
     </message>
     <message>
         <source>Mark &amp;brothers</source>
-        <translation type="obsolete">&amp;Marcar variações</translation>
+        <translation type="obsolete">Brüder &amp;markieren</translation>
     </message>
     <message>
         <source>Shift+F3</source>
-        <translation type="obsolete">Shift+F3</translation>
+        <translation type="obsolete">Umschalttaste + F3</translation>
     </message>
     <message>
         <source>Mark all brothers of the current move</source>
-        <translation type="obsolete">Marcar todas as variações da jogada atual</translation>
+        <translation type="obsolete">Alle Brüder des aktuellen Zuges markieren</translation>
     </message>
     <message>
         <source>Mark brothers
 
 Mark all brothers of the current move.</source>
-        <translation type="obsolete">Marcar as variações
+        <translation type="obsolete">Brüder markieren
 
-Marcar todas as variações da jogada atual.</translation>
+Alle Brüder des aktuellen Zuges markieren.</translation>
     </message>
     <message>
         <source>Mark sons</source>
-        <translation type="obsolete">Marcar as derivações</translation>
+        <translation type="obsolete">Söhne markieren</translation>
     </message>
     <message>
         <source>Mark &amp;sons</source>
-        <translation type="obsolete">Marcar as &amp;derivações</translation>
+        <translation type="obsolete">&amp;Söhne markieren</translation>
     </message>
     <message>
         <source>Shift+F4</source>
-        <translation type="obsolete">Shift+F4</translation>
+        <translation type="obsolete">Umschalttaste + F4</translation>
     </message>
     <message>
         <source>Mark all sons of the current move</source>
-        <translation type="obsolete">Marcar todas as derivações da jogada atual</translation>
+        <translation type="obsolete">Alle Söhne des aktuellen Zuges markieren</translation>
     </message>
     <message>
         <source>Mark sons
 
 Mark all sons of the current move.</source>
-        <translation type="obsolete">Marcar derivações
+        <translation type="obsolete">Söhne markieren
 
-Marcar as derivações da jogada atual.</translation>
+Alle Söhne des aktuellen Zuges markieren.</translation>
     </message>
     <message>
         <source>Previous move (Left)</source>
-        <translation type="obsolete">Jogada anterior (Esquerda)</translation>
+        <translation type="obsolete">Vorheriger Zug (Links)</translation>
     </message>
     <message>
-        <source>Left</source>
-        <translation type="obsolete">Esquerda</translation>
+        <source>&amp;Previous move	Left</source>
+        <translation type="obsolete">V&amp;orheriger Zug	Links</translation>
     </message>
     <message>
         <source>To previous move</source>
-        <translation type="obsolete">Para a jogada anterior</translation>
+        <translation type="obsolete">Zum vorherigen Zug</translation>
     </message>
     <message>
         <source>Previous move
 
 Move one move backward.</source>
-        <translation type="obsolete">Jogada anterior 
+        <translation type="obsolete">Vorheriger Zug
 
-Voltar uma jogada atrás.</translation>
+Geht einen Zug zurück.</translation>
     </message>
     <message>
         <source>Next move (Right)</source>
-        <translation type="obsolete">Jogada seguinte (Direita)</translation>
+        <translation type="obsolete">Nächster Zug (Rechts)</translation>
     </message>
     <message>
-        <source>Right</source>
-        <translation type="obsolete">Direita</translation>
+        <source>&amp;Next move	Right</source>
+        <translation type="obsolete">&amp;Nächster Zug	Rechts</translation>
     </message>
     <message>
         <source>To next move</source>
-        <translation type="obsolete">Para a jogada seguinte</translation>
+        <translation type="obsolete">Zum nächsten Zug</translation>
     </message>
     <message>
         <source>Next move
 
 Move one move forward.</source>
-        <translation type="obsolete">Jogada seguinte 
+        <translation type="obsolete">Nächster Zug
 
-Avançar uma jogada à frente.</translation>
+Geht einen Zug weiter.</translation>
     </message>
     <message>
         <source>First move (Home)</source>
-        <translation type="obsolete">Primeira jogada (Início)</translation>
+        <translation type="obsolete">Erster Zug (Pos1)</translation>
     </message>
     <message>
-        <source>Home</source>
-        <translation type="obsolete">Início</translation>
+        <source>&amp;First move	Home</source>
+        <translation type="obsolete">&amp;Erster Zug	Pos1</translation>
     </message>
     <message>
         <source>To first move</source>
-        <translation type="obsolete">Para a primeira jogada</translation>
+        <translation type="obsolete">Zum ersten Zug</translation>
     </message>
     <message>
         <source>First move
 
 Move to first move.</source>
-        <translation type="obsolete">Primeira jogada
+        <translation type="obsolete">Erster Zug
 
-Voltar para a primeira jogada.</translation>
+Geht zum ersten Zug.</translation>
     </message>
     <message>
         <source>Last move (End)</source>
-        <translation type="obsolete">Última jogada (Fim)</translation>
+        <translation type="obsolete">Letzter Zug (Ende)</translation>
     </message>
     <message>
-        <source>End</source>
-        <translation type="obsolete">Fim</translation>
+        <source>&amp;Last move	End</source>
+        <translation type="obsolete">&amp;Letzter Zug	Ende</translation>
     </message>
     <message>
         <source>To last move</source>
-        <translation type="obsolete">Para a última jogada</translation>
+        <translation type="obsolete">Zum letzten Zug</translation>
     </message>
     <message>
         <source>Last move
 
 Move to last move.</source>
-        <translation type="obsolete">Última jogada
+        <translation type="obsolete">Letzter Zug
 
-Ir para a última jogada.</translation>
+Geht zum letzten Zug.</translation>
     </message>
     <message>
         <source>Previous variation (Up)</source>
-        <translation type="obsolete">Variações anteriores (Acima)</translation>
+        <translation type="obsolete">Vorherige Variation (Hoch)</translation>
     </message>
     <message>
-        <source>Up</source>
-        <translation type="obsolete">Acima</translation>
+        <source>P&amp;revious variation	Up</source>
+        <translation type="obsolete">Vo&amp;rherige Variation	Hoch</translation>
     </message>
     <message>
         <source>To previous variation</source>
-        <translation type="obsolete">Voltar para a variação anterior</translation>
+        <translation type="obsolete">Zur vorherigen Variation</translation>
     </message>
     <message>
         <source>Previous variation
 
 Move to the previous variation of this move.</source>
-        <translation type="obsolete">Variação anterior
+        <translation type="obsolete">Vorherige Variation
 
-Ir para a variação anterior à esta jogada.</translation>
+Geht zur vorherigen Variation dieses Zuges.</translation>
     </message>
     <message>
         <source>Next variation (Down)</source>
-        <translation type="obsolete">Variação seguinte (Abaixo)</translation>
+        <translation type="obsolete">Nächste Variation (Runter)</translation>
     </message>
     <message>
-        <source>Down</source>
-        <translation type="obsolete">Abaixo</translation>
+        <source>N&amp;ext variation	Down</source>
+        <translation type="obsolete">Nächste &amp;Variation	Runter</translation>
     </message>
     <message>
         <source>To next variation</source>
-        <translation type="obsolete">Para a próxima variação</translation>
+        <translation type="obsolete">Zur nächsten Variation</translation>
     </message>
     <message>
         <source>Next variation
 
 Move to the next variation of this move.</source>
-        <translation type="obsolete">Variação seguinte
+        <translation type="obsolete">Nächste Variation
 
-Ir para a variação posterior à esta jogada.</translation>
+Geht zur nächsten Variation dieses Zuges.</translation>
     </message>
     <message>
         <source>Variation start</source>
-        <translation type="obsolete">Início da variação</translation>
+        <translation type="obsolete">Variation Start</translation>
     </message>
     <message>
         <source>Variation &amp;start</source>
-        <translation type="obsolete">&amp;Início da variação</translation>
+        <translation type="obsolete">Variation &amp;Start</translation>
     </message>
     <message>
         <source>To top of variation</source>
-        <translation type="obsolete">Para o topo da variação</translation>
+        <translation type="obsolete">Zum Anfang der Variation</translation>
     </message>
     <message>
         <source>Variation start
 
 Move to the top variation of this branch.</source>
-        <translation type="obsolete">Início da variação
+        <translation type="obsolete">Variation Start
 
-Ir para a variação no topo deste braço.</translation>
+Geht zum Anfang der Variation dieses Astes.</translation>
     </message>
     <message>
         <source>Next branch</source>
-        <translation type="obsolete">Novo braço</translation>
+        <translation type="obsolete">Nächster Ast</translation>
     </message>
     <message>
         <source>Next &amp;branch</source>
-        <translation type="obsolete">Novo &amp;braço</translation>
+        <translation type="obsolete">Nä&amp;chster Ast</translation>
     </message>
     <message>
         <source>To next branch starting a variation</source>
-        <translation type="obsolete">Para o práximo braço</translation>
+        <translation type="obsolete">Zur nächsten Abzweigung einer Variation</translation>
     </message>
     <message>
         <source>Next branch
 
 Move to the next branch starting a variation.</source>
-        <translation type="obsolete">Braço seguinte
+        <translation type="obsolete">Nächster Ast
 
-Ir para o próximo braço que começa uma variação.</translation>
+Gehe zur nächsten Abzweigung einer Variation.</translation>
     </message>
     <message>
         <source>Goto move</source>
-        <translation type="obsolete">Ir para a jogada</translation>
+        <translation type="obsolete">Gehe zu Zug</translation>
     </message>
     <message>
         <source>&amp;Goto Move</source>
-        <translation type="obsolete">&amp;Ir para a jogada</translation>
+        <translation type="obsolete">&amp;Gehe zu Zug</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation type="obsolete">Ctrl+G</translation>
+        <translation type="obsolete">Strg+G</translation>
     </message>
     <message>
         <source>Goto a move of main branch by number</source>
-        <translation type="obsolete">Ir para uma jogada do braço principal pelo número</translation>
+        <translation type="obsolete">Geht zu einem Zug des Hauptastes nach Zugnummer</translation>
     </message>
     <message>
         <source>Goto move
 
 Goto a move of main branch by number.</source>
-        <translation type="obsolete">Ir para a jogada
+        <translation type="obsolete">Gehe zu Zug
 
-Ir paraa uma jogada do braço principal pelo número.</translation>
+Geht zu einem Zug des Hauptastes nach Zugnummer.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation type="obsolete">Jogar automaticamente</translation>
+        <translation type="obsolete">Automatisch spielen</translation>
     </message>
     <message>
         <source>&amp;Autoplay</source>
-        <translation type="obsolete">Jogar &amp;automaticamente</translation>
+        <translation type="obsolete">&amp;Automatisch spielen</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation type="obsolete">Ctrl+A</translation>
+        <translation type="obsolete">Strg+A</translation>
     </message>
     <message>
         <source>Start/Stop autoplaying current game</source>
-        <translation type="obsolete">Iniciar/parar o atual jogo automático</translation>
+        <translation type="obsolete">Startet/Stoppt das automatische Spielen</translation>
     </message>
     <message>
         <source>Autoplay
 
 Start/Stop autoplaying current game.</source>
-        <translation type="obsolete">Jogar automaticamente
+        <translation type="obsolete">Automatisch spielen
 
-Iniciar/Parar o atual jogo automático.</translation>
+Startet/Stoppt das automatische Spielen.</translation>
     </message>
     <message>
         <source>Empty branch</source>
-        <translation type="obsolete">Braço vazio</translation>
+        <translation type="obsolete">Leerer Ast</translation>
     </message>
     <message>
         <source>Empt&amp;y branch</source>
-        <translation type="obsolete">Braço &amp;vazio</translation>
+        <translation type="obsolete">Leerer As&amp;t</translation>
     </message>
     <message>
         <source>Create an empty branch</source>
-        <translation type="obsolete">Criar um braço vazio</translation>
+        <translation type="obsolete">Erstellt einen leeren Ast</translation>
     </message>
     <message>
         <source>Empty branch
 
 Create an empty branch.</source>
-        <translation type="obsolete">Braço vazio
+        <translation type="obsolete">Leerer Ast
 
-Criar um braço vazio.</translation>
+Erstellt einen leeren Ast.</translation>
     </message>
     <message>
         <source>Duplicate move</source>
-        <translation type="obsolete">Duplicar jogada</translation>
+        <translation type="obsolete">Zug duplizieren</translation>
     </message>
     <message>
         <source>D&amp;uplicate move</source>
-        <translation type="obsolete">D&amp;uplicar jogada</translation>
+        <translation type="obsolete">Zug &amp;duplizieren</translation>
     </message>
     <message>
         <source>Copies and duplicates this move</source>
-        <translation type="obsolete">Copia e duplica esta jogada</translation>
+        <translation type="obsolete">Kopiert und dupliziert diesen Zug</translation>
     </message>
     <message>
         <source>Duplicate move
 
 Copies and duplicates this move.</source>
-        <translation type="obsolete">Duplicar jogada
+        <translation type="obsolete">Zug duplizieren
 
-Copia e duplica esta jogada.</translation>
+Kopiert und dupliziert Zug.</translation>
     </message>
     <message>
         <source>Swap variations</source>
-        <translation type="obsolete">Trocar variações</translation>
+        <translation type="obsolete">Variationen tauschen</translation>
     </message>
     <message>
         <source>S&amp;wap variations</source>
-        <translation type="obsolete">T&amp;rocar variações</translation>
+        <translation type="obsolete">Variationen ta&amp;uschen</translation>
     </message>
     <message>
         <source>Swap current move with previous variation</source>
-        <translation type="obsolete">Trocar a jogada atual com a variação anterior</translation>
+        <translation type="obsolete">Tauscht den aktuellen Zug mit vorheriger Variation</translation>
     </message>
     <message>
         <source>Swap variations
 
 Swap current move with previous variation.</source>
-        <translation type="obsolete">Trocar variações
+        <translation type="obsolete">Variationen tauschen
 
-Trocar a jogada atual com a variação anterior.</translation>
+Tauscht den aktuellen Zug mit vorheriger Variation.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="127"/>
         <source>Preferences</source>
-        <translation>Preferências</translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation type="obsolete">&amp;Preferências</translation>
+        <translation type="obsolete">&amp;Einstellungen</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -5941,95 +6468,95 @@ Trocar a jogada atual com a variação anterior.</translation>
     </message>
     <message>
         <source>Edit the preferences</source>
-        <translation type="obsolete">Editar as preferências</translation>
+        <translation type="obsolete">Einstellungen ändern</translation>
     </message>
     <message>
         <source>Preferences
 
 Edit the applications preferences.</source>
-        <translation type="obsolete">Preferências
+        <translation type="obsolete">Einstellungen
 
-Editar as preferências para o aplicativo.</translation>
+Einstellungen ändern.</translation>
     </message>
     <message>
         <source>Game Info</source>
-        <translation type="obsolete">Informação de jogo</translation>
+        <translation type="obsolete">Spielinfo</translation>
     </message>
     <message>
         <source>&amp;Game Info</source>
-        <translation type="obsolete">&amp;Informação de jogo</translation>
+        <translation type="obsolete">&amp;Spielinfo</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="obsolete">Ctrl+I</translation>
+        <translation type="obsolete">Strg+I</translation>
     </message>
     <message>
         <source>Display game information</source>
-        <translation type="obsolete">Mostrar as informações de jogo</translation>
+        <translation type="obsolete">Zeigt Informationen über das Spiel an</translation>
     </message>
     <message>
         <source>File toolbar</source>
-        <translation type="obsolete">Barra de ferramentas de arquivos</translation>
+        <translation type="obsolete">Dateileiste</translation>
     </message>
     <message>
         <source>Enables/disables the file toolbar</source>
-        <translation type="obsolete">Ativar/desativar a barra de ferramentas de arquivos</translation>
+        <translation type="obsolete">AKtiviert/deaktiviert die Dateileiste</translation>
     </message>
     <message>
         <source>File toolbar
 
 Enables/disables the file toolbar.</source>
-        <translation type="obsolete">Barra de ferramentas de arquivos
+        <translation type="obsolete">Dateileiste
 
-Ativar/desativar a barra de ferramentas de arquivos.</translation>
+AKtiviert/deaktiviert die Dateileiste.</translation>
     </message>
     <message>
         <source>Navigation toolbar</source>
-        <translation type="obsolete">Barra de ferramentas de navegação</translation>
+        <translation type="obsolete">Navigationsleiste</translation>
     </message>
     <message>
         <source>Navigation &amp;toolbar</source>
-        <translation type="obsolete">Barra de ferramentas de &amp;navegação</translation>
+        <translation type="obsolete">&amp;Navigationsleiste</translation>
     </message>
     <message>
         <source>Enables/disables the navigation toolbar</source>
-        <translation type="obsolete">Ativar/desativar a barra de ferramentas de navegação</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Navigationsleiste</translation>
     </message>
     <message>
         <source>Navigation toolbar
 
 Enables/disables the navigation toolbar.</source>
-        <translation type="obsolete">Barra de ferramentas de navegação
+        <translation type="obsolete">Navigationsleiste
 
-Ativar/desativar a barra de ferramentas de navegação.</translation>
+Aktiviert/deaktiviert die Navigationsleiste.</translation>
     </message>
     <message>
         <source>Edit toolbar</source>
-        <translation type="obsolete">Editar a barra de ferramentas</translation>
+        <translation type="obsolete">Editierleiste</translation>
     </message>
     <message>
         <source>&amp;Edit toolbar</source>
-        <translation type="obsolete">&amp;Editar a barra de ferramentas</translation>
+        <translation type="obsolete">&amp;Editierleiste</translation>
     </message>
     <message>
         <source>Enables/disables the edit toolbar</source>
-        <translation type="obsolete">Ativar/desativar a barra de ferramentas</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Editierleiste</translation>
     </message>
     <message>
         <source>Edit toolbar
 
 Enables/disables the edit toolbar.</source>
-        <translation type="obsolete">Editar a barra de ferramentas
+        <translation type="obsolete">Editierleiste
 
-Ativar/desativar a barra de ferramentas.</translation>
+Aktiviert/deaktiviert die Editierleiste.</translation>
     </message>
     <message>
         <source>Menubar</source>
-        <translation type="obsolete">Barra de menus</translation>
+        <translation type="obsolete">Menüleiste</translation>
     </message>
     <message>
         <source>&amp;Menubar</source>
-        <translation type="obsolete">Barra de &amp;menus</translation>
+        <translation type="obsolete">&amp;Menüleiste</translation>
     </message>
     <message>
         <source>F7</source>
@@ -6037,43 +6564,43 @@ Ativar/desativar a barra de ferramentas.</translation>
     </message>
     <message>
         <source>Enables/disables the menubar</source>
-        <translation type="obsolete">Ativar/desativar a barra de menus</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Menüleiste</translation>
     </message>
     <message>
         <source>Menubar
 
 Enables/disables the menubar.</source>
-        <translation type="obsolete">Barra de menus
+        <translation type="obsolete">Menüleiste
 
-Ativar/desativar a barra de menus.</translation>
+Aktiviert/deaktiviert die Menüleiste.</translation>
     </message>
     <message>
         <source>Statusbar</source>
-        <translation type="obsolete">Barra de estado</translation>
+        <translation type="obsolete">Statuszeile</translation>
     </message>
     <message>
         <source>&amp;Statusbar</source>
-        <translation type="obsolete">Barra de es&amp;tado</translation>
+        <translation type="obsolete">&amp;Statuszeile</translation>
     </message>
     <message>
         <source>Enables/disables the statusbar</source>
-        <translation type="obsolete">Ativar/desativar a barra de estado</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Statuszeile</translation>
     </message>
     <message>
         <source>Statusbar
 
 Enables/disables the statusbar.</source>
-        <translation type="obsolete">Barra de estado
+        <translation type="obsolete">Statuszeile
 
-Ativar/desativar a barra de estado.</translation>
+Aktiviert/deaktiviert die Statuszeile.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation type="obsolete">Coordenadas</translation>
+        <translation type="obsolete">Koordinaten</translation>
     </message>
     <message>
         <source>C&amp;oordinates</source>
-        <translation type="obsolete">C&amp;oordenadas</translation>
+        <translation type="obsolete">K&amp;oordinaten</translation>
     </message>
     <message>
         <source>F8</source>
@@ -6081,39 +6608,39 @@ Ativar/desativar a barra de estado.</translation>
     </message>
     <message>
         <source>Enables/disables the coordinates</source>
-        <translation type="obsolete">Ativar/desativar as coordenadas</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Koordinaten</translation>
     </message>
     <message>
         <source>Coordinates
 
 Enables/disables the coordinates.</source>
-        <translation type="obsolete">Coordenadas
+        <translation type="obsolete">Koordinaten
 
-Ativar/desativar as coordenadas.</translation>
+Aktiviert/deaktiviert die Koordinaten.</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation type="obsolete">Barra deslizante</translation>
+        <translation type="obsolete">Schieber</translation>
     </message>
     <message>
         <source>Sli&amp;der</source>
-        <translation type="obsolete">&amp;Cursor</translation>
+        <translation type="obsolete">Schie&amp;ber</translation>
     </message>
     <message>
         <source>Ctrl+F8</source>
-        <translation type="obsolete">Ctrl+F8</translation>
+        <translation type="obsolete">Strg+F8</translation>
     </message>
     <message>
         <source>Enables/disables the slider</source>
-        <translation type="obsolete">Ativar/desativar a barra deslizante</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert den Schieber</translation>
     </message>
     <message>
         <source>Sidebar</source>
-        <translation type="obsolete">Barra lateral</translation>
+        <translation type="obsolete">Werkzeugleiste</translation>
     </message>
     <message>
         <source>Side&amp;bar</source>
-        <translation type="obsolete">&amp;Barra lateral</translation>
+        <translation type="obsolete">&amp;Werkzeugleiste</translation>
     </message>
     <message>
         <source>F9</source>
@@ -6121,23 +6648,23 @@ Ativar/desativar as coordenadas.</translation>
     </message>
     <message>
         <source>Enables/disables the comment field</source>
-        <translation type="obsolete">Ativar/desativar o campo de comentários</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert das Kommentarfeld</translation>
     </message>
     <message>
         <source>Sidebar
 
 Enables/disables the sidebar.</source>
-        <translation type="obsolete">Barra lateral
+        <translation type="obsolete">Werkzeugleiste
 
-Ativar/desativar a barra lateral.</translation>
+Aktiviert/deaktiviert die Werkzeugleiste.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="obsolete">Comentários</translation>
+        <translation type="obsolete">Kommentare</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation type="obsolete">&amp;Comentários</translation>
+        <translation type="obsolete">&amp;Kommentare</translation>
     </message>
     <message>
         <source>F10</source>
@@ -6147,37 +6674,37 @@ Ativar/desativar a barra lateral.</translation>
         <source>Comment field
 
 Enables/disables the comment field.</source>
-        <translation type="obsolete">Comentários
+        <translation type="obsolete">Kommentarfeld
 
-Ativar/desativar o campo de comentários.</translation>
+Aktiviert/deaktiviert das Kommentarfeld.</translation>
     </message>
     <message>
         <source>Pin comment</source>
-        <translation type="obsolete">Pregar comentários</translation>
+        <translation type="obsolete">Kommentare abreissen</translation>
     </message>
     <message>
         <source>&amp;Pin comment</source>
-        <translation type="obsolete">&amp;Pregar comentários</translation>
+        <translation type="obsolete">Kommentare &amp;abreissen</translation>
     </message>
     <message>
         <source>Ctrl+F10</source>
-        <translation type="obsolete">Ctrl+F10</translation>
+        <translation type="obsolete">Strg+F10</translation>
     </message>
     <message>
         <source>Enables/disables pinning the comment field</source>
-        <translation type="obsolete">Ativar/desativar a pregagem do campo de comentários</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert ein eigenes Fenster für Kommentare</translation>
     </message>
     <message>
         <source>Pin comment field
 
 Enables/disables pinning the comment field.</source>
-        <translation type="obsolete">Pregar comentários
+        <translation type="obsolete">Kommentare abreissen
 
-Ativar/desativar a pregagem do campo de comentários.</translation>
+Aktiviert/deaktiviert ein eigenes Fenster für Kommentare.</translation>
     </message>
     <message>
         <source>Zoom In</source>
-        <translation type="obsolete">Aproximar</translation>
+        <translation type="obsolete">Vergrößern</translation>
     </message>
     <message>
         <source>Alt++</source>
@@ -6185,19 +6712,19 @@ Ativar/desativar a pregagem do campo de comentários.</translation>
     </message>
     <message>
         <source>Zooms in the board</source>
-        <translation type="obsolete">Aproximar o tabuleiro</translation>
+        <translation type="obsolete">Brett vergrößern</translation>
     </message>
     <message>
         <source>Zoom In
 
 Zooms in the board.</source>
-        <translation type="obsolete">Aproximar
+        <translation type="obsolete">Vergrößern
 
-Aproximar o tabuleiro.</translation>
+Brett vergrößern.</translation>
     </message>
     <message>
         <source>Zoom Out</source>
-        <translation type="obsolete">Distanciar</translation>
+        <translation type="obsolete">Verkleinern</translation>
     </message>
     <message>
         <source>Alt+-</source>
@@ -6205,39 +6732,39 @@ Aproximar o tabuleiro.</translation>
     </message>
     <message>
         <source>Zooms out the board</source>
-        <translation type="obsolete">Distanciar o tabuleiro</translation>
+        <translation type="obsolete">Brett verkleinern</translation>
     </message>
     <message>
         <source>Zoom Out
 
 Zooms out the board.</source>
-        <translation type="obsolete">Distanciar
+        <translation type="obsolete">Verkleinern
 
-Distanciar o tabuleiro.</translation>
+Brett verkleinern.</translation>
     </message>
     <message>
         <source>Save size</source>
-        <translation type="obsolete">Salvar o tamanho</translation>
+        <translation type="obsolete">Größe speichern</translation>
     </message>
     <message>
         <source>Save the current window size</source>
-        <translation type="obsolete">Salvar o tamanho da janela atual</translation>
+        <translation type="obsolete">Speichert die aktuelle Fenstergröße</translation>
     </message>
     <message>
         <source>Save size
 
 Saves the current window size and restores it on the next program start.</source>
-        <translation type="obsolete">Enregistrer la taille
+        <translation type="obsolete">Größe speichern
 
-Enregistrer la taille actuelle de la fen</translation>
+Speichert die aktuelle Fenstergröße und stellt diese beim Programmstart wieder her.</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="obsolete">Tela cheia</translation>
+        <translation type="obsolete">Vollbild</translation>
     </message>
     <message>
         <source>&amp;Fullscreen</source>
-        <translation type="obsolete">Tela &amp;cheia</translation>
+        <translation type="obsolete">Vo&amp;llbild</translation>
     </message>
     <message>
         <source>F11</source>
@@ -6245,23 +6772,23 @@ Enregistrer la taille actuelle de la fen</translation>
     </message>
     <message>
         <source>Enable/disable fullscreen mode</source>
-        <translation type="obsolete">Ativar/desativar o modo de tela cheia</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert Vollbildmodus</translation>
     </message>
     <message>
         <source>Fullscreen
 
 Enable/disable fullscreen mode.</source>
-        <translation type="obsolete">Tela cheia
+        <translation type="obsolete">Vollbild
 
-Ativar/desativar o modo de tela cheia.</translation>
+Aktiviert/deaktiviert Vollbildmodus.</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="obsolete">Manual</translation>
+        <translation type="obsolete">Handbuch</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="obsolete">&amp;Manual</translation>
+        <translation type="obsolete">&amp;Handbuch</translation>
     </message>
     <message>
         <source>F1</source>
@@ -6269,338 +6796,342 @@ Ativar/desativar o modo de tela cheia.</translation>
     </message>
     <message>
         <source>Opens the manual</source>
-        <translation type="obsolete">Abre o manual</translation>
+        <translation type="obsolete">Öffnet das Handbuch</translation>
     </message>
     <message>
         <source>Help
 
 Opens the manual of the application.</source>
-        <translation type="obsolete">Ajuda
+        <translation type="obsolete">Hilfe
 
-Abre o manual do aplicativo.</translation>
+Öffnet das Handbuch.</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="obsolete">Sobre</translation>
+        <translation type="obsolete">Über</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="obsolete">&amp;Sobre...</translation>
+        <translation type="obsolete">Ü&amp;ber ...</translation>
     </message>
     <message>
         <source>About the application</source>
-        <translation type="obsolete">Sobre o aplicativo</translation>
+        <translation type="obsolete">Über das Programm</translation>
     </message>
     <message>
         <source>About
 
 About the application.</source>
-        <translation type="obsolete">Sobre
+        <translation type="obsolete">Über
 
-Sobre o aplicativo.</translation>
+Über das Programm.</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation type="obsolete">Sobre o Qt</translation>
+        <translation type="obsolete">Über Qt</translation>
     </message>
     <message>
         <source>About &amp;Qt...</source>
-        <translation type="obsolete">Sobre o &amp;Qt...</translation>
+        <translation type="obsolete">Über &amp;Qt ...</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="obsolete">&amp;Arquivo</translation>
+        <translation type="obsolete">&amp;Datei</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="obsolete">&amp;Editar</translation>
+        <translation type="obsolete">&amp;Bearbeiten</translation>
     </message>
     <message>
         <source>&amp;Navigation</source>
-        <translation type="obsolete">&amp;Navegação</translation>
+        <translation type="obsolete">&amp;Navigation</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation type="obsolete">&amp;Configurações</translation>
+        <translation type="obsolete">&amp;Optionen</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="obsolete">&amp;Ver</translation>
+        <translation type="obsolete">&amp;Ansicht</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="obsolete">&amp;Ajuda</translation>
+        <translation type="obsolete">&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="188"/>
+        <location filename="../mainwindow.cpp" line="186"/>
         <source>Ready.</source>
-        <translation>Pronto.</translation>
+        <translation>Bereit.</translation>
     </message>
     <message>
         <source>Window size saved.</source>
-        <translation type="obsolete">Tamanho da janela foi salvo.</translation>
+        <translation type="obsolete">Fenstergröße gespeichert.</translation>
     </message>
     <message>
         <source>About...</source>
-        <translation type="obsolete">A propos...</translation>
+        <translation type="obsolete">Über...</translation>
     </message>
     <message>
         <source>Game Info
 
 Display game information.</source>
-        <translation type="obsolete">Informações de jogo
+        <translation type="obsolete">Spielinfo
 
-Mostra informações de jogo.</translation>
+Zeigt Informationen über das Spiel an.</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation type="obsolete">Este arquivo já existe. Você quer o sobreescrever?</translation>
+        <translation type="obsolete">Diese Datei existiert bereits. Soll sie überschrieben werden?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="obsolete">Sim</translation>
+        <translation type="obsolete">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="obsolete">N</translation>
+        <translation type="obsolete">Nein</translation>
     </message>
     <message>
         <source>Cannot save SGF file.</source>
-        <translation type="obsolete">Impossível salvar arquivo SGF.</translation>
+        <translation type="obsolete">Konnte SGF-Datei nicht speichern.</translation>
     </message>
     <message>
         <source>Cannot load from clipboard. Is it empty?</source>
-        <translation type="obsolete">Impossível carregar da área de transferência. Está vazia?</translation>
+        <translation type="obsolete">Konnte nicht von der Zwischenablage laden. Ist diese leer?</translation>
     </message>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation type="obsolete">Arquivos de texto (*.txt);;Todos os arquivos (*)</translation>
+        <translation type="obsolete">Textdateien (*.txt);;Alle Dateien (*)</translation>
     </message>
     <message>
         <source>Importing ASCII failed. Clipboard empty?</source>
-        <translation type="obsolete">Falha ao importar arquivo ASCII. Área de transferência vazia?</translation>
+        <translation type="obsolete">Der ASCII-Import scheiterte. Ist die Zwischenablage leer?</translation>
     </message>
     <message>
         <source>Telnet connection disabled.
 To enable it, get the qGo-library and recompile this package with telnet enabled.</source>
-        <translation type="obsolete">Connection Telnet d</translation>
+        <translation type="obsolete">Telnet Verbindung deaktiviert.
+Um dies zu aktivieren, benötigen sie die qGo-library und müssen das Packet neu kompilieren.</translation>
     </message>
     <message>
         <source>Autoplay stopped.</source>
-        <translation type="obsolete">Jogo automático parado.</translation>
+        <translation type="obsolete">Automatisches Spielen angehalten.</translation>
     </message>
     <message>
         <source>Autoplay started.</source>
-        <translation type="obsolete">Jogo automático começado.</translation>
+        <translation type="obsolete">Automatisches Spielen gestartet.</translation>
     </message>
     <message>
         <source>Variations swapped.</source>
-        <translation type="obsolete">Variações trocadas.</translation>
+        <translation type="obsolete">Variationen getauscht.</translation>
     </message>
     <message>
         <source>No previous variation available.</source>
-        <translation type="obsolete">Nenhuma variação anterior disponível.</translation>
+        <translation type="obsolete">Keine vorherige Variation vorhanden.</translation>
     </message>
     <message>
         <source>You modified the game.
 Do you want to save your changes?</source>
-        <translation type="obsolete">Você modificou o jogo.
-Quer salvar as modificações?</translation>
+        <translation type="obsolete">Das Spiel wurde geändert.
+Sollen die Änderungen gespeichert werden?</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1947"/>
         <location filename="../mainwindow.ui" line="3239"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>What&apos;s &amp;This?</source>
-        <translation type="obsolete">O &amp;que é isto?</translation>
+        <translation type="obsolete">Was ist &amp;Das?</translation>
     </message>
     <message>
         <source>English translation by Peter Strempel</source>
-        <translation type="obsolete">Traduction Fran</translation>
+        <translation type="obsolete">Deutsche Übersetzung von Peter Strempel</translation>
     </message>
     <message>
         <source>Current move</source>
-        <translation type="obsolete">Jogada atual</translation>
+        <translation type="obsolete">Aktueller Zug</translation>
     </message>
     <message>
         <source>Move
 Displays the number of the current turn and the last move played.</source>
-        <translation type="obsolete">Jogada
-Mostra o número da jogada atual e a última jogada realizada.</translation>
+        <translation type="obsolete">Zug
+
+Zeigt die Nummer des aktuellen Zuges und den zuletzt gespielten Zug an.</translation>
     </message>
     <message>
         <source>Brothers / sons</source>
-        <translation type="obsolete">Variações / derivações</translation>
+        <translation type="obsolete">Brüder / Söhne</translation>
     </message>
     <message>
         <source>Navigation
 Shows the brothers and sons of the current move.</source>
-        <translation type="obsolete">Navegação
-Mostra as variações e derivações da jogada atual.</translation>
+        <translation type="obsolete">Navigation
+
+Zeit die Brüder und Söhne des aktuellen Zuges an.</translation>
     </message>
     <message>
         <source>Current mode</source>
-        <translation type="obsolete">Modo atual</translation>
+        <translation type="obsolete">Aktueller Modus</translation>
     </message>
     <message>
         <source>Mode
 Shows the current mode. &apos;N&apos; for normal mode, &apos;E&apos; for edit mode.</source>
-        <translation type="obsolete">Modo
+        <translation type="obsolete">Modus
 
-Mostra o modo atual. &apos;N&apos; para o modo normal, &apos;E&apos; para o modo de edição.</translation>
+Zeigt den aktuellen Modus an. &apos;N&apos; für normalen Modus, &apos;E&apos; für Bearbeitungsmodus.</translation>
     </message>
     <message>
         <source>Current edit mark</source>
-        <translation type="obsolete">Marca de edição</translation>
+        <translation type="obsolete">Derzeitige Markierung</translation>
     </message>
     <message>
         <source>Mark
 Shows the current edit mark. &apos;-&apos; in normal mode.</source>
-        <translation type="obsolete">Marca
-Mostra a marca de edição atual. &apos;-&apos; no modo normal.</translation>
+        <translation type="obsolete">Markierung
+
+Zeigt die aktuelle Markierung an. &apos;-&apos; in normalem Modus.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation type="obsolete">Arquivos SGF (*.sgf);;Arquivos MGT (*.mgt);;Arquivos XML (*.xml);;Todos os arquivos (*)</translation>
+        <translation type="obsolete">SGF-Dateien (*.sgf);;MGT-Dateien (*.mgt);;XML-Dateien (*.xml);;Alle Dateien (*)</translation>
     </message>
     <message>
         <source>loaded.</source>
-        <translation type="obsolete">carregado.</translation>
+        <translation type="obsolete">geladen.</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;All Files (*)</source>
-        <translation type="obsolete">Arquivos SGF (*.sgf);;Todos os arquivos (*)</translation>
+        <translation type="obsolete">SGF-Dateien (*.sgf);;All Dateien (*)</translation>
     </message>
     <message>
         <source>saved.</source>
-        <translation type="obsolete">salvo.</translation>
+        <translation type="obsolete">gespeichert.</translation>
     </message>
     <message>
         <source>Export image as</source>
-        <translation type="obsolete">Exportar imagem como</translation>
+        <translation type="obsolete">Exportiere Bild als</translation>
     </message>
     <message>
         <source>&amp;File toolbar</source>
-        <translation type="obsolete">Barra de ferramentas de &amp;arquivos</translation>
+        <translation type="obsolete">&amp;Dateileiste</translation>
     </message>
     <message>
         <source>Slider
 
 Enables/disables the slider.</source>
-        <translation type="obsolete">Barra deslizante
+        <translation type="obsolete">Schieber
 
-Ativar/desativar a barra deslizante.</translation>
+Aktiviert/deaktiviert den Schieber.</translation>
     </message>
     <message>
         <source>About Qt
 
 About Qt.</source>
-        <translation type="obsolete">Sobre o Qt
+        <translation type="obsolete">Über Qt
 
-Sobre o Qt.</translation>
+Über Qt.</translation>
     </message>
     <message>
         <source>Enables/disables the sidebar</source>
-        <translation type="obsolete">Ativar/desativar a barra lateral</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert die Werkzeugleiste</translation>
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation type="obsolete">&amp;Aproximar</translation>
+        <translation type="obsolete">Verg&amp;rößern</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation type="obsolete">&amp;Distanciar</translation>
+        <translation type="obsolete">Verkle&amp;inern</translation>
     </message>
     <message>
         <source>Variation duplicated.</source>
-        <translation type="obsolete">Variação duplicada.</translation>
+        <translation type="obsolete">Variation duplizieren.</translation>
     </message>
     <message>
         <source>Import &amp;ASCII</source>
-        <translation type="obsolete">Importar &amp;ASCII</translation>
+        <translation type="obsolete">&amp;ASCII importieren</translation>
     </message>
     <message>
         <source>&amp;Export ASCII</source>
-        <translation type="obsolete">&amp;Exportar ASCII</translation>
+        <translation type="obsolete">ASCII &amp;exportieren</translation>
     </message>
     <message>
         <source>Import SGF &amp;from clipboard</source>
-        <translation type="obsolete">Importar &amp;SGF a partir da área de trasferência</translation>
+        <translation type="obsolete">SGF &amp;von der Zwischenablage importieren</translation>
     </message>
     <message>
         <source>Export SGF to clipboard</source>
-        <translation type="obsolete">Exportar SGF para a área de trasferência</translation>
+        <translation type="obsolete">SGF in die Zwischenablage exportieren</translation>
     </message>
     <message>
         <source>Export SGF &amp;to clipboard</source>
-        <translation type="obsolete">Exportar SGF &amp;para a área de trasferência</translation>
+        <translation type="obsolete">SGF &amp;in die Zwischenablage exportieren</translation>
     </message>
     <message>
         <source>Export a complete game in SGF format to clipboard</source>
-        <translation type="obsolete">Exportar uma partida completa para a área de trasferência sob o format SGF</translation>
+        <translation type="obsolete">Das komplette Spiel im SGF-Format in die Zwischenablage exportieren</translation>
     </message>
     <message>
         <source>Export SGF to clipboard
 
 Export a complete game in SGF format to clipboard.</source>
-        <translation type="obsolete">Exportar SGF para a área de trasferência
+        <translation type="obsolete">SGF in Zwischenablage exportieren
 
-Exportar uma partida completa para a área de trasferência sob o format SGF.</translation>
+Das komplette Spiel im SGF-Format in die Zwischenablage exportieren.</translation>
     </message>
     <message>
         <source>Export &amp;Image</source>
-        <translation type="obsolete">Exportar &amp;imagem</translation>
+        <translation type="obsolete">&amp;Bild exportieren</translation>
     </message>
     <message>
         <source>&amp;Main branch</source>
-        <translation type="obsolete">&amp;Braço principal</translation>
+        <translation type="obsolete">&amp;Hauptvariante</translation>
     </message>
     <message>
         <source>To main branch</source>
-        <translation type="obsolete">Para o braço principal</translation>
+        <translation type="obsolete">Zur Hauptvariante</translation>
     </message>
     <message>
         <source>Main Branch
 
 Move to the main branch where variation started.</source>
-        <translation type="obsolete">Braço Principal
+        <translation type="obsolete">Hauptvariante
 
-Ir para o braço principal onde a variação começou.</translation>
+Geht zur Hauptvariante, bei der die Variation startete.</translation>
     </message>
     <message>
         <source>Vertical comment</source>
-        <translation type="obsolete">Comentário vertical</translation>
+        <translation type="obsolete">Vertikaler Kommentar</translation>
     </message>
     <message>
         <source>&amp;Vertical comment</source>
-        <translation type="obsolete">Comentário &amp;vertical</translation>
+        <translation type="obsolete">&amp;Vertikaler Kommentar</translation>
     </message>
     <message>
         <source>Shift+F10</source>
-        <translation type="obsolete">Shift+F10</translation>
+        <translation type="obsolete">Umschalttaste + F10</translation>
     </message>
     <message>
         <source>Enables/disables a vertical direction of the comment field</source>
-        <translation type="obsolete">Ativar/desativar a orientação vertical para o campo de comentários</translation>
+        <translation type="obsolete">Aktiviert/deaktiviert vertikale Ausrichtung des Kommentarfeldes</translation>
     </message>
     <message>
         <source>Vertical comment field
 
 Enables/disables a vertical direction of the comment field.</source>
-        <translation type="obsolete">Commentaire vertical
+        <translation type="obsolete">Vertikaler Kommentar
 
-Active / d</translation>
+Aktiviert/deaktiviert vertikale Orientierung des Kommentarfeldes.</translation>
     </message>
     <message>
         <source>Save si&amp;ze</source>
-        <translation type="obsolete">Salvar o &amp;tamanho</translation>
+        <translation type="obsolete">&amp;Größe speichern</translation>
     </message>
     <message>
         <source>&amp;Import/Export</source>
-        <translation type="obsolete">&amp;Importar/Exportar</translation>
+        <translation type="obsolete">&amp;Import/Export</translation>
     </message>
     <message>
         <source>N</source>
@@ -6612,19 +7143,19 @@ Active / d</translation>
     </message>
     <message>
         <source>SGF imported.</source>
-        <translation type="obsolete">SGF importado.</translation>
+        <translation type="obsolete">SGF importiert.</translation>
     </message>
     <message>
         <source>Failed to export SGF to clipboard.</source>
-        <translation type="obsolete">Impossível exportar SGF para a área de transferência.</translation>
+        <translation type="obsolete">Konnte SGF nicht in die Zwischenablage exportieren.</translation>
     </message>
     <message>
         <source>SGF exported.</source>
-        <translation type="obsolete">SGF exportado.</translation>
+        <translation type="obsolete">SGF exportiert.</translation>
     </message>
     <message>
         <source>ASCII imported.</source>
-        <translation type="obsolete">ASCII importado.</translation>
+        <translation type="obsolete">ASCII importiert.</translation>
     </message>
     <message>
         <source>PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;JPEG (*.jpeg);;MNG (*.mng)</source>
@@ -6632,71 +7163,98 @@ Active / d</translation>
     </message>
     <message>
         <source>Main Branch</source>
-        <translation type="obsolete">Braço Principal</translation>
+        <translation type="obsolete">Hauptvariation</translation>
     </message>
     <message>
         <source>New board prepared.</source>
-        <translation type="obsolete">Novo tabuleiro preparado.</translation>
-    </message>
-    <message>
-        <source>newgame</source>
-        <translation type="obsolete">nova partida</translation>
-    </message>
-    <message>
-        <source>entermove</source>
-        <translation type="obsolete">Entre com uma jogada</translation>
-    </message>
-    <message>
-        <source>preferences</source>
-        <translation type="obsolete">preferências</translation>
-    </message>
-    <message>
-        <source>gameinfo</source>
-        <translation type="obsolete">Informations de la partie</translation>
+        <translation type="obsolete">Neues Brett vorbereitet.</translation>
     </message>
     <message>
         <source>English translation by Peter Strempel &amp; Johannes Mesa</source>
-        <translation type="obsolete">Traduction fran</translation>
+        <translation type="obsolete">Deutsche Übersetzung durch Peter Strempel &amp; Johannes Mesa</translation>
     </message>
     <message>
         <source>&amp;Previous move</source>
-        <translation type="obsolete">Jogada &amp;anterior</translation>
+        <translation type="obsolete">V&amp;orheriger Zug</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="obsolete">Links</translation>
     </message>
     <message>
         <source>&amp;Next move</source>
-        <translation type="obsolete">Jogada &amp;seguinte</translation>
+        <translation type="obsolete">&amp;Nächster Zug</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="obsolete">Rechts</translation>
     </message>
     <message>
         <source>&amp;First move</source>
-        <translation type="obsolete">&amp;Primeira jogada</translation>
+        <translation type="obsolete">&amp;Erster Zug</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation type="obsolete">Pos1</translation>
     </message>
     <message>
         <source>&amp;Last move</source>
-        <translation type="obsolete">Ú&amp;ltima jogada</translation>
+        <translation type="obsolete">&amp;Letzter Zug</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation type="obsolete">Ende</translation>
     </message>
     <message>
         <source>P&amp;revious variation</source>
-        <translation type="obsolete">Va&amp;riação anterior</translation>
+        <translation type="obsolete">Vo&amp;rherige Variation</translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="obsolete">Hoch</translation>
     </message>
     <message>
         <source>N&amp;ext variation</source>
-        <translation type="obsolete">Variação s&amp;eguinte</translation>
+        <translation type="obsolete">Nächste &amp;Variation</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="obsolete">Runter</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="obsolete">Atualizar</translation>
+        <translation type="obsolete">Aktualisierung</translation>
     </message>
     <message>
         <source>Update from online game</source>
-        <translation type="obsolete">Atualizar a partir de um jogo conectado</translation>
+        <translation type="obsolete">Aktualisierung des Online-Spieles</translation>
     </message>
     <message>
         <source>Update from online game to local board and supersede own changes.</source>
-        <translation type="obsolete">Atualizar a partir de um jogo conectado para o tabuleiro e suplantar mudanças próprias.</translation>
+        <translation type="obsolete">Übernehme das Online-Spiel zum lokalen Brett, wobei vorgenommene Änderungen überschrieben werden.</translation>
+    </message>
+    <message>
+        <source>Save size
+
+Saves the current window size and restores it on the next program start.
+
+Use ALT + &lt;number key&gt; to store own sizes
+Restore with CTRL + &lt;number key&gt;
+
+&lt;0&gt; is default value at program start.</source>
+        <translation type="obsolete">Größe speichern.
+
+Speichert die momentane Fenstergröße und stellt sie beim nächsten Programmstart wieder her.
+
+ALT + &lt;Zifferntaste&gt; speichert eigene Größen
+CTRL + &lt;Zifferntaste&gt; stellt die Größe wieder her.
+
+&lt;0&gt; ist die Voreinstellung für Programmstart.
+&lt;9&gt; ist die Voreinstellung für Editorfenster.</translation>
     </message>
     <message>
         <source>Window size restored.</source>
-        <translation type="obsolete">Tamanho da janela restaurado.</translation>
+        <translation type="obsolete">Fenstergröße wieder hergestellt.</translation>
     </message>
     <message>
         <source>Save size
@@ -6708,39 +7266,39 @@ Restore with CTRL + &lt;number key&gt;
 
 &lt;0&gt; is default value at program start.
 &lt;9&gt; is default for edit window.</source>
-        <translation type="obsolete">Salvar o tamanho
+        <translation type="obsolete">Größe speichern.
 
-Salva o tamanho da janela e restaura-o na próxima vez que o programa iniciar.
+Speichert die derzeitige Fenstergröße und stellt sie beim nächsten Programmstart wieder her.
 
-Use ALT + &lt;tecla numérica&gt; para guardar tamanhos próprios
-Restaurar é com CTRL + &lt;tecla numérica&gt;
+ALT + &lt;Zifferntaste&gt; speichert eigene Größen
+STRG + &lt;Zifferntaste&gt; stellt die Größe wieder her.
 
-&lt;0&gt; é o valor padrão no início do programa.
-&lt;9&gt; é o padrão para a janela de edição.</translation>
+&lt;0&gt; ist die Voreinstellung beim Programmstart.
+&lt;9&gt; ist die Voreinstellung für das Editorfenster.</translation>
     </message>
     <message>
         <source>Sound Info</source>
-        <translation type="obsolete">Informações de Som</translation>
+        <translation type="obsolete">Toninformation</translation>
     </message>
     <message>
         <source>&amp;Sound</source>
-        <translation type="obsolete">&amp;Som</translation>
+        <translation type="obsolete">&amp;Sound</translation>
     </message>
     <message>
         <source>Short info on sound availability</source>
-        <translation type="obsolete">Algumas informações sobre a disponibilidade do som</translation>
+        <translation type="obsolete">Kurzinfo zur Tonverfügbarkeit</translation>
     </message>
     <message>
         <source>Sound Info
 
 Views a message box with a short comment about sound.</source>
-        <translation type="obsolete">Informações de Som
+        <translation type="obsolete">Toninformation
 
-Mostra uma caixa de mensagem com um pequeno comentário sobre o som.</translation>
+Ein kurzer Kommentar zur Tonverfügbarkeit wird angezeigt.</translation>
     </message>
     <message>
         <source>Observers</source>
-        <translation type="obsolete">Observadores</translation>
+        <translation type="obsolete">Zuschauer</translation>
     </message>
     <message>
         <source>N</source>
@@ -6749,41 +7307,43 @@ Mostra uma caixa de mensagem com um pequeno comentário sobre o som.</translatio
     </message>
     <message>
         <source>Previous commented move</source>
-        <translation type="obsolete">Jogada comentada anterior</translation>
+        <translation type="obsolete">Voriger kommentierter Zug</translation>
     </message>
     <message>
         <source>Previous &amp;commented move</source>
-        <translation type="obsolete">Jogada &amp;comentada anterior</translation>
+        <translation type="obsolete">Voriger &amp;kommentierter Zug</translation>
     </message>
     <message>
         <source>To previous comment</source>
-        <translation type="obsolete">Para o comentário anterior</translation>
+        <translation type="obsolete">Zum vorigen Kommentar</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the previous move that has a comment</source>
-        <translation type="obsolete">Comentário anterior
+        <translation type="obsolete">Voriger Kommentar
 
-Ir para a jogada anterior que tem um comentário</translation>
+Zurückgehen zum vorigen kommentierten Zug</translation>
     </message>
     <message>
         <source>Next commented move</source>
-        <translation type="obsolete">Próxima jogada comentada</translation>
+        <translation type="obsolete">Nächster, kommentierter Zug</translation>
     </message>
     <message>
         <source>Next c&amp;ommented move</source>
-        <translation type="obsolete">Próxima jogada c&amp;omentada</translation>
+        <translation type="obsolete">Nächster k&amp;ommentierter Zug</translation>
     </message>
     <message>
         <source>To next comment</source>
-        <translation type="obsolete">Para o próximo comentário</translation>
+        <translation type="obsolete">Zum nächsten Kommentar</translation>
     </message>
     <message>
         <source>Previous comment
 
 Move to the next move that has a comment</source>
-        <translation type="obsolete">Coup comment</translation>
+        <translation type="obsolete">Nächster Kommentar
+
+Vorgehen zum nächsten, kommentierten Zug</translation>
     </message>
     <message>
         <source>Vertical comment field
@@ -6791,116 +7351,116 @@ Move to the next move that has a comment</source>
 Enables/disables a vertical direction of the comment field.
 
 Note: This setting is temporary for this board. In order to set permanent horizontal/vertical comment use &apos;Preferences&apos;.</source>
-        <translation type="obsolete">Comentário vertical
+        <translation type="obsolete">Senkrechtes Kommentarfeld.
 
-Ativa/desativa a direção vertical do campo de comentários.
+Stellt die Ausrichtung des Kommentarfeldes auf vertikal/horizontal.
 
-Nota: este ajuste é temporário para este tabuleiro. para definir permanentemente, use &apos;Preferências&apos;.</translation>
+Anmerkung: Diese Einstellung ist temporär. Eine Dauerhafte Einstellung erfolgt unter &apos;Einstellungen&apos;.</translation>
     </message>
     <message>
         <source>Goto stone at clicked move</source>
-        <translation type="obsolete">Ir para a pedra na jogada clicada</translation>
+        <translation type="obsolete">Zum Stein an der angeklickten Stelle gehen</translation>
     </message>
     <message>
         <source>Goto clic&amp;ked move</source>
-        <translation type="obsolete">Ir para a pedra na jogada c&amp;licada</translation>
+        <translation type="obsolete">Zum Stein an der ange&amp;klickten Stelle gehen</translation>
     </message>
     <message>
         <source>To clicked move</source>
-        <translation type="obsolete">Para a jogada clicada</translation>
+        <translation type="obsolete">Zum angeklickten Zug</translation>
     </message>
     <message>
         <source>Click on a board intersection
 
 Move to the stone played at this intersection (if any)</source>
-        <translation type="obsolete">Clicar sobre uma interseção do tabuleiro
+        <translation type="obsolete">Anklicken einer Position
 
-Ir para a pedra jogada nesta interseção (se alguma)</translation>
+Falls ein Stein an der gewählten Position gespielt wurde, wird zu diesem Zug gewechselt</translation>
     </message>
     <message>
         <source>Next comment
 
 Move to the next move that has a comment</source>
-        <translation type="obsolete">Comentário seguinte
+        <translation type="obsolete">Nächster Kommentar
 
-Ir para a próxima jogdaa que tem um comentário</translation>
+Vorgehen zum nächsten Zug mit Kommentar</translation>
     </message>
     <message>
         <source>Rk</source>
-        <translation type="obsolete">Cl</translation>
+        <translation type="obsolete">Rg</translation>
     </message>
     <message>
         <source>Mute stones sound</source>
-        <translation type="obsolete">Silenciar o barulho das pedras</translation>
+        <translation type="obsolete">Klang für Steine stummschalten</translation>
     </message>
     <message>
         <source>&amp;Mute stones sound</source>
-        <translation type="obsolete">&amp;Silenciar o barulho das pedras</translation>
+        <translation type="obsolete">Klang für Steine stu&amp;mmschalten</translation>
     </message>
     <message>
         <source>Toggle stones sound on/off</source>
-        <translation type="obsolete">Alterna entre ligar/desligar o som das pedras</translation>
+        <translation type="obsolete">Ändere Klang für Steine (ein/aus)</translation>
     </message>
     <message>
         <source>Stones sound
 
 Toggle stones sound on/off
 this toggles only the stones sounds</source>
-        <translation type="obsolete">Som das pedras
+        <translation type="obsolete">Klang für Steine
 
-Alterna entre ligar/desligar o som das pedras
-isto afeta somente os sons das pedras</translation>
+Ändere Klang für Steine (ein/aus)
+Nur der Klang für Steine wird geändert</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="208"/>
+        <location filename="../mainwindow.cpp" line="206"/>
         <source>Current online players / watched players</source>
-        <translation type="unfinished">Jogadores conectados agora / jogadores observados</translation>
+        <translation type="unfinished">Spieler online / beobachtete Spieler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="209"/>
+        <location filename="../mainwindow.cpp" line="207"/>
         <source>Displays the number of current online players
 and the number of online players you are watching.
 A player you are watching has an entry in the &apos;watch player:&apos; field.</source>
-        <translation type="unfinished">Exibe o número de jogadores conectados agora
-e o número de jogadores que você está observando.
-Um jogador que você estiver observando terá uma entrada no campo &apos;observar jogador:&apos; .</translation>
+        <translation type="unfinished">Zeigt die Anzahl der gegenwärtig am Server angemeldeten Spieler
+sowie die Zahl der beobachteten Spieler, die angemeldet sind.
+Um einen Spieler zu beobachten ,genügt ein Eintrag in das Feld &quot;beobachtete Spieler&quot;.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.cpp" line="214"/>
         <source>Current online games / observed games + matches</source>
-        <translation type="unfinished">Jogos conectados agora / jogos observados + partidas</translation>
+        <translation type="unfinished">Derzeitig laufende Spiele / zugeschaute Spiele + eigene Spiele</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="217"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>Displays the number of games currently played on this server and the number of games you are observing or playing</source>
-        <translation type="unfinished">Mostra o número de jogos em andamento neste servidor e o número de jogos que você estiver observando ou participando</translation>
+        <translation type="unfinished">Zeigt die Anzahl der Spiele, die gerade auf dem Go-Server laufen und die Zahl der Spiele, denen man zuschaut oder die man selbst spielt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="224"/>
+        <location filename="../mainwindow.cpp" line="222"/>
         <source>Current server</source>
-        <translation type="unfinished">Servidor atual</translation>
+        <translation type="unfinished">Derzeitiger Server</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="223"/>
         <source>Displays the current server&apos;s name or OFFLINE if you are not connected to the internet.</source>
-        <translation type="unfinished">Mostra o nome do servidor atual ou &apos;OFFLINE&apos; se você não estiver conectado à internete.</translation>
+        <translation type="unfinished">Zeigt den Namen des Servers, mit dem derzeitig kommuniziert wird, oder OFFLINE, falls keine Internetverbindung hergestellt worden ist.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="240"/>
+        <location filename="../mainwindow.cpp" line="238"/>
         <source>Online Time</source>
-        <translation type="unfinished">Tempo Conectado</translation>
+        <translation type="unfinished">Online-Zeit</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="239"/>
         <source>Displays the current online time.
 (A) -&gt; auto answer
 (Hold) -&gt; hold the line</source>
-        <translation type="unfinished">Mostra a hora de coneção atual.
-(A)  -&gt;  resposta automática
-(Hold)  -&gt;  segura a linha</translation>
+        <translation type="unfinished">Aktuelle Online-Zeit.
+(A) -&gt; automatische Antwort.
+(Hold) -&gt; Verbindung halten</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="492"/>
+        <location filename="../mainwindow.cpp" line="490"/>
         <source>*** Both players are the same ! ***</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6980,7 +7540,7 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
     <message>
         <location filename="../mainwindow.ui" line="268"/>
         <source>Set the handicap range you want for seeking games</source>
-        <translation type="unfinished">Defina a gama de vantagens que você quer para procurar jogos</translation>
+        <translation type="unfinished">Vorgabebereich für zu suchendes Spiel setzen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
@@ -7025,12 +7585,12 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
     <message>
         <location filename="../mainwindow.ui" line="386"/>
         <source>Shouts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rufe</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="412"/>
         <source>Messages</source>
-        <translation type="unfinished">Messages</translation>
+        <translation type="unfinished">Meldungen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="437"/>
@@ -7046,7 +7606,7 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
         <location filename="../mainwindow.ui" line="492"/>
         <location filename="../mainwindow.ui" line="636"/>
         <source>9p-1p</source>
-        <translation type="unfinished">1j-9j {9p?} {1p?}</translation>
+        <translation type="unfinished">1p-9p {9p?} {1p?}</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="497"/>
@@ -7241,7 +7801,7 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
         <location filename="../mainwindow.ui" line="1226"/>
         <location filename="../mainwindow.ui" line="1461"/>
         <source>Handicap</source>
-        <translation type="unfinished">Vantagem</translation>
+        <translation type="unfinished">Vorgabe</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1013"/>
@@ -7255,7 +7815,7 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
         <location filename="../mainwindow.ui" line="1395"/>
         <location filename="../mainwindow.ui" line="3150"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Weiß</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1037"/>
@@ -7269,7 +7829,7 @@ Um jogador que você estiver observando terá uma entrada no campo &apos;observa
         <location filename="../mainwindow.ui" line="1358"/>
         <location filename="../mainwindow.ui" line="3143"/>
         <source>Black</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schwarz</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1074"/>
@@ -7369,22 +7929,22 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <message>
         <location filename="../mainwindow.ui" line="1717"/>
         <source>Language</source>
-        <translation type="unfinished">Idioma</translation>
+        <translation type="unfinished">Sprache</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1725"/>
         <source>System default</source>
-        <translation type="unfinished">Idioma original</translation>
+        <translation type="unfinished">Systemvorgabe</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1730"/>
         <source>German</source>
-        <translation type="unfinished">Allemand</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1735"/>
         <source>French</source>
-        <translation type="unfinished">Fran</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1780"/>
@@ -7399,7 +7959,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <message>
         <location filename="../mainwindow.ui" line="1809"/>
         <source>None</source>
-        <translation type="unfinished">Nenhum</translation>
+        <translation type="unfinished">Keine</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1954"/>
@@ -7434,16 +7994,16 @@ When in score mode, left click to mark a group as dead, right click to mark it a
     <message>
         <location filename="../mainwindow.ui" line="2030"/>
         <source>Time interval for autoplay</source>
-        <translation type="unfinished">Intervalo de tempo para jogo automático</translation>
+        <translation type="unfinished">Zeitintervall für automatisches Spielen</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2033"/>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation type="unfinished">Intervalo de tempo para jogo automático
+        <translation type="unfinished">Zeitintervall für automatisches Spielen
 
-Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
+Verzögerung in Sekunden zwischen den Zügen beim automatischen Spielen.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2039"/>
@@ -7453,7 +8013,7 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
     <message>
         <location filename="../mainwindow.ui" line="2044"/>
         <source>0.5</source>
-        <translation type="unfinished">0,5</translation>
+        <translation type="unfinished">0.5</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2049"/>
@@ -7463,7 +8023,7 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
     <message>
         <location filename="../mainwindow.ui" line="2054"/>
         <source>2.5</source>
-        <translation type="unfinished">2,5</translation>
+        <translation type="unfinished">2.5</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2059"/>
@@ -7473,7 +8033,7 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
     <message>
         <location filename="../mainwindow.ui" line="2064"/>
         <source>7.5</source>
-        <translation type="unfinished">7,5</translation>
+        <translation type="unfinished">7.5</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2069"/>
@@ -7483,7 +8043,7 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
     <message>
         <location filename="../mainwindow.ui" line="1820"/>
         <source>Sound</source>
-        <translation type="unfinished">Som</translation>
+        <translation type="unfinished">Sound</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1832"/>
@@ -7503,22 +8063,22 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
     <message>
         <location filename="../mainwindow.ui" line="1856"/>
         <source>Stones</source>
-        <translation type="unfinished">Pedras</translation>
+        <translation type="unfinished">Steine</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1868"/>
         <source>Ugly 2D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schlichtes 2D</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1875"/>
         <source>Plain 3D</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schlichtes 3D</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1882"/>
         <source>Realistic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Realistisch</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1898"/>
@@ -7529,7 +8089,7 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
         <location filename="../mainwindow.ui" line="1910"/>
         <location filename="../mainwindow_settings.cpp" line="387"/>
         <source>Table picture</source>
-        <translation type="unfinished">Imagem da tabela</translation>
+        <translation type="unfinished">Bild des Tisches</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1917"/>
@@ -7538,8 +8098,12 @@ Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Title:</source>
+        <translation type="obsolete">Titel:</translation>
+    </message>
+    <message>
         <source>title, e.g.: guest account at NNGS</source>
-        <translation type="obsolete">título, ex.: conta de visitante em NNGS</translation>
+        <translation type="obsolete">Titel, z.B.: Gast auf NNGS</translation>
     </message>
     <message>
         <source>unique title, e.g.:
@@ -7551,19 +8115,39 @@ xyz
 The title field is used to chose a server connection.
 
 Note: don&apos;t use a default server name, i.e. &apos;-- Aurora --&apos; etc.</source>
-        <translation type="obsolete">título único, ex.:
+        <translation type="obsolete">Eindeutiger Titel, z.B.:
 
-conta de visitante em NNGS
-qGo1234 (IGS)
+Gast auf NNGS
+qGo4321 (IGS)
 xyz
 
-O campo de título é usado para escolher uma conexão de servidor.
+Das Titelfeld wird zum Auswählen der Server-Verbindung gebraucht.
 
-Nota: não use um nome padrão de servidor, p. ex. &apos;-- Aurora --&apos;, etc.</translation>
+Beachte: vordefinierte Servernamen, wie beispielsweise &apos;-- Aurora --&apos;, dürfen nicht verwendet werden.</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="obsolete">Titel</translation>
+    </message>
+    <message>
+        <source>Host</source>
+        <translation type="obsolete">Host</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Port</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation type="obsolete">Name:</translation>
     </message>
     <message>
         <source>name
@@ -7574,14 +8158,18 @@ use your login name and password provided by the go server operator after regist
 New users: depends on server
 NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
 others:		guest</source>
-        <translation type="obsolete">nome
+        <translation type="obsolete">Name
 
-Usuários registrados:
-use seu nome de acesso e senha dados pelo operador do servidor &apos;go&apos; após seu registro
+Registrierte Benutzer:
+Den Namen und das Passwort benutzen, die nach der Registrierung zugesandt wurden.
 
-Novos usuários: depende do servidor usado
-NNGS, CWS: use um único nome, como &apos;cachorro17&apos;
-outros:		&apos;guest&apos; (visitante)</translation>
+Neue Benutzer: vom Go-Server abhängig
+NNGS, CWS: eindeutigen Namen verwenden, z.B. &apos;Blaubart36&apos;
+andere:  guest</translation>
+    </message>
+    <message>
+        <source>Host:</source>
+        <translation type="obsolete">Host:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="186"/>
@@ -7607,9 +8195,9 @@ outros:		&apos;guest&apos; (visitante)</translation>
         <source>port address, e.g.: 9696
 
 Port address is defined for each go server. It&apos;s a fixed number. See Host for predefined server names.</source>
-        <translation type="obsolete">endereço de porta, ex.: 9696
+        <translation type="obsolete">Portadresse, z.B. 9696
 
-Endereços de porta são definidos para cada servidor de Go. É um número fixo. Veja Sevidor para nomes pré-definidos.</translation>
+Die Portadresse ist eine für jede Server-Verbindung eindeutig definierte Zahl. Siehe Host für vordefinierte Hosts.</translation>
     </message>
     <message>
         <source>password
@@ -7618,24 +8206,32 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: leave blank!</source>
-        <translation type="obsolete">senha:
+        <translation type="obsolete">Passwort
 
-Jogadores registrados:
-use seu nome de acesso e senha providos pelo operador do servidor de Go após o cadastramento
+Registrierte Benutzer:
+Den Namen und das Passwort benutzen, die nach der Registrierung zugesandt wurden.
 
-Novos usuários: deixe em branco!</translation>
+Neue Benutzer: leeres Feld!</translation>
     </message>
     <message>
         <source>Codec:</source>
-        <translation type="obsolete">&apos;Codec&apos;:</translation>
+        <translation type="obsolete">Codec:</translation>
+    </message>
+    <message>
+        <source>clear form</source>
+        <translation type="obsolete">Formular zurücksetzen</translation>
     </message>
     <message>
         <source>New
 
 clear form; doesn&apos;t make any changes to the entries</source>
-        <translation type="obsolete">Novo
+        <translation type="obsolete">Neu
 
-limpar o formulário; não aplica nenhuma mudança às entradas</translation>
+Formular zurücksetzen; nimmt keinen Einfluss auf die gespeicherten Verbindungsdaten</translation>
+    </message>
+    <message>
+        <source>add/change current entry</source>
+        <translation type="obsolete">Eingaben hinzufügen/ändern</translation>
     </message>
     <message>
         <source>Add or Change
@@ -7643,11 +8239,19 @@ limpar o formulário; não aplica nenhuma mudança às entradas</translation>
 Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
 
 Label &apos;Add&apos; is default. The given entries will be saved under the given title.</source>
-        <translation type="obsolete">Adicionar ou Mudar
+        <translation type="obsolete">Eingaben hinzufügen/ändern
 
-O rótulo &apos;Mudar&apos; aparece quando o título não é único, isto é, as entradas salvas com aquele título serão sobreescritas pelas entradas correntes.
+&apos;Ändern&apos; erscheint, wenn der Titel mit einem gespeicherten Eintrag übereinstimmt. Die gespeicherte Verbindung wird überschrieben.
 
-O rótulo &apos;Adicionar&quot; é o padrão. As entradas dadas serão salvas com o título dado.</translation>
+&apos;Hinzufügen&apos; ist Voreinstellung. Die Einträge werden unter dem gewählten Titel gespeichert.</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="obsolete">Hinzufügen</translation>
+    </message>
+    <message>
+        <source>delete current entry</source>
+        <translation type="obsolete">Eintrag löschen</translation>
     </message>
     <message>
         <source>Delete
@@ -7655,11 +8259,11 @@ O rótulo &apos;Adicionar&quot; é o padrão. As entradas dadas serão salvas co
 Deletes the saved entries with same Title.
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="obsolete">Apagar
+        <translation type="obsolete">Löschen
 
-Apaga as entradas salvas com o mesmo Título.
+Löscht die gespeicherten Einträge mit dem selben Titel.
 
-Nota: &apos;Apagar&apos; diz respeito a registros salvos.</translation>
+Hinweise: &apos;Löschen&apos; bezieht sich auf gespeicherte Einträge, nicht auf das Formularfeld.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3254"/>
@@ -7669,7 +8273,7 @@ Nota: &apos;Apagar&apos; diz respeito a registros salvos.</translation>
     <message>
         <location filename="../mainwindow.ui" line="2583"/>
         <source>Score/Edit</source>
-        <translation type="unfinished">Pontuação/Editar</translation>
+        <translation type="unfinished">Auszählen/Editieren</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="799"/>
@@ -7752,7 +8356,7 @@ Click to get a new, editable offline window.</source>
     <message>
         <location filename="../mainwindow.ui" line="2656"/>
         <source>Autosave</source>
-        <translation type="unfinished">Auto-salvar</translation>
+        <translation type="unfinished">Automatisches Speichern</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2668"/>
@@ -7775,18 +8379,18 @@ Click to get a new, editable offline window.</source>
         <location filename="../mainwindow.ui" line="3176"/>
         <location filename="../mainwindow.ui" line="3196"/>
         <source>board size</source>
-        <translation type="unfinished">tamanho do tabuleiro</translation>
+        <translation type="unfinished">Brettgröße</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2724"/>
         <source>Board size:</source>
-        <translation type="unfinished">Tamanho do tabuleiro:</translation>
+        <translation type="unfinished">Brettgröße:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2766"/>
         <location filename="../mainwindow.ui" line="2785"/>
         <source>Komi: added to white&apos;s result</source>
-        <translation type="unfinished">Komi: adicionado para o resultado do branco</translation>
+        <translation type="unfinished">Komi: wird zum Ergebnis von Weiß addiert</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2769"/>
@@ -7796,7 +8400,7 @@ Click to get a new, editable offline window.</source>
     <message>
         <location filename="../mainwindow.ui" line="2809"/>
         <source>allow client to negotiate automatic</source>
-        <translation type="unfinished">permitir ao cliente negociar automaticamente</translation>
+        <translation type="unfinished">erlaubt dem Client automatisch zu verhandeln</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2812"/>
@@ -7805,17 +8409,18 @@ Click to get a new, editable offline window.</source>
 Allow client to negotiate komi automatic.
 
 Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</source>
-        <translation type="unfinished">Negociação Automática
+        <translation type="unfinished">Automatisches Verhandeln
 
-Permitir ao cliente negociar um komi automático.
+Erlaubt dem Client, das Komi automatisch zu verhandeln.
 
-Cuidado: pode ser chato se o oponente não quiser aceitar seus padrões mesmo se eles já tenham sido definidos para ele antes. Isto pode acontecer devido a diferenças internas de valores de negociação nos clientes.</translation>
+Vorsicht: diese Einstellung kann sehr lästig sein, wenn der Gegner das Angebot nicht annehmen will, selbst wenn es vielleicht vorher ausgemacht worden ist. Diese Problem begründet sich in der unterschiedlichen Implementierung der Verhandlungswerte verschiedener Clients.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2819"/>
         <source>Automatic komi 
 negotiation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Automatisch Komi
+Verhandeln</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2837"/>
@@ -7823,13 +8428,14 @@ negotiation</source>
         <location filename="../mainwindow.ui" line="3062"/>
         <location filename="../mainwindow.ui" line="3082"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="unfinished">Tempo adicional para 25 jogadas; após 25 jogadas o tempo de byoyomi recomeça continuamente</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2840"/>
         <source>Byoyomi
 time:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Byoyomi-
+Zeit:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2886"/>
@@ -7837,51 +8443,55 @@ time:</source>
         <location filename="../mainwindow.ui" line="3013"/>
         <location filename="../mainwindow.ui" line="3033"/>
         <source>Playing time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spielzeit</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2889"/>
         <source>Main 
 time :</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Haupt-
+zeit:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2946"/>
         <source>All servers settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einstellungen für alle Server</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2979"/>
         <source>IGS &apos;nmatch&apos; specific settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Einstellungen speziell für IGS &apos;nmatch&apos;</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3016"/>
         <source>Main time 
 up to :</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hauptzeit
+bis zu:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3065"/>
         <source>Byo time
 up to :</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Byo-Zeit
+bis zu:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3128"/>
         <source>Play as :</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spielen als:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3157"/>
         <source>Nigiri</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nigiri</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3179"/>
         <source>Handicap 
 up to :</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Handicap
+bis zu:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3199"/>
@@ -7895,14 +8505,14 @@ up to :</source>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="302"/>
-        <location filename="../mainwindow_server.cpp" line="1100"/>
+        <location filename="../mainwindow_server.cpp" line="1150"/>
         <source>Connect with</source>
-        <translation type="unfinished">Conectar a</translation>
+        <translation type="unfinished">Verbinden mit</translation>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="114"/>
         <source>Disconnect from</source>
-        <translation type="unfinished">Desconectar de</translation>
+        <translation type="unfinished">Trennen von</translation>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="350"/>
@@ -7915,22 +8525,23 @@ up to :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="870"/>
+        <location filename="../mainwindow_server.cpp" line="920"/>
         <source>msg*</source>
-        <translation type="unfinished">msg*</translation>
+        <translation type="unfinished">info*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="896"/>
+        <location filename="../mainwindow_server.cpp" line="946"/>
         <source>Shouts*</source>
-        <translation type="unfinished">Gritos*</translation>
+        <translation type="unfinished">Shouts*
+</translation>
     </message>
     <message>
         <source> stones)</source>
-        <translation type="obsolete">pedras)</translation>
+        <translation type="obsolete">Steine)</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation type="obsolete">Aceitar</translation>
+        <translation type="obsolete">Annehmen</translation>
     </message>
     <message>
         <location filename="../mainwindow_settings.cpp" line="67"/>
@@ -7948,7 +8559,7 @@ up to :</source>
         <location filename="../mainwindow_settings.cpp" line="375"/>
         <location filename="../mainwindow_settings.cpp" line="388"/>
         <source>All Files (*)</source>
-        <translation type="unfinished">Todos arquivos (*)</translation>
+        <translation type="unfinished">Alle Dateien (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1087"/>
@@ -7989,7 +8600,7 @@ up to :</source>
     <message>
         <location filename="../network/matchinvitedialog.cpp" line="18"/>
         <source>&amp;Decline</source>
-        <translation type="unfinished">&amp;Recusar</translation>
+        <translation type="unfinished">A&amp;blehnen</translation>
     </message>
     <message>
         <location filename="../network/matchinvitedialog.cpp" line="20"/>
@@ -8039,27 +8650,27 @@ up to :</source>
     <name>NewGameDialog</name>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">Nova partida</translation>
+        <translation type="obsolete">Neues Spiel</translation>
     </message>
     <message>
         <source>White player:</source>
-        <translation type="obsolete">Jogador branco:</translation>
+        <translation type="obsolete">Spieler Weiß:</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>Black player:</source>
-        <translation type="obsolete">Jogador preto:</translation>
+        <translation type="obsolete">Spieler Schwarz:</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation type="obsolete">Tamanho do tabuleiro:</translation>
+        <translation type="obsolete">Brettgröße:</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -8067,7 +8678,7 @@ up to :</source>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">Vantagem:</translation>
+        <translation type="obsolete">Vorgabe:</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -8075,79 +8686,79 @@ up to :</source>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">A&amp;bbrechen</translation>
     </message>
     <message>
         <source>s&amp;wap colors</source>
-        <translation type="obsolete">&amp;Trocar cores</translation>
+        <translation type="obsolete">Farben &amp;tauschen</translation>
     </message>
     <message>
         <source>&amp;suggest</source>
-        <translation type="obsolete">&amp;Sugerir</translation>
+        <translation type="obsolete">&amp;vorschlagen</translation>
     </message>
     <message>
         <source>&amp;Decline</source>
-        <translation type="obsolete">&amp;Recusar</translation>
+        <translation type="obsolete">A&amp;blehnen</translation>
     </message>
     <message>
         <source>&amp;Offer</source>
-        <translation type="obsolete">&amp;Oferecer</translation>
+        <translation type="obsolete">&amp;Offerieren</translation>
     </message>
     <message>
         <source>on if handicap requested from opponent</source>
-        <translation type="obsolete">ativado se o oponente requisitar vantagem</translation>
+        <translation type="obsolete">markiert, falls Handicap vom Gegner angefordert</translation>
     </message>
     <message>
         <source>on if komi requested from opponent</source>
-        <translation type="obsolete">ativado se o oponente requisitar komi</translation>
+        <translation type="obsolete">markiert, falls Komi vom Gegner angefordert</translation>
     </message>
     <message>
         <source>Free game</source>
-        <translation type="obsolete">Partida livre</translation>
+        <translation type="obsolete">Freies Spiel</translation>
     </message>
     <message>
         <source>on if opponent wants a free game</source>
-        <translation type="obsolete">ativado se o oponente quiser uma partida livre</translation>
+        <translation type="obsolete">markiert, falls der Gegner zum nicht gewerteten Spiel auffordert</translation>
     </message>
     <message>
         <source>no</source>
-        <translation type="obsolete">não</translation>
+        <translation type="obsolete">nein</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation type="obsolete">sim</translation>
+        <translation type="obsolete">ja</translation>
     </message>
     <message>
         <source>Byoyomi Time:</source>
-        <translation type="obsolete">Tempo de Byoyomi:</translation>
+        <translation type="obsolete">Byoyomi-Zeit:</translation>
     </message>
     <message>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="obsolete">Tempo adicional para 25 jogadas; após 25 jogadas o tempo de byoyomi recomeça continuamente</translation>
+        <translation type="obsolete">Zusätzliche Zeit für 25 Züge; nach 25 Zügen wird die Zeit auf diesen Wert zurückgesetzt usw.</translation>
     </message>
     <message>
         <source>Time:</source>
-        <translation type="obsolete">Tempo:</translation>
+        <translation type="obsolete">Zeit:</translation>
     </message>
     <message>
         <source>Playing time</source>
-        <translation type="obsolete">Duração da partida</translation>
+        <translation type="obsolete">Spielzeit</translation>
     </message>
     <message>
         <source>suggest proper handicap according to players ranks</source>
-        <translation type="obsolete">sugerir vantagem adequada para a classificação dos jogadores</translation>
+        <translation type="obsolete">Schätzen der Vorgabe anhand der Spielereinstufung</translation>
     </message>
     <message>
         <source>swap players colors</source>
-        <translation type="obsolete">trocar a cor dos jogadores</translation>
+        <translation type="obsolete">Farben tauschen</translation>
     </message>
     <message>
         <source>S&amp;tats</source>
-        <translation type="obsolete">Es&amp;tatísticas</translation>
+        <translation type="obsolete">S&amp;tats</translation>
     </message>
     <message>
         <source>query the other players stats</source>
-        <translation type="obsolete">requisitar as estatísticas dos outros jogadores</translation>
+        <translation type="obsolete">Stats des anderen Spielers abfragen</translation>
     </message>
     <message>
         <source>Alt+O</source>
@@ -8155,54 +8766,74 @@ up to :</source>
     </message>
     <message>
         <source>Opponent</source>
-        <translation type="obsolete">Oponente</translation>
+        <translation type="obsolete">Gegner</translation>
+    </message>
+    <message>
+        <source>Game against :</source>
+        <translation type="obsolete">Spiel gegen:</translation>
+    </message>
+    <message>
+        <source>Alt+T</source>
+        <translation type="obsolete">Alt+T</translation>
+    </message>
+    <message>
+        <source>You play</source>
+        <translation type="obsolete">Ich spiele</translation>
+    </message>
+    <message>
+        <source>Nigiri</source>
+        <translation type="obsolete">Nigiri</translation>
+    </message>
+    <message>
+        <source>Alt+S</source>
+        <translation type="obsolete">Alt+S</translation>
     </message>
 </context>
 <context>
     <name>NewLocalGameDialog</name>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">Nova partida</translation>
+        <translation type="obsolete">Neues Spiel</translation>
     </message>
     <message>
         <source>White:</source>
-        <translation type="obsolete">Branco:</translation>
+        <translation type="obsolete">Weiß:</translation>
     </message>
     <message>
         <source>Black:</source>
-        <translation type="obsolete">Preto:</translation>
+        <translation type="obsolete">Schwarz:</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>Player Name:</source>
-        <translation type="obsolete">Nome do jogador:</translation>
+        <translation type="obsolete">Spielername:</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>Rank:</source>
-        <translation type="obsolete">Classificação:</translation>
+        <translation type="obsolete">Rang:</translation>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation type="obsolete">&amp;OK</translation>
+        <translation type="obsolete">&amp;Ok</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">&amp;Abbrechen</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation type="obsolete">Tamanho do tabuleiro:</translation>
+        <translation type="obsolete">Brettgröße:</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">Vantagem:</translation>
+        <translation type="obsolete">Vorgabe:</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -8210,45 +8841,45 @@ up to :</source>
     </message>
     <message>
         <source>Byoyomi Time:</source>
-        <translation type="obsolete">Tempo de Byoyomi:</translation>
+        <translation type="obsolete">Byoyomi-Zeit:</translation>
     </message>
     <message>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="obsolete">Tempo adicional para 25 jogadas; após 25 jogadas o tempo de byoyomi recomeça continuamente</translation>
+        <translation type="obsolete">Zusätzliche Zeit für 25 Züge; nach 25 Zügen wird die Zeit auf diesen Wert zurückgesetzt usw.</translation>
     </message>
     <message>
         <source>Time:</source>
-        <translation type="obsolete">Tempo:</translation>
+        <translation type="obsolete">Zeit:</translation>
     </message>
     <message>
         <source>Playing time</source>
-        <translation type="obsolete">Duração da partida</translation>
+        <translation type="obsolete">Spielzeit</translation>
     </message>
 </context>
 <context>
     <name>NodeResultsGUI</name>
     <message>
         <source>Results</source>
-        <translation type="obsolete">Resultados</translation>
+        <translation type="obsolete">Ergebnisse</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="obsolete">Fechar</translation>
+        <translation type="obsolete">Schließen</translation>
     </message>
 </context>
 <context>
     <name>NormalTools</name>
     <message>
         <source>NormalTools</source>
-        <translation type="obsolete">Ferramentas Normais</translation>
+        <translation type="obsolete">Normal-Tools</translation>
     </message>
     <message>
         <source>Captures</source>
-        <translation type="obsolete">Prisonniers</translation>
+        <translation type="obsolete">Gefangene</translation>
     </message>
     <message>
         <source>White:</source>
-        <translation type="obsolete">Blanc:</translation>
+        <translation type="obsolete">Weiß:</translation>
     </message>
     <message>
         <source>0</source>
@@ -8256,11 +8887,11 @@ up to :</source>
     </message>
     <message>
         <source>Black:</source>
-        <translation type="obsolete">Noir:</translation>
+        <translation type="obsolete">Schwarz:</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>00:00</source>
@@ -8268,11 +8899,11 @@ up to :</source>
     </message>
     <message>
         <source>Captures:</source>
-        <translation type="obsolete">Capturas:</translation>
+        <translation type="obsolete">Gefangene:</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -8280,15 +8911,81 @@ up to :</source>
     </message>
     <message>
         <source>0.5</source>
-        <translation type="obsolete">0,5</translation>
+        <translation type="obsolete">0.5</translation>
     </message>
     <message>
         <source>H:</source>
         <translation type="obsolete">H:</translation>
     </message>
     <message>
+        <source>Byo:</source>
+        <translation type="obsolete">Byo:</translation>
+    </message>
+    <message>
+        <source>byoyomi time</source>
+        <translation type="obsolete">Byoyomi Zeit</translation>
+    </message>
+    <message>
+        <source>Byoyomi time
+
+Additional time to place a number of stones (normally 25).
+If all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
+If time reaches zero before all stones are placed, the game ends immediately: &quot;... forfeits on time.&quot;</source>
+        <translation type="obsolete">Byoyomi Zeit
+
+Zusätzliche Zeitspanne, während der eine bestimmte Anzahl Steine (üblicherweise 25) plaziert werden müssen.
+Sind alle Steine gesetzt, beginnt die Byoyomi Periode erneut. Dies wiederholt sich solange, bis das Spiel zu Ende ist.
+Läuft einem Spieler die Zeit aus bevor alle Steine plaziert sind, endet das Spiel mit dessen Niederlage auf Zeit: &quot;...forfeits on time.&quot;</translation>
+    </message>
+    <message>
+        <source>free</source>
+        <translation type="obsolete">frei</translation>
+    </message>
+    <message>
+        <source>free/rated game</source>
+        <translation type="obsolete">freies/gewertetes Spiel</translation>
+    </message>
+    <message>
+        <source>free game:
+
+use &quot;free&quot; command to make game rated or unrated (free)</source>
+        <translation type="obsolete">Freies Spiel
+
+Mit dem Kommando &apos;free&apos; kann ein Spiel für frei oder gewerted gesetzt werden</translation>
+    </message>
+    <message>
+        <source>komi points</source>
+        <translation type="obsolete">Komi-Punkte</translation>
+    </message>
+    <message>
+        <source>komi:
+
+Add komi points to white because black has the advantage to set the first stone.
+Use &quot;komi x&quot; to request a komi of x (number).</source>
+        <translation type="obsolete">Komi
+
+Durch den Vorteil von Schwarz, den ersten Zug machen zu dürfen, werden Weiß Komi-Punkte zum Ergebnis hinzugezählt.
+Mit &quot;komi x&quot; wird der Gegner aufgefordert, das Komi auf x (eine Zahl) festzulegen.</translation>
+    </message>
+    <message>
+        <source>Handicap</source>
+        <translation type="obsolete">Vorgabe</translation>
+    </message>
+    <message>
+        <source>Handicap
+
+Number of stones placed by black as his first move.</source>
+        <translation type="obsolete">Vorgabe
+
+Zahl der Steine, die von Schwarz im ersten Zug aufs Brett gelegt werden.</translation>
+    </message>
+    <message>
+        <source>byoyomi time (minutes)</source>
+        <translation type="obsolete">Byoyomi-Periode (Minuten)</translation>
+    </message>
+    <message>
         <source>remaining time / stones</source>
-        <translation type="obsolete">tempo/pedras remanescentes</translation>
+        <translation type="obsolete">verbleibende Zeit / Steine</translation>
     </message>
     <message>
         <source>Clock
@@ -8298,89 +8995,13 @@ shows remaining time or byoyomi time / remaining stones.
 Click on
 - your own clock for pause request (NNGS) or
 - the opponent&apos;s clock to give him additional time of one minute.</source>
-        <translation type="obsolete">Relógio
+        <translation type="obsolete">Uhr
 
-mostra o tempo restante ou o tempo de byoyomi / pedras restantes.
+zeigt die verbleibende Zeit oder Byoyomi-Zeit / verbleibende Steine.
 
-Clique em
-- seu próprio relógio para requisitar pausas (NNGS) ou
-- o relógio do oponente para lhe dar um minuto a mais de tempo.</translation>
-    </message>
-    <message>
-        <source>Byo:</source>
-        <translation type="obsolete">Byo:</translation>
-    </message>
-    <message>
-        <source>byoyomi time (minutes)</source>
-        <translation type="obsolete">Tempo de byoyomi (minutos)</translation>
-    </message>
-    <message>
-        <source>Byoyomi time
-
-Additional time to place a number of stones (normally 25).
-If all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
-If time reaches zero before all stones are placed, the game ends immediately: &apos;... forfeits on time.&apos;</source>
-        <translation type="obsolete">Temps de Byoyomi
-
-Dur</translation>
-    </message>
-    <message>
-        <source>free</source>
-        <translation type="obsolete">livre</translation>
-    </message>
-    <message>
-        <source>free/rated game</source>
-        <translation type="obsolete">partida livre/qualificada</translation>
-    </message>
-    <message>
-        <source>free game:
-
-use &apos;free&apos; command to make game rated or unrated (free)</source>
-        <translation type="obsolete">partie libre:
-
-employez la commande &apos;libre&apos; pour faire une partie comptabilis</translation>
-    </message>
-    <message>
-        <source>komi points</source>
-        <translation type="obsolete">pontos de komi</translation>
-    </message>
-    <message>
-        <source>komi:
-
-Add komi points to white because black has the advantage to set the first stone.
-Use &apos;komi x&apos; to request a komi of x (number).</source>
-        <translation type="obsolete">komi:
-
-On ajoute des points de komi </translation>
-    </message>
-    <message>
-        <source>Handicap</source>
-        <translation type="obsolete">Vantagem</translation>
-    </message>
-    <message>
-        <source>Handicap
-
-Number of stones placed by black as his first move.</source>
-        <translation type="obsolete">Vantagem
-
-Número de pedras colocadas pelo preto em sua primeira jogada.</translation>
-    </message>
-    <message>
-        <source>Byoyomi time
-
-Additional time to place a number of stones.
-If time reaches zero before all stones are placed, the game ends immediately: &apos;... forfeits on time.&apos;
-
-Time Systems (offline):
-
-Absolute: Byo = 0, no additional time after main time is zero.
-
-Canadian: e.g. Byo = 6/25, 25 stones to place in 6 minutes; if all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
-
-byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 30 seconds, time is reset to 30 seconds, if not placed within 30 seconds, period will be decreased by one, a new period of 30 seconds starts; if period is zero and last time interval is over then game ends.</source>
-        <translation type="obsolete">Temps de Byoyomi
-
-Dur</translation>
+Klick auf
+- eigene Uhr: Pause anfragen (NNGS)
+- gegnerische Uhr: Zeit des Gegners um eine Minute erhöhen.</translation>
     </message>
     <message>
         <source>Byoyomi time
@@ -8395,36 +9016,18 @@ Absolute: Byo = 0, no additional time after main time is zero.
 Canadian: e.g. Byo = 6/25, 25 stones to place in 6 minutes; if all stones are placed. The byoyomi period is reset to this value and the same number of stones have to be placed until the game ends.
 
 byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 30 seconds, time is reset to 30 seconds, if not placed within 30 seconds, period will be decreased by one, a new period of 30 seconds starts; if period is zero and last time interval is over then game ends.</source>
-        <translation type="obsolete">Tempos de Byoyomi
+        <translation type="obsolete">Byoyomi-Zeit
 
-Tempo adicional para colocar certa quantidade de pedras.
-Se o tempo se esgotar antes que todas as pedras sejam colocadas, o jogo termina imediatamete: &quot;...estouro do tempo.&quot;
+Eine zusätzliche Zeit, während der eine bestimmte Anzahl Steine plaziert werden muss.
+Läuft einem Spieler die Zeit ab, bevor alle Steine plaziert sind, endet das Spiel mit Niederlage auf Zeit: &quot;... forfeits on time.&quot;
 
-Sistemas de tempo (desconectado):
+Zeitsysteme (offline):
 
-Absoluto : Byo = 0, sem tempo adicional após o tempo principal se esgotar.
+Absolut: Byo = 0; nach Ablauf der Zeit wird keine zusätzliche Zeit  gewährt.
 
-Canadense: ex. Byo = 6/25, 25 pedras para colocar em 6 minutos; se todas as pedras são colocadas, o tempo de byoyomi é reiniciado para este valor e o mesmo número de pedras deve ser colocado até o jogo terminar.
+Kanadisch: z.B. Byo = 6/25; 25 Steine sind in 6 Minuten zu setzen. Sind alle 25 Steine gesetzt, werden weitere 6 Minuten gewährt und so weiter.
 
-byo-yomi: ex. Byo 7x30, 7 períodos de 30 segundos; se uma pedra é colocada dentro de 30 segundos, o tempo é reiniciado, senão, a contagem de períodos é decrementada e uma nova temporização recomeça; quando o tempo do último período se esgotar, a partida termina.</translation>
-    </message>
-    <message>
-        <source>free game:
-
-use &quot;free&quot; command to make game rated or unrated (free)</source>
-        <translation type="obsolete">partida livre:
-
-use o comando &quot;livre&quot; para fazer uma partida classificada ou não (livre)</translation>
-    </message>
-    <message>
-        <source>komi:
-
-Add komi points to white because black has the advantage to set the first stone.
-Use &quot;komi x&quot; to request a komi of x (number).</source>
-        <translation type="obsolete">komi:
-
-Adicionar pontos komi ao branco porque o preto tem a vantagem de colocar a primeira pedra.
-Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
+Byoyomi: z.B. Byo: 7x30s; 7 Perioden zu je 30 Sekunden stehen zur Verfügung, wobei ein Stein innerhalb von 30 Sekunden zu setzen ist. Wird ein Stein innerhalb der 30 Sekunden gesetzt, wird die Uhr auf 30 Sekunden zurückgestellt; andernfalls wird eine Periode abgezogen und die nächsten 30 Sekunden beginnen. Laufen die 30 Sekunden ab und stehen keine Perioden mehr zur Verfügung, dann ist das Spiel auf Zeit verloren.</translation>
     </message>
     <message>
         <source>0.1</source>
@@ -8432,22 +9035,22 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>5.5</source>
-        <translation type="obsolete">5,5</translation>
+        <translation type="obsolete">5.5</translation>
     </message>
 </context>
 <context>
     <name>NthMoveDialog</name>
     <message>
         <source>Move Number</source>
-        <translation type="obsolete">Número da jogada</translation>
+        <translation type="obsolete">Zug Nummer</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">A&amp;bbrechen</translation>
     </message>
     <message>
         <source>Enter move number:</source>
-        <translation type="obsolete">Entre com o número da jogada:</translation>
+        <translation type="obsolete">Zugnummer eingeben:</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -8694,26 +9297,41 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="71"/>
-        <source>Nice to meet you everyone</source>
+        <source>How do you do?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="72"/>
-        <source>How are you everyone?</source>
+        <source>Nice to meet you everyone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="73"/>
-        <source>Anyone want a quick game?</source>
+        <source>How are you everyone?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="74"/>
-        <source>I&apos;m looking for a friendly match.</source>
+        <source>Anyone want a quick game?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="75"/>
+        <source>I&apos;m looking for a friendly match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="76"/>
+        <source>Strong players!  How about playing handicap with me?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="77"/>
+        <source>Anyone want to play a game with me?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/orosetphrasechat.cpp" line="78"/>
         <source>I don&apos;t mind any sorts of games with anyone.  Just request me.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8732,7 +9350,7 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     <name>Parser</name>
     <message>
         <source>msg*</source>
-        <translation type="obsolete">msg*</translation>
+        <translation type="obsolete">info*</translation>
     </message>
 </context>
 <context>
@@ -8743,7 +9361,7 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Nom</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Rk</source>
@@ -8751,7 +9369,7 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>pl</source>
-        <translation type="obsolete">Joue</translation>
+        <translation type="obsolete">sp</translation>
     </message>
     <message>
         <source>ob</source>
@@ -8759,7 +9377,11 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>Idle</source>
-        <translation type="obsolete">Inactif</translation>
+        <translation type="obsolete">Still</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="obsolete">X</translation>
     </message>
     <message>
         <source>Stat</source>
@@ -8769,7 +9391,7 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation type="obsolete">Nom</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Rk</source>
@@ -8779,7 +9401,7 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation type="obsolete">Joue</translation>
+        <translation type="obsolete">sp</translation>
     </message>
     <message>
         <source>ob</source>
@@ -8789,89 +9411,89 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation type="obsolete">Inactif</translation>
+        <translation type="obsolete">Still</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
     <message>
         <source>Change</source>
-        <translation type="obsolete">Modificar</translation>
+        <translation type="obsolete">Ändern</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="obsolete">Adicionar</translation>
+        <translation type="obsolete">Hinzufügen</translation>
     </message>
     <message>
         <source>Stones</source>
-        <translation type="obsolete">Pedras</translation>
+        <translation type="obsolete">Steine</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation type="obsolete">Jogar automaticamente</translation>
+        <translation type="obsolete">Automatisches Spielen</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="obsolete">Tempo</translation>
+        <translation type="obsolete">Zeit</translation>
     </message>
     <message>
         <source>Talk</source>
-        <translation type="obsolete">Conversar</translation>
+        <translation type="obsolete">Sprechen</translation>
     </message>
     <message>
         <source>Say</source>
-        <translation type="obsolete">Falar</translation>
+        <translation type="obsolete">Say</translation>
     </message>
     <message>
         <source>Match</source>
-        <translation type="obsolete">Jogo</translation>
+        <translation type="obsolete">Spielanfrage</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">Entrar</translation>
+        <translation type="obsolete">Eintreten</translation>
     </message>
     <message>
         <source>Game end</source>
-        <translation type="obsolete">Fim da partida</translation>
+        <translation type="obsolete">Spiel-Ende</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="obsolete">Sair</translation>
+        <translation type="obsolete">Verlassen</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="obsolete">Desconectar</translation>
+        <translation type="obsolete">Verbindung trennen</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation type="obsolete">Conectar</translation>
+        <translation type="obsolete">Verbinden</translation>
     </message>
     <message>
         <source>All Files (*)</source>
-        <translation type="obsolete">Todos arquivos (*)</translation>
+        <translation type="obsolete">Alle Dateien (*)</translation>
     </message>
     <message>
         <source>Images (*.png *.jpg *.xpm *.ico)</source>
-        <translation type="obsolete">Imagens (*.png *.jpg *.xpm *.ico)</translation>
+        <translation type="obsolete">Bilder (*.png *.jpg *.xpm *.ico</translation>
     </message>
     <message>
         <source>Images (*.png *.xpm *.jpg)</source>
-        <translation type="obsolete">Imagens (*.png *.xpm *.jpg)</translation>
+        <translation type="obsolete">Bilder (*.png *.xpm *.jpg)</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialogGui</name>
     <message>
         <source>Preferences</source>
-        <translation type="obsolete">Preferências</translation>
+        <translation type="obsolete">Einstellungen</translation>
     </message>
     <message>
         <source>&amp;Apply</source>
-        <translation type="obsolete">&amp;Aplicar</translation>
+        <translation type="obsolete">&amp;Anwenden</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -8879,11 +9501,11 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">A&amp;bbrechen</translation>
     </message>
     <message>
         <source>Interface Style</source>
-        <translation type="obsolete">Estilo da interface</translation>
+        <translation type="obsolete">Stil für Oberfläche</translation>
     </message>
     <message>
         <source>Windows</source>
@@ -8911,43 +9533,43 @@ Use &quot;komi x&quot; para pedir um komi de x (número).</translation>
     </message>
     <message>
         <source>Choose your interface style</source>
-        <translation type="obsolete">Escolha o estilo de sua interface</translation>
+        <translation type="obsolete">Stil für Oberfläche auswählen</translation>
     </message>
     <message>
         <source>Choose interface style
 
 Choose one of the styles for the look-and-feel of this program.</source>
-        <translation type="obsolete">Escolha o estilo da interface
+        <translation type="obsolete">Stil der Oberfläche auswählen
 
-Escolha um dos estilos para a aparência deste aplicativo.</translation>
+Einen Stil für das Aussehen des Programmes auswählen.</translation>
     </message>
     <message>
         <source>Light wood</source>
-        <translation type="obsolete">Madeira clara</translation>
+        <translation type="obsolete">Helles Holz</translation>
     </message>
     <message>
         <source>Dark wood</source>
-        <translation type="obsolete">Madeira escura</translation>
+        <translation type="obsolete">Dunkles Holz</translation>
     </message>
     <message>
         <source>Choose your board style</source>
-        <translation type="obsolete">Escolha o estilo de seu tabuleiro</translation>
+        <translation type="obsolete">Brettstil auswählen</translation>
     </message>
     <message>
         <source>Choose your board style
 
 Choose a style for the board.</source>
-        <translation type="obsolete">Escolha o estilo de seu tabuleiro
+        <translation type="obsolete">Brettstil auswählen
 
-Escolha um estilo para o tabuleiro.</translation>
+Einen Brettstil auswählen.</translation>
     </message>
     <message>
         <source>Comment orientation</source>
-        <translation type="obsolete">Orientação dos comentários</translation>
+        <translation type="obsolete">Kommentarausrichtung</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation</source>
-        <translation type="obsolete">Orientação horizontal ou vertical dos comentários</translation>
+        <translation type="obsolete">Horizontale oder vertikale Kommentarausrichtung</translation>
     </message>
     <message>
         <source>horizontal</source>
@@ -8955,141 +9577,143 @@ Escolha um estilo para o tabuleiro.</translation>
     </message>
     <message>
         <source>vertical</source>
-        <translation type="obsolete">vertical</translation>
+        <translation type="obsolete">vertikal</translation>
     </message>
     <message>
         <source>Board</source>
-        <translation type="obsolete">Tabuleiro</translation>
+        <translation type="obsolete">Brett</translation>
     </message>
     <message>
         <source>Show coordinates</source>
-        <translation type="obsolete">Affiche les coordon</translation>
+        <translation type="obsolete">Koordinaten anzeigen</translation>
     </message>
     <message>
         <source>Show board coordinates</source>
-        <translation type="obsolete">Mostrar coordenadas do tabuleiro</translation>
+        <translation type="obsolete">Brettkoordinaten anzeigen</translation>
     </message>
     <message>
         <source>Show board coordinates
 
 Toggles if the board coordinates are shown.</source>
-        <translation type="obsolete">Mostrar coordenadas do tabuleiro
+        <translation type="obsolete">Brettkoordinaten anzeigen
 
-Mostrar ou não as coordenadas do tabuleiro.</translation>
+Einstellung, ob Brettkoordinaten angezeigt oder versteckt werden.</translation>
     </message>
     <message>
         <source>Show slider</source>
-        <translation type="obsolete">Mostrar a barra deslizante</translation>
+        <translation type="obsolete">Schieber zeigen</translation>
     </message>
     <message>
         <source>Show slider
 
 Toggles the slider on the bottom of the board on or off.</source>
-        <translation type="obsolete">Mostrar a barra deslizante
+        <translation type="obsolete">Schieber zeigen
 
-Mostrar ou não a barra deslizante acima do tabuleiro.</translation>
+Schieber unterhalb des Brettes anzeigen oder verbergen.</translation>
     </message>
     <message>
         <source>Show cursor</source>
-        <translation type="obsolete">Affiche un d</translation>
+        <translation type="obsolete">Cursor zeigen</translation>
     </message>
     <message>
         <source>Show a ghost stone at mouse pointer</source>
-        <translation type="obsolete">Mostrar uma pedra fantasma sob o ponteiro do mause</translation>
+        <translation type="obsolete">Einen transparenten Stein als Mauszeiger anzeigen</translation>
     </message>
     <message>
         <source>Show a ghost stone at mouse pointer
 
 Have a ghost stone showing the current position of the mouse pointer on the board?</source>
-        <translation type="obsolete">Mostrar uma pedra fantasma sob o ponteiro do mause
+        <translation type="obsolete">Einen transparenten Stein als Mauszeiger anzeigen
 
-Quer ter uma pedra fantasma sob o ponteiro do mause dentro do tabuleiro?</translation>
+Soll ein transparenter Stein die aktuelle Position des Mauszeigers anzeigen?</translation>
     </message>
     <message>
         <source>ToolTip coords</source>
-        <translation type="obsolete">Coordenadas na ferramenta de dicas</translation>
+        <translation type="obsolete">Tooltip-Koordinaten</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip</source>
-        <translation type="obsolete">Mostrar coordenadas como ferramenta de dicas</translation>
+        <translation type="obsolete">Koordinaten als Tooltip anzeigen</translation>
     </message>
     <message>
         <source>Show coordinates as ToolTip
 
 When the mouse hovers over a point on the board, show a tooltip with the current coordinate.</source>
-        <translation type="obsolete">Mostrar coordenadas como ferramenta de dicas
+        <translation type="obsolete">Koordinaten als Tooltip anzeigen
 
-Quando o mause passa sobre um ponto no tabuleiro, mostra uma dica com a coordenada corrente.</translation>
+Wenn sich die Maus über dem Brett befindet, zeige die Koordinaten in einem Tooltip an.</translation>
     </message>
     <message>
         <source>Bold marks</source>
-        <translation type="obsolete">Marcas en negrito</translation>
+        <translation type="obsolete">Fette Markierungen</translation>
     </message>
     <message>
         <source>Use bold font for text marks</source>
-        <translation type="obsolete">Utilise des caract</translation>
+        <translation type="obsolete">Fette Schrift für Markierungen benutzen</translation>
     </message>
     <message>
         <source>Use bold font for text marks
 
 This will toggle displaying the labels of the text marks in normal or bold font.</source>
-        <translation type="obsolete">Utilise des caract</translation>
+        <translation type="obsolete">Fette Schrift für Markierungen benutzen
+
+Schaltet eine fette Textbeschriftung der Markierungen an oder aus.</translation>
     </message>
     <message>
         <source>Smaller stones</source>
-        <translation type="obsolete">Pedras menores</translation>
+        <translation type="obsolete">Kleine Steine</translation>
     </message>
     <message>
         <source>Draw stones slightly smaller</source>
-        <translation type="obsolete">Desenhar as pedras um pouco menores</translation>
+        <translation type="obsolete">Steine etwas kleiner zeichnen</translation>
     </message>
     <message>
         <source>Draw stones slightly smaller
 
 If activated, stones on the board will be drawn slightly smaller and the underlaying grid lines can be seen.</source>
-        <translation type="obsolete">Desenhar as pedras um pouco menores
+        <translation type="obsolete">Steine etwas kleiner zeichnen
 
-Se ativado, as pedras no tabuleiro serão mostradas um pouco menores e as linhas de malha poderão ser vistas.</translation>
+Wenn aktiviert, werden die Steine auf dem Brett etwas kleiner gezeichner, so daß das unterliegende Gitter sichtbar ist.</translation>
     </message>
     <message>
         <source>Play sound for</source>
-        <translation type="obsolete">Tocar som para</translation>
+        <translation type="obsolete">Ton spielen für</translation>
     </message>
     <message>
         <source>Stones</source>
-        <translation type="obsolete">Pedras</translation>
+        <translation type="obsolete">Steine</translation>
     </message>
     <message>
         <source>Play sound when placing a stone</source>
-        <translation type="obsolete">Tocar som ao posicionar uma pedra</translation>
+        <translation type="obsolete">Einen Ton spielen, wenn ein Stein gesetzt wird</translation>
     </message>
     <message>
         <source>Play sound when placing a stone
 
 Enable this box when you want to listen a clicking sound when playing a stone on the board.</source>
-        <translation type="obsolete">Tocar som ao posicionar uma pedra
+        <translation type="obsolete">Einen Ton spielen, wenn ein Stein gesetzt wird
 
-Habilite esta caixa quando quiser escutar um som de clique ao jogar uma pedra no tabuleiro.</translation>
+Wenn aktiviert, wird ein Ton abgespielt, sobald ein Stein auf das Brett gesetzt wird.</translation>
     </message>
     <message>
         <source>Autoplay</source>
-        <translation type="obsolete">Jogar automaticamente</translation>
+        <translation type="obsolete">Automatisches Spielen</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode</source>
-        <translation type="obsolete">Tocar som no modo automático</translation>
+        <translation type="obsolete">Ton beim automatischen Spielen</translation>
     </message>
     <message>
         <source>Play sound in autoplay mode
 
 Play a sound when a stone is placed in autoplay mode.</source>
-        <translation type="obsolete">Tocar som no modo automático
+        <translation type="obsolete">Ton beim automatischen Spielen
 
-Tocar um som quando um pedra é colocada, durante os jogos automáticos.</translation>
+Ein Ton wird abgespielt, wenn im automatischen Spielmodus ein Stein gesetzt wird.</translation>
     </message>
     <message>
         <source>Interval:</source>
-        <translation type="obsolete">Intervalo:</translation>
+        <translation type="obsolete">Intervall:</translation>
     </message>
     <message>
         <source>0.1</source>
@@ -9117,91 +9741,91 @@ Tocar um som quando um pedra é colocada, durante os jogos automáticos.</transl
     </message>
     <message>
         <source>Time interval for autoplay</source>
-        <translation type="obsolete">Intervalo de tempo para jogo automático</translation>
+        <translation type="obsolete">Zeitintervall für automatisches Spielen</translation>
     </message>
     <message>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation type="obsolete">Intervalo de tempo para jogo automático
+        <translation type="obsolete">Zeitintervall für automatisches Spielen
 
-Demora entre jogadas quando jogando automaticamente, em segundos.</translation>
+Verzögerung in Sekunden zwischen den Zügen beim automatischen Spielen.</translation>
     </message>
     <message>
         <source>Font</source>
-        <translation type="obsolete">Fonte</translation>
+        <translation type="obsolete">Schrift</translation>
     </message>
     <message>
         <source>Remember font</source>
-        <translation type="obsolete">Conservar fonte</translation>
+        <translation type="obsolete">An Schriftart erinnern</translation>
     </message>
     <message>
         <source>Remember selected font</source>
-        <translation type="obsolete">Conservar fonte selecionada</translation>
+        <translation type="obsolete">An ausgewählte Schriftart erinnern</translation>
     </message>
     <message>
         <source>Remember selected font
 
 Remember the selected font when qGo starts up the next time. If not checked, the system default is used on next program start and the current change will only affect the current session.</source>
-        <translation type="obsolete">Conservar fonte selecionada
+        <translation type="obsolete">An ausgewählte Schriftart erinnern
 
-Retoma a fonte selecionada agora , na pr</translation>
+An die ausgewählte Schriftart erinnern, wenn qGo das nächste mal startet. Wenn deaktiviert, wird die Standardschrift des Systems benutzt und die Änderung wirkt sich nur auf die aktuelle SItzung aus.</translation>
     </message>
     <message>
         <source>font</source>
-        <translation type="obsolete">police</translation>
+        <translation type="obsolete">Schrift</translation>
     </message>
     <message>
         <source>Current font</source>
-        <translation type="obsolete">Fonte atual</translation>
+        <translation type="obsolete">Aktuelle Schrift</translation>
     </message>
     <message>
         <source>Current font
 
 Font currently used for the application.</source>
-        <translation type="obsolete">Police actuelle
+        <translation type="obsolete">Aktuelle Schrift
 
-Police actuellement utilis</translation>
+Momentan von der Anwendung benutzte Schriftart.</translation>
     </message>
     <message>
         <source>Select</source>
-        <translation type="obsolete">S</translation>
+        <translation type="obsolete">Auswählen</translation>
     </message>
     <message>
         <source>Select new font</source>
-        <translation type="obsolete">Selecionar nova fonte</translation>
+        <translation type="obsolete">Neue Schrift auswählen</translation>
     </message>
     <message>
         <source>Select new font
 
 Select the font for the application.</source>
-        <translation type="obsolete">Selecionar nova fonte
+        <translation type="obsolete">Neue Schrift auswählen
 
-Selecionar nova fonte para o aplicativo.</translation>
+Eine neue Schriftart für die Anwendung auswählen.</translation>
     </message>
     <message>
         <source>Interface</source>
-        <translation type="obsolete">Interface</translation>
+        <translation type="obsolete">Oberfläche</translation>
     </message>
     <message>
         <source>ASCII Characters</source>
-        <translation type="obsolete">Caracteres ASCII</translation>
+        <translation type="obsolete">ASCII-Zeichen</translation>
     </message>
     <message>
         <source>ASCII character for import/export</source>
-        <translation type="obsolete">Caracteres ASCII para importar/exportar</translation>
+        <translation type="obsolete">ASCII-Buchstaben für Import/Export</translation>
     </message>
     <message>
         <source>ASCII character for import
 
 When importing or exporting ASCII files, use these characters to indicate the given stone or point on the board.</source>
-        <translation type="obsolete">Caracteres ASCII para importar/exportar
+        <translation type="obsolete">ASCII-Buchstaben für Import/Export
 
-Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedra ou ponto presentes no tabuleiro.</translation>
+Beim Importieren oder Exportieren von ASCII-Dateien werden diese Zeichen benutzt, um den angegeben Stein oder Punkt auf dem Brett darzustellen.</translation>
     </message>
     <message>
         <source>Black stone:</source>
-        <translation type="obsolete">Pedra preta:</translation>
+        <translation type="obsolete">Schwarzer Stein:</translation>
     </message>
     <message>
         <source>#</source>
@@ -9209,7 +9833,7 @@ Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedr
     </message>
     <message>
         <source>White stone:</source>
-        <translation type="obsolete">Pedra branca:</translation>
+        <translation type="obsolete">Weißer Stein:</translation>
     </message>
     <message>
         <source>O</source>
@@ -9217,7 +9841,7 @@ Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedr
     </message>
     <message>
         <source>Star point:</source>
-        <translation type="obsolete">Ponto estrela:</translation>
+        <translation type="obsolete">Sternpunkt:</translation>
     </message>
     <message>
         <source>,</source>
@@ -9225,7 +9849,7 @@ Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedr
     </message>
     <message>
         <source>Empty point:</source>
-        <translation type="obsolete">Ponto vazio:</translation>
+        <translation type="obsolete">Leerer Punkt:</translation>
     </message>
     <message>
         <source>.</source>
@@ -9233,7 +9857,7 @@ Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedr
     </message>
     <message>
         <source>Horizontal border:</source>
-        <translation type="obsolete">Borda horizontal:</translation>
+        <translation type="obsolete">Horizontaler Rand:</translation>
     </message>
     <message>
         <source>|</source>
@@ -9241,7 +9865,7 @@ Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedr
     </message>
     <message>
         <source>Vertical border:</source>
-        <translation type="obsolete">Borda vertical:</translation>
+        <translation type="obsolete">Vertikaler Rand:</translation>
     </message>
     <message>
         <source>-</source>
@@ -9249,19 +9873,19 @@ Ao importar ou exportar arquivos ASCII, use estes caracteres para indicar a pedr
     </message>
     <message>
         <source>Add as brother</source>
-        <translation type="obsolete">Adicionar como variação</translation>
+        <translation type="obsolete">Als Bruder hinzufügen</translation>
     </message>
     <message>
         <source>Add imported position as brother</source>
-        <translation type="obsolete">Adicionar a posição importada como derivação</translation>
+        <translation type="obsolete">Importierte Stellung als Bruder hinzufügen</translation>
     </message>
     <message>
         <source>Add imported position as brother
 
 If disabled, the imported position is added as son.</source>
-        <translation type="obsolete">Adicionar a posição importada como derivação
+        <translation type="obsolete">Importierte Stellung als Bruder hinzufügen
 
-Se desabilitado, a posição importada é adicionada como variação.</translation>
+Wenn ausgeschaltet, wird die importierte Stellung als Sohn hinzugefügt.</translation>
     </message>
     <message>
         <source>ASCII</source>
@@ -9269,19 +9893,19 @@ Se desabilitado, a posição importada é adicionada como variação.</translati
     </message>
     <message>
         <source>Remember last directory</source>
-        <translation type="obsolete">Conservar o ltimo diretório</translation>
+        <translation type="obsolete">An letztes Verzeichnis erinnern</translation>
     </message>
     <message>
         <source>Remember last directory
 
 When toggled on, the last used directory when loading or saving sgf files will be remembered.</source>
-        <translation type="obsolete">Conservar o ltimo diretório
+        <translation type="obsolete">An letztes Verzeichnis erinnern
 
-Quando ativado, o último diretório usado ao carregar ou salvar arquivos sgf serão lembrados.</translation>
+Wenn aktiviert, erinnert sich qGo an das zuletzt benutzte Verzeichnis beim Laden oder Speichern von SGF-Dateien.</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving</source>
-        <translation type="obsolete">Codificação do texto ao carregar ou salvar</translation>
+        <translation type="obsolete">Textkodierung fürs Laden und Speichern</translation>
     </message>
     <message>
         <source>Text encoding for loading and saving
@@ -9289,19 +9913,19 @@ Quando ativado, o último diretório usado ao carregar ou salvar arquivos sgf se
 This is used for loading and saving files containing asian letters.
 If &apos;None&apos; is selected, Latin1 encoding will be used, common in western world.
 &apos;None&apos; will speed up loading large files like Kogos Joseki dictionary significantly.</source>
-        <translation type="obsolete">Codificação do texto ao carregar ou salvar
+        <translation type="obsolete">Textkodierung fürs Laden und Speichern
 
-Isto é usado para carregar ou salvar textos contendo caracteres asiáticos.
-Se &apos;Nenhum&apos; for selecionado, a codificação &apos;Latin1&apos; será usada, a qual é comum no mundo ocidental.
-&apos;Nenhum&apos;  irá acelerar sigificativamente o carregamento de arquivos grandes como o dicionário Kogos Joseki.</translation>
+Dies wird benutzt beim Laden und Speichern von Dateien mit asiatischen Zeichen.
+Wenn &apos;Keine&apos; gewählt ist, wird Latin1-Kodierung benutzt, üblich in der westlichen Welt.
+&apos;Keine&apos; wird das Laden von großen Dateien wie Kogos Joseki-Wörterbuch deutlich beschleunigen.</translation>
     </message>
     <message>
         <source>Text encoding:</source>
-        <translation type="obsolete">Codificação do texto:</translation>
+        <translation type="obsolete">Textkodierung:</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="obsolete">Nenhum</translation>
+        <translation type="obsolete">Keine</translation>
     </message>
     <message>
         <source>EUC-JP</source>
@@ -9325,31 +9949,31 @@ Se &apos;Nenhum&apos; for selecionado, a codificação &apos;Latin1&apos; será 
     </message>
     <message>
         <source>Tamil TSCII</source>
-        <translation type="obsolete">Tamil TSCII</translation>
+        <translation type="obsolete">Tamil-TSCII</translation>
     </message>
     <message>
         <source>Fast loading (EXPERIMENTAL)</source>
-        <translation type="obsolete">Carregamento rápido (EXPERIMENTAL)</translation>
+        <translation type="obsolete">Schnelles Laden (EXPERIMENTELL)</translation>
     </message>
     <message>
         <source>Enable fast loading</source>
-        <translation type="obsolete">Ativa o carregamento rápido</translation>
+        <translation type="obsolete">Schnelles Laden aktivieren</translation>
     </message>
     <message>
         <source>Enable fast loading
 
 Warning: This is experimental and does not work properly!</source>
-        <translation type="obsolete">Ativa o carregamento rápido
+        <translation type="obsolete">Schnelles Laden aktivieren
 
-Aviso: Isto é experimental e não funciona direito ainda!</translation>
+Warnung: Dies ist experimentell und funktioniert nicht korrekt!</translation>
     </message>
     <message>
         <source>Fast loading is experimental right now and does not work completely!</source>
-        <translation type="obsolete">O carregamento rápido é experimental ainda!</translation>
+        <translation type="obsolete">Schnelles Laden ist momentan experimentell und funktioniert nicht korrekt!</translation>
     </message>
     <message>
         <source>SGF Loading</source>
-        <translation type="obsolete">Carregamento de SGF</translation>
+        <translation type="obsolete">SGF Lesen</translation>
     </message>
     <message>
         <source>Horizontal or vertical comment orientation
@@ -9359,95 +9983,95 @@ The comment field will either be displayed on the bottom of the board or on the 
 For more dynamic display, pin off the comment field in the View menu.
 
 If None is selected, the comment field is by default hidden.</source>
-        <translation type="obsolete">Orientação horizontal ou vertica dos comentários
+        <translation type="obsolete">Horizontale oder vertikale Kommentarausrichtung
 
-O campo de comentários será mostrado ou embaixo do tabuleiro ou à direita.
+Das Kommentarfeld wird entweder unten oder rechts vom Brett angezeigt.
 
-Para um visualização mais dinâmica, desgrude o campo de comentários do menu &apos;Ver&apos;&apos;.
+Für eine dynamischere Anzeige kann das Kommentarfeld im Ansichtenmenü als eigenes Fenster abgerissen werden.
 
-Se Nenhum for selecionado, o campo de comentários ficará oculto.</translation>
+Ist &apos;Keine&apos; gewählt, wird das Kommentarfeld standardmässig nicht angezeigt.</translation>
     </message>
     <message>
         <source>Variation display</source>
-        <translation type="obsolete">Visualização de variação</translation>
+        <translation type="obsolete">Variationendarstellung</translation>
     </message>
     <message>
         <source>Display variations</source>
-        <translation type="obsolete">Mostrar variações</translation>
+        <translation type="obsolete">Variationendarstellung</translation>
     </message>
     <message>
         <source>Display variations
 
 Select how to display all brothers of the current move. Either not at all, or as ghost stones, or as smaller stones.</source>
-        <translation type="obsolete">Mostrar variações
+        <translation type="obsolete">Variationendarstellung
 
-Selecione como mostrar todas as variações da jogada atual. Ou sem mostrar, ou como pedras fantasmas ou como pedras menores.</translation>
+Wählt, wie die Brüder des aktuellen Zuges dargestellt werden: entweder gar nicht, als transparente Steine oder als kleine Steine.</translation>
     </message>
     <message>
         <source>Ghosts</source>
-        <translation type="obsolete">Fantasmas</translation>
+        <translation type="obsolete">Transparent</translation>
     </message>
     <message>
         <source>Small stones</source>
-        <translation type="obsolete">Pedras pequenas</translation>
+        <translation type="obsolete">Kleine Steine</translation>
     </message>
     <message>
         <source>Show sidebar</source>
-        <translation type="obsolete">Mostrar a barra lateral</translation>
+        <translation type="obsolete">Werkzeugeleiste anzeigen</translation>
     </message>
     <message>
         <source>Show sidebar
 
 Enables or disables the navigation and tool sidebar.</source>
-        <translation type="obsolete">Mostrar a barra lateral
+        <translation type="obsolete">Werkzeugeleiste anzeigen
 
-Ativa/desativa a barra lateral de ferramentas e a de navegação.</translation>
+Aktiviert/deaktiviert die Werkzeugleiste.</translation>
     </message>
     <message>
         <source>Adjust font size</source>
-        <translation type="obsolete">Ajustar o tamanho da fonte</translation>
+        <translation type="obsolete">Schriftgröße anpassen</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels</source>
-        <translation type="obsolete">Ajustar o tamanho da fonte para rótulos de texto</translation>
+        <translation type="obsolete">Schriftgröße für Text und Nummermarkierungen anpassen</translation>
     </message>
     <message>
         <source>Adjust font size for text and number labels
 
 This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
 When editing only single digit marks, it might be convinient to switch this off.</source>
-        <translation type="obsolete">Ajustar o tamanho da fonte para rótulos de texto
+        <translation type="obsolete">Schriftgröße für Text und Nummer Markierungen anpassen
 
-Isto é útili ao numerar todas as fogadas de uma partida, de modo que o tamanho da fonte em todos os números de um, dois ou três dígitos seja igual.
-Ao editar marcas de dígito único, pode ser melhor desativar isto aqui.</translation>
+Dies ist nützlich, wenn alle Züge des Spiels durchnummeriert werden, so daß die Schriftgröße für ein, zwei oder drei Ziffern immer gleich ist.
+Werden nur Markierungen mit einzelnen Ziffern editiert, ist es empfehlenswert, diese Option abzuschalten.</translation>
     </message>
     <message>
         <source>Disable tooltips</source>
-        <translation type="obsolete">Desativar dicas</translation>
+        <translation type="obsolete">Tooltips abschalten</translation>
     </message>
     <message>
         <source>Disable Tool Tips</source>
-        <translation type="obsolete">Desativar dicas</translation>
+        <translation type="obsolete">Tooltips abschalten</translation>
     </message>
     <message>
         <source>Disable Tool Tips
 
 Globally disables all tool tips that would show up if the mouse hovers over a GUI element.</source>
-        <translation type="obsolete">Desativar dicas
+        <translation type="obsolete">Tooltips abschalten
 
-Desativa globalmente todas as dicas que seriam mostradas quando o mause passa sobre um elemento da interface gráfica.</translation>
+Schaltet die Tooltips global ab, die angezeigt werden, wenn sich die Maus über einem Element der Oberfläche befindet.</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="obsolete">Idioma</translation>
+        <translation type="obsolete">Sprache</translation>
     </message>
     <message>
         <source>Set application language</source>
-        <translation type="obsolete">Definir o idioma do aplicativo</translation>
+        <translation type="obsolete">Sprache einstellen</translation>
     </message>
     <message>
         <source>System default</source>
-        <translation type="obsolete">Idioma original</translation>
+        <translation type="obsolete">Systemvorgabe</translation>
     </message>
     <message>
         <source>Set application language
@@ -9458,252 +10082,268 @@ If &apos;System default&apos; is selected, qGo will use the standard language of
 This change will take effect only after qGo has been restarted.
 
 If your language is not supported, you might consider translating qGo. Please check the qGo homepage at http://qgo.sourceforge.net</source>
-        <translation type="obsolete">Definir o idioma do aplicativo
+        <translation type="obsolete">Sprache einstellen
 
-Escolha o seu idioma para o qGo.
-Se &apos;Idioma original&apos; for escolhido, qGo usará o idioma padrão de seu sistema. No Linux isto irá checar a variável LANG. No Windows,  o idioma definido em suas preferências.
+Stellen Sie die Sprache für qGo ein.
+Ist &apos;Systemvorgabe&apos; ausgewählt, wird qGo die Standardsprache Ihres Systems benutzen. Unter Unix und Linux wird die Umgebungsvariable LANG geprüft, unter Windows die Sprachvorgabe.
 
-Esta mudança irá valer só após o qGo reiniciar.
+Diese Änderung wird erst nach einem Neustart von qGo aktiv.
 
-Se sua língua não é suportada, você poderia considerar em traduzir este aplicativo, se tiver paciência e coragem. Por favor, cheque a página do qGo em http://qgo.sourceforge.net</translation>
+Sie können beim Übersetzen helfen, wenn Ihre Sprache nicht unterstützt wird. Weitere Informationen gibt es auf der qGo-Seite: http://qgo.sourceforge.net</translation>
     </message>
     <message>
         <source>Talk</source>
-        <translation type="obsolete">Conversar</translation>
+        <translation type="obsolete">Gespräch</translation>
     </message>
     <message>
         <source>Play sound for incoming talk message</source>
-        <translation type="obsolete">Tocar som quando chegar uma mensagem</translation>
+        <translation type="obsolete">Ton für eingehendes Gespräch abspielen</translation>
     </message>
     <message>
         <source>Match</source>
-        <translation type="obsolete">Partida</translation>
+        <translation type="obsolete">Spielanfrage</translation>
     </message>
     <message>
         <source>Play sound for incoming match request</source>
-        <translation type="obsolete">Tocar som quando uma partida for requisitada</translation>
+        <translation type="obsolete">Ton für eingehende Spielaufforderung abspielen</translation>
     </message>
     <message>
         <source>Game end</source>
-        <translation type="obsolete">Fim da partida</translation>
+        <translation type="obsolete">Spielende</translation>
     </message>
     <message>
         <source>Play sound when played or observed game has ended</source>
-        <translation type="obsolete">Tocar som quando uma partida ou um jogo observado terminarem</translation>
+        <translation type="obsolete">Ton abspielen, wenn das beobachtete oder eigene Spiel beendet wurde</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="obsolete">Tempo</translation>
+        <translation type="obsolete">Zeit</translation>
     </message>
     <message>
         <source>Play sound for remaining 10 seconds of own time</source>
-        <translation type="obsolete">Tocar som para os 10 minutos restantes da pr</translation>
+        <translation type="obsolete">Sound spielen während die letzen verbleiben 10 Sekunden der eigenen Zeit</translation>
     </message>
     <message>
         <source>Say</source>
-        <translation type="obsolete">Falar</translation>
+        <translation type="obsolete">Say</translation>
     </message>
     <message>
         <source>Play sound for incoming say message while playing a game</source>
-        <translation type="obsolete">Tocar som quando para mensagens que entrem durante uma partida</translation>
+        <translation type="obsolete">Ton für eingehendes Gespräch während eines eigenen Spiels abspielen</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="obsolete">Sair</translation>
+        <translation type="obsolete">Verlassen</translation>
     </message>
     <message>
         <source>Play sound when a watched player leaves the room</source>
-        <translation type="obsolete">Tocar som quando um jogador observado deixar a sala</translation>
+        <translation type="obsolete">Ton abspielen, wenn ein beobachteter Spieler geht</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">Entrar</translation>
+        <translation type="obsolete">Eintreten</translation>
     </message>
     <message>
         <source>Play sound when a watched player enters the room</source>
-        <translation type="obsolete">Tocar som quando um jogador observado entrar na sala</translation>
+        <translation type="obsolete">Ton abspielen, wenn ein beobachteter Spieler kommt</translation>
     </message>
     <message>
         <source>Pass</source>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
     </message>
     <message>
         <source>Play sound for pass move</source>
-        <translation type="obsolete">Tocar som quando a jogada for passada</translation>
+        <translation type="obsolete">Ton abspielen, wenn gepaßt wird</translation>
     </message>
     <message>
         <source>Wood 3</source>
-        <translation type="obsolete">Madeira 3</translation>
+        <translation type="obsolete">Holz 3</translation>
     </message>
     <message>
         <source>Wood 4</source>
-        <translation type="obsolete">Madeira 4</translation>
+        <translation type="obsolete">Holz 4</translation>
     </message>
     <message>
         <source>Wood 5</source>
-        <translation type="obsolete">Madeira 5</translation>
+        <translation type="obsolete">Holz 5</translation>
     </message>
     <message>
         <source>font: standard</source>
-        <translation type="obsolete">fonte: padrão</translation>
+        <translation type="obsolete">Schrift: Standard</translation>
     </message>
     <message>
         <source>font: marks</source>
-        <translation type="obsolete">fonte: marcas</translation>
+        <translation type="obsolete">Schrift: Markierung</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select the font for marks on the board</source>
+        <translation type="obsolete">Neue Schrift auswählen
+
+Eine neue Schriftart für die Markierung auswählen</translation>
     </message>
     <message>
         <source>font: comments</source>
-        <translation type="obsolete">fonte: comentários</translation>
+        <translation type="obsolete">Schrift: Kommentar</translation>
     </message>
     <message>
         <source>Select new font
 
 Select font used in all text input/output fields.</source>
-        <translation type="obsolete">Selecionar uma nova fonte
+        <translation type="obsolete">Neue Schrift auswählen
 
-Selecionar a fonte usada em todos os campos de entrada/saída.</translation>
+Eine neue Schriftart für alle Ein- und Ausgabefelder auswählen.</translation>
     </message>
     <message>
         <source>font: lists</source>
-        <translation type="obsolete">fonte: listas</translation>
+        <translation type="obsolete">Schrift: Listen</translation>
+    </message>
+    <message>
+        <source>Select new font
+
+Select the font for lists</source>
+        <translation type="obsolete">Neue Schrift auswählen
+
+Eine neue Schriftart für Listen auswählen</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="obsolete">Cor</translation>
+        <translation type="obsolete">Farbe</translation>
     </message>
     <message>
         <source>color: Background</source>
-        <translation type="obsolete">cor: Fundo</translation>
+        <translation type="obsolete">Farbe: Hintergrund</translation>
     </message>
     <message>
         <source>Current background color</source>
-        <translation type="obsolete">Cor de fundo atual</translation>
+        <translation type="obsolete">Aktuelle Hintergrundfarbe</translation>
     </message>
     <message>
         <source>Select new color</source>
-        <translation type="obsolete">Selecionar nova cor</translation>
+        <translation type="obsolete">Neue Farbe auswählen</translation>
     </message>
     <message>
         <source>Select new color
 
 Select the color for dialog background in the application.</source>
-        <translation type="obsolete">Selecionar nova cor
+        <translation type="obsolete">Neue Farbe auswählen
 
-Selecionar cor para o fundo dos diálogo neste aplicativo.</translation>
+Eine neue Farbe für den Dialoghintergrund auswählen.</translation>
     </message>
     <message>
         <source>Shadow</source>
-        <translation type="obsolete">Sombra</translation>
+        <translation type="obsolete">Schatten</translation>
     </message>
     <message>
         <source>Shell look</source>
-        <translation type="obsolete">Aparência de concha</translation>
+        <translation type="obsolete">Muschelsteine</translation>
     </message>
     <message>
         <source>Variable mark font</source>
-        <translation type="obsolete">Fonte para as marcas variáveis</translation>
+        <translation type="obsolete">Variable Markierungsschrift</translation>
     </message>
     <message>
         <source>Variable font size for marks</source>
-        <translation type="obsolete">Variar o tamanho das fontes para as marcas</translation>
+        <translation type="obsolete">Variable Schriftartengröße für Markierungen</translation>
     </message>
     <message>
         <source>Variable font size for marks 
 
 Ignore the size of the chosen font for marks and set size to about stone dimension.</source>
-        <translation type="obsolete">Variar o tamanho das fontes para as marcas
+        <translation type="obsolete">Variable Schriftartengröße für Markierungen
 
-Igonora o tamanho escolhido da fonte para as marcas e o ajusta para ficar de acordo com o tamanho das pedras.</translation>
+Die gewählte Schriftgröße wird ignoriert und stattdessen der Größe der Steine angepaßt.</translation>
     </message>
     <message>
         <source>Smaller marks</source>
-        <translation type="obsolete">Marcas menores</translation>
+        <translation type="obsolete">Kleinere Markierungen</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller</source>
-        <translation type="obsolete">Desenha as marcas um pouco menores</translation>
+        <translation type="obsolete">Markierugen geringfügig kleiner darstellen</translation>
     </message>
     <message>
         <source>Draw marks slightly smaller
 
 If activated, all types of marks on the board will be drawn slightly smaller.</source>
-        <translation type="obsolete">Desenha as marcas um pouco menores
+        <translation type="obsolete">Markierugen geringfügig kleiner darstellen
 
-Se ativado, todos os tipos de marcas no tabuleiro serão desenhados um pouco menores.</translation>
+Alle Markierungsarten werden geringfügig kleiner als normal dargestellt.</translation>
     </message>
     <message>
         <source>Draw marks bold</source>
-        <translation type="obsolete">Desenhar as marcas em negrito</translation>
+        <translation type="obsolete">Fette Markierungen</translation>
     </message>
     <message>
         <source>Draw marks bold
 
 If activated, all types of marks except characters and numbers on the board will be drawn bold.</source>
-        <translation type="obsolete">Desenhar as marcas em negrito
+        <translation type="obsolete">Fette Markierungen
 
-Se ativado, todos os tipos de marcas no tabuleiro, exceto caracteres e nmeros, serão desenhados em negrito.</translation>
+Alle Markierungen, ausgenommen Buchstaben und Zahlen, werden fett dargestellt.</translation>
     </message>
     <message>
         <source>sgf time tags</source>
-        <translation type="obsolete">etiquetas de tempo sgf</translation>
+        <translation type="obsolete">SGF-Zeitinformation</translation>
     </message>
     <message>
         <source>use time info of input file</source>
-        <translation type="obsolete">usar informação de tempo do arquivo de entrada</translation>
+        <translation type="obsolete">Die Zeitinformation der Eingabedatei wird verwendet</translation>
     </message>
     <message>
         <source>sgf time tags
 
 Use time info of input file. The autoplay speed is same as recorded.
 If not available then interval time is used.</source>
-        <translation type="obsolete">etiquetas de tempo sgf
+        <translation type="obsolete">SGF-Zeitinformation
 
-Usar a informação do arquivo de entrada. A velocidade de jogo automático é o mesmo de quando gravado.
-Se não estiver disponível, o tempo de intervalo é usado.</translation>
+Die Zeitinformation der Eingabedatei wird verwendet. Die Geschwindigkeit für &apos;Automatisches Spielen&apos; ist dieselbe wie aufgezeichnet.
+Falls keine Zeitinformation verfügbar ist, wird die Intervallzeit verwendet.</translation>
     </message>
     <message>
         <source>Select new font
 
 Select the font for marks on the board.</source>
-        <translation type="obsolete">Selecionar uma nova fonte
+        <translation type="obsolete">Neue Schrift auswählen
 
-Selecionar a fonte para as marcas no tabuleiro.</translation>
+Eine neue Schriftart für die Markierungen auswählen.</translation>
     </message>
     <message>
         <source>Select new font
 
 Select the font for lists.</source>
-        <translation type="obsolete">Selecionar uma nova fonte
+        <translation type="obsolete">Neue Schrift auswählen
 
-Selecionar a fonte para as listas.</translation>
+Eine neue Schriftart für Listen auswählen.</translation>
     </message>
     <message>
         <source>show white stones with shadow</source>
-        <translation type="obsolete">mostrar pedras brancas com sombra</translation>
+        <translation type="obsolete">Zeige weiße Steine mit Schatten</translation>
     </message>
     <message>
         <source>Show white stones with shadow. Contrast may be better then.</source>
-        <translation type="obsolete">Mostrar pedras brancas com sombra. O contraste será melhor assim.</translation>
+        <translation type="obsolete">Zeige weiße Steine mit Schatten. Der Kontrast wird dadurch verbessert.</translation>
     </message>
     <message>
         <source>let the stones look like shell stones</source>
-        <translation type="obsolete">Fazer as pedras se parecerem com pedras em concha</translation>
+        <translation type="obsolete">Gibt den weißen Steinen das Aussehen von Muschelsteinen</translation>
     </message>
     <message>
         <source>Shell look
 
 Use this to let stones look like shell stones with random stripes.</source>
-        <translation type="obsolete">Aparência de concha
+        <translation type="obsolete">Muschelsteine
 
-Use isto para permitir aparência de concha sobre as pedras, com listras aleatórias.</translation>
+Gibt den weißen Steinen das Aussehen von Muschelsteinen mit zufälligen Streifen.</translation>
     </message>
     <message>
         <source>Coordinates</source>
-        <translation type="obsolete">Coordenadas</translation>
+        <translation type="obsolete">Koordinaten</translation>
     </message>
     <message>
         <source>Slider</source>
-        <translation type="obsolete">Barra deslizante</translation>
+        <translation type="obsolete">Schieber</translation>
     </message>
     <message>
         <source>Cursor</source>
@@ -9711,75 +10351,75 @@ Use isto para permitir aparência de concha sobre as pedras, com listras aleató
     </message>
     <message>
         <source>Sidebar</source>
-        <translation type="obsolete">Barra lateral</translation>
+        <translation type="obsolete">Werkzeugleiste</translation>
     </message>
     <message>
         <source>left</source>
-        <translation type="obsolete">esquerda</translation>
+        <translation type="obsolete">links</translation>
     </message>
     <message>
         <source>Show sidebar on the left</source>
-        <translation type="obsolete">Mostrar a barra lateral </translation>
+        <translation type="obsolete">Die Werkzeugleiste auf der linken Seite platzieren</translation>
     </message>
     <message>
         <source>Show sidebar on the left
 
 Swaps sidebar and board, thus board is on the left and sidbar is on the right.</source>
-        <translation type="obsolete">Mostrar a barra lateral 
+        <translation type="obsolete">Werkzeugleiste links
 
-Troca a barra lateral e o tabuleiro, de modo que o tabuleiro fique à esquerda e a barra lateral à direita.</translation>
+Die Werkzeugleiste und das Brett vertauschen.</translation>
     </message>
     <message>
         <source>font: clocks</source>
-        <translation type="obsolete">fonte: relógios</translation>
+        <translation type="obsolete">Schrift: Uhren</translation>
     </message>
     <message>
         <source>Select new font
 
 Select the font for the clocks.</source>
-        <translation type="obsolete">Selecionar uma nova fonte
+        <translation type="obsolete">Neue Schrift auswählen
 
-Selecionar a fonte para os relógios.</translation>
+Eine neue Schriftart für die Uhren auswählen.</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation type="obsolete">Desconectar-se</translation>
+        <translation type="obsolete">Verbindung trennen</translation>
     </message>
     <message>
         <source>Play sound when disconnected from server</source>
-        <translation type="obsolete">Tocar som ao se desconectar do servidor</translation>
+        <translation type="obsolete">Ton bei Trennung vom Server abspielen</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation type="obsolete">Conectar-se</translation>
+        <translation type="obsolete">Verbinden</translation>
     </message>
     <message>
         <source>Play sound when connected to server</source>
-        <translation type="obsolete">Tocar som ao se conectar do servidor</translation>
+        <translation type="obsolete">Ton abspielen, wenn zum Server verbunden wurde</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation type="obsolete">memorizar aquele ponto para retornar rapidamente</translation>
+        <translation type="obsolete">merken eines Punktes zur schnellen Rückkehr</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation type="obsolete">Aperte o botão no ponto inicial par habilitar memorização.
-Após colocar e/ou desfazer, solte o botão para retornar ao ponto inicial automaticamente.</translation>
+        <translation type="obsolete">Taste drücken, um den jetzigen Spielstand zu speichern.
+Nach dem Platzieren und/oder der Rücknahme die Taste wieder lösen, um sofort zum gespeicherten Spielzustand zurückzukehren.</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation type="obsolete">dar o controle ao oponente</translation>
+        <translation type="obsolete">Die Kontrolle an den Gegner abgeben</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation type="obsolete">dar o controle ao oponente para permitir a ele colocar pedras pretas e brancas, desfazer, etc.
+        <translation type="obsolete">Das Übergeben der Kontrolle an den Geger ermöglicht diesem das Setzen schwarzer und weißer Steine, Züge zurückzunehmen usw.
 
-Somente o instrutor pode dar controle,
-ambos instrutor e aprendiz podem soltar o controle.</translation>
+Nur der Lehrer kann die Kontrolle übergeben;
+Lehrer und Schüler können die Kontrolle zurücksetzen.</translation>
     </message>
     <message>
         <source>Click on the board to place a stone.
@@ -9790,66 +10430,88 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</source>
-        <translation type="obsolete">Clicker sur le plateau pour placer une pierre
+        <translation type="obsolete">Klick auf das Brett spielt einen Stein.
 
-En mode normal, un click gauche place les pierres en alternant les couleurs.
-Shift + click gauche reviens au premier coup de la branche principale.
-Shift + click droit avance au coup suivant de la branche en cours.
-En mode </translation>
+Im normalen Modus spielt ein Linksklick einen Zug mit abwechselnden Farben.
+Shift + Linksklick geht zum ersten Zug in der Hauptvariation.
+Shift + Rechtsklick geht zum nächsten Zug in der aktuellen Variation.
+Im Bearbeitenmodus beim Editieren von Steinen setzt ein Linksklick einen schwarzen, ein Rechtsklick einen weißen Stein. Klick auf einen existierenden Stein entfernt diesen wieder.
+Beim Bearbeiten von Markierungen setzt ein Linksklick eine Markierung, ein Rechtsklick löscht diese wieder. Beim Bearbeiten von Buchstaben erlaubt Shift-Klick die Eingabe eines freien Textes.
+Beim Berechnen des Ergebnisses markiert ein Linksklick eine Gruppe als tot, ein Rechtsklick eine Gruppe als lebend in Seki. Ein erneuter Klick auf eine Gruppe entfernt die vorherige Markierung als tot oder Seki wieder.</translation>
     </message>
     <message>
         <source>as saved</source>
-        <translation type="obsolete">como salvo</translation>
+        <translation type="obsolete">wie gespeichert</translation>
     </message>
     <message>
         <source>choose default comment orientation</source>
-        <translation type="obsolete">escolha a orientação padrão do campo de comentários</translation>
+        <translation type="obsolete">Voreinstellung der Ausrichtung des Kommentarfeldes wählen</translation>
+    </message>
+    <message>
+        <source>default comment field orientation
+
+as saved	use ALT+&lt;0..9&gt; to save position, size and comment orientation, 
+		restore with CTRL+&lt;0..9&gt;
+horizontal	always show horizontal comment field
+vertical		always show vertical comment field
+
+Using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
+        <translation type="obsolete">Voreinstellung der Orientierung des Kommentarfeldes
+
+wie gespeichert	ALT+&lt;0..9&gt; speichert Position und Größe sowie die Orientierung des Kommentarfeldes,
+		CTRL+&lt;0..9&gt; stellt die gespeicherte Geometrie wieder her
+horizontal	immer horizontale Orientierung des Kommentarfeldes
+vertikal		immer vertikale Orientierung des Kommentarfeldes
+
+</translation>
     </message>
     <message>
         <source>Circle</source>
-        <translation type="obsolete">C</translation>
+        <translation type="obsolete">Kreis</translation>
     </message>
     <message>
         <source>Circle
 
 Edit circle marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">C</translation>
+        <translation type="obsolete">Kreis
+
+Kreisförmige Markierung editieren. Klick links setzt eine Markierung, Klick rechts entfernt diese.</translation>
     </message>
     <message>
         <source>Square</source>
-        <translation type="obsolete">Quadrado</translation>
+        <translation type="obsolete">Rechteck</translation>
     </message>
     <message>
         <source>Square
 
 Edit square marks on the board. Left click sets a mark, right click removes it.</source>
-        <translation type="obsolete">Quadrado
+        <translation type="obsolete">Rechteck
 
-Editar as marcas quadradas no tabuleiro. Clique à esquerda define a marca, à direita a remove.</translation>
+Rechteckige Markierung editieren. Ein Linksklick setzt eine Markierung, ein Rechtsklick entfernt diese.</translation>
     </message>
     <message>
         <source>Request adjournment</source>
-        <translation type="obsolete">Requisitar adiamento</translation>
+        <translation type="obsolete">Unterbrechung erbitten (adjourn)</translation>
     </message>
     <message>
         <source>Adjourn.
 
 Send adjournment request to your opponent. If he accept it, the game will be adjourned and saved.</source>
-        <translation type="obsolete">Adiar
+        <translation type="obsolete">Unterbrechen. (adjourn)
 
-Enviar uma requisição de adiamento ao seu oponente. Se aceito, o jogo será adiado e salvo.</translation>
+Sendet eine Unterbrechungsanfrage an den Gegner, deren Annahme das Spiel speichert und unterbricht.</translation>
     </message>
     <message>
         <source>Client Window</source>
-        <translation type="obsolete">Janela cliente</translation>
+        <translation type="obsolete">Hauptfenster</translation>
     </message>
     <message>
         <source>Toolbar tabs</source>
-        <translation type="obsolete">Abas das barras de ferramentas</translation>
+        <translation type="obsolete">Griffe der Werkzeugleiste</translation>
     </message>
     <message>
         <source>define:</source>
-        <translation type="obsolete">definir:</translation>
+        <translation type="obsolete">def:</translation>
     </message>
     <message>
         <source>1:</source>
@@ -9869,39 +10531,39 @@ Enviar uma requisição de adiamento ao seu oponente. Se aceito, o jogo será ad
     </message>
     <message>
         <source>button label:</source>
-        <translation type="obsolete">r</translation>
+        <translation type="obsolete">Beschriftung:</translation>
     </message>
     <message>
         <source>Free button label</source>
-        <translation type="obsolete">R</translation>
+        <translation type="obsolete">Freie Tastenbeschriftung</translation>
     </message>
     <message>
         <source>command:</source>
-        <translation type="obsolete">comando:</translation>
+        <translation type="obsolete">Befehl:</translation>
     </message>
     <message>
         <source>Go server command: e.g. &apos;stats&apos;</source>
-        <translation type="obsolete">comando do servidor de Go: por exemplo &apos;stats&apos;</translation>
+        <translation type="obsolete">Go Server Befehl: z.B. &apos;stats&apos;</translation>
     </message>
     <message>
         <source>help text:</source>
-        <translation type="obsolete">texto de ajuda:</translation>
+        <translation type="obsolete">Hilfetext:</translation>
     </message>
     <message>
         <source>tooltip - shown when mouse moves over button</source>
-        <translation type="obsolete">dicas - mostrar quando o mause passar sobre um bot</translation>
+        <translation type="obsolete">Tooltip - wird angezeigt, wenn die Maus über die Taste geführt wird</translation>
     </message>
     <message>
         <source>Special players</source>
-        <translation type="obsolete">Jogadores especiais</translation>
+        <translation type="obsolete">Spezielle Spieler</translation>
     </message>
     <message>
         <source>watch players:</source>
-        <translation type="obsolete">observar jogadores:</translation>
+        <translation type="obsolete">beobachte Spieler:</translation>
     </message>
     <message>
         <source>players to be colored red</source>
-        <translation type="obsolete">jogadores para serem coloridos de vermelho</translation>
+        <translation type="obsolete">Spieler, die rot eingefärbt werden</translation>
     </message>
     <message>
         <source>add players you want to
@@ -9910,16 +10572,16 @@ Enviar uma requisição de adiamento ao seu oponente. Se aceito, o jogo será ad
 - hear sound if entering/leaving.
 
 Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
-        <translation type="obsolete">adicione jogadores que você quer
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spieler- und Spieletabelle
 
-- ver como vermelho e
-- escutar som se entrar/sair.
+- rot eingefärbt und 
+- bei ihrem Eintreten und Verlassen des Servers ein Ton abspielt.
 
-Use ponto e vírgula &quot;;&quot; como delimitador (sem espaços)</translation>
+Als Trennzeichen zwischen den Spielern sind Semikola zu benutzen (keine Leerzeichen)</translation>
     </message>
     <message>
         <source>players to be colored green</source>
-        <translation type="obsolete">jogadores para serem coloridos de verde</translation>
+        <translation type="obsolete">Spieler, die grün eingefärbt werden</translation>
     </message>
     <message>
         <source>add players you want to
@@ -9928,16 +10590,16 @@ Use ponto e vírgula &quot;;&quot; como delimitador (sem espaços)</translation>
 - exclude from shouting.
 
 Use semicolon &quot;;&quot; as delimiter (no spaces)</source>
-        <translation type="obsolete">adicione jogadores que você quiser
+        <translation type="obsolete">Hier eingetragene Spieler werden in der Spieler- und Spieletabelle
 
-- ver como verde e
-- desabilitar o grito.
+- grün eingefärbt und 
+- für Shouts (Ausrufe an alle Spieler) ausgeschlossen!
 
-Use ponto e vírgula &quot;;&quot; como delimitador (sem espaços)</translation>
+Als Trennzeichen zwischen den Spielern sind Semikola zu benutzen (keine Leerzeichen)</translation>
     </message>
     <message>
         <source>exclude players:</source>
-        <translation type="obsolete">excluir jogadores:</translation>
+        <translation type="obsolete">Spieler ausschließen:</translation>
     </message>
     <message>
         <source>IGS</source>
@@ -9945,11 +10607,11 @@ Use ponto e vírgula &quot;;&quot; como delimitador (sem espaços)</translation>
     </message>
     <message>
         <source>Extended user info</source>
-        <translation type="obsolete">Informação extendida do usuário</translation>
+        <translation type="obsolete">Erweiterte Spielerinformation</translation>
     </message>
     <message>
         <source>see more information from users -&gt; slow!</source>
-        <translation type="obsolete">Ver mais informações dos usuários -&gt; lento!</translation>
+        <translation type="obsolete">mehr Informationen über den Spieler sehen -&gt; langsam!</translation>
     </message>
     <message>
         <source>If checked then additional information is requested from server.
@@ -9959,21 +10621,25 @@ Use ponto e vírgula &quot;;&quot; como delimitador (sem espaços)</translation>
 Works slow! User &apos;Refresh players&apos; after changing.
 
 On IGS only.</source>
-        <translation type="obsolete">Se marcado, então informações adicionais são requisitadas do servidor.
+        <translation type="obsolete">Falls gewählt werden zusätzliche Informationen vom Server angefordert.
 
-o comando &apos;user&apos; ao invés de &apos;who&apos;, de modo que, informação , perdeu/ganhou, país e ajustes de idioma serão disponibilizados.</translation>
+&apos;user&apos; Befehl statt &apos;who&apos;. Daher werden Infotext, Siege/Niederlagen, Land und Sprachsetzung verfügbar.
+
+Sehr langsamer Befehl!
+
+Funktioniert nur auf IGS.</translation>
     </message>
     <message>
         <source>Go Server</source>
-        <translation type="obsolete">Servidor de Go</translation>
+        <translation type="obsolete">Go-Server</translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation type="obsolete">Título:</translation>
+        <translation type="obsolete">Titel:</translation>
     </message>
     <message>
         <source>title, e.g.: guest account at NNGS</source>
-        <translation type="obsolete">título, ex.: conta de visitante em NNGS</translation>
+        <translation type="obsolete">Titel, z.B.: Gast auf NNGS</translation>
     </message>
     <message>
         <source>unique title, e.g.:
@@ -9985,35 +10651,35 @@ xyz
 The title field is used to chose a server connection.
 
 Note: don&apos;t use a default server name, i.e. &apos;-- Aurora --&apos; etc.</source>
-        <translation type="obsolete">título único, ex.:
+        <translation type="obsolete">Eindeutiger Titel, z.B.:
 
-conta de visitante em NNGS
-qGo1234 (IGS)
+Gast auf NNGS
+qGo4321 (IGS)
 xyz
 
-O campo de título é usado para escolher uma conexão de servidor.
+Das Titelfeld wird zum Auswählen der Server-Verbindung gebraucht.
 
-Nota: não use um nome padrão de servidor, p. ex. &apos;-- Aurora --&apos;, etc.</translation>
+Beachte: vordefinierte Servernamen, wie beispielsweise &apos;-- Aurora --&apos;, dürfen nicht verwendet werden.</translation>
     </message>
     <message>
         <source>Refresh display</source>
-        <translation type="obsolete">Atualizar a tela</translation>
+        <translation type="obsolete">Anzeige erneuern</translation>
     </message>
     <message>
         <source>Refresh
 
 Refresh board. Use this if you cannot see any stones on the board.</source>
-        <translation type="obsolete">Atualizar.
+        <translation type="obsolete">Anzeige auffrischen
 
-Atualizar o tabuleiro. Use isto aqui se você não puder ver qulaquer pedras no tabuleiro.</translation>
+Auffrischen des Bretts. Zu benutzen, falls bei einem Online-Spiel keine Steine auf dem Brett angezeigt werden.</translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation type="obsolete">Servidor:</translation>
+        <translation type="obsolete">Host:</translation>
     </message>
     <message>
         <source>hostname, e.g.: nngs.cosmic.org</source>
-        <translation type="obsolete">Nome de servidor ex.: nngs.cosmic.org</translation>
+        <translation type="obsolete">Host-Name, z.B. nngs.cosmic.org</translation>
     </message>
     <message>
         <source>hostname
@@ -10028,9 +10694,9 @@ Use a valid hostname or ip address. Instead of typing it one of the predefined h
 -- LGS --
 -- NNGS --
 -- WING --</source>
-        <translation type="obsolete">Nome de servidor
+        <translation type="obsolete">Hostname
 
-Use um nome ou IP de servidor válido. Ao invés de digitar, um dos servidores pré-definidos pode ser escolhiido:
+Einen gültigen Host-Namen oder eine IP-Adresse eingeben. Stattdessen kann auch einer der vordefinierten Hosts verwendet werden.
 
 -- Aurora --
 -- CTN --
@@ -10043,51 +10709,66 @@ Use um nome ou IP de servidor válido. Ao invés de digitar, um dos servidores p
     </message>
     <message>
         <source>Port:</source>
-        <translation type="obsolete">Porta:</translation>
+        <translation type="obsolete">Port:</translation>
     </message>
     <message>
         <source>port address, e.g.: 9696</source>
-        <translation type="obsolete">endereço de porta, ex.: 9696</translation>
+        <translation type="obsolete">Portadresse, z.B. 9696</translation>
     </message>
     <message>
         <source>port address, e.g.: 9696
 
 Port address is defined for each go server. It&apos;s a fixed number. See Host for predefined server names.</source>
-        <translation type="obsolete">endereço de porta, ex.: 9696
+        <translation type="obsolete">Portadresse, z.B. 9696
 
-Endereços de porta são definidos para cada servidor de Go. É um número fixo. Veja Sevidor para nomes pré-definidos.</translation>
+Die Portadresse ist eine für jede Server-Verbindung eindeutig definierte Zahl. Siehe Host für vordefinierte Hosts.</translation>
     </message>
     <message>
         <source>Undo last move</source>
-        <translation type="obsolete">Desfazer última jogada</translation>
+        <translation type="obsolete">letzten Zug zurücknehmen (undo)</translation>
     </message>
     <message>
         <source>Undo
 
 Undo the opponent&apos;s last move.</source>
-        <translation type="obsolete">Desfazer
+        <translation type="obsolete">Rücknahme (undo)
 
-Desfazer a última jogada do oponente.</translation>
+Nimmt den letzten Zug des Gegners zurück.</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation type="obsolete">Nome:</translation>
+        <translation type="obsolete">Name:</translation>
     </message>
     <message>
         <source>use your login name; if unregistered use a unique name like &apos;hotdog17&apos; (NNGS, CWS) or guest (other servers)</source>
-        <translation type="obsolete">Use seu nome de acesso; se não estiver cadastrado, use um nome único como &apos;hotdog17&apos; (NNGS, CWS) ou visitante (outros servidores)</translation>
+        <translation type="obsolete">eigenen Benutzernamen eingeben;
+falls nicht registriert, bitte eindeutigen Namen benutzen, beispielsweise &apos;blauebohne45&apos; (NNGS, CWS) oder &apos;guest&apos; (andere Server)</translation>
     </message>
     <message>
-        <source>guest</source>
-        <translation type="obsolete">visitante</translation>
+        <source>name
+
+Registered users: 
+use your login name and password provided by the go server operator after registration
+
+New users: depends on server
+NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
+others:		guest</source>
+        <translation type="obsolete">Name
+
+Registrierte Benutzer:
+Den Namen und das Passwort benutzen, die nach der Registrierung zugesandt wurden.
+
+Neue Benutzer: vom Go-Server abhängig
+NNGS, CWS: eindeutigen Namen verwenden, z.B. &apos;Blaubart36&apos;
+andere:  guest</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="obsolete">Senha:</translation>
+        <translation type="obsolete">Passwort:</translation>
     </message>
     <message>
         <source>your password; if unregistered: blank field</source>
-        <translation type="obsolete">sua senha; se não for cadastrado: deixe em branco</translation>
+        <translation type="obsolete">Passwort einsetzen; falls unregistriert: leeres Feld</translation>
     </message>
     <message>
         <source>password
@@ -10096,16 +10777,16 @@ Registered users:
 use your login name and password provided by the go server operator after registration
 
 New users: leave blank!</source>
-        <translation type="obsolete">senha:
+        <translation type="obsolete">Passwort
 
-Jogadores registrados:
-use seu nome de acesso e senha providos pelo operador do servidor de Go após o cadastramento
+Registrierte Benutzer:
+Den Namen und das Passwort benutzen, die nach der Registrierung zugesandt wurden.
 
-Novos usuários: deixe em branco!</translation>
+Neue Benutzer: leeres Feld!</translation>
     </message>
     <message>
         <source>Score/Edit</source>
-        <translation type="obsolete">Pontuação/Editar</translation>
+        <translation type="obsolete">Auszählen/Editieren</translation>
     </message>
     <message>
         <source>Score
@@ -10117,39 +10798,39 @@ Click a second time on a group to unmark it as dead or seki.
 Edit
 
 Click to get a new, editable offline window.</source>
-        <translation type="obsolete">Pontuação
+        <translation type="obsolete">Auszählen
 
-Clique à esquerda em um grupo para o marcar como morto.
-Clique à direita em um grupo para o marcar como sobrevivente no seki.
-Clique uma segunda vez para o marcar como morto ou sobreviente no seki.
+Ein Linksklick auf eine Gruppe markiert diese als tot.
+Ein Rechtsklick auf eine Gruppe markiert diese als lebending in Seki.
+Nochmaliger Klick auf eine Gruppe entfernt die Markierung als tot oder Seki.
 
-Editar
+Editieren
 
-Clique para obter uma nova janela, editável e desconectada.</translation>
+Ein Klick öffnet ein neues, editierbares Brett zur Offline-Bearbeitung.</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="obsolete">Novo</translation>
+        <translation type="obsolete">Neu</translation>
     </message>
     <message>
         <source>clear form</source>
-        <translation type="obsolete">Limpar o formulário</translation>
+        <translation type="obsolete">Formular zurücksetzen</translation>
     </message>
     <message>
         <source>New
 
 clear form; doesn&apos;t make any changes to the entries</source>
-        <translation type="obsolete">Novo
+        <translation type="obsolete">Neu
 
-limpar o formulário; não aplica nenhuma mudança às entradas</translation>
+Formular zurücksetzen; nimmt keinen Einfluss auf die gespeicherten Verbindungsdaten</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="obsolete">Adicionar</translation>
+        <translation type="obsolete">Hinzufügen</translation>
     </message>
     <message>
         <source>add/change current entry</source>
-        <translation type="obsolete">adicionar/mudar a entrada atual</translation>
+        <translation type="obsolete">Eingaben hinzufügen/ändern</translation>
     </message>
     <message>
         <source>Add or Change
@@ -10157,19 +10838,19 @@ limpar o formulário; não aplica nenhuma mudança às entradas</translation>
 Label &apos;Change &apos; appears when title is not unique, i.e. the saved entries with that title will be superseded by the current entries.
 
 Label &apos;Add&apos; is default. The given entries will be saved under the given title.</source>
-        <translation type="obsolete">Adicionar ou Mudar
+        <translation type="obsolete">Eingaben hinzufügen/ändern
 
-O rótulo &apos;Mudar&apos; aparece quando o título não é único, isto é, as entradas salvas com aquele título serão sobreescritas pelas entradas correntes.
+&apos;Ändern&apos; erscheint, wenn der Titel mit einem gespeicherten Eintrag übereinstimmt. Die gespeicherte Verbindung wird überschrieben.
 
-O rótulo &apos;Adicionar&quot; é o padrão. As entradas dadas serão salvas com o título dado.</translation>
+&apos;Hinzufügen&apos; ist Voreinstellung. Die Einträge werden unter dem gewählten Titel gespeichert.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Apagar</translation>
+        <translation type="obsolete">Löschen</translation>
     </message>
     <message>
         <source>delete current entry</source>
-        <translation type="obsolete">Apagar a entrada atual</translation>
+        <translation type="obsolete">Eintrag löschen</translation>
     </message>
     <message>
         <source>Delete
@@ -10177,31 +10858,31 @@ O rótulo &apos;Adicionar&quot; é o padrão. As entradas dadas serão salvas co
 Deletes the saved entries with same Title.
 
 Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="obsolete">Apagar
+        <translation type="obsolete">Löschen
 
-Apaga as entradas salvas com o mesmo Título.
+Löscht die gespeicherten Einträge mit dem selben Titel.
 
-Nota: &apos;Apagar&apos; diz respeito a registros salvos.</translation>
+Hinweise: &apos;Löschen&apos; bezieht sich auf gespeicherte Einträge, nicht auf das Formularfeld.</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="obsolete">Título</translation>
+        <translation type="obsolete">Titel</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="obsolete">Servidor</translation>
+        <translation type="obsolete">Host</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="obsolete">Porta</translation>
+        <translation type="obsolete">Port</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Nome</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="obsolete">Senha</translation>
+        <translation type="obsolete">Passwort</translation>
     </message>
     <message>
         <source>Host Entries
@@ -10211,503 +10892,13 @@ Select &apos;New&apos; to clear input fields. After filling in at least Title an
 Select an entry to edit, change (Title keeps unchanged) or delete a line.
 
 Select one of the predefined hosts -- xxx -- and add a title to use it.</source>
-        <translation type="obsolete">Entradas do servidor
+        <translation type="obsolete">Host Einträge
 
-Selecione &apos;Novo&apos; para limpar os campos de entrada. Após preencher ao menos Título e Servidor use Adicionar/Mudar.
+&apos;Neu&apos; setzt die Eingabefelder zurück. Nach dem Einfüllen von mindestens Titel und Host &apos;Hinzufügen&apos; und &apos;Ändern&apos; verwenden.
 
-Selecione uma entrada para editar, mudar ou apagar uma linha.
+Einen Eintrag zum Editieren, Ändern (Titel bleibt gleich) oder Löschen wählen.
 
-Selecione um dos servidores pré-definidos -- xxx -- e adicione um título para o usar.</translation>
-    </message>
-    <message>
-        <source>always show vertical comment field
-
-To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation type="obsolete">sempre mostrar o campo de comentários vertical
-
-Para salvar a orientação do campo de comentários você deve selecionar &apos;como salvo&apos;. Usando ALT/CTRL+&lt;número&gt; enquanto o vertical/horizontal está aplicado, a orientação salva é ignorada.</translation>
-    </message>
-    <message>
-        <source>Go Engine</source>
-        <translation type="obsolete">Programa de Go</translation>
-    </message>
-    <message>
-        <source>Path to the Go program</source>
-        <translation type="obsolete">Caminho do programa de Go</translation>
-    </message>
-    <message>
-        <source>Path to the Go playing program, e.g. GnuGo</source>
-        <translation type="obsolete">Caminho do programa de Go, p. ex. GnuGo</translation>
-    </message>
-    <message>
-        <source>Default games settings</source>
-        <translation type="obsolete">Parâmetros de jogo padrão</translation>
-    </message>
-    <message>
-        <source>Default settings for game proposal</source>
-        <translation type="obsolete">Par</translation>
-    </message>
-    <message>
-        <source>Default games settings 
-
-Set here the settings you want to use as default when proposing a game on a Go server</source>
-        <translation type="obsolete">Par</translation>
-    </message>
-    <message>
-        <source>Board size:</source>
-        <translation type="obsolete">Tamanho do tabuleiro:</translation>
-    </message>
-    <message>
-        <source>Time:</source>
-        <translation type="obsolete">Tempo:</translation>
-    </message>
-    <message>
-        <source>Playing time</source>
-        <translation type="obsolete">Duração</translation>
-    </message>
-    <message>
-        <source>Byoyomi Time:</source>
-        <translation type="obsolete">Tempo de Byoyomi:</translation>
-    </message>
-    <message>
-        <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
-        <translation type="obsolete">Tempo adicional para 25 jogadas; após 25 jogadas o tempo de byoyomi recomeça continuamente</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation type="obsolete">Alt+A</translation>
-    </message>
-    <message>
-        <source>Alt+O</source>
-        <translation type="obsolete">Alt+O</translation>
-    </message>
-    <message>
-        <source>Main Interface</source>
-        <translation type="obsolete">Interface Principal</translation>
-    </message>
-    <message>
-        <source>font: console</source>
-        <translation type="obsolete">fonte: console</translation>
-    </message>
-    <message>
-        <source>font for the server console</source>
-        <translation type="obsolete">fonte para o console de servidor</translation>
-    </message>
-    <message>
-        <source>Select new font
-
-Select the font for the server console (fixed font preferably).</source>
-        <translation type="obsolete">Selecionar nova fonte
-
-Selecionar nova fonte para o console de servidor (preferencialmente uma fonte fixa).</translation>
-    </message>
-    <message>
-        <source>Default (OS style)</source>
-        <translation type="obsolete">Padrão (estilo do SO)</translation>
-    </message>
-    <message>
-        <source>Time (secs.)</source>
-        <translation type="obsolete">Tempo (seg.)</translation>
-    </message>
-    <message>
-        <source>Play sound for remaining seconds of own time</source>
-        <translation type="obsolete">Tocar som para os segundos restantes do tempo próprio</translation>
-    </message>
-    <message>
-        <source>Check this box if you want to be warned when Byo Yomi ends.
-You can set the warning time besides</source>
-        <translation type="obsolete">Marque esta caixa se você quiser ser avisado quando o Byo Yomi terminar.
-Você pode definir o tempo de aviso ao lado</translation>
-    </message>
-    <message>
-        <source>Warning time</source>
-        <translation type="obsolete">Tempo de aviso</translation>
-    </message>
-    <message>
-        <source>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</source>
-        <translation type="obsolete">Defina isto para o número de segundos para o qual você quer ser avisado antes do Byo Yomi terminar</translation>
-    </message>
-    <message>
-        <source>User buttons toolbar</source>
-        <translation type="obsolete">Barra de botões do usuário</translation>
-    </message>
-    <message>
-        <source>Delete
-
-Deletes the saved entries with same label
-
-Note: &apos;Delete&apos; concerns saved records.</source>
-        <translation type="obsolete">Apagar
-
-Apaga as entradas salvas com o mesmo rótulo
-
-Nota: &apos;Apagar&apos; diz respeito a registros salvos.</translation>
-    </message>
-    <message>
-        <source>Help text:</source>
-        <translation type="obsolete">Texto de ajuda:</translation>
-    </message>
-    <message>
-        <source>Help text, displayed as tooltip</source>
-        <translation type="obsolete">Texto de ajuda, mostrado como dica</translation>
-    </message>
-    <message>
-        <source>help text
-
-This text is displayed as tooltip of the created button</source>
-        <translation type="obsolete">texto de ajuda
-
-Este texto é mostrado como dica do botão criado</translation>
-    </message>
-    <message>
-        <source>Command:</source>
-        <translation type="obsolete">Comando:</translation>
-    </message>
-    <message>
-        <source>command passed to the server</source>
-        <translation type="obsolete">comando passado ao servidor</translation>
-    </message>
-    <message>
-        <source>command
-
-the command is passed to the server</source>
-        <translation type="obsolete">comando
-
-o comando é passado ao servidor</translation>
-    </message>
-    <message>
-        <source>Pixmap file:</source>
-        <translation type="obsolete">Arquivo de mapa de pixels:</translation>
-    </message>
-    <message>
-        <source>file path to the button pixmap</source>
-        <translation type="obsolete">caminho do arquivo para o desenho do botão</translation>
-    </message>
-    <message>
-        <source>file path to the button pixmap
-
-Set it with the file chooser</source>
-        <translation type="obsolete">caminho do arquivo para o desenho do botão
-
-Defina-o com o seletor de arquivos</translation>
-    </message>
-    <message>
-        <source>pixmap file chooser</source>
-        <translation type="obsolete">seletor de arquivo de mapa de pixels</translation>
-    </message>
-    <message>
-        <source>Label:</source>
-        <translation type="obsolete">Rótulo:</translation>
-    </message>
-    <message>
-        <source>Button label</source>
-        <translation type="obsolete">Rótulo do botão</translation>
-    </message>
-    <message>
-        <source>unique label, 
-
-The label is displayed as button text.</source>
-        <translation type="obsolete">rótulo único,
-
-O rótulo é mostrado como texto do botão.</translation>
-    </message>
-    <message>
-        <source>Pixmap</source>
-        <translation type="obsolete">Mapa de pixels</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="obsolete">Rótulo</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation type="obsolete">Comando</translation>
-    </message>
-    <message>
-        <source>Help Text</source>
-        <translation type="obsolete">Texto de Ajuda</translation>
-    </message>
-    <message>
-        <source>User defined button list</source>
-        <translation type="obsolete">Lista de botões definida pelo usuário</translation>
-    </message>
-    <message>
-        <source>Button Entries
-
-Select &apos;New&apos; to clear input fields. After filling in at least label and command use Add/Change.
-
-Select an entry to edit, change (label keeps unchanged) or delete a line.
-</source>
-        <translation type="obsolete">Entradas de Botões
-
-Selecione &apos;Novo&apos; para limpar os campos de entrada. Após preencher ao menos o rótulo e o comando, use Adicionar/Mudar.
-
-Selecione uma entrada para editar, mudar (rótulos mantém-se os mesmos) ou apagar uma linha</translation>
-    </message>
-    <message>
-        <source>Board Window</source>
-        <translation type="obsolete">Janela do Tabuleiro</translation>
-    </message>
-    <message>
-        <source>Goban</source>
-        <translation type="obsolete">Goban</translation>
-    </message>
-    <message>
-        <source>SGF Style</source>
-        <translation type="obsolete">Estilo SGF</translation>
-    </message>
-    <message>
-        <source>Show SGF board coordinates</source>
-        <translation type="obsolete">Mostrar coordenadas do tabuleiro em SGF</translation>
-    </message>
-    <message>
-        <source>
-Toggles if SGF style board coordinates are shown.</source>
-        <translation type="obsolete">Alterna entre mostrar ou não as coordenadas no estilo SGF.</translation>
-    </message>
-    <message>
-        <source>Computer Go</source>
-        <translation type="obsolete">Computador Go</translation>
-    </message>
-    <message>
-        <source>Default for White</source>
-        <translation type="obsolete">Padrão para o Branco</translation>
-    </message>
-    <message>
-        <source>Computer</source>
-        <translation type="obsolete">Computador</translation>
-    </message>
-    <message>
-        <source>Human</source>
-        <translation type="obsolete">Humano</translation>
-    </message>
-    <message>
-        <source>Default for Black</source>
-        <translation type="obsolete">Padrão para o Preto</translation>
-    </message>
-    <message>
-        <source>Handicap :</source>
-        <translation type="obsolete">Vantagem :</translation>
-    </message>
-    <message>
-        <source>board size</source>
-        <translation type="obsolete">tamanho do tabuleiro</translation>
-    </message>
-    <message>
-        <source>Import / Export</source>
-        <translation type="obsolete">Importar / Exportar</translation>
-    </message>
-    <message>
-        <source>Big5</source>
-        <translation type="obsolete">Big5</translation>
-    </message>
-    <message>
-        <source>Imported game position</source>
-        <translation type="obsolete">Importar posição da partida</translation>
-    </message>
-    <message>
-        <source>Komi:</source>
-        <translation type="obsolete">Komi:</translation>
-    </message>
-    <message>
-        <source>Komi: added to white&apos;s result</source>
-        <translation type="obsolete">Komi: adicionado para o resultado do branco</translation>
-    </message>
-    <message>
-        <source>.5</source>
-        <translation type="obsolete">.5</translation>
-    </message>
-    <message>
-        <source>Automatic Negotiation of Komi</source>
-        <translation type="obsolete">Negociação Automática do Komi</translation>
-    </message>
-    <message>
-        <source>allow client to negotiate automatic</source>
-        <translation type="obsolete">permitir ao cliente negociar automaticamente</translation>
-    </message>
-    <message>
-        <source>Automatic Negotiation
-
-Allow client to negotiate komi automatic.
-
-Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</source>
-        <translation type="obsolete">Negociação Automática
-
-Permitir ao cliente negociar um komi automático.
-
-Cuidado: pode ser chato se o oponente não quiser aceitar seus padrões mesmo se eles já tenham sido definidos para ele antes. Isto pode acontecer devido a diferenças internas de valores de negociação nos clientes.</translation>
-    </message>
-    <message>
-        <source>Adjust font size for text and number labels
-
-This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
-When editing only single digit marks, it might be convenient to switch this off.</source>
-        <translation type="obsolete">Ajustar o tamanho da fonte para rótulos de texto
-
-Isto é útili ao numerar todas as fogadas de uma partida, de modo que o tamanho da fonte em todos os números de um, dois ou três dígitos seja igual.
-Ao editar marcas de dígito único, pode ser melhor desativar isto aqui.</translation>
-    </message>
-    <message>
-        <source>On line games</source>
-        <translation type="obsolete">Jogos conectados</translation>
-    </message>
-    <message>
-        <source>Anti clicko (1/4 second click latency)</source>
-        <translation type="obsolete">Anti-cliques (atraso de 1/4 de segundo)</translation>
-    </message>
-    <message>
-        <source>Anti Clicko
-
-Check the box for setting an anti clicko delay (1/4 second) for on line games.
-If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
-        <translation type="obsolete">Anti-cliques
-
-Marque o ítem para definir um atraso anti-cliques (1/4 de segundo) em jogos conectados.
-Quando você pressionar para entrar com uma jogada no tabuleiro, ela não será realizada se o botão do mause for solto muito rapidamente.</translation>
-    </message>
-    <message>
-        <source>If checked then additional information is requested from server.
-
-&apos;user&apos; cmd instead of &apos;who&apos;, thus, info string, won/lost, country and language settings are available.
-
-Works slow! Use &apos;Refresh players&apos; after changing.
-
-On IGS only.</source>
-        <translation type="obsolete">Se marcado, então informações adicionais são requisitadas do servidor.
-
-o comando &apos;user&apos; ao invés de &apos;who&apos;, de modo que, informação , perdeu/ganhou, país e ajustes de idioma serão disponibilizados.</translation>
-    </message>
-    <message>
-        <source>Check for setting an anti cliko delay for on line games</source>
-        <translation type="obsolete">Marque para definir um atraso anti-cliques para jogos conectados</translation>
-    </message>
-    <message>
-        <source>shadow</source>
-        <translation type="obsolete">sombra</translation>
-    </message>
-    <message>
-        <source>check for shadowed stones</source>
-        <translation type="obsolete">marque para usar pedras sombreadas</translation>
-    </message>
-    <message>
-        <source>shadow
-
-Check the box for haveing a shadow displayed under the stones.</source>
-        <translation type="obsolete">sombra
-
-Marque este ítem para obter sombras sob as pedras.</translation>
-    </message>
-    <message>
-        <source>shell look</source>
-        <translation type="obsolete">aparência de concha</translation>
-    </message>
-    <message>
-        <source>check for striped white stones (shell looking)</source>
-        <translation type="obsolete">marque para obter pedras listradas de branco (parecidas com conchinhas do mar)</translation>
-    </message>
-    <message>
-        <source>shell look
-
-Check the box for having striped, shell looking, white stones.</source>
-        <translation type="obsolete">aparência de concha
-
-Marque este ítem para obter pedras listradas de branco, parecendo conchas do mar.</translation>
-    </message>
-    <message>
-        <source>Autosave</source>
-        <translation type="obsolete">Auto-salvar</translation>
-    </message>
-    <message>
-        <source>Autosave observed games</source>
-        <translation type="obsolete">Jogos observados automaticamente salvos</translation>
-    </message>
-    <message>
-        <source>check for automatic saving observed games</source>
-        <translation type="obsolete">marque para obter o salvamento automático de jogos observados</translation>
-    </message>
-    <message>
-        <source>Autosave
-
-If checked then when an observed game completes, it is automatically saved in the working directory</source>
-        <translation type="obsolete">Auto-salvar
-
-Se estiver marcado, quando um jogo observado termina, ele é automaticamente salvo no diretório de trabalho (atual)</translation>
-    </message>
-    <message>
-        <source>Board picture</source>
-        <translation type="obsolete">Imagem do tabuleiro</translation>
-    </message>
-    <message>
-        <source>observed games</source>
-        <translation type="obsolete">jogos observados</translation>
-    </message>
-    <message>
-        <source>played games</source>
-        <translation type="obsolete">partidas jogadas</translation>
-    </message>
-    <message>
-        <source>check for automatic saving for your games games</source>
-        <translation type="obsolete">marque para salvar automaticamente seus jogos</translation>
-    </message>
-    <message>
-        <source>Autosave
-
-If checked then when a game you played completes, it is automatically saved in the working directory</source>
-        <translation type="obsolete">Auto-salvamento
-
-Se estiver marcado quando completar uma partida, ela é automaticamente salva no diretório de trabalho</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation type="obsolete">Fundo</translation>
-    </message>
-    <message>
-        <source>Alternate (lists)</source>
-        <translation type="obsolete">Alternar (listas)</translation>
-    </message>
-    <message>
-        <source>Show SGF board coordinates
-										
-Toggles if SGF style board coordinates are shown.</source>
-        <translation type="obsolete">Mostrar coordenadas SGF
-										
-Alterna entre mostrar ou não as coordenadas sob o estilo SGF.</translation>
-    </message>
-    <message>
-        <source>Path to the goban picture</source>
-        <translation type="obsolete">Caminho para a imagem do &apos;goban&apos;</translation>
-    </message>
-    <message>
-        <source>Path to the goban picture.
-If the picture is not set, or unvalid, a default goban is used by qgo</source>
-        <translation type="obsolete">Caminho para a imagem do &apos;goban&apos;.
-Se a imagem não estiver definida ou for inválida, uma imagem padrão será usada pelo &apos;qgo&apos;</translation>
-    </message>
-    <message>
-        <source>Table picture</source>
-        <translation type="obsolete">Imagem da tabela</translation>
-    </message>
-    <message>
-        <source>Path to the table picture</source>
-        <translation type="obsolete">Caminho para a imagem da tabela</translation>
-    </message>
-    <message>
-        <source>Path to the table picture.
-If the picture is not set, or unvalid, a default picture is used by qgo</source>
-        <translation type="obsolete">Caminho para a imagem da tabela.
-Se a imagem não estiver definida ou for inválida, uma imagem padrão será usada pelo &apos;qgo&apos;</translation>
-    </message>
-    <message>
-        <source>2.5</source>
-        <translation type="obsolete">2,5</translation>
-    </message>
-    <message>
-        <source>7.5</source>
-        <translation type="obsolete">7,5</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation type="obsolete">10</translation>
+Einen vordefinierten Go-Server -- xxx -- wählen und Titel eintragen, um diesen benutzen zu können.</translation>
     </message>
     <message>
         <source>default comment field orientation
@@ -10718,63 +10909,648 @@ horizontal	always show horizontal comment field
 vertical		always show vertical comment field
 
 To use saved comment field orientation you must select &apos;as saved&apos;. By using ALT/CTRL+&lt;number&gt; while horizontal/vertical is chosen, the saved comment field orientation is ignored.</source>
-        <translation type="obsolete">orientação do campo de comentários padrão
+        <translation type="obsolete">Voreinstellung der Kommentarausrichtung
 
-como salvo	use ALT+&lt;0..9&gt; para salvar a posição, o tamanho e a orientação dos comentários,
-		restaure com CTRL+&lt;0..9&gt;
-horizontal	sempre mostra o campo de comentários na horizontal
-vertical		sempre mostra o campo de comentários na vertical
+wie gespeichert ALT+&lt;0..9&gt; speichert die Position, Größe und Ausrichtung des Kommentarfeldes,
+  STRG+&lt;0..9&gt; stellt die gespeicherte Geometrie wieder her
+horizontal immer die horizontale Ausrichtung verwenden
+vertikal  immer die vertikale Ausrichtung verwenden
 
-Para usar a orientação salva você deve seleciorar &apos;como salvo&apos;. Ao usar ALT/CTRL+&lt;número&gt; enquanto horizontal/vertical está ativado, a orientação salva é ignorada.</translation>
+Soll mit jedem Wiederherstellen gespeicherter Daten auch die jeweilige Ausrichtung wieder hergestellt werden, so muss &apos;wie gespeichert&apos; ausgewählt werden. Andernfalls wird immer horizontal/vertikal ausgerichtet.</translation>
     </message>
     <message>
-        <source>Codec:</source>
-        <translation type="obsolete">&apos;Codec&apos;:</translation>
+        <source>Go Engine</source>
+        <translation type="obsolete">Go-Engine</translation>
     </message>
     <message>
-        <source>name
+        <source>Path to the Go program</source>
+        <translation type="obsolete">Pfad zum Go-Programm</translation>
+    </message>
+    <message>
+        <source>Path to the Go playing program, e.g. GnuGo</source>
+        <translation type="obsolete">Pfad zum Go-Programm, z.B. GnuGo</translation>
+    </message>
+    <message>
+        <source>Default games settings</source>
+        <translation type="obsolete">Spieleinstellungen</translation>
+    </message>
+    <message>
+        <source>Default settings for game proposal</source>
+        <translation type="obsolete">Einstellungen für den Spieledialog</translation>
+    </message>
+    <message>
+        <source>Default games settings 
 
-Registered users: 
-use your login name and password provided by the go server operator after registration
+Set here the settings you want to use as default when proposing a game on a Go server</source>
+        <translation type="obsolete">Spieleeinstellungen
 
-New users: depends on server
-NNGS, CWS:	use a unique name like &apos;hotdog17&apos;
-others:		guest</source>
-        <translation type="obsolete">nome
+Voreinstellung der Parameter für das Aufsetzen eines Matches auf einem Go Server</translation>
+    </message>
+    <message>
+        <source>Board size:</source>
+        <translation type="obsolete">Brettgröße:</translation>
+    </message>
+    <message>
+        <source>Time:</source>
+        <translation type="obsolete">Zeit:</translation>
+    </message>
+    <message>
+        <source>Playing time</source>
+        <translation type="obsolete">Spielzeit</translation>
+    </message>
+    <message>
+        <source>Byoyomi Time:</source>
+        <translation type="obsolete">Byoyomi-Zeit:</translation>
+    </message>
+    <message>
+        <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
+        <translation type="obsolete">Zusätzliche Zeit für 25 Züge; nach 25 Zügen beginnt die Zeit von vorne und so weiter</translation>
+    </message>
+    <message>
+        <source>Default (OS style)</source>
+        <translation type="obsolete">Voreinstellung (BS Stil)</translation>
+    </message>
+    <message>
+        <source>Default for White</source>
+        <translation type="obsolete">Voreinstellung für Weiß</translation>
+    </message>
+    <message>
+        <source>Computer</source>
+        <translation type="obsolete">Computer</translation>
+    </message>
+    <message>
+        <source>Human</source>
+        <translation type="obsolete">Mensch</translation>
+    </message>
+    <message>
+        <source>Default for Black</source>
+        <translation type="obsolete">Voreinstellung für Schwarz</translation>
+    </message>
+    <message>
+        <source>font: console</source>
+        <translation type="obsolete">Schrift: Konsole</translation>
+    </message>
+    <message>
+        <source>font for the server console</source>
+        <translation type="obsolete">Schrift für die Server-Konsole</translation>
+    </message>
+    <message>
+        <source>Select new font
 
-Usuários registrados:
-use seu nome de acesso e senha dados pelo operador do servidor &apos;go&apos; após seu registro
+Select the font for the server console (fixed font preferably).</source>
+        <translation type="obsolete">Neue Schrift auswählen
 
-Novos usuários: depende do servidor usado
-NNGS, CWS: use um único nome, como &apos;cachorro17&apos;
-outros:		&apos;guest&apos; (visitante)</translation>
+Die Schrift für die Server-Konsole wählen (&apos;fixed font&apos; bevorzugt).</translation>
+    </message>
+    <message>
+        <source>Time (secs.)</source>
+        <translation type="obsolete">Zeit (Sekunden)</translation>
+    </message>
+    <message>
+        <source>Play sound for remaining seconds of own time</source>
+        <translation type="obsolete">Ton für die eigene verbleibende Zeit abspielen</translation>
+    </message>
+    <message>
+        <source>Check this box if you want to be warned when Byo Yomi ends.
+You can set the warning time besides</source>
+        <translation type="obsolete">Diese Box wählen, wenn vor dem Ende des Byoyomi gewarnt werden soll.
+Die Zeit dafür kann seitlich gesetzt werden</translation>
+    </message>
+    <message>
+        <source>Warning time</source>
+        <translation type="obsolete">Warnzeit</translation>
+    </message>
+    <message>
+        <source>Set this to the number of seconds to which you want to be warned before Byo Yomi ends</source>
+        <translation type="obsolete">Hier die Zeit in Sekunden vor Ablauf des Byoyomis angeben, zu der gewarnt werden soll</translation>
+    </message>
+    <message>
+        <source>board size</source>
+        <translation type="obsolete">Brettgröße</translation>
+    </message>
+    <message>
+        <source>Komi:</source>
+        <translation type="obsolete">Komi:</translation>
+    </message>
+    <message>
+        <source>Komi: added to white&apos;s result</source>
+        <translation type="obsolete">Komi: wird zum Ergebnis von Weiß addiert</translation>
+    </message>
+    <message>
+        <source>.5</source>
+        <translation type="obsolete">.5</translation>
+    </message>
+    <message>
+        <source>Automatic Negotiation of Komi</source>
+        <translation type="obsolete">Komi automatisch verhandeln</translation>
+    </message>
+    <message>
+        <source>allow client to negotiate automatic</source>
+        <translation type="obsolete">erlaubt dem Client automatisch zu verhandeln</translation>
+    </message>
+    <message>
+        <source>Automatic Negotiation
+
+Allow client to negotiate komi automatic.
+
+Be careful: it may be annoying if opponent does not want to accept your defaults even if defaults have been sent to opponent before. This may be due to different internal use of negotiation values by clients.</source>
+        <translation type="obsolete">Automatisches Verhandeln
+
+Erlaubt dem Client, das Komi automatisch zu verhandeln.
+
+Vorsicht: diese Einstellung kann sehr lästig sein, wenn der Gegner das Angebot nicht annehmen will, selbst wenn es vielleicht vorher ausgemacht worden ist. Diese Problem begründet sich in der unterschiedlichen Implementierung der Verhandlungswerte verschiedener Clients.</translation>
+    </message>
+    <message>
+        <source>Main Interface</source>
+        <translation type="obsolete">Hauptschnittstelle</translation>
+    </message>
+    <message>
+        <source>User buttons toolbar</source>
+        <translation type="obsolete">Werkzeugleiste für Benutzerschalter</translation>
+    </message>
+    <message>
+        <source>Delete
+
+Deletes the saved entries with same label
+
+Note: &apos;Delete&apos; concerns saved records.</source>
+        <translation type="obsolete">Löschen
+
+Löschen der gespeicherten Einträge mit dem selben Titel
+
+Hinweise: &apos;Löschen&apos; bezieht sich auf gespeicherte Einträge, nicht auf das Formularfeld.</translation>
+    </message>
+    <message>
+        <source>Help text:</source>
+        <translation type="obsolete">Hilfetext:</translation>
+    </message>
+    <message>
+        <source>Help text, displayed as tooltip</source>
+        <translation type="obsolete">Hilfetext, als Tooltip angezeigt</translation>
+    </message>
+    <message>
+        <source>help text
+
+This text is displayed as tooltip of the created button</source>
+        <translation type="obsolete">Hilfetext
+
+Dieser Text wird als Tooltip des erzeugten Schalters angezeigt</translation>
+    </message>
+    <message>
+        <source>Command:</source>
+        <translation type="obsolete">Befehl:</translation>
+    </message>
+    <message>
+        <source>command passed to the server</source>
+        <translation type="obsolete">Befehl, an den Server geleitet</translation>
+    </message>
+    <message>
+        <source>command
+
+the command is passed to the server</source>
+        <translation type="obsolete">Befehl
+
+Der Befehl wird an den Server geleitet</translation>
+    </message>
+    <message>
+        <source>Pixmap file:</source>
+        <translation type="obsolete">Pixmap-Datei:</translation>
+    </message>
+    <message>
+        <source>file path to the button pixmap</source>
+        <translation type="obsolete">Dateipfad zum Bild des Schalters</translation>
+    </message>
+    <message>
+        <source>file path to the button pixmap
+
+Set it with the file chooser</source>
+        <translation type="obsolete">Dateipfad zum Bild des Schalters
+
+Kann mit dem Dateiauswahlschalter gesetzt werden</translation>
+    </message>
+    <message>
+        <source>pixmap file chooser</source>
+        <translation type="obsolete">Auswahlschalter für Bild</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation type="obsolete">Bezeichner:</translation>
+    </message>
+    <message>
+        <source>Button label</source>
+        <translation type="obsolete">Bezeichnung des Schalters</translation>
+    </message>
+    <message>
+        <source>unique label, 
+
+The label is displayed as button text.</source>
+        <translation type="obsolete">Eindeutige Bezeichnung
+
+Die Bezeichnung wird als Schaltertext angezeigt.</translation>
+    </message>
+    <message>
+        <source>Pixmap</source>
+        <translation type="obsolete">Pixmap-Bild</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation type="obsolete">Bezeichnung</translation>
+    </message>
+    <message>
+        <source>Command</source>
+        <translation type="obsolete">Befehl</translation>
+    </message>
+    <message>
+        <source>Help Text</source>
+        <translation type="obsolete">Hilfetext</translation>
+    </message>
+    <message>
+        <source>User defined button list</source>
+        <translation type="obsolete">Benutzerdefinierte Schalterliste</translation>
+    </message>
+    <message>
+        <source>Button Entries
+
+Select &apos;New&apos; to clear input fields. After filling in at least label and command use Add/Change.
+
+Select an entry to edit, change (label keeps unchanged) or delete a line.
+</source>
+        <translation type="obsolete">Schaltereinträge
+
+&apos;Neu&apos; auswählen, um Eingabefelder zu löschen. Hinzufügen/Ändern nach der Eingabe von zumindest Bezeichner und Befehl verwenden.
+
+Einen Eintrag zum Editieren, Ändern oder Löschen auswählen.</translation>
+    </message>
+    <message>
+        <source>Board Window</source>
+        <translation type="obsolete">Brettfenster</translation>
+    </message>
+    <message>
+        <source>Goban</source>
+        <translation type="obsolete">Goban</translation>
+    </message>
+    <message>
+        <source>Computer Go</source>
+        <translation type="obsolete">Computer-Go</translation>
+    </message>
+    <message>
+        <source>Import / Export</source>
+        <translation type="obsolete">Import / Export</translation>
+    </message>
+    <message>
+        <source>Imported game position</source>
+        <translation type="obsolete">Importierte Spielstellung</translation>
+    </message>
+    <message>
+        <source>Big5</source>
+        <translation type="obsolete">Big5</translation>
+    </message>
+    <message>
+        <source>Handicap :</source>
+        <translation type="obsolete">Vorgabe:</translation>
+    </message>
+    <message>
+        <source>Alt+A</source>
+        <translation type="obsolete">Alt+A</translation>
+    </message>
+    <message>
+        <source>Alt+O</source>
+        <translation type="obsolete">Alt+O</translation>
+    </message>
+    <message>
+        <source>SGF Style</source>
+        <translation type="obsolete">SGF-Stil</translation>
+    </message>
+    <message>
+        <source>Show SGF board coordinates</source>
+        <translation type="obsolete">Zeige SGF-Brettkoordinaten</translation>
+    </message>
+    <message>
+        <source>Show SGF board coordinates
+										
+Toggles if SGF style board coordinates are shown.</source>
+        <translation type="obsolete">Zeige SGF-Brettkoordinaten
+
+Einstellung, ob SGF-Brettkoordinaten angezeigt werden.</translation>
+    </message>
+    <message>
+        <source>Adjust font size for text and number labels
+
+This is useful when numbering all moves of a game, so the font size of all one, two or three digits numbers is equal.
+When editing only single digit marks, it might be convenient to switch this off.</source>
+        <translation type="obsolete">Schriftgröße für Text und Nummermarkierungen anpassen
+
+Dies ist nützlich, wenn alle Züge des Spieles durchnummeriert werden, so daß die Schriftgröße für ein, zwei oder drei Ziffern immer gleich ist.
+Werden nur Markierungen mit einzelnen Ziffern editiert, ist es empfehlenswert, diese Option auszuschalten.</translation>
+    </message>
+    <message>
+        <source>On line games</source>
+        <translation type="obsolete">Online-Spiel</translation>
+    </message>
+    <message>
+        <source>Anti clicko (1/4 second click latency)</source>
+        <translation type="obsolete">Anti-Clicko (1/4 Sekunde Klickverzögerung)</translation>
+    </message>
+    <message>
+        <source>Anti Clicko
+
+Check the box for setting an anti clicko delay (1/4 second) for on line games.
+If you press to enter a move on the board, the move will not be acknowledged if the mouse is released too early.</source>
+        <translation type="obsolete">Anti-Clicko
+
+Anwählen der Box setzt eine Verzögerung von 1/4 Sekunde für Online-Spiele.
+Wird ein Zug auf dem Brett ausgeführt, wird dieser nicht anerkannt, falls die Maus zu früh losgelassen wird.</translation>
+    </message>
+    <message>
+        <source>If checked then additional information is requested from server.
+
+&apos;user&apos; cmd instead of &apos;who&apos;, thus, info string, won/lost, country and language settings are available.
+
+Works slow! Use &apos;Refresh players&apos; after changing.
+
+On IGS only.</source>
+        <translation type="obsolete">Falls gewählt. werden zusätzliche Informationen vom Server angefordert.
+
+Befehl &apos;user&apos; statt &apos;who&apos;, daher werden der Infotext, die Siege/Niederlagen, das Land und die Spracheinstellung verfügbar.
+
+Sehr langsamer Befehl!
+
+Funktioniert nur auf IGS.</translation>
+    </message>
+    <message>
+        <source>Check for setting an anti cliko delay for on line games</source>
+        <translation type="obsolete">Auswählen, um die Anti-Clicko-Verzögerung für Online-Spiele zu aktivieren</translation>
+    </message>
+    <message>
+        <source>shadow</source>
+        <translation type="obsolete">Schatten</translation>
+    </message>
+    <message>
+        <source>check for shadowed stones</source>
+        <translation type="obsolete">anwählen für schattierte Steine</translation>
+    </message>
+    <message>
+        <source>shadow
+
+Check the box for haveing a shadow displayed under the stones.</source>
+        <translation type="obsolete">Schatten
+
+Anwählen, um einen Schatten unter den Steinen zu erhalten.</translation>
+    </message>
+    <message>
+        <source>shell look</source>
+        <translation type="obsolete">Muschelsteine</translation>
+    </message>
+    <message>
+        <source>check for striped white stones (shell looking)</source>
+        <translation type="obsolete">anwählen für gestreifte, weiße Steine (Muschelsteine)</translation>
+    </message>
+    <message>
+        <source>shell look
+
+Check the box for having striped, shell looking, white stones.</source>
+        <translation type="obsolete">Muschelsteine
+
+Anwählen, um gestreifte, weiße Steine, sogenannte Muschelsteine, zu erhalten.</translation>
+    </message>
+    <message>
+        <source>Autosave</source>
+        <translation type="obsolete">Automatisches Speichern</translation>
+    </message>
+    <message>
+        <source>Autosave observed games</source>
+        <translation type="obsolete">Autospeichern beobachteter Spiele</translation>
+    </message>
+    <message>
+        <source>check for automatic saving observed games</source>
+        <translation type="obsolete">anwählen, um beobachtete Spiele automatisch speichern zu lassen</translation>
+    </message>
+    <message>
+        <source>Autosave
+
+If checked then when an observed game completes, it is automatically saved in the working directory</source>
+        <translation type="obsolete">Autospeichern
+
+Falls gewählt, werden alle Spiele, die nur zur Beobachtung geöffnet sind, auch automatisch im Arbeitsverzeichnis gespeichert</translation>
+    </message>
+    <message>
+        <source>Board picture</source>
+        <translation type="obsolete">Brettbild</translation>
+    </message>
+    <message>
+        <source>observed games</source>
+        <translation type="obsolete">beobachtete Spiele</translation>
+    </message>
+    <message>
+        <source>played games</source>
+        <translation type="obsolete">gespielte Partien</translation>
+    </message>
+    <message>
+        <source>Autosave
+
+If checked then when a game you played completes, it is automatically saved in the working directory</source>
+        <translation type="obsolete">Automatisches Speichern
+
+Falls gewählt, werden alle eigenen Partien beim Beenden automatisch im Arbeitsverzeichnis gespeichert</translation>
+    </message>
+    <message>
+        <source>2.5</source>
+        <translation type="obsolete">2.5</translation>
+    </message>
+    <message>
+        <source>7.5</source>
+        <translation type="obsolete">7.5</translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation type="obsolete">10</translation>
     </message>
     <message>
         <source>check for automatic saving for your games</source>
-        <translation type="obsolete">ative para o salvamento automático de seus jogos</translation>
+        <translation type="obsolete">anwählen, um eigene Spiele automatisch speichern zu lassen</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation type="obsolete">Hintergrund</translation>
+    </message>
+    <message>
+        <source>Alternate (lists)</source>
+        <translation type="obsolete">abwechseln (Listen)</translation>
+    </message>
+    <message>
+        <source>Path to the goban picture</source>
+        <translation type="obsolete">Pfad zum Goban-Bild</translation>
+    </message>
+    <message>
+        <source>Path to the goban picture.
+If the picture is not set, or unvalid, a default goban is used by qgo</source>
+        <translation type="obsolete">Pfad zum Goban-Bild.
+Falls das Bild nicht gesetzt oder ungültig ist, wird die Voreinstellung von qGo benutzt</translation>
+    </message>
+    <message>
+        <source>Table picture</source>
+        <translation type="obsolete">Bild des Tisches</translation>
+    </message>
+    <message>
+        <source>Path to the table picture</source>
+        <translation type="obsolete">Pfad zum Bild des Tisches</translation>
+    </message>
+    <message>
+        <source>Path to the table picture.
+If the picture is not set, or unvalid, a default picture is used by qgo</source>
+        <translation type="obsolete">Pfad zum Bild des Tisches.
+Falls das Bild nicht gesetzt oder ungültig ist, wird die Voreinstellung von qGo benutzt</translation>
+    </message>
+    <message>
+        <source>Codec:</source>
+        <translation type="obsolete">Codec:</translation>
+    </message>
+    <message>
+        <source>use new &apos;nmatch&apos; feature</source>
+        <translation type="obsolete">neuen Befehl &apos;nmatch&apos; verwenden</translation>
+    </message>
+    <message>
+        <source>If checked then match offers will use the new &apos;nmatch&apos; protocol.</source>
+        <translation type="obsolete">Falls ausgewählt, wird das neue Nmatch-Protokoll verwendet.</translation>
+    </message>
+    <message>
+        <source>If checked then match offers will use the new &apos;nmatch&apos; protocol.
+
+When both players use this protocol, they can set handicap before playing, have &apos;nigiri&apos; for even games. IGS also permits the japanese Byo yomi clock, but it&apos;s not yet supported by qGo</source>
+        <translation type="obsolete">Falls ausgewählt, wird das neue Nmatch-Protokoll verwendet.
+
+Wenn beide Spieler dieses Protokoll verwenden, können sie die Vorgaben vor dem Spiel festlegen -- Nigiri für Gleichaufpartien. IGS erlaubt außerdem die japanische Byoyomi-Uhr, die aber von qGo noch nicht unterstützt wird</translation>
+    </message>
+    <message>
+        <source>Ugly 2D</source>
+        <translation type="obsolete">Schlichtes 2D</translation>
+    </message>
+    <message>
+        <source>flat circled ... ugly but asked for ...</source>
+        <translation type="obsolete">einfache Kreise ... schlicht aber gefragt...</translation>
+    </message>
+    <message>
+        <source>Stone appearance
+
+This will display back and white circles</source>
+        <translation type="obsolete">Aussehen der Steine
+
+Die Steine erscheinen als schwarze und weiße Kreise</translation>
+    </message>
+    <message>
+        <source>Plain 3D</source>
+        <translation type="obsolete">Schlichtes 3D</translation>
+    </message>
+    <message>
+        <source>plain 3D (no shadow, no stripes)</source>
+        <translation type="obsolete">schlichtes 3D (keine Schatten, keine Streifen)</translation>
+    </message>
+    <message>
+        <source>Stone appearance
+
+this will display simple 3D stones, with no shadow and neither stripes on white stones</source>
+        <translation type="obsolete">Aussehen der Steine
+
+Die Steine erscheinen in einfachem 3D ohne Schatten und auf weißen Steinen ohne Streifen</translation>
+    </message>
+    <message>
+        <source>Realistic</source>
+        <translation type="obsolete">Realistisch</translation>
+    </message>
+    <message>
+        <source>Realistic 3D stones with stripes and shadow</source>
+        <translation type="obsolete">realistische 3D Steine mit Schatten und Streifen</translation>
+    </message>
+    <message>
+        <source>Stone appearance
+
+This will display realistic 3D stones with stripes and shadow</source>
+        <translation type="obsolete">Aussehen der Steine
+
+Die Steine erscheinen realitätsnah mit Schatten und Streifen</translation>
+    </message>
+    <message>
+        <source>All servers settings</source>
+        <translation type="obsolete">Einstellungen für alle Server</translation>
+    </message>
+    <message>
+        <source>Automatic komi 
+negotiation</source>
+        <translation type="obsolete">Automatisch Komi
+Verhandeln</translation>
+    </message>
+    <message>
+        <source>Main 
+time :</source>
+        <translation type="obsolete">Haupt-
+zeit:</translation>
+    </message>
+    <message>
+        <source>Byoyomi
+time:</source>
+        <translation type="obsolete">Byoyomi-
+Zeit:</translation>
+    </message>
+    <message>
+        <source>IGS &apos;nmatch&apos; specific settings</source>
+        <translation type="obsolete">Einstellungen speziell für IGS &apos;nmatch&apos;</translation>
+    </message>
+    <message>
+        <source>Main time 
+up to :</source>
+        <translation type="obsolete">Hauptzeit
+bis zu:</translation>
+    </message>
+    <message>
+        <source>Byo time
+up to :</source>
+        <translation type="obsolete">Byo-Zeit
+bis zu:</translation>
+    </message>
+    <message>
+        <source>Play as :</source>
+        <translation type="obsolete">Spielen als:</translation>
+    </message>
+    <message>
+        <source>Black</source>
+        <translation type="obsolete">Schwarz</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation type="obsolete">Weiß</translation>
+    </message>
+    <message>
+        <source>Nigiri</source>
+        <translation type="obsolete">Nigiri</translation>
+    </message>
+    <message>
+        <source>Handicap 
+up to :</source>
+        <translation type="obsolete">Handicap
+bis zu:</translation>
     </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Noir</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Blanc</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>free</source>
-        <translation type="obsolete">livre</translation>
+        <translation type="obsolete">frei</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation type="obsolete">qualificada</translation>
+        <translation type="obsolete">gewertet</translation>
     </message>
     <message>
         <source>teach</source>
-        <translation type="obsolete">ensinar</translation>
+        <translation type="obsolete">Lektion</translation>
     </message>
     <message>
         <source>-</source>
@@ -10785,50 +11561,50 @@ outros:		&apos;guest&apos; (visitante)</translation>
     <name>QNewGameDlg</name>
     <message>
         <source>Human</source>
-        <translation type="obsolete">Humano</translation>
+        <translation type="obsolete">Mensch</translation>
     </message>
     <message>
         <source>Computer</source>
-        <translation type="obsolete">Computador</translation>
+        <translation type="obsolete">Computer</translation>
     </message>
     <message>
         <source>SGF Files (*.sgf);;MGT Files (*.mgt);;XML Files (*.xml);;All Files (*)</source>
-        <translation type="obsolete">Arquivos SGF (*.sgf);;Arquivos MGT (*.mgt);;Arquivos XML (*.xml);;Todos arquivos (*)</translation>
+        <translation type="obsolete">SGF-Dateien (*.sgf);;MGT-Dateien (*.mgt);;XML-Dateien (*.xml);;Alle Dateien (*)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="obsolete">Erro</translation>
+        <translation type="obsolete">Fehler</translation>
     </message>
     <message>
         <source>You entered an invalid Handicap (1 is not legal)</source>
-        <translation type="obsolete">Você definiu uma Vantagem inválida (1 não é legal)</translation>
+        <translation type="obsolete">Falsche Vorgaben (1 ist nicht möglich)</translation>
     </message>
 </context>
 <context>
     <name>QNewGameDlgGui</name>
     <message>
         <source>Computer Game</source>
-        <translation type="obsolete">Partida contra o Computador</translation>
+        <translation type="obsolete">Spiel gegen Computer</translation>
     </message>
     <message>
         <source>White Player</source>
-        <translation type="obsolete">Jogador branco</translation>
+        <translation type="obsolete">Spieler Weiß</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Nome</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Computer Level</source>
-        <translation type="obsolete">Nível do Computador</translation>
+        <translation type="obsolete">Computer-Level</translation>
     </message>
     <message>
         <source>Black Player</source>
-        <translation type="obsolete">Jogador preto</translation>
+        <translation type="obsolete">Spieler Schwarz</translation>
     </message>
     <message>
         <source>Load game</source>
-        <translation type="obsolete">Carregar uma partida</translation>
+        <translation type="obsolete">Spiel laden</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -10836,15 +11612,15 @@ outros:		&apos;guest&apos; (visitante)</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">&amp;Abbrechen</translation>
     </message>
     <message>
         <source>New Game</source>
-        <translation type="obsolete">Nova partida</translation>
+        <translation type="obsolete">Neues Spiel</translation>
     </message>
     <message>
         <source>Board size:</source>
-        <translation type="obsolete">Tamanho do tabuleiro:</translation>
+        <translation type="obsolete">Brettgröße:</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -10852,15 +11628,19 @@ outros:		&apos;guest&apos; (visitante)</translation>
     </message>
     <message>
         <source>Handicap:</source>
-        <translation type="obsolete">Vantagem:</translation>
+        <translation type="obsolete">Vorgabe:</translation>
     </message>
     <message>
         <source>One Color Go</source>
-        <translation type="obsolete">Go monocromático</translation>
+        <translation type="obsolete">Ein-Farb-Go</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
+    <message>
+        <source> V</source>
+        <translation type="obsolete">V</translation>
+    </message>
     <message>
         <source>Id</source>
         <comment>GamesTable Id number</comment>
@@ -10869,37 +11649,37 @@ outros:		&apos;guest&apos; (visitante)</translation>
     <message>
         <source>White</source>
         <comment>GamesTable White name</comment>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>WR</source>
         <comment>GamesTable White Rank</comment>
-        <translation type="obsolete">CB</translation>
+        <translation type="obsolete">WR</translation>
     </message>
     <message>
         <source>Black</source>
         <comment>GamesTable Black name</comment>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>BR</source>
         <comment>GamesTable Black Rank</comment>
-        <translation type="obsolete">CP</translation>
+        <translation type="obsolete">SR</translation>
     </message>
     <message>
         <source>Mv</source>
         <comment>GamesTable Move</comment>
-        <translation type="obsolete">Jg</translation>
+        <translation type="obsolete">Zg</translation>
     </message>
     <message>
         <source>Sz</source>
         <comment>GamesTable Size</comment>
-        <translation type="obsolete">Tm</translation>
+        <translation type="obsolete">Gr</translation>
     </message>
     <message>
         <source>H</source>
         <comment>GamesTable Handicap</comment>
-        <translation type="obsolete">V</translation>
+        <translation type="obsolete">H</translation>
     </message>
     <message>
         <source>K</source>
@@ -10914,32 +11694,32 @@ outros:		&apos;guest&apos; (visitante)</translation>
     <message>
         <source>FR</source>
         <comment>GamesTable Free/Rated type of game</comment>
-        <translation type="obsolete">LC</translation>
+        <translation type="obsolete">FR</translation>
     </message>
     <message>
         <source>Ob</source>
         <comment>GamesTable number of Observers</comment>
-        <translation type="obsolete">Ob</translation>
+        <translation type="obsolete">Zu</translation>
     </message>
     <message>
         <source>Stat</source>
         <comment>PlayerTable: status [X!SQ]</comment>
-        <translation type="obsolete">Est</translation>
+        <translation type="obsolete">Stat</translation>
     </message>
     <message>
         <source>Name</source>
         <comment>PlayerTable: player&apos;s name</comment>
-        <translation type="obsolete">Nome</translation>
+        <translation type="obsolete">Name</translation>
     </message>
     <message>
         <source>Rk</source>
         <comment>PlayerTable: rank</comment>
-        <translation type="obsolete">Cl</translation>
+        <translation type="obsolete">Rg</translation>
     </message>
     <message>
         <source>pl</source>
         <comment>PlayerTable: playing in game</comment>
-        <translation type="obsolete">jg</translation>
+        <translation type="obsolete">sp</translation>
     </message>
     <message>
         <source>ob</source>
@@ -10949,17 +11729,17 @@ outros:		&apos;guest&apos; (visitante)</translation>
     <message>
         <source>Idle</source>
         <comment>PlayerTable: idle time</comment>
-        <translation type="obsolete">Inat</translation>
+        <translation type="obsolete">Still</translation>
     </message>
     <message>
         <source>Refresh</source>
         <comment>button label</comment>
-        <translation type="obsolete">Redesenhar</translation>
+        <translation type="obsolete">Anzeigen</translation>
     </message>
     <message>
         <source>Score</source>
         <comment>button label</comment>
-        <translation type="obsolete">Pontuação</translation>
+        <translation type="obsolete">Zählen</translation>
     </message>
     <message>
         <source>N</source>
@@ -10974,7 +11754,7 @@ outros:		&apos;guest&apos; (visitante)</translation>
     <message>
         <source>Edit</source>
         <comment>button label</comment>
-        <translation type="obsolete">Editar</translation>
+        <translation type="obsolete">Editieren</translation>
     </message>
     <message>
         <source>O</source>
@@ -10984,22 +11764,22 @@ outros:		&apos;guest&apos; (visitante)</translation>
     <message>
         <source>Pass</source>
         <comment>button label</comment>
-        <translation type="obsolete">Passar</translation>
+        <translation type="obsolete">Passen</translation>
     </message>
     <message>
         <source>P</source>
         <comment>Board status line: play mode</comment>
-        <translation type="obsolete">J</translation>
+        <translation type="obsolete">S</translation>
     </message>
     <message>
         <source>T</source>
         <comment>Board status line: teach mode</comment>
-        <translation type="obsolete">E</translation>
+        <translation type="obsolete">L</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="159"/>
         <source>Move</source>
-        <translation>Jogada</translation>
+        <translation>Zug</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="114"/>
@@ -11009,7 +11789,7 @@ outros:		&apos;guest&apos; (visitante)</translation>
         <location filename="../board/interfacehandler.cpp" line="572"/>
         <location filename="../board/interfacehandler.cpp" line="574"/>
         <source>W</source>
-        <translation>B</translation>
+        <translation>W</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="132"/>
@@ -11019,46 +11799,46 @@ outros:		&apos;guest&apos; (visitante)</translation>
         <location filename="../board/interfacehandler.cpp" line="590"/>
         <location filename="../board/interfacehandler.cpp" line="592"/>
         <source>B</source>
-        <translation>P</translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="176"/>
         <source>Pass</source>
-        <translation>Passar</translation>
+        <translation>Passen</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="185"/>
         <source>Black to play</source>
-        <translation>Preto a jogar</translation>
+        <translation>Schwarz am Zug</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="185"/>
         <source>White to play</source>
-        <translation>Branco a jogar</translation>
+        <translation>Weiß am Zug</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="194"/>
         <source>brother</source>
-        <translation>variação</translation>
+        <translation>Bruder</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="196"/>
         <source>brothers</source>
-        <translation>variações</translation>
+        <translation>Brüder</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="200"/>
         <source>son</source>
-        <translation>derivaçã</translation>
+        <translation>Sohn</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="202"/>
         <source>sons</source>
-        <translation>derivações</translation>
+        <translation>Söhne</translation>
     </message>
     <message>
         <source>textedit</source>
-        <translation type="obsolete">edita_texto</translation>
+        <translation type="obsolete">textedit</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="124"/>
@@ -11067,7 +11847,7 @@ outros:		&apos;guest&apos; (visitante)</translation>
         <location filename="../board/interfacehandler.cpp" line="583"/>
         <location filename="../gamedata.h" line="15"/>
         <source>Black</source>
-        <translation>Preto</translation>
+        <translation>Schwarz</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="106"/>
@@ -11076,55 +11856,53 @@ outros:		&apos;guest&apos; (visitante)</translation>
         <location filename="../board/interfacehandler.cpp" line="565"/>
         <location filename="../gamedata.h" line="14"/>
         <source>White</source>
-        <translation>Branco</translation>
+        <translation>Weiß</translation>
     </message>
     <message>
         <source>S</source>
         <comment>Board status line: score mode</comment>
-        <translation type="obsolete">P</translation>
+        <translation type="obsolete">Z</translation>
     </message>
     <message>
         <source>Open</source>
         <comment>open a file</comment>
-        <translation type="obsolete">Abrir
-
-Abrir um arquivo</translation>
+        <translation type="obsolete">Laden</translation>
     </message>
     <message>
         <source>&amp;Open</source>
         <comment>open a file</comment>
-        <translation type="obsolete">&amp;Abrir</translation>
+        <translation type="obsolete">&amp;Laden</translation>
     </message>
     <message>
         <source>Open</source>
         <comment>open for matches</comment>
-        <translation type="obsolete">Dispon</translation>
+        <translation type="obsolete">Offen</translation>
     </message>
     <message>
         <source>&amp;Open</source>
         <comment>open for matches</comment>
-        <translation type="obsolete">&amp;Dispon</translation>
+        <translation type="obsolete">&amp;Offen</translation>
     </message>
     <message>
         <source>Open</source>
         <comment>open a sgf file</comment>
-        <translation type="obsolete">Abrir</translation>
+        <translation type="obsolete">Laden</translation>
     </message>
     <message>
         <source>Play with program</source>
         <comment>Play with program</comment>
-        <translation type="obsolete">Jogar contra o computador</translation>
+        <translation type="obsolete">Gegen Programm spielen</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="91"/>
-        <location filename="../board/boardwindow.cpp" line="110"/>
+        <location filename="../board/boardwindow.cpp" line="87"/>
+        <location filename="../board/boardwindow.cpp" line="106"/>
         <source>Error</source>
-        <translation>Erro</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="42"/>
         <source>Error opening program: %1</source>
-        <translation>Erro ao abrir o programa: %1</translation>
+        <translation>Fehler beim Öffnen des Programmes %1</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="95"/>
@@ -11139,41 +11917,41 @@ Abrir um arquivo</translation>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="260"/>
         <source>Could not find file:</source>
-        <translation type="unfinished">Impossível achar o arquivo:</translation>
+        <translation type="unfinished">Konnte die Datei nicht finden:</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="266"/>
         <location filename="../sgf/sgfparser.cpp" line="1553"/>
         <source>Could not open file:</source>
-        <translation type="unfinished">Impossível abrir o arquivo:</translation>
+        <translation type="unfinished">Konnte die Datei nicht öffnen:</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="274"/>
         <location filename="../sgf/sgfparser.cpp" line="1578"/>
         <source>Invalid text encoding given. Please check preferences!</source>
-        <translation type="unfinished">Codificação do texto inválida. Por favor, cheque as preferências!</translation>
+        <translation type="unfinished">Ungültige Textkodierung! Bitte überprüfen Sie die Einstellungen!</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="455"/>
         <source>Reading sgf file...</source>
-        <translation type="unfinished">Lendo o arquivo sgf...</translation>
+        <translation type="unfinished">Lese SGF-Datei ...</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="455"/>
         <source>Abort</source>
-        <translation type="unfinished">Abortar</translation>
+        <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
         <location filename="../sgf/sgfparser.cpp" line="1258"/>
         <source>Corrupt SGF file at position</source>
-        <translation type="unfinished">Erro no arquivo SGF, na posição</translation>
+        <translation type="unfinished">Fehlerhafte SGF-Datei bei Position</translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Move</source>
-        <translation type="obsolete">Jogada</translation>
+        <translation type="obsolete">Zug</translation>
     </message>
 </context>
 <context>
@@ -11209,49 +11987,49 @@ Abrir um arquivo</translation>
 <context>
     <name>Room</name>
     <message>
-        <location filename="../network/room.cpp" line="267"/>
+        <location filename="../network/room.cpp" line="269"/>
         <source>Match</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spielanfrage</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="276"/>
+        <location filename="../network/room.cpp" line="278"/>
         <source>Talk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="279"/>
+        <location filename="../network/room.cpp" line="281"/>
         <source>Remove from Friends</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="281"/>
+        <location filename="../network/room.cpp" line="283"/>
         <source>Add to Friends</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="283"/>
+        <location filename="../network/room.cpp" line="285"/>
         <source>Remove from Watches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="285"/>
+        <location filename="../network/room.cpp" line="287"/>
         <source>Add to Watches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="286"/>
+        <location filename="../network/room.cpp" line="288"/>
         <source>Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="309"/>
-        <location filename="../network/room.cpp" line="315"/>
+        <location filename="../network/room.cpp" line="311"/>
+        <location filename="../network/room.cpp" line="317"/>
         <source>Observe Outside</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="310"/>
-        <location filename="../network/room.cpp" line="314"/>
+        <location filename="../network/room.cpp" line="312"/>
+        <location filename="../network/room.cpp" line="316"/>
         <source>Join and Observe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11260,11 +12038,11 @@ Abrir um arquivo</translation>
     <name>ScoreTools</name>
     <message>
         <source>ScoreTools</source>
-        <translation type="obsolete">Ferramentas de pontuação</translation>
+        <translation type="obsolete">Score-Tools</translation>
     </message>
     <message>
         <source>White</source>
-        <translation type="obsolete">Branco</translation>
+        <translation type="obsolete">Weiß</translation>
     </message>
     <message>
         <source>Terr.:</source>
@@ -11276,7 +12054,7 @@ Abrir um arquivo</translation>
     </message>
     <message>
         <source>Cap:</source>
-        <translation type="obsolete">Cap:</translation>
+        <translation type="obsolete">Gef:</translation>
     </message>
     <message>
         <source>Total:</source>
@@ -11284,7 +12062,7 @@ Abrir um arquivo</translation>
     </message>
     <message>
         <source>Black</source>
-        <translation type="obsolete">Preto</translation>
+        <translation type="obsolete">Schwarz</translation>
     </message>
     <message>
         <source>Komi:</source>
@@ -11296,7 +12074,7 @@ Abrir um arquivo</translation>
     <message>
         <location filename="../network/serverlistdialog.cpp" line="9"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verbinden</translation>
     </message>
     <message>
         <location filename="../network/serverlistdialog.cpp" line="12"/>
@@ -11325,16 +12103,12 @@ Abrir um arquivo</translation>
 <context>
     <name>StartUpFrameGui</name>
     <message>
-        <source>Form1</source>
-        <translation type="obsolete">Form1</translation>
-    </message>
-    <message>
         <source>GnuGo</source>
         <translation type="obsolete">GnuGo</translation>
     </message>
     <message>
         <source>Load a game</source>
-        <translation type="obsolete">Carregar uma partida</translation>
+        <translation type="obsolete">Spiel laden</translation>
     </message>
     <message>
         <source>qGo</source>
@@ -11342,41 +12116,53 @@ Abrir um arquivo</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation type="obsolete">Sair</translation>
+        <translation type="obsolete">Beenden</translation>
     </message>
     <message>
         <source>Go Server</source>
-        <translation type="obsolete">Servidor de Go</translation>
-    </message>
-    <message>
-        <source>Preferences</source>
-        <translation type="obsolete">Prefer</translation>
+        <translation type="obsolete">Go Server</translation>
     </message>
     <message>
         <source>Open board</source>
-        <translation type="obsolete">Abrir um tabuleiro</translation>
+        <translation type="obsolete">Brett öffnen</translation>
+    </message>
+    <message>
+        <source>Preferences</source>
+        <translation type="obsolete">Einstellungen</translation>
     </message>
 </context>
 <context>
     <name>Talk</name>
     <message>
+        <source>Talk to </source>
+        <translation type="obsolete">Sprechen mit</translation>
+    </message>
+    <message>
+        <source>CHAT CHANNEL </source>
+        <translation type="obsolete">CHAT KANAL</translation>
+    </message>
+    <message>
+        <source>Talk to</source>
+        <translation type="obsolete">Sprechen mit</translation>
+    </message>
+    <message>
         <source>CHAT CHANNEL</source>
-        <translation type="obsolete">CANAL DE DISCUSSION</translation>
+        <translation type="obsolete">CHAT KANAL</translation>
     </message>
     <message>
         <source>hide</source>
-        <translation type="obsolete">cacher</translation>
+        <translation type="obsolete">verstecken</translation>
     </message>
     <message>
         <source>close</source>
-        <translation type="obsolete">fechar</translation>
+        <translation type="obsolete">Schließen</translation>
     </message>
 </context>
 <context>
     <name>TalkDialogWidget</name>
     <message>
         <source>Talk</source>
-        <translation type="obsolete">Parler</translation>
+        <translation type="obsolete">Sprechen</translation>
     </message>
 </context>
 <context>
@@ -11388,16 +12174,80 @@ Abrir um arquivo</translation>
     <message>
         <source>dialog
 
+in this box you see the conversation with the player whose name appears on the tab label</source>
+        <translation type="obsolete">Dialog
+
+In dieser Box wird die Konversation mit dem Spieler angezeigt, dessen Name im Griff angezeigt wird</translation>
+    </message>
+    <message>
+        <source>match</source>
+        <translation type="obsolete">Spielanfrage</translation>
+    </message>
+    <message>
+        <source>match
+
+proposes a match to this player</source>
+        <translation type="obsolete">Spielanfrage
+
+Macht diesem Spieler eine Spielanfrage</translation>
+    </message>
+    <message>
+        <source>close</source>
+        <translation type="obsolete">Schließen</translation>
+    </message>
+    <message>
+        <source>close
+
+closes the tab (and dialog)</source>
+        <translation type="obsolete">Schließen
+
+Schließt den Griff (und den Dialog)</translation>
+    </message>
+    <message>
+        <source>dialog with this player</source>
+        <translation type="obsolete">Dialog mit diesem Spieler</translation>
+    </message>
+    <message>
+        <location filename="../network/talk_gui.ui" line="327"/>
+        <source>Idle :</source>
+        <translation>Frei:</translation>
+    </message>
+    <message>
+        <location filename="../network/talk_gui.ui" line="415"/>
+        <source>Rating :</source>
+        <translation>Spielstärke:</translation>
+    </message>
+    <message>
+        <source>Rated games :</source>
+        <translation type="obsolete">gewertete Spiele:</translation>
+    </message>
+    <message>
+        <source>Country :</source>
+        <translation type="obsolete">Land:</translation>
+    </message>
+    <message>
+        <source>Wins :</source>
+        <translation type="obsolete">Siege:</translation>
+    </message>
+    <message>
+        <source>Loss :</source>
+        <translation type="obsolete">Niederlagen:</translation>
+    </message>
+    <message>
+        <source>playing game :</source>
+        <translation type="obsolete">Spiel in Partie:</translation>
+    </message>
+    <message>
+        <source>dialog
+
 
 
 
 
 in this box you see the conversation with the player whose name appears on the tab label</source>
-        <translation type="obsolete">diálogo</translation>
-    </message>
-    <message>
-        <source>match</source>
-        <translation type="obsolete">disputa</translation>
+        <translation type="obsolete">Dialog
+
+In diesem Fenster findet der Dialog mit dem Spieler statt, dessen Name auf dem Reiter steht</translation>
     </message>
     <message>
         <source>match
@@ -11407,17 +12257,9 @@ in this box you see the conversation with the player whose name appears on the t
 
 
 proposes a match to this player</source>
-        <translation type="obsolete">disputa
+        <translation type="obsolete">Match
 
-
-
-
-
-propõem uma disputa a este jogador</translation>
-    </message>
-    <message>
-        <source>close</source>
-        <translation type="obsolete">fechar</translation>
+Einem Spieler ein Match anbieten</translation>
     </message>
     <message>
         <source>close
@@ -11427,17 +12269,9 @@ propõem uma disputa a este jogador</translation>
 
 
 closes the tab (and dialog)</source>
-        <translation type="obsolete">fechar
+        <translation type="obsolete">Schließen
 
-
-
-
-
-fecha a aba (e o diálogo)</translation>
-    </message>
-    <message>
-        <source>dialog with this player</source>
-        <translation type="obsolete">dialogar com com este jogador</translation>
+Reiter und Dialog schließen</translation>
     </message>
     <message>
         <location filename="../network/talk_gui.ui" line="297"/>
@@ -11450,39 +12284,9 @@ fecha a aba (e o diálogo)</translation>
         <translation>--</translation>
     </message>
     <message>
-        <location filename="../network/talk_gui.ui" line="327"/>
-        <source>Idle :</source>
-        <translation>Inativo :</translation>
-    </message>
-    <message>
-        <location filename="../network/talk_gui.ui" line="415"/>
-        <source>Rating :</source>
-        <translation>Classificação:</translation>
-    </message>
-    <message>
-        <source>Rated games :</source>
-        <translation type="obsolete">Partidas classificadas:</translation>
-    </message>
-    <message>
-        <source>Country :</source>
-        <translation type="obsolete">País:</translation>
-    </message>
-    <message>
-        <source>Wins :</source>
-        <translation type="obsolete">Vence :</translation>
-    </message>
-    <message>
-        <source>Loss :</source>
-        <translation type="obsolete">Perde :</translation>
-    </message>
-    <message>
-        <source>playing game :</source>
-        <translation type="obsolete">jogo em andamento :</translation>
-    </message>
-    <message>
         <location filename="../network/talk_gui.ui" line="178"/>
         <source>Address :</source>
-        <translation>Endereço :</translation>
+        <translation>Adresse:</translation>
     </message>
     <message>
         <location filename="../network/talk_gui.ui" line="13"/>
@@ -11510,71 +12314,84 @@ fecha a aba (e o diálogo)</translation>
     <name>TeachTools</name>
     <message>
         <source>TeachTools</source>
-        <translation type="obsolete">Outils de r</translation>
+        <translation type="obsolete">Lehrhilfen</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation type="obsolete">-- aucun --</translation>
+        <translation type="obsolete">-- leer --</translation>
+    </message>
+    <message>
+        <source>give controls</source>
+        <translation type="obsolete">Kontrolle abgeben</translation>
     </message>
     <message>
         <source>hand over controls to opponent</source>
-        <translation type="obsolete">donner le contr</translation>
+        <translation type="obsolete">Die Kontrolle an den Gegner abgeben</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation type="obsolete">Adversaire:</translation>
+        <translation type="obsolete">Gegner:</translation>
     </message>
     <message>
         <source>opponent
 
 choose opponent from list to enable him playing with you in a teaching game.</source>
-        <translation type="obsolete">Adversaire
+        <translation type="obsolete">Gegner:
 
-Choisissez un adversaire dans la liste pour lui permettre de jouer avec vous dans une partie p</translation>
+einen Spieler aus der Liste wählen um ihm aktives Mitspielen in einer Lektion zu ermöglichen.</translation>
     </message>
     <message>
         <source>controls</source>
-        <translation type="obsolete">controles</translation>
+        <translation type="obsolete">Kontrolle</translation>
     </message>
     <message>
         <source>hand over controls to opponent to allow him placing black and white stones, undo etc.
 
 Only teacher can give control,
 both teacher and pupil can release control.</source>
-        <translation type="obsolete">donner le contr</translation>
+        <translation type="obsolete">Übergeben der Kontrolle an den Geger ermöglicht diesem schwarze und weiße Steine zu setzen, Rücknahme, etc.
+
+Nur der Lehrer kann die Kontrolle übergeben,
+Leher und Schüler können die Kontrolle zurücksetzen.</translation>
     </message>
     <message>
         <source>mark</source>
-        <translation type="obsolete">marque</translation>
+        <translation type="obsolete">Merker</translation>
     </message>
     <message>
         <source>remember that point for fast return</source>
-        <translation type="obsolete">m</translation>
+        <translation type="obsolete">merken eines Punktes zur schnellen Rückkehr</translation>
+    </message>
+    <message>
+        <source>push button for fast return to this point after placing or undo</source>
+        <translation type="obsolete">Taste drücken zu</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release butten for returning to starting point automatically.</source>
-        <translation type="obsolete">bouton de pouss</translation>
+        <translation type="obsolete">Taste drücken um den jetzigen Spielstand zu speichern.
+Nach platzieren und/oder Rücknahmen Taste wieder lösen zur sofortigen Rückkehr in den gespeicherten Spielzustand.</translation>
     </message>
     <message>
         <source>push button at starting point to enable remembering.
 After placing and/or undo release button for returning to starting point automatically.</source>
-        <translation type="obsolete">Utilisez le bouton au d</translation>
+        <translation type="obsolete">Taste drücken um den jetzigen Spielstand zu speichern.
+Nach platzieren und/oder Rücknahmen Taste wieder lösen zur sofortigen Rückkehr in den gespeicherten Spielzustand.</translation>
     </message>
     <message>
         <source>opponent: invited by teacher</source>
-        <translation type="obsolete">adversaire: invit</translation>
+        <translation type="obsolete">Gegner: vom Lehrer eingeladen</translation>
     </message>
 </context>
 <context>
     <name>TextEditDialog</name>
     <message>
         <source>Text Label</source>
-        <translation type="obsolete">Definir rótulo</translation>
+        <translation type="obsolete">Text-Label</translation>
     </message>
     <message>
         <source>Enter the text for this label:</source>
-        <translation type="obsolete">Entre com o texto para este rótulo:</translation>
+        <translation type="obsolete">Text für diese Markierung eingeben:</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -11582,139 +12399,139 @@ After placing and/or undo release button for returning to starting point automat
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation type="obsolete">&amp;Cancelar</translation>
+        <translation type="obsolete">A&amp;bbrechen</translation>
     </message>
 </context>
 <context>
     <name>TextView</name>
     <message>
         <source>Text Files (*.txt);;All Files (*)</source>
-        <translation type="obsolete">Arquivos de texto (*.txt);;Todos arquivos (*)</translation>
+        <translation type="obsolete">Textdateien (*.txt);;Alle Dateien (*)</translation>
     </message>
     <message>
         <source>This file already exists. Do you want to overwrite it?</source>
-        <translation type="obsolete">Este arquivo já existe. Quer sobreescrevê-lo?</translation>
+        <translation type="obsolete">Diese Datei existiert bereits. Soll sie überschrieben werden?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="obsolete">Sim</translation>
+        <translation type="obsolete">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="obsolete">Não</translation>
+        <translation type="obsolete">Nein</translation>
     </message>
     <message>
         <source>Failed to write to file</source>
-        <translation type="obsolete">Impossível escrever para o arquivo</translation>
+        <translation type="obsolete">Konnte die Datei nicht schreiben</translation>
     </message>
 </context>
 <context>
     <name>TextViewGUI</name>
     <message>
         <source>Text View</source>
-        <translation type="obsolete">Ver texto</translation>
+        <translation type="obsolete">Text-View</translation>
     </message>
     <message>
         <source>&amp;To clipboard</source>
-        <translation type="obsolete">Para a área de &amp;transferência</translation>
+        <translation type="obsolete">&amp;Zur Zwischenablage</translation>
     </message>
     <message>
         <source>Copy position to clipboard</source>
-        <translation type="obsolete">Copiar a posição para área de transferência</translation>
+        <translation type="obsolete">Kopiert die Stellung in die Zwischenablage</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation type="obsolete">&amp;Salvar</translation>
+        <translation type="obsolete">&amp;Speichern</translation>
     </message>
     <message>
         <source>Save position to file</source>
-        <translation type="obsolete">Salvar a posição para o arquivo</translation>
+        <translation type="obsolete">Speichert die Position in Datei</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="obsolete">&amp;Fechar</translation>
+        <translation type="obsolete">S&amp;chließen</translation>
     </message>
     <message>
         <source>Close this window</source>
-        <translation type="obsolete">Fechar esta janela</translation>
+        <translation type="obsolete">Dieses Fenster schließen</translation>
     </message>
 </context>
 <context>
     <name>TygemConnection</name>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="269"/>
-        <location filename="../network/tygemconnection.cpp" line="2074"/>
+        <location filename="../network/tygemconnection.cpp" line="262"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
         <source>3 Boards Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="269"/>
+        <location filename="../network/tygemconnection.cpp" line="262"/>
         <source>You must close a board before you can open another one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="696"/>
+        <location filename="../network/tygemconnection.cpp" line="650"/>
         <source>Server full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="696"/>
+        <location filename="../network/tygemconnection.cpp" line="650"/>
         <source>Server full, try another</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2074"/>
+        <location filename="../network/tygemconnection.cpp" line="2028"/>
         <source>You must close a board before you can start a game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2077"/>
-        <location filename="../network/tygemconnection.cpp" line="8395"/>
-        <location filename="../network/tygemconnection.cpp" line="8402"/>
+        <location filename="../network/tygemconnection.cpp" line="2031"/>
+        <location filename="../network/tygemconnection.cpp" line="7889"/>
+        <location filename="../network/tygemconnection.cpp" line="7896"/>
         <source>Not open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2077"/>
-        <location filename="../network/tygemconnection.cpp" line="8386"/>
-        <location filename="../network/tygemconnection.cpp" line="8395"/>
+        <location filename="../network/tygemconnection.cpp" line="2031"/>
+        <location filename="../network/tygemconnection.cpp" line="7880"/>
+        <location filename="../network/tygemconnection.cpp" line="7889"/>
         <source>%1 is not accepting invitations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5221"/>
+        <location filename="../network/tygemconnection.cpp" line="5050"/>
         <source>Resume match?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5222"/>
+        <location filename="../network/tygemconnection.cpp" line="5051"/>
         <source>Resume match in progress with %1?
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8373"/>
-        <location filename="../network/tygemconnection.cpp" line="8410"/>
+        <location filename="../network/tygemconnection.cpp" line="7867"/>
+        <location filename="../network/tygemconnection.cpp" line="7904"/>
         <source>Invite declined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8373"/>
+        <location filename="../network/tygemconnection.cpp" line="7867"/>
         <source>%1 has declined invitation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8386"/>
+        <location filename="../network/tygemconnection.cpp" line="7880"/>
         <source>In game?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8402"/>
+        <location filename="../network/tygemconnection.cpp" line="7896"/>
         <source>%1 has the maximum boards (3) open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8410"/>
+        <location filename="../network/tygemconnection.cpp" line="7904"/>
         <source>%1 has declined all invitations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11724,7 +12541,7 @@ After placing and/or undo release button for returning to starting point automat
     <message>
         <location filename="../network/gamedialog.cpp" line="18"/>
         <source>New Game</source>
-        <translation type="unfinished">Nova partida</translation>
+        <translation type="unfinished">Neues Spiel</translation>
     </message>
 </context>
 <context>
@@ -11757,7 +12574,7 @@ After placing and/or undo release button for returning to starting point automat
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="33"/>
         <source>&amp;Decline</source>
-        <translation type="unfinished">&amp;Recusar</translation>
+        <translation type="unfinished">A&amp;blehnen</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="37"/>
@@ -11786,70 +12603,84 @@ After placing and/or undo release button for returning to starting point automat
         <source>At least one board is modified.
 If you exit the application now, all changes will be lost!
 Exit anyways?</source>
-        <translation type="obsolete">Ao menos um tabuleiro foi modificado.
-Se você sair do aplicativo agora, todas as mudanças serão perdidas!
-Sair assim mesmo?</translation>
+        <translation type="obsolete">Mindestens ein Brett wurde geändert.
+Wird die Anwendung jetzt geschlossen, sind alle Änderungen verloren!
+Trotzdem beenden?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="obsolete">Sim</translation>
+        <translation type="obsolete">Ja</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="obsolete">Não</translation>
+        <translation type="obsolete">Nein</translation>
     </message>
     <message>
         <source>No sound available.</source>
-        <translation type="obsolete">Nenhum som está disponível.</translation>
+        <translation type="obsolete">Kein Ton verfügbar.</translation>
     </message>
     <message>
         <source>qGo directory</source>
-        <translation type="obsolete">Diretório qGo</translation>
+        <translation type="obsolete">qGo-Verzeichnis</translation>
     </message>
     <message>
         <source>No valid directory was given. Sound is not available.</source>
-        <translation type="obsolete">Nenhum diretório válido foi dado. O som não está disponível.</translation>
+        <translation type="obsolete">Kein gültiges Verzeichnis angegeben. Ton nicht verfügbar.</translation>
     </message>
     <message>
         <source>Sound files not found.
 Please check for the directories /usr/local/share/qgo/sounds/ or /usr/share/qgo/sounds/, depending on your installation.</source>
-        <translation type="obsolete">Les fichiers son n&apos;ont pas </translation>
+        <translation type="obsolete">Sound Dateien nicht gefunden.
+Bitte überprüfen Sie die Verzeichnisse /usr/local/share/qgo/sounds/ oder /usr/share/qgo/sounds/, abhängig von Ihrer Installation.</translation>
     </message>
     <message>
         <source>Sound files not found.</source>
-        <translation type="obsolete">Os arquivos de som não foram encontrados.</translation>
+        <translation type="obsolete">Audiodateien nicht gefunden.</translation>
     </message>
     <message>
         <source>Please check for the directories</source>
-        <translation type="obsolete">Por favor verifique os diretórios</translation>
+        <translation type="obsolete">Bitte überprüfen Sie die Verzeichnisse</translation>
     </message>
     <message>
         <source>or</source>
-        <translation type="obsolete">ou</translation>
+        <translation type="obsolete">oder</translation>
     </message>
     <message>
         <source>depending on your installation.</source>
-        <translation type="obsolete">dependendo de sua instalação.</translation>
+        <translation type="obsolete">abhängig von der Installation.</translation>
     </message>
     <message>
         <source>You can navigate to the main qGo directory (for example:</source>
-        <translation type="obsolete">Você pode navegar para o diretório principal qGo (por exemplo:</translation>
+        <translation type="obsolete">Sie können das qGo-Verzeichnis angeben (zum Beispiel:</translation>
     </message>
     <message>
         <source>If the directory was given correctly, this data will be saved and you won&apos;tbe asked
 anymore except you install qGo again into a different directory.
 To abort this procedure, click &apos;Cancel&apos; in the following dialog.</source>
-        <translation type="obsolete">Se o diretório foi definido corretamente, este dado será salvo e não será questionado
-mais, exceto se você reinstalar o qGo em um diretório diferente.
-Para abortar este procedimento, clique em &apos;Cancelar&apos; no diálogo a seguir.</translation>
+        <translation type="obsolete">Das Verzeichnis wird gespeichert, wenn es korrekt angegeben ist. Eine erneute Aufforderung unterbleibt,
+außer nach einer erneuten Installation von qGo in ein anderes Verzeichnis.
+
+Sie können diese Prozedur durch das Klicken auf &apos;Abbrechen&apos; beenden.</translation>
     </message>
     <message>
         <source>No sound facilities available on this machine or sound drivers are not supported ty Qt.</source>
-        <translation type="obsolete">Pas de serveur de son sur cette machine, ou les drivers ne sont pas support</translation>
+        <translation type="obsolete">Keine Soundunterstützung gefunden oder die Soundtreiber werden nicht unterstützt von Qt.</translation>
     </message>
     <message>
-        <source>No sound available. Qt on Mac uses QuickTime sound.</source>
-        <translation type="obsolete">Sem som disponível. Qt no Mac usa o som do QuickTime.</translation>
+        <source>Sorry, you are not running the Network Audio sytem.
+If you have the `au&apos; command, run it in the background before this program. The latest release of the Network Audio System can be obtained from:
+
+ftp.ncd.com:/pub/ncd/technology/src/nas
+ftp.x.org:/contrib/audio/nas
+Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
+</source>
+        <translation type="obsolete">Network Audio system ist nich verfügbar.
+Falls &apos;au&apos; Kommando verfügbar, bitte im Hintergrund vor der Ausführung dieses Programms starten. Die neueste Version von Network Audio System befindet sich auf:
+
+ftp.ncd.com:/pub/ncd/technology/src/nas
+ftp.x.org:/contrib/audio/nas
+
+Release 1.2 des NAS ist außerdem Teil der X11R6 Distribution. Nach der Installation von NAS muß Qt für NAS Sound Unterstützung neu konfiguriert werden.</translation>
     </message>
     <message>
         <source>Sorry, you are not running the Network Audio sytem.
@@ -11859,19 +12690,29 @@ ftp.ncd.com:/pub/ncd/technology/src/nas
 ftp.x.org:/contrib/audio/nas
 
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.</source>
-        <translation type="obsolete">D</translation>
+        <translation type="obsolete">Network Audio system ist nich verfügbar.
+Falls &apos;au&apos; Kommando verfügbar, bitte im Hintergrund vor der Ausführung dieses Programms starten. Die neueste Version von Network Audio System befindet sich auf:
+
+ftp.ncd.com:/pub/ncd/technology/src/nas
+ftp.x.org:/contrib/audio/nas
+
+Release 1.2 des NAS ist außerdem Teil der X11R6 Distribution. Nach der Installation von NAS muß Qt für NAS Sound Unterstützung neu konfiguriert werden.</translation>
+    </message>
+    <message>
+        <source>No sound available. Qt on Mac uses QuickTime sound.</source>
+        <translation type="obsolete">Kein Ton verfügbar. Qt verwendet QuickTime.</translation>
     </message>
     <message>
         <source>Sound available.</source>
-        <translation type="obsolete">Som disponível.</translation>
+        <translation type="obsolete">Ton verfügbar.</translation>
     </message>
     <message>
         <source>English translation by Peter Strempel &amp; Johannes Mesa</source>
-        <translation type="obsolete">Traduction fran</translation>
+        <translation type="obsolete">Deutsche Übersetzung durch Peter Strempel &amp; Johannes Mesa</translation>
     </message>
     <message>
         <source>About...</source>
-        <translation type="obsolete">Sobre...</translation>
+        <translation type="obsolete">Über ...</translation>
     </message>
     <message>
         <source>You are not running the Network Audio sytem.
@@ -11883,20 +12724,15 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation type="obsolete">Você não está usando o Network Audio System (NAS).
-Se você tem o comando &apos;au&apos;, execute-o em plano de fundo antes deste programa.
-O lançamento mais recente do NAS pode ser obtido em:
+        <translation type="obsolete">Network Audio System ist nicht verfügbar.
+Falls &apos;au&apos; Kommando verfügbar, bitte im Hintergrund vor der Ausführung dieses Programms starten. Die neueste Version von Network Audio System befindet sich auf:
 
 ftp.ncd.com:/pub/ncd/technology/src/nas
 ftp.x.org:/contrib/audio/nas
 
-O lançamento 1.2 do NAS também está incluído na distribuição de contribuição do X11R6. Após instalar o NAS, você precisará reconfigurar o Qt com suporte ao som pelo NAS.
+Release 1.2 des NAS ist außerdem Teil der X11R6 Distribution. Nach der Installation von NAS muß Qt für NAS Sound Unterstützung neu konfiguriert werden.
 
-De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcionado para o dispositivo /dev/dsp</translation>
-    </message>
-    <message>
-        <source>GTP code from Goliath, thanks to:</source>
-        <translation type="obsolete">Código GTP de Goliath, obrigado a:</translation>
+Trotzdem: Falls oss vorhanden ist, sollte Sound trotzdem funktionieren und ist gerichtet auf /dev/dsp</translation>
     </message>
     <message>
         <source>English translation by:
@@ -11904,21 +12740,27 @@ Peter Strempel
 Johannes Mesa
 Emmanuel Beranger</source>
         <comment>Please set your own language and your name! Use your own language!</comment>
-        <translation type="obsolete">Tradução para o português por:
-Felipe Castro</translation>
+        <translation type="obsolete">Deutsche Übersetzung:
+Bastian Fuchs
+Johannes Mesa
+Peter Strempel</translation>
+    </message>
+    <message>
+        <source>GTP code from Goliath, thanks to:</source>
+        <translation type="obsolete">GTP-Code von Goliath. Mit Dank an:</translation>
     </message>
     <message>
         <source>No sound files in bundle, strange.
 </source>
-        <translation type="obsolete">Nenhum arquivo de som no pacote, estranho</translation>
+        <translation type="obsolete">Keine Audiodateien gefunden.</translation>
     </message>
     <message>
         <source>At least one board is modified.
 If you exit the application now, all changes will be lost!
 Exit anyway?</source>
-        <translation type="obsolete">Ao menos um tabuleiro foi modificado.
-Se você sair do aplicativo agora, todas as mudanças serão perdidas!
-Sair assim mesmo?</translation>
+        <translation type="obsolete">Mindestens ein Brett wurde geändert.
+Wird die Anwendung jetzt geschlossen, sind alle Änderungen verloren!
+Trotzdem beenden?</translation>
     </message>
     <message>
         <source>You are not running the Network Audio system.
@@ -11930,71 +12772,70 @@ ftp.x.org:/contrib/audio/nas
 Release 1.2 of NAS is also included with the X11R6 contrib distribution. After installing NAS, you will then need to reconfigure Qt with NAS sound support.
 
 Nevertheless, if you have oss, sound should be working and directed to /dev/dsp</source>
-        <translation type="obsolete">Você não está usando o Network Audio System (NAS).
-Se você tem o comando &apos;au&apos;, execute-o em plano de fundo antes deste programa.
-O lançamento mais recente do NAS pode ser obtido em:
+        <translation type="obsolete">Das Network-Audio-System ist nicht verfügbar.
+Falls das Kommando &apos;au&apos; verfügbar ist, dieses bitte im Hintergrund vor der Ausführung von qGo starten. Die aktuelle Version des Network-Audio-Systems befindet sich auf:
 
 ftp.ncd.com:/pub/ncd/technology/src/nas
 ftp.x.org:/contrib/audio/nas
 
-O lançamento 1.2 do NAS também está incluído na distribuição de contribuição do X11R6. Após instalar o NAS, você precisará reconfigurar o Qt com suporte ao som pelo NAS.
+Version 1.2 des NAS ist außerdem Teil der X11R6-Distribution. Nach der Installation von NAS muß Qt für NAS-Unterstützung neu konfiguriert werden.
 
-De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcionado para o dispositivo /dev/dsp</translation>
+Trotzdem: Falls OSS vorhanden ist, sollte Ton funktionieren und ist auf /dev/dsp gerichtet</translation>
     </message>
 </context>
 <context>
     <name>qGoBoard</name>
     <message>
         <source>GAME STOPPED! -&gt; </source>
-        <translation type="obsolete">PARTIE ARRETEE ! -&gt;</translation>
+        <translation type="obsolete">SPIEL GESTOPPT! -&gt;</translation>
     </message>
     <message>
         <source>free</source>
-        <translation type="obsolete">livre</translation>
+        <translation type="obsolete">frei</translation>
     </message>
     <message>
         <source>rated</source>
-        <translation type="obsolete">classificada</translation>
+        <translation type="obsolete">gewertet</translation>
     </message>
     <message>
         <source>remaining time / stones</source>
-        <translation type="obsolete">tempo/pedras restantes</translation>
+        <translation type="obsolete">verbleibende Zeit / Steine</translation>
     </message>
     <message>
         <source>click to pause/unpause the game</source>
-        <translation type="obsolete">clique para pausar/retomar a partida</translation>
+        <translation type="obsolete">klicke für Pause/Fortsetzung des Spiels</translation>
     </message>
     <message>
         <source>click to add 1 minute to your opponent&apos;s clock</source>
-        <translation type="obsolete">clique para adicionar 1 minuto ao relógio do seu oponente</translation>
+        <translation type="obsolete">klicke zum Hinzufügen einer Minute zur Uhr des Gegners</translation>
     </message>
     <message>
         <source>-- none --</source>
-        <translation type="obsolete">-- ninguém --</translation>
+        <translation type="obsolete">-- leer --</translation>
     </message>
     <message>
         <source>opponent:</source>
-        <translation type="obsolete">oponente:</translation>
+        <translation type="obsolete">Gegner:</translation>
     </message>
     <message>
         <source>Failed to play the stone within program 
 </source>
-        <translation type="obsolete">Falha ao mover a pedra dentro do programa</translation>
+        <translation type="obsolete">Der Stein konnte nicht gespielt werden</translation>
     </message>
     <message>
         <source>Failed to pass within program 
 </source>
-        <translation type="obsolete">Falha ao passar dentro do programa</translation>
+        <translation type="obsolete">Das Programm konnte nicht passen</translation>
     </message>
     <message>
         <source>Failed to have the program play its stone
 </source>
-        <translation type="obsolete">Falha ao fazer o programa jogar sua pedra</translation>
+        <translation type="obsolete">Das Programm konnte den Stein nicht spielen</translation>
     </message>
     <message>
         <source>Failed to undo within program 
 </source>
-        <translation type="obsolete">Falha ao tentar desfazer dentro do programa</translation>
+        <translation type="obsolete">Das Programm konnte den Stein nicht zurücknehmen</translation>
     </message>
 </context>
 <context>
@@ -12004,7 +12845,7 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="176"/>
         <source>Failed to play the stone within program 
 </source>
-        <translation type="unfinished">Falha ao mover a pedra dentro do programa</translation>
+        <translation type="unfinished">Der Stein konnte nicht gespielt werden</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="209"/>
@@ -12012,14 +12853,14 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="235"/>
         <source>Failed to have the program play its stone
 </source>
-        <translation type="unfinished">Falha ao fazer o programa jogar sua pedra</translation>
+        <translation type="unfinished">Das Programm konnte den Stein nicht spielen</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="310"/>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="323"/>
         <source>Failed to pass within program 
 </source>
-        <translation type="unfinished">Falha ao passar dentro do programa</translation>
+        <translation type="unfinished">Das Programm konnte nicht passen</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_computer.cpp" line="367"/>
@@ -12037,7 +12878,7 @@ De qualquer forma, se você tiver OSS, o som deveria estar funcionando, direcion
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="163"/>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation type="unfinished">MODO DE PONTUAÇÃO: clique em uma pedra para a marcar como morta...</translation>
+        <translation type="unfinished">ZÄHLMODUS: klicke auf einen Stein, um als tot zu markieren ...</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="178"/>
@@ -12234,7 +13075,7 @@ Do you accept ?
     <name>qGoBoardObserveInterface</name>
     <message>
         <source>Game n° </source>
-        <translation type="obsolete">Jogo nº </translation>
+        <translation type="obsolete">Spiel Nr</translation>
     </message>
 </context>
 <context>
@@ -12254,111 +13095,134 @@ Do you accept ?
     <name>qGoIF</name>
     <message>
         <source>Game continued as Game number </source>
-        <translation type="obsolete">Partie continu</translation>
+        <translation type="obsolete">Spiel fortgesetzt mit Nummer</translation>
     </message>
     <message>
         <source>komi </source>
-        <translation type="obsolete">komi</translation>
+        <translation type="obsolete">Komi</translation>
     </message>
     <message>
         <source>decline</source>
-        <translation type="obsolete">recusar</translation>
+        <translation type="obsolete">Ablehnen</translation>
     </message>
     <message>
         <source>Opponent</source>
-        <translation type="obsolete">Oponente</translation>
+        <translation type="obsolete">Gegner</translation>
     </message>
     <message>
         <source>Request of Opponent</source>
-        <translation type="obsolete">Requisição do Oponente</translation>
+        <translation type="obsolete">Anfrage des Gegners</translation>
+    </message>
+    <message>
+        <source> requests for </source>
+        <translation type="obsolete">Bitte um</translation>
+    </message>
+    <message>
+        <source>
+YES = </source>
+        <translation type="obsolete">JA =</translation>
+    </message>
+    <message>
+        <source>
+CANCEL = ignore request</source>
+        <translation type="obsolete">ABBRECHEN = ignoriere Anfrage</translation>
+    </message>
+    <message>
+        <source>
+NO = </source>
+        <translation type="obsolete">NEIN =</translation>
     </message>
     <message>
         <source>SCORE MODE: RESET - click on a stone to mark as dead...</source>
-        <translation type="obsolete">MODE DE PONTUAÇÃO: REINÍCIO - clique em uma pedra para a marcar como morta...</translation>
+        <translation type="obsolete">ZÄHLMODUS: RESET - klicke auf einen Stein, um als tot zu markieren ...</translation>
     </message>
     <message>
         <source>SCORE MODE: click on a stone to mark as dead...</source>
-        <translation type="obsolete">MODO DE PONTUAÇÃO: clique em uma pedra para a marcar como morta...</translation>
+        <translation type="obsolete">ZÄHLMODUS: klicke auf einen Stein, um als tot zu markieren ...</translation>
     </message>
     <message>
         <source>GAME MODE: place stones...</source>
-        <translation type="obsolete">MODO DE JOGADA : coloque pedras...</translation>
+        <translation type="obsolete">SPIELMODUS: plaziere Steine ...</translation>
     </message>
     <message>
         <source>Game Status: W:</source>
-        <translation type="obsolete">Estado do jogo : B:</translation>
+        <translation type="obsolete">Spielstatus: W:</translation>
+    </message>
+    <message>
+        <source> B:</source>
+        <translation type="obsolete">S:</translation>
     </message>
     <message>
         <source>requests for</source>
-        <translation type="obsolete">Demande de</translation>
+        <translation type="obsolete">bittet um</translation>
     </message>
     <message>
         <source>YES</source>
-        <translation type="obsolete">OUI</translation>
+        <translation type="obsolete">JA</translation>
     </message>
     <message>
         <source>CANCEL = ignore request</source>
-        <translation type="obsolete">ANNULER = ignorer la demande</translation>
+        <translation type="obsolete">ABBRECHEN = Anfrage ignorieren</translation>
     </message>
     <message>
         <source>NO</source>
-        <translation type="obsolete">NON</translation>
+        <translation type="obsolete">NEIN</translation>
     </message>
     <message>
         <source>B:</source>
-        <translation type="obsolete">P:</translation>
+        <translation type="obsolete">S:</translation>
     </message>
     <message>
         <source>Game continued as Game number</source>
-        <translation type="obsolete">Partie continu</translation>
+        <translation type="obsolete">Spiel wurde fortgesetzt mit Nummer</translation>
     </message>
     <message>
         <source>%1 wants to %2
 YES = %3
 CANCEL = %4</source>
-        <translation type="obsolete">%1 quer para  %2
-SIM = %3
-CANCELAR = %4</translation>
+        <translation type="obsolete">%1 bittet um &apos;%2&apos;
+JA = %3
+ABBRECHEN = %4</translation>
     </message>
     <message>
         <source>ignore request</source>
-        <translation type="obsolete">ignorar a requisição</translation>
+        <translation type="obsolete">Anfrage ignorieren</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="obsolete">Mise </translation>
+        <translation type="obsolete">Anzeigen</translation>
     </message>
     <message>
         <source>LOAD</source>
-        <translation type="obsolete">CARREGAR</translation>
+        <translation type="obsolete">LADEN</translation>
     </message>
     <message>
         <source>Game has adjourned</source>
-        <translation type="obsolete">A partida foi adiada</translation>
+        <translation type="obsolete">Spiel wurde unterbrochen</translation>
     </message>
     <message>
         <source>White forfeits on time</source>
-        <translation type="obsolete">Branco estourou o tempo</translation>
+        <translation type="obsolete">Weiß hat auf Zeit verloren</translation>
     </message>
     <message>
         <source>White resigns</source>
-        <translation type="obsolete">Branco desiste</translation>
+        <translation type="obsolete">Weiß gibt auf</translation>
     </message>
     <message>
         <source>Black resigns</source>
-        <translation type="obsolete">Preto desiste</translation>
+        <translation type="obsolete">Schwarz gibt auf</translation>
     </message>
     <message>
         <source>Game continued as Game number %1</source>
-        <translation type="obsolete">Partida continua como Jogo número %1</translation>
+        <translation type="obsolete">Spiel wurde fortgesetzt als Spiel Nummer %1</translation>
     </message>
     <message>
         <source>Black forfeits on time</source>
-        <translation type="obsolete">Preto estourou o tempo</translation>
+        <translation type="obsolete">Schwarz hat auf Zeit verloren</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="obsolete">Feito</translation>
+        <translation type="obsolete">Fertig</translation>
     </message>
     <message>
         <source>0</source>
@@ -12366,21 +13230,24 @@ CANCELAR = %4</translation>
     </message>
     <message>
         <source>*** Both players are Human ! ***</source>
-        <translation type="obsolete">*** Ambos os jogadores são Humanos ! ***</translation>
+        <translation type="obsolete">*** Beide Spieler sind Menschen! ***</translation>
+    </message>
+    <message>
+        <source>COMPUTER_PATH</source>
+        <translation type="obsolete">Computer_Pfad</translation>
     </message>
     <message>
         <source>Game n° </source>
-        <translation type="obsolete">Jogo nº </translation>
+        <translation type="obsolete">Spiel Nr</translation>
     </message>
     <message>
         <source>%1 wants to %2
 
 Do you accept ? 
 </source>
-        <translation type="obsolete">%1 quer %2
+        <translation type="obsolete">%1 möchte %2
 
-Você aceita?
-</translation>
+Akzeptieren?</translation>
     </message>
 </context>
 </TS>
