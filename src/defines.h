@@ -313,10 +313,13 @@ extern QString applicationPath;
  * only be embedded on linux and mac and windows will have to install them. */
 #ifdef Q_OS_LINUX
 	#define SOUND_PATH_PREFIX			":/ressources/sounds/"
+	#define TRANSLATIONS_PATH_PREFIX		"/usr/share/qgo/"
 #elif defined(Q_OS_MAC)
 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
+	#define TRANSLATIONS_PATH_PREFIX		"qGo.app/Contents/Resources/Translations/"
 #else //Q_OS_WIN or Q_WSWIN?
 	#define SOUND_PATH_PREFIX			"ressources/sounds/"
+	#define TRANSLATIONS_PATH_PREFIX		"ressources/translations/"
 #endif
 
 void startqGo(void);

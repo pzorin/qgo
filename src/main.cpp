@@ -73,42 +73,42 @@ void installTranslator(enum Language l)
 	switch(l)
 	{
 		case German:
-			translatorPtr->load("qgo2_de");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_de");	
 			return;
 		case French:
-			translatorPtr->load("qgo2_fr");			//path?!?
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_fr");			//path?!?
 			break;
 		case Italian:
-			translatorPtr->load("qgo2_it");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_it");	
 			break;
 		case Danish:
-			translatorPtr->load("qgo2_dk");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_dk");	
 			break;
 		case Dutch:
-			translatorPtr->load("qgo2_nl");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_nl");	
 			break;
 		case Czech:
-			translatorPtr->load("qgo2_cz");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_cz");	
 			break;
 		case Chinese:
-			translatorPtr->load("qgo2_zh");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_zh");	
 			break;
 		case Portugese:
-			translatorPtr->load("qgo2_pt");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_pt");	
 			break;
 		case Polish:
-			translatorPtr->load("qgo2_it");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_it");	
 			break;
 		case Russian:
-			translatorPtr->load("qgo2_ru");	
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_ru");	
 			break;
 		case Turkish:
-			translatorPtr->load("qgo2_tr");			//path?!?
+			translatorPtr->load(TRANSLATIONS_PATH_PREFIX"qgo_tr");			//path?!?
 			break;
 		case None:
 		default:
 			QString locale = QLocale::system().name();
-     			translatorPtr->load(QString("qgo2_") + locale);
+     			translatorPtr->load(QString("qgo_") + locale);
 			return;
 	}
 	appPtr->installTranslator(translatorPtr);

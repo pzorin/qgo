@@ -3,9 +3,6 @@
 #message($${CONFIG})
 RESOURCES = application.qrc  \
 	    board/board.qrc
-linux-g++ {
-RESOURCES += sounds.qrc
-}
 QT = core gui \
 network
 TARGET = ../bin/qgo
@@ -25,18 +22,18 @@ win32 {
 }
 TEMPLATE = app 
 OBJECTS_DIR = objects
-TRANSLATIONS = translations/qgo2_cz.ts \
-	    	translations/qgo2_de.ts \
-		translations/qgo2_dk.ts \
-		translations/qgo2_fr.ts \
-		translations/qgo2_it.ts \
-		translations/qgo2_la.ts \
-		translations/qgo2_nl.ts \
-		translations/qgo2_pt.ts \
-		translations/qgo2_ru.ts \
-		translations/qgo2_tr.ts \
-		translations/qgo2_zh_cn.ts \
-		translations/qgo2_zh.ts
+TRANSLATIONS = translations/qgo_cz.ts \
+	    	translations/qgo_de.ts \
+		translations/qgo_dk.ts \
+		translations/qgo_fr.ts \
+		translations/qgo_it.ts \
+		translations/qgo_la.ts \
+		translations/qgo_nl.ts \
+		translations/qgo_pt.ts \
+		translations/qgo_ru.ts \
+		translations/qgo_tr.ts \
+		translations/qgo_zh_cn.ts \
+		translations/qgo_zh.ts
 FORMS += mainwindow.ui \
 	 board/boardwindow.ui \
 	 board/gameinfo.ui \
@@ -173,13 +170,22 @@ macx {
 }
 
 linux-g++ {
-    QGO_INSTALL_PATH = /usr/local/share/qgo
-    QGO_INSTALL_BIN_PATH = /usr/local/bin
+    QGO_INSTALL_PATH = /usr/share/qgo
+    QGO_INSTALL_BIN_PATH = /usr/bin
+
     SOURCES += audio/alsa.cpp
     HEADERS += audio/alsa.h
+    RESOURCES += sounds.qrc
 
     LIBS += -lasound
-
+    
+    icon.path = /usr/share/pixmaps
+    icon.files = ressources/pics/qgo.png
+    INSTALLS += icon
+    desktopfile.path = /usr/share/applications
+    desktopfile.files = qgo.desktop
+    desktopfile.files += sgf.desktop
+    INSTALLS += desktopfile
 }
 INCLUDEPATH += network \
 audio \
