@@ -7,7 +7,6 @@ QT = core gui \
 network
 TARGET = ../bin/qgo
 CONFIG += warn_on \
-          qt \
           thread \
           qtestlib \
           stl \
@@ -169,7 +168,7 @@ macx {
     QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
 }
 
-linux-g++ {
+linux-* {
     QGO_INSTALL_PATH = /usr/share/qgo
     QGO_INSTALL_BIN_PATH = /usr/bin
 
@@ -181,6 +180,10 @@ linux-g++ {
     
     icon.path = /usr/share/pixmaps
     icon.files = ressources/pics/qgo.png
+    icon.files += ressources/pics/qgo_16x16.xpm
+    icon.files += ressources/pics/qgo_32x32.xpm
+    icon.files += ressources/pics/qgo_48x48.png
+    icon.files += ressources/pics/qgo_48x48.xpm
     INSTALLS += icon
     desktopfile.path = /usr/share/applications
     desktopfile.files = qgo.desktop
