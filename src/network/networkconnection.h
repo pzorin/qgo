@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #ifndef NETWORKCONNECTION_H
 #define NETWORKCONNECTION_H
 #include <map>
@@ -99,6 +121,7 @@ class NetworkConnection : public QObject
 		virtual void createRoom(void) {};
 		virtual void sendCreateRoom(class RoomCreate *) {};
 		virtual void sendJoinRoom(const RoomListing &, const char * = 0) {};
+		virtual void sendJoinChannel(const ChannelListing &) {};
 		
 		
 		virtual char * sendRequestAccountInfo(int *, void *) { return NULL;} ;
@@ -181,6 +204,7 @@ class NetworkConnection : public QObject
 		#define RS_ONEGAMEPERROOM	0x10
 		std::vector<class RoomListing *> * getRoomList(void) { return 0; };
 		void recvRoomListing(class RoomListing * r);
+		void recvChannelListing(class ChannelListing * r);
 		/* again, recvRoom is solely for igs handlers which aren't
 		 * part of networkconnection FIXME */
 		
@@ -204,6 +228,7 @@ class NetworkConnection : public QObject
 		bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
 		void latencyOnSend(void);
 		void latencyOnRecv(void);
+		void changeChannel(const QString & s);
 
 		bool firstonReadyCall;
 		friend class GameDialogRegistry;
@@ -270,7 +295,7 @@ class NetworkConnection : public QObject
 	protected slots:
 		virtual void OnConnected();
 	private slots:
-		void OnHostFound();
+		//void OnHostFound();
 		void OnReadyRead();
 		void OnConnectionClosed();
 		//OnDelayedCloseFinish();
