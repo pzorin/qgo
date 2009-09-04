@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #include <string.h>
 #include <stdint.h>
 #include <time.h>
@@ -4370,13 +4392,14 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 				aPlayer = room->getPlayerListingByNotNickname(encoded_name);
 			if(aPlayer)
 			{
-				for(std::vector<unsigned short>::iterator room_listit = aPlayer->room_list.begin();
+				//hopefully moved to Room but doublecheck continue !! FIXME
+				/*for(std::vector<unsigned short>::iterator room_listit = aPlayer->room_list.begin();
 					room_listit != aPlayer->room_list.end(); room_listit++)
 				{
 					BoardDispatch * boarddispatch = getIfBoardDispatch(*room_listit);
 					if(boarddispatch)
 						boarddispatch->recvObserver(aPlayer, false);
-				}
+				}*/
 				
 				
 				/*GameData * gameData;
@@ -5587,15 +5610,6 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 				aPlayer = room->getPlayerListingByNotNickname(encoded_name);
 			if(aPlayer)
 			{
-				for(std::vector<unsigned short>::iterator room_listit = aPlayer->room_list.begin();
-					room_listit != aPlayer->room_list.end(); room_listit++)
-				{
-					if(*room_listit == game_number)
-					{
-						aPlayer->room_list.erase(room_listit);
-						break;
-					}
-				}
 				boarddispatch->recvObserver(aPlayer, false);
 				if(match_negotiation_state->isOngoingMatch(game_number))
 				{
@@ -5743,7 +5757,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 		
 		/* Also notice that below is a problem if someone leaves
 		 * and rejoins a game */
-		aPlayer->room_list.push_back(game_number);
+		//aPlayer->room_list.push_back(game_number);		//moved to boarddispatch doublecheck FIXME
 		boarddispatch->recvObserver(aPlayer, true);
 		if(match_negotiation_state->isOurGame(game_number))
 		{
