@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #include "listviews.h"
 #include "network/messages.h"
 #include "playergamelistings.h"
@@ -42,7 +64,7 @@ ObserverListModel::~ObserverListModel()
 	delete headerItem;
 }
 
-void ObserverListModel::insertListing(const PlayerListing * listing)
+void ObserverListModel::insertListing(PlayerListing * const listing)
 {
 	for(int i = 0; i < items.count(); i++)
 	{
@@ -53,7 +75,7 @@ void ObserverListModel::insertListing(const PlayerListing * listing)
 	ListModel::insertListing(*item);	
 }
 
-void ObserverListModel::removeListing(const PlayerListing * listing)
+void ObserverListModel::removeListing(PlayerListing * const listing)
 {
 	for(int i = 0; i < items.count(); i++)
 	{
@@ -94,7 +116,7 @@ QVariant ObserverListModel::data(const QModelIndex & index, int role) const
 		return item->data(index.column());
 	else if(role == Qt::ForegroundRole)
 	{
-		if(item->getListing() && item->getListing()->name == account_name)		//maybe fix?  bigger problem though FIXME
+		if(item->getListing() && item->getListing()->name == account_name)
 			return Qt::blue;
 		else
 			return QVariant();
@@ -528,7 +550,7 @@ int ListModel::priorityCompare(const ListItem & i, const ListItem & j)
 	return result;
 }
 
-ObserverListItem::ObserverListItem(const PlayerListing * l) : listing(l)
+ObserverListItem::ObserverListItem(PlayerListing * const l) : listing(l)
 {
 }
 
