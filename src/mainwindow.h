@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -37,6 +59,15 @@ public:
 
 	/* This is awkward here but has the same life as mainwindow */
 	ServerListStorage & getServerListStorage(void) { return *serverliststorage; };
+
+	void recvRoomListing(const RoomListing & room, bool b);
+	void recvChannelListing(const ChannelListing & channel, bool b);
+	void changeChannel(const QString & s);
+	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
+	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
+	void addBoardWindow(BoardWindow *);
+	void removeBoardWindow(BoardWindow *);
+	int checkForOpenBoards(void);
 public slots:
 	void slot_expanded(const QModelIndex & i);
 	// sfg slots
@@ -73,6 +104,7 @@ public slots:
 	void slot_cmdactivated(const QString&);
 	
 	void slot_roomListClicked(const QString &);
+	void slot_channelListClicked(const QString &);
 	void slot_seek(bool);
 	void slot_seek(QAction *);
 	void slot_talk(const QString& , const QString &, bool );
@@ -84,19 +116,14 @@ public slots:
 	void slot_cblooking();
 	void slot_cbopen();
 	void slot_cbquiet();
+	void slot_alternateListColorsCB(bool);
 
 	// parser slots
-	void recvRoomListing(const RoomListing & room, bool b);
 	void slot_statsPlayer(PlayerListing*);
 	void slot_checkbox(int , bool );
 	//void slot_playerConnected(Player*);
 	void slot_connexionClosed();
 	void slot_msgBox(const QString&);
-	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
-	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
-	void addBoardWindow(BoardWindow *);
-	void removeBoardWindow(BoardWindow *);
-	int checkForOpenBoards(void);
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
@@ -144,6 +171,7 @@ private:
 	QList<GameDialog*> matchList;
 	std::vector<BoardWindow *> boardWindowList;
 	std::vector<const RoomListing *> roomList;
+	std::vector<const ChannelListing *> channelList;
 	int 	seekButtonTimer;
 	
 	//players table

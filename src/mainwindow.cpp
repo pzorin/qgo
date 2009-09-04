@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Emmanuel Béranger                               *
- *   yfh2@hotmail.com                                                      *
+ *   Copyright (C) 2009 by the qGo project                                 *
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
@@ -13,8 +14,8 @@
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
@@ -48,6 +49,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	/* We need to integrate this room list with the new room code FIXME */
 	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
+	connect(ui.channelsCB,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_channelListClicked(const QString &)));
 
 	SGFloaded = "";
 	SGFloaded2 = "";
@@ -128,7 +130,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect( ui.setQuietMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
 	connect( ui.setOpenMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
 	connect( ui.setLookingMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
-
+	
 	connect(ui.newFile_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newFile_HandicapChange(int)));
 	connect(ui.newComputer_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newComputer_HandicapChange(int)));
 	connect(ui.cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
@@ -139,6 +141,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
 	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
 	connect(ui.comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
+	connect( ui.alternateListColorsCB, SIGNAL( clicked(bool) ), this, SLOT( slot_alternateListColorsCB(bool) ) );
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
@@ -156,9 +159,6 @@ MainWindow::~MainWindow()
 	cleanupServerData();
 }
 
-/* FIXME FIXME FIXME We need to prompt for close if there are games open !!!!!!!!! 
- * we should also prompt to save any edited normal boards, or the boards should
- * do that themselves on closing.  The board windows might actually be separate though.*/
 void MainWindow::closeEvent(QCloseEvent * e)
 {
 	/* Close connection if open */
