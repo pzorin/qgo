@@ -1,3 +1,26 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
+#include <algorithm>
 #include "boarddispatch.h"
 #include "boardwindow.h"
 #include "messages.h"
@@ -35,6 +58,8 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	 * key.  But to go without a gameListing in the BoardDispatch?*/
 	if(l)
 		gameListing = new GameListing(*l);
+	else
+		qDebug("Boarddispatch with no gameListing!!!");
 	//else
 	//	gameListing = new GameListing();
 }
@@ -344,10 +369,17 @@ void BoardDispatch::recvObserver(PlayerListing * p, bool present)
 {
 	if(!boardwindow)
 		return;
-	if(present)
+	std::vector<unsigned short>::iterator i = std::find(p->room_list.begin(), p->room_list.end(), (unsigned short)gameData->number);
+	if(present && p->room_list.end() == i)
+	{
+		p->room_list.push_back(gameData->number);
 		observerListModel->insertListing(p);
-	else
+	}
+	else if(i != p->room_list.end())
+	{
+		p->room_list.erase(i);
 		observerListModel->removeListing(p);
+	}
 }
 
 void BoardDispatch::clearObservers(void)
@@ -634,6 +666,12 @@ void BoardDispatch::mergeListingIntoRecord(GameData * r, GameListing * l)
 	/* FIXME we get here from IGS without white or black names somehow.
 	 * also if game list has changed before refresh there's other issues */
 	
+	/* FIXME if player observes IGS through console, the ranks can come up wrong
+	 * possibly because the games list hasn't been refreshed and that thing above
+	 * sets the ranks to what they are in the listing.  They're not passed in the
+	 * game info from the server.  There's little that can be done about it, its
+	 * more of a protocol bug.  And I still want to get rid of this whole function */
+
 	//FIXME, trying not overwriting komi for now
 	//r->komi = l->komi;
 	//r->board_size = l->board_size;
