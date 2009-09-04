@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #include <string.h>
 #include "igsconnection.h"
 #include "consoledispatch.h"
@@ -178,6 +200,7 @@ void IGSConnection::sendObserve(const GameListing & game)
 	if(getIfBoardDispatch(game_id))		//don't observe twice, it unobserves
 		return;
 	protocol_save_int = game_id;	//since this isn't always reported back
+	match_negotiation_state->sendJoinRoom(game_id);
 	sendText("observe " + QString::number(game_id) + "\r\n");
 }
 
@@ -206,6 +229,7 @@ void IGSConnection::sendGamesRequest(void)
 	sendText("games\r\n");
 }
 
+//FIXME unused, set quiet false is enough
 void IGSConnection::periodicListRefreshes(bool b)
 {
 	if(b)
@@ -245,6 +269,15 @@ void IGSConnection::sendJoinRoom(const RoomListing & room, const char * /*passwo
 	roomhandle->clearGamesList();
 	sendPlayersRequest();
 	sendGamesRequest();
+}
+
+void IGSConnection::sendJoinChannel(const ChannelListing & room)
+{
+	if(room.number == 0)
+		sendText("yell \\-1\r\n");
+	else
+		sendText("yell \\" + QString::number(room.number) + "\r\n");
+	//set the current room somehow?
 }
 
 void IGSConnection::sendMatchInvite(const PlayerListing & player)
@@ -501,7 +534,6 @@ unsigned int IGSConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 				return p;
 			break;
 		case byoyomi:
-			// is this right? doublecheck
 			if(p > 100)
 				return 100;
 			else if(p < 1)
@@ -563,6 +595,16 @@ void IGSConnection::sendSeekCancel(void)
 void IGSConnection::sendToggleClientOn(void)
 {
 	sendText("toggle client on\r\n");
+}
+
+void IGSConnection::sendListChannels(void)
+{
+	//could also clear channel list but unnecessary
+	ChannelListing * c = new ChannelListing();
+	c->number = 0;
+	c->name = "No Channel";
+	recvChannelListing(c);
+	sendText("channels\r\n");
 }
 
 void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
@@ -704,50 +746,52 @@ void IGSConnection::onReady(void)
 			return;
 		firstonReadyCall = 0;
 		setConnected();		//shouldbe just SETUP FIXME
-	/* This gets called too much, we need a better
-	 * way to call it */
-	/* also needs to be earlier */
-	/* Below is kind of round-about.  We need the account name in order to make our
-	* name in the players list blue.  We could also use something similar to 
-	* affect colors of observed or played games, although I'm not sure why we'd
-	* do any of this.  But it means setting the account name on the listview model
-	* from the room.  The room has no other real use for the account name, so we
-	* pull it from the connection just for that.  Its a lot of misdirection just
-	* preserve the encapsulation but I suppose its okay for now.  We might
-	* fix it along the lines of the above at some point. */
-	/* Specifically, when we figure out how we're going to deal with rooms in the
-	* future, then we'll find a better place to do this and set the connection
-	* etc.. the idea of a "DefaultRoom" will sort of drop away. FIXME */
-	/* There's a bug here where a person who's name is "" gets painted blue FIXME */
-	//getDefaultRoom()->setAccountName(username);
+		/* This gets called too much, we need a better
+		 * way to call it */
+		/* also needs to be earlier */
+		/* Below is kind of round-about.  We need the account name in order to make our
+		* name in the players list blue.  We could also use something similar to 
+		* affect colors of observed or played games, although I'm not sure why we'd
+		* do any of this.  But it means setting the account name on the listview model
+		* from the room.  The room has no other real use for the account name, so we
+		* pull it from the connection just for that.  Its a lot of misdirection just
+		* preserve the encapsulation but I suppose its okay for now.  We might
+		* fix it along the lines of the above at some point. */
+		/* Specifically, when we figure out how we're going to deal with rooms in the
+		* future, then we'll find a better place to do this and set the connection
+		* etc.. the idea of a "DefaultRoom" will sort of drop away. FIXME */
+		/* There's a bug here where a person who's name is "" gets painted blue FIXME */
+		//getDefaultRoom()->setAccountName(username);
 	
-	QString v = "id qGov" + QString(VERSION) + "\r\n";
-	sendText(v.toLatin1().constData());
-	
-	//onAuthenticationNegotiated();
-	
-	if(!guestAccount)
-	{
-		sendText("toggle newundo on\r\n");		//undoplease undo requests
-		//sendText("toggle client on\r\n");		//adds type codes, done earlier
-		sendText("toggle nmatch on\r\n");		//allows nmatch
-		sendText("toggle seek on\r\n");
-		sendText("toggle newrating\r\n");		//?s and +s
-	
-		//sendText("toggle quiet on\r\n");		//FIXME do we want this?
-		//sendText("toggle review on\r\n");
+		QString v = "id qGov" + QString(VERSION) + "\r\n";
+		sendText(v.toLatin1().constData());
 		
-		sendPlayersRequest();
+		//onAuthenticationNegotiated();
 		
-		sendNmatchParameters();
-		sendText("seek config_list\r\n");
-	}
+		if(!guestAccount)
+		{
+			sendText("toggle newundo on\r\n");		//undoplease undo requests
+			//sendText("toggle client on\r\n");		//adds type codes, done earlier
+			sendText("toggle nmatch on\r\n");		//allows nmatch
+			sendText("toggle seek on\r\n");
+			sendText("toggle newrating\r\n");		//?s and +s
+		
+			//sendText("toggle quiet on\r\n");		//FIXME do we want this?
+			//sendText("toggle quiet off\r\n");
+			//sendText("toggle review on\r\n");
+			
+			sendPlayersRequest();
+			
+			sendNmatchParameters();
+			sendText("seek config_list\r\n");
+		}
 	
-	sendGamesRequest();
-	recvRoomListing(new RoomListing(0, "Lobby"));
-	sendRoomListRequest();
-	
-	qDebug("Ready!\n");
+		sendGamesRequest();
+		recvRoomListing(new RoomListing(0, "Lobby"));
+		sendRoomListRequest();
+		sendListChannels();
+
+		qDebug("Ready!\n");
 	}
 	writeReady = true;
 	writeFromBuffer();
@@ -756,12 +800,14 @@ void IGSConnection::onReady(void)
 /* In case we want to add updates every so often */
 void IGSConnection::timerEvent(QTimerEvent* e)
 {
-	//i.e., startTimer somewhere customizable and then
-	//sendPlayersRequest(), sendGamesRequest()
 	if(e->timerId() == keepAliveTimer)
-	{
 		sendText("ayt\r\n");
-		return;
+	else if(e->timerId() == playersListRefreshTimer)
+		sendPlayersRequest();
+	else if(e->timerId() == gamesListRefreshTimer)
+	{
+		getDefaultRoom()->clearGamesList();
+		sendGamesRequest();
 	}
 }
 
@@ -1015,14 +1061,15 @@ void IGSConnection::handleMessage(QString msg)
 			if(msg[msg.size() - 1].toLatin1() == 0x0a)
 				msg.remove(msg.size() - 2, msg.size()).trimmed();
 		}
-		if(console_dispatch)
+		if(console_dispatch && msg.size() > 2)
 			console_dispatch->recvText(msg.toLatin1().constData());
 		return;
 	}
-	//qDebug("***Type %d %c %c",type, msg[0], msg[1]);
+	//qDebug("***Type %d %c %c",type, msg[0].toLatin1(), msg[1].toLatin1());
 	switch(type)
 	{
 		case IGS_LOGINMSG:
+			//FIXME we never get here because !type returns
 			handle_loginmsg(msg);
 			break;
 		case IGS_PROMPT:
@@ -1507,7 +1554,14 @@ void IGSConnection::handle_error(QString line)
 		int number = element(line, 2, " ").toInt();
 		qDebug("%d is a private game", number);
 	}
-
+	else if(line.contains("Could not add you to the channel"))
+	{
+		//i.e., trying to join pro channel
+		//actually should change back to the channel we were in probably
+		//but to do that FIXME, we'd have to set that when we actually
+		//entered a channel and I haven't seen a msg for that
+		changeChannel("No Channel");
+	}
 	getConsoleDispatch()->recvText(line.toLatin1().constData());
 }			
 		// games
@@ -1690,7 +1744,7 @@ void IGSConnection::handle_info(QString line)
 	Room * room = getDefaultRoom();
 	static QString memory_str;
 	static int memory = 0;
-	//qDebug("9: %s", line.toLatin1().constData());
+	qDebug("9: %s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();
 			// status messages
 	if (line.contains("Set open to be"))
@@ -1765,11 +1819,22 @@ void IGSConnection::handle_info(QString line)
 			// 9 #42    broesel    zero815     Granit
 	else if (line.contains("#"))
 	{
-#ifdef FIXME
-		int nr = element(line, 0, "#", " ").toInt();
 		QString msg = element(line, 0, " ", "EOL");
-		emit signal_channelinfo(nr, msg);
-#endif //FIXME
+		
+		if(msg.contains("Title:"))
+		{
+			channel = new ChannelListing();
+			channel->number = element(line, 0, "#", " ").toInt();
+			channel->name = element(line, 2, " ");
+			qDebug("Channel: %d %s", channel->number, channel->name.toLatin1().constData());
+		}
+		else if(channel)
+		{
+			//parse member list FIXME
+			channel = 0;
+		}
+		if(channel)
+			recvChannelListing(channel);
 	}
 			// NNGS: channels
 	else if (line.contains("has left channel") || line.contains("has joined channel"))
@@ -2125,7 +2190,7 @@ void IGSConnection::handle_info(QString line)
 	else if (line.contains("Use adjourn to") || line.contains("Use <adjourn> to"))
 	{
 		////emit signal_requestDialog("adjourn", "decline adjourn", 0, 0);
-		boarddispatch = getBoardDispatch(match_negotiation_state->getGameId());
+		boarddispatch = getIfBoardDispatch(match_negotiation_state->getGameId());
 		if(boarddispatch)
 			boarddispatch->recvRequestAdjourn();
 	}
@@ -2222,7 +2287,6 @@ void IGSConnection::handle_info(QString line)
 			// 9 1 minutes were added to your opponents clock
 	else if (line.contains("minutes were added"))
 	{
-#ifdef FIXME
 		//boarddispatch = getIfBoardDispatch(protocol_save_int);
 		//need to see this in action FIXME addTime
 		//also check LGS/WING code
@@ -2230,20 +2294,15 @@ void IGSConnection::handle_info(QString line)
 		boarddispatch = getIfBoardDispatch(match_negotiation_state->getGameId());
 		if(boarddispatch)
 			boarddispatch->recvAddTime(t, boarddispatch->getOpponentName());
-		
-		//emit signal_timeAdded(t, false);
-#endif //FIXME
+
 	}
 			// 9 Your opponent has added 1 minutes to your clock.
 	else if (line.contains("opponent has added"))
 	{
-#ifdef FIXME
 		int t = element(line, 4, " ").toInt();
 		boarddispatch = getIfBoardDispatch(match_negotiation_state->getGameId());
 		if(boarddispatch)
 			boarddispatch->recvAddTime(t, getUsername());
-		//emit signal_timeAdded(t, true);
-#endif //FIXME
 	}
 			// NNGS: 9 Game clock paused. Use "unpause" to resume.
 	else if (line.contains("Game clock paused"))
@@ -2272,10 +2331,6 @@ void IGSConnection::handle_info(QString line)
 			else
 				boarddispatch->recvAddTime(t, boarddispatch->getOpponentName());
 		}
-		/*if (line.contains(getUsername()))
-			emit signal_timeAdded(t, true);
-		else
-			emit signal_timeAdded(t, false);*/
 	}
 	// 9 Setting your . to Banana  [text] (idle: 0 minutes)
 	else if (line.contains("Setting your . to"))
@@ -2314,7 +2369,7 @@ void IGSConnection::handle_info(QString line)
 					// for information
 		aGame->result = element(line, 4, " ", "}");
 
-		boarddispatch = getBoardDispatch(aGame->number);
+		boarddispatch = getIfBoardDispatch(aGame->number);
 		/* FIXME: This shouldn't create a new board if
 		* we're not watching it.
 		* Also WING sometimes sends 9 and sometimes sends 21 perhaps
@@ -2825,7 +2880,7 @@ void IGSConnection::handle_info(QString line)
 	}
 	else if(line.contains("File"))
 		return;
-	if (protocol_save_string != "STATS")
+	if (protocol_save_string != "STATS")	//FIXME
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 }
 
@@ -3013,7 +3068,8 @@ void IGSConnection::handle_move(QString line)
 				 * a board isn't enough, if it hits at the wrong
 				 * time, a move can pop the board back open again
 				 * and then nothing more. */
-				boarddispatch = getBoardDispatch(number);
+				if(match_negotiation_state->sentJoinRoom())		//so no observing by console
+					boarddispatch = getBoardDispatch(number);
 			}
 			//return;
 		}
@@ -3336,50 +3392,53 @@ void IGSConnection::handle_score_m(QString line)
 	delete aGameResult;
 }	
 			
-			
 // SHOUT - a info from the server
 //case 21:
 void IGSConnection::handle_shout(QString line)
 {
 	PlayerListing * aPlayer;
-	
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
 	line = line.remove(0, 2).trimmed();
+	
 			// case sensitive
 	if (line.contains(" connected.}"))
 	{
 				// {guest1381 [NR ] has connected.}
 				//line.replace(QRegExp(" "), "");
-		aPlayer = new PlayerListing();
-
-		aPlayer->name = element(line, 0, "{", " ");
+		QString name = element(line, 0, "{", " ");
+		PlayerListing * newPlayer = 0;
+		aPlayer = room->getPlayerListing(name);
+		if(!aPlayer)
+		{
+			newPlayer = new PlayerListing();
+			aPlayer = newPlayer;
+		}
+		aPlayer->name = name;
 		aPlayer->rank = element(line, 0, "[", "]", true);
 		fixRankString(&(aPlayer->rank));
 		aPlayer->rank_score = rankToScore(aPlayer->rank);
 		aPlayer->info = "??";
-		aPlayer->playing = -1;
-		aPlayer->observing = -1;
+		aPlayer->playing = 0;
+		aPlayer->observing = 0;
 		aPlayer->idletime = "-";
 		aPlayer->online = true;
 				
 		room->recvPlayerListing(aPlayer);
-		delete aPlayer;
+		delete newPlayer;
 			
 			
 		return;
 	}
 	else if (line.contains("has disconnected"))
 	{
-		aPlayer = new PlayerListing();
-
 				// {xxxx has disconnected}
-		aPlayer->name = element(line, 0, "{", " ");
-		aPlayer->online = false;
-				
-		room->recvPlayerListing(aPlayer);
-		delete aPlayer;
-
+		aPlayer = room->getPlayerListing(element(line, 0, "{", " "));
+		if(aPlayer)
+		{
+			aPlayer->online = false;
+			room->recvPlayerListing(aPlayer);
+		}
 		return;
 	}
 	else if (line.contains("{Game"))
@@ -3451,12 +3510,15 @@ void IGSConnection::handle_shout(QString line)
 				  line.contains("lost by"))
 		{
 			GameResult * aGameResult;
-			GameListing * aGame = new GameListing();
+			GameListing * l = 0;
 					// re game from list
 			int number = element(line, 0, " ", ":").toInt();
-			GameListing * l = room->getGameListing(number);
-			if(l)
-				*aGame = *l;
+			GameListing * aGame = room->getGameListing(number);
+			if(!aGame)
+			{
+				l = new GameListing();
+				aGame = l;
+			}
 			aGame->number = number;
 			aGame->running = false;
 					// for information
@@ -3513,8 +3575,6 @@ void IGSConnection::handle_shout(QString line)
 						else
 							aGameResult->winner_color = stoneBlack;
 					}
-
-
 				}
 				else if(line.contains("forfeits on time"))
 				{
@@ -3559,9 +3619,9 @@ void IGSConnection::handle_shout(QString line)
 					/* A little ugly to have this and return here
 					 * but if it works with protocol... */
 					boarddispatch->adjournGame();
-					closeBoardDispatch(aGame->number);	
+					closeBoardDispatch(aGame->number);
 					delete aGameResult;
-					delete aGame;
+					delete l;
 					return;
 				}
 			}
@@ -3582,7 +3642,7 @@ void IGSConnection::handle_shout(QString line)
 				boarddispatch->recvKibitz("", line);
 			}
 			room->recvGameListing(aGame);
-			delete aGame;
+			delete l;
 			return;
 		}
 	}
@@ -3595,10 +3655,14 @@ void IGSConnection::handle_shout(QString line)
 		line.replace(QRegExp("Match "), "");
 		line.replace(QRegExp(" "), "");
 		int number = element(line, 0, "{", ":").toInt();
-		GameListing * aGame = new GameListing();
-		GameListing * l = room->getGameListing(number);
-		if(l)
-			*aGame = *l;
+		
+		GameListing * l = 0;
+		GameListing * aGame = room->getGameListing(number);
+		if(!aGame)
+		{
+			l = new GameListing();
+			aGame = l;
+		}
 		aGame->number = number;
 		/* No reason to wait for player listing since info is here */
 		QString name = element(line, 0, ":", "[");
@@ -3627,9 +3691,15 @@ void IGSConnection::handle_shout(QString line)
 
 		//emit signal_game(aGame);
 #endif //OLD
+		qDebug("Match %d %s %s", aGame->number, aGame->white_name().toLatin1().constData(), aGame->white_name().toLatin1().constData());
 		room->recvGameListing(aGame);
-		delete aGame;
+		delete l;
 		return;
+	}
+	else if(line.contains("Match"))
+	{
+		//Match 220 gogal gogal
+		//what is this?  a request?
 	}
 			// !xxxx!: a game anyone ?
 	else if (line.contains("!: "))
@@ -3638,7 +3708,6 @@ void IGSConnection::handle_shout(QString line)
 		//emit signal_shout(player, line);
 		return;
 	}
-	
 	getConsoleDispatch()->recvText(line.toLatin1().constData());
 }
 
@@ -4206,21 +4275,21 @@ void IGSConnection::handle_yell(QString line)
 	}
 
 			// //emit (channel number, player + message , false =channel )
-			
-#ifdef FIXME
-	switch (gsName)
+	/*switch (gsName)
 	{
-		case IGS:
+		case IGS:*/
 			e1=element(line, 0, ":");
 			e2="> " + element(line, 0, ":", "EOL").trimmed();
-			break;
+			e1 += e2;
+			getConsoleDispatch()->recvText(e1.toLatin1().constData());
+	/*		break;
 
 		default:
 			e1=element(line, 0, ":");
 			e2="> " + element(line, 0, ":", "EOL").trimmed();
+			e1 += e2;
 			break;
-	}
-#endif //FIXME
+	} FIXME */
 
 //			//emit signal_talk(e1, e2, false);
 }
