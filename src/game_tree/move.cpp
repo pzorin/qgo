@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #include "move.h"
 #include "matrix.h"
 
@@ -14,7 +36,7 @@ Move::Move(int board_size)
 	terrMarked = false;
 	capturesBlack = capturesWhite = 0;
 	checked = true;
-	fastLoadMarkDict = NULL;
+	//fastLoadMarkDict = NULL;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
@@ -33,7 +55,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &m
 	capturesBlack = capturesWhite = 0;
 	terrMarked = false;
 	checked = true;
-	fastLoadMarkDict = NULL;
+	//fastLoadMarkDict = NULL;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
@@ -55,7 +77,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 	terrMarked = false;
 	checked = false;
 	matrix = NULL;
-	fastLoadMarkDict = NULL;
+	//fastLoadMarkDict = NULL;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
@@ -66,10 +88,10 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 Move::~Move()
 {
 	delete matrix;
-	if (fastLoadMarkDict) //TODO make sure this is the proper way 
+	/*if (fastLoadMarkDict) //TODO make sure this is the proper way 
 //		qDeleteAll(*fastLoadMarkDict);
 		fastLoadMarkDict->clear();
-	delete fastLoadMarkDict;
+	delete fastLoadMarkDict;*/
 }
 
 // We do not overwrite the operator == as well, as this is used to compare the
@@ -177,7 +199,7 @@ const QString Move::saveMove(bool isRoot)
 	return str;
 }
 
-void Move::insertFastLoadMark(int x, int y, MarkType markType, const QString &txt)
+/*void Move::insertFastLoadMark(int x, int y, MarkType markType, const QString &txt)
 {
 	if (fastLoadMarkDict == NULL)
 	{
@@ -192,7 +214,7 @@ void Move::insertFastLoadMark(int x, int y, MarkType markType, const QString &tx
 	flm->txt = txt;
 	
 	fastLoadMarkDict->insert(Matrix::coordsToKey(x, y), *flm);
-}
+}*/
 
 bool Move::isPassMove()
 {
