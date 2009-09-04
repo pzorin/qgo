@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2006 by EB   *
- *      *
+ *   Copyright (C) 2009 by The qGo Project                                 *
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
@@ -13,8 +14,8 @@
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
@@ -28,7 +29,7 @@
 #include "network/login.h"
 #include "listviews.h"
 #include "playergamelistings.h"		//FIXME should be moved out
-
+#include "network/consoledispatch.h"		//FIXME for channel chat
 
 void MainWindow::cleanupServerData(void)
 {
@@ -36,6 +37,9 @@ void MainWindow::cleanupServerData(void)
 	std::vector<const RoomListing *>::iterator r;
 	for(r = roomList.begin(); r != roomList.end(); r++)
 		delete *r;
+	std::vector<const ChannelListing *>::iterator c;
+	for(c = channelList.begin(); c != channelList.end(); c++)
+		delete *c;
 }
 /*
  * return pressed in edit line -> command to send
@@ -45,51 +49,26 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 {
 	if (cmd.trimmed().isEmpty())
 		return;
-	//char * command = (char *)cmd.toLatin1().constData();
-	
-	connection->sendConsoleText(cmd.toLatin1().constData());
-	ui.cb_cmdLine->clearEditText();
-	return;
-	qDebug("cmd_valid: %i", (int)cmd_valid);
-	// check if valid cmd -> cmd number risen
-//	if (cmd_valid)
-//	{
-		// clear field, and restore the blank line at top
-//		ui.cb_cmdLine->removeItem(1);
-//		ui.cb_cmdLine->insertItem(0,"");
+	if (cmd.mid(0,2).contains("ob"))
+	{
+		GameListing g;
+		QString cmd2 = cmd;
+		g.number = cmd2.replace(QRegExp("[\\S]+\\s"), "").toInt();
+		if (g.number)
+			connection->sendObserve(g);
+	}
+	else if (cmd.mid(0,4).contains("yell") || cmd.mid(0,1) == ";")
+	{
+		GameListing g;
+		QString cmd2 = cmd;
+		cmd2.replace(QRegExp("^[\\S]+\\s"), "");
+		connection->getConsoleDispatch()->recvText(cmd2);	 //copy back since otherwise doesn't appear
+	}
+	else
+	{
+		connection->sendConsoleText(cmd.toLatin1().constData());
 		ui.cb_cmdLine->clearEditText();
- 
-		// echo & send
-		QString cmdLine = cmd;
-		//sendcommand(cmdLine.trimmed(),true);
-		cmd_valid = false;
-
-/*		// check for known commands
-		if (cmdLine.mid(0,2).contains("ob"))
-		{
-			QString testcmd;
-
-			qDebug("found cmd: observe");
-			testcmd = element(cmdLine, 1, " ");
-			if (testcmd)
-			{
-//				qgoif->set_observe(testcmd);
-				sendcommand("games " + testcmd);
-			}
-		}
-*/
-		if (cmdLine.mid(0,3).contains("who"))
-		{
-			// clear table if manually entered
-			//prepareTables(WHO);
-//			playerListSteadyUpdate = false;
-		}
-//		if (cmdLine.mid(0,5).contains("; \\-1") && myAccount->get_gsname() == IGS)
-//		{
-//			// exit all channels
-//			prepare_tables(CHANNELS);
-//		}
-//	}
+	}
 }
 
 
@@ -102,7 +81,6 @@ void MainWindow::slot_connect(bool b)
 	{
 		if(connection)
 			return;
-		qDebug("Creating login dialog!");
 		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
 		if(logindialog->exec())
 		{
@@ -423,6 +401,33 @@ void MainWindow::slot_roomListClicked(const QString& text)
 		statusBar()->message(tr("Room ")+ room);
 */	
 }
+
+void MainWindow::slot_channelListClicked(const QString& text)
+{
+	if(!connection)
+		return;
+	if(text == "No Channel"/* || text == "Leave"*/)
+	{
+
+		return;
+	}
+	if(text == "Create")
+	{
+	
+		return;
+	}
+	std::vector <const ChannelListing *>::iterator it = channelList.begin();
+	while(it != channelList.end())
+	{
+		if(text.contains(QString::number((*it)->number)))
+		{
+			connection->sendJoinChannel((**it));
+			return;
+		}
+		it++;
+	}
+	qDebug("Can't find channel %s", text.toLatin1().constData());	
+}
 #ifdef FIXME
 
 
@@ -739,7 +744,44 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 	{
 		//FIXME update that window tree view we would add
 	}
-}	
+}
+
+void MainWindow::recvChannelListing(const ChannelListing & channel, bool b)
+{
+	std::vector <const ChannelListing *>::iterator it = channelList.begin();
+	while(it != channelList.end())
+	{
+		if((*it)->name.contains(QString::number(channel.number)))
+		{
+			if(!b)
+			{
+				//channel has been removed
+				channelList.erase(it);
+			}
+			return;
+		}
+		it++;
+	}
+	if(!b)
+		return;		//removed channel not found
+	channelList.push_back(&channel);
+	if(channel.number == 0)
+		ui.channelsCB->addItem(channel.name);
+	else
+		ui.channelsCB->addItem(QString::number(channel.number) + " " + channel.name);
+}
+
+void MainWindow::changeChannel(const QString & s)
+{
+	for(int i = 0; i < ui.channelsCB->count(); i++)
+	{
+		if(ui.channelsCB->itemText(i).contains(s))
+		{
+			ui.channelsCB->setCurrentIndex(i);
+			return;
+		}
+	}
+}
 
 // convert rk to key for sorting;
 // if integer is true, then result can be used to calculate handicap
@@ -1117,10 +1159,12 @@ void MainWindow::slot_cblooking()
 	 * do it only on exit or disconnect.  But right now stuff does
 	 * crash a lot so maybe this is okay.  Either FIXME later or
 	 * remove this comment. */
-	QSettings settings;
+	/* Additionally, the server keeps these settings or we have to set
+	 * them on connect (IGS) to sync up.  So no prefs on these at all */
+	/*QSettings settings;
 	settings.setValue("LOOKING_FOR_GAMES", val);
 	if(val)
-		settings.setValue("OPEN_FOR_GAMES", true);
+		settings.setValue("OPEN_FOR_GAMES", true);*/
 }
 
 /*
@@ -1128,17 +1172,17 @@ void MainWindow::slot_cblooking()
  */
 void MainWindow::slot_cbopen()
 {
-	bool val = ui.setOpenMode->isChecked(); 
+	bool val = ui.setOpenMode->isChecked();
 	set_sessionparameter("open", val);
 	qDebug("Setting session open: %d", val);
 	if (!val)
 		// if not open then set close
 		set_sessionparameter("looking", false);
 	/* See above comment. */
-	QSettings settings;
+	/*QSettings settings;
 	settings.setValue("OPEN_FOR_GAMES", val);
 	if(!val)
-		settings.setValue("LOOKING_FOR_GAMES", false);
+		settings.setValue("LOOKING_FOR_GAMES", false);*/
 }
 
 /*
@@ -1146,10 +1190,11 @@ void MainWindow::slot_cbopen()
  */
 void MainWindow::slot_cbquiet()
 {
-	bool val = ui.setQuietMode->isChecked(); 
+	bool val = ui.setQuietMode->isChecked();
 	set_sessionparameter("quiet", val);
 
-	if (val)
+	/* FIXME periodic list refreshes may not be necessary, set quiet true does a lot */
+	/*if (val)
 	{
 		if(connection)
 			connection->periodicListRefreshes(false);	
@@ -1159,12 +1204,23 @@ void MainWindow::slot_cbquiet()
 	{
 		if(connection)
 			connection->periodicListRefreshes(true);
+	}*/
+}
+
+void MainWindow::slot_alternateListColorsCB(bool b)
+{
+	if(b)
+	{
+		ui.playerView->setAlternatingRowColors(true);
+		ui.gamesView->setAlternatingRowColors(true);
+	}
+	else
+	{
+		ui.playerView->setAlternatingRowColors(false);
+		ui.gamesView->setAlternatingRowColors(false);
 	}
 }
 
-/*
- * 
- */
 void MainWindow::timerEvent(QTimerEvent* e)
 {
 	// some variables for forcing send buffer and keep line established
