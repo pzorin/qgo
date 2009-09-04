@@ -1,9 +1,31 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #include "matrix.h"
 //#include <stdlib.h>
 //#ifndef NO_DEBUG
 #include <iostream>
-#include <algorithm>		//some versions of g++ require this, some do not
 //#endif
+#include <algorithm>		//some versions of g++ require this, some do not
 
 Matrix::Matrix(int s)
 : size(s)
@@ -1436,7 +1458,6 @@ void Matrix::invalidateAllGroups(Group *** gm)
 		delete *k;
 }
 
-
 /* This is kind of ugly but I'm trying to use the existing matrix
  * code for something weird 
  * Could there be a potential miscalc if called on empty vertex?
@@ -1486,7 +1507,6 @@ Group* Matrix::assembleAreaGroups(MatrixStone *stone)
 	
 	return group;
 }
-
 
 /*
  * Returns true if the stone at x,y belongs to a groups with only 1 liberty
