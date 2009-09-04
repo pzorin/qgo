@@ -1744,7 +1744,7 @@ void IGSConnection::handle_info(QString line)
 	Room * room = getDefaultRoom();
 	static QString memory_str;
 	static int memory = 0;
-	qDebug("9: %s", line.toLatin1().constData());
+	//qDebug("9: %s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();
 			// status messages
 	if (line.contains("Set open to be"))
@@ -1826,7 +1826,6 @@ void IGSConnection::handle_info(QString line)
 			channel = new ChannelListing();
 			channel->number = element(line, 0, "#", " ").toInt();
 			channel->name = element(line, 2, " ");
-			qDebug("Channel: %d %s", channel->number, channel->name.toLatin1().constData());
 		}
 		else if(channel)
 		{
@@ -2033,7 +2032,6 @@ void IGSConnection::handle_info(QString line)
 			else
 				aMatch->timeSystem = canadian;
 			aMatch->nmatch = true;
-			qDebug("nmatch in parser");
 		}
 		else
 		{
