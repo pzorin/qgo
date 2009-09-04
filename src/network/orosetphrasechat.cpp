@@ -1,3 +1,25 @@
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #include "orosetphrasechat.h"
 #include <QCoreApplication>
 
@@ -68,9 +90,12 @@ void ORO_setup_setphrases(void)
 	ORO_setphrase[OROSP_HAVEAGOODTIME] = QCoreApplication::translate("ORO_setphrases", "Have a good time", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_IMLEAVINGNOW] = QCoreApplication::translate("ORO_setphrases", "I'm leaving now", "", QCoreApplication::DefaultCodec);
 
+	ORO_setphrase[OROSP_HOWDOYOUDO] = QCoreApplication::translate("ORO_setphrases", "How do you do?", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_NICETOMEETEVERYONE] = QCoreApplication::translate("ORO_setphrases", "Nice to meet you everyone", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_HOWAREYOUEVERYONE] = QCoreApplication::translate("ORO_setphrases", "How are you everyone?", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_ANYONEFORQUICKGAME] = QCoreApplication::translate("ORO_setphrases", "Anyone want a quick game?", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_LOOKINGFORFRIENDLY] = QCoreApplication::translate("ORO_setphrases", "I'm looking for a friendly match.", "", QCoreApplication::DefaultCodec);
+	ORO_setphrase[OROSP_STRONGPLAYERSHANDICAP] = QCoreApplication::translate("ORO_setphrases", "Strong players!  How about playing handicap with me?", "", QCoreApplication::DefaultCodec);
+	ORO_setphrase[OROSP_ANYONEWANTSTOPLAYWITHME] = QCoreApplication::translate("ORO_setphrases", "Anyone want to play a game with me?", "", QCoreApplication::DefaultCodec);
 	ORO_setphrase[OROSP_DONTMINDANYGAME] = QCoreApplication::translate("ORO_setphrases", "I don't mind any sorts of games with anyone.  Just request me.", "", QCoreApplication::DefaultCodec);
 }
