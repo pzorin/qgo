@@ -1,5 +1,25 @@
-/* Can we clean this file up?  It has way too many definitions specific to one or two other files,
- * takes too long to compile everything when its altered.  FIXME */
+/***************************************************************************
+ *   Copyright (C) 2009 by The qGo Project                                 *
+ *                                                                         *
+ *   This file is part of qGo.   					   *
+ *                                                                         *
+ *   qGo is free software: you can redistribute it and/or modify           *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
+ *   or write to the Free Software Foundation, Inc.,                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+
 #ifndef DEFINES_H
 #define DEFINES_H
 
@@ -23,40 +43,6 @@
 #define SLIDER_INIT 0
 
 #define CONSOLECMDPREFIX "--->"
-
-/*
-* GraphicsItems types for the board class
-*/
-#define RTTI_STONE 1001
-#define RTTI_MARK_SQUARE 1002
-#define RTTI_MARK_CIRCLE 1003
-#define RTTI_MARK_TRIANGLE 1004
-#define RTTI_MARK_CROSS 1005
-#define RTTI_MARK_TEXT 1006
-#define RTTI_MARK_NUMBER 1007
-#define RTTI_MARK_TERR 1008
-#define RTTI_MARK_OTHERLINE 1009
-
-
-/*
-* Marks used in editing a game
-*/
-/* FIXME, I multiplied these by 10 because they prevented the use of countLiberties
- * by checkFalseEye by corrupting the stone.  It seems to me rather silly to
- * have defines like these in addition to the marking system, but they are sort
- * of internal marks.  At any rate, things still seem to work so I guess
- * this fixed things.  But its still ugly and there could still be more problems */
-#define MARK_TERRITORY_VISITED    0x0800
-#define MARK_TERRITORY_DAME       0x0400
-#define MARK_SEKI                 0x1000
-#define MARK_TERRITORY_DONE_BLACK 0x0200
-#define MARK_TERRITORY_DONE_WHITE 0x0100
-
-//first nibble is for stone color/erase
-#define MX_STONEDEAD	0x8000
-#define MX_STONEEDIT	0x4000
-
-#define MX_STONEDIRTY	0x2000
 
 //3 looked a little small
 #define SMALL_STONE_TERR_DIVISOR	2.5
@@ -104,18 +90,9 @@ enum State { stateVarBegin, stateNode, stateVarEnd };
 enum Property { moveBlack, moveWhite, editBlack, editWhite, editErase, comment, editMark, unknownProp, nodeName, timeLeft, openMoves, nextMove};
 enum TimeSystem { none, absolute, byoyomi, canadian, tvasia };
 
-enum CursorType { cursorIdle, cursorGhostBlack , cursorGhostWhite , cursorWait , cursorNavTo };
-
 /*
  * Game server enums
  */
-enum Status {GUEST, REGISTERED, OFFLINE};
-enum InfoType {PLAYER, GAME, MESSAGE, YOUHAVEMSG, SERVERNAME, 
-		ACCOUNT, STATUS, IT_OTHER, CMD, READY,
-		NOCLIENTMODE, TELL, KIBITZ, MOVE, BEEP,
-		WHO, STATS, GAMES, NONE, HELP, CHANNELS, SHOUT,
-		PLAYER27, PLAYER27_START, PLAYER27_END, GAME7, GAME7_START,
-		PLAYER42, PLAYER42_START, PLAYER42_END, WS};
 /* ConnectionType in line with ui comboBox_server entry. FIXME to make more securely connected */
 enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS,
 			 TypeORO,
@@ -125,24 +102,11 @@ enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS,
  * and reconcile with mainwindow_settings.h */
 
 /*
- * Go Text Protocol (GnuGo) enums
- */
-enum CommandType {PROTOCOL, BOARDSIZE, KNOWN_COMMAND, LEVEL, KOMI, PLAY_BLACK, PLAY_WHITE, GENMOVE};
-
-
-/*
 * Global structs
 */
 struct ASCII_Import
 {
 	char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
-};
-
-struct FastLoadMark
-{
-	int x, y;
-	MarkType t;
-	QString txt;
 };
 
 struct MatrixStone
@@ -152,77 +116,6 @@ struct MatrixStone
 	MatrixStone() {};
 	MatrixStone(int _x, int _y, StoneColor _c) : x(_x), y(_y), c(_c) {};
 };
-
-struct Position { int x, y; };
-struct MoveNum {int n; };
-
-struct GameInfo
-{
-	QString nr;
-	QString type;
-	QString wname;
-	QString wprisoners;
-	QString wtime;
-	QString wstones;
-	QString bname;
-	QString bprisoners;
-	QString btime;
-	QString bstones;
-	QString mv_col;	// T..Time, B..Black, W..White, I..Init
-	QString mv_nr;
-	QString mv_pt;
-};
-
-
-/*struct Game
-{
-	QString nr;
-	QString	wname;
-	QString	wrank;
-	QString	bname;
-	QString	brank;
-	QString res;
-	QString	mv;
-	QString Sz;
-	QString H;
-	QString K;
-	QString By;
-	QString FR;
-	QString ob;
-	QString player;
-	bool running;
-  	bool oneColorGo ;
-};
-
-struct Player
-{
-
-	QString info;
-	QString name;
-	QString idle;
-	QString rank;
-	QString play_str;
-	QString obs_str;
-	QString extInfo;
-	QString won;
-	QString lost;
-	QString country;
-	QString nmatch_settings;
-  	QString rated;
-	QString address;
-	int     playing;
-	int     observing;
-	bool 	nmatch;
-	bool    online;
-	// BWN 0-9 19-19 60-60 600-600 25-25 0-0 0-0 0-0
-	bool nmatch_black, nmatch_white, nmatch_nigiri;
-	int 	nmatch_handicapMin, nmatch_handicapMax, 
-		nmatch_timeMin, nmatch_timeMax, 
-		nmatch_BYMin, nmatch_BYMax, 
-		nmatch_stonesMin, nmatch_stonesMax,
-		nmatch_KoryoMin, nmatch_KoryoMax;
-
-};*/
 
 /* This should really probably have access functions or
  * something and then friend the mainwindow settings code so
@@ -237,6 +130,7 @@ struct _preferences
 	bool number_current_move;
 	bool terr_stone_mark;
 	bool observe_outside_on_doubleclick;
+
 	int default_size;
 	int default_komi;
 	bool warn_about_codecs;
