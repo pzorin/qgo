@@ -541,5 +541,12 @@ int MainWindow::checkForOpenBoards(void)
 		if(!(*i)->okayToQuit())
 			return -1;
 	}
+	//close all open, since boardwindow no longer has parent because of windows task bar issue:
+	i = boardWindowList.begin();
+	while(i != boardWindowList.end())
+	{
+		delete (*i);
+		i = boardWindowList.begin();
+	}
 	return 0;
 }

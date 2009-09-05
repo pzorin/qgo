@@ -39,7 +39,7 @@
 class BoardHandler;
 
 BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
-	: QMainWindow((QWidget*)mainwindow, 0), addtime_menu(0)
+	: QMainWindow(0, 0), addtime_menu(0)
 {
 	if(!gd)
 	{
