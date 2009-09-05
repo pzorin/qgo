@@ -63,6 +63,8 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 		QString cmd2 = cmd;
 		cmd2.replace(QRegExp("^[\\S]+\\s"), "");
 		connection->getConsoleDispatch()->recvText(cmd2);	 //copy back since otherwise doesn't appear
+		connection->sendConsoleText(cmd.toLatin1().constData());
+		ui.cb_cmdLine->clearEditText();
 	}
 	else
 	{
