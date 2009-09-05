@@ -36,6 +36,7 @@ LoginDialog::LoginDialog(const QString & s, HostList * h)
 {
 	ui.setupUi(this);
 	connectionName = s;
+	connection = 0;
 	serverlistdialog_open = false;
 	
 	setWindowTitle(connectionName);
