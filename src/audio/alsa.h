@@ -45,7 +45,7 @@ class QAlsaSound : public Sound, public QThread
 //Q_OBJECT
 public :
 	QAlsaSound( const QString& filename, QObject* parent=0) ;
-	~QAlsaSound() {};
+	~QAlsaSound();
 
 	bool initialise() ; 
 	bool isAvailable() { return is_available ; }
@@ -65,7 +65,7 @@ private:
 	char* findchunk(char* pstart, char* fourcc, size_t n);
 	WAVEFORMAT waveformat ;
 	u_long samples, datastart;
-
+	char * buffer2;
 	void run();
 
 };

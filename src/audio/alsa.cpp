@@ -48,7 +48,11 @@ QAlsaSound::QAlsaSound( const QString& filename, QObject* parent):
 	is_available = initialise();
 }
 
-
+QAlsaSound::~QAlsaSound()
+{
+	if(is_available)
+		free(buffer2);
+}
 
 bool QAlsaSound::initialise()
 {
@@ -205,14 +209,20 @@ bool QAlsaSound::initialise()
 		qDebug("Unable to install hw params:");
 		return FALSE;
 	}
-
+	
 	chunk_size = 0;
 	buffer_size=0;
 	snd_pcm_hw_params_get_period_size(params, &chunk_size, 0);
 //	snd_pcm_hw_params_get_buffer_size(params, &buffer_size);
 
 	buffer_size = chunk_size * waveformat.wChannels *2;
-
+	
+	buffer2 = (char *)malloc (buffer_size);
+	if(!buffer2) {
+		qDebug("Unable to allocate memory for sound");
+		return FALSE;
+	}
+	
 	bits_per_sample = snd_pcm_format_physical_width(format);
 	bits_per_frame = bits_per_sample * waveformat.wChannels;
 	chunk_bytes = chunk_size * bits_per_frame / 8;
@@ -220,7 +230,6 @@ bool QAlsaSound::initialise()
 	return TRUE ;
 
 #endif
-
 }
 
 void QAlsaSound::run()
@@ -236,9 +245,8 @@ void QAlsaSound::run()
 
 	//int written;
 	int count,f;
-	char *buffer2;
-	buffer2 = (char *)malloc (buffer_size);
-        while((count = qfile.read(buffer2, buffer_size)))
+	snd_pcm_prepare(handle);
+	while((count = qfile.read(buffer2, buffer_size)))
 	{
 		f=count*8/bits_per_frame;
 //		while ((frames = snd_pcm_writei(handle, buffer2, f)) < 0) 
@@ -269,11 +277,10 @@ void QAlsaSound::run()
 			{
 				f -= frames;
 				written += frames * bits_per_frame / 8;
-			}	
+			}
 		}
 	
         }
-	free(buffer2);
 
 	// the 'usleep' is needed when using the drain, otherwise, there is a 'click' at the end of the sound
 	// either comment away the two lines, or let them together.
@@ -283,13 +290,11 @@ void QAlsaSound::run()
 
 void QAlsaSound::play()
 {
-
 	if (!is_available)
 		return;
 
 //#ifdef Q_OS_LINUX
 	start();
-
 }
 
 char* QAlsaSound::findchunk  (char* pstart, char* fourcc, size_t n)
