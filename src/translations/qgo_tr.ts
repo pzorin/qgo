@@ -1935,12 +1935,12 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>LoginDialog</name>
     <message>
-        <location filename="../network/login.cpp" line="74"/>
+        <location filename="../network/login.cpp" line="75"/>
         <source>Empty Login</source>
         <translation>Boş Oturum</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="74"/>
+        <location filename="../network/login.cpp" line="75"/>
         <source>You must enter a username</source>
         <translation>Kullanıcı adı girmeniz gerekir</translation>
     </message>
@@ -1953,92 +1953,92 @@ Varsayılanı kullanıyorum</translation>
         <translation type="obsolete">Bağlanılıyor...</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="102"/>
+        <location filename="../network/login.cpp" line="103"/>
         <source>Bad Password</source>
         <translation>Parola Kötü</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="102"/>
+        <location filename="../network/login.cpp" line="103"/>
         <source>Invalid Password</source>
         <translation>Parola Geçersiz</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="106"/>
+        <location filename="../network/login.cpp" line="107"/>
         <source>Bad Login</source>
         <translation>Oturum Kötü</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="106"/>
+        <location filename="../network/login.cpp" line="107"/>
         <source>Invalid Login</source>
         <translation>Oturum Geçersiz</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="112"/>
+        <location filename="../network/login.cpp" line="113"/>
         <source>Already Logged In</source>
         <translation>Oturum Zaten Açık</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="112"/>
+        <location filename="../network/login.cpp" line="113"/>
         <source>Are you logged in somewhere else?</source>
         <translation>Başka bir sunucuya bağlı mısınız?</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="116"/>
+        <location filename="../network/login.cpp" line="117"/>
         <source>Can&apos;t connect</source>
         <translation>Bağlanılamıyor</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="116"/>
+        <location filename="../network/login.cpp" line="117"/>
         <source>Can&apos;t connect to host!</source>
         <translation>Sunucuya bağlanılamıyor!</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="120"/>
+        <location filename="../network/login.cpp" line="121"/>
         <source>Connection Refused</source>
         <translation>Bağlantı Reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="120"/>
+        <location filename="../network/login.cpp" line="121"/>
         <source>Server may be down</source>
         <translation>Sunucu kapalı olabilir</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="124"/>
+        <location filename="../network/login.cpp" line="125"/>
         <source>Protocol Error</source>
         <translation>Protokol Hatası</translation>
     </message>
     <message>
-        <location filename="../network/login.cpp" line="124"/>
+        <location filename="../network/login.cpp" line="125"/>
         <source>Notify Developer!</source>
         <translation>Yazılım Geliştiricisine Haber Ver!</translation>
     </message>
     <message>
-        <location filename="../network/login.ui" line="13"/>
+        <location filename="../network/login.ui" line="14"/>
         <source>Dialog</source>
         <translation>Bağlantı</translation>
     </message>
     <message>
-        <location filename="../network/login.ui" line="28"/>
+        <location filename="../network/login.ui" line="29"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../network/login.ui" line="35"/>
+        <location filename="../network/login.ui" line="36"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../network/login.ui" line="54"/>
+        <location filename="../network/login.ui" line="155"/>
         <source>Save Password</source>
         <translation>Parolayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../network/login.ui" line="83"/>
+        <location filename="../network/login.ui" line="65"/>
         <source>Password:</source>
         <translation>Parola:</translation>
     </message>
     <message>
-        <location filename="../network/login.ui" line="96"/>
+        <location filename="../network/login.ui" line="58"/>
         <source>Login:</source>
         <translation>Oturum:</translation>
     </message>
@@ -2109,7 +2109,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
     </message>
     <message>
         <location filename="../mainwindow.ui" line="100"/>
-        <location filename="../mainwindow.ui" line="3295"/>
+        <location filename="../mainwindow.ui" line="3259"/>
         <source>Go server</source>
         <translation>Go sunucusu</translation>
     </message>
@@ -2120,7 +2120,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
     </message>
     <message>
         <location filename="../mainwindow.ui" line="118"/>
-        <location filename="../mainwindow.ui" line="3286"/>
+        <location filename="../mainwindow.ui" line="3250"/>
         <location filename="../mainwindow_settings.cpp" line="371"/>
         <source>Go engine</source>
         <translation>Go programı</translation>
@@ -2364,8 +2364,8 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <location filename="../mainwindow.ui" line="329"/>
         <location filename="../mainwindow.ui" line="776"/>
         <location filename="../mainwindow.ui" line="818"/>
-        <location filename="../mainwindow.ui" line="1919"/>
-        <location filename="../mainwindow.ui" line="1926"/>
+        <location filename="../mainwindow.ui" line="1884"/>
+        <location filename="../mainwindow.ui" line="1891"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -2374,10 +2374,10 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">Nu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="939"/>
-        <location filename="../mainwindow.ui" line="1241"/>
-        <location filename="../mainwindow.ui" line="1390"/>
-        <location filename="../mainwindow.ui" line="3145"/>
+        <location filename="../mainwindow.ui" line="936"/>
+        <location filename="../mainwindow.ui" line="1206"/>
+        <location filename="../mainwindow.ui" line="1355"/>
+        <location filename="../mainwindow.ui" line="3109"/>
         <source>White</source>
         <translation>Beyaz</translation>
     </message>
@@ -2386,10 +2386,10 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">BS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="963"/>
-        <location filename="../mainwindow.ui" line="1173"/>
-        <location filename="../mainwindow.ui" line="1353"/>
-        <location filename="../mainwindow.ui" line="3138"/>
+        <location filename="../mainwindow.ui" line="960"/>
+        <location filename="../mainwindow.ui" line="1138"/>
+        <location filename="../mainwindow.ui" line="1318"/>
+        <location filename="../mainwindow.ui" line="3102"/>
         <source>Black</source>
         <translation>Siyah</translation>
     </message>
@@ -2516,40 +2516,56 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation>Yeni dosya</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1046"/>
-        <location filename="../mainwindow.ui" line="1166"/>
-        <location filename="../mainwindow.ui" line="1429"/>
+        <location filename="../mainwindow.ui" line="987"/>
+        <location filename="../mainwindow.ui" line="1131"/>
+        <location filename="../mainwindow.ui" line="1394"/>
         <source>Size</source>
         <translation>Boyut</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1065"/>
-        <location filename="../mainwindow.ui" line="1221"/>
-        <location filename="../mainwindow.ui" line="1456"/>
+        <location filename="../mainwindow.ui" line="1004"/>
+        <location filename="../mainwindow.ui" line="1186"/>
+        <location filename="../mainwindow.ui" line="1421"/>
         <source>Handicap</source>
         <translation>Avans</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3194"/>
+        <location filename="../mainwindow.ui" line="1993"/>
+        <source>Time interval for autoplay n
+Delay between the moves in autoplay mode in seconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2605"/>
+        <source>Sound warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2699"/>
+        <source>Board size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="3158"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="932"/>
-        <location filename="../mainwindow.ui" line="1193"/>
+        <location filename="../mainwindow.ui" line="929"/>
+        <location filename="../mainwindow.ui" line="1158"/>
         <source>White player</source>
         <translation>Beyaz oyuncu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="956"/>
-        <location filename="../mainwindow.ui" line="1200"/>
+        <location filename="../mainwindow.ui" line="953"/>
+        <location filename="../mainwindow.ui" line="1165"/>
         <source>Black player</source>
         <translation>Siyah oyuncu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="993"/>
-        <location filename="../mainwindow.ui" line="1207"/>
-        <location filename="../mainwindow.ui" line="1489"/>
+        <location filename="../mainwindow.ui" line="1030"/>
+        <location filename="../mainwindow.ui" line="1172"/>
+        <location filename="../mainwindow.ui" line="1454"/>
         <source>Komi</source>
         <translation>Komi</translation>
     </message>
@@ -2558,40 +2574,40 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
         <translation type="obsolete">6,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1106"/>
-        <location filename="../mainwindow.ui" line="1329"/>
+        <location filename="../mainwindow.ui" line="1070"/>
+        <location filename="../mainwindow.ui" line="1294"/>
         <source>New game</source>
         <translation>Yeni oyun</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1116"/>
+        <location filename="../mainwindow.ui" line="1081"/>
         <source>Open file</source>
         <translation>Dosya aç</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1131"/>
-        <location filename="../mainwindow.ui" line="1616"/>
+        <location filename="../mainwindow.ui" line="1096"/>
+        <location filename="../mainwindow.ui" line="1581"/>
         <source>Open game</source>
         <translation>Oyun aç</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1159"/>
+        <location filename="../mainwindow.ui" line="1124"/>
         <source>Date</source>
         <translation>Tarih</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1234"/>
+        <location filename="../mainwindow.ui" line="1199"/>
         <source>19</source>
         <translation>19</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1248"/>
+        <location filename="../mainwindow.ui" line="1213"/>
         <source>Result</source>
         <translation>Sonuç</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1302"/>
-        <location filename="../mainwindow.ui" line="1586"/>
+        <location filename="../mainwindow.ui" line="1267"/>
+        <location filename="../mainwindow.ui" line="1551"/>
         <source>Click on the board to place a stone.
 
 When in normal mode, left click plays moves in alternating colors.
@@ -2610,12 +2626,12 @@ Düzenleme kipinde taş düzenlerken sol tık siyah taş, sağ tık beyaz taş y
 Sayma kipindeyken sol tık grubu ölü olarak, sağ tık seki olarak işaretler. Eski hallerine getirmek için üzerlerine tekrar tıklayın.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1341"/>
+        <location filename="../mainwindow.ui" line="1306"/>
         <source>Computer engine plays as</source>
         <translation>Bilgisayar programının rengi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1368"/>
+        <location filename="../mainwindow.ui" line="1333"/>
         <source>Computer level</source>
         <translation>Bilgisayar programının seviyesi</translation>
     </message>
@@ -2624,176 +2640,175 @@ Sayma kipindeyken sol tık grubu ölü olarak, sağ tık seki olarak işaretler.
         <translation type="obsolete">komi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1514"/>
+        <location filename="../mainwindow.ui" line="1479"/>
         <source>One color Go</source>
         <translation>Tek renk Go</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1523"/>
+        <location filename="../mainwindow.ui" line="1488"/>
         <source>Set defaults</source>
         <translation>Varsayılanları ayarla</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1530"/>
+        <location filename="../mainwindow.ui" line="1495"/>
         <source>Start game</source>
         <translation>Oyunu başlat</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1540"/>
+        <location filename="../mainwindow.ui" line="1505"/>
         <source>Open started game</source>
         <translation>Başlanmış oyun aç</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1639"/>
+        <location filename="../mainwindow.ui" line="1604"/>
         <source>Go engine path</source>
         <translation>Go programı yolu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1667"/>
+        <location filename="../mainwindow.ui" line="1632"/>
         <source>Get engine</source>
         <translation>Program bul</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1700"/>
+        <location filename="../mainwindow.ui" line="1665"/>
         <source>International</source>
         <translation>Uluslararası</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1712"/>
+        <location filename="../mainwindow.ui" line="1677"/>
         <source>Language</source>
         <translation>Dil</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1720"/>
+        <location filename="../mainwindow.ui" line="1685"/>
         <source>System default</source>
         <translation>Sistem varsayılanı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1725"/>
+        <location filename="../mainwindow.ui" line="1690"/>
         <source>German</source>
         <translation>Almanca</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1730"/>
+        <location filename="../mainwindow.ui" line="1695"/>
         <source>French</source>
         <translation>Fransızca</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1735"/>
+        <location filename="../mainwindow.ui" line="1700"/>
         <source>Italian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1740"/>
+        <location filename="../mainwindow.ui" line="1705"/>
         <source>Danish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1745"/>
+        <location filename="../mainwindow.ui" line="1710"/>
         <source>Dutch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1750"/>
+        <location filename="../mainwindow.ui" line="1715"/>
         <source>Czech</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1755"/>
+        <location filename="../mainwindow.ui" line="1720"/>
         <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1760"/>
+        <location filename="../mainwindow.ui" line="1725"/>
         <source>Portugese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1765"/>
+        <location filename="../mainwindow.ui" line="1730"/>
         <source>Polish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1770"/>
+        <location filename="../mainwindow.ui" line="1735"/>
         <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1775"/>
+        <location filename="../mainwindow.ui" line="1740"/>
         <source>Turkish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1796"/>
+        <location filename="../mainwindow.ui" line="1761"/>
         <source>Text encoding</source>
         <translation>Metin kodlaması</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1804"/>
+        <location filename="../mainwindow.ui" line="1769"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1949"/>
+        <location filename="../mainwindow.ui" line="1914"/>
         <source>Misc</source>
         <translation>Muhtelif</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2015"/>
+        <location filename="../mainwindow.ui" line="1980"/>
         <source>Autoplay interval</source>
         <translation>Otomatik oynatma aralığı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2025"/>
+        <location filename="../mainwindow.ui" line="1990"/>
         <source>Time interval for autoplay</source>
         <translation>Otomatik oynatma özelliği için süre aralığı (sn)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2028"/>
         <source>Time interval for autoplay
 
 Delay between the moves in autoplay mode in seconds.</source>
-        <translation>Otomatik oynatma özelliği için süre aralığı
+        <translation type="obsolete">Otomatik oynatma özelliği için süre aralığı
 
 Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2034"/>
+        <location filename="../mainwindow.ui" line="1998"/>
         <source>0.1</source>
         <translation>0,1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2039"/>
+        <location filename="../mainwindow.ui" line="2003"/>
         <source>0.5</source>
         <translation>0,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2044"/>
+        <location filename="../mainwindow.ui" line="2008"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2049"/>
+        <location filename="../mainwindow.ui" line="2013"/>
         <source>2.5</source>
         <translation>2,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2054"/>
+        <location filename="../mainwindow.ui" line="2018"/>
         <source>5</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2059"/>
+        <location filename="../mainwindow.ui" line="2023"/>
         <source>7.5</source>
         <translation>7,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2064"/>
+        <location filename="../mainwindow.ui" line="2028"/>
         <source>10</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1815"/>
+        <location filename="../mainwindow.ui" line="1780"/>
         <source>Sound</source>
         <translation>Ses</translation>
     </message>
@@ -2813,60 +2828,60 @@ Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1827"/>
+        <location filename="../mainwindow.ui" line="1792"/>
         <source>Sound off</source>
         <translation>kapalı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1834"/>
+        <location filename="../mainwindow.ui" line="1799"/>
         <source>My games</source>
         <translation>sadece oyunlarımda açık</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1841"/>
+        <location filename="../mainwindow.ui" line="1806"/>
         <source>All games</source>
         <translation>tüm oyunlarda açık</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1851"/>
+        <location filename="../mainwindow.ui" line="1816"/>
         <source>Stones</source>
         <translation>Taşlar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1863"/>
+        <location filename="../mainwindow.ui" line="1828"/>
         <source>Ugly 2D</source>
         <translation>Çirkin 2B</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1870"/>
+        <location filename="../mainwindow.ui" line="1835"/>
         <source>Plain 3D</source>
         <translation>Sade 3B</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1877"/>
+        <location filename="../mainwindow.ui" line="1842"/>
         <source>Realistic</source>
         <translation>Gerçekçi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1893"/>
+        <location filename="../mainwindow.ui" line="1858"/>
         <source>Goban and table</source>
         <translation>Go tahtası ve masa</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1905"/>
+        <location filename="../mainwindow.ui" line="1870"/>
         <location filename="../mainwindow_settings.cpp" line="397"/>
         <source>Table picture</source>
         <translation>Masa resmi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1912"/>
+        <location filename="../mainwindow.ui" line="1877"/>
         <location filename="../mainwindow_settings.cpp" line="384"/>
         <source>Goban picture</source>
         <translation>Go tahtası resmi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1942"/>
-        <location filename="../mainwindow.ui" line="3234"/>
+        <location filename="../mainwindow.ui" line="1907"/>
+        <location filename="../mainwindow.ui" line="3198"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
@@ -3066,12 +3081,12 @@ Not: &apos;Sil&apos; kayıtlı veriler içindir.</translation>
         <translation type="obsolete">Sil</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2578"/>
+        <location filename="../mainwindow.ui" line="2542"/>
         <source>Score/Edit</source>
         <translation>Say/Düzenle</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2581"/>
+        <location filename="../mainwindow.ui" line="2545"/>
         <source>Score
 
 Left click on a group to mark it as dead.
@@ -3092,61 +3107,58 @@ Düzenle
 Yeni, düzenlenebilir çevrimdışı bir pencere açmak için tıklayın.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2605"/>
+        <location filename="../mainwindow.ui" line="2569"/>
         <source>Byo Yomi warning</source>
         <translation>Byoyomi uyarısı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2611"/>
+        <location filename="../mainwindow.ui" line="2575"/>
         <source>Seconds</source>
         <translation>Saniye</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2641"/>
         <source>sound warning</source>
-        <translation>sesle uyar</translation>
+        <translation type="obsolete">sesle uyar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2651"/>
+        <location filename="../mainwindow.ui" line="2615"/>
         <source>Autosave</source>
         <translation>Otomatik kayıt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2663"/>
+        <location filename="../mainwindow.ui" line="2627"/>
         <source>Observed games</source>
         <translation>İzlenmiş oyunlar için</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2670"/>
+        <location filename="../mainwindow.ui" line="2634"/>
         <source>Played games</source>
         <translation>Oynanmış oyunlar için</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2680"/>
+        <location filename="../mainwindow.ui" line="2644"/>
         <source>Games settings</source>
         <translation>Oyun ayarları</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2716"/>
-        <location filename="../mainwindow.ui" line="2735"/>
-        <location filename="../mainwindow.ui" line="3171"/>
-        <location filename="../mainwindow.ui" line="3191"/>
+        <location filename="../mainwindow.ui" line="2680"/>
+        <location filename="../mainwindow.ui" line="3135"/>
         <source>board size</source>
         <translation>tahta boyutu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2719"/>
+        <location filename="../mainwindow.ui" line="2683"/>
         <source>Board size:</source>
         <translation>Tahta boyutu:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2761"/>
-        <location filename="../mainwindow.ui" line="2780"/>
+        <location filename="../mainwindow.ui" line="2725"/>
+        <location filename="../mainwindow.ui" line="2744"/>
         <source>Komi: added to white&apos;s result</source>
         <translation>Komi: Beyaz&apos;ın sonucuna eklenir</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2764"/>
+        <location filename="../mainwindow.ui" line="2728"/>
         <source>Komi:</source>
         <translation>Komi:</translation>
     </message>
@@ -3155,12 +3167,12 @@ Yeni, düzenlenebilir çevrimdışı bir pencere açmak için tıklayın.</trans
         <translation type="obsolete">,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2804"/>
+        <location filename="../mainwindow.ui" line="2768"/>
         <source>allow client to negotiate automatic</source>
         <translation>istemcinin kendiliğinden görüşmesine izin ver</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2807"/>
+        <location filename="../mainwindow.ui" line="2771"/>
         <source>Automatic Negotiation
 
 Allow client to negotiate komi automatic.
@@ -3173,111 +3185,116 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
 Dikkat: rakibinize önceden oyun şartlarınızı göndermiş olmanıza rağmen rakibiniz şartlarınızı kabul etmiyorsa sinir bozucu olabilir. Bu istemcilerin kendi içlerinde pazarlık değerlerini farklı şekillerde kullanmalarından kaynaklanıyor olabilir.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2814"/>
+        <location filename="../mainwindow.ui" line="2778"/>
         <source>Automatic komi 
 negotiation</source>
         <translation>Otomatik komi
 pazarlığı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2832"/>
-        <location filename="../mainwindow.ui" line="2858"/>
-        <location filename="../mainwindow.ui" line="3057"/>
-        <location filename="../mainwindow.ui" line="3077"/>
+        <location filename="../mainwindow.ui" line="2796"/>
+        <location filename="../mainwindow.ui" line="2822"/>
+        <location filename="../mainwindow.ui" line="3021"/>
+        <location filename="../mainwindow.ui" line="3041"/>
         <source>Additional time for 25 moves; after 25 moves the byoyomi time starts again and again</source>
         <translation>25 hamle için ek süre; her 25 hamle bitiminde byoyomi tekrar başlar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2835"/>
+        <location filename="../mainwindow.ui" line="2799"/>
         <source>Byoyomi
 time:</source>
         <translation>Byoyomi
 süresi:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2881"/>
-        <location filename="../mainwindow.ui" line="2907"/>
-        <location filename="../mainwindow.ui" line="3008"/>
-        <location filename="../mainwindow.ui" line="3028"/>
+        <location filename="../mainwindow.ui" line="2845"/>
+        <location filename="../mainwindow.ui" line="2871"/>
+        <location filename="../mainwindow.ui" line="2972"/>
+        <location filename="../mainwindow.ui" line="2992"/>
         <source>Playing time</source>
         <translation>Oyun süresi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2884"/>
+        <location filename="../mainwindow.ui" line="2848"/>
         <source>Main 
 time :</source>
         <translation>Ana
 süre:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2941"/>
+        <location filename="../mainwindow.ui" line="2905"/>
         <source>All servers settings</source>
         <translation>Tüm sunucular için ayarlar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2974"/>
+        <location filename="../mainwindow.ui" line="2938"/>
         <source>IGS &apos;nmatch&apos; specific settings</source>
         <translation>IGS &apos;nmatch&apos; özelliğine has ayarlar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3011"/>
+        <location filename="../mainwindow.ui" line="2975"/>
         <source>Main time 
 up to :</source>
         <translation>Azami
 ana süre:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3060"/>
+        <location filename="../mainwindow.ui" line="3024"/>
         <source>Byo time
 up to :</source>
         <translation>Azami
 Byo süresi:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3123"/>
+        <location filename="../mainwindow.ui" line="3087"/>
         <source>Play as :</source>
         <translation>Renk tercihi:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3152"/>
+        <location filename="../mainwindow.ui" line="3116"/>
         <source>Nigiri</source>
         <translation>Nigiri</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3174"/>
+        <location filename="../mainwindow.ui" line="3138"/>
         <source>Handicap 
 up to :</source>
         <translation>Azami
 avans:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3249"/>
+        <location filename="../mainwindow.ui" line="3155"/>
+        <source>Maximum handicap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="3213"/>
         <source>Alternating list colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3277"/>
+        <location filename="../mainwindow.ui" line="3241"/>
         <source>sgf editor</source>
         <translation>SGF düzenleyici</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="280"/>
-        <location filename="../mainwindow_server.cpp" line="1142"/>
+        <location filename="../mainwindow_server.cpp" line="282"/>
+        <location filename="../mainwindow_server.cpp" line="1144"/>
         <source>Connect with</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="92"/>
+        <location filename="../mainwindow_server.cpp" line="94"/>
         <source>Disconnect from</source>
         <translation>Bağlantıyı kopar</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="912"/>
+        <location filename="../mainwindow_server.cpp" line="914"/>
         <source>msg*</source>
         <translation>ilt*</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="938"/>
+        <location filename="../mainwindow_server.cpp" line="940"/>
         <source>Shouts*</source>
         <translation>İlanlar*</translation>
     </message>
@@ -3363,49 +3380,49 @@ avans:</translation>
         <translation>Oda aç</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1006"/>
-        <location filename="../mainwindow.ui" line="1186"/>
-        <location filename="../mainwindow.ui" line="1502"/>
+        <location filename="../mainwindow.ui" line="1043"/>
+        <location filename="../mainwindow.ui" line="1151"/>
+        <location filename="../mainwindow.ui" line="1467"/>
         <source>6.5</source>
         <translation>6,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1959"/>
+        <location filename="../mainwindow.ui" line="1924"/>
         <source>Territory Cross</source>
         <translation type="unfinished">Bölge İmi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1969"/>
+        <location filename="../mainwindow.ui" line="1934"/>
         <source>Territory Stone</source>
         <translation type="unfinished">Bölge Taşı</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1980"/>
+        <location filename="../mainwindow.ui" line="1945"/>
         <source>Ko marker</source>
         <translation>Ko belirteci</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1987"/>
+        <location filename="../mainwindow.ui" line="1952"/>
         <source>Number Current Move</source>
         <translation type="unfinished">Son Hamleyi Numaralandır</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2783"/>
+        <location filename="../mainwindow.ui" line="2747"/>
         <source>.5</source>
         <translation>,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3256"/>
+        <location filename="../mainwindow.ui" line="3220"/>
         <source>Default is Observe Outside</source>
         <translation>Dışarıdan izleme varsayılan ayar</translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="328"/>
+        <location filename="../mainwindow_server.cpp" line="330"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow_server.cpp" line="328"/>
+        <location filename="../mainwindow_server.cpp" line="330"/>
         <source>This feature will be in a later version</source>
         <translation>Bu özellik ileriki bir sürümde yer alacak</translation>
     </message>
