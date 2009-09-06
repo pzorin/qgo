@@ -109,7 +109,7 @@ void installTranslator(enum Language l)
 		case None:
 		default:
 			QString locale = QLocale::system().name();
-     			translatorPtr->load(QString("qgo_") + locale);
+     			translatorPtr->load(QString(TRANSLATIONS_PATH_PREFIX"qgo_") + locale);
 			return;
 	}
 	appPtr->installTranslator(translatorPtr);
