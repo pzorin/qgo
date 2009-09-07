@@ -68,7 +68,7 @@ Filename: "{app}\qGo.url"; Section: "InternetShortcut"; Key: "URL"; String: "htt
 [Icons]
 Name: "{group}\qGo"; Filename: "{app}\qGo.exe"; WorkingDir: "{app}"
 ;Name: "{group}\qGo Menu"; Filename: "{app}\qGo.exe"; Parameters: "-menu"; WorkingDir: "{app}"
-Name: "{group}\qGo on the Web"; Filename: "{app}\qGo.url"
+Name: "{group}\qGo Website"; Filename: "{app}\qGo.url"
 Name: "{userdesktop}\qGo"; Filename: "{app}\qGo.exe"; MinVersion: 4,4; Tasks: desktopicon; WorkingDir: "{app}"
 ;Name: "{userdesktop}\qGo Menu"; Filename: "{app}\qGo.exe"; Parameters: "-menu"; MinVersion: 4,4; Tasks: desktopmenuicon; WorkingDir: "{app}"
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\qGo"; Filename: "{app}\qGo.exe"; MinVersion: 4,4; Tasks: quicklaunchicon; WorkingDir: "{app}"
