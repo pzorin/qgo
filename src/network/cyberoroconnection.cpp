@@ -1493,6 +1493,17 @@ void CyberOroConnection::sendRequestKeepAlive(const GameListing & game)
 	delete[] packet;
 }
 
+void CyberOroConnection::saveIfDoesntSave(GameData * data)
+{
+	GameListing * listing = getDefaultRoom()->getGameListing(data->number);
+	if(!listing)
+	{
+		qDebug("Trying to save game to listing, but no listing");
+		return;
+	}
+	listing->gameData = new GameData(data);
+}
+
 void CyberOroConnection::timerEvent(QTimerEvent * event)
 {
 	if(event->timerId() == matchKeepAliveTimerID ||
@@ -4736,12 +4747,6 @@ void CyberOroConnection::handlePlayerRoomJoin(unsigned char * msg, unsigned int 
 		return;
 	}
 	room_number = p[2] + (p[3] << 8);
-	if(id == our_player_id)
-	{
-		setRoomNumber(room_number);
-		if((boarddispatch = getIfBoardDispatch(room_number)))
-			addObserverListToBoard(boarddispatch);
-	}
 #ifdef RE_DEBUG
 	printf("%s %02x%02x entering room %d\n", aPlayer->name.toLatin1().constData(), p[0], p[1], room_number);
 #endif //RE_DEBUG
@@ -4776,6 +4781,17 @@ void CyberOroConnection::handlePlayerRoomJoin(unsigned char * msg, unsigned int 
 		{
 			game->observers++;
 			game->observer_list.push_back(aPlayer);
+		}
+		if(id == our_player_id)
+		{
+			if(game->gameData)		//only used on finished games where we won't receive info from server
+			{
+				boarddispatch = getBoardDispatch(room_number);
+				boarddispatch->openBoard();	
+			}
+			setRoomNumber(room_number);
+			if((boarddispatch = getIfBoardDispatch(room_number)))
+				addObserverListToBoard(boarddispatch);
 		}
 	}
 	/* We set to 0 here with the idea that they aren't entering
@@ -8178,6 +8194,8 @@ void CyberOroConnection::handleMatchOfferPending(unsigned char * msg, unsigned i
  * on rooms we leave, etc. */
 void CyberOroConnection::setRoomNumber(unsigned short number)
 {
+	if(room_were_in == number)
+		return;
 	if(room_were_in)
 	{
 		BoardDispatch * bd = getIfBoardDispatch(room_were_in);

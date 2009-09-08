@@ -23,6 +23,8 @@
 #ifndef PLAYERGAMELISTING_H
 #define PLAYER_GAMELISTING_H
 
+class GameData;
+
 struct PlayerListing
 {
 	unsigned short id;
@@ -46,9 +48,7 @@ struct PlayerListing
 	QString extInfo;
 	QString email_address;
 
-	/* I should really use MatchRequest structure for this
-	* but I don't want to allocate another object inside of this here,
-	* maybe changes this later once I understand it better.  FIXME */
+	/* I should really use MatchRequest structure somehow for this: FIXME */
 	bool nmatch;
 	TimeSystem nmatch_timeSystem;
 	bool nmatch_white, nmatch_black, nmatch_nigiri;
@@ -57,7 +57,7 @@ struct PlayerListing
 	int nmatch_stonesMin, nmatch_stonesMax;
 	QString nmatch_settings;
 	int nmatch_handicapMin, nmatch_handicapMax;
-	unsigned char specialbyte;		//ORO weirdness personalchat FIXME
+	unsigned char specialbyte;		//ORO weirdness personalchat
 	bool pro;
 	bool dialog_opened;
 	bool game_dialog_opened;
@@ -88,9 +88,6 @@ struct PlayerListing
 	game_dialog_opened(false),
 	friendWatchType(none),
 	notify(false) {};
-	// there's also some setttings as well as match requirements
-	//PlayerListing(const QString* n, const char * i, const char * r, const char * c, unsigned int w, unsigned int l, unsigned o) : name(n), idletime(i), rank(r), country(c), wins(w), losses(l), observing_str() {};
-	//~PlayerListing();
 };
 
 /* We need to alter copy constructor to have and respect a bit field.
@@ -173,6 +170,7 @@ struct GameListing
 	bool isLocked;
 	bool white_first_flag;
 	std::vector <PlayerListing *> observer_list;
+	GameData * gameData;
 	/* Also need byomi time, one color go, running, private, flags, ranked, etc.*/
 	GameListing() : running(0), 
 	moves(0), 
@@ -195,6 +193,7 @@ struct GameListing
 	isRoomOnly(false),
 	isBroadcast(false),
 	isBetting(false),
-	isLocked(false) {};
+	isLocked(false),
+	gameData(NULL) {};
 };
 #endif //PLAYERGAMELISTINGS_H

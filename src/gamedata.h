@@ -64,7 +64,8 @@ class GameData
 			 move_list_received(false),
 			 white_first_flag(false),
 			 our_invitation(false),
-			 opponentdropcount(0) {};
+			 opponentdropcount(0),
+			 record_sgf("") {};
 		GameData(GameData *d)
 		{
 			if (d)
@@ -105,6 +106,7 @@ class GameData
 				opponentdropcount = d->opponentdropcount;
 				game_code = d->game_code;
 				gameMode = d->gameMode;
+				record_sgf = d->record_sgf;
 			}
 		}
 
@@ -162,6 +164,7 @@ class GameData
 		// or take the one off...
 		bool our_invitation;
 		unsigned int opponentdropcount;
+		QString record_sgf;
 };
 
 

@@ -111,6 +111,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual bool supportsBlockList(void) { return true; };
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
 		virtual bool supportsCreateRoom(void) { return true; };
+		virtual void saveIfDoesntSave(GameData * data);
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
 		virtual void timerEvent(QTimerEvent * event);
 	private:

@@ -51,7 +51,10 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	 * whatever loads the game data before passing it to the
 	 * boardwindow creates it.  The boardwindow deletes it.
 	 * there's only one gameData per board */
-	gameData = new GameData();
+	if(l && l->gameData)
+		gameData = new GameData(l->gameData);		//ORO uses this
+	else
+		gameData = new GameData();
 	//maybe we could set number here?  if we have it?
 	
 	/* Not sure we can do this. GameListings have to have a
@@ -280,6 +283,8 @@ void BoardDispatch::openBoard(void)
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 		boardwindow->gameDataChanged();	//necessary at least for cursor
+		if(gameData->record_sgf != QString())	//for ORO
+			boardwindow->getBoardHandler()->slotNavLast();
 	}
 	else
 	{
@@ -356,6 +361,11 @@ void BoardDispatch::recvResult(GameResult * r)
 	}
 	boardwindow->qgoboard->setResult(*r);
 	
+	if(gameData->record_sgf == QString())
+	{
+		boardwindow->saveRecordToGameData();		//for ORO
+		connection->saveIfDoesntSave(gameData);		//for ORO
+	}
 	//testing
 	//connection->sendRematchRequest(gameData->number);
 }
@@ -369,10 +379,16 @@ void BoardDispatch::recvObserver(PlayerListing * p, bool present)
 {
 	if(!boardwindow)
 		return;
-	std::vector<unsigned short>::iterator i = std::find(p->room_list.begin(), p->room_list.end(), (unsigned short)gameData->number);
-	if(present && p->room_list.end() == i)
+	if(!gameData)
 	{
-		p->room_list.push_back(gameData->number);
+		qDebug("received observer but no game data!!");
+		return;
+	}
+	std::vector<unsigned short>::iterator i = std::find(p->room_list.begin(), p->room_list.end(), (unsigned short)gameData->number);
+	if(present)
+	{
+		if(p->room_list.end() == i)
+			p->room_list.push_back(gameData->number);
 		observerListModel->insertListing(p);
 	}
 	else if(i != p->room_list.end())

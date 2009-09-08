@@ -71,6 +71,7 @@ public:
 	QString get_bplayer()			{return gameData->black_name;}
 	ClockDisplay *getClockDisplay()		{return clockDisplay;}
 	void swapColors(bool noswap = false);
+	void saveRecordToGameData(void);
 	
 	bool okayToQuit(void);	
 

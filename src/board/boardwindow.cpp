@@ -149,7 +149,9 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//update();
 	//gridLayout->update();
 
-	mainwindow->addBoardWindow(this);	
+	mainwindow->addBoardWindow(this);
+	if(gameData->record_sgf != QString())
+		loadSGF(0, gameData->record_sgf);
 }
 
 BoardWindow::~BoardWindow()
@@ -476,6 +478,21 @@ void BoardWindow::swapColors(bool noswap)
 	//also network timers in addition to game timers
 }
 
+void BoardWindow::saveRecordToGameData(void)
+{
+	QString sgf = "";
+	SGFParser *p = new SGFParser( tree);
+
+	/* FIXME potentially there's never a reason to not save the record to the gameData or the like
+	 * etc., we'll see how this works out, but we might want to change some of this */
+	if (!p->exportSGFtoClipB(&sgf, tree, gameData))
+	{
+		QMessageBox::warning(this, tr("Export"), tr("Could not duplicate the game"));
+		return ;
+	}
+	gameData->record_sgf = sgf;
+}
+
 /*
  * Loads the SGF string. returns true if the file was sucessfully parsed
  */
@@ -664,23 +681,11 @@ void BoardWindow::slotExportPicClipB()
  */
 void BoardWindow::slotDuplicate()
 {
-	QString sgf = "";
-	QString filename;
-	
-	SGFParser *p = new SGFParser( tree);
-
-	if (!p->exportSGFtoClipB(&sgf, tree, gameData))
-	{
-		QMessageBox::warning(this, tr("Export"), tr("Could not duplicate the game"));
-//		qDebug ("QGoboard:setMove - move %d %d done",i,j);
-		return ;
-	}
+	saveRecordToGameData();
 	GameData * gd = new GameData(gameData);
 	gd->gameMode = modeNormal;
 	gd->fileName = "";
 	BoardWindow *b = new BoardWindow(gd, TRUE, TRUE);
-	
-	b->loadSGF(0,sgf);
 	
 	//doublecheck FIXME
 	/* Note also that this does not duplicate any ui.board->marks
