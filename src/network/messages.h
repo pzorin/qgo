@@ -53,8 +53,8 @@ struct MoveRecord
 	// having accept and refuse undo here is a little weird but its almost a kind
 	// of move... we'll see how other protocols handle this stuff
 	enum Flags { NONE, HANDICAP, PASS, RESIGN, REMOVE, UNREMOVE, UNDO, REQUESTUNDO, REFUSEUNDO, TERRITORY, UNDO_TERRITORY, REMOVE_AREA, UNREMOVE_AREA, DONE_SCORING } flags;
-	MoveRecord() : color(stoneNone), flags(NONE) {};
-	MoveRecord(Flags f) : flags(f) {};
+	MoveRecord() : number(NOMOVENUMBER), color(stoneNone), flags(NONE) {};
+	MoveRecord(Flags f) : number(NOMOVENUMBER), flags(f) {};
 	MoveRecord(unsigned int n, Flags f) : number(n), flags(f) {};
 	MoveRecord(unsigned int n, unsigned int _x, unsigned int _y, StoneColor c) : number(n), x(_x), y(_y), color(c), flags(NONE) {}; 
 };

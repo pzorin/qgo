@@ -138,7 +138,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	
 	tree->setCurrent(last);
 
-	move_number = m->number;		//this is undefined from cyberoro remove stones for instance
+	move_number = m->number;
 	//bool hcp_move = tree->getCurrent()->isHandicapMove();
 	move_counter = tree->getCurrent()->getMoveNumber();
 	if(move_number == NOMOVENUMBER)	//not all services number
