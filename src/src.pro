@@ -200,7 +200,7 @@ game_tree \
 board \
 sgf
 
-languages.path = $${QGO_INSTALL_PATH}/languages/
+languages.path = $${QGO_INSTALL_PATH}/languages
 languages.extra = $(QTDIR)/bin/lrelease src.pro
 languages.files = translations/*.qm
 INSTALLS += languages
