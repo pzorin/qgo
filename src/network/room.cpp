@@ -288,6 +288,7 @@ void Room::slot_showPopup(const QPoint & iPoint)
 			return;
 			
     	QMenu menu(playerView);
+	menu.addAction(tr("Stats"), this, SLOT(slot_popupStats()));
 	QAction * matchAct = new QAction(tr("Match"), 0);
 	if(popup_playerlisting->info.contains("X"))
 		matchAct->setEnabled(false);
@@ -369,6 +370,13 @@ void Room::slot_removeWatch(void)
 void Room::slot_addBlock(void)
 {
 	connection->addBlock(*popup_playerlisting);
+}
+
+void Room::slot_popupStats(void)
+{
+	/* For now, just request stats.  Later, we might open a separate window with a tab for
+	 * game records */
+	connection->sendStatsRequest(*popup_playerlisting);
 }
 
 void Room::slot_popupMatch(void)

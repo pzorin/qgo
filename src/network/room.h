@@ -106,6 +106,7 @@ class Room : public QObject
 		void slot_addWatch(void);
 		void slot_removeWatch(void);
 		void slot_addBlock(void);
+		void slot_popupStats(void);
 		void slot_popupMatch(void);
 		void slot_popupTalk(void);
 		void slot_popupObserveOutside(void);
