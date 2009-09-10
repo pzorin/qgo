@@ -181,6 +181,9 @@
            </property>
            <item row="0" column="0" colspan="2">
             <widget class="QComboBox" name="cb_connect">
+             <property name="toolTip">
+              <string>Select service</string>
+             </property>
              <item>
               <property name="text">
                <string>IGS</string>
@@ -220,6 +223,9 @@
            </item>
            <item row="2" column="0" colspan="2">
             <widget class="QCheckBox" name="setOpenMode">
+             <property name="toolTip">
+              <string>Others can invite you to a match</string>
+             </property>
              <property name="text">
               <string>Open for playing</string>
              </property>
@@ -234,6 +240,9 @@
            </item>
            <item row="4" column="0" colspan="2">
             <widget class="QCheckBox" name="setQuietMode">
+             <property name="toolTip">
+              <string>Don't receive list updates from server</string>
+             </property>
              <property name="text">
               <string>No lists update</string>
              </property>
@@ -241,6 +250,9 @@
            </item>
            <item row="5" column="0">
             <widget class="QToolButton" name="toolSeek">
+             <property name="toolTip">
+              <string>Seek a match</string>
+             </property>
              <property name="text">
               <string>...</string>
              </property>
@@ -325,6 +337,9 @@
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="pb_connect">
+             <property name="toolTip">
+              <string>Connect to service</string>
+             </property>
              <property name="text">
               <string>...</string>
              </property>
@@ -345,6 +360,9 @@
            </item>
            <item row="1" column="0">
             <widget class="QPushButton" name="changeServerPB">
+             <property name="toolTip">
+              <string/>
+             </property>
              <property name="text">
               <string>Change Server</string>
              </property>
@@ -477,6 +495,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QComboBox" name="whoBox1">
+              <property name="toolTip">
+               <string>Only show players within these ranks</string>
+              </property>
               <item>
                <property name="text">
                 <string/>
@@ -621,6 +642,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QComboBox" name="whoBox2">
+              <property name="toolTip">
+               <string>Only show players within these ranks</string>
+              </property>
               <item>
                <property name="text">
                 <string/>
@@ -765,6 +789,9 @@
             </item>
             <item row="1" column="2">
              <widget class="QCheckBox" name="whoOpenCheck">
+              <property name="toolTip">
+               <string>Only show players available for a match</string>
+              </property>
               <property name="text">
                <string>Open</string>
               </property>
@@ -772,6 +799,9 @@
             </item>
             <item row="1" column="3">
              <widget class="QToolButton" name="pbRefreshPlayers">
+              <property name="toolTip">
+               <string>Refresh players list</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -783,6 +813,9 @@
             </item>
             <item row="1" column="4">
              <widget class="QCheckBox" name="friendsCheck">
+              <property name="toolTip">
+               <string>Only show friends</string>
+              </property>
               <property name="text">
                <string>Friends</string>
               </property>
@@ -790,6 +823,9 @@
             </item>
             <item row="1" column="5">
              <widget class="QCheckBox" name="watchesCheck">
+              <property name="toolTip">
+               <string>Only show games played by watched players</string>
+              </property>
               <property name="text">
                <string>Watch</string>
               </property>
@@ -799,6 +835,9 @@
              <widget class="QPushButton" name="editFriendsWatchesPB">
               <property name="enabled">
                <bool>false</bool>
+              </property>
+              <property name="toolTip">
+               <string>Change the friends/watches/blocks lists</string>
               </property>
               <property name="text">
                <string>Edit Friends/Watch</string>
@@ -814,6 +853,9 @@
             </item>
             <item row="1" column="8">
              <widget class="QToolButton" name="pbRefreshGames">
+              <property name="toolTip">
+               <string>Refresh games list</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -903,7 +945,7 @@
           <property name="title">
            <string>New file</string>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <property name="geometry">
             <rect>
              <x>12</x>
