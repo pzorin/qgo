@@ -145,68 +145,68 @@ Voulez vous enregistrer les changements ?</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.cpp" line="187"/>
-        <location filename="../board/boardwindow.cpp" line="389"/>
+        <location filename="../board/boardwindow.cpp" line="390"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="381"/>
+        <location filename="../board/boardwindow.cpp" line="382"/>
         <source>Add 1 min</source>
         <translation>Ajouter 1 minute</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="383"/>
+        <location filename="../board/boardwindow.cpp" line="384"/>
         <source>Add 5 min</source>
         <translation>Ajouter 5 minutes</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="385"/>
+        <location filename="../board/boardwindow.cpp" line="386"/>
         <source>Add 10 min</source>
         <translation>Ajouter 10 minutes</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="387"/>
+        <location filename="../board/boardwindow.cpp" line="388"/>
         <source>Add 60 min</source>
         <translation>Ajouter 60 minutes</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="490"/>
-        <location filename="../board/boardwindow.cpp" line="630"/>
+        <location filename="../board/boardwindow.cpp" line="491"/>
+        <location filename="../board/boardwindow.cpp" line="631"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="630"/>
+        <location filename="../board/boardwindow.cpp" line="631"/>
         <source>Could not export  the game to clipboard</source>
         <translation>Impossible d&apos;exporter la partie vers le presse-papier</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="646"/>
+        <location filename="../board/boardwindow.cpp" line="647"/>
         <source>Export image as</source>
         <translation>Exporter l&apos;image sous</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="490"/>
+        <location filename="../board/boardwindow.cpp" line="491"/>
         <source>Could not duplicate the game</source>
         <translation>Impossible de dupliquer la partie</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="790"/>
+        <location filename="../board/boardwindow.cpp" line="764"/>
         <source>Save File</source>
         <translation>Enregistrer le fichier</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="790"/>
+        <location filename="../board/boardwindow.cpp" line="764"/>
         <source>SGF Files (*.sgf);;All Files (*)</source>
         <translation>Fichiers SGF (*.sgf);;Fichiers (*)</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="809"/>
+        <location filename="../board/boardwindow.cpp" line="783"/>
         <source>Cannot save SGF file.</source>
         <translation>Impossible d&apos;enregistrer le fichier SGF.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="889"/>
+        <location filename="../board/boardwindow.cpp" line="863"/>
         <source>Match Mode</source>
         <translation>Mode partie</translation>
     </message>
@@ -796,7 +796,7 @@ Undo the opponent&apos;s last move.</source>
 Annuler le dernier coup de l&apos;adversaire.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="860"/>
+        <location filename="../board/boardwindow.cpp" line="834"/>
         <location filename="../board/boardwindow.ui" line="5424"/>
         <source>Undo</source>
         <translation>Annuler</translation>
