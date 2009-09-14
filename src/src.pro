@@ -58,6 +58,7 @@ board/board.h \
 board/boardhandler.h \
 board/boardwindow.h \
 board/clockdisplay.h \
+board/gameinfo.h \
 board/gatter.h \
 board/imagehandler.h \
 board/interfacehandler.h \
@@ -114,6 +115,7 @@ SOURCES += displayboard.cpp \
            board/boardhandler.cpp \
            board/boardwindow.cpp \
            board/clockdisplay.cpp \
+           board/gameinfo.cpp \
            board/gatter.cpp \
            board/imagehandler.cpp \
            board/interfacehandler.cpp \
