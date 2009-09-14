@@ -117,7 +117,6 @@ private:
 	int boardSize;		//the true boardsize
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
-//	qGoBoard *qgoboard;
 	class BoardDispatch * dispatch;		//may not be the best place!!!
 
 	GameData *gameData;
@@ -128,7 +127,6 @@ private:
 	QButtonGroup *editButtons;
 	MarkType editMark;
 	ClockDisplay *clockDisplay;
-
 };
 
 #endif

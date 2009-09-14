@@ -31,7 +31,7 @@
 #include "sgf/sgfparser.h"
 #include "../network/boarddispatch.h"
 #include "listviews.h"
-#include "ui_gameinfo.h"
+#include "gameinfo.h"
 #include "mainwindow.h"		//for board window lists
 
 #include <QtGui>
@@ -318,6 +318,7 @@ void BoardWindow::setupUI(void)
 	connect(ui.actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
 	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
 	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
+	connect(ui.actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
 
 	/* Set column widths ?? */
 }
@@ -726,34 +727,7 @@ void BoardWindow::slotViewCoords(bool toggle)
 
 void BoardWindow::slotGameInfo(bool /*toggle*/)
 {
-	QDialog *dlg = new QDialog;
-	Ui::GameinfoDialog ui;
-	ui.setupUi( dlg );
-	ui.whiteName->setText( gameData->white_name );
-	ui.blackName->setText( gameData->black_name );
-	ui.whiteRank->setText( gameData->white_rank );
-	ui.blackRank->setText( gameData->black_rank );
-	ui.komi->setText( QString::number(gameData->komi ));
-	ui.handicap->setText( QString::number(gameData->handicap ));
-	ui.result->setText( gameData->result );
-	ui.gameName->setText( gameData->gameName );
-	ui.date->setText( gameData->date );
-	ui.playedAt->setText( gameData->place );
-	ui.copyright->setText( gameData->copyright );
-	ui.whiteName->setReadOnly( 1 );
-	ui.blackName->setReadOnly( 1 );
-	ui.whiteRank->setReadOnly( 1 );
-	ui.blackRank->setReadOnly( 1 );
-	ui.komi->setReadOnly(1);
-	ui.handicap->setReadOnly(1);
-	ui.result->setReadOnly(1);
-	ui.gameName->setReadOnly(1);
-	ui.date->setReadOnly(1);
-	ui.playedAt->setReadOnly(1);
-	ui.copyright->setReadOnly(1);
-	dlg->show();
-	
-//	statusBar()->message(tr("Ready."));
+	new GameInfo(this);
 }
 
 /*
