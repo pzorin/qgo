@@ -353,8 +353,8 @@ void GamesListModel::removeListing(GameListing * const l)
 			return;
 		}
 	}
+	/* IGS with updates does get here */
 	qDebug("Couldn't find listing to remove for game id %d", l->number);
-	exit(0);
 }
 
 void GamesListModel::clearList(void)
