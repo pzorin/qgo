@@ -422,11 +422,25 @@ void Room::slot_refreshPlayers(void)
 void Room::clearPlayerList(void)
 {
 	playerListModel->clearList();
+	if(connection->playerTrackingByID())
+	{
+		qDebug("Creating player ID Registry");
+		delete playerListingIDRegistry;
+		playerListingIDRegistry = new PlayerListingIDRegistry(playerListModel);
+	}
+	else
+	{
+		qDebug("Creating player Registry");
+		delete playerListingRegistry;
+		playerListingRegistry = new PlayerListingRegistry(playerListModel);
+	}
 }
 
 void Room::clearGamesList(void)
 {
 	gamesListModel->clearList();
+	delete gameListingRegistry;
+	gameListingRegistry = new GameListingRegistry(gamesListModel);
 }
 
 void Room::slot_refreshGames(void)
