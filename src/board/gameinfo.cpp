@@ -59,6 +59,13 @@ GameInfo::GameInfo(BoardWindow * bw) : GameinfoDialog(), boardwindow(bw)
 		connect(ui.blackName, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
 		connect(ui.whiteRank, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
 		connect(ui.blackRank, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.komi, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.handicap, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.result, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.gameName, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.date, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.playedAt, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+		connect(ui.copyright, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
 	}
 	
 	connect(ui.buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotGameInfoButton(QAbstractButton *)));
@@ -77,7 +84,6 @@ void GameInfo::slotGameInfoButton(QAbstractButton * button)
 		boardwindow->getGameData()->black_name = ui.blackName->text();
 		boardwindow->getGameData()->white_rank = ui.whiteRank->text();
 		boardwindow->getGameData()->black_rank = ui.blackRank->text();
-		boardwindow->getGameData()->komi = 
 		sscanf(ui.komi->text().toLatin1().constData(), "%f", &(boardwindow->getGameData()->komi));
 		sscanf(ui.handicap->text().toLatin1().constData(), "%d", &(boardwindow->getGameData()->handicap));
 		boardwindow->getGameData()->result = ui.result->text();
