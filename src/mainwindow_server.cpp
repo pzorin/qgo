@@ -159,7 +159,7 @@ void MainWindow::setupConnection(void)
 	else if(rs_flags & RS_SHORTROOMLIST)
 	{
 		ui.RoomList->show();
-		ui.roomsLabel->hide();
+		ui.roomsLabel->show();
 	}
 	else if(rs_flags & RS_LONGROOMLIST)
 	{
