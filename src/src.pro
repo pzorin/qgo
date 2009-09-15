@@ -192,7 +192,7 @@ linux-* {
     INSTALLS += desktopfile
     filetype.path = /usr/share/mimelnk/text
     filetype.files = sgf.desktop
-    INSTALS += filetype
+    INSTALLS += filetype
 }
 INCLUDEPATH += network \
 audio \
