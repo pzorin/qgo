@@ -37,22 +37,22 @@ Değişiklikleri kaydetmek istermisiniz?</translation>
     <message>
         <location filename="../board/boardwindow.cpp" line="382"/>
         <source>Add 1 min</source>
-        <translation type="unfinished"></translation>
+        <translation>1 dak. ekle</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.cpp" line="384"/>
         <source>Add 5 min</source>
-        <translation type="unfinished"></translation>
+        <translation>5 dak. ekle</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.cpp" line="386"/>
         <source>Add 10 min</source>
-        <translation type="unfinished"></translation>
+        <translation>10 dak. ekle</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.cpp" line="388"/>
         <source>Add 60 min</source>
-        <translation type="unfinished"></translation>
+        <translation>60 dak. ekle</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.cpp" line="491"/>
@@ -637,12 +637,12 @@ Tahtayı tazeler. Tahtada hiç ya da yeni taş göremiyorsanız kullanın.</tran
     <message>
         <location filename="../board/boardwindow.ui" line="6439"/>
         <source>InsertStone</source>
-        <translation type="unfinished"></translation>
+        <translation>TaşEkle</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="6442"/>
         <source>Insert stone to position (no variation)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozisyona taş ekle (dallanma yapmaz)</translation>
     </message>
     <message>
         <location filename="../board/boardwindow.ui" line="5416"/>
@@ -1520,12 +1520,12 @@ Varsayılanı kullanıyorum</translation>
     <message>
         <location filename="../network/cyberoroconnection.cpp" line="6075"/>
         <source>Rematch declined</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni oyun talebi reddedildi</translation>
     </message>
     <message>
         <location filename="../network/cyberoroconnection.cpp" line="6075"/>
         <source>%1 has declined rematch</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 yeni oyun talebinizi reddetti</translation>
     </message>
     <message>
         <location filename="../network/cyberoroconnection.cpp" line="8131"/>
@@ -1535,7 +1535,7 @@ Varsayılanı kullanıyorum</translation>
     <message>
         <location filename="../network/cyberoroconnection.cpp" line="8131"/>
         <source>%1 has declined invitation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 davetinizi reddetti</translation>
     </message>
 </context>
 <context>
@@ -1560,12 +1560,12 @@ Varsayılanı kullanıyorum</translation>
     <message>
         <location filename="../network/friendslistdialog.cpp" line="136"/>
         <source>Add to Watches</source>
-        <translation type="unfinished"></translation>
+        <translation>İzleme listesine ekle</translation>
     </message>
     <message>
         <location filename="../network/friendslistdialog.cpp" line="159"/>
         <source>Remove from Watches</source>
-        <translation type="unfinished"></translation>
+        <translation>İzleme listesinden çıkar</translation>
     </message>
     <message>
         <source>Add to Fans</source>
@@ -1598,7 +1598,7 @@ Varsayılanı kullanıyorum</translation>
     <message>
         <location filename="../network/friendslistdialog.ui" line="14"/>
         <source>Friends, Watched, and Blocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkadaşlar, İzlenenler ve Engelliler</translation>
     </message>
     <message>
         <location filename="../network/friendslistdialog.ui" line="29"/>
@@ -1608,7 +1608,7 @@ Varsayılanı kullanıyorum</translation>
     <message>
         <location filename="../network/friendslistdialog.ui" line="39"/>
         <source>Watched</source>
-        <translation type="unfinished"></translation>
+        <translation>İzlenenler</translation>
     </message>
     <message>
         <source>Fans</source>
@@ -2697,47 +2697,47 @@ Sayma kipindeyken sol tık grubu ölü olarak, sağ tık seki olarak işaretler.
     <message>
         <location filename="../mainwindow.ui" line="1742"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>İtalyanca</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1747"/>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Danca</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1752"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hollandaca</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1757"/>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Çekçe</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1762"/>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Çince</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1767"/>
         <source>Portugese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portekizce</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1772"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Lehçe</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1777"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Rusça</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1782"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Türkçe</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1803"/>
@@ -2815,7 +2815,7 @@ Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</t
     <message>
         <location filename="../mainwindow.ui" line="19"/>
         <source>qGo</source>
-        <translation type="unfinished"></translation>
+        <translation>qGo</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="185"/>
@@ -2871,7 +2871,7 @@ Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</t
     <message>
         <location filename="../mainwindow.ui" line="830"/>
         <source>Watch</source>
-        <translation type="unfinished"></translation>
+        <translation>İzle</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="840"/>
@@ -2881,7 +2881,7 @@ Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</t
     <message>
         <location filename="../mainwindow.ui" line="843"/>
         <source>Edit Friends/Watch</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkadaş/İzleme listesi</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="857"/>
@@ -3382,13 +3382,14 @@ avans:</translation>
     <message>
         <location filename="../mainwindow_settings.cpp" line="69"/>
         <source>Change Language?</source>
-        <translation type="unfinished"></translation>
+        <translation>Dil değişsin mi?</translation>
     </message>
     <message>
         <location filename="../mainwindow_settings.cpp" line="70"/>
         <source>Changing the language requires restarting qGo.  Go ahead?
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Dili değiştirmek qGo&apos;nun tekrar başlatılmasını gerektirir.  Devam edeyim mi?
+</translation>
     </message>
     <message>
         <location filename="../mainwindow_settings.cpp" line="372"/>
@@ -3450,12 +3451,12 @@ avans:</translation>
     <message>
         <location filename="../mainwindow.ui" line="1966"/>
         <source>Territory Cross</source>
-        <translation type="unfinished">Bölge İmi</translation>
+        <translation>Bölge İmi</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1976"/>
         <source>Territory Stone</source>
-        <translation type="unfinished">Bölge Taşı</translation>
+        <translation>Bölge Taşı</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1987"/>
@@ -3465,7 +3466,7 @@ avans:</translation>
     <message>
         <location filename="../mainwindow.ui" line="1994"/>
         <source>Number Current Move</source>
-        <translation type="unfinished">Son Hamleyi Numaralandır</translation>
+        <translation>Son Hamleyi Numaralandır</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2789"/>
@@ -3480,7 +3481,7 @@ avans:</translation>
     <message>
         <location filename="../mainwindow_server.cpp" line="330"/>
         <source>Not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Henüz çalışmıyor</translation>
     </message>
     <message>
         <location filename="../mainwindow_server.cpp" line="330"/>
@@ -3527,7 +3528,7 @@ avans:</translation>
     <message>
         <location filename="../network/matchinvitedialog.cpp" line="42"/>
         <source>Refuse Invites from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1&apos;den/dan gelen davetleri reddet</translation>
     </message>
     <message>
         <location filename="../network/matchinvitedialog.cpp" line="64"/>
@@ -3545,7 +3546,7 @@ avans:</translation>
     <message>
         <location filename="../network/networkconnection.cpp" line="448"/>
         <source>%1 has signed on</source>
-        <translation type="unfinished">%1 oturum açtı</translation>
+        <translation>%1 oturum açtı</translation>
     </message>
     <message>
         <location filename="../network/networkconnection.cpp" line="488"/>
@@ -3609,17 +3610,17 @@ avans:</translation>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="41"/>
         <source>I&apos;ll create multi room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çoklu oda açacağım.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="42"/>
         <source>Enter for pair baduk</source>
-        <translation type="unfinished">Eşli go için girin</translation>
+        <translation>Eşli go için girin.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="43"/>
         <source>Request me for regular game</source>
-        <translation type="unfinished">Normal oyun için bana teklifte bulunun</translation>
+        <translation>Bana normal oyun için teklifte bulunabilirsin.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="44"/>
@@ -3709,22 +3710,22 @@ avans:</translation>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="64"/>
         <source>Swearing will not be tolerated!</source>
-        <translation type="unfinished">Küfür edene müsamaha gösterilmeyecektir!</translation>
+        <translation>Küfür edene müsamaha gösterilmeyecektir!</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="65"/>
         <source>No flooding please!</source>
-        <translation type="unfinished">Flooding yapmayın lütfen!</translation>
+        <translation>Flooding yapmayın lütfen!</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="66"/>
         <source>Don&apos;t be a notorious escaper!</source>
-        <translation type="unfinished">Seni gidi kaçak!</translation>
+        <translation>Seni gidi kaçak!</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="68"/>
         <source>Please teach me a lot</source>
-        <translation type="unfinished">Lütfen bana çok</translation>
+        <translation>Lütfen bana çok şey öğret.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="69"/>
@@ -3734,7 +3735,7 @@ avans:</translation>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="70"/>
         <source>Thanks for the opportunity</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu fırsat için teşekkür ederim.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="71"/>
@@ -3824,22 +3825,22 @@ avans:</translation>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="94"/>
         <source>Nice to meet you everyone</source>
-        <translation type="unfinished"></translation>
+        <translation>Hepinizle tanıştığıma memnun oldum.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="95"/>
         <source>How are you everyone?</source>
-        <translation type="unfinished"></translation>
+        <translation>Herkes nasıl?</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="96"/>
         <source>Anyone want a quick game?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hızlı bir oyun isteyen var mı?</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="97"/>
         <source>I&apos;m looking for a friendly match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkadaşça bir oyun arıyorum.</translation>
     </message>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="98"/>
@@ -3854,7 +3855,7 @@ avans:</translation>
     <message>
         <location filename="../network/orosetphrasechat.cpp" line="100"/>
         <source>I don&apos;t mind any sorts of games with anyone.  Just request me.</source>
-        <translation type="unfinished"></translation>
+        <translation>Herkesle her türlü oyuna açığım.  İstekte bulunun yeter.</translation>
     </message>
 </context>
 <context>
@@ -4001,7 +4002,7 @@ avans:</translation>
         <location filename="../game_interfaces/resultdialog.cpp" line="41"/>
         <location filename="../game_interfaces/resultdialog.cpp" line="84"/>
         <source> requests rematch</source>
-        <translation type="unfinished">tekrar oynamak istiyor </translation>
+        <translation>tekrar oynamak istiyor </translation>
     </message>
     <message>
         <location filename="../game_interfaces/resultdialog.cpp" line="43"/>
@@ -4012,7 +4013,7 @@ avans:</translation>
     <message>
         <location filename="../game_interfaces/resultdialog.cpp" line="53"/>
         <source>&amp;Rematch?</source>
-        <translation type="unfinished">&amp;Tekrar? </translation>
+        <translation>&amp;Tekrar? </translation>
     </message>
     <message>
         <location filename="../game_interfaces/resultdialog.cpp" line="59"/>
@@ -4055,12 +4056,12 @@ avans:</translation>
     <message>
         <location filename="../network/room.cpp" line="308"/>
         <source>Remove from Watches</source>
-        <translation type="unfinished"></translation>
+        <translation>İzlenenlerden çıkar</translation>
     </message>
     <message>
         <location filename="../network/room.cpp" line="310"/>
         <source>Add to Watches</source>
-        <translation type="unfinished"></translation>
+        <translation>İzlenenlere ekle</translation>
     </message>
     <message>
         <source>Remove from Fans</source>
@@ -4178,12 +4179,12 @@ avans:</translation>
         <location filename="../network/tygemconnection.cpp" line="284"/>
         <location filename="../network/tygemconnection.cpp" line="2050"/>
         <source>3 Boards Open</source>
-        <translation type="unfinished">3 Tahta Açık</translation>
+        <translation>3 Tahta Açık</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="284"/>
         <source>You must close a board before you can open another one</source>
-        <translation type="unfinished">Yeni bir tahta açmadan önce açıklardan birini kapatmalısınız</translation>
+        <translation>Yeni bir tahta açmadan önce açık olanlardan birini kapatmalısınız</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="672"/>
@@ -4198,32 +4199,32 @@ avans:</translation>
     <message>
         <location filename="../network/tygemconnection.cpp" line="2050"/>
         <source>You must close a board before you can start a game</source>
-        <translation type="unfinished">Yeni oyuna başlamadan önce açık olanı kapatmalısınız</translation>
+        <translation>Yeni oyuna başlamadan önce açık bir tahtayı kapatmalısınız</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="2053"/>
         <location filename="../network/tygemconnection.cpp" line="7903"/>
         <location filename="../network/tygemconnection.cpp" line="7910"/>
         <source>Not open</source>
-        <translation type="unfinished"></translation>
+        <translation>Açık değil</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="2053"/>
         <location filename="../network/tygemconnection.cpp" line="7894"/>
         <location filename="../network/tygemconnection.cpp" line="7903"/>
         <source>%1 is not accepting invitations</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 oyun davetlerini kabul etmiyor.</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="5073"/>
         <source>Resume match?</source>
-        <translation type="unfinished">Oyuna devam?</translation>
+        <translation>Oyuna devam?</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="5074"/>
         <source>Resume match in progress with %1?
 </source>
-        <translation type="unfinished">%1 ile olan oyununuza devam etmek istermisiniz?
+        <translation>%1 ile olan oyununuza devam etmek istermisiniz?
 </translation>
     </message>
     <message>
@@ -4235,22 +4236,23 @@ avans:</translation>
     <message>
         <location filename="../network/tygemconnection.cpp" line="7881"/>
         <source>%1 has declined invitation</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 oyun davetinizi reddetti</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="7894"/>
         <source>In game?</source>
-        <translation type="unfinished">Oyunda?</translation>
+        <translatorcomment>not obvious what is this for?</translatorcomment>
+        <translation>Oyunda</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="7910"/>
         <source>%1 has the maximum boards (3) open</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 açık olacbilecek azami (3) tahtayı açık tutuyor</translation>
     </message>
     <message>
         <location filename="../network/tygemconnection.cpp" line="7918"/>
         <source>%1 has declined all invitations</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tüm davetleri reddetti</translation>
     </message>
 </context>
 <context>
@@ -4276,12 +4278,12 @@ avans:</translation>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="40"/>
         <source>Undo the last move?</source>
-        <translation type="unfinished">Son hamleyi geri al</translation>
+        <translation>Son hamle geri alınsın mı?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="43"/>
         <source>Undo to what move?</source>
-        <translation type="unfinished">Hangi hamleye kadar geri alınsın?</translation>
+        <translation>Hangi hamleye kadar geri alınsın?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="52"/>
@@ -4296,7 +4298,7 @@ avans:</translation>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="59"/>
         <source>&amp;Request</source>
-        <translation type="unfinished"></translation>
+        <translation>İ&amp;ste</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="62"/>
@@ -4306,12 +4308,12 @@ avans:</translation>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="80"/>
         <source>Undo requested</source>
-        <translation type="unfinished">Hamle geri almak isteniyor</translation>
+        <translation>Hamle geri alınmak isteniyor</translation>
     </message>
     <message>
         <location filename="../game_interfaces/undoprompt.cpp" line="82"/>
         <source>Request undo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Geri alma isteğinde bulun?</translation>
     </message>
 </context>
 <context>
@@ -4379,57 +4381,59 @@ avans:</translation>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="195"/>
         <source>Request Draw?</source>
-        <translation type="unfinished">Yenişmezlik teklif et?</translation>
+        <translation>Yenişmezlik teklif et?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="196"/>
         <source>Ask %1 to end game in draw?
 </source>
-        <translation type="unfinished">%1&apos;a/e oyunu berabere bitirelim mi diye sor.
+        <translation>%1&apos;a/e oyunu berabere bitirelim mi diye sor.
 </translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="210"/>
         <source>Request Count?</source>
-        <translation type="unfinished">Sayıma geçmeyi teklif et?</translation>
+        <translation>Sayıma geçmeyi teklif et?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="211"/>
         <source>Ask %1 to end game?
 </source>
-        <translation type="unfinished">%1&apos;a/e oyunu bitirmeyi teklif et</translation>
+        <translation>%1&apos;a/e oyunu bitirmeyi teklif et,
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="234"/>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="256"/>
         <source>Adjourn?</source>
-        <translation type="unfinished">Ara ver?</translation>
+        <translation>Ara ver?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="235"/>
         <source>Ask %1 to adjourn?
 </source>
-        <translation type="unfinished">%1&apos;a/e ara verelim mi diye sor</translation>
+        <translation>%1&apos;a/e ara verelim mi diye sor.
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="251"/>
         <source>Adjourn Declined</source>
-        <translation type="unfinished">Ara Verme İsteği Reddedildi</translation>
+        <translation>Ara Verme İsteği Reddedildi</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="251"/>
         <source>%1 has declined to adjourn the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ara verme isteğinizi reddetti.</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="305"/>
         <source>%1 has declined to count and end the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 sayma ve oyunu bitirme isteğinizi reddetti.</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="310"/>
         <source>Return to game?</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyuna devam?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="311"/>
@@ -4437,22 +4441,25 @@ avans:</translation>
 
 Do you accept ? 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>%1 oyun kipine dönmeyi talebediyor
+
+Kabul ediyor musunuz?
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="332"/>
         <source>Match mode declined</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyun kipi reddedildi</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="332"/>
         <source>%1 has declined to return to the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 oyun kipine dönmeyi reddetti.</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="359"/>
         <source>%1 has declined to draw the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 oyunu berabere bitirmeyi reddetti.</translation>
     </message>
     <message>
         <source> has declined to adjourn the game.</source>
@@ -4464,7 +4471,7 @@ Do you accept ?
 
 Do you accept ? 
 </source>
-        <translation type="unfinished">%1 oyuna ara vermek istiyor
+        <translation>%1 oyuna ara vermek istiyor
 
 Kabul ediyor musunuz?
 </translation>
@@ -4473,7 +4480,7 @@ Kabul ediyor musunuz?
         <location filename="../game_interfaces/qgoboard_match.cpp" line="283"/>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="337"/>
         <source>End game?</source>
-        <translation type="unfinished">Oyunu bitir?</translation>
+        <translation>Oyunu bitir?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="284"/>
@@ -4481,7 +4488,7 @@ Kabul ediyor musunuz?
 
 Do you accept ? 
 </source>
-        <translation type="unfinished">%1 sayıma geçmek istiyor
+        <translation>%1 sayıma geçmek istiyor
 
 Kabul ediyor musunuz?
 </translation>
@@ -4489,7 +4496,7 @@ Kabul ediyor musunuz?
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="305"/>
         <source>Count Declined</source>
-        <translation type="unfinished">Sayım İsteği Reddedildi</translation>
+        <translation>Sayım isteği reddedildi</translation>
     </message>
     <message>
         <source> has declined to count and end the game.</source>
@@ -4501,7 +4508,7 @@ Kabul ediyor musunuz?
 
 Do you accept ? 
 </source>
-        <translation type="unfinished">%1 yenişmezlik teklif etti
+        <translation>%1 yenişmezlik teklif etti
 
 Kabul ediyor musunuz?
 </translation>
@@ -4509,7 +4516,7 @@ Kabul ediyor musunuz?
     <message>
         <location filename="../game_interfaces/qgoboard_match.cpp" line="359"/>
         <source>Draw Declined</source>
-        <translation type="unfinished">Yenişmezlik İsteği Reddedildi</translation>
+        <translation>Yenişmezlik isteği reddedildi</translation>
     </message>
     <message>
         <source> has declined to draw the game.</source>
@@ -4521,13 +4528,13 @@ Kabul ediyor musunuz?
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="80"/>
         <source>Unmark All?</source>
-        <translation type="unfinished">Hepsinin işaretlerini temizle?</translation>
+        <translation>Hepsinin işaretlerini temizle?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="81"/>
         <source>Unmark all your dead stones?
 </source>
-        <translation type="unfinished">Ölü olarak işaretli tüm taşlarınızın işareti kaldırılsın mı?
+        <translation>Ölü olarak işaretli tüm taşlarınızın işareti kaldırılsın mı?
 </translation>
     </message>
     <message>
@@ -4549,41 +4556,42 @@ Kabul ediyor musunuz?
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="477"/>
         <source>Return to game?</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyuna devam?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="478"/>
         <source>Ask opponent to return to game?
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Rakibe oyuna dönüp bitirmeyi teklif eder.
+</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="532"/>
         <source>Resign?</source>
-        <translation type="unfinished">Pes?</translation>
+        <translation>Pes?</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="533"/>
         <source>Resign game with %1
 </source>
-        <translation type="unfinished">%1 ile olan oyunda pes et
+        <translation>%1 ile olan oyunda pes et
 </translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="559"/>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="563"/>
         <source>Game Adjourned</source>
-        <translation type="unfinished">Oyuna Ara Verildi</translation>
+        <translation>Oyuna Ara Verildi</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="559"/>
         <source>%1 vs. %2 has been adjourned.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 oynuna ara verildi.</translation>
     </message>
     <message>
         <location filename="../game_interfaces/qgoboard_network.cpp" line="563"/>
         <source>Game with %1 has been adjourned.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ile olan oyna ara verildi.</translation>
     </message>
     <message>
         <source> vs. </source>
