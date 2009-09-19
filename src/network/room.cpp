@@ -864,6 +864,7 @@ void GameListingRegistry::initEntry(GameListing * l)
 void GameListingRegistry::onErase(GameListing * l)
 {
 	gamesListModel->removeListing(l);
+	delete l->gameData;		//used by ORO
 	delete l;
 }
 
