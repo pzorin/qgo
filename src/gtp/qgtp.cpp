@@ -178,7 +178,11 @@ void QGtp::slot_readFromStdout()
 		answer.append(s); 
 	} while (!s.isEmpty());
 		
-
+	if(answer == "")
+	{
+			responseReceived = FALSE;
+			return;
+	}
 	answer=answer.trimmed();
 	if (answer.length() != 0)
 		_response = answer;
