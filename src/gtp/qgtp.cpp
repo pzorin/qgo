@@ -285,6 +285,7 @@ QGtp::waitResponse()
 	}
 	else
 	{
+		fflush(outFile);
 		return OK;
 	}
 }
