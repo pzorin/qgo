@@ -1,4 +1,4 @@
-***************************************************************************
+/***************************************************************************
 qgtp.cpp  -  description
 -------------------
 begin                : Thu Nov 29 2001
@@ -190,7 +190,7 @@ void QGtp::slot_readFromStdout()
 		_response = answer;
 
 	buff = _response[0];
-	qDebug("*%02x*", buff.toLatin1().constData());
+	qDebug("*%02x*", buff.toLatin1().constData()[0]);
 
 	// do we have any answer after the command number ?
 	pos = _response.indexOf(" ");
