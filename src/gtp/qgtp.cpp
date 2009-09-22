@@ -1,4 +1,4 @@
-/***************************************************************************
+***************************************************************************
 qgtp.cpp  -  description
 -------------------
 begin                : Thu Nov 29 2001
@@ -183,11 +183,14 @@ void QGtp::slot_readFromStdout()
 			responseReceived = FALSE;
 			return;
 	}
+	else
+	
 	answer=answer.trimmed();
 	if (answer.length() != 0)
 		_response = answer;
 
 	buff = _response[0];
+	qDebug("*%02x*", buff.toLatin1().constData());
 
 	// do we have any answer after the command number ?
 	pos = _response.indexOf(" ");
