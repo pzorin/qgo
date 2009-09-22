@@ -178,19 +178,17 @@ void QGtp::slot_readFromStdout()
 		answer.append(s); 
 	} while (!s.isEmpty());
 		
-	if(answer == "")
-	{
-			responseReceived = FALSE;
-			return;
-	}
-	else
-	
 	answer=answer.trimmed();
 	if (answer.length() != 0)
 		_response = answer;
 
 	buff = _response[0];
 	qDebug("*%02x*", buff.toLatin1().constData()[0]);
+	if(buff != "=" && buff != "?")
+	{
+		responseReceived = FALSE;
+		return;
+	}
 
 	// do we have any answer after the command number ?
 	pos = _response.indexOf(" ");
@@ -285,7 +283,6 @@ QGtp::waitResponse()
 	}
 	else
 	{
-		fflush(outFile);
 		return OK;
 	}
 }
