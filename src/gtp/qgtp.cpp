@@ -181,9 +181,11 @@ void QGtp::slot_readFromStdout()
 	answer=answer.trimmed();
 	if (answer.length() != 0)
 		_response = answer;
+	else
+		qDebug("0");
 
 	buff = _response[0];
-	qDebug("*%02x*", buff.toLatin1().constData()[0]);
+	qDebug("*%s*", _response.toLatin1().constData()[0]);
 	if(buff != "=" && buff != "?")
 	{
 		responseReceived = FALSE;
