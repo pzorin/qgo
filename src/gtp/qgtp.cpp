@@ -36,6 +36,7 @@ QGtp::QGtp()
 	/*openGtpSession(filename);*/
 	programProcess = NULL; // This to permit proper ending
 	responseReceived = FALSE;
+	answer = "";
 }
 
 QGtp::~QGtp()
@@ -168,8 +169,6 @@ void QGtp::slot_readFromStdout()
 {
 	int number;
 	int pos;
-	responseReceived = TRUE;
-	QString answer="";
 
 	QString s;
 	do 
@@ -177,12 +176,14 @@ void QGtp::slot_readFromStdout()
 		s = programProcess->readAllStandardOutput();
 		answer.append(s); 
 	} while (!s.isEmpty());
+	if(answer[answer.length() - 1] != '\n')
+		return;
+	responseReceived = TRUE;
 		
 	answer=answer.trimmed();
 	if (answer.length() != 0)
 		_response = answer;
-	else
-		qDebug("0");
+	answer = "";
 
 	buff = _response[0];
 	qDebug("*%s*", _response.toLatin1().constData());

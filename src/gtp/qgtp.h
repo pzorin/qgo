@@ -197,7 +197,7 @@ public:
 	char *_outFile;
 	char *outFile;
 	FILE *_inFile;
-	QString buff, _response;
+	QString buff, _response, answer;
 
 	int waitResponse();
 //	int waitResponseOld();
