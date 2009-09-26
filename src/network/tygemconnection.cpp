@@ -151,10 +151,10 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	connectionType = connType;
 	if(connType == TypeTYGEM)
 	{
-		serverCodec = QTextCodec::codecForName("eucKR");
+		serverCodec = QTextCodec::codecForName(getCodecString());
 		if(!serverCodec)
 		{
-			new CodecWarnDialog("eucKR");
+			new CodecWarnDialog(getCodecString());
 			serverCodec = QTextCodec::codecForLocale();
 		}
 		if(!getServerListStorage().restoreServerList(TypeTYGEM, serverList))
@@ -352,7 +352,7 @@ void TygemConnection::sendResume(unsigned short game_number)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending resume");
 	delete[] packet;
-	//match_negotiation_state FIXME
+	match_negotiation_state->sendAdjournResume();
 }
 
 void TygemConnection::closeTalk(PlayerListing & opponent)
@@ -405,6 +405,11 @@ unsigned long TygemConnection::getGameDialogFlags(void)
 		  | GDF_HANDICAP1
 	          | GDF_NIGIRI_EVEN /*| GDF_ONLY_DISPUTE_TIME*/
 		  | GDF_BY_CAN_MAIN_MIN);
+}
+
+const char * TygemConnection::getCodecString(void)
+{
+	return "eucKR";
 }
 
 int TygemConnection::gd_verifyBoardSize(int v)
@@ -2156,7 +2161,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 		packet[62] = room_number & 0x00ff;
 		packet[63] = (room_number >> 8);
 		/* No no, they're probably just inconsistent with their ntohs calls... */
-		match_negotiation_state->createdRoom();
+		match_negotiation_state->createdRoom(room_number);
 	}
 	for(i = 64; i < 68; i++)
 		packet[i] = 0x00;
@@ -2729,6 +2734,7 @@ void TygemConnection::sendMove(unsigned int game_id, MoveRecord * move)
 			sprintf(move_str, "SUR %d %d %d \n", 0, move_message_number, player_number); 
 			break;
 		case MoveRecord::DONE_SCORING:
+		case MoveRecord::REMOVE_AREA:		//very awkward, this is really return to match mode, but don't want to trigger done_scoring endgame msg below
 			/* Looks like this is a little different at the end... 
 			 * doesn't seem to be a player number*/
 			sprintf(move_str, "REM %d %d -1 -1 %d %d \n", 0, move_message_number, 0, 1 );
@@ -2977,7 +2983,12 @@ void TygemConnection::sendEndgameMsg(const GameData * game, enum EGVersion versi
 			packet[37] = 0xc5;
 			break;
 		case reject_count:
+		{
+			MoveRecord aMove;
+			aMove.flags = MoveRecord::REMOVE_AREA;	//really return to match mode
+			sendMove(game->number, &aMove);
 			packet[37] = 0xc6;
+		}
 			break;
 		case accept_count:
 			packet[36] = 0x01;
@@ -4199,6 +4210,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			//seems to happen after counts... but I don't get
 			//who sends it... we get it if we request the count
 			//from them and they agree FIXME
+			//game number two bytes for colors sender something, also seen CSP nearby
 			printf("0x0674: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
@@ -5086,6 +5098,12 @@ void TygemConnection::promptResumeMatch(void)
 		sendObserversRequest(game_number);
 		sendResume(game_number);
 	}
+	else
+	{
+		//we have to do something else here, FIXME either, nothing, no choice,
+		//or we need to change the match negotiation state or send a resign or... nothing is
+		//probably best.... i.e., no "Yes" but informational
+	}
 }
 
 void TygemConnection::handleServerAnnouncement(unsigned char * msg, unsigned int size)
@@ -5789,6 +5807,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 			}
 			else
 			{
+				qDebug("Other match error");
 				GameData * gameData = boarddispatch->getGameData();
 				//FIXME nick or username? probably nick but is that ascii or normal?
 				if(aPlayer->name == (gameData->black_name == getUsername() ? gameData->white_name : gameData->black_name))
@@ -5905,7 +5924,10 @@ void TygemConnection::handleGameResult2(unsigned char * msg, unsigned int size)
 		aGameResult.loser_name = gameData->white_name;
 	}
 	boarddispatch->recvResult(&aGameResult);
-	sendResult(gameData, &aGameResult);		
+	sendResult(gameData, &aGameResult);
+
+	if(match_negotiation_state->isOurGame(gameData->number))	//redundant with 0672?
+		match_negotiation_state->reset();	
 }
 
 //0672
@@ -6125,6 +6147,8 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 		aGameResult.winner_color = stoneWhite;
 	}
 	boarddispatch->recvResult(&aGameResult);
+	if(match_negotiation_state->isOurGame(game_number))
+		match_negotiation_state->reset();
 }
 
 //0x0683:	//clock stop? //enter score?
@@ -6784,7 +6808,7 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	//SKI 0 player_number		//skip? pass?
 	
 	//BAC 0 246 1 	//part of review
-	//CSP 0 233 0
+	//CSP 0 233 0	//possibly something to do with sscoring
 	//CST 0 234 
 	//FOR 0 186 1
 	
@@ -7244,8 +7268,8 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	if(match_negotiation_state->isOurGame(game_number) &&
 		!match_negotiation_state->startMatchAcceptable())
 	{
-		qDebug("received match start at strange time");
-		return;
+		qDebug("received match start at strange time");	//we get here when we create room FIXME why, I set MSCREATEDROOM, how is it not that
+		//return;
 	}
 	aGameData = boarddispatch->getGameData();
 	
@@ -7443,7 +7467,21 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	strncpy((char *)name, (char *)p, 11);
 	encoded_nameB2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 10;
-	if(match_negotiation_state->isOurGame(game_number))
+	if(match_negotiation_state->sentAdjournResume())
+	{
+		if(encoded_nameB2 != match_negotiation_state->getOpponent())
+		{
+			qDebug("rematch start by unknown player");		//I highly doubt encoded_nameB2 works if we originally created the game
+			if(encoded_nameA2 == match_negotiation_state->getOpponent())
+				qDebug("Rematch is a2");			//FIXME, yes, we get here if we created the game originally (offered it, etc. )
+										//probably okay below because we normally only get 0672 if we didn't create the game
+										//rejoin on disconnect is exception
+			//return;
+		}
+		opponent = room->getPlayerListing(encoded_nameB2);
+		match_negotiation_state->setPlayer(opponent);
+	}
+	else if(match_negotiation_state->isOurGame(game_number))
 	{
 		opponent = room->getPlayerListing(encoded_nameB2);
 		if(!match_negotiation_state->verifyPlayer(opponent))
@@ -7454,7 +7492,8 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		if(!match_negotiation_state->verifyGameData(*aGameData))
 		{
 			qDebug("opponent attempted starting game with different match settings then negotiated upon");
-			return;
+			//happens FIXME and its not like we can send an error
+			//return;
 		}
 	}
 	//p[1] is color byte
@@ -7513,6 +7552,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 			aGameData->undoAllowed = true;
 		boarddispatch->startGame();	//starts timers
 		boarddispatch->swapColors(true);
+		match_negotiation_state->startMatch();
 	}
 	/* Actually, first move message number appears to be 2, maybe 1 is for handicap?
 	 * this needs to be right for when we play black!! */
@@ -7666,13 +7706,14 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		}
 		if(!match_negotiation_state->verifyMatchRequest(*tempmr))
 		{
-			qDebug("opponent accepted with strange match sttings");
-			return;
+			qDebug("opponent accepted with strange match sttings");	//we get here
+			//return;
 		}
 		//FIXME, maybe should be mr here, but tempmr from filled out
 		//above is probably better
 		//FIXME there's an issue here
 		//when we negotiate an offer... not clear yet
+		match_negotiation_state->acceptMatchTerms(tempmr);	//FIXME awkward, even though they're accepting? but is necessary here, just lousy name
 		sendStartGame(*tempmr);
 	}
 	else if(version == decline)

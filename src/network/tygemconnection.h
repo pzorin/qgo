@@ -124,6 +124,7 @@ class TygemConnection : public NetworkConnection
 		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
 		virtual bool supportsCreateRoom(void) { return true; };
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
+		virtual const char * getCodecString(void);
 		virtual void timerEvent(QTimerEvent * event);
 	protected:
 		virtual int requestServerInfo(void);
