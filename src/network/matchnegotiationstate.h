@@ -34,6 +34,8 @@ struct MatchNegotiationState
 	void setGameId(unsigned short id) { game_number = id; };
 	void setCountingVerification(unsigned short v) { counting_verification = v; };
 	unsigned short getCountingVerification(void) { return counting_verification; };
+	QString & getOpponent(void) { return opponent; };
+	void setPlayer(PlayerListing * p) { player = p; };
 
 	bool newMatchAllowed(void);
 	bool canEnterRematchAdjourned(void);
@@ -57,6 +59,7 @@ struct MatchNegotiationState
 	bool doneCounting(void);
 	bool sentRematch(void);
 	bool sentRematchAccept(void);
+	bool sentAdjournResume(void);
 	void setupRematchAdjourned(unsigned short id, QString opponent_name);
 	void reset(void);
 	void sendMatchInvite(PlayerListing * p);
@@ -64,7 +67,7 @@ struct MatchNegotiationState
 	void sendMatchOfferPending(void);
 	void sendCreateRoom(void);
 	void sendJoinRoom(unsigned short id);
-	void createdRoom(void);
+	void createdRoom(unsigned short id);
 	void offerMatchTerms(MatchRequest * mr);
 	void modifyMatchTerms(MatchRequest * mr);
 	void acceptMatchTerms(MatchRequest * mr);
@@ -78,6 +81,7 @@ struct MatchNegotiationState
 	void sendRematch(void);
 	void sendRematchAccept(void);
 	void opponentDisconnect(void);
+	void sendAdjournResume(void);
 	void opponentReconnect(void);
 	void swapColors(void);
 	bool verifyPlayer(PlayerListing * p);
@@ -95,7 +99,7 @@ private:
 		      MSMATCHMODEREQUEST,
 		      MSMATCHFINISHED,
 		      MSSENTREMATCH, MSSENTREMATCHACCEPT, MSREMATCH,
-		      MSOPPONENTDISCONNECT, MSREMATCHADJOURNED } state;
+		      MSOPPONENTDISCONNECT, MSSENTADJOURNRESUME, MSREMATCHADJOURNED } state;
 	MSSTATE getState(void) { return state; };
 	
 	

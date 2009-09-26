@@ -36,7 +36,7 @@ bool MatchNegotiationState::newMatchAllowed(void)
 void MatchNegotiationState::setupRematchAdjourned(unsigned short id, QString opponent_name)
 {
 	game_number = id;
-	opponent = opponent_name,
+	opponent = opponent_name;
 	state = MSREMATCHADJOURNED;
 }
 
@@ -107,7 +107,7 @@ bool MatchNegotiationState::sentMatchOffer(void)
 
 bool MatchNegotiationState::startMatchAcceptable(void)
 {
-	if(state == MSMATCHACCEPT || state == MSMATCHFINISHED)
+	if(state == MSMATCHACCEPT || state == MSMATCHFINISHED || state == MSSENTADJOURNRESUME)
 		return true;
 	return false;
 }	
@@ -184,6 +184,13 @@ bool MatchNegotiationState::sentRematchAccept(void)
 	return false;
 }
 
+bool MatchNegotiationState::sentAdjournResume(void)
+{
+	if(state == MSSENTADJOURNRESUME)
+		return true;
+	return false;
+}
+
 void MatchNegotiationState::reset(void)
 {
 	player = 0;
@@ -214,8 +221,9 @@ void MatchNegotiationState::sendCreateRoom(void)
 	state = MSSENTCREATEROOM;
 }
 
-void MatchNegotiationState::createdRoom(void)
+void MatchNegotiationState::createdRoom(unsigned short id)
 {
+	game_number = id;
 	state = MSCREATEDROOM;
 }
 
@@ -299,6 +307,11 @@ void MatchNegotiationState::opponentDisconnect(void)
 	state = MSOPPONENTDISCONNECT;
 }
 
+void MatchNegotiationState::sendAdjournResume(void)
+{
+	state = MSSENTADJOURNRESUME;
+}
+
 void MatchNegotiationState::opponentReconnect(void)
 {
 	state = MSONGOINGMATCH;		//FIXME
@@ -343,7 +356,7 @@ bool MatchNegotiationState::verifyGameData(GameData & g)
 		match_request->maintime != g.maintime ||
 		match_request->komi != g.komi ||
 		match_request->timeSystem != g.timeSystem ||
-		match_request->handicap != g.handicap)/* ||
+		(match_request->handicap != g.handicap && (match_request->handicap != 1 || (g.handicap != 0 && g.handicap != 1))))/* ||
 		match_request->color_request != g.color_request)*/	//FIXME
 		return false;
 	return true;
