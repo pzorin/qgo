@@ -34,10 +34,10 @@
 TomConnection::TomConnection(const QString & user, const QString & pass)
 : TygemConnection(user, pass, TypeTOM)
 {
-	serverCodec = QTextCodec::codecForName("GB2312");
+	serverCodec = QTextCodec::codecForName(getCodecString());
 	if(!serverCodec)
 	{
-		new CodecWarnDialog("GB2312");
+		new CodecWarnDialog(getCodecString());
 		serverCodec = QTextCodec::codecForLocale();
 	}
 	if(!getServerListStorage().restoreServerList(TypeTOM, serverList))
@@ -51,6 +51,11 @@ TomConnection::TomConnection(const QString & user, const QString & pass)
 			return;
 		}
 	}
+}
+
+const char * TomConnection::getCodecString(void)
+{
+	return "GB2312";
 }
 
 int TomConnection::requestServerInfo(void)

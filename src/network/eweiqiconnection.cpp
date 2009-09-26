@@ -30,10 +30,10 @@
 EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
 : TygemConnection(user, pass, TypeEWEIQI)
 {
-	serverCodec = QTextCodec::codecForName("GB2312");
+	serverCodec = QTextCodec::codecForName(getCodecString());
 	if(!serverCodec)
 	{
-		new CodecWarnDialog("GB2312");
+		new CodecWarnDialog(getCodecString());
 		serverCodec = QTextCodec::codecForLocale();
 	}
 	if(!getServerListStorage().restoreServerList(TypeEWEIQI, serverList))
@@ -47,6 +47,11 @@ EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
 			return;
 		}
 	}
+}
+
+const char * EWeiQiConnection::getCodecString(void)
+{
+	return "GB2312";
 }
 
 int EWeiQiConnection::requestServerInfo(void)

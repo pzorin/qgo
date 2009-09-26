@@ -27,6 +27,7 @@ class EWeiQiConnection : public TygemConnection
 	public:
 		EWeiQiConnection(const QString & user, const QString & pass);
 		//~EWeiQiConnection();
+		virtual const char * getCodecString(void);
 	private:
 		virtual int requestServerInfo(void);
 		virtual QByteArray getTygemGameRecordQByteArray(class GameData *);
