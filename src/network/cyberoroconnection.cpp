@@ -486,20 +486,13 @@ int CyberOroConnection::reconnectToServer(void)
 	playerlist_roomnumber = 1;
 	playerlist_observernumber = 0;
 
-	char name[15];
-	if(server_i == 0)
-		sprintf(name, "Shift-JIS");
-	else if(server_i == 1 || server_i == 2 || server_i == 3)
-		sprintf(name, "eucKR");
-	else if(server_i == 4 || server_i == 5 || server_i == 6)	//Taiwan?
-		sprintf(name, "GB2312");
-	else
+	if(server_i > 6)
 		qDebug("Please don't try to connect to the voice, we don't know what that is");
 
-	serverCodec = QTextCodec::codecForName(name);
+	serverCodec = QTextCodec::codecForName(getCodecString());
 	if(!serverCodec)
 	{
-		new CodecWarnDialog((const char *)name);
+		new CodecWarnDialog(getCodecString());
 		serverCodec = QTextCodec::codecForLocale();
 	}
 	
@@ -3515,13 +3508,16 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 				}
 			}
 			backPlayer = room->getPlayerListing(aPlayer->id);
-			/* add room to player, ORO is one room per player */
-			backPlayer->observing = playerlist_roomnumber;
-			/* add player to room */
-			gamelisting->observer_list.push_back(backPlayer);
+			if(backPlayer->playing != playerlist_roomnumber)
+			{
+				/* add room to player, ORO is one room per player */
+				backPlayer->observing = playerlist_roomnumber;
+				/* add player to room */
+				gamelisting->observer_list.push_back(backPlayer);
 #ifdef RE_DEBUG
-			printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
+				printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
 #endif //RE_DEBUG
+			}
 			goto label_playerlist_was_observer;
 		}
 label_playerlist_nogame:
@@ -3684,13 +3680,16 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 				}
 			}
 			backPlayer = room->getPlayerListing(aPlayer->id);
-			/* add room to player, ORO is one room per player */
-			backPlayer->observing = playerlist_roomnumber;
-			/* add player to room */
-			gamelisting->observer_list.push_back(backPlayer);
+			if(backPlayer->playing != playerlist_roomnumber)
+			{
+				/* add room to player, ORO is one room per player */
+				backPlayer->observing = playerlist_roomnumber;
+				/* add player to room */
+				gamelisting->observer_list.push_back(backPlayer);
 #ifdef PLAYERLIST_DEBUG
-			printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
+				printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
 #endif //PLAYERLIST_DEBUG
+			}
 			goto label_playerlist_was_observer;
 		}
 label_playerlist_nogame:
@@ -3914,19 +3913,23 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 		else
 			aGameListing->moves = 0;
 		aGameListing->owner_id = p[8] + (p[9] << 8);
-		player = room->getPlayerListing(aGameListing->owner_id);
-		if(!player)
+		if(!aGameListing->white)
 		{
-			temp.id = aGameListing->owner_id;
-			temp.name = QString("No name");
-			temp.playing = 0;
-			/* FIXME we add and remove a lot of these, too many I think
-			 * doublecheck, inefficient anyway */
-			room->recvPlayerListing(&temp);
 			player = room->getPlayerListing(aGameListing->owner_id);
+			if(!player)
+			{
+				temp.id = aGameListing->owner_id;
+				temp.name = QString("No name");
+				temp.playing = 0;
+				/* FIXME we add and remove a lot of these, too many I think
+				 * doublecheck, inefficient anyway */
+				room->recvPlayerListing(&temp);
+				player = room->getPlayerListing(aGameListing->owner_id);
+			}
+			aGameListing->white = player;
 		}
-		aGameListing->white = player;
-		
+		else
+			player = 0;
 		/* These are really like room owners */
 		if(!aGameListing->black)
 		{
@@ -3965,13 +3968,16 @@ void CyberOroConnection::handleRoomList(unsigned char * msg, unsigned int size)
 				if(roomlist_observers + playerlist_skipnumber < playerlist_inorder.size())
 				{
 					player = playerlist_inorder[roomlist_observers + playerlist_skipnumber];
-					/* add room to player, ORO is one room per player */
-					player->observing = number;
-					/* add player to room */
-					aGameListing->observer_list.push_back(player);
+					if(player->playing != number)
+					{
+						/* add room to player, ORO is one room per player */
+						player->observing = number;
+						/* add player to room */
+						aGameListing->observer_list.push_back(player);
 #ifdef RE_DEBUG
-					printf("Adding player %s %d to game %d\n", player->name.toLatin1().constData(), player->id, number);
+						printf("Adding player %s %d to game %d\n", player->name.toLatin1().constData(), player->id, number);
 #endif //RE_DEBUG
+					}
 					playerlist_observernumber++;
 					if(playerlist_observernumber == aGameListing->observers)
 					{
@@ -4273,7 +4279,7 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		p += 2;
 #ifdef RE_DEBUG
 		if(white && black)
-		qDebug("Adding listing for %s vs %s", 
+		printf("Adding listing for %s vs %s\n", 
 		       white->name.toLatin1().constData(), 
 		       black->name.toLatin1().constData());
 #endif //RE_DEBUG
@@ -4281,6 +4287,16 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		//aGameListing->observers = 2;	//the players
 		room->recvGameListing(aGameListing);
 		//after recv
+#ifdef FIXME //maybe we need this here?!?
+		owner = room->getPlayerListing(aGameListing->owner_id);
+		if(owner != black)
+			setAttachedGame(black, aGameListing->number);
+		if(owner != white)
+			setAttachedGame(white, aGameListing->number);
+		//detach owner if any, players are attached alread
+		if(owner && owner != black && owner != white)
+			setAttachedGame(owner, 0);
+#endif //FIXME
 		setAttachedGame(black, aGameListing->number);
 		setAttachedGame(white, aGameListing->number);
 	}
@@ -4405,9 +4421,14 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 		game = getDefaultRoom()->getGameListing(player->playing);
 		if(game)
 		{
+			/* This is silly, unless its a chat room, its still the same game,
+			 * we shouldn't remove the players */
 			if(game->white == player)
 			{
+				game->_white_name = game->white->name;
+				game->_white_rank = game->white->rank;
 				game->white = 0;
+#ifdef FIXME			//chat only
 				if(game->black)
 				{
 					/* This is so the name is always
@@ -4425,10 +4446,15 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 			 			 * and then we have to pull up observernames, either alphabetical or in the order they joined
 			 			 * or something.  Should also probably change flags to chat or something */
 					}
-				}	
+				}
+#endif //FIXME	
 			}
 			else if(game->black == player)
 			{
+				if(game->black->name == "0")
+					qDebug("black name equals 0!!!!");
+				game->_black_name = game->black->name;
+				game->_black_rank = game->black->rank;
 				game->black = 0;
 			}
 			/*if(!g->observers)
@@ -4451,14 +4477,18 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 	/* Doesn't help.  Looks like observer counts do not include the players playing themselves which makes some sense
 	 * but we need them in our little list and, well the whole thing is iffy FIXME */
 	/* Okay, we're adding observer counts here, we can check it later.  They're not in the data we get, so that's an issue */
-	game = getDefaultRoom()->getGameListing(game_id);
-	if(game)
+	
+	if(player->observing != game_id)
 	{
-		//game->observers++;
-		game->observer_list.push_back(player);
+		game = getDefaultRoom()->getGameListing(game_id);
+		if(game)
+		{
+			//game->observers++;
+			game->observer_list.push_back(player);
+		}
+		else
+			qDebug("setAttached game has no listing");
 	}
-	else
-		qDebug("setAttached game has no listing");
 
 	if(player->observing && player->observing != game_id)
 		removeObserverFromGameListing(player);
@@ -5182,7 +5212,7 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("\n");
 #endif //RE_DEBUG
-	if(!black || ! white)
+	if(!black || !white)
 	{
 		printf("%d gamecode game is missing black or white\n", game_code);
 		return;
@@ -5238,13 +5268,23 @@ void CyberOroConnection::handleGameMsg(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("Setting game code to game number %02x%02x %d\n", msg[0], msg[1], aGameListing->number);
 #endif //RE_DEBUG
+	/* Somehow, its possible to get here with a game listing that's been erased and yet somehow comes up
+	 * from getGameListing FIXME FIXME*/
 	aGameListing->black = black;
 	aGameListing->white = white;
 	owner = room->getPlayerListing(aGameListing->owner_id);
+	/* FIXME, Presumably this is where the crash comes from, we don't get entering rooms for these players
+	 * which is fine, but we need to inc the observers to prevent removing the owner from deleting it */
 	if(owner != black)
+	{
 		setAttachedGame(black, aGameListing->number);
+		aGameListing->observers++;
+	}
 	if(owner != white)
+	{
 		setAttachedGame(white, aGameListing->number);
+		aGameListing->observers++;
+	}
 	//detach owner if any, players are attached alread
 	if(owner && owner != black && owner != white)
 		setAttachedGame(owner, 0);
@@ -8356,13 +8396,16 @@ unsigned int CyberOroConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 	return p;
 }
 
-GameData * CyberOroConnection::getGameData(unsigned int game_id)
+const char * CyberOroConnection::getCodecString(void)
 {
-	/* FIXME, this is weird, I mean I know the caller usually
-	 * checks that boarddispatch is solid but... */
-	/* I don't think we use this ?!?!? */
-	qDebug("getGameData on COC deprecated");
-	return getBoardDispatch(game_id)->getGameData();
+	if(current_server_index == 0)
+		return "Shift-JIS";
+	else if(current_server_index == 1 || current_server_index == 2 || current_server_index == 3)
+		return "eucKR";
+	else if(current_server_index == 4 || current_server_index == 5 || current_server_index == 6)	//Taiwan? (may have been removed)
+		return "GB2312";
+	else
+		return "";
 }
 
 int CyberOroConnection::time_to_seconds(const QString & time)

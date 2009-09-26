@@ -113,6 +113,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual bool supportsCreateRoom(void) { return true; };
 		virtual void saveIfDoesntSave(GameData * data);
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
+		virtual const char * getCodecString(void);
 		virtual void timerEvent(QTimerEvent * event);
 	private:
 		void handleServerList(unsigned char * msg);
@@ -220,7 +221,6 @@ class CyberOroConnection : public NetworkConnection
 		void handleFriends(unsigned char * msg, unsigned int size);
 		void handleMsg2(unsigned char * msg, unsigned int size);
 		void handleNigiri(unsigned char * msg, unsigned int size);
-		class GameData * getGameData(unsigned int game_id);
 		int time_to_seconds(const QString & time);
 		void killActiveMatchTimers(void);
 		void startMatchTimers(bool ourTurn);
