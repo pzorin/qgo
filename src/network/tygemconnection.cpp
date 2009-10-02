@@ -549,8 +549,7 @@ void TygemConnection::declineMatchOffer(const PlayerListing & opponent)
 	if(boarddispatch)
 	{
 		/* Awkward but to prevent issues on board close */
-		delete match_negotiation_state;
-		match_negotiation_state = 0;
+		match_negotiation_state->reset();
 		GameResult g;
 		g.result = GameResult::NOGAME;
 		boarddispatch->recvResult(&g);
@@ -2394,8 +2393,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		packet[49] = 0xff;
 		packet[50] = 0xff;
 		packet[51] = 0xff;
-		delete match_negotiation_state;
-		match_negotiation_state = 0;
+		match_negotiation_state->reset();
 	}
 	
 	if(version == offer)
@@ -2702,7 +2700,8 @@ void TygemConnection::sendMove(unsigned int game_id, MoveRecord * move)
 	/*if(move->number + 2 > move_message_number)
 		move_message_number = move->number + 2;
 	else*/
-	move_message_number++;
+	if(move->flags != MoveRecord::UNREMOVE && move->flags != MoveRecord::REQUESTUNDO && move->flags != MoveRecord::REFUSEUNDO)
+		move_message_number++;
 	//0001	//color
 	//0000 0000 0000 ADBA	//probably like 8 zeroes
 	//text string ending in 200a and 0 padded out to the full 32
@@ -3307,6 +3306,7 @@ void TygemConnection::sendOpponentDisconnectTimer(unsigned int game_number)
 		}
 		opponent->online = false;	
 		getDefaultRoom()->recvPlayerListing(opponent);
+		/* Note that we also need to do this if we get tired of waiting and resign the game FIXME FIXME */
 		return;
 	}
 	/* Next, we need to figure when all these things get sent
@@ -3352,6 +3352,10 @@ void TygemConnection::sendAcceptCountRequest(GameData * data)
 void TygemConnection::sendRefuseCountRequest(GameData * data)
 {
 	sendEndgameMsg(data, refuse_count_request);
+	MoveRecord * aMove = new MoveRecord();			//here?? FIXME
+				aMove->flags = MoveRecord::UNREMOVE;
+				sendMove(data->number, aMove);
+				delete aMove;
 }
 
 void TygemConnection::sendRequestDraw(unsigned int game_id)
@@ -3732,7 +3736,7 @@ QByteArray TygemConnection::getTygemGameRecordQByteArray(GameData * game)
 				margin = (margin * 10) + 5;
 			else
 				margin *= 10;
-			qDebug("FIXME margin: %d\n", margin);
+			qDebug("FIXME margin: %d\n", margin);		//margin 200?  instead of 303?  bug somewhere, somehow?
 			//3f20 margin 3f3f203f	//black wins
 			//3f20 margin 3f203f    //white wins?
 			//string += QChar(0x3f);
@@ -4423,16 +4427,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 				if(match_negotiation_state->isOngoingMatch() &&
 					match_negotiation_state->verifyPlayer(aPlayer))
 				{
-					/* FIXME this is awkward here, also would be better if
-					 * we just had an opponent QString to check.  The issue is that
-					 * we already have player_accepted_match and I don't want to have another
-					 * weird variable that we're not sure where its set and where its not,
-					 * but its DEFINITELY something to think about.  Here, we're looking up the 
-					 * boarddispatch for the game we're in EVERY TIME a player leaves the server
-					 * come to think of it, we shouldn't even look up the boarddispatch for
-					 * the game we're playing ever.  FIXME FIXME But I just want to get things
-					 * working right now, but major FIXME.
-					 * also basically, we can't disconnect this player because we need their info to
+					/* basically, we can't disconnect this player because we need their info to
 					 * send stuff */
 					
 					//FIXME nick or username? probably nick but is that ascii or normal?
@@ -4446,9 +4441,9 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 			else
 				printf("Can't find disconnecting player\n");
 			p += 14;
-#ifdef PLAYERLIST_DEBUG
+//#ifdef PLAYERLIST_DEBUG
 			printf("Player %s disconnected, last bytes: %02x%02x\n", encoded_name.toLatin1().constData(), p[0], p[1]);
-#endif //PLAYERLIST_DEBUG
+//#endif //PLAYERLIST_DEBUG
 			p += 2;
 			continue;
 		}
@@ -4783,6 +4778,7 @@ int TygemConnection::getPhase(unsigned char byte)
 			return 130;
 					//end
 			break;
+		case 6:			//adjourned due to drop, I think
 		case 11:
 					//looks like wished opponent
 		default:
@@ -5103,6 +5099,7 @@ void TygemConnection::promptResumeMatch(void)
 		//we have to do something else here, FIXME either, nothing, no choice,
 		//or we need to change the match negotiation state or send a resign or... nothing is
 		//probably best.... i.e., no "Yes" but informational
+		//check official client, might be able to resign
 	}
 }
 
@@ -5649,6 +5646,9 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 							 * Right now, I'll assume that's time it takes
 							 * server to pass "observer left" msg */
 							match_negotiation_state->opponentDisconnect();
+							/* FIXME, if its our turn, we need to block playing, and also stop the clocks !! 
+							 * or can we play?FIXME */
+							boarddispatch->stopTime();		//also no play, if our turn
 						}
 					}
 				}
@@ -5832,6 +5832,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 						delete aMove;
 						sendResumeFromDisconnect(game_number);
 						match_negotiation_state->opponentReconnect();
+						boarddispatch->startTime();
 					}
 				}
 			}
@@ -6585,7 +6586,13 @@ void TygemConnection::handleCountRequestResponse(unsigned char * msg, unsigned i
 		boarddispatch->recvKibitz(QString(), QString("%1 has rejected count request...").arg(
 				(encoded_name == game->black_name ? game->white_name : game->black_name)));
 		if(encoded_name == getUsername())
+		{
 			boarddispatch->recvRejectCountRequest();
+			MoveRecord * aMove = new MoveRecord();		//here? FIXME
+			aMove->flags = MoveRecord::UNREMOVE;
+			sendMove(game_number, aMove);
+			delete aMove;
+		}
 	}
 }
 
@@ -7248,6 +7255,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	unsigned short game_number;
 	unsigned char name[15];
 	name[14] = 0x00;
+	bool first_name_is_client;
 	QString encoded_nameA, encoded_nameB;
 	QString encoded_nameA2, encoded_nameB2;
 	QString rankA, rankB;
@@ -7297,6 +7305,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		printf("%c", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
+	first_name_is_client = p[0];
 	// we should see if there's time info in here or the
 			// one we're currently using.  we need to initially set time
 			// we also seem to get this one when rematch started
@@ -7473,12 +7482,17 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		{
 			qDebug("rematch start by unknown player");		//I highly doubt encoded_nameB2 works if we originally created the game
 			if(encoded_nameA2 == match_negotiation_state->getOpponent())
+			{
 				qDebug("Rematch is a2");			//FIXME, yes, we get here if we created the game originally (offered it, etc. )
 										//probably okay below because we normally only get 0672 if we didn't create the game
 										//rejoin on disconnect is exception
+				opponent = room->getPlayerListing(encoded_nameA2);
+			}
 			//return;
+			
 		}
-		opponent = room->getPlayerListing(encoded_nameB2);
+		else
+			opponent = room->getPlayerListing(encoded_nameB2);
 		match_negotiation_state->setPlayer(opponent);
 	}
 	else if(match_negotiation_state->isOurGame(game_number))
@@ -7487,7 +7501,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		if(!match_negotiation_state->verifyPlayer(opponent))
 		{
 			qDebug("start match by unknown player");
-			return;
+			//return;						//bugs out here on nigiri
 		}
 		if(!match_negotiation_state->verifyGameData(*aGameData))
 		{
@@ -7531,8 +7545,10 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	}
 	if(match_negotiation_state->isOurGame(game_number))
 	{
+		//our_invitation is also set in handleCreateRoomResponse, so doublecheck, the former may be unnecessary FIXME
 		if(encoded_nameA2 == getUsername())
 		{
+			aGameData->our_invitation = first_name_is_client;
 			//we do this only if we didn't send the 0671 out
 			if(!opponent)
 				qDebug("Can't get opponent to close game dialog");
@@ -7542,6 +7558,8 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 			 * a match in progress FIXME, networkconnection reports
 			 * error. */
 		}
+		else
+			aGameData->our_invitation = !first_name_is_client;
 		//FIXME time
 		//doublecheck this same issue with 0 maintime on IGS and ORO
 		if(aGameData->maintime == 0)
