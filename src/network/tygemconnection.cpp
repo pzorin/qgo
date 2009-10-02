@@ -4760,6 +4760,7 @@ void TygemConnection::handleServerPlayerCounts(unsigned char * msg, unsigned int
  * But for now, moves is pretty accurate for the field */
 int TygemConnection::getPhase(unsigned char byte)
 {
+	/* Note that this is unused right now */
 	switch(byte)
 	{
 		case 0:
@@ -5014,6 +5015,10 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 				aGameListing->FR += "V";	//review
 				break;
 			case 6:
+				aGameListing->FR += "A";	//adjourned due to drop?
+				break;
+			case 11:
+				aGameListing->FR += "W";	//wished opponent?
 				break;
 		}
 		p++;
