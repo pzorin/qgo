@@ -315,7 +315,7 @@ QString SGFParser::loadFile(const QString &fileName)
 	}
 	while (!txt.atEnd())
 		toParse.append(txt.readLine() + "\n");
-
+	readCodec = stream->codec();
 	file.close();
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "READING", toParse);
@@ -1028,7 +1028,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 						if (!commentStr.isEmpty())
 						{
 							// add comment; skip 'C[]'
-							tree->getCurrent()->setComment(commentStr);
+							tree->getCurrent()->setComment(readCodec->toUnicode(commentStr.toLatin1().constData()));
 						}
 						pos ++;
 						break;
@@ -1597,7 +1597,7 @@ bool SGFParser::doWrite(const QString &fileName, Tree *tree, GameData *gameData)
 bool SGFParser::writeStream(Tree *tree, GameData *gameData)
 {
 	Q_CHECK_PTR(stream);
-	if (!setCodec())
+	if (!setCodec(gameData->codec))
 	{
 		QMessageBox::critical(0, PACKAGE, QObject::tr("Invalid text encoding given. Please check preferences!"));
 		delete stream;
@@ -1688,14 +1688,14 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 		if (isRoot)
 		{
 			writeGameHeader(gameData);
-			*stream << t->saveMove(isRoot);
+			*stream << t->saveMove(isRoot).toUtf8();		//utf8 might only be necessary if gameData->codec is set, but should be okay either way
 			isRoot = false;
 		}
 		else
 		{
 			// do some formatting: add single B[]/W[] properties to one line, max: 10
 			// if more properties, e.g. B[]PL[]C] -> new line
-			QString txt = t->saveMove(false);
+			QString txt = t->saveMove(false).toUtf8();
 			int cnt_old = cnt;
 			cnt = txt.length();
 			if (col % 10 == 0 || (col == 1 && cnt != 6) || cnt_old != 6 || col == -1)

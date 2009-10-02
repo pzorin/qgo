@@ -68,6 +68,7 @@ private:
 
 //	BoardHandler *boardHandler;
 	QTextStream *stream;
+	QTextCodec * readCodec;
 	bool isRoot;
 //	XMLParser *xmlParser;
 	int asciiOffsetX, asciiOffsetY;
