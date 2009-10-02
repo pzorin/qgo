@@ -20,7 +20,6 @@
 
 #include <qapplication.h>
 #include <qprocess.h>
-//#include "global.h"
 
 #define IGTP_BUFSIZE 2048    /* Size of the response buffer */
 #define OK 0

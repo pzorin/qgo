@@ -186,7 +186,7 @@ void QGtp::slot_readFromStdout()
 	answer = "";
 
 	buff = _response[0];
-	qDebug("*%s*", _response.toLatin1().constData());
+	
 	if(buff != "=" && buff != "?")
 	{
 		responseReceived = FALSE;
