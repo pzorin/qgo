@@ -131,6 +131,11 @@ struct _preferences
 	bool terr_stone_mark;
 	bool observe_outside_on_doubleclick;
 
+	int playerslist_sortcolumn;
+	bool playerslist_sortascending;
+	int gameslist_sortcolumn;
+	bool gameslist_sortascending;
+
 	int default_size;
 	int default_komi;
 	bool warn_about_codecs;
@@ -158,6 +163,11 @@ struct _preferences
 		terr_stone_mark = (settings.value("TERR_STONE_MARK") == 1);
 		observe_outside_on_doubleclick = (settings.value("OBSERVEOUTSIDE") == 1);
 		
+		playerslist_sortcolumn = settings.value("PLAYERSLIST_SORTCOLUMN").toInt();
+		playerslist_sortascending = settings.value("PLAYERSLIST_SORTASCENDING").toBool();
+		gameslist_sortcolumn = settings.value("GAMESLIST_SORTCOLUMN").toInt();
+		gameslist_sortascending = settings.value("GAMESLIST_SORTASCENDING").toBool();
+
 		default_size = settings.value("DEFAULT_SIZE").toInt();
 		default_komi = settings.value("DEFAULT_KOMI").toInt();
 		
@@ -178,6 +188,11 @@ struct _preferences
 	void save(void)
 	{
 		QSettings settings;
+		
+		settings.setValue("PLAYERSLIST_SORTCOLUMN", playerslist_sortcolumn);
+		settings.setValue("PLAYERSLIST_SORTASCENDING", playerslist_sortascending);
+		settings.setValue("GAMESLIST_SORTCOLUMN", gameslist_sortcolumn);
+		settings.setValue("GAMESLIST_SORTASCENDING", gameslist_sortascending);
 		
 		settings.setValue("DONT_WARN_ABOUT_CODECS", !warn_about_codecs);
 		
