@@ -56,7 +56,9 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	else
 		gameData = new GameData();
 	//maybe we could set number here?  if we have it?
-	
+	if(strlen(connection->getCodecString()) != 0)
+		gameData->codec = "UTF-8";		//all files in unicode where necessary
+
 	/* Not sure we can do this. GameListings have to have a
 	 * key.  But to go without a gameListing in the BoardDispatch?*/
 	if(l)
