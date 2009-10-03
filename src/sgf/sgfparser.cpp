@@ -222,6 +222,7 @@ SGFParser::SGFParser(Tree * _tree)
 //	CHECK_PTR(boardHandler);
 	stream = NULL;
 	tree = _tree;
+	readCodec = 0;
 //	xmlParser = NULL;
 }
 
@@ -1028,7 +1029,10 @@ bool SGFParser::doParse(const QString &toParseStr)
 						if (!commentStr.isEmpty())
 						{
 							// add comment; skip 'C[]'
-							tree->getCurrent()->setComment(readCodec->toUnicode(commentStr.toLatin1().constData()));
+							if(readCodec)
+								tree->getCurrent()->setComment(readCodec->toUnicode(commentStr.toLatin1().constData()));
+							else
+								tree->getCurrent()->setComment(commentStr.toLatin1().constData());
 						}
 						pos ++;
 						break;
@@ -1673,7 +1677,6 @@ void SGFParser::writeGameHeader(GameData *gameData)
 	
 	*stream << endl;
 }
-
 
 /*
  * traverses the tree from move 't', and stores SGF code into 'stream'
