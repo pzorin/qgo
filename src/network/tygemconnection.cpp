@@ -6028,10 +6028,16 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 	for(unsigned int i = 0; i < size; i++)
 		printf("%02x", msg[i]);
 	printf("\n");
+	if(black_loses_on_time)
+		qDebug("black loses on time?\n");
+	if(white_loses_on_time)
+		qDebug("white loses on time?\n");
 #endif //RE_DEBUG
 	
 	//FIXME not necessary:
+
 	GameResult aGameResult;
+#ifdef FIXME	//also broken I think
 	if(white_loses_on_time || black_loses_on_time)
 	{
 		aGameResult.result = GameResult::TIME;
@@ -6051,6 +6057,7 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 		boarddispatch->recvResult(&aGameResult);
 		return;
 	}
+#endif //FIXME
 	
 	//awkward, redundant with white_loses_on_time, black_loses_on_time above
 	bool white_wins = false, black_wins = false;
