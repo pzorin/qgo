@@ -78,7 +78,7 @@ int QuickConnection::checkSuccess(void)
 void QuickConnection::OnConnected(void)
 {
 	int size;
-	char * packet;
+	char * packet = 0;
 	//qDebug("QC: OnConnected()");
 	switch(type)
 	{
