@@ -79,6 +79,7 @@ public:
 	//virtual void deleteNode();
 	virtual void enterScoreMode();
 	virtual void leaveScoreMode();
+	void toggleGroupAt(int x, int y);
 	virtual void markDeadStone(int x, int y);
 	virtual void markLiveStone(int x, int y);
 	virtual void markDeadArea(int x, int y);

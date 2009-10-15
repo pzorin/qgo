@@ -432,7 +432,7 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
  */
 void qGoBoard::localMarkDeadRequest(int x, int y)
 {
-	markDeadStone(x,y);
+	toggleGroupAt(x,y);
 	/* FIXME maybe should be markDeadArea()?  Maybe as option? */
 }
 
@@ -586,6 +586,16 @@ void qGoBoard::leaveScoreMode()
 	boardwindow->getUi()->tabDisplay->setCurrentIndex(0);
 	boardwindow->setGamePhase ( phaseOngoing );
 	boardwindow->getBoardHandler()->exitScore();
+}
+
+void qGoBoard::toggleGroupAt(int x, int y)
+{
+	// is the click on a stone ?
+	if ( tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneNone )
+		return;
+	
+	tree->getCurrent()->getMatrix()->toggleGroupAt(x, y);
+	boardwindow->getBoardHandler()->countScore();
 }
 
 /*
