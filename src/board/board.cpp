@@ -47,6 +47,8 @@ class ImageHandler;
 Board::Board(QWidget *parent, QGraphicsScene *c)
 : QGraphicsView(c,parent)
 {
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	isDisplayBoard = FALSE;
 	marks = NULL;
 }
