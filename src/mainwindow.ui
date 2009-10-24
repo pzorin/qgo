@@ -167,13 +167,13 @@
           <property name="minimumSize">
            <size>
             <width>170</width>
-            <height>250</height>
+            <height>270</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>250</width>
-            <height>250</height>
+            <height>270</height>
            </size>
           </property>
           <property name="title">
@@ -1045,7 +1045,7 @@
           <property name="title">
            <string>New file</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout">
+          <layout class="QGridLayout" name="gridLayout_11">
            <item row="0" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
@@ -2245,7 +2245,7 @@
            <item>
             <widget class="QRadioButton" name="radioButtonStones_2D">
              <property name="text">
-              <string>Simple 2D</string>
+              <string>Solid 2D</string>
              </property>
             </widget>
            </item>
