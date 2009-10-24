@@ -65,8 +65,8 @@ public:
 	void setBoardSize(int sz)		{boardSize=sz;}
 	void setGamePhase(GamePhase gp);
 	void setTree(Tree *t)			{tree=t;}
-	void gameDataChanged(void);
-	void setGameData(GameData *gd);	
+	void checkHideToolbar(int h);
+	void gameDataChanged(void);	
 	QString get_wplayer()			{return gameData->white_name;}
 	QString get_bplayer()			{return gameData->black_name;}
 	ClockDisplay *getClockDisplay()		{return clockDisplay;}

@@ -139,6 +139,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 
 	setGamePhase(phaseOngoing);
 	show();
+	checkHideToolbar(height());
 	setFocus();
 
 
@@ -336,7 +337,7 @@ void BoardWindow::setupBoardUI(void)
 		ui.actionSound->setChecked(TRUE);
 		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_off.png"));
 	}
-
+	
 	//Connects the board to the interface and boardhandler
 	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
 		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
@@ -431,21 +432,49 @@ void BoardWindow::setupBoardUI(void)
 		connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 }
 
-void BoardWindow::resizeEvent(QResizeEvent *)
+void BoardWindow::resizeEvent(QResizeEvent * e)
 {
+	checkHideToolbar(e->size().height());	
+}
+
+void BoardWindow::checkHideToolbar(int h)
+{
+	if(h < 700)
+	{
+		if(ui.varLabel->isVisible())
+			ui.varLabel->hide();
+	}
+	else
+	{
+		if(!ui.varLabel->isVisible())
+			ui.varLabel->show();
+	}
+	if(h < 660)
+	{
+		if(ui.moveNumLabel->isVisible())
+			ui.moveNumLabel->hide();
+	}
+	else
+	{
+		if(!ui.moveNumLabel->isVisible())
+			ui.moveNumLabel->show();
+	}
+	if(h < 600)
+	{
+		if(ui.matchSettingsFrame->isVisible())
+			ui.matchSettingsFrame->hide();
+	}
+	else
+	{
+		if(!ui.matchSettingsFrame->isVisible())
+			ui.matchSettingsFrame->show();
+	}
 }
 
 void BoardWindow::gameDataChanged(void)
 {
 	interfaceHandler->updateCaption(gameData);
 	clockDisplay->setTimeSettings(gameData->timeSystem, gameData->maintime, gameData->periodtime, gameData->stones_periods);
-}
-
-void BoardWindow::setGameData(GameData *gd)
-{
-	qDebug("BoardWindow::setGameData deprecated!!!!");
-	gameData = new GameData(gd); 
-	interfaceHandler->updateCaption(gd);
 }
 
 void BoardWindow::swapColors(bool noswap)
@@ -749,17 +778,16 @@ bool BoardWindow::doSave(QString fileName, bool force)
 {
 	if (!force)
   	{
-     		if  (fileName == NULL ||
+     	if  (fileName == NULL ||
 			fileName.isNull() ||
-          		fileName.isEmpty() ||
-          		QDir(fileName).exists())
-            	{
-              		QString base = getCandidateFileName();
-              		if (fileName == NULL || fileName.isNull() || fileName.isEmpty())
-                		fileName = base;
-              		else
-                		fileName.append(base);
-
+          	fileName.isEmpty() ||
+          	QDir(fileName).exists())
+		{
+              	QString base = getCandidateFileName();
+				if (fileName == NULL || fileName.isNull() || fileName.isEmpty())
+                	fileName = base;
+              	else
+                	fileName.append(base);
 		}
 		fileName = QFileDialog::getSaveFileName(this,tr("Save File"), fileName, tr("SGF Files (*.sgf);;All Files (*)") );
 	}
@@ -942,8 +970,6 @@ void BoardWindow::slotEditDelete()
  * annoying. */
 void BoardWindow::keyPressEvent(QKeyEvent *e)
 {
-	qDebug("boardwindow.cpp: key pressed");
-
 #if 0
 	// check for window resize command = number button
 	if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9)

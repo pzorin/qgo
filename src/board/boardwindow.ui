@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1034</width>
-    <height>793</height>
+    <width>1071</width>
+    <height>766</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>640</width>
-    <height>557</height>
+    <height>480</height>
    </size>
   </property>
   <property name="focusPolicy">
@@ -123,8 +123,8 @@ Maximum game move the slider can currently show.</string>
              </property>
              <property name="minimumSize">
               <size>
-               <width>400</width>
-               <height>454</height>
+               <width>380</width>
+               <height>420</height>
               </size>
              </property>
              <property name="whatsThis">
@@ -136,6 +136,34 @@ Shift + right click moves to the next move in the current branch.
 When in edit mode and editing stones, left click places a black, right click a white stone, clicking on an existant stone removes it.
 When editing marks, left click sets, right click removes the mark. When editing letter marks, shift-click allows to customize the mark text.
 When in score mode, left click to mark a group as dead, right click to mark it alive in seki. Click again to unmark as dead or seki.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="sliderLeftLabel">
+             <property name="font">
+              <font>
+               <family>Helvetica</family>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+               <underline>false</underline>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="whatsThis">
+              <string>Slider min value
+
+Minimum game move the slider can currently show.</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="margin">
+              <number>2</number>
              </property>
             </widget>
            </item>
@@ -166,34 +194,6 @@ Use the slider to quickly navigate through the current branch of the game.</stri
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="sliderLeftLabel">
-             <property name="font">
-              <font>
-               <family>Helvetica</family>
-               <weight>50</weight>
-               <italic>false</italic>
-               <bold>false</bold>
-               <underline>false</underline>
-               <strikeout>false</strikeout>
-              </font>
-             </property>
-             <property name="whatsThis">
-              <string>Slider min value
-
-Minimum game move the slider can currently show.</string>
-             </property>
-             <property name="text">
-              <string>0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="margin">
-              <number>2</number>
              </property>
             </widget>
            </item>
@@ -1800,13 +1800,13 @@ Shows the number of sons and brothers within the current node.</string>
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>25</height>
+                      <height>24</height>
                      </size>
                     </property>
                     <property name="maximumSize">
                      <size>
                       <width>16777215</width>
-                      <height>20</height>
+                      <height>24</height>
                      </size>
                     </property>
                     <property name="palette">
@@ -2281,6 +2281,7 @@ Shows the number of sons and brothers within the current node.</string>
                     <property name="font">
                      <font>
                       <family>Sans Serif</family>
+                      <pointsize>13</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -2400,13 +2401,13 @@ Click on
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
-                      <height>25</height>
+                      <height>24</height>
                      </size>
                     </property>
                     <property name="maximumSize">
                      <size>
                       <width>16777215</width>
-                      <height>20</height>
+                      <height>24</height>
                      </size>
                     </property>
                     <property name="palette">
@@ -2881,6 +2882,7 @@ Click on
                     <property name="font">
                      <font>
                       <family>Sans Serif</family>
+                      <pointsize>13</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -3503,7 +3505,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_2">
+            <widget class="QFrame" name="matchSettingsFrame">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                <horstretch>0</horstretch>
@@ -6286,7 +6288,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1034</width>
+     <width>1071</width>
      <height>25</height>
     </rect>
    </property>
