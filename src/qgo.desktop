@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=qGo
-GenericName=Go client
+GenericName=Go Client
 Comment=Play Go online and against computer, view and edit SGF files
 Icon=qgo
 Exec=qgo
