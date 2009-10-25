@@ -4881,7 +4881,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                  <property name="title">
                   <string>Game Tree tools</string>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout">
+                 <layout class="QGridLayout" name="gridLayout_10">
                   <property name="topMargin">
                    <number>1</number>
                   </property>
