@@ -26,7 +26,7 @@
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>480</height>
+     <height>420</height>
     </size>
    </property>
    <layout class="QGridLayout">
@@ -41,7 +41,7 @@
       <property name="minimumSize">
        <size>
         <width>16</width>
-        <height>480</height>
+        <height>420</height>
        </size>
       </property>
       <property name="orientation">
@@ -65,7 +65,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>400</width>
+            <width>380</width>
             <height>250</height>
            </size>
           </property>
@@ -124,7 +124,7 @@ Maximum game move the slider can currently show.</string>
              <property name="minimumSize">
               <size>
                <width>380</width>
-               <height>420</height>
+               <height>380</height>
               </size>
              </property>
              <property name="whatsThis">
@@ -211,7 +211,7 @@ Use the slider to quickly navigate through the current branch of the game.</stri
           <property name="minimumSize">
            <size>
             <width>130</width>
-            <height>450</height>
+            <height>420</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -6170,7 +6170,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
        <property name="minimumSize">
         <size>
          <width>16</width>
-         <height>480</height>
+         <height>420</height>
         </size>
        </property>
        <property name="orientation">

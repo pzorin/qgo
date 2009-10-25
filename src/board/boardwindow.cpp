@@ -469,6 +469,16 @@ void BoardWindow::checkHideToolbar(int h)
 		if(!ui.matchSettingsFrame->isVisible())
 			ui.matchSettingsFrame->show();
 	}
+	if(h < 560)
+	{
+		if(statusBar())
+			setStatusBar(0);
+	}
+	else
+	{
+		if(!statusBar())
+			setStatusBar(new QStatusBar());		//Qt deletes
+	}
 }
 
 void BoardWindow::gameDataChanged(void)
