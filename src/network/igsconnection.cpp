@@ -2274,9 +2274,12 @@ void IGSConnection::handle_info(QString line)
 		}
 		else
 		{
+#ifdef FIXME
 					// don't work correct at IGS!!!
 			int i = line.count(',');
+
 			qDebug(QString("observing %1 games").arg(i+1).toLatin1());
+#endif //FIXME
 //					//emit signal_addToObservationList(i+1);
 		}
 
@@ -3389,7 +3392,9 @@ void IGSConnection::handle_score_m(QString line)
 	game_were_playing = 0;
 	delete aGameResult;
 }	
-			
+
+/* Note that we get shouts on games and players in other rooms,
+ * either that, or only the lobby.  Find out which.  */	
 // SHOUT - a info from the server
 //case 21:
 void IGSConnection::handle_shout(QString line)
@@ -3751,7 +3756,6 @@ void IGSConnection::handle_status(QString line)
 	static int cap;
 	static float komi;
 	static BoardDispatch * statusDispatch;
-	qDebug(line.toLatin1().constData());
 	if (!line.contains(":"))
 	{
 		if(player == "")
@@ -4092,8 +4096,10 @@ void IGSConnection::handle_who(QString line)
 				newPlayer = 0;
 			}
 		}
+#ifdef FIXME
 		else
 			qDebug("player27 dropped (1): %s" + line.toLatin1());
+#endif //FIXME
 
 				// position of delimiter between two players
 		pos = line.indexOf('|');
@@ -4145,8 +4151,10 @@ void IGSConnection::handle_who(QString line)
 				delete newPlayer;
 			}
 		}
+#ifdef FIXME
 		else
 			qDebug("player27 dropped (2): %s" + line.toLatin1());
+#endif //FIXME
 }
 
 void IGSConnection::handle_undo(QString line)
@@ -4398,8 +4406,6 @@ void IGSConnection::handle_dot(QString)
 //		42    spaman*                  -        11k* 0000/0000  -    4  11m    9a E?E----
 //		No match
 
-
-
 void IGSConnection::handle_userlist(QString line)
 {
 	//line = line.remove(0, 2).trimmed();
@@ -4418,7 +4424,7 @@ void IGSConnection::handle_userlist(QString line)
 	QRegExp re2 = QRegExp("(.{1,14})  ");
 			//                    3
 			//                    Country
-	QRegExp re3 = QRegExp("([a-zA-Z][a-zA-Z. /]{,6}|--     )  "
+	QRegExp re3 = QRegExp("([a-zA-Z][a-zA-Z. /&#92;']{,6}|--     )  "
 			//                    4
 			//                    Rank
 			"([0-9 ][0-9][kdp].?| +BC| +NR) +"
@@ -4431,16 +4437,12 @@ void IGSConnection::handle_userlist(QString line)
 			//                    9               10                   11    12
 			//                    Idle            Flags
 			"([A-Za-z0-9]+) +([^ ]{,2})");// +default");
-	QRegExp re4 = QRegExp("([TF])(.*)");
+	QRegExp re4 = QRegExp(" ([TF]) (.*)");
 	if(re1.indexIn(line) < 0 || re3.indexIn(line) < 0)
 	{
 		qDebug("\n%s", line.toUtf8().data());
 		qDebug("No match\n");
 		return;
-	}
-	else
-	{
-				//qDebug("Match\n");
 	}
 			
 			// 42       Neil  <None>          USA      12k  136/  86  -   -    0s    -X default  T BWN 0-9 19-19 60-60 60-3600 25-25 0-0 0-0 0-0
