@@ -347,6 +347,8 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	servers = p[1];
 	/* FIXME, I no longer think that this is the number of
 	 * servers.  I think there are always 8 */
+	/* Actually, I think it is the number of servers but some of them
+	 * are not game servers... */
 	servers = 8;
 	qDebug("Servers: %d", servers);
 	printf("\n");
@@ -374,7 +376,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 		printf(" -> ");
 		// pad out to 15 (max ip length
 		p += (16 - ip_string_length);
-		s = p + 18;
+		s = p + 16;
 		//strncpy(si->name, (const char *)p, 18);
 		si->name = QString((char *)p);
 		while(p < s && *p != 0x00)
@@ -383,10 +385,26 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 			server_name_length++;
 		}
 		
-		p += (18 - server_name_length);	
+		p += (16 - server_name_length);	
 		printf("\n");
 		serverList.push_back(si);
-		//p += 2;		//probably a picture reference maybe in 18
+		printf("Language byte: %02x\n", p[0]);
+		switch(p[0])
+		{
+			case 1:
+				si->codec = "eucKR";
+				break;
+			case 2:
+				si->codec = "GB2312";
+				break;
+			case 3:
+				si->codec = "Shift-JIS";
+				break;
+			case 6:
+			default:
+				break;
+		}
+		p += 2;
 	}
 	/* We should really check for overflows here so that we don't run out
 	 * of packet.  FIXME FIXME FIXME */
@@ -477,7 +495,11 @@ int CyberOroConnection::reconnectToServer(void)
 		game_code_to_number.clear();
 	}
 	else
+	{
+		/* FIXME This can happen, for instance two of the china servers gave connection refused errors
+		 * which left the select server drop down menu grayed out!!! Add handling for this! */
 		qDebug("Can't open Connection!!");
+	}
 	/* FIXME, really we should set server init variables in a function
 	 * called from here on every reconnect, not on connection object allocation*/
 	playerlist_skipnumber = PLAYERLIST_SKIPNUMBER_UNSET;
@@ -2830,8 +2852,6 @@ bool CyberOroConnection::isReady(void)
 		return 0;
 }
 
-/* Non IGS servers can override this function and pass
- * their own GSName type for now */
 void CyberOroConnection::handleMessage(QString)
 {
 }
@@ -4478,7 +4498,7 @@ void CyberOroConnection::setAttachedGame(PlayerListing * const player, unsigned 
 	 * but we need them in our little list and, well the whole thing is iffy FIXME */
 	/* Okay, we're adding observer counts here, we can check it later.  They're not in the data we get, so that's an issue */
 	
-	if(player->observing != game_id)
+	if(game_id && player->observing != game_id)
 	{
 		game = getDefaultRoom()->getGameListing(game_id);
 		if(game)
@@ -4694,18 +4714,16 @@ void CyberOroConnection::handleRoomChat(unsigned char * msg, unsigned int size)
 		QString u;
 		
 		u = serverCodec->toUnicode((const char *)text, size - 4);
-			//u = codec->toUnicode(b, size - 4);
-		if(console_dispatch)
-			console_dispatch->recvText(player->name + ": " + u);
 		
 		BoardDispatch * boarddispatch = getIfBoardDispatch(room_were_in);
 		if(boarddispatch)
-			boarddispatch->recvKibitz(player->name, u);
+			boarddispatch->recvKibitz(player->name + "[" + player->rank + "]", u);
 		else
+		{
 			qDebug("No boarddispatch for %d", room_were_in);
-		//FIXME this belongs in a room or something
-		if(console_dispatch)
-			console_dispatch->recvText(player->name + "(" + QString::number(room_were_in) + "): " + u);
+			if(console_dispatch)
+				console_dispatch->recvText(player->name + "(" + QString::number(room_were_in) + "): " + u);
+		}
 	}
 	else
 		printf("unknown player says something");
@@ -8398,14 +8416,7 @@ unsigned int CyberOroConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 
 const char * CyberOroConnection::getCodecString(void)
 {
-	if(current_server_index == 0)
-		return "Shift-JIS";
-	else if(current_server_index == 1 || current_server_index == 2 || current_server_index == 3)
-		return "eucKR";
-	else if(current_server_index == 4 || current_server_index == 5 || current_server_index == 6)	//Taiwan? (may have been removed)
-		return "GB2312";
-	else
-		return "";
+	return serverList[current_server_index]->codec.toLatin1().constData();
 }
 
 int CyberOroConnection::time_to_seconds(const QString & time)
