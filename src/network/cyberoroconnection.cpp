@@ -401,6 +401,8 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 				si->codec = "Shift-JIS";
 				break;
 			case 6:
+				si->codec = "ISO-8859-1";
+				break;
 			default:
 				break;
 		}
