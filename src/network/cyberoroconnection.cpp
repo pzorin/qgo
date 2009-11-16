@@ -336,7 +336,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	
 	if(p[0] != 0x24 || p[1] != 0x27)
 	{
-		qDebug("Non standard server list msg header");
+		qDebug("Non standard server list msg header");		//unnecessary check FIXME
 		printf("%02x %02x", p[0], p[1]);
 	}
 	p += 4;
@@ -350,9 +350,9 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	/* Actually, I think it is the number of servers but some of them
 	 * are not game servers... */
 	servers = 8;
+#ifdef RE_DEBUG
 	qDebug("Servers: %d", servers);
 	printf("\n");
-#ifdef RE_DEBUG
 	for(i = 0; i < 20; i++)
 		printf("%02x ", p[i]);
 	printf("\n");
@@ -370,10 +370,15 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 		strncpy(si->ipaddress, (const char *)p, 16);
 		while(p < s && *p != 0x00)
 		{
-			printf("%c", *p++);
+#ifdef RE_DEBUG
+			printf("%c", *p);
+#endif //RE_DEBUG
+			p++;
 			ip_string_length++;
 		}
+#ifdef RE_DEBUG
 		printf(" -> ");
+#endif //RE_DEBUG
 		// pad out to 15 (max ip length
 		p += (16 - ip_string_length);
 		s = p + 16;
@@ -381,14 +386,19 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 		si->name = QString((char *)p);
 		while(p < s && *p != 0x00)
 		{
-			printf("%c", *p++);
+#ifdef RE_DEBUG
+			printf("%c", *p);
+#endif //RE_DEBUG
+			p++;
 			server_name_length++;
 		}
 		
 		p += (16 - server_name_length);	
 		printf("\n");
 		serverList.push_back(si);
+#ifdef RE_DEBUG
 		printf("Language byte: %02x\n", p[0]);
+#endif //RE_DEBUG
 		switch(p[0])
 		{
 			case 1:
