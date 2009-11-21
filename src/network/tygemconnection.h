@@ -150,6 +150,7 @@ class TygemConnection : public NetworkConnection
 		ConnectionType connectionType;
 		
 		int move_message_number;	//FIXME can't use if more than one game
+		int move_message_number_ack;
 		int seconds_until_opp_forfeits;
 	private:
 		void sendJoin(unsigned short game_number);
@@ -226,12 +227,12 @@ class TygemConnection : public NetworkConnection
 		//FIXME
 		void handleScoreMsg1(unsigned char * msg, unsigned int size);
 		void handleEndgameMsg(unsigned char * msg, unsigned int size);
+		void handleGameStateChange(unsigned char * msg, unsigned int size);
 		void handleCountRequest(unsigned char * msg, unsigned int size);
 		void handleCountRequestResponse(unsigned char * msg, unsigned int size);
 		void handleGameResult(unsigned char * msg, unsigned int size);
 		void handleGameResult2(unsigned char * msg, unsigned int size);
 		void handleMsg2(unsigned char * msg, unsigned int size);
-		class GameData * getGameData(unsigned int game_id);
 		int time_to_seconds(const QString & time);
 		
 		unsigned int http_connect_content_length;
