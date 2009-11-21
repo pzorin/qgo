@@ -53,7 +53,8 @@ struct MoveNum {int n; };
  * also allowing the reading of files.  This will become more useful if
  * we add in the stuff to retrieve game records from the server.
  * oro also has its own format I think and there's a few others.  There's
- * no reason why we shouldn't be able to handle them */
+ * no reason why we shouldn't be able to handle them.
+ * IGS also has its own format as probably does cyberoro */
 
 // Note: This class is a DIRTY UGLY Hack.
 // It probably does all the stuff books tell you never ever to do.
@@ -1194,6 +1195,9 @@ bool SGFParser::doParse(const QString &toParseStr)
 								if (compressed_list)
 									// Advance pos by 3
 									pos += 3;
+
+								if((markType == markTerrWhite || markType == markTerrBlack) && !tree->getCurrent()->isTerritoryMarked())
+									tree->getCurrent()->setTerritoryMarked();
 							}
 
 							//old_label = false;
@@ -1487,8 +1491,9 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 				//FIXME okay?
 				gameData->periodtime = time.toInt();
 				gameData->stones_periods = tmp.left(pos1).toInt();
-
+#ifdef FIXME
 				qDebug(QString("byoyomi time system: %1 Periods at %2 seconds").arg(gameData->stones_periods).arg(gameData->periodtime).toLatin1().constData());
+#endif //FIXME
 			}
 		}
 		else if (tmp.contains(":"))
