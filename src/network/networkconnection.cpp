@@ -883,6 +883,9 @@ int NetworkConnection::getBoardDispatches(void)
 
 GameDialog * NetworkConnection::getGameDialog(const PlayerListing & opponent)
 {
+	lastMainTimeChecked = -1;
+	lastPeriodTimeChecked = -1;
+	lastPeriodsChecked = -1;
 	return gameDialogRegistry->getEntry(&opponent);
 }
 

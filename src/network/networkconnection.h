@@ -275,7 +275,8 @@ class NetworkConnection : public QObject
 		std::vector<FriendWatchListing *> blockedList;
 
 		MatchNegotiationState * match_negotiation_state;
-		
+		int lastMainTimeChecked, lastPeriodTimeChecked, lastPeriodsChecked;
+
 	private:
 		void setupRoomAndConsole(void);
 		void tearDownRoomAndConsole(void);
