@@ -62,7 +62,8 @@ public:
 	virtual void startGame() {};
 	virtual void stopTime() {};
 	virtual void set_move(StoneColor , QString , QString ) {};
-	virtual void handleMove(class MoveRecord *) {}; 
+	virtual void handleMove(class MoveRecord *) {};
+	virtual void moveControl(QString &) {};
 	int getMoveNumber(void);
 	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual void setModified(bool b= true)		{ isModified = b;}
@@ -118,7 +119,6 @@ public:
 //	void send_kibitz(const QString);
 //	MainWindow *get_win() { return win; }
 //	void initGame() { win->getBoard()->initGame(&gd); }
-//	void setGameData() {win->getBoard()->setGameData(&gd); }
 //	void setMode() { win->getBoard()->setMode(gameMode); }
 
 //	QString secToTime(int);
@@ -309,6 +309,7 @@ protected:
 	virtual void sendMoveToInterface(StoneColor c,int x, int y);
 	virtual void sendPassToInterface(StoneColor c);
 	virtual void handleMove(MoveRecord * m);
+	virtual void moveControl(QString & player) { controlling_player = player; };
 	virtual void adjournGame(void);
 	virtual void startGame(void) {};
 	virtual void stopTime(void);
@@ -316,6 +317,7 @@ protected:
 	
 	QString game_Id;
 	bool dontsend;
+	QString controlling_player;
 };
 
 class qGoBoardObserveInterface : public qGoBoardNetworkInterface

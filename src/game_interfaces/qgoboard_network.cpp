@@ -44,13 +44,15 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	}
 	dontsend = false;
 	boardTimerId = 0;
-	
+	controlling_player = QString();
 	// what about review games?  games without timers ??
 
 }
 
 void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 {
+	if(controlling_player != QString() && controlling_player != boardwindow->getBoardDispatch()->getUsername())
+		return;
 	if(boardwindow->getGameData()->nigiriToBeSettled)
 	{
 		qDebug("Nigiri unsettled");

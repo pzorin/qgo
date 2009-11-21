@@ -36,6 +36,7 @@ class BoardDispatch
 		bool isClockStopped(void) { return clockStopped; };
 		void stopTime(void) { clockStopped = true; };
 		void startTime(void) { clockStopped = false; };
+		void moveControl(QString & player);
 		void sendTimeLoss(void);
 		void gameDataChanged(void);
 		void openBoard(void);

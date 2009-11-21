@@ -165,6 +165,11 @@ void BoardDispatch::closeBoard(void)
 	//delete this;
 }
 
+void BoardDispatch::moveControl(QString & player)
+{
+	boardwindow->qgoboard->moveControl(player);
+}
+
 void BoardDispatch::recvMove(MoveRecord * m)
 {
 	if(!boardwindow)
