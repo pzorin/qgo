@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>GameinfoDialog</class>
- <widget class="QDialog" name="GameinfoDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="GameinfoDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,84 +10,90 @@
     <height>358</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Game Information</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" colspan="3" >
-    <layout class="QHBoxLayout" >
+  <layout class="QGridLayout">
+   <item row="0" column="0" colspan="3">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_8" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>100</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Game Name:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="gameName" >
-       <property name="minimumSize" >
+      <widget class="QLineEdit" name="gameName">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_7" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>100</width>
        <height>0</height>
       </size>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Result:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QLineEdit" name="result" >
-     <property name="maximumSize" >
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="result">
+     <property name="minimumSize">
       <size>
-       <width>50</width>
+       <width>80</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>80</width>
        <height>16777215</height>
       </size>
      </property>
-     <property name="text" >
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="2" >
+   <item row="1" column="2">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>40</width>
        <height>20</height>
@@ -94,23 +101,23 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" colspan="3" >
-    <widget class="Line" name="line_2" >
-     <property name="orientation" >
+   <item row="2" column="0" colspan="3">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3" >
-    <layout class="QGridLayout" >
-     <item row="0" column="0" >
-      <layout class="QVBoxLayout" >
+   <item row="3" column="0" colspan="3">
+    <layout class="QGridLayout">
+     <item row="0" column="0">
+      <layout class="QVBoxLayout">
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>40</width>
            <height>20</height>
@@ -119,120 +126,120 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_3" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>White</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_4" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <widget class="QLabel" name="label_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Black</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
-     <item row="0" column="1" >
-      <layout class="QVBoxLayout" >
+     <item row="0" column="1">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Name</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="whiteName" />
+        <widget class="QLineEdit" name="whiteName"/>
        </item>
        <item>
-        <widget class="QLineEdit" name="blackName" />
+        <widget class="QLineEdit" name="blackName"/>
        </item>
       </layout>
      </item>
-     <item row="0" column="2" >
-      <layout class="QVBoxLayout" >
+     <item row="0" column="2">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label_2" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Rank</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="whiteRank" />
+        <widget class="QLineEdit" name="whiteRank"/>
        </item>
        <item>
-        <widget class="QLineEdit" name="blackRank" />
+        <widget class="QLineEdit" name="blackRank"/>
        </item>
       </layout>
      </item>
     </layout>
    </item>
-   <item row="4" column="0" colspan="3" >
-    <widget class="Line" name="line" >
-     <property name="orientation" >
+   <item row="4" column="0" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
+   <item row="5" column="0" colspan="2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_5" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>100</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Komi:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="komi" />
+      <widget class="QLineEdit" name="komi"/>
      </item>
     </layout>
    </item>
-   <item row="5" column="2" >
+   <item row="5" column="2">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>40</width>
        <height>20</height>
@@ -240,38 +247,38 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
+   <item row="6" column="0" colspan="2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_6" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>100</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Handicap:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="handicap" />
+      <widget class="QLineEdit" name="handicap"/>
      </item>
     </layout>
    </item>
-   <item row="6" column="2" >
+   <item row="6" column="2">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>40</width>
        <height>20</height>
@@ -279,97 +286,97 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="0" colspan="3" >
-    <layout class="QHBoxLayout" >
+   <item row="7" column="0" colspan="3">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_9" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>100</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Date</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="date" >
-       <property name="text" >
+      <widget class="QLineEdit" name="date">
+       <property name="text">
         <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="8" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
+   <item row="8" column="0" colspan="2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_11" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_11">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>60</width>
          <height>0</height>
         </size>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Copyright:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="copyright" >
-       <property name="text" >
+      <widget class="QLineEdit" name="copyright">
+       <property name="text">
         <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="8" column="2" >
-    <layout class="QHBoxLayout" >
+   <item row="8" column="2">
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="label_10" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+      <widget class="QLabel" name="label_10">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Played at:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="playedAt" >
-       <property name="text" >
+      <widget class="QLineEdit" name="playedAt">
+       <property name="text">
         <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="9" column="0" colspan="3" >
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+   <item row="9" column="0" colspan="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -383,11 +390,11 @@
    <receiver>GameinfoDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -399,11 +406,11 @@
    <receiver>GameinfoDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>
