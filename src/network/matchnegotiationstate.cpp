@@ -191,6 +191,20 @@ bool MatchNegotiationState::sentAdjournResume(void)
 	return false;
 }
 
+bool MatchNegotiationState::opponentDisconnected(void)
+{
+	if(state == MSOPPONENTDISCONNECT)
+		return true;
+	return false;
+}
+
+bool MatchNegotiationState::opponentRejoining(void)
+{
+	if(state == MSOPPONENTREJOINING)
+		return true;
+	return false;
+}
+
 void MatchNegotiationState::reset(void)
 {
 	player = 0;
@@ -310,6 +324,11 @@ void MatchNegotiationState::opponentDisconnect(void)
 void MatchNegotiationState::sendAdjournResume(void)
 {
 	state = MSSENTADJOURNRESUME;
+}
+
+void MatchNegotiationState::opponentRejoins(void)
+{
+	state = MSOPPONENTREJOINING;
 }
 
 void MatchNegotiationState::opponentReconnect(void)
