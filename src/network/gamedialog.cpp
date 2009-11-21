@@ -67,6 +67,7 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	ui.komiSpin->setValue(preferences.default_komi);
 	
 	ui.timeSpin->setDisplayFormat("h:mm:ss");
+	ui.BYTimeSpin->setDisplayFormat("h:mm:ss");
 	ui.timeSpin->setTime(connection->gd_checkMainTime(canadian, qtimeFromSeconds(preferences.default_stonesmaintime)));
 	ui.stonesTimeSpin->setTime(connection->gd_checkPeriodTime(canadian, QTime(0, preferences.default_stonestime/60, preferences.default_stonestime%60)));
 	ui.stonesSpin->setValue(connection->gd_checkPeriods(canadian, preferences.default_stones));
@@ -341,10 +342,14 @@ void GameDialog::slot_timeSpin(const QTime & v)
 	//	ui.timeSpin->setTime(QTime(v.minutes(), 0);
 	QTime check = connection->gd_checkMainTime(canadian, v);
 	if(check != v)
+	{
+		ui.timeSpin->blockSignals(true);
 		ui.timeSpin->setTime(check);
+		ui.timeSpin->blockSignals(false);
+	}
 	/*if(current_match_request->timeSystem == canadian)
 	{*/
-		int seconds = (v.minute() * 60) + v.second();
+		int seconds = (v.hour() * 3600) + (v.minute() * 60) + v.second();
 		if(current_match_request->maintime == seconds)
 		{
 			dialog_changed--;
@@ -365,7 +370,11 @@ void GameDialog::slot_stonesTimeSpin(const QTime & v)
 {
 	QTime check = connection->gd_checkPeriodTime(canadian, v);
 	if(check != v)
+	{
+		ui.stonesTimeSpin->blockSignals(true);
 		ui.stonesTimeSpin->setTime(check);
+		ui.stonesTimeSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == canadian)
 	{
 		int seconds = timeToSeconds(check);
@@ -389,7 +398,11 @@ void GameDialog::slot_stonesSpin(int v)
 {
 	unsigned int check = connection->gd_checkPeriods(canadian, v);
 	if(check != (unsigned)v)
+	{
+		ui.stonesSpin->blockSignals(true);
 		ui.stonesSpin->setValue(check);
+		ui.stonesSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == canadian)
 	{
 		if(current_match_request->stones_periods == v)
@@ -412,7 +425,11 @@ void GameDialog::slot_BYTimeSpin(const QTime & v)
 {
 	QTime check = connection->gd_checkMainTime(byoyomi, v);
 	if(check != v)
+	{
+		ui.BYTimeSpin->blockSignals(true);
 		ui.BYTimeSpin->setTime(check);
+		ui.BYTimeSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == byoyomi)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -436,7 +453,11 @@ void GameDialog::slot_BYPeriodTimeSpin(const QTime & v)
 {
 	QTime check = connection->gd_checkPeriodTime(byoyomi, v);
 	if(check != v)
+	{
+		ui.BYPeriodTimeSpin->blockSignals(true);
 		ui.BYPeriodTimeSpin->setTime(check);
+		ui.BYPeriodTimeSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == byoyomi)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -460,7 +481,11 @@ void GameDialog::slot_BYPeriodsSpin(int v)
 {
 	unsigned int check = connection->gd_checkPeriods(byoyomi, v);
 	if(check != (unsigned)v)
+	{
+		ui.BYPeriodsSpin->blockSignals(true);
 		ui.BYPeriodsSpin->setValue(check);
+		ui.BYPeriodsSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == byoyomi)
 	{
 		if(current_match_request->stones_periods == v)
@@ -483,7 +508,11 @@ void GameDialog::slot_ASIATimeSpin(const QTime & v)
 {
 	QTime check = connection->gd_checkMainTime(tvasia, v);
 	if(check != v)
+	{
+		ui.ASIATimeSpin->blockSignals(true);
 		ui.ASIATimeSpin->setTime(check);
+		ui.ASIATimeSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == tvasia)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -507,7 +536,11 @@ void GameDialog::slot_ASIAPeriodTimeSpin(const QTime & v)
 {
 	QTime check = connection->gd_checkPeriodTime(tvasia, v);
 	if(check != v)
+	{
+		ui.ASIAPeriodTimeSpin->blockSignals(true);
 		ui.ASIAPeriodTimeSpin->setTime(check);
+		ui.ASIAPeriodTimeSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == tvasia)
 	{
 		int seconds = (v.minute() * 60) + v.second();
@@ -531,7 +564,11 @@ void GameDialog::slot_ASIAPeriodsSpin(int v)
 {
 	unsigned int check = connection->gd_checkPeriods(tvasia, v);
 	if(check != (unsigned)v)
+	{
+		ui.ASIAPeriodsSpin->blockSignals(true);
 		ui.ASIAPeriodsSpin->setValue(check);
+		ui.ASIAPeriodsSpin->blockSignals(false);
+	}
 	if(current_match_request->timeSystem == tvasia)
 	{
 		if(current_match_request->stones_periods == v)
