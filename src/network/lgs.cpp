@@ -535,10 +535,12 @@ void LGSConnection::handle_info(QString line)
 		}
 		else
 		{
+#ifdef FIXME
 					// don't work correct at IGS!!!
 			int i = line.count(',');
 			qDebug(QString("observing %1 games").arg(i+1).toLatin1());
 //					//emit signal_addToObservationList(i+1);
+#endif //FIXME
 		}
 
 //				return IT_OTHER;
