@@ -7414,7 +7414,8 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 		boarddispatch = getIfBoardDispatch(game_number);
 		if(!boarddispatch)
 		{
-			getAndCloseGameDialog(*player);
+			if(player)
+				getAndCloseGameDialog(*player);
 			setRoomNumber(game_number);
 		}
 		else
