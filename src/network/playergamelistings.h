@@ -159,6 +159,7 @@ struct GameListing
 	GameMode gameType;		//this needs to be consistent
 	QString By;			//these two need to be changed somehow
 	QString FR;
+	QString comment;
 	/* Other possibilities for flags:
 	 * NO_FLAG, BROADCAST, CHAT_ROOM */
 	enum Flags { BLACK_WON, WHITE_WON, IN_PROGRESS, REVIEW, LOOKING } flags;
