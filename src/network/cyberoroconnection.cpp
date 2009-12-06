@@ -3476,6 +3476,8 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 		{
 			aPlayer->pro = true;
 		}
+		else
+			aPlayer->pro = false;
 		
 		//lost interest, its not the game
 		//aPlayer->observing = p[2];	//FIXME, what is this?
@@ -3550,26 +3552,14 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 				printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
 #endif //RE_DEBUG
 			}
-			goto label_playerlist_was_observer;
 		}
 label_playerlist_nogame:
 		/* If the game can't be found it either means that the player is not in a room
 		* or it means we don't have the room yet because that list hasn't come in.*/
 		
-		/* FIXME.  Why do we do this here?  So that we can reuse same
-		* object?  Why does this bit have to be cleared?  Its ugly here,
-		* and we can't use "continue" above, instead we have to use
-		* gotos and labels because of this...*/
-label_playerlist_was_observer:
-		aPlayer->pro = false;
-		
-		/* This also seems necessary... once we get this working, we should
-		 * think about how to clean this mess up... its just cause I've
-		* written it all so piecemeal */
 		backPlayer = room->getPlayerListing(aPlayer->id);
 		playerlist_inorder.push_back(backPlayer);
 	}
-	//FIXME test without this
 	delete newPlayer;
 #ifdef RE_DEBUG
 	printf("*** Players %d\n", players);
@@ -3648,6 +3638,8 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 		{
 			aPlayer->pro = true;
 		}
+		else
+			aPlayer->pro = false;
 		
 		//lost interest, its not the game
 		//aPlayer->observing = p[2];	//FIXME, what is this?
@@ -3722,26 +3714,14 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 				printf("Adding player %s %d to game %d\n", backPlayer->name.toLatin1().constData(), backPlayer->id, playerlist_roomnumber);
 #endif //PLAYERLIST_DEBUG
 			}
-			goto label_playerlist_was_observer;
 		}
 label_playerlist_nogame:
 		/* If the game can't be found it either means that the player is not in a room
 		 * or it means we don't have the room yet because that list hasn't come in.*/
 		
-		/* FIXME.  Why do we do this here?  So that we can reuse same
-		 * object?  Why does this bit have to be cleared?  Its ugly here,
-		 * and we can't use "continue" above, instead we have to use
-		 * gotos and labels because of this...*/
-label_playerlist_was_observer:
-		aPlayer->pro = false;
-		
-		/* This also seems necessary... once we get this working, we should
-		 * think about how to clean this mess up... its just cause I've
-		 * written it all so piecemeal */
 		backPlayer = room->getPlayerListing(aPlayer->id);
 		playerlist_inorder.push_back(backPlayer);
 	}
-	//FIXME test without this
 	delete newPlayer;
 #ifdef PLAYERLIST_DEBUG
 	printf("*** Players %d\n", players);
@@ -4381,7 +4361,8 @@ void CyberOroConnection::handlePlayerConnect(unsigned char * msg, unsigned int s
 		aPlayer = newPlayer;
 	aPlayer->id = id;
 	//aPlayer->name = (char *)name;
-	aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
+	aPlayer->name = serverCodec->toUnicode((const char *)name2, strlen((const char *)name2));
+	aPlayer->notnickname = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 	/* It actually looks like this catches more unicode foreign names, then the
 	* second name.  But I get the feeling that one is the text username or
 	* something... not sure */
@@ -4576,12 +4557,12 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 					console_dispatch->recvText(player->name + ": " + it->second);
 			}
 			else
-				boarddispatch->recvKibitz(player->name, it->second);
+				boarddispatch->recvKibitz(player->name + "[" + player->rank + "]", it->second);
 		}
 		else
 		{
 			if(console_dispatch)
-				console_dispatch->recvText(player->name + ": " + it->second);
+				console_dispatch->recvText(player->name + "[" + player->rank + "]: " + it->second);
 		}
 	}
 	else
@@ -4595,12 +4576,12 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 					console_dispatch->recvText(player->name + ": " + QString::number(setphrase_code, 16));
 			}
 			else
-				boarddispatch->recvKibitz(player->name, QString::number(setphrase_code, 16));
+				boarddispatch->recvKibitz(player->name + "[" + player->rank + "]", QString::number(setphrase_code, 16));
 		}
 		else
 		{
 			if(console_dispatch)
-				console_dispatch->recvText(player->name + ": " + QString::number(setphrase_code, 16));
+				console_dispatch->recvText(player->name + "[" + player->rank + "]: " + QString::number(setphrase_code, 16));
 		}
 	}
 #ifdef RE_DEBUG
@@ -4673,7 +4654,7 @@ void CyberOroConnection::handleServerRoomChat(unsigned char * msg, unsigned int 
 		u = serverCodec->toUnicode((const char *)text, size - 4);
 			//u = codec->toUnicode(b, size - 4);
 		if(console_dispatch)
-			console_dispatch->recvText(player->name + ": " + u);
+			console_dispatch->recvText(player->name + "[" + player->rank + "]: " + u);
 	}
 	else
 		printf("unknown player says something");
@@ -4926,23 +4907,44 @@ void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned i
 #ifdef RE_DEBUG
 	printf("%s 4a9c: %02x%02x %d %d\n", aPlayer->name.toLatin1().constData(), p[0], p[1], room_id, aPlayer->observing);
 #endif //RE_DEBUG
-	if(1)
+	
+	if(aPlayer->observing)
 	{
-		if(aPlayer->observing)
-			removeObserverFromGameListing(aPlayer);
-		aPlayer->online = false;
-		
-		room->recvPlayerListing(aPlayer);
-		
+		room_id = aPlayer->observing;
+		removeObserverFromGameListing(aPlayer);
 	}
+	else
+		room_id = 0;
+
 	BoardDispatch * boarddispatch = getIfBoardDispatch(room_id);
 	if(boarddispatch)
 	{
 		// Player left a running game?  maybe observer though
 		// but we need to check if stop clock is necessary
-		boarddispatch->recvKibitz(QString(), QString("%1 has left the room.").arg(aPlayer->name)); 
 		boarddispatch->recvObserver(aPlayer, false);	//doublecheck
+		GameData * gd = boarddispatch->getGameData();
+		if(gd->gameMode == modeMatch && (aPlayer->name == gd->black_name || aPlayer->name == gd->white_name))
+		{
+			boarddispatch->recvKibitz(QString(), tr("%1 has left the room.").arg(aPlayer->name)); 
+			if(gd->moves < 10)		//doublecheck, not 11?? FIXME
+			{
+				boarddispatch->recvKibitz(QString(), tr("Adjourned games with less than 10 moves are not counted."));
+				GameResult aGameResult;
+				aGameResult.result = GameResult::NOGAME;
+				boarddispatch->recvResult(&aGameResult);
+			}
+			else
+			{
+				match_negotiation_state->opponentDisconnect();
+				boarddispatch->stopTime();
+				QString q = QString(tr("Opponent Disconnected"));
+				boarddispatch->moveControl(q);
+			}
+		}
 	}
+	
+	aPlayer->online = false;	
+	room->recvPlayerListing(aPlayer);
 }
 
 //85bb
@@ -5353,15 +5355,15 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
 	BoardDispatch * boarddispatch;
-	GameListing * aGameListing;
-	GameData * aGameData;
+	GameListing * aGameListing, * newGameListing = 0;
+	GameData * aGameData, * newGameData = 0;
 	unsigned char name[11];
 	name[10] = 0x00;
 	unsigned short game_number;
 	int black_seconds, white_seconds;
 	int black_periods, white_periods;
 	bool black_in_byoyomi, white_in_byoyomi;
-	bool add_listing = false;
+	bool joining = false;
 	if(size != 116)
 	{
 		qDebug("Betting Match msg of strange size %d", size);
@@ -5390,29 +5392,44 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	game_number = p[0] + (p[1] << 8);
 	
 	p += 2;
-	/* The next two bytes might help. */
+	/* The next two bytes might help. or not*/
 	if(p[0] == 0xff && p[1] == 0xff)
 	{
 		/* If these are ffff, we can add it to the listing I think */
-		add_listing = true;
+		joining = false;
 #ifdef RE_DEBUG
 		printf("not for joining\n");
 #endif //RE_DEBUG
 	}
+	else if(our_player_id == p[0] + (p[1] << 8))
+	{
+		joining = true;
+#ifdef RE_DEBUG
+		printf("joining\n");
+#endif //RE_DEBUG
+	}
+	
 	p += 2;
 	/* FIXME Okay, I'm thinking that there's a standard game
 	 * data struct that we should just write something to convert
 	 * from.  I.e., we pass it the chunk of data and done.
 	 * Check out some of the match offers and see if we can
 	 * puzzle it out */
+	if(joining)
+	{
 #ifdef RE_DEBUG
 	//this keeps coming up, I think just to tell us there's a game but its annoying because it opens
 	//a window FIXME
 	qDebug("Apparently joining or not %d (%d?)", game_number, connecting_to_game_number);
 #endif //RE_DEBUG
-	boarddispatch = getBoardDispatch(game_number);
-	aGameData = boarddispatch->getGameData();
-	
+		boarddispatch = getBoardDispatch(game_number);
+		aGameData = boarddispatch->getGameData();
+	}
+	else
+	{
+		newGameData = new GameData();
+		aGameData = newGameData;
+	}
 	aGameData->number = game_number;
 	/* Also, we should check for connecting_to_game_number */
 	p += 2;
@@ -5468,8 +5485,14 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	//second byte could be board size, but usually 19 for Betting
 	aGameData->board_size = 19;		//FIXME?!??
 	
-	if(add_listing)
+	if(1)//(add_listing)
 	{
+		aGameListing = room->getGameListing(game_number);
+		if(!aGameListing)
+		{
+			newGameListing = new GameListing();
+			aGameListing = newGameListing;
+		}
 		aGameListing = new GameListing();
 		aGameListing->running = true;
 		aGameListing->isBetting = true;
@@ -5542,9 +5565,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		//aGameListing->game_code = aGameData->game_code;
 		aGameListing->isRoomOnly = false;
 		room->recvGameListing(aGameListing);
-		//FIXME test without delete
-		//delete aGameListing;
-		return;
+		delete newGameListing;
 	}
 	else
 		p += 24;
@@ -5564,6 +5585,8 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	aGameData->black_rank = aGameListing->black_rank();
 	aGameData->white_rank = aGameListing->white_rank();
 	
+	if(joining)
+	{
 	boarddispatch->openBoard();
 	boarddispatch->recvTime(TimeRecord(white_seconds, white_periods), TimeRecord(black_seconds, black_periods));
 	
@@ -5576,6 +5599,9 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 #endif //RE_DEBUG
 		addObserverListToBoard(boarddispatch);
 	}
+	}
+	else
+		delete newGameData;
 }
 
 //ca5d	chat rooms also
@@ -7381,7 +7407,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	//b50d 7203 0002 01f0 0201 0300 0000 3c00 3c003c00
 	//0002
 	//I think this is the rematch number
-	//4 and 5 might be the ordinal of this game in a sequence
+	//4 and 5 might be the ordinal of this game in a sequence (maybe not)
 	p += 2;
 
 	if(connecting_to_game_number)
@@ -7399,43 +7425,76 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	}
 	else if(match_negotiation_state->isOurGame(game_number))
 	{
-		if(!match_negotiation_state->verifyPlayer(player) &&
-                    (player_id != our_player_id || (!match_negotiation_state->sentRematch() && !match_negotiation_state->canEnterRematchAdjourned())))
+		if(match_negotiation_state->opponentDisconnected())
 		{
-			//on resuming a game after being disconnected, we hit here
-			//it could be anything but its amazing that our game is set at all?!? FIXME
-			qDebug("Would have been a rematch but some issue");  //FIXME FIXME
-			//FIXME resetting here could be a problem with someone blocking games by causing us to reset when
-			//we shouldn't?  maybe not.  I'm being paranoid, this isn't udp
-			//match_negotiation_state->reset();
-			//return;
-			// so yeah, going to go ahead, assuming its okay though should still FIXME
-		}
-		boarddispatch = getIfBoardDispatch(game_number);
-		if(!boarddispatch)
-		{
-			if(player)
-				getAndCloseGameDialog(*player);
-			setRoomNumber(game_number);
+			if(match_negotiation_state->getOpponent() != player->name)
+			{
+				qDebug("Got match opened, but %s is not our opponent", player->name.toLatin1().constData());
+				//return;	//FIXME
+			}
+			qDebug("opponent reconnected");
+			match_negotiation_state->setPlayer(player);
+			match_negotiation_state->startMatch();
+			boarddispatch = getIfBoardDispatch(game_number);
+			if(!boarddispatch)
+			{
+				qDebug("Opponent reconnected but no board!");
+				return;
+			}
+			aGameData = boarddispatch->getGameData();
+			if(aGameData->game_code != game_id)		//probably won't
+				aGameData->game_code = game_id;
+			boarddispatch->startTime();
+			QString q;
+			boarddispatch->moveControl(q);	
 		}
 		else
 		{
-			aGameData = boarddispatch->getGameData();
-			if(aGameData->game_code != game_id)
+			if(!match_negotiation_state->verifyPlayer(player) &&
+						(player_id != our_player_id || (!match_negotiation_state->sentRematch() && !match_negotiation_state->canEnterRematchAdjourned())))
 			{
-				printf("our rematch\n");
-				NetworkConnection::closeBoardDispatch(game_number);
-				aGameData = 0;
+				//on resuming a game after being disconnected, we hit here
+				//it could be anything but its amazing that our game is set at all?!? FIXME
+				// actually, obviously their id changes when they resume so "verifyPlayer" will fail !!! FIXME
+				qDebug("Would have been a rematch but some issue");  //FIXME FIXME
+				//FIXME resetting here could be a problem with someone blocking games by causing us to reset when
+				//we shouldn't?  maybe not.  I'm being paranoid, this isn't udp
+				//match_negotiation_state->reset();
+				//return;
+				// so yeah, going to go ahead, assuming its okay though should still FIXME
+			}
+			boarddispatch = getIfBoardDispatch(game_number);
+			if(!boarddispatch)
+			{
+				if(player)
+					getAndCloseGameDialog(*player);
+				setRoomNumber(game_number);
 			}
 			else
 			{
-			
-#ifdef RE_DEBUG
-				printf("Maybe a return to match mode our game\n");
-#endif //RE_DEBUG
-				//if so, need to restart timers!!! FIXME, added to boarddispatch but doublecheck
-				boarddispatch->recvLeaveScoreMode();
-				return;
+				aGameData = boarddispatch->getGameData();
+				if(aGameData->game_code != game_id)
+				{
+					/* We're getting here when there's just a rejoin
+					* unknown indicator 01 could be resume, but game code is different 
+					* note that we get the list of moves when they drop and rejoin!! */
+					GameListing * listing = room->getGameListing(game_number);
+					delete listing->gameData;
+					listing->gameData = 0;
+					printf("our rematch\n");
+					NetworkConnection::closeBoardDispatch(game_number);
+					aGameData = 0;
+				}
+				else
+				{
+				
+	#ifdef RE_DEBUG
+					printf("Maybe a return to match mode our game\n");
+	#endif //RE_DEBUG
+					//if so, need to restart timers!!! FIXME, added to boarddispatch but doublecheck
+					boarddispatch->recvLeaveScoreMode();
+					return;
+				}
 			}
 		}
 	}
@@ -7452,6 +7511,13 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 			aGameData = boarddispatch->getGameData();
 			if(aGameData->game_code != game_id)
 			{
+				/* FIXME should be combined with earlier deletion of this under our match.
+				 * this is ugly incidentally, that we add this strange thing to store the
+				 * gameData because ORO doesn't resend on rejoin, and then we have to go
+				 * around it like this. */
+				GameListing * listing = room->getGameListing(game_number);
+				delete listing->gameData;
+				listing->gameData = 0;
 				printf("observer rematch\n");
 				NetworkConnection::closeBoardDispatch(game_number);
 				aGameData = 0;
@@ -7466,7 +7532,6 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 			}
 		}
 	}
-	
 	/* In case of rematches, we close the existing board
 	 * dispatch, but only through the network
 	 * connection.  We don't want to send a leave msg*/
@@ -7528,6 +7593,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	}
 #ifdef RE_DEBUG
 	printf("Unknown indicator: %02x\n", p[1]);
+	//very likely this means a resume after disconnect
 #endif //RE_DEBUG
 	p += 2;
 	
@@ -8430,6 +8496,11 @@ unsigned int CyberOroConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 const char * CyberOroConnection::getCodecString(void)
 {
 	return serverList[current_server_index]->codec.toLatin1().constData();
+}
+
+QString CyberOroConnection::getPlaceString(void)
+{
+	return "CyberOro: " + serverList[current_server_index]->name;
 }
 
 int CyberOroConnection::time_to_seconds(const QString & time)
