@@ -1518,22 +1518,37 @@ Varsayılanı kullanıyorum</translation>
         <translation>Sunucu dolu, başkasını deneyin</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6145"/>
+        <location filename="../network/cyberoroconnection.cpp" line="4928"/>
+        <source>%1 has left the room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="4931"/>
+        <source>Adjourned games with less than 10 moves are not counted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="4940"/>
+        <source>Opponent Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../network/cyberoroconnection.cpp" line="6171"/>
         <source>Rematch declined</source>
         <translation>Yeni oyun talebi reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6145"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6171"/>
         <source>%1 has declined rematch</source>
         <translation>%1 yeni oyun talebinizi reddetti</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8202"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8268"/>
         <source>Invite declined</source>
         <translation>Davet reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8202"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8268"/>
         <source>%1 has declined invitation</source>
         <translation>%1 davetinizi reddetti</translation>
     </message>
@@ -2009,8 +2024,12 @@ Varsayılanı kullanıyorum</translation>
     </message>
     <message>
         <location filename="../network/login.cpp" line="125"/>
+        <source>Update qGo?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Notify Developer!</source>
-        <translation>Yazılım Geliştiricisine Haber Ver!</translation>
+        <translation type="obsolete">Yazılım Geliştiricisine Haber Ver!</translation>
     </message>
     <message>
         <location filename="../network/login.ui" line="14"/>
@@ -2109,7 +2128,7 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
     </message>
     <message>
         <location filename="../mainwindow.ui" line="101"/>
-        <location filename="../mainwindow.ui" line="3668"/>
+        <location filename="../mainwindow.ui" line="3678"/>
         <source>Go server</source>
         <translation>Go sunucusu</translation>
     </message>
@@ -2120,8 +2139,8 @@ izlemekte olduğunuz oyuncuların sayısını gösterir.
     </message>
     <message>
         <location filename="../mainwindow.ui" line="119"/>
-        <location filename="../mainwindow.ui" line="3659"/>
-        <location filename="../mainwindow_settings.cpp" line="371"/>
+        <location filename="../mainwindow.ui" line="3669"/>
+        <location filename="../mainwindow_settings.cpp" line="377"/>
         <source>Go engine</source>
         <translation>Go programı</translation>
     </message>
@@ -2938,13 +2957,13 @@ Otomatik oynatma kipinde hamleler arasında saniye cinsinden bekleme süresi.</t
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2280"/>
-        <location filename="../mainwindow_settings.cpp" line="397"/>
+        <location filename="../mainwindow_settings.cpp" line="403"/>
         <source>Table picture</source>
         <translation>Masa resmi</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2287"/>
-        <location filename="../mainwindow_settings.cpp" line="384"/>
+        <location filename="../mainwindow_settings.cpp" line="390"/>
         <source>Goban picture</source>
         <translation>Go tahtası resmi</translation>
     </message>
@@ -3338,11 +3357,16 @@ avans:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="3622"/>
+        <source>Simple player names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="3632"/>
         <source>Alternating list colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3650"/>
+        <location filename="../mainwindow.ui" line="3660"/>
         <source>sgf editor</source>
         <translation>SGF düzenleyici</translation>
     </message>
@@ -3400,9 +3424,9 @@ avans:</translation>
 </translation>
     </message>
     <message>
-        <location filename="../mainwindow_settings.cpp" line="372"/>
-        <location filename="../mainwindow_settings.cpp" line="385"/>
-        <location filename="../mainwindow_settings.cpp" line="398"/>
+        <location filename="../mainwindow_settings.cpp" line="378"/>
+        <location filename="../mainwindow_settings.cpp" line="391"/>
+        <location filename="../mainwindow_settings.cpp" line="404"/>
         <source>All Files (*)</source>
         <translation>Tüm Dosyalar (*)</translation>
     </message>
@@ -3482,7 +3506,7 @@ avans:</translation>
         <translation>,5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="3629"/>
+        <location filename="../mainwindow.ui" line="3639"/>
         <source>Default is Observe Outside</source>
         <translation>Dışarıdan izleme varsayılan ayar</translation>
     </message>
@@ -4184,96 +4208,96 @@ avans:</translation>
 <context>
     <name>TygemConnection</name>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="274"/>
+        <location filename="../network/tygemconnection.cpp" line="277"/>
         <source>Sorry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="274"/>
+        <location filename="../network/tygemconnection.cpp" line="277"/>
         <source>Review games are not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="288"/>
-        <location filename="../network/tygemconnection.cpp" line="2094"/>
+        <location filename="../network/tygemconnection.cpp" line="291"/>
+        <location filename="../network/tygemconnection.cpp" line="2106"/>
         <source>3 Boards Open</source>
         <translation>3 Tahta Açık</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="288"/>
+        <location filename="../network/tygemconnection.cpp" line="291"/>
         <source>You must close a board before you can open another one</source>
         <translation>Yeni bir tahta açmadan önce açık olanlardan birini kapatmalısınız</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="717"/>
+        <location filename="../network/tygemconnection.cpp" line="728"/>
         <source>Server full</source>
         <translation>Sunucu dolu</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="717"/>
+        <location filename="../network/tygemconnection.cpp" line="728"/>
         <source>Server full, try another</source>
         <translation>Sunucu dolu, başkasını deneyin</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2094"/>
+        <location filename="../network/tygemconnection.cpp" line="2106"/>
         <source>You must close a board before you can start a game</source>
         <translation>Yeni oyuna başlamadan önce açık bir tahtayı kapatmalısınız</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2097"/>
-        <location filename="../network/tygemconnection.cpp" line="8144"/>
-        <location filename="../network/tygemconnection.cpp" line="8151"/>
+        <location filename="../network/tygemconnection.cpp" line="2109"/>
+        <location filename="../network/tygemconnection.cpp" line="8172"/>
+        <location filename="../network/tygemconnection.cpp" line="8179"/>
         <source>Not open</source>
         <translation>Açık değil</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2097"/>
-        <location filename="../network/tygemconnection.cpp" line="8135"/>
-        <location filename="../network/tygemconnection.cpp" line="8144"/>
+        <location filename="../network/tygemconnection.cpp" line="2109"/>
+        <location filename="../network/tygemconnection.cpp" line="8163"/>
+        <location filename="../network/tygemconnection.cpp" line="8172"/>
         <source>%1 is not accepting invitations</source>
         <translation>%1 oyun davetlerini kabul etmiyor.</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5150"/>
+        <location filename="../network/tygemconnection.cpp" line="5164"/>
         <source>Resume match?</source>
         <translation>Oyuna devam?</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5151"/>
+        <location filename="../network/tygemconnection.cpp" line="5165"/>
         <source>Resume match in progress with %1?
 </source>
         <translation>%1 ile olan oyununuza devam etmek istermisiniz?
 </translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5682"/>
+        <location filename="../network/tygemconnection.cpp" line="5696"/>
         <source>Opponent Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8122"/>
-        <location filename="../network/tygemconnection.cpp" line="8159"/>
+        <location filename="../network/tygemconnection.cpp" line="8150"/>
+        <location filename="../network/tygemconnection.cpp" line="8187"/>
         <source>Invite declined</source>
         <translation>Davet reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8122"/>
+        <location filename="../network/tygemconnection.cpp" line="8150"/>
         <source>%1 has declined invitation</source>
         <translation>%1 oyun davetinizi reddetti</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8135"/>
+        <location filename="../network/tygemconnection.cpp" line="8163"/>
         <source>In game?</source>
         <translatorcomment>not obvious what is this for?</translatorcomment>
         <translation>Oyunda</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8151"/>
+        <location filename="../network/tygemconnection.cpp" line="8179"/>
         <source>%1 has the maximum boards (3) open</source>
         <translation>%1 açık olacbilecek azami (3) tahtayı açık tutuyor</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8159"/>
+        <location filename="../network/tygemconnection.cpp" line="8187"/>
         <source>%1 has declined all invitations</source>
         <translation>%1 tüm davetleri reddetti</translation>
     </message>
@@ -4577,42 +4601,42 @@ Kabul ediyor musunuz?
         <translation>Gelen hamle %1,%2 geçersiz gözüküyor</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="479"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="481"/>
         <source>Return to game?</source>
         <translation>Oyuna devam?</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="480"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="482"/>
         <source>Ask opponent to return to game?
 </source>
         <translation>Rakibe oyuna dönüp bitirmeyi teklif eder.
 </translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="534"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="536"/>
         <source>Resign?</source>
         <translation>Pes?</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="535"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="537"/>
         <source>Resign game with %1
 </source>
         <translation>%1 ile olan oyunda pes et
 </translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="561"/>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="565"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="563"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="567"/>
         <source>Game Adjourned</source>
         <translation>Oyuna Ara Verildi</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="561"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="563"/>
         <source>%1 vs. %2 has been adjourned.</source>
         <translation>%1 - %2 oynuna ara verildi.</translation>
     </message>
     <message>
-        <location filename="../game_interfaces/qgoboard_network.cpp" line="565"/>
+        <location filename="../game_interfaces/qgoboard_network.cpp" line="567"/>
         <source>Game with %1 has been adjourned.</source>
         <translation>%1 ile olan oyna ara verildi.</translation>
     </message>
