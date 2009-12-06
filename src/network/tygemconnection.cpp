@@ -139,6 +139,9 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	matchRequestKeepAliveTimerID = 0;
 	retryLoginTimerID = 0;
 	opponentDisconnectTimerID = 0;
+	dont_validate_maintime = false;
+	dont_validate_periodtime = false;
+	dont_validate_periods = false;
 	/* We should either create the palette on creation of
 	 * the connection, or have a button to activate it that
 	 * appears when the room is connected */
@@ -297,7 +300,7 @@ void TygemConnection::sendJoin(unsigned short game_number)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x18;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x38;
 	packet[4] = (game_number >> 8);
 	packet[5] = game_number & 0x00ff;
@@ -334,7 +337,7 @@ void TygemConnection::sendResume(unsigned short game_number)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x0c;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x86;
 	packet[4] = (game_number >> 8);
 	packet[5] = game_number & 0x00ff;
@@ -416,6 +419,11 @@ const char * TygemConnection::getCodecString(void)
 	return "eucKR";
 }
 
+QString TygemConnection::getPlaceString(void)
+{
+	return "Tygem: " + serverList[current_server_index]->name;
+}
+
 int TygemConnection::gd_verifyBoardSize(int v)
 {
 	return 19;
@@ -437,15 +445,16 @@ int TygemConnection::gd_verifyBoardSize(int v)
 QTime TygemConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 {
 	int seconds_options[] = {0, 60, 300, 600, 900, 1200, 1800, 2400, 3000, 3600, 5400, 7200, 
-								10800, 18000, 28000, 54600 };
+								10800, 18000, 28800, 54600 };
 	int seconds = (t.hour() * 3600) + (t.minute() * 60) + t.second();
 	bool increase;
 	int i, hours, minutes;
-	/*if(lastMainTimeChecked == -1)
+	if(dont_validate_maintime)
 	{
 		lastMainTimeChecked = seconds;
+		dont_validate_maintime = false;
 		return t;
-	}*/
+	}
 	if(seconds < lastMainTimeChecked)
 		increase = false;
 	else
@@ -467,7 +476,7 @@ QTime TygemConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 			else
 			{
 				i = 1;
-				while(seconds < seconds_options[i])
+				while(seconds >= seconds_options[i])
 				{
 					i++;
 					if(i == 16)
@@ -498,11 +507,12 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 	int seconds = (t.minute() * 60) + t.second();
 	bool increase;
 	int i, minutes;
-	/*if(lastPeriodTimeChecked == -1)
+	if(dont_validate_periodtime)
 	{
 		lastPeriodTimeChecked = seconds;
+		dont_validate_periodtime = false;
 		return t;
-	}*/
+	}
 	if(seconds < lastPeriodTimeChecked)
 		increase = false;
 	else
@@ -526,7 +536,7 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 			else
 			{
 				i = 1;
-				while(seconds < seconds_options[i])
+				while(seconds >= seconds_options[i])
 				{
 					i++;
 					if(i == 4)
@@ -552,11 +562,12 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 unsigned int TygemConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 {
 	unsigned int newp;
-	/*if(lastPeriodsChecked == -1)
+	if(dont_validate_periods)
 	{
 		lastPeriodsChecked = p;
+		dont_validate_periods = false;
 		return p;
-	}*/
+	}
 	switch(s)
 	{
 		default:
@@ -911,13 +922,12 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 
 void TygemConnection::sendLogin(bool response_bit, bool change_server)
 {	
-	unsigned int length = 0x28;
+	unsigned int length = 0x2c;
 	unsigned char * packet = new unsigned char[length];
 	unsigned int i;
-	
-	packet[0] = 0x00;
-	packet[1] = 0x28;
-	packet[2] = 0x06;
+	packet[0] = (length >> 8);
+	packet[1] = length & 0x00ff;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0xa5;
 	for(i = 0; i < (unsigned)username.length(); i++)
 		packet[i + 4] = username.toLatin1().data()[i];
@@ -941,7 +951,9 @@ void TygemConnection::sendLogin(bool response_bit, bool change_server)
 	printf("\n");
 #endif //RE_DEBUG
 	encode_offset = 0;	//clear for new server
-	encode(packet, 0x8);
+	//encode(packet, 0x8);
+	encode(packet, 0x9);
+	//encode(packet, (length / 4) - 2);
 	//after encode
 #ifdef RE_DEBUG
 	for(i = 0; i < length; i++)
@@ -1026,7 +1038,7 @@ void TygemConnection::sendRequestGames(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x08;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x11;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
@@ -1059,7 +1071,7 @@ void TygemConnection::sendRequest(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x0c;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0xae;
 	packet[4] = 0x0d;
 	packet[5] = 0xf0;
@@ -1093,7 +1105,7 @@ void TygemConnection::sendName(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x18;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x91;
 	writeZeroPaddedString((char *)&(packet[4]), getUsername(), 20);
 	//before encode
@@ -1117,7 +1129,7 @@ void TygemConnection::sendRequestPlayers(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x08;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x14;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
@@ -1154,7 +1166,7 @@ void TygemConnection::sendFriendsBlocksRequest(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x08;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x95;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
@@ -1186,7 +1198,7 @@ void TygemConnection::sendObserversRequest(unsigned short game_number)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x0c;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x65;
 	packet[4] = (game_number >> 8);
 	packet[5] = game_number & 0x00ff;
@@ -1406,7 +1418,7 @@ void TygemConnection::sendOpenConversation(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x33;
 	
 	PlayerListing * ourPlayer;
@@ -1452,7 +1464,7 @@ void TygemConnection::sendConversationReply(PlayerListing & player, enum MIVersi
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x34;
 	
 	PlayerListing * ourPlayer;
@@ -1505,7 +1517,7 @@ void TygemConnection::sendConversationMsg(PlayerListing & player, const char * t
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x35;
 	
 	PlayerListing * ourPlayer;
@@ -1565,7 +1577,7 @@ void TygemConnection::sendCloseConversation(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x35;
 	
 	PlayerListing * ourPlayer;
@@ -1641,7 +1653,7 @@ void TygemConnection::sendMsg(unsigned int room_number, QString text)
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x61;
 	packet[4] = (room_number >> 8);
 	packet[5] = room_number & 0x00ff;
@@ -1704,7 +1716,7 @@ void TygemConnection::sendServerChat(QString text)
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x17;
 	msg = (char *)text.toLatin1().constData();
 	/*our_name = (char *)getUsername().toLatin1().constData();
@@ -1784,7 +1796,7 @@ void TygemConnection::addFriend(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x93;
 	writeZeroPaddedString((char *)&(packet[4]), player.notnickname, 14);
 	//there's some bytes here that the official client doesn't even zero I don't
@@ -1812,7 +1824,7 @@ void TygemConnection::removeFriend(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x94;
 	writeZeroPaddedString((char *)&(packet[4]), player.notnickname, 14);
 	//there's some bytes here that the official client doesn't even zero I don't
@@ -1842,7 +1854,7 @@ void TygemConnection::addBlock(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x93;
 	writeZeroPaddedString((char *)&(packet[4]), player.notnickname, 14);
 
@@ -1871,7 +1883,7 @@ void TygemConnection::removeBlock(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x94;
 	writeZeroPaddedString((char *)&(packet[4]), player.notnickname, 14);
 
@@ -1901,7 +1913,7 @@ void TygemConnection::requestLongInfo(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x91;
 	writeZeroPaddedString((char *)&(packet[4]), player.notnickname, 14);
 
@@ -1932,7 +1944,7 @@ void TygemConnection::requestShortInfo(PlayerListing & player)
 
 	packet[0] = (length >> 8);
 	packet[1] = (length & 0xff);
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0xa3;
 	writeZeroPaddedString((char *)&(packet[4]), player.notnickname, 14);
 
@@ -1963,7 +1975,7 @@ void TygemConnection::sendFinishObserving(unsigned short game_number)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x0c;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x3d;
 	packet[4] = (game_number >> 8);
 	packet[5] = game_number & 0x00ff;
@@ -2003,7 +2015,7 @@ void TygemConnection::sendCreateRoom(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x28;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x36;
 	for(i = 4; i < length; i++)
 		packet[i] = 0x00;
@@ -2115,7 +2127,7 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	//else we actually might want to set it here instead of in handleMatchInvite
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	if(version == accept || version == decline || version == decline_all || version == alreadyingame)
 		packet[3] = 0x44;
 	else	//offer or create
@@ -2228,7 +2240,7 @@ void TygemConnection::sendMatchMsg1(const PlayerListing & player, unsigned short
 	unsigned char * packet = new unsigned char[length];
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0xc6;
 	packet[4] = (game_number >> 8);
 	packet[5] = game_number & 0x00ff;
@@ -2288,7 +2300,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	if(version == offer)
 		packet[3] = 0x45;
 	else //if(version == accept || version == modify)
@@ -2467,7 +2479,9 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 #endif //RE_DEBUG
 	
 	encode(packet, (length / 4) - 2);
+#ifdef RE_DEBUG
 	qDebug("Sending match offer");
+#endif //RE_DEBUG
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending match offer");
 	delete[] packet;
@@ -2497,7 +2511,7 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x71;
 	packet[4] = (mr.number >> 8);
 	packet[5] = mr.number & 0x00ff;
@@ -2608,7 +2622,7 @@ void TygemConnection::sendServerKeepAlive(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x08;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x4e;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
@@ -2652,7 +2666,7 @@ void TygemConnection::sendTime(BoardDispatch * boarddispatch)
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x7d;
 	packet[4] = (gd->number >> 8);
 	packet[5] = gd->number & 0x00ff;
@@ -2832,7 +2846,7 @@ void TygemConnection::sendMove(unsigned int game_id, MoveRecord * move)
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x68;
 	packet[4] = (r->number >> 8);
 	packet[5] = r->number & 0x00ff;
@@ -3005,7 +3019,7 @@ void TygemConnection::sendEndgameMsg(const GameData * game, enum EGVersion versi
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	if(version == pass)
 		packet[3] = 0x69;
 	else if(version == request_count)
@@ -3202,7 +3216,7 @@ void TygemConnection::sendStopTime(BoardDispatch * boarddispatch, enum EGVersion
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x83;
 	packet[4] = (game->number >> 8);
 	packet[5] = game->number & 0x00ff;
@@ -3249,7 +3263,7 @@ void TygemConnection::sendResumeFromDisconnect(unsigned int game_number)
 	
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x8d;
 	packet[4] = (game_number >> 8);
 	packet[5] = game_number & 0x00ff;
@@ -3279,7 +3293,7 @@ void TygemConnection::sendOpponentDisconnect(unsigned int game_number, enum Oppo
 	GameData * game = boarddispatch->getGameData();
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x81;
 	packet[4] = (game->number >> 8);
 	packet[5] = game->number & 0x00ff;
@@ -3325,7 +3339,7 @@ void TygemConnection::sendLongOpponentDisconnect(unsigned int game_number)
 	GameData * game = boarddispatch->getGameData();
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x52;
 	
 	game->opponentdropcount++;
@@ -3506,7 +3520,7 @@ void TygemConnection::sendMatchResult(unsigned short game_code)
 	GameData *aGameData = boarddispatch->getGameData();
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x70;
 	packet[4] = (game_code >> 8);
 	packet[5] = game_code & 0x00ff;
@@ -3587,7 +3601,7 @@ void TygemConnection::sendLongMatchResult(unsigned short game_code)
 	unsigned char * packet = new unsigned char[length];
 	packet[0] = (length >> 8);
 	packet[1] = length & 0x00ff;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x72;
 	packet[4] = (game_code >> 8);
 	packet[5] = game_code & 0x00ff;
@@ -4030,7 +4044,7 @@ void TygemConnection::sendInvitationSettings(bool invite)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x0c;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0xa2;
 	packet[4] = (invite ? 0 : 2);
 	packet[5] = 0xf0;
@@ -4067,7 +4081,7 @@ void TygemConnection::sendDisconnectMsg(void)
 	
 	packet[0] = 0x00;
 	packet[1] = 0x08;
-	packet[2] = 0x06;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x51;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
@@ -4133,8 +4147,8 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 	size -=4;
 	switch(message_type)
 	{
-		case TYGEM_GAMESINIT:
-		case TYGEM_GAMESUPDATE:
+		case TPC(TYGEM_GAMESINIT):
+		case TPC(TYGEM_GAMESUPDATE):
 			handleGamesList(msg, size);
 			break;
 	// possibly update after game won, first 00df
@@ -4144,17 +4158,17 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 	//0000
 
 			
-		case TYGEM_PLAYERSINIT:
+		case TPC(TYGEM_PLAYERSINIT):
 			handlePlayerList(msg, size);
 			//0653 request should also be sent here FIXME
 			break;
-		case TYGEM_PLAYERSUPDATE:
+		case TPC(TYGEM_PLAYERSUPDATE):
 			handlePlayerList(msg, size);
 			break;
-		case 0x0617:
+		case TPC(0x17):
 			handleServerRoomChat(msg, size);
 			break;
-		case 0x0618:
+		case TPC(0x18):
 			//baec cec0 b1f8 0000 0000 0000 0000 0012
 			//6877 6200 0000 0000 0000 0002
 			//3030ff003d007a00
@@ -4171,19 +4185,19 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 #endif //RE_DEBUG
 			break;
-		case TYGEM_OPENCONVERSATION:
+		case TPC(TYGEM_OPENCONVERSATION):
 			handleOpenConversation(msg, size);
 			break;
-		case TYGEM_CONVERSATIONREPLY:
+		case TPC(TYGEM_CONVERSATIONREPLY):
 			handleConversationReply(msg, size);
 			break;
-		case TYGEM_CONVERSATIONMSG:
+		case TPC(TYGEM_CONVERSATIONMSG):
 			handleConversationMsg(msg, size);
 			break;
-		case 0x0637:
+		case TPC(TYGEM_ROOMCREATED):
 			handleCreateRoomResponse(msg, size);
 			break;
-		case 0x0638:
+		case TPC(0x38):
 #ifdef RE_DEBUG
 			printf("0x0638: ");
 			for(i = 0; i < (int)size; i++)
@@ -4191,18 +4205,18 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 #endif //RE_DEBUG
 			//break;
-		case 0x0639:	//in response to 0638 sendJoin
+		case TPC(TYGEM_BOARDOPENED):	//in response to 0638 sendJoin
 			handleBoardOpened(msg, size);
 			break;
-		case TYGEM_MATCHINVITE:
+		case TPC(TYGEM_MATCHINVITE):
 			//0x0643: 70657465726975730000000000000001706574657269757300000000696e74727573696f6e00000000000
 			//		009696e74727573696f6e0000020100ffff
 			handleMatchInvite(msg, size);
 			break;
-		case TYGEM_MATCHINVITERESPONSE:
+		case TPC(TYGEM_MATCHINVITERESPONSE):
 			handleMatchInviteResponse(msg, size);
 			break;
-		case TYGEM_MATCHOFFER:
+		case TPC(TYGEM_MATCHOFFER):
 #ifdef RE_DEBUG
 			printf("0645: ");
 			for(i = 0; i < (int)size; i++)
@@ -4217,7 +4231,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 				printf("*** 0645 match offer has strange type: %02x!!!\n", msg[43]);
 			//type 0x1e could be rematch, or something else
 			break;
-		case TYGEM_MATCHOFFERRESPONSE:
+		case TPC(TYGEM_MATCHOFFERRESPONSE):
 			if(msg[43] == 0x01)
 				handleMatchOffer(msg, size, accept);
 			else if(msg[43] == 0x02)
@@ -4238,7 +4252,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			//3100 0000 0000 0002 6269 7473 0000 0000
 			//0000 0002
 			break;
-		case 0x064d:
+		case TPC(0x4d):
 			//this might be when opponent leaves game? possibly?
 			//maybe not, maybe we just have to pick that up
 			//from observers
@@ -4247,40 +4261,40 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 				printf("%02x", msg[i]);
 			printf("\n");
 			break;
-		case TYGEM_GAMECHAT:	//in game chat
+		case TPC(TYGEM_GAMECHAT):	//in game chat
 			handleGameChat(msg, size);
 			break;
 		//0633: 
 		//063370657465726975730000000000000008696e74727573696f6e00000000000009706574657269757300000002696e7
 		//4727573696f6e000002000000000000020000000000
 		
-		case TYGEM_OBSERVERSINIT:
-		case TYGEM_OBSERVERSUPDATE:
+		case TPC(TYGEM_OBSERVERSINIT):
+		case TPC(TYGEM_OBSERVERSUPDATE):
 				//maybe we do have to request with oro...
 			handleObserverList(msg, size);
 			break;
-		case TYGEM_MOVE:
+		case TPC(TYGEM_MOVE):
 			handleMove(msg, size);
 			break;
-		case 0x0669:	//first pass
+		case TPC(0x69):	//first pass
 			handlePass(msg, size, 1);
 			break;
-		case 0x066a:
+		case TPC(0x6a):
 			handleCountRequest(msg, size);
 			break;
-		case 0x066b:
+		case TPC(0x6b):
 			handleCountRequestResponse(msg, size);
 			break;
-		case 0x0670:
+		case TPC(0x70):
 			handleGameResult2(msg, size);
 			break;
-		case 0x0671:
+		case TPC(TYGEM_MATCH):
 			handleMatchOpened(msg, size);
 			break;	
-		case 0x0672:
+		case TPC(TYGEM_MATCHRESULT):
 			handleGameResult(msg, size);
 			break;
-		case 0x0674:
+		case TPC(0x74):
 			//067401f90001
 			//0x0674: 00910101
 			//I think this is the enter score message... 
@@ -4294,16 +4308,16 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 			break;
 			//an REM -1 -1 likely proceeds these as meaning done?
-		case TYGEM_ENDGAMEMSG:   
+		case TPC(TYGEM_ENDGAMEMSG):   
 			handleEndgameMsg(msg, size);
 			break;
-		case TYGEM_TIME:
+		case TPC(TYGEM_TIME):
 			handleTime(msg, size);
 			break;
-		case 0x0681:
+		case TPC(0x81):
 			handleGameStateChange(msg, size);
 			break;
-		case 0x0683:	//clock stop? //enter score?
+		case TPC(0x83):	//clock stop? //enter score?
 			/* This comes a lot during broadcasted games,  not
 			 * certain but could be time update, like stopped time
 			 * at the time listed */
@@ -4315,16 +4329,16 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 		//0000 0000 0000 696e 7472 7573 696f 6e00
 		//0000 0000 0001
 			
-		case TYGEM_SERVERPLAYERCOUNTS:	//0653 requests
+		case TPC(TYGEM_SERVERPLAYERCOUNTS):	//0653 requests
 			//0651 might request this
 			//in which case 0651 might not be
 			//a disconnect
 			handleServerPlayerCounts(msg, size);
 			break;
-		case 0x068e:
+		case TPC(TYGEM_RESUMEBROKENMATCH):
 			handleResumeMatch(msg, size);
 			break;
-		case 0x06c7:
+		case TPC(0xc7):
 			//this is related to either a failed match create or a bad
 			//sent message or maybe something legit
 			//00280000696e74727573696f6e00000000000009 396b 0000000000000
@@ -4365,7 +4379,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 		//00000009000000030000000000002457584f4f58584f4f4f4f4f4f4f005f636f756e742c2073776900000000000000010000000300000004000000056368696e61005f636f756e742c206c746f74616c5f636f00031b000000406c8b4d6f7573652e676966006f73735f636f756e742c206c74000000000000004e200000000000004e2000000000000000000000000049f2e7010000000000000000000000000000000000000000000061ea
 
 		
-		case 0x0692:
+		case TPC(0x92):
 			//possibly related to match opening or negotiation
 			//actually, unlikely, we send an 0691 at open
 #ifdef RE_DEBUG
@@ -4375,10 +4389,10 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 #endif //RE_DEBUG
 			break;
-		case TYGEM_FRIENDSBLOCKSLIST:
+		case TPC(TYGEM_FRIENDSBLOCKSLIST):
 			handleFriendsBlocksList(msg, size);
 			break;
-		case 0x0698:
+		case TPC(0x98):
 			//maybe number of games/players?
 #ifdef RE_DEBUG
 			printf("0x0698: ");
@@ -4387,10 +4401,10 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 #endif //RE_DEBUG
 			break;
-		case 0x069f:
+		case TPC(TYGEM_PERSONALCHAT):
 			handlePersonalChat(msg, size);
 			break;
-		case 0x06b1:	//a name during game?  //maybe bets? probably bets FIXME
+		case TPC(0xb1):	//a name during game?  //maybe bets? probably bets FIXME
 			//0001 0700 b0fc 
 			//c3b6 b5bf bdc3 b4eb 0000 0000 0000 0000 01
 			//0000 0000 0000 0003
@@ -4402,7 +4416,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			printf("\n");
 #endif //RE_DEBUG
 			break;
-		case 0x06af:	//login request response?
+		case TPC(0xaf):	//login request response?
 #ifdef RE_DEBUG
 			printf("0x06af: ");
 			for(i = 0; i < (int)size; i++)
@@ -7406,6 +7420,8 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	QString encoded_nameA, encoded_nameB;
 	QString encoded_nameA2, encoded_nameB2;
 	QString rankA, rankB;
+	unsigned short maintime;
+	unsigned char periodtime, stones_periods;
 	if(size != 92)			//eweiqi 88 FIXME
 	{
 		qDebug("Match open msg of strange size: %d", size);
@@ -7498,30 +7514,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	//00490001c4c1d2b0b5b6bfcd0000000000000015797031323131373400000000000000
 	//14012c1e030100000001000002ffffffffffffffff000b000c6d79646b003137340000
 	//0002797031323131373400000002498b58e4
-	if(aGameData->fullresult)
-	{
-		qDebug("0671 received for game with result already set\nassuming rematch\n");
-		class ObserverListModel * olm = boarddispatch->getObserverListModelForRematch();
-		NetworkConnection::closeBoardDispatch(game_number);
-		boarddispatch = getBoardDispatch(game_number);
-		if(!boarddispatch)
-		{
-			qDebug("Can't create board dispatch for %d", game_number);
-			return;
-		}
-		boarddispatch->setObserverListModel(olm);
-		//below is copied from 0639, awkward FIXME
-		boarddispatch->openBoard();
-
-		if(match_negotiation_state->isOurGame(game_number))
-		{
-			match_negotiation_state->startMatch();
-			//verify name and settings, possibly with switched color FIXME
-		}
-		aGameData = boarddispatch->getGameData();
-		
-		aGameData->number = game_number;
-	}
+	
 	p += 2;
 	//name and rank
 	strncpy((char *)name, (char *)p, 14);
@@ -7559,11 +7552,10 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 			break;
 	}*/
 	// TIME is wrong FIXME
-	aGameData->timeSystem = byoyomi;		//anything else??
-	aGameData->maintime = (p[0] << 8) + p[1];
-	aGameData->periodtime = p[2];
-	aGameData->stones_periods = p[3];
-	if(aGameData->maintime == 0 && aGameData->periodtime == 0 && aGameData->stones_periods == 0)
+	maintime = (p[0] << 8) + p[1];
+	periodtime = p[2];
+	stones_periods = p[3];
+	if(maintime == 0 && periodtime == 0 && stones_periods == 0)
 	{
 		//this can't be the only indicator
 		//no time settings agreed upon, no game
@@ -7571,6 +7563,36 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		qDebug("no match");
 		return;
 	}
+
+	if(aGameData->fullresult)
+	{
+		qDebug("0671 received for game with result already set\nassuming rematch\n");
+		class ObserverListModel * olm = boarddispatch->getObserverListModelForRematch();
+		NetworkConnection::closeBoardDispatch(game_number);
+		boarddispatch = getBoardDispatch(game_number);
+		if(!boarddispatch)
+		{
+			qDebug("Can't create board dispatch for %d", game_number);
+			return;
+		}
+		boarddispatch->setObserverListModel(olm);
+		//below is copied from 0639, awkward FIXME
+		boarddispatch->openBoard();
+
+		if(match_negotiation_state->isOurGame(game_number))
+		{
+			match_negotiation_state->startMatch();
+			//verify name and settings, possibly with switched color FIXME
+		}
+		aGameData = boarddispatch->getGameData();
+		
+		aGameData->number = game_number;
+	}
+
+	aGameData->timeSystem = byoyomi;		//anything else??
+	aGameData->maintime = maintime;
+	aGameData->periodtime = periodtime;
+	aGameData->stones_periods = stones_periods;
 #ifdef RE_DEBUG
 	printf("0671 TIME SETTINGS: %d %d %d %d %d %d\n", p[0], p[1], p[2], p[3], p[4], p[5]);
 #endif //RE_DEBUG
@@ -7860,6 +7882,12 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		qDebug("Match offer/accept from unknown opponent");
 		return;
 	}
+
+	//for game dialog time checks
+	dont_validate_maintime = true;
+	dont_validate_periodtime = true;
+	dont_validate_periods = true;
+
 	//0004 0e10 1e03 0100
 	if(version == offer || version == modify)
 	{	
