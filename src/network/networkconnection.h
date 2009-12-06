@@ -192,6 +192,7 @@ class NetworkConnection : public QObject
 		virtual bool supportsBlockList(void) { return false; };
 		virtual bool supportsSeek(void) { return false; };
 		virtual const char * getCodecString(void) { return ""; };
+		virtual QString getPlaceString(void) { return ""; };
 		virtual void saveIfDoesntSave(GameData *) {};
 		virtual unsigned long getPlayerListColumns(void) { return 0; };
 		#define PL_NOWINSLOSSES		0x01

@@ -38,6 +38,7 @@ class IGSConnection : public NetworkConnection
 		IGSConnection(const QString & user, const QString & pass);
 		IGSConnection();
 		~IGSConnection();
+		virtual QString getPlaceString();
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);

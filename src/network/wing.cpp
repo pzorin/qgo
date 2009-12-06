@@ -43,6 +43,11 @@ IGSConnection()
 		qDebug("Can't open Connection\n");	//throw error?
 }
 
+QString WingConnection::getPlaceString(void)
+{
+	return "WING";
+}
+
 void WingConnection::sendPlayersRequest(void)
 {
 	sendText("user\r\n");

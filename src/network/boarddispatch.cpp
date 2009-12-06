@@ -55,6 +55,7 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 		gameData = new GameData(l->gameData);		//ORO uses this
 	else
 		gameData = new GameData();
+	gameData->place = connection->getPlaceString();
 	//maybe we could set number here?  if we have it?
 	if(strlen(connection->getCodecString()) != 0)
 		gameData->codec = "UTF-8";		//all files in unicode where necessary

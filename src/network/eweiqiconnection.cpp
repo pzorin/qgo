@@ -26,6 +26,7 @@
 #include "gamedata.h"
 #include "room.h"
 #include "serverliststorage.h"
+#include "serverlistdialog.h"
 
 EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
 : TygemConnection(user, pass, TypeEWEIQI)
@@ -52,6 +53,11 @@ EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
 const char * EWeiQiConnection::getCodecString(void)
 {
 	return "GB2312";
+}
+
+QString EWeiQiConnection::getPlaceString(void)
+{
+	return "EWeiqi: " + serverList[current_server_index]->name;
 }
 
 int EWeiQiConnection::requestServerInfo(void)

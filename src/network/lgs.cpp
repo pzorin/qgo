@@ -43,6 +43,11 @@ IGSConnection()
 		qDebug("Can't open Connection\n");	//throw error?
 }
 
+QString LGSConnection::getPlaceString(void)
+{
+	return "LGS";
+}
+
 void LGSConnection::sendPlayersRequest(void)
 {
 	sendText("who\r\n");	//no userlist, user gives simple info

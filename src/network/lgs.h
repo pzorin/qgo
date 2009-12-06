@@ -27,6 +27,7 @@ class LGSConnection : public IGSConnection
 {
 	public:
 		LGSConnection(const QString & user, const QString & pass);
+		virtual QString getPlaceString(void);
 		virtual void sendPlayersRequest(void);
 		virtual void sendToggle(const QString & param, bool val);
 		virtual void onReady(void);

@@ -81,6 +81,11 @@ IGSConnection::~IGSConnection()
 	delete btime;
 }
 
+QString IGSConnection::getPlaceString(void)
+{
+	return "IGS";
+}
+
 void IGSConnection::sendText(QString text)
 {
 	// FIXME We're getting some nonsense on the end of this sometimes for

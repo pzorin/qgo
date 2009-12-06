@@ -114,6 +114,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual void saveIfDoesntSave(GameData * data);
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
 		virtual const char * getCodecString(void);
+		virtual QString getPlaceString(void);
 		virtual void timerEvent(QTimerEvent * event);
 	private:
 		void handleServerList(unsigned char * msg);

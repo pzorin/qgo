@@ -58,6 +58,11 @@ const char * TomConnection::getCodecString(void)
 	return "GB2312";
 }
 
+QString TomConnection::getPlaceString(void)
+{
+	return "Tom: " + serverList[current_server_index]->name;
+}
+
 int TomConnection::requestServerInfo(void)
 {
 	qDebug("Requesting Tom Server Info");
