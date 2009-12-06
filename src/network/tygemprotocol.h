@@ -56,3 +56,4 @@
 #define TYGEM_PERSONALCHAT		0x9f
 
 #define TPC(x) (TYGEM_PROTOCOL_VERSION << 8) + x
+
