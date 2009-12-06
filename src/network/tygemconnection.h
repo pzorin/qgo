@@ -125,6 +125,7 @@ class TygemConnection : public NetworkConnection
 		virtual bool supportsCreateRoom(void) { return true; };
 		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
 		virtual const char * getCodecString(void);
+		virtual QString getPlaceString(void);
 		virtual void timerEvent(QTimerEvent * event);
 	protected:
 		virtual int requestServerInfo(void);
@@ -255,6 +256,7 @@ class TygemConnection : public NetworkConnection
 		bool received_players;
 		bool received_games;
 		bool initial_connect;
+		bool dont_validate_maintime, dont_validate_periodtime, dont_validate_periods;
 		
 	private slots:
 		virtual void OnConnected();
