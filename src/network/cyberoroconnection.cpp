@@ -60,7 +60,7 @@
 
 //#define RE_DEBUG 
 
-#define CYBERORO_METASERVER			"211.113.91.78"
+#define CYBERORO_METASERVER			"211.38.95.221"
 CyberOroConnection::CyberOroConnection(const QString & user, const QString & pass)
 {
 
