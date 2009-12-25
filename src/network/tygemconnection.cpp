@@ -509,6 +509,11 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 		increase = false;
 	else
 		increase = true;
+	if(lastPeriodTimeChecked == 60 && seconds == 0)	//awkward
+	{
+		lastPeriodTimeChecked = 40;
+		return QTime(0, 0, 40);
+	}
 	switch(s)
 	{
 		default:
