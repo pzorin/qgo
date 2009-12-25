@@ -139,9 +139,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	matchRequestKeepAliveTimerID = 0;
 	retryLoginTimerID = 0;
 	opponentDisconnectTimerID = 0;
-	dont_validate_maintime = false;
-	dont_validate_periodtime = false;
-	dont_validate_periods = false;
+	
 	/* We should either create the palette on creation of
 	 * the connection, or have a button to activate it that
 	 * appears when the room is connected */
@@ -449,12 +447,9 @@ QTime TygemConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 	int seconds = (t.hour() * 3600) + (t.minute() * 60) + t.second();
 	bool increase;
 	int i, hours, minutes;
-	if(dont_validate_maintime)
-	{
-		lastMainTimeChecked = seconds;
-		dont_validate_maintime = false;
+	printf("maintime: %d %d", seconds, lastMainTimeChecked);
+	if(lastMainTimeChecked == seconds)
 		return t;
-	}
 	if(seconds < lastMainTimeChecked)
 		increase = false;
 	else
@@ -507,12 +502,9 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 	int seconds = (t.minute() * 60) + t.second();
 	bool increase;
 	int i, minutes;
-	if(dont_validate_periodtime)
-	{
-		lastPeriodTimeChecked = seconds;
-		dont_validate_periodtime = false;
+	printf("periodtime: %d %d", seconds, lastPeriodTimeChecked);
+	if(lastPeriodTimeChecked == seconds)
 		return t;
-	}
 	if(seconds < lastPeriodTimeChecked)
 		increase = false;
 	else
@@ -562,12 +554,8 @@ QTime TygemConnection::gd_checkPeriodTime(TimeSystem s, const QTime & t)
 unsigned int TygemConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 {
 	unsigned int newp;
-	if(dont_validate_periods)
-	{
-		lastPeriodsChecked = p;
-		dont_validate_periods = false;
+	if(lastPeriodsChecked == (signed)p)
 		return p;
-	}
 	switch(s)
 	{
 		default:
@@ -595,9 +583,13 @@ void TygemConnection::declineMatchOffer(const PlayerListing & opponent)
 	unsigned short playing_game_number = match_negotiation_state->getGameId();
 	if(!playing_game_number)
 		return;
-	MatchRequest mr;
-	mr.number = playing_game_number;
-	mr.opponent = opponent.name;
+	GameDialog * gameDialogDispatch = getIfGameDialog(opponent);
+	if(!gameDialogDispatch)
+	{
+		qDebug("No game dialog but just got decline!");
+		return;
+	}
+	MatchRequest * mr = gameDialogDispatch->getMatchRequest();
 	BoardDispatch * boarddispatch = getIfBoardDispatch(playing_game_number);
 	if(boarddispatch)
 	{
@@ -606,7 +598,7 @@ void TygemConnection::declineMatchOffer(const PlayerListing & opponent)
 		g.result = GameResult::NOGAME;
 		boarddispatch->recvResult(&g);
 	}
-	sendMatchOffer(mr, decline);
+	sendMatchOffer(*mr, decline);
 }
 
 void TygemConnection::cancelMatchOffer(const PlayerListing & opponent)
@@ -951,9 +943,7 @@ void TygemConnection::sendLogin(bool response_bit, bool change_server)
 	printf("\n");
 #endif //RE_DEBUG
 	encode_offset = 0;	//clear for new server
-	//encode(packet, 0x8);
-	encode(packet, 0x9);
-	//encode(packet, (length / 4) - 2);
+	encode(packet, (length / 4) - 2);
 	//after encode
 #ifdef RE_DEBUG
 	for(i = 0; i < length; i++)
@@ -1089,7 +1079,7 @@ void TygemConnection::sendRequest(void)
 	printf("\n");
 #endif //RE_DEBUG
 	
-	encode(packet, 1);		//WOAH FIXME double check this
+	encode(packet, (length / 4) - 2);
 
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending request");
@@ -2316,13 +2306,14 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	//0bb8 2803 0100 0100 0002	//offer
 	//time settings
 	//0007 012c 1e03 0100 0100
-	if(version == decline)
+	/* Its not clear that declines have to have the time settings, but they do seem to */
+	/*if(version == decline)
 	{
 		for(i = 38; i < 47; i++)
 			packet[i] = 0x00;
 	}
 	else
-	{
+	{*/
 		/*I've seen an accept sent with these as 0s
 		 * and yet that literally sets time to 0 so... */
 		//if(version == offer)
@@ -2331,6 +2322,8 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 			packet[39] = mr.maintime & 0x00ff;
 			packet[40] = mr.periodtime;
 			packet[41] = mr.stones_periods;
+			if(version != decline)
+			{
 			packet[42] = mr.handicap;	//this is handicap bit!!!
 			/* FIXME  it sets the handicap but doesn't know
 			 * whos turn it is or something !?!?! */
@@ -2341,6 +2334,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 				packet[43] = (unsigned char)(mr.komi - 0.5);
 			else
 				packet[43] = 0x00;
+			
 		/*}
 		else if(version == accept)
 		{
@@ -2363,9 +2357,12 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 				break;
 			case MatchRequest::NIGIRI:
 				packet[44] = 0x02;
-				break;	
+				break;
+			default:
+				break;
 		
 		}
+			}
 		/* This bit, if we're offering is basically ignored since
 		 * sent 0671 sendStartGame overrides colors, etc. */
 		//if(version == accept)
@@ -2405,10 +2402,10 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		}
 		//on tom sending accept I've seen 45 and 46 as 10 00
 		//might even be critical
-	}
+	//}
 	if(version == offer)
 	{
-		packet[47] = 0x02;	//offer bit
+		packet[47] = 0x02;
 		packet[48] = 0x00;
 		packet[49] = 0x00;
 		packet[50] = 0x00;
@@ -2417,7 +2414,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	}
 	else if(version == accept)
 	{
-		packet[47] = 0x01;	//accept bit
+		packet[47] = 0x01;
 		/* Could also be challenger bit, but if we change 47 to 02
 		 * it definitely rechallenges or disputes or something */
 		packet[48] = 0xff;
@@ -2428,7 +2425,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	}
 	else if(version == modify)
 	{
-		packet[47] = 0x02;	//accept bit
+		packet[47] = 0x02;
 		packet[48] = 0xff;
 		packet[49] = 0xff;
 		packet[50] = 0xff;
@@ -2437,11 +2434,15 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	}
 	else if(version == decline)
 	{
-		packet[47] = 0x03;
+		/*packet[47] = 0x03;
 		packet[48] = 0xff;
 		packet[49] = 0xff;
 		packet[50] = 0xff;
-		packet[51] = 0xff;
+		packet[51] = 0xff;*/
+		/* zeroes seem to work better here although there's still an autodecline if we try to modify
+		 * their modify */
+		for(i = 47; i < 52; i++)
+			packet[i] = 0x00;
 		match_negotiation_state->reset();
 	}
 	
@@ -2462,7 +2463,11 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 		packet[59] = 0x00;	//their pic?
 		for(i = 60; i < 64; i++)
 			packet[i] = 0x00;
-		
+
+		/* Below doesn't seem to matter, if its this.  The major thing was the 03ffffff */
+		/*if(mr.opponent_is_challenger)
+			packet[63] = 0x01;	*/	//seen on modify and decline
+
 		writeNicknameAndCID((char *)&(packet[64]), *opponent);
 	}
 	
@@ -4082,7 +4087,7 @@ void TygemConnection::sendDisconnectMsg(void)
 	packet[0] = 0x00;
 	packet[1] = 0x08;
 	packet[2] = TYGEM_PROTOCOL_VERSION;
-	packet[3] = 0x51;
+	packet[3] = TYGEM_SERVERDISCONNECT;
 	packet[4] = 0x00;
 	packet[5] = 0x00;
 	packet[6] = 0x00;
@@ -4445,7 +4450,7 @@ void TygemConnection::handleConnected(unsigned char * , unsigned int )
 }
 
 #ifdef RE_DEBUG
-#define PLAYERLIST_DEBUG
+//#define PLAYERLIST_DEBUG
 #endif //RE_DEBUG
 //0613
 void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
@@ -7427,7 +7432,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		qDebug("Match open msg of strange size: %d", size);
 	}
 	/* Is there a board_size FIXME or not? */
-	game_number = (p[0] << 8) + p[1];
+	game_number = (msg[0] << 8) + msg[1];
 	p += 2;
 	
 	boarddispatch = getIfBoardDispatch(game_number);
@@ -7476,7 +7481,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	//7269 7573 0000 0002 696e 7472 7573 696f
 	//6e00 0002 0000 61ea 4af4 8c0e
 
-	first_name_is_client = p[0];
+	first_name_is_client = msg[2];
 	// we should see if there's time info in here or the
 			// one we're currently using.  we need to initially set time
 			// we also seem to get this one when rematch started
@@ -7517,28 +7522,28 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	
 	p += 2;
 	//name and rank
-	strncpy((char *)name, (char *)p, 14);
+	strncpy((char *)name, (char *)&(msg[4]), 14);
 	encoded_nameA = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 15;
 	//rank byte
-	if(p[0] < 0x12)
-		rankA = QString::number(0x12 - p[0]) + 'k';
-	else if(p[0] > 0x1a)
-		rankA = QString::number(p[0] - 0x1a) + 'p';
+	if(msg[19] < 0x12)
+		rankA = QString::number(0x12 - msg[19]) + 'k';
+	else if(msg[19] > 0x1a)
+		rankA = QString::number(msg[19] - 0x1a) + 'p';
 	else
-		rankA = QString::number(p[0] - 0x11) + 'd';
+		rankA = QString::number(msg[19] - 0x11) + 'd';
 	p++;
 	//name and rank		
-	strncpy((char *)name, (char *)p, 14);
+	strncpy((char *)name, (char *)&(msg[20]), 14);
 	encoded_nameB = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 15;
 	//rank byte
-	if(p[0] < 0x12)
-		rankB = QString::number(0x12 - p[0]) + 'k';
-	else if(p[0] > 0x1a)
-		rankB = QString::number(p[0] - 0x1a) + 'p';
+	if(msg[35] < 0x12)
+		rankB = QString::number(0x12 - msg[35]) + 'k';
+	else if(msg[35] > 0x1a)
+		rankB = QString::number(msg[35] - 0x1a) + 'p';
 	else
-		rankB = QString::number(p[0] - 0x11) + 'd';
+		rankB = QString::number(msg[35] - 0x11) + 'd';
 	p++;
 	//time settings
 	//type seconds minutes periods
@@ -7552,9 +7557,14 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 			break;
 	}*/
 	// TIME is wrong FIXME
-	maintime = (p[0] << 8) + p[1];
-	periodtime = p[2];
-	stones_periods = p[3];
+	//0178 0001 696e 7472 7573 696f 6e00 0000
+	//0000 000a 7065 7465 7269 7573 0000 0000
+	//0000 0009 0000 0000 0000 0000 0100 0002
+	//ffff ffff ffff ffff 0000 0001 696e 7472
+	//7573696f6e000002706574657269757300000002000061ea4b3170da
+	maintime = (msg[36] << 8) + msg[37];
+	periodtime = msg[38];
+	stones_periods = msg[39];
 	if(maintime == 0 && periodtime == 0 && stones_periods == 0)
 	{
 		//this can't be the only indicator
@@ -7596,22 +7606,22 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 #ifdef RE_DEBUG
 	printf("0671 TIME SETTINGS: %d %d %d %d %d %d\n", p[0], p[1], p[2], p[3], p[4], p[5]);
 #endif //RE_DEBUG
-	aGameData->handicap = p[4];
-	aGameData->komi = (float)p[5] + .5;
+	aGameData->handicap = msg[40];
+	aGameData->komi = (float)msg[41] + .5;
 	p += 4;
 	p += 2;
 	/* This isn't white first flag I don't think, its first player
 	 * white I think... or maybe first player black, so I'll negate it...*/
 	
-	aGameData->white_first_flag = !p[0];
+	aGameData->white_first_flag = !msg[42];
 	/* FIXME okay, obviously this isn't right, at the same time, we use it below  BIG FIXME */
-	aGameData->undoAllowed = p[0];
-	if(p[1])
+	aGameData->undoAllowed = msg[42];
+	if(msg[43])
 		aGameData->free_rated = FREE;
-	else if(!p[1])
+	else if(!msg[43])
 		aGameData->free_rated = RATED;
 	else
-		qDebug("strange rated byte on board open %02x", p[1]);
+		qDebug("strange rated byte on board open %02x", msg[43]);
 	p += 2;
 
 #ifdef RE_DEBUG
@@ -7620,7 +7630,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 		qDebug("gl and 0671 white first flag differ !!!!!");
 	printf("Setting white first flag to: %d\n", aGameData->white_first_flag);
 #endif //RE_DEBUG
-
+	//msg44
 	p += 4;
 	p += 4;
 	p += 4;
@@ -7628,7 +7638,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	p += 2;
 	//possibly this is black or their picture code: p[1]
 	p += 2;
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)&(msg[60]), 11);
 	encoded_nameA2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 10;
 	//p[1] is color byte
@@ -7655,7 +7665,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	//else
 	//	qDebug("Strange color byte %d, line: %d", p[1], __LINE__);
 	p += 2;
-	strncpy((char *)name, (char *)p, 11);
+	strncpy((char *)name, (char *)&(msg[72]), 11);
 	encoded_nameB2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 10;
 	if(match_negotiation_state->sentAdjournResume())
@@ -7710,6 +7720,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	//else
 	//	qDebug("Strange color byte %d, line: %d", p[1], __LINE__);
 	p += 2;
+	//msg84
 	boarddispatch->gameDataChanged();
 	if(aGameData->handicap)
 	{
@@ -7883,11 +7894,6 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		return;
 	}
 
-	//for game dialog time checks
-	dont_validate_maintime = true;
-	dont_validate_periodtime = true;
-	dont_validate_periods = true;
-
 	//0004 0e10 1e03 0100
 	if(version == offer || version == modify)
 	{	
@@ -7907,6 +7913,10 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		}
 		//Here, we actually want to pop up game dialog
 		GameDialog * gameDialogDispatch = getGameDialog(*opponent);
+		//for game dialog time checks
+		lastMainTimeChecked = tempmr->maintime;
+		lastPeriodTimeChecked = tempmr->periodtime;
+		lastPeriodsChecked = tempmr->stones_periods;
 		gameDialogDispatch->recvRequest(tempmr, getGameDialogFlags());
 	}
 	else if(version == accept)
@@ -8138,7 +8148,10 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 		return;
 	}
 	if(!match_negotiation_state->verifyPlayer(player))
+	{
+		qDebug("Match invite response failed to verify player");
 		return;
+	}
 	p += 12;
 	p++;
 	//this byte seems to determine accept versus decline, etc.
@@ -8195,8 +8208,6 @@ void TygemConnection::handleMatchInviteResponse(unsigned char * msg, unsigned in
 #endif //RE_DEBUG
 			break;
 	}
-	delete match_negotiation_state;
-	match_negotiation_state = 0;
 }
 
 //0637
