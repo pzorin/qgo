@@ -697,7 +697,10 @@ void BoardDispatch::mergeListingIntoRecord(GameData * r, GameListing * l)
 	 * more of a protocol bug.  And I still want to get rid of this whole function */
 
 	//FIXME, trying not overwriting komi for now
-	//r->komi = l->komi;
+	//FIXME This is not okay, komi is apparently not passed all the time or with
+	//observed games on IGS, but we shouldn't have to do this:
+	if(connection->getPlaceString() == "IGS")
+		r->komi = l->komi;
 	//r->board_size = l->board_size;
 	r->moves = l->moves;
 	//r->handicap = l->handicap;
