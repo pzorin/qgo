@@ -410,6 +410,8 @@ void IGSConnection::sendMatchRequest(MatchRequest * mr)
 		mr->first_offer = false;
 		if(mr->timeSystem == canadian && color != " N ")
 			mr->nmatch = false;
+		if(mr->handicap)
+			mr->nmatch = true;
 	}
 	if(mr->nmatch)
 	{
@@ -448,7 +450,7 @@ unsigned long IGSConnection::getGameDialogFlags(void)
 {
 	//GDF_STONES25_FIXED is only set in "match" not "nmatch"
 	//there's also pmatch and tdmatch now I think
-	return (GDF_CANADIAN | GDF_BYOYOMI | GDF_CANADIAN300 | GDF_BY_CAN_MAIN_MIN |
+	return (GDF_CANADIAN | /*GDF_BYOYOMI |*/ GDF_CANADIAN300 | GDF_BY_CAN_MAIN_MIN |
 		 GDF_NIGIRI_EVEN | GDF_KOMI_FIXED6
 			/*| GDF_STONES25_FIXED*/);
 }
@@ -495,6 +497,7 @@ QTime IGSConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 				return QTime(8, 50, 0);
 			break;
 		case byoyomi:
+			//FIXME isn't only periodtime supposed to be less than 5?
 			if(seconds >= 300)
 				return QTime(0, 4, 0);
 			else
@@ -950,6 +953,10 @@ unsigned int IGSConnection::rankToScore(QString rank)
 */
 void IGSConnection::sendNmatchParameters(void)
 {
+	//note that official client doesn't reload an nmatchrange cancel
+	//until after you reconnect
+	//who the hell knows
+	return;
 	QString c = "nmatchrange ";
 	QSettings settings;
 
@@ -2043,7 +2050,7 @@ void IGSConnection::handle_info(QString line)
 			aMatch->timeSystem = canadian;
 			aMatch->board_size = line.section(" ",3,3).toInt();
 			aMatch->maintime = line.section(" ",4,4).toInt() * 60;
-			aMatch->periodtime = line.section(" ",5,5).toInt();
+			aMatch->periodtime = line.section(" ",5,5).toInt() * 60;
 			aMatch->stones_periods = 25;
 			flags |= GDF_CANADIAN;
 			flags |= GDF_STONES25_FIXED;
