@@ -31,7 +31,7 @@ struct ServerItem
 {
 	char ipaddress[16];
 	QString name;
-	QString codec;
+	char * codec;
 };
 
 class ServerListDialog : public QDialog

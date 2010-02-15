@@ -58,9 +58,15 @@
 
 #define PLAYERLIST_SKIPNUMBER_UNSET	0xffff
 
-//#define RE_DEBUG 
+//#define RE_DEBUG
 
 #define CYBERORO_METASERVER			"211.38.95.221"
+
+const char * KoreanCodec = "eucKR";
+const char * ChineseCodec = "GB2312";
+const char * JapaneseCodec = "Shift-JIS";
+const char * LatinCodec = "ISO-8859-1";
+
 CyberOroConnection::CyberOroConnection(const QString & user, const QString & pass)
 {
 
@@ -402,16 +408,16 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 		switch(p[0])
 		{
 			case 1:
-				si->codec = "eucKR";
+				si->codec = (char *)KoreanCodec;
 				break;
 			case 2:
-				si->codec = "GB2312";
+				si->codec = (char *)ChineseCodec;
 				break;
 			case 3:
-				si->codec = "Shift-JIS";
+				si->codec = (char *)JapaneseCodec;
 				break;
 			case 6:
-				si->codec = "ISO-8859-1";
+				si->codec = (char *)LatinCodec;
 				break;
 			default:
 				break;
@@ -419,10 +425,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 		p += 2;
 	}
 	/* We should really check for overflows here so that we don't run out
-	 * of packet.  FIXME FIXME FIXME */
-	
-	/* FIXME We may not get this whole message in one shot... we need
-	 * to make sure we do.  Its exactly 1046 bytes every time.*/
+	 * of packet.  FIXME FIXME FIXME 1046 bytes every time*/
 	
 	/* We close here because this first time, its going to close
 	 * anyway, and if we don't close here, we'll get an error
@@ -8495,7 +8498,7 @@ unsigned int CyberOroConnection::gd_checkPeriods(TimeSystem s, unsigned int p)
 
 const char * CyberOroConnection::getCodecString(void)
 {
-	return serverList[current_server_index]->codec.toLatin1().constData();
+	return serverList[current_server_index]->codec;
 }
 
 QString CyberOroConnection::getPlaceString(void)
