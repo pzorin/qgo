@@ -601,7 +601,6 @@ GamesListItem::GamesListItem(GameListing * const l) : listing(l)
 {
 }
 
-
 int GamesListItem::compare(const ListItem & i, int column) const
 {
 	const GamesListItem & g = (const GamesListItem &)i;
@@ -1062,7 +1061,7 @@ int ListModel::columnCount(const QModelIndex & /* parent */) const
 QModelIndex ListModel::index(int row, int column, const QModelIndex & /*parent*/) const
 {
 	const ListItem * item;
-	if(items.count() == row)
+	if(row >= items.count())
 		return QModelIndex();
 	if(list_sort_order == Qt::DescendingOrder)
 		item = items[row];
