@@ -193,6 +193,8 @@ class ServerListStorage & NetworkConnection::getServerListStorage(void)
 
 int NetworkConnection::checkForOpenBoards(void)
 {
+	if(!boardDispatchRegistry)
+		return 0;
 	BoardDispatch * boarddispatch;
 	std::map<unsigned int, class BoardDispatch *>::iterator i;
 	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
