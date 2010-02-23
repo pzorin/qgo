@@ -63,16 +63,17 @@ struct PlayerListing
 	bool game_dialog_opened;
 	enum FriendWatchType { none, friended, watched, blocked } friendWatchType;
 	bool notify;
+	bool hidden;
 	PlayerListing() : id(0), 
-	online(0), 
-	name(0), 
+	online(0),
+	name(0),
 	notnickname(0),
-	info(0), 
-	idletime(0), 
+	info(0),
+	idletime(0),
 	seconds_idle(0),
 	rank(0),
 	rank_score(0),
-	country(0), 
+	country(0),
 	wins(0), 
 	losses(0),
 	rated_games(0),
@@ -87,7 +88,8 @@ struct PlayerListing
 	dialog_opened(false),
 	game_dialog_opened(false),
 	friendWatchType(none),
-	notify(false) {};
+	notify(false),
+	hidden(false) {};
 };
 
 /* We need to alter copy constructor to have and respect a bit field.

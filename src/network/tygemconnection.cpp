@@ -4465,6 +4465,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 	QString encoded_name, encoded_name2, rank;
 	int players;
 	bool no_rank = false;
+	bool special_account;
 	Room * room = getDefaultRoom();
 	PlayerListing * newPlayer = new PlayerListing();
 	PlayerListing * aPlayer;
@@ -4544,6 +4545,10 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		 * pictures too so... */
 #endif //FIXME
 		p++;
+		if(p[0] == '[' && p[1] == 'G' && (p[2] == 'S' || p[2] == 'M'))
+			special_account = true;
+		else
+			special_account = false;
 		strncpy((char *)name, (char *)p, 14);
 		encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 		if(p[14])
@@ -4566,6 +4571,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		aPlayer->notnickname = encoded_name;
 		aPlayer->name = encoded_name2;
 		aPlayer->rank = rank;
+		aPlayer->hidden = special_account;
 		
 		p += 11;
 		aPlayer->country_id = p[0];
@@ -4677,7 +4683,8 @@ unsigned int TygemConnection::rankToScore(QString rank)
 
 	/* This is for ranking purposes, these are all kind of off and
 	 * tygem doesn't equate rank to points directly I don't think.
-	 * might be weighted by win/loss ratio or something. */
+         * might be weighted by win/loss ratio or something.
+         * at the very least, its logarithmic */
 	if(rank.contains("k"))
 		rp = (19 - ordinal) * 1000;
 	else if(rank.contains("d"))
