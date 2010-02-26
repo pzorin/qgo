@@ -3462,6 +3462,10 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 			newPlayer->playing = 0;
 		}
 		aPlayer->id = id;
+		if(strncmp((char *)name, "jguest", 6) == 0 || strncmp((char *)name, "jpguest", 7) == 0)
+			aPlayer->hidden = true;
+		else
+			aPlayer->hidden = false;
 		//aPlayer->name = QString((char*)name);
 		aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 		
@@ -3624,6 +3628,10 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 			newPlayer->playing = 0;
 		}
 		aPlayer->id = id;
+		if(strncmp((char *)name, "jguest", 6) == 0 || strncmp((char *)name, "jpguest", 7) == 0)
+			aPlayer->hidden = true;
+		else
+			aPlayer->hidden = false;
 		//aPlayer->name = QString((char*)name);
 		aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 		
@@ -4364,6 +4372,10 @@ void CyberOroConnection::handlePlayerConnect(unsigned char * msg, unsigned int s
 		aPlayer = newPlayer;
 	aPlayer->id = id;
 	//aPlayer->name = (char *)name;
+	if(strncmp((char *)name, "jguest", 6) == 0 || strncmp((char *)name, "jpguest", 7) == 0)
+		aPlayer->hidden = true;
+	else
+		aPlayer->hidden = false;
 	aPlayer->name = serverCodec->toUnicode((const char *)name2, strlen((const char *)name2));
 	aPlayer->notnickname = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 	/* It actually looks like this catches more unicode foreign names, then the
