@@ -419,10 +419,12 @@ bool PlayerListModel::lessThan(const PlayerGameListingPtr l, const PlayerGameLis
 Qt::SortOrder PlayerListModel::getSortOrder(void) const { return sortProxy->sortOrder(); };
 int PlayerListModel::getSortColumn(void) const { return sortProxy->sortColumn(); };
 
-SimplePlayerListModel::SimplePlayerListModel(bool _notify_column) : ListModel(2)
+SimplePlayerListModel::SimplePlayerListModel(bool _notify_column) : ListModel(_notify_column ? 2 : 1)
 {
+	notify_column = _notify_column;
 	setHeaderData(SPC_NAME, Qt::Horizontal, tr("Name"));
-	setHeaderData(SPC_NOTIFY, Qt::Horizontal, tr("Notify"));
+	if(notify_column)
+		setHeaderData(SPC_NOTIFY, Qt::Horizontal, tr("Notify"));
 	
 	sortProxy = new SimplePlayerSortProxy();
 	sortProxy->setSourceModel(this);
@@ -439,7 +441,8 @@ void SimplePlayerListModel::insertListing(PlayerListing * const l)
 	int i = getInsertPos((PlayerGameListingPtr)l);
 	insertRow(i);
 	setData(index(i, SPC_NAME), QVariant(l->name));
-	setData(index(i, SPC_NOTIFY), QVariant(l->rank));
+	if(notify_column)
+		setData(index(i, SPC_NOTIFY), QVariant(l->notify));
 }
 
 void SimplePlayerListModel::removeListing(PlayerListing * const l)
