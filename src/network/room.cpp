@@ -66,17 +66,19 @@ void Room::setupUI(void)
 {
 	gamesSortProxy = new GamesSortProxy();
 	gamesListModel = new GamesListModel();
-	gamesSortProxy->setSourceModel(gamesListModel);
+    gamesSortProxy->setSourceModel(gamesListModel);
 
 	/*ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
 	ui.ListView_games->hideColumn(12);
 	ui.ListView_games->hideColumn(13);*/
-	//gamesView->setModel(gamesListModel);
+        //gamesView->setModel(gamesListModel);
 	gamesView->setModel(gamesSortProxy);
 	/* Justifications??? */
+	gamesSortProxy->setDynamicSortFilter(true);
+	gamesListModel->setSortProxy(gamesSortProxy);
 	/* No sort indicator??? */
 	/* Qt 4.4.1 made sortIndicatorShown necesssary for sort behavior
-	 * !!!! */
+	 * !!!! doublecheck now FIXME*/
 	gamesView->header()->setSortIndicatorShown ( true );
 
 	//gamesView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -110,20 +112,16 @@ void Room::setupUI(void)
 	playerSortProxy = new PlayerSortProxy();
 	playerListModel = new PlayerListModel();
 	playerSortProxy->setSourceModel(playerListModel);
-	/* FIXME the below seems to have no affect, so I commented it out.
-	 * I changed references to the listmodel to the sortproxy in the id
-	 * registries, in the hope that they would... well I think that was the
-	 * wrong way, but I can't be sure since it could be an issue with
-	 * the network connection as well... anyway, if I get it working
-	 * correctly, probably more like the way it was, then I should change
-	 * the sortproxy references back maybe... */
 	
    // playerView->setIconSize(QSize(20, 20));
 	playerView->setModel(playerSortProxy);
+	//playerView->setModel(playerListModel);
 	playerSortProxy->setDynamicSortFilter(true);
-	gamesSortProxy->setDynamicSortFilter(true);
+	playerListModel->setSortProxy(playerSortProxy);
 	//connect(playerListModel, SIGNAL(dataChanged(QModelIndex())), playerSortProxy, SLOT(clear()));
+	//connect(playerView->header(), SIGNAL(sectionClicked(int)), playerSortProxy, SLOT(sortByColumn(int))); 
 	playerView->header()->setSortIndicatorShown ( true );
+	//playerView->setSortingEnabled(true);
 	
 	playerView->setColumnWidth ( 0, 40 );
 	playerView->setColumnWidth ( 1, 100 );
@@ -184,7 +182,6 @@ Room::~Room()
 	
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
-	qDebug("Deconstructing room");
 	playerView->setModel(0);
 	gamesView->setModel(0);
 	delete playerListModel;
@@ -468,41 +465,33 @@ void Room::slot_setRankSpreadView(void)
 		rkMin = "NR";
 		rkMax = "9p";
 	}
-
 	else if ( ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() == 1)) ||
 		((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() == 0))  ||
 		((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() ==1)) )
 	{
 		rkMin = "1p";
 		rkMax = "9p";
-	}	
-
+	}
 	else if ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() > 1))
 	{
 		rkMin = whoBox2->currentText();
 		rkMax = whoBox2->currentText();
-	}	
-
-
+	}
 	else if ((whoBox1->currentIndex() > 1) && (whoBox2->currentIndex() == 0))
 	{
 		rkMin = whoBox1->currentText();
 		rkMax = whoBox1->currentText();
-	}	
-
+	}
 	else if ((whoBox1->currentIndex() > 1) && (whoBox2->currentIndex() == 1))
 	{
 		rkMin = whoBox1->currentText();
 		rkMax = "9p";
-	}	
-
+	}
 	else if ((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() > 1))
 	{
 		rkMin = whoBox2->currentText();
 		rkMax = "9p";
 	}
-
-
 	else if ((whoBox2->currentIndex() >= whoBox1->currentIndex() ))
 	{
 		rkMin = whoBox2->currentText();
