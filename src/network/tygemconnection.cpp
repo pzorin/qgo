@@ -4621,7 +4621,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		//01  might mean observing
 		//02  probably means in a game
 		/* I've seen 10, then 11 when we enter room for game and then 12 when we've accepted and game is in progress */
-		aPlayer->country = QString::number(p[0], 16) + QString::number(p[1], 16);
+		//aPlayer->country = QString::number(p[0], 16) + QString::number(p[1], 16);
 		p += 2;
 		p += 2;
 #ifdef PLAYERLIST_DEBUG
@@ -5125,7 +5125,8 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 			if(name_length)
 			{
 				char * comment = new char[name_length + 1];
-				strncpy(comment, (char *)p, name_length);
+				comment[name_length] = '\0';
+				strncpy(comment, (char *)p, name_length);	//FIXME next line strlen
 				aGameListing->comment = serverCodec->toUnicode(comment, strlen(comment));
 				delete comment;
 			}
