@@ -685,8 +685,8 @@ Undo the opponent&apos;s last move.</source>
 Rakibin son hamlesini geri al.</translation>
     </message>
     <message>
-        <location filename="../board/boardwindow.cpp" line="872"/>
         <location filename="../board/boardwindow.ui" line="5445"/>
+        <location filename="../board/boardwindow.cpp" line="872"/>
         <source>Undo</source>
         <translation>Geri al</translation>
     </message>
@@ -1508,47 +1508,47 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>CyberOroConnection</name>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3290"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3293"/>
         <source>Server full</source>
         <translation>Sunucu dolu</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="3290"/>
+        <location filename="../network/cyberoroconnection.cpp" line="3293"/>
         <source>Server full, try another</source>
         <translation>Sunucu dolu, başkasını deneyin</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="4928"/>
+        <location filename="../network/cyberoroconnection.cpp" line="4943"/>
         <source>%1 has left the room.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="4931"/>
+        <location filename="../network/cyberoroconnection.cpp" line="4946"/>
         <source>Adjourned games with less than 10 moves are not counted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="4940"/>
+        <location filename="../network/cyberoroconnection.cpp" line="4955"/>
         <source>Opponent Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6171"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6186"/>
         <source>Rematch declined</source>
         <translation>Yeni oyun talebi reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="6171"/>
+        <location filename="../network/cyberoroconnection.cpp" line="6186"/>
         <source>%1 has declined rematch</source>
         <translation>%1 yeni oyun talebinizi reddetti</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8268"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8283"/>
         <source>Invite declined</source>
         <translation>Davet reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/cyberoroconnection.cpp" line="8268"/>
+        <location filename="../network/cyberoroconnection.cpp" line="8283"/>
         <source>%1 has declined invitation</source>
         <translation>%1 davetinizi reddetti</translation>
     </message>
@@ -1638,6 +1638,7 @@ Varsayılanı kullanıyorum</translation>
 <context>
     <name>GameDialog</name>
     <message>
+        <location filename="../network/gamedialog.ui" line="850"/>
         <location filename="../network/gamedialog.cpp" line="124"/>
         <location filename="../network/gamedialog.cpp" line="144"/>
         <location filename="../network/gamedialog.cpp" line="164"/>
@@ -1662,9 +1663,13 @@ Varsayılanı kullanıyorum</translation>
         <location filename="../network/gamedialog.cpp" line="871"/>
         <location filename="../network/gamedialog.cpp" line="878"/>
         <location filename="../network/gamedialog.cpp" line="1292"/>
-        <location filename="../network/gamedialog.ui" line="850"/>
         <source>Offer</source>
         <translation>Teklif et</translation>
+    </message>
+    <message>
+        <location filename="../network/gamedialog.cpp" line="40"/>
+        <source>New Game</source>
+        <translation type="unfinished">Yeni Oyun</translation>
     </message>
     <message>
         <location filename="../network/gamedialog.cpp" line="824"/>
@@ -3571,32 +3576,32 @@ avans:</translation>
 <context>
     <name>NetworkConnection</name>
     <message>
-        <location filename="../network/networkconnection.cpp" line="448"/>
+        <location filename="../network/networkconnection.cpp" line="450"/>
         <source>Signed on</source>
         <translation>Bağlanıldı</translation>
     </message>
     <message>
-        <location filename="../network/networkconnection.cpp" line="448"/>
+        <location filename="../network/networkconnection.cpp" line="450"/>
         <source>%1 has signed on</source>
         <translation>%1 oturum açtı</translation>
     </message>
     <message>
-        <location filename="../network/networkconnection.cpp" line="488"/>
+        <location filename="../network/networkconnection.cpp" line="490"/>
         <source>Match Started!</source>
         <translation>Oyun başladı!</translation>
     </message>
     <message>
-        <location filename="../network/networkconnection.cpp" line="488"/>
+        <location filename="../network/networkconnection.cpp" line="490"/>
         <source>Match has started between %1 and %2</source>
         <translation>%1 ile %2 arasında maç başladı</translation>
     </message>
     <message>
-        <location filename="../network/networkconnection.cpp" line="498"/>
+        <location filename="../network/networkconnection.cpp" line="500"/>
         <source>Please wait</source>
         <translation>Lütfen bekleyin</translation>
     </message>
     <message>
-        <location filename="../network/networkconnection.cpp" line="498"/>
+        <location filename="../network/networkconnection.cpp" line="500"/>
         <source>Connecting...</source>
         <translation>Bağlanılıyor...</translation>
     </message>
@@ -3900,8 +3905,8 @@ avans:</translation>
     <message>
         <location filename="../board/interfacehandler.cpp" line="127"/>
         <location filename="../board/interfacehandler.cpp" line="128"/>
+        <location filename="../board/interfacehandler.cpp" line="584"/>
         <location filename="../board/interfacehandler.cpp" line="585"/>
-        <location filename="../board/interfacehandler.cpp" line="586"/>
         <location filename="../gamedata.h" line="32"/>
         <source>White</source>
         <translation>Beyaz</translation>
@@ -3909,18 +3914,18 @@ avans:</translation>
     <message>
         <location filename="../board/interfacehandler.cpp" line="135"/>
         <location filename="../board/interfacehandler.cpp" line="137"/>
-        <location filename="../board/interfacehandler.cpp" line="187"/>
-        <location filename="../board/interfacehandler.cpp" line="196"/>
-        <location filename="../board/interfacehandler.cpp" line="593"/>
-        <location filename="../board/interfacehandler.cpp" line="595"/>
+        <location filename="../board/interfacehandler.cpp" line="186"/>
+        <location filename="../board/interfacehandler.cpp" line="195"/>
+        <location filename="../board/interfacehandler.cpp" line="592"/>
+        <location filename="../board/interfacehandler.cpp" line="594"/>
         <source>W</source>
         <translation>B</translation>
     </message>
     <message>
         <location filename="../board/interfacehandler.cpp" line="145"/>
         <location filename="../board/interfacehandler.cpp" line="146"/>
+        <location filename="../board/interfacehandler.cpp" line="602"/>
         <location filename="../board/interfacehandler.cpp" line="603"/>
-        <location filename="../board/interfacehandler.cpp" line="604"/>
         <location filename="../gamedata.h" line="33"/>
         <source>Black</source>
         <translation>Siyah</translation>
@@ -3928,50 +3933,50 @@ avans:</translation>
     <message>
         <location filename="../board/interfacehandler.cpp" line="153"/>
         <location filename="../board/interfacehandler.cpp" line="155"/>
-        <location filename="../board/interfacehandler.cpp" line="187"/>
-        <location filename="../board/interfacehandler.cpp" line="196"/>
-        <location filename="../board/interfacehandler.cpp" line="611"/>
-        <location filename="../board/interfacehandler.cpp" line="613"/>
+        <location filename="../board/interfacehandler.cpp" line="186"/>
+        <location filename="../board/interfacehandler.cpp" line="195"/>
+        <location filename="../board/interfacehandler.cpp" line="610"/>
+        <location filename="../board/interfacehandler.cpp" line="612"/>
         <source>B</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="180"/>
+        <location filename="../board/interfacehandler.cpp" line="179"/>
         <source>Move</source>
         <translation>Hamle</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="197"/>
+        <location filename="../board/interfacehandler.cpp" line="196"/>
         <source>Pass</source>
         <translation>Pas</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="206"/>
+        <location filename="../board/interfacehandler.cpp" line="205"/>
         <source>Black to play</source>
         <translation>Sıra Siyah&apos;ta</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="206"/>
+        <location filename="../board/interfacehandler.cpp" line="205"/>
         <source>White to play</source>
         <translation>Sıra Beyaz&apos;da</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="215"/>
+        <location filename="../board/interfacehandler.cpp" line="214"/>
         <source>brother</source>
         <translation>üst dal</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="217"/>
+        <location filename="../board/interfacehandler.cpp" line="216"/>
         <source>brothers</source>
         <translation>üst dal</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="221"/>
+        <location filename="../board/interfacehandler.cpp" line="220"/>
         <source>son</source>
         <translation>alt dal</translation>
     </message>
     <message>
-        <location filename="../board/interfacehandler.cpp" line="223"/>
+        <location filename="../board/interfacehandler.cpp" line="222"/>
         <source>sons</source>
         <translation>alt dal</translation>
     </message>
@@ -4061,37 +4066,37 @@ avans:</translation>
 <context>
     <name>Room</name>
     <message>
-        <location filename="../network/room.cpp" line="297"/>
+        <location filename="../network/room.cpp" line="285"/>
         <source>Stats</source>
         <translation type="unfinished">İstatistikler</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="298"/>
+        <location filename="../network/room.cpp" line="286"/>
         <source>Match</source>
         <translation>Oyun</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="307"/>
+        <location filename="../network/room.cpp" line="295"/>
         <source>Talk</source>
         <translation>Sohbet</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="310"/>
+        <location filename="../network/room.cpp" line="298"/>
         <source>Remove from Friends</source>
         <translation>Arkadaşlıktan çık</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="312"/>
+        <location filename="../network/room.cpp" line="300"/>
         <source>Add to Friends</source>
         <translation>Arkadaş ol</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="314"/>
+        <location filename="../network/room.cpp" line="302"/>
         <source>Remove from Watches</source>
         <translation>İzlenenlerden çıkar</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="316"/>
+        <location filename="../network/room.cpp" line="304"/>
         <source>Add to Watches</source>
         <translation>İzlenenlere ekle</translation>
     </message>
@@ -4104,19 +4109,19 @@ avans:</translation>
         <translation type="obsolete">Hayran ol</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="317"/>
+        <location filename="../network/room.cpp" line="305"/>
         <source>Block</source>
         <translation>Engelle</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="340"/>
-        <location filename="../network/room.cpp" line="346"/>
+        <location filename="../network/room.cpp" line="328"/>
+        <location filename="../network/room.cpp" line="334"/>
         <source>Observe Outside</source>
         <translation>Dışarıdan İzle</translation>
     </message>
     <message>
-        <location filename="../network/room.cpp" line="341"/>
-        <location filename="../network/room.cpp" line="345"/>
+        <location filename="../network/room.cpp" line="329"/>
+        <location filename="../network/room.cpp" line="333"/>
         <source>Join and Observe</source>
         <translation>Katıl ve İzle</translation>
     </message>
@@ -4208,96 +4213,96 @@ avans:</translation>
 <context>
     <name>TygemConnection</name>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="277"/>
+        <location filename="../network/tygemconnection.cpp" line="275"/>
         <source>Sorry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="277"/>
+        <location filename="../network/tygemconnection.cpp" line="275"/>
         <source>Review games are not yet supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="291"/>
-        <location filename="../network/tygemconnection.cpp" line="2106"/>
+        <location filename="../network/tygemconnection.cpp" line="289"/>
+        <location filename="../network/tygemconnection.cpp" line="2101"/>
         <source>3 Boards Open</source>
         <translation>3 Tahta Açık</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="291"/>
+        <location filename="../network/tygemconnection.cpp" line="289"/>
         <source>You must close a board before you can open another one</source>
         <translation>Yeni bir tahta açmadan önce açık olanlardan birini kapatmalısınız</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="728"/>
+        <location filename="../network/tygemconnection.cpp" line="725"/>
         <source>Server full</source>
         <translation>Sunucu dolu</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="728"/>
+        <location filename="../network/tygemconnection.cpp" line="725"/>
         <source>Server full, try another</source>
         <translation>Sunucu dolu, başkasını deneyin</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2106"/>
+        <location filename="../network/tygemconnection.cpp" line="2101"/>
         <source>You must close a board before you can start a game</source>
         <translation>Yeni oyuna başlamadan önce açık bir tahtayı kapatmalısınız</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2109"/>
-        <location filename="../network/tygemconnection.cpp" line="8172"/>
-        <location filename="../network/tygemconnection.cpp" line="8179"/>
+        <location filename="../network/tygemconnection.cpp" line="2104"/>
+        <location filename="../network/tygemconnection.cpp" line="8198"/>
+        <location filename="../network/tygemconnection.cpp" line="8205"/>
         <source>Not open</source>
         <translation>Açık değil</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="2109"/>
-        <location filename="../network/tygemconnection.cpp" line="8163"/>
-        <location filename="../network/tygemconnection.cpp" line="8172"/>
+        <location filename="../network/tygemconnection.cpp" line="2104"/>
+        <location filename="../network/tygemconnection.cpp" line="8189"/>
+        <location filename="../network/tygemconnection.cpp" line="8198"/>
         <source>%1 is not accepting invitations</source>
         <translation>%1 oyun davetlerini kabul etmiyor.</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5164"/>
+        <location filename="../network/tygemconnection.cpp" line="5182"/>
         <source>Resume match?</source>
         <translation>Oyuna devam?</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5165"/>
+        <location filename="../network/tygemconnection.cpp" line="5183"/>
         <source>Resume match in progress with %1?
 </source>
         <translation>%1 ile olan oyununuza devam etmek istermisiniz?
 </translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="5696"/>
+        <location filename="../network/tygemconnection.cpp" line="5714"/>
         <source>Opponent Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8150"/>
-        <location filename="../network/tygemconnection.cpp" line="8187"/>
+        <location filename="../network/tygemconnection.cpp" line="8176"/>
+        <location filename="../network/tygemconnection.cpp" line="8213"/>
         <source>Invite declined</source>
         <translation>Davet reddedildi</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8150"/>
+        <location filename="../network/tygemconnection.cpp" line="8176"/>
         <source>%1 has declined invitation</source>
         <translation>%1 oyun davetinizi reddetti</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8163"/>
+        <location filename="../network/tygemconnection.cpp" line="8189"/>
         <source>In game?</source>
         <translatorcomment>not obvious what is this for?</translatorcomment>
         <translation>Oyunda</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8179"/>
+        <location filename="../network/tygemconnection.cpp" line="8205"/>
         <source>%1 has the maximum boards (3) open</source>
         <translation>%1 açık olacbilecek azami (3) tahtayı açık tutuyor</translation>
     </message>
     <message>
-        <location filename="../network/tygemconnection.cpp" line="8187"/>
+        <location filename="../network/tygemconnection.cpp" line="8213"/>
         <source>%1 has declined all invitations</source>
         <translation>%1 tüm davetleri reddetti</translation>
     </message>
@@ -4305,9 +4310,8 @@ avans:</translation>
 <context>
     <name>Ui</name>
     <message>
-        <location filename="../network/gamedialog.cpp" line="40"/>
         <source>New Game</source>
-        <translation>Yeni Oyun</translation>
+        <translation type="obsolete">Yeni Oyun</translation>
     </message>
 </context>
 <context>
