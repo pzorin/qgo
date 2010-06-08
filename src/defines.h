@@ -139,6 +139,7 @@ struct _preferences
 	int default_size;
 	int default_komi;
 	bool warn_about_codecs;
+	bool simple_player_names;
 	
 	int default_stonesmaintime;
 	int default_stonestime;
@@ -170,6 +171,7 @@ struct _preferences
 
 		default_size = settings.value("DEFAULT_SIZE").toInt();
 		default_komi = settings.value("DEFAULT_KOMI").toInt();
+		simple_player_names = settings.value("SIMPLEPLAYERNAMES").toBool();
 		
 		warn_about_codecs = !settings.value("DONT_WARN_ABOUT_CODECS").toBool();
 		
@@ -195,7 +197,7 @@ struct _preferences
 		settings.setValue("GAMESLIST_SORTASCENDING", gameslist_sortascending);
 		
 		settings.setValue("DONT_WARN_ABOUT_CODECS", !warn_about_codecs);
-		
+
 		settings.setValue("DEFAULT_STONESMAIN", default_stonesmaintime);
 		settings.setValue("DEFAULT_STONEST", default_stonestime);
 		settings.setValue("DEFAULT_STONES", default_stones);

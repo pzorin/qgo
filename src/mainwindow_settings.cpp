@@ -199,6 +199,11 @@ void MainWindow::saveSettings()
 		i=0;
 	settings.setValue("WARNONCLOSEENGINE", i);
 #endif //UNNECESSARY
+	if ( ui.simplePlayerNamesCB->isChecked())
+		i=1;
+	else
+		i=0;
+	settings.setValue("SIMPLEPLAYERNAMES", i);
 	if ( ui.observeOutsideCB->isChecked())
 		i=1;
 	else
@@ -302,7 +307,8 @@ void MainWindow::loadSettings()
 		ui.terrStoneRB->setChecked(true);
 	else
 		ui.terrCrossRB->setChecked(true);
-	
+
+	ui.simplePlayerNamesCB->setChecked((settings.value("SIMPLEPLAYERNAMES") == 1));
 	ui.observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
 	bool b = (settings.value("ALTERNATELISTCOLORS") == 1);
 	ui.alternateListColorsCB->setChecked(b);
