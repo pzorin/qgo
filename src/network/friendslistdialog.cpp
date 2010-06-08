@@ -39,7 +39,7 @@ FriendsListDialog::FriendsListDialog(NetworkConnection * c) : QDialog(), Ui::Fri
 	friendsListModel = new SimplePlayerListModel(true);
 	//friendsSortProxy->setSourceModel(friendsListModel);
 	//friendsView->setModel(friendsSortProxy);
-	friendsView->setModel(friendsListModel->getProxy());
+	friendsView->setModel(friendsListModel);
 	//friendsSortProxy->setDynamicSortFilter(true);
 	//probably don't need to be able to change sort order or sort on notify FIXME
 	watchesListModel = new SimplePlayerListModel(true);

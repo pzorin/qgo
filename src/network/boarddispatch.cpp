@@ -287,7 +287,7 @@ void BoardDispatch::openBoard(void)
 			observerListModel = new ObserverListModel();
 			observerListModel->setAccountName(myName);
 		}
-		boardwindow->getUi()->observerView->setModel(observerListModel->getProxy());
+		boardwindow->getUi()->observerView->setModel(observerListModel);
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 		boardwindow->gameDataChanged();	//necessary at least for cursor
