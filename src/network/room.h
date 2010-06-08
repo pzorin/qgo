@@ -33,6 +33,7 @@ class GameListingRegistry;
 class PlayerListingRegistry;
 class PlayerListingIDRegistry;
 class Talk;
+class FilteredView;
 class PlayerListModel;
 class PlayerSortProxy;
 class GamesListModel;
@@ -79,7 +80,7 @@ class Room : public QObject
 		GamesListModel * gamesListModel;
 		GamesSortProxy * gamesSortProxy;
 
-		QTreeView * playerView, * gamesView;
+		FilteredView * playerView, * gamesView;
 		QToolButton * refreshGamesButton, * refreshPlayersButton;
 		QPushButton * editFriendsWatchesListButton;
 		QComboBox * whoBox1, * whoBox2;

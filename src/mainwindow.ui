@@ -179,6 +179,9 @@
           <property name="title">
            <string>Server status</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
           <layout class="QGridLayout" name="gridLayout_7">
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -578,7 +581,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_6">
             <item row="0" column="0" colspan="9">
-             <widget class="QTreeView" name="playerView">
+             <widget class="FilteredView" name="playerView">
               <property name="contextMenuPolicy">
                <enum>Qt::CustomContextMenu</enum>
               </property>
@@ -972,7 +975,7 @@
              </widget>
             </item>
             <item row="2" column="0" colspan="9">
-             <widget class="QTreeView" name="gamesView">
+             <widget class="FilteredView" name="gamesView">
               <property name="contextMenuPolicy">
                <enum>Qt::CustomContextMenu</enum>
               </property>
@@ -1364,7 +1367,7 @@
                     <enum>Qt::Horizontal</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Preferred</enum>
+                    <enum>QSizePolicy::Expanding</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2004,19 +2007,6 @@
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_8">
@@ -3627,6 +3617,16 @@ up to :</string>
              <number>0</number>
             </property>
             <item>
+             <widget class="QCheckBox" name="simplePlayerNamesCB">
+              <property name="text">
+               <string>Simple player names</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="alternateListColorsCB">
               <property name="text">
                <string>Alternating list colors</string>
@@ -3684,6 +3684,11 @@ up to :</string>
    <class>DisplayBoard</class>
    <extends>QWidget</extends>
    <header>displayboard.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FilteredView</class>
+   <extends>QTreeView</extends>
+   <header>listviews.h</header>
   </customwidget>
  </customwidgets>
  <resources>

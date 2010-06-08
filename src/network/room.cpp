@@ -64,21 +64,17 @@ Room::Room()
 
 void Room::setupUI(void)
 {
-	gamesSortProxy = new GamesSortProxy();
 	gamesListModel = new GamesListModel();
-    gamesSortProxy->setSourceModel(gamesListModel);
 
 	/*ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
 	ui.ListView_games->hideColumn(12);
 	ui.ListView_games->hideColumn(13);*/
-        //gamesView->setModel(gamesListModel);
-	gamesView->setModel(gamesSortProxy);
+	gamesView->setModel(gamesListModel);
+	gamesView->setFilter(new GamesListFilter(gamesListModel));
 	/* Justifications??? */
-	gamesSortProxy->setDynamicSortFilter(true);
-	gamesListModel->setSortProxy(gamesSortProxy);
 	/* No sort indicator??? */
 	/* Qt 4.4.1 made sortIndicatorShown necesssary for sort behavior
-	 * !!!! doublecheck now FIXME*/
+	 * !!!! */
 	gamesView->header()->setSortIndicatorShown ( true );
 
 	//gamesView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -95,6 +91,7 @@ void Room::setupUI(void)
 	ui.gamesView->setColumnWidth ( 10, 60 ); //20
 	ui.gamesView->setColumnWidth ( 11, 55 ); //25
 	*/
+	//IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
 	gamesView->setColumnWidth ( 0, 35 );	//35
 	gamesView->setColumnWidth ( 1, 100 );
 	gamesView->setColumnWidth ( 2, 35 );	//35
@@ -109,19 +106,19 @@ void Room::setupUI(void)
 	gamesView->setColumnWidth ( 11, 30 ); //25
 	//ui.gamesView->show();
 	
-	playerSortProxy = new PlayerSortProxy();
 	playerListModel = new PlayerListModel();
-	playerSortProxy->setSourceModel(playerListModel);
+	/* FIXME the below seems to have no affect, so I commented it out.
+	 * I changed references to the listmodel to the sortproxy in the id
+	 * registries, in the hope that they would... well I think that was the
+	 * wrong way, but I can't be sure since it could be an issue with
+	 * the network connection as well... anyway, if I get it working
+	 * correctly, probably more like the way it was, then I should change
+	 * the sortproxy references back maybe... */
 	
    // playerView->setIconSize(QSize(20, 20));
-	playerView->setModel(playerSortProxy);
-	//playerView->setModel(playerListModel);
-	playerSortProxy->setDynamicSortFilter(true);
-	playerListModel->setSortProxy(playerSortProxy);
-	//connect(playerListModel, SIGNAL(dataChanged(QModelIndex())), playerSortProxy, SLOT(clear()));
-	//connect(playerView->header(), SIGNAL(sectionClicked(int)), playerSortProxy, SLOT(sortByColumn(int))); 
+	playerView->setModel(playerListModel);
+	playerView->setFilter(new PlayerListFilter(playerListModel));
 	playerView->header()->setSortIndicatorShown ( true );
-	//playerView->setSortingEnabled(true);
 	
 	playerView->setColumnWidth ( 0, 40 );
 	playerView->setColumnWidth ( 1, 100 );
@@ -182,12 +179,12 @@ Room::~Room()
 	
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
+	qDebug("Deconstructing room");
 	playerView->setModel(0);
 	gamesView->setModel(0);
 	delete playerListModel;
-	delete playerSortProxy;
 	delete gamesListModel;
-	delete gamesSortProxy;
+	
 	disconnect(whoBox1, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(whoBox2, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
@@ -267,7 +264,7 @@ void Room::updateRoomStats(void)
 //stats
 void Room::slot_playersDoubleClicked(const QModelIndex & index)
 {
-	QModelIndex translated = playerSortProxy->mapToSource(index);
+	QModelIndex translated = index;
 	PlayerListing * opponent = playerListModel->playerListingFromIndex(translated);
 	sendStatsRequest(*opponent);
 }
@@ -279,7 +276,7 @@ void Room::slot_showPopup(const QPoint & iPoint)
 	{
 		/* If we have the listing now, we don't need to look it up
 		 * again later FIXME */
-		QModelIndex translated = playerSortProxy->mapToSource(popup_item);
+		QModelIndex translated = popup_item;
 		popup_playerlisting = playerListModel->playerListingFromIndex(translated);
 		if(popup_playerlisting->name == connection->getUsername())
 			return;
@@ -321,7 +318,7 @@ void Room::slot_showGamesPopup(const QPoint & iPoint)
 	if (popup_item != QModelIndex())
 	{
 		/* Do not give options on rooms without games */
-		QModelIndex translated = gamesSortProxy->mapToSource(popup_item);
+		QModelIndex translated = popup_item;
 		popup_gamelisting = gamesListModel->gameListingFromIndex(translated);
 		if(popup_gamelisting->isRoomOnly)
 			return;
@@ -399,7 +396,7 @@ void Room::slot_popupJoinObserve(void)
 //observe
 void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 {
-	QModelIndex translated = gamesSortProxy->mapToSource(index);
+	QModelIndex translated = index;
 	const GameListing * g = gamesListModel->gameListingFromIndex(translated);
 	if(preferences.observe_outside_on_doubleclick &&
 		  connection->supportsObserveOutside() && !g->isRoomOnly)
@@ -465,33 +462,41 @@ void Room::slot_setRankSpreadView(void)
 		rkMin = "NR";
 		rkMax = "9p";
 	}
+
 	else if ( ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() == 1)) ||
 		((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() == 0))  ||
 		((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() ==1)) )
 	{
 		rkMin = "1p";
 		rkMax = "9p";
-	}
+	}	
+
 	else if ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() > 1))
 	{
 		rkMin = whoBox2->currentText();
 		rkMax = whoBox2->currentText();
-	}
+	}	
+
+
 	else if ((whoBox1->currentIndex() > 1) && (whoBox2->currentIndex() == 0))
 	{
 		rkMin = whoBox1->currentText();
 		rkMax = whoBox1->currentText();
-	}
+	}	
+
 	else if ((whoBox1->currentIndex() > 1) && (whoBox2->currentIndex() == 1))
 	{
 		rkMin = whoBox1->currentText();
 		rkMax = "9p";
-	}
+	}	
+
 	else if ((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() > 1))
 	{
 		rkMin = whoBox2->currentText();
 		rkMax = "9p";
 	}
+
+
 	else if ((whoBox2->currentIndex() >= whoBox1->currentIndex() ))
 	{
 		rkMin = whoBox2->currentText();
@@ -503,24 +508,24 @@ void Room::slot_setRankSpreadView(void)
 		rkMax = whoBox2->currentText();
 	} 
 
-	playerSortProxy->setFilter(connection->rankToScore(rkMin), connection->rankToScore(rkMax));
+	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(connection->rankToScore(rkMin), connection->rankToScore(rkMax));
 	qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
 }
 
 void Room::slot_showOpen(int)
 {
-	playerSortProxy->setFilter(PlayerSortProxy::open);
+	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(PlayerListFilter::open);
 }
 
 void Room::slot_showFriends(int)
 {
-	playerSortProxy->setFilter(PlayerSortProxy::friends);
+	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(PlayerListFilter::friends);
 }
 
 void Room::slot_showWatches(int)
 {
-	playerSortProxy->setFilter(PlayerSortProxy::fans);
-	gamesSortProxy->toggleWatches();
+	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(PlayerListFilter::fans);
+	dynamic_cast<GamesListFilter *>(gamesView->getFilter())->toggleWatches();
 }
 
 void Room::slot_editFriendsWatchesList(void)
@@ -567,7 +572,8 @@ PlayerListing * Room::getPlayerListing(const QString & name)
 		}
 	}
 	else
-		p = playerListingRegistry->getEntry(name);
+		p = playerListingRegistry->getEntry(name);	//note getNewEntry not defined and so returns 0 like getIfEntry
+
 #ifdef FIXME
 	/* this is tricky FIXME */
 	if(!p)
@@ -814,6 +820,7 @@ void Room::recvGameListing(GameListing * game)
 	//	key = game->game_code;
 	//else
 		key = game->number;
+	
 	if(game->running)
 	{
 		game = gameListingRegistry->getEntry(key, game);
