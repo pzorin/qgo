@@ -2,6 +2,6 @@
 Comment=Smart go format
 Hidden=false
 Icon=qgo
-MimeType=text/sgf
+MimeType=text/go-sgf
 Patterns=*.sgf
 Type=MimeType
