@@ -188,6 +188,9 @@ Room::~Room()
 	disconnect(whoBox1, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(whoBox2, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
+	disconnect(whoOpenCheckBox, SIGNAL(stateChanged(int)), 0, 0);
+	disconnect(friendsCheckBox, SIGNAL(stateChanged(int)), 0, 0);
+	disconnect(watchesCheckBox, SIGNAL(stateChanged(int)), 0, 0);
 	editFriendsWatchesListButton->setDisabled(true);
 	
 	QSettings settings;
@@ -199,6 +202,9 @@ Room::~Room()
 	settings.setValue("OPENFILTER", whoOpenCheckBox->isChecked());
 	settings.setValue("FRIENDSFILTER", friendsCheckBox->isChecked());
 	settings.setValue("WATCHESFILTER", watchesCheckBox->isChecked());
+	whoOpenCheckBox->setChecked(false);
+	friendsCheckBox->setChecked(false);
+	watchesCheckBox->setChecked(false);
 }
 
 void Room::onError(void)
