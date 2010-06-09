@@ -147,10 +147,7 @@ PlayerListModel::~PlayerListModel()
 void PlayerListModel::insertListing(PlayerListing * const l)
 {
 	PlayerListItem * item = new PlayerListItem(l);	
-	ListModel::insertListing(*item);	
-	//sort(P_TOTALCOLUMNS);	//too slow?	FIXME
-	/*emit dataChanged(createIndex(0, 0, 0),
-		createIndex(items.count() - 1, headerItem->columnCount() - 1, 0));*/
+	ListModel::insertListing(*item);
 }
 
 void PlayerListModel::updateListing(PlayerListing * const l)
@@ -163,9 +160,7 @@ void PlayerListModel::updateListing(PlayerListing * const l)
 		if(static_cast<PlayerListItem const *>(items[i])->getListing() == l)
 		{
 			//this listing needs to be reloaded
-			//emit dataChanged(createIndex(i,0), createIndex(i, headerItem->columnCount() - 1));
-			emit dataChanged(createIndex(0, 0, 0),
-			createIndex(items.count() - 1, headerItem->columnCount() - 1, 0));
+			emit dataChanged(createIndex(i, 0), createIndex(i, headerItem->columnCount() - 1));
 			return;
 		}
 	}
@@ -184,7 +179,7 @@ void PlayerListModel::removeListing(PlayerListing * const l)
 			emit endRemoveRows();
 			delete item;
 			emit dataChanged(createIndex(0, 0, 0),
-				createIndex(items.count() - 1, headerItem->columnCount() - 1, 0));
+					createIndex(items.count() - 1, headerItem->columnCount() - 1, 0));
 			return;
 		}
 	}
@@ -496,31 +491,45 @@ void ListModel::insertListing(ListItem & item)
 	//{
 		//int sortColumn = sort_priority[0];
 		//list = &(items[sortColumn]);
+#define ONLISTINSERT_SORT
 #ifdef ONLISTINSERT_SORT
-		for(int i = 0; i < items.count(); i++)
+		if(list_sort_order == Qt::AscendingOrder)
 		{
-			int result = priorityCompare(item, *(items[i]));
-			/* FIXME as with the notes about having a
-			 * list_sort_order for each column, this
-			 * GREATERTHAN does not respect the sort order
-			 * meaning it just shoves stuff in there 
-			 * BIG FIXME */
-			if((list_sort_order == Qt::AscendingOrder && result == GREATERTHAN) || (list_sort_order == Qt::DescendingOrder && result == LESSTHAN) || result == EQUALTO)
+			for(int i = 0; i < items.count(); i++)
 			{
-				emit beginInsertRows(QModelIndex(), i + 1, i + 1);
-				items.insert(i, &item); 
-				//emit beginInsertRows(QModelIndex(), i, i);
-				emit endInsertRows();
-				emit dataChanged(createIndex(i - 1, 0),
-					createIndex(i, headerItem->columnCount() - 1));
-				return;
+				int result = priorityCompare(item, *(items[i]));
+				if(result == LESSTHAN || result == EQUALTO)
+				{
+					emit beginInsertRows(QModelIndex(), i, i);
+					items.insert(i, &item); 
+					emit endInsertRows();
+					emit dataChanged(createIndex(i, 0),
+						createIndex(items.count() - 1, headerItem->columnCount() - 1));
+					return;
+				}
 			}
+		}
+		else if(list_sort_order == Qt::DescendingOrder)
+		{
+			for(int i = items.count() - 1; i >= 0; i--)
+			{
+				int result = priorityCompare(item, *(items[i]));
+				if(result == GREATERTHAN || result == EQUALTO)
+				{
+					emit beginInsertRows(QModelIndex(), i, i);
+					items.insert(i, &item); 
+					emit endInsertRows();
+					emit dataChanged(createIndex(0, 0),
+						createIndex(i, headerItem->columnCount() - 1));
+					return;
+				}
+			}	
 		}
 #else
 		//trying != here because of sort filter issues
 		// still doesn't work
-		if((list_sort_order != Qt::AscendingOrder && !isGamesListAwkwardVariable) ||
-		  (list_sort_order == Qt::AscendingOrder && isGamesListAwkwardVariable))
+		if((list_sort_order == Qt::AscendingOrder && !isGamesListAwkwardVariable) ||
+		  (list_sort_order != Qt::AscendingOrder && isGamesListAwkwardVariable))
 		{
 			emit beginInsertRows(QModelIndex(), 0, 0);
 			items.insert(0, &item);
@@ -534,7 +543,7 @@ void ListModel::insertListing(ListItem & item)
 		items.append(&item);
 		//emit beginInsertRows(QModelIndex(), items.count() - 1, items.count() - 1);
 		emit endInsertRows();
-		emit dataChanged(createIndex(items.count(), 0),
+		emit dataChanged(createIndex(items.count() - 1, 0),
 			createIndex(items.count() - 1, headerItem->columnCount() - 1));
 	//}
 }
