@@ -86,6 +86,7 @@ class ListFilter
 {
 	public:
 		ListFilter(class ListModel * l) : listModel(l) {};
+		virtual ~ListFilter() {};
 		virtual bool filterAcceptsRow(int row) const = 0;
 	protected:
 		class ListModel * listModel;
