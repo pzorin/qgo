@@ -959,8 +959,10 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		if((flags & GDF_RATED_NO_HANDICAP) && (!mr || mr->free_rated == RATED))
 		{
 			PlayerListing us = connection->getOurListing();
-			getProperKomiHandicap(us.rank, opponent.rank, &(mr->komi), &(mr->handicap));
-			if(mr->handicap > 1)
+			float k;
+			int h;
+			getProperKomiHandicap(us.rank, opponent.rank, &k, &h);
+			if(h > 1)
 			{
 				//mr->free_rated = FREE;	//necessary?? FIXME
 				ui.ratedCB->setChecked(false);
