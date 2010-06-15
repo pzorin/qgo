@@ -1452,6 +1452,18 @@ void IGSConnection::handle_error(QString line)
 		gameDialog->recvRequest(aMatch);
 		gameDialog->recvRefuseMatch(GD_RESET);
 	}
+	else if(line.contains("wants Handicap"))
+	{
+		//5 x wants Handicap 0 - 0.
+		QString opponent = element(line, 0, " ");
+		PlayerListing * pl = getPlayerListingNeverFail(opponent);
+		GameDialog * gameDialog = getGameDialog(*pl);
+		MatchRequest * m = gameDialog->getMatchRequest();
+		MatchRequest * aMatch = new MatchRequest(*m);
+		aMatch->handicap = element(line, 3, " ").toInt();
+		gameDialog->recvRequest(aMatch);
+		gameDialog->recvRefuseMatch(GD_RESET);
+	}
 	else if (line.contains("request:") || line.contains("wants"))
 	{
 		QString p = element(line, 0, " ");
@@ -4818,7 +4830,7 @@ QString IGSConnection::element(const QString &line, int index, const QString &de
 	QString sub;
 
 	// kill trailing white spaces
-	while (/*(int)*/ line[len-1] < 33 && len > 0)
+	while (/*(int)*/ len > 0 && line[len-1] < 33)
 		len--;
 
 	// right delimiter given?
