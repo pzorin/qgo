@@ -960,7 +960,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		{
 			PlayerListing us = connection->getOurListing();
 			float k;
-			int h;
+			unsigned int h;
 			getProperKomiHandicap(us.rank, opponent.rank, &k, &h);
 			if(h > 1)
 			{
