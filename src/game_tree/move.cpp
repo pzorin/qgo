@@ -120,11 +120,15 @@ const QString Move::saveMove(bool isRoot)
 	if (!isRoot && !handicapMove )
 		str += ";"; //"\n;";
 	
-	if (x != -1 && y != -1 /*&& gamePhase != phaseEdit*/)
+	if (x != -1 && y != -1)
 	{
-		// Write something like 'B[aa]'
-		str += stoneColor == stoneBlack ? "B" : "W";
- 		str += "[" + Matrix::coordsToString(x-1, y-1) + "]";
+		if(gamePhase == phaseEdit && matrix->getStoneAt(x,y) == stoneErase) {}
+		else
+		{
+			// Write something like 'B[aa]'
+			str += stoneColor == stoneBlack ? "B" : "W";
+			str += "[" + Matrix::coordsToString(x-1, y-1) + "]";
+		}
 	}
 	
 	// Save edited moves (including handicap)
