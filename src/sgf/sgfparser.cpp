@@ -874,13 +874,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 
 								else if (prop == editErase)
 								{
-									tree->removeStoneSGF(i, j, true, false);
-									/*else  fastload
-									{
-										tree->getCurrent()->setX(0);
-										tree->getCurrent()->setY(0);
-										tree->getCurrent()->setColor(stoneNone);
-									}*/
+									tree->addStoneToCurrentMove(stoneErase, i, j);
 								}
 								else
 								{
@@ -1688,6 +1682,7 @@ void SGFParser::writeGameHeader(GameData *gameData)
  */
 void SGFParser::traverse(Move *t, GameData *gameData)
 {
+	QString txt;
 	*stream << "(";
 	int col = -1, cnt = 6;
 
@@ -1696,14 +1691,17 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 		if (isRoot)
 		{
 			writeGameHeader(gameData);
-			*stream << t->saveMove(isRoot).toUtf8();		//utf8 might only be necessary if gameData->codec is set, but should be okay either way
+			txt = t->saveMove(isRoot).toUtf8();		//utf8 might only be necessary if gameData->codec is set, but should be okay either way
+			*stream << txt;
 			isRoot = false;
 		}
 		else
 		{
 			// do some formatting: add single B[]/W[] properties to one line, max: 10
 			// if more properties, e.g. B[]PL[]C] -> new line
-			QString txt = t->saveMove(false).toUtf8();
+			txt = t->saveMove(false).toUtf8();
+			if(txt == ";")		//don't save empty nodes
+				txt = "";
 			int cnt_old = cnt;
 			cnt = txt.length();
 			if (col % 10 == 0 || (col == 1 && cnt != 6) || cnt_old != 6 || col == -1)
@@ -1711,11 +1709,10 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 				*stream << endl;
 				col = 0;
 			}
-
 			*stream << txt;
 			col++;
 		}
-		
+	
 		Move *tmp = t->son;
 		if (tmp != NULL && tmp->brother != NULL)
 		{
