@@ -122,7 +122,7 @@ void LoginDialog::slot_connect(void)
 	}
 	else if(connectionStatus == ND_PROTOCOL_ERROR)
 	{
-		QMessageBox::information(this, tr("Protocol Error"), tr("Update qGo?"));
+		QMessageBox::information(this, tr("Protocol Error"), tr("Check for qGo update"));
 	}
 	else if(connectionStatus == ND_CONNECTED)
 	{
