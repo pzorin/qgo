@@ -702,7 +702,8 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 					//0008069801000000	//everything okay?
 					if(c[5] == 0x04/*c[7] == 0x68*/ || c[5] == 0x03)  //00080698ff040065 //(03 is Tom)
 					{
-						if(c[7] == 0x00)
+						//0008 1398 ff03 0000  tom bad password
+						if(c[7] == 0x00 && connectionType != TypeTOM)
 						{
 							//this might be okay for eweiqi and tygem
 							//on change server, probably not okay for tom
@@ -4406,6 +4407,14 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			//maybe number of games/players?
 #ifdef RE_DEBUG
 			printf("0x0698: ");
+			for(i = 0; i < (int)size; i++)
+				printf("%02x", msg[i]);
+			printf("\n");
+#endif //RE_DEBUG
+			break;
+		case TPC(0xca):
+#ifdef RE_DEBUG
+			printf("unknown new on login 13ca: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
