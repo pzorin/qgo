@@ -56,9 +56,7 @@ public:
 	~Matrix();
 	int getSize() const { return size; }
 	void clear();
-	void insertStone(int x, int y, StoneColor c, GamePhase phase);
-	void removeStone(int x, int y);
-	void eraseStone(int x, int y);
+	void insertStone(int x, int y, StoneColor c, bool fEdit = false);
 	StoneColor getStoneAt(int x, int y);
 	bool isStoneDead(int x, int y);
 	bool isStoneDirty(int x, int y);

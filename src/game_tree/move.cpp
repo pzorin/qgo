@@ -120,7 +120,7 @@ const QString Move::saveMove(bool isRoot)
 	if (!isRoot && !handicapMove )
 		str += ";"; //"\n;";
 	
-	if (x != -1 && y != -1 && gamePhase != phaseEdit)
+	if (x != -1 && y != -1 /*&& gamePhase != phaseEdit*/)
 	{
 		// Write something like 'B[aa]'
 		str += stoneColor == stoneBlack ? "B" : "W";
@@ -252,7 +252,6 @@ int Move::getNumSons()
 	return counter;
 }
 
-
 bool Move::hasParent()
 {
 	return (parent != NULL);
@@ -260,7 +259,6 @@ bool Move::hasParent()
 
 bool Move::hasPrevBrother()
 {
-
 	if (parent == NULL)
 		return false;
 	else

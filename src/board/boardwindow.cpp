@@ -562,6 +562,7 @@ bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
 void BoardWindow::slotEditButtonPressed( int m )
 {
 	QString txt;
+	Move *current = tree->getCurrent();
 	
 	//we have to emulate exclusive buttons, while raise the button if it was down
 	if (m >= 0 && m < 7 )
@@ -576,7 +577,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 		else
 		{
 			gamePhase = phaseEdit;
-			boardHandler->updateCursor( );
+			boardHandler->updateCursor( );		//this still has turn change FIXME
 			editButtons->button (7)->setDisabled( TRUE );
 
 			for (int i= 0;i<7;i++)
@@ -589,6 +590,8 @@ void BoardWindow::slotEditButtonPressed( int m )
 	{
 	case 0:
 		editMark = markNone;
+		if(gamePhase == phaseEdit)
+				current->setGamePhase(phaseEdit);	//permanent on this move, right?
 		break;
 		
 	case 1:
@@ -617,7 +620,6 @@ void BoardWindow::slotEditButtonPressed( int m )
 
 	case 7:
 	{
-		Move *current = tree->getCurrent();
 		// set next move's color
 		if (qgoboard->getBlackTurn())
 		{

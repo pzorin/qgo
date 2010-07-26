@@ -229,23 +229,10 @@ void qGoBoard::removeMark( int x, int y)
  */
 void qGoBoard::addStone(StoneColor c, int x, int y)
 {
-	tree->addStone(c,x,y);
+	tree->addStoneToCurrentMove(c, x, y);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	setModified();
 }
-
-/*
- * removes a stone to the current move's matrix
- * This is used in edit phase to remove stones (and not moves) on the board
- */
-void qGoBoard::removeStone( int x, int y)
-{
-	//TODO make sure this is the correct way
-	tree->updateCurrentMatrix(stoneNone,  x,  y);
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-	setModified();
-}
-
 
 int qGoBoard::getMoveNumber(void)
 {
@@ -371,7 +358,7 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 					if(tree->getCurrent()->getMatrix()->getStoneAt(x,y) == stoneNone)
 						addStone(mouseState == Qt::LeftButton ? stoneBlack : stoneWhite, x, y);
 					else
-						removeStone(x,y);
+						addStone(stoneErase, x, y);
 					setModified(true);
 					return;
 				}
@@ -494,10 +481,10 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 	 * the moves from an observed game.  But there's no clean way
 	 * to tell when the board has stopped loading, particularly for IGS.
 	 * so we only play a sound every 500 msecs... 
-	 * Also, maybe it should play even if we aren't looking at last move */
+	 * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
 	if(!dontplayyet && validMove && boardwindow->getGamePhase() == phaseOngoing &&
-		   QTime::currentTime() > lastSound &&
-		   tree->getCurrent()->getMoveNumber() == tree->findLastMoveInMainBranch()->getMoveNumber())
+		   QTime::currentTime() > lastSound /*&& (boardwindow->getGameMode() != modeObserve ||
+		   tree->getCurrent()->getMoveNumber() == tree->findLastMoveInMainBranch()->getMoveNumber())*/)
 	{
 			if (playSound)
 				clickSound->play();

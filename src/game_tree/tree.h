@@ -69,10 +69,6 @@ public:
  */
 
 	void addEmptyMove(bool brother =false);
-	void removeStoneSGF(int x, int y, bool hide=false, bool new_node=true);
-	void updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase = phaseOngoing);
- 	//void addMove(StoneColor c, int x, int y, bool clearMarks = true);
-	//void addMove(StoneColor c, int x, int y, Matrix * mat, bool clearMarks = true);
 	void doPass(bool sgf, bool fastLoad = false);
 	
 	void editMove(StoneColor c, int x, int y);
@@ -113,7 +109,7 @@ private:
 	void invalidateAdjacentCheckPositionGroups(MatrixStone m);
 	void invalidateCheckPositionGroups(void);
 	bool isInMainBranch(Move * m) const;
-	void updateMatrix(Matrix * m, StoneColor c, int x, int y, GamePhase gamephase = phaseOngoing);
+	void updateCurrentMatrix(StoneColor c, int x, int y);
 	void deleteGroupMatrices(void);
 	Move *root, *current, *lastMoveInMainBranch;
 	int * boardSize;

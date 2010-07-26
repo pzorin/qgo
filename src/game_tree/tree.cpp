@@ -650,36 +650,6 @@ void Tree::addEmptyMove( bool /*brother*/)
 
 }
 
-/*
- * This is the code from boardhandler (as opposed to stonehandler::removestone)
- * It has been renamed to 'removeStoneSGF' because both boardhandler and stonehandler are here
- */
-void Tree::removeStoneSGF(int x, int y, bool /*hide*//*isalwaystrue*/, bool new_node)
-{
-#ifdef OLD
-	bool res = removeStone(x, y, hide);
-	
-	if (res)
-	{
-#endif //OLD
-		if ((current->getGamePhase() == phaseOngoing) && (current->getMoveNumber() > 0))//	currentMove > 0)
-		{
-			if (new_node)  // false, when reading sgf
-				addMove(stoneNone, x, y);
-			updateCurrentMatrix(stoneErase, x, y);
-		}
-		else
-			updateCurrentMatrix(stoneErase, x, y);
-#ifdef OLD
-//		board->checkLastMoveMark(x, y);
-	}
-	
-//	board->setModified();
-	
-//	return res;
-#endif //OLD
-}
-
 /* Really conflicting with setCurrent name, this is like a joke FIXME */
 Move * Tree::assignCurrent(Move * & o, Move * & n) 
 {
@@ -759,7 +729,7 @@ void Tree::invalidateCheckPositionGroups(void)
 
 /* These two functions are a little awkward here, just done to minimize
  * issues with qgoboard edit FIXME */
-void Tree::updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase)
+void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
 {
 	// Passing?
 	if (x == 20 && y == 20)
@@ -773,69 +743,11 @@ void Tree::updateCurrentMatrix(StoneColor c, int x, int y, GamePhase gamePhase)
 	}
 	
 	Q_CHECK_PTR(current->getMatrix());
-	
-	updateMatrix(current->getMatrix(), c, x, y, gamePhase);
-}
-
-void Tree::updateMatrix(Matrix * m, StoneColor c, int x, int y, GamePhase gamePhase)
-{
-	if (c == stoneNone)
-		m->removeStone(x, y);
-	else if (c == stoneErase)
-		m->eraseStone(x, y);
+	if(current->getGamePhase() == phaseEdit)
+		current->getMatrix()->insertStone(x, y, c, true);
 	else
-		m->insertStone(x, y, c, gamePhase);
+		current->getMatrix()->insertStone(x, y, c);
 }
-
-
-#ifdef OLD
-/*
- * This function is called by the SGF parser for adding pass moves or a 'StoneNone'
- */
-void Tree::addMove(StoneColor c, int x, int y, bool clearMarks)
-{
-	// qDebug("BoardHandler::addMove - clearMarks = %d", clearMarks);
-	
- 	Matrix *mat = current->getMatrix();
-	Q_CHECK_PTR(mat);
-	 
-	Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, clearMarks);
-	Q_CHECK_PTR(m);
-	
-	if (hasSon(m))
-	{
-		// qDebug("*** HAVE THIS SON ALREADY! ***");
-		delete m;
-		return;
-	}
-	
-	addSon(m);
-//	if (tree->addSon(m) && setting->readIntEntry("VAR_GHOSTS") && getNumBrothers())
-//		updateVariationGhosts();
-//	lastValidMove = m;
-}
-
-
-void Tree::addMove(StoneColor c, int x, int y, Matrix * mat, bool clearMarks)
-{
-	Q_CHECK_PTR(mat);
-	 
-	Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, clearMarks);
-	Q_CHECK_PTR(m);
-	
-	if (hasSon(m))
-	{
-		// qDebug("*** HAVE THIS SON ALREADY! ***");
-		delete m;
-		return;
-	}
-	
-	addSon(m);
-//	if (tree->addSon(m) && setting->readIntEntry("VAR_GHOSTS") && getNumBrothers())
-//		updateVariationGhosts();
-//	lastValidMove = m;
-}
-#endif //OLD
 
 /* FIXME double check and remove editMove, unnecessary */
 void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
@@ -1045,6 +957,7 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 	}
 	else
 		return;
+
 	lastValidMoveChecked = NULL;
 
 	int capturesBlack, capturesWhite;
@@ -1085,7 +998,7 @@ void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
 		 * individual colors of the matrix positions for this move */
 		current->setColor(stoneBlack);
 	}
-	updateCurrentMatrix(c, x, y, phaseEdit);
+	updateCurrentMatrix(c, x, y);
 	//editMove(c, x, y);
 }
 
@@ -1121,7 +1034,7 @@ bool Tree::insertStone(Move *node)
 			node->parent = current;
 			node->setTimeinfo(false);
 			assignCurrent(current, node);
-			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
 			
 			return false;
 		}
@@ -1147,11 +1060,11 @@ bool Tree::insertStone(Move *node)
 
 			node->setTimeinfo(false);
 			assignCurrent(current, node);
-			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
 
 			//update son - it is exclude from traverse search because we cannot update brothers of node->son
 			node->son->setMoveNumber(node->son->getMoveNumber()+1);
-			node->son->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+			node->son->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
 
 			if (node->son->son != NULL)
 			{
@@ -1170,7 +1083,7 @@ bool Tree::insertStone(Move *node)
 						if (t->son != NULL)
 							stack.push(t->son);
 						t->setMoveNumber(t->getMoveNumber()+1);
-						t->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor(), node->getGamePhase());
+						t->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
 					}
 				}
 			}
@@ -1323,7 +1236,7 @@ int Tree::checkPosition(MatrixStone * stone, Matrix * m)
 				gm[joins[i]->at(j)->x - 1][joins[i]->at(j)->y - 1] = joins[i];
 		}
 		gm[stone->x-1][stone->y-1] = NULL;
-		m->removeStone(stone->x,stone->y);
+		m->insertStone(stone->x, stone->y, stoneNone);
 		delete newgroup;
 		return -1;	//suicide
 	}

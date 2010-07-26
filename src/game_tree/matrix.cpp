@@ -205,33 +205,15 @@ void Matrix::debug() const
 }
 #endif
 
-void Matrix::insertStone(int x, int y, StoneColor c, GamePhase phase)
+void Matrix::insertStone(int x, int y, StoneColor c, bool fEdit)
 {
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
 	matrix[x-1][y-1] = (matrix[x-1][y-1] & 0xfff0) | c;
 	matrix[x-1][y-1] |= MX_STONEDIRTY;
-	if (phase == phaseEdit)
+	if(fEdit)
 		matrix[x-1][y-1] |= MX_STONEEDIT;
-}
-
-void Matrix::removeStone(int x, int y)
-{
-	Q_ASSERT(x > 0 && x <= size &&
-		y > 0 && y <= size);
-	
-	matrix[x-1][y-1] &= 0xfff0;
-	matrix[x-1][y-1] |= MX_STONEDIRTY;
-}
-
-void Matrix::eraseStone(int x, int y)
-{
-	Q_ASSERT(x > 0 && x <= size &&
-		y > 0 && y <= size);
-	
-	matrix[x-1][y-1] = (matrix[x-1][y-1] & 0xfff0) | stoneErase | MX_STONEDEAD;
-	matrix[x-1][y-1] |= MX_STONEDIRTY;
 }
 
 unsigned short Matrix::at(int x, int y) const
@@ -372,7 +354,7 @@ void Matrix::absMatrix()
 			//matrix[i][j] = abs(matrix[i][j]);
 			matrix[i][j] &= 0x2fff;		//remove dead and edit?
 			if (getStoneAt(i + 1, j + 1) == stoneErase)
-				insertStone(i + 1, j + 1, stoneNone, phaseOngoing);
+				insertStone(i + 1, j + 1, stoneNone);
 			matrix[i][j] |= MX_STONEDIRTY;
 		}
 	}
@@ -1083,7 +1065,7 @@ Group* Matrix::checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, 
 	else if(enemyGroups[3])
 		printf("Enemy south with %d liberties\n", enemyGroups[3]->liberties);
 #endif //CHECKPOSITION_DEBUG
-	insertStone(x, y, ourColor, phaseOngoing);
+	insertStone(x, y, ourColor);
 	g = assembleGroup(stone, groupMatrix);
 #ifdef CHECKPOSITION_DEBUG
 	printf("New stone liberties %d\n", g->liberties);
@@ -1155,7 +1137,7 @@ void Matrix::removeGroup(Group * g, Group *** groupMatrix, Group * killer)
 		}
 				
 		groupMatrix[x - 1][y - 1] = NULL;
-		removeStone(x, y);
+		insertStone(x, y, stoneNone);
 	}
 	delete g;
 }
@@ -1179,7 +1161,7 @@ void Matrix::removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix)
 		enemyGroups[i] = NULL;
 	}
 
-	eraseStone(x, y);
+	insertStone(x, y, stoneErase);
 	if(x > 1)
 	{
 		c = getStoneAt(x - 1, y);

@@ -52,7 +52,6 @@ public:
 	virtual ~qGoBoard() {}; 
 	virtual void setHandicap(int handicap);
 	virtual void addStone(StoneColor c, int x, int y);
-	virtual void removeStone(int x, int y);
 
 	virtual void addMark( int x, int y, MarkType t );
 	virtual void removeMark( int x, int y);
