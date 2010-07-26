@@ -397,7 +397,7 @@ void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModel
 	}	
 }
 
-void MainWindow::loadSgfFile(QString fn)
+bool MainWindow::loadSgfFile(QString fn)
 {
 	fileLoaded2 = fn.toLatin1().constData();
 	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
@@ -405,7 +405,7 @@ void MainWindow::loadSgfFile(QString fn)
 	if (SGFloaded2 == NULL)
 	{
 		ui.button_loadComputerGame->setDisabled(true);
-		return ;
+		return false;
 	}
 
 	ui.button_loadComputerGame->setEnabled(true);
@@ -413,6 +413,7 @@ void MainWindow::loadSgfFile(QString fn)
 	GameLoaded2 = MW_SGFparser->initGame(SGFloaded2, fileLoaded2);
 	GameLoaded2->gameMode = modeNormal;
 	new BoardWindow(new GameData(GameLoaded2), TRUE, TRUE);
+	return true;
 }
 
 void MainWindow::slot_expanded(const QModelIndex & i)

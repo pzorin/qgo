@@ -50,7 +50,7 @@ public:
 	~MainWindow();
 
 	void set_sessionparameter(QString par, bool val); //FIXME
-	void loadSgfFile(QString fn);
+	bool loadSgfFile(QString fn);
 	void onConnectionError(void);
 	
 	void recvSeekCondition(class SeekCondition * s);

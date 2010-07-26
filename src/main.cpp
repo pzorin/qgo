@@ -55,8 +55,10 @@ int main(int argc, char *argv[])
 
 	if ( sgf_file )
 	{
-		mainwindow->loadSgfFile( *sgf_file );
+		bool success = mainwindow->loadSgfFile( *sgf_file );
 		delete sgf_file;
+		if(!success)
+			return -1;
 		//mainwindow->hide();
 	}
 	else
