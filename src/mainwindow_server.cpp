@@ -242,7 +242,7 @@ void MainWindow::setupConnection(void)
 	onlineCount = 0;
 	//mainServerTimer = startTimer(1000);
 	
-	connectSound->play();
+	//connectSound->play();
 }
 
 /* Shouldn't be here. FIXME */
@@ -273,7 +273,7 @@ int MainWindow::closeConnection(bool error)
 	}
 	
 	
-	connectSound->play();
+	//connectSound->play();
 
 	// show current Server name in status bar
 	statusServer->setText(" OFFLINE ");
