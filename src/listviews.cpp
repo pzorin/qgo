@@ -160,7 +160,7 @@ void PlayerListModel::updateListing(PlayerListing * const l)
 		if(static_cast<PlayerListItem const *>(items[i])->getListing() == l)
 		{
 			//this listing needs to be reloaded
-			emit dataChanged(createIndex(i, 0), createIndex(i, headerItem->columnCount() - 1));
+			if(view) view->_dataChanged(createIndex(i, 0), createIndex(i, headerItem->columnCount() - 1));
 			return;
 		}
 	}
@@ -178,7 +178,7 @@ void PlayerListModel::removeListing(PlayerListing * const l)
 			items.removeAt(i);
 			emit endRemoveRows();
 			delete item;
-			emit dataChanged(createIndex(0, 0, 0),
+			if(view) view->_dataChanged(createIndex(0, 0, 0),
 					createIndex(items.count() - 1, headerItem->columnCount() - 1, 0));
 			return;
 		}
@@ -440,7 +440,7 @@ void ListModel::sort(int column, Qt::SortOrder /*order*/)
 	//qDebug("sort! %d %d\n", sort_priority[0], order);
 	quicksort(0, items.count() - 1);
 	/* FIXME We might want to make this more specific if its what's causing the slowdown */
-	emit dataChanged(createIndex(0, 0, 0),
+	if(view) view->_dataChanged(createIndex(0, 0, 0),
 			createIndex(items.count() - 1, headerItem->columnCount() - 1, 0));
 }
 
@@ -503,7 +503,7 @@ void ListModel::insertListing(ListItem & item)
 					emit beginInsertRows(QModelIndex(), i, i);
 					items.insert(i, &item); 
 					emit endInsertRows();
-					emit dataChanged(createIndex(i, 0),
+					if(view) view->_dataChanged(createIndex(0, 0),
 						createIndex(items.count() - 1, headerItem->columnCount() - 1));
 					return;
 				}
@@ -519,7 +519,7 @@ void ListModel::insertListing(ListItem & item)
 					emit beginInsertRows(QModelIndex(), i, i);
 					items.insert(i, &item); 
 					emit endInsertRows();
-					emit dataChanged(createIndex(0, 0),
+					if(view) view->_dataChanged(createIndex(0, 0),
 						createIndex(i, headerItem->columnCount() - 1));
 					return;
 				}
@@ -528,22 +528,23 @@ void ListModel::insertListing(ListItem & item)
 #else
 		//trying != here because of sort filter issues
 		// still doesn't work
-		if((list_sort_order == Qt::AscendingOrder && !isGamesListAwkwardVariable) ||
+		/*if((list_sort_order == Qt::AscendingOrder && !isGamesListAwkwardVariable) ||
 		  (list_sort_order != Qt::AscendingOrder && isGamesListAwkwardVariable))
 		{
 			emit beginInsertRows(QModelIndex(), 0, 0);
 			items.insert(0, &item);
 			emit endInsertRows();
-			emit dataChanged(createIndex(0, 0),
+			if(view) view->_dataChanged(createIndex(0, 0),
 				createIndex(0, headerItem->columnCount() - 1));
 			return;
-		}
+		}*/
+
 #endif //ONLISTINSERT_SORT
 		emit beginInsertRows(QModelIndex(), items.count(), items.count());
 		items.append(&item);
 		//emit beginInsertRows(QModelIndex(), items.count() - 1, items.count() - 1);
 		emit endInsertRows();
-		emit dataChanged(createIndex(items.count() - 1, 0),
+		if(view) view->_dataChanged(createIndex(0, 0),
 			createIndex(items.count() - 1, headerItem->columnCount() - 1));
 	//}
 }
@@ -1043,6 +1044,7 @@ ListModel::ListModel()
 	//and a fancy X would be nice for a player not open for a game
 #endif //LISTVIEW_ICONS
 	isGamesListAwkwardVariable = false;
+	view = 0;
 }
 
 ListModel::~ListModel()
@@ -1132,14 +1134,18 @@ QVariant ListModel::headerData(int section, Qt::Orientation orientation, int rol
 	return QVariant();
 }
 
-void FilteredView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
+void FilteredView::_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
 {
 	for(int i = topLeft.row(); i <= bottomRight.row(); i++)
 	{
-			if(listFilter->filterAcceptsRow(i))
-				setRowHidden(i, QModelIndex(), false);
-			else
-				setRowHidden(i, QModelIndex(), true);
+		if(listFilter->filterAcceptsRow(i))
+		{	
+			setRowHidden(i, QModelIndex(), false);
+		}
+		else
+		{
+			setRowHidden(i, QModelIndex(), true);
+		}
 	}
 }
 

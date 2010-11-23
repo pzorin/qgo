@@ -88,6 +88,7 @@ class ListFilter
 		ListFilter(class ListModel * l) : listModel(l) {};
 		virtual ~ListFilter() {};
 		virtual bool filterAcceptsRow(int row) const = 0;
+		class ListModel * getListModel(void) { return listModel; };
 	protected:
 		class ListModel * listModel;
 };
@@ -124,8 +125,8 @@ class FilteredView : public QTreeView
 		~FilteredView() { delete listFilter; };
 		void setFilter(ListFilter * l) { listFilter = l; };
 		ListFilter * getFilter(void) { return listFilter; };
+		void _dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 	private:
-		virtual void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 		ListFilter * listFilter;
 };
 
@@ -149,17 +150,22 @@ class ListModel : public QAbstractItemModel	//QAbstractItemModel??
 		QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 		QModelIndex getIndex(int row, int column) { return createIndex(row, column); };		
+		void setView(FilteredView * v) { view = v; };
 	protected:
 		friend class PlayerListFilter;
 		friend class GamesListFilter;
+		friend class FilteredView;
 		ListItem * headerItem;
 		QList <ListItem *> items;	//try it with the one list
 		QList <int> sort_priority;
 		Qt::SortOrder list_sort_order;
 		bool isGamesListAwkwardVariable;
+		FilteredView * view;
 	private:
 		void quicksort(int b, int e);
 		int qs_partition(int b, int e);
+		
+		QModelIndexList newPersistentIndexes;
 };
 
 class ObserverListModel : public ListModel

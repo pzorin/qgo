@@ -117,6 +117,7 @@ void Room::setupUI(void)
 	
    // playerView->setIconSize(QSize(20, 20));
 	playerView->setModel(playerListModel);
+	playerListModel->setView(playerView);
 	playerView->setFilter(new PlayerListFilter(playerListModel));
 	playerView->header()->setSortIndicatorShown ( true );
 	
@@ -424,13 +425,13 @@ void Room::clearPlayerList(void)
 	playerListModel->clearList();
 	if(connection->playerTrackingByID())
 	{
-		qDebug("Creating player ID Registry");
+		qDebug("Recreating player ID Registry");
 		delete playerListingIDRegistry;
 		playerListingIDRegistry = new PlayerListingIDRegistry(playerListModel);
 	}
 	else
 	{
-		qDebug("Creating player Registry");
+		qDebug("Recreating player Registry");
 		delete playerListingRegistry;
 		playerListingRegistry = new PlayerListingRegistry(playerListModel);
 	}
@@ -696,6 +697,20 @@ void Room::recvPlayerListing(PlayerListing * player)
 {
 	if(!player->online)
 	{
+#ifdef VIEWTESTDEBUG
+		if(player->name == "REMOVEMENOTAPLAYER")
+		{
+			int i;
+			delete player;
+			player = 0;
+			do
+			{
+				i = rand() % players;
+			}
+			while(!(player = playerListingIDRegistry->getIfEntry(i)));
+			player->online = false;
+		}
+#endif  //VIEWTESTDEBUG
 		removed_player[player] = player->playing;
 #ifdef PLAYERLISTING_ISSUES
 		qDebug("Removing player %s %p on attached game %d", player->name.toLatin1().constData(), player, player->playing);
