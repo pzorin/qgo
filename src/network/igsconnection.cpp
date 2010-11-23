@@ -754,6 +754,7 @@ void IGSConnection::onReady(void)
 			return;
 		firstonReadyCall = 0;
 		setConnected();		//shouldbe just SETUP FIXME
+		setKeepAlive(600);
 		/* This gets called too much, we need a better
 		 * way to call it */
 		/* also needs to be earlier */

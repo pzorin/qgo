@@ -170,7 +170,7 @@ void WingConnection::onReady(void)
 			return;
 		firstonReadyCall = 0;
 		connectionState = CONNECTED;
-		
+		setKeepAlive(600);
 		/* FIXME Note that wing and lgs use "set" instead of
 		 * "toggle" possibly, so that's maybe an issue */
 		sendPlayersRequest();

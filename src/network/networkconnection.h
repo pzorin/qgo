@@ -116,7 +116,6 @@ class NetworkConnection : public QObject
 		class PlayerListing * getPlayerListingFromFriendWatchListing(class FriendWatchListing & f);
 		virtual bool isReady(void) = 0;
 		virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
-		virtual void setKeepAlive(int) {};
 		virtual void changeServer(void) {};
 		virtual void createRoom(void) {};
 		virtual void sendCreateRoom(class RoomCreate *) {};

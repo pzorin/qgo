@@ -77,7 +77,7 @@ void LGSConnection::onReady(void)
 			return;
 		firstonReadyCall = 0;
 		connectionState = CONNECTED;
-
+		setKeepAlive(600);
 		sendPlayersRequest();
 		sendGamesRequest();
 		//dispatch->recvRoomListing(new RoomListing(0, "Lobby"));

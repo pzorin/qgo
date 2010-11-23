@@ -69,7 +69,6 @@ class IGSConnection : public NetworkConnection
 		virtual void handlePendingData(newline_pipe <unsigned char> * p);
 		virtual bool isReady(void);
 		virtual void onReady(void);
-		virtual void setKeepAlive(int);
 
 		virtual void sendJoinRoom(const RoomListing & room, const char * password = 0);
 		virtual void sendJoinChannel(const ChannelListing & channel);
@@ -101,6 +100,7 @@ class IGSConnection : public NetworkConnection
 		virtual bool readyToWrite(void);
 		virtual void setReadyToWrite(void) { writeReady = true; };
 		virtual void onAuthenticationNegotiated(void);
+		virtual void setKeepAlive(int);
 		void handleLogin(QString msg);
 		void handlePassword(QString msg);
 		void handleMessage(QString msg);

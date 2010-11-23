@@ -219,7 +219,7 @@ void MainWindow::setupConnection(void)
 		ui.channelsLabel->hide();
 		ui.channelsCB->hide();
 	}
-	connection->setKeepAlive(600);		//600 seconds okay? FIXME
+
 	/* FIXME Also need away message and maybe game/player refresh */
 #ifdef FIXME	
 	// quiet mode? if yes do clear table before refresh
