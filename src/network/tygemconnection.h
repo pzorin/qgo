@@ -27,6 +27,7 @@
 #include "messages.h"
 #include "newline_pipe.h"
 #include <vector>
+#include <stdint.h>
 
 class BoardDispatch;
 class GameDialogDispatch;
@@ -162,6 +163,7 @@ class TygemConnection : public NetworkConnection
 		void sendRequestPlayers(void);
 		void sendName(void);
 		void sendRequest(void);
+		void sendRequest2(void);
 		void sendFriendsBlocksRequest(void);
 		void promptResumeMatch(void);
 		void sendOpenConversation(PlayerListing & player);
@@ -175,6 +177,7 @@ class TygemConnection : public NetworkConnection
 		void sendFinishObserving(unsigned short game_number);
 		void sendObserversRequest(unsigned short game_number);
 		void sendServerKeepAlive(void);
+		uint32_t encodeKeepAliveIV(uint32_t a);
 		void sendMatchInvite(const PlayerListing & player, enum MIVersion version = offer, unsigned short room_number = 0xffff);
 		void sendMatchOffer(const MatchRequest & mr, enum MIVersion version = offer);
 		void sendStartGame(const MatchRequest & mr);
@@ -204,6 +207,7 @@ class TygemConnection : public NetworkConnection
 		PlayerListing * getOrCreatePlayerListingFromRecord(char * r);
 
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);
+		void handleRequestKeepAlive(unsigned char * msg, unsigned int size);
 		void handleServerRoomChat(unsigned char * msg, unsigned int size);
 		void handlePersonalChat(unsigned char * msg, unsigned int size);
 		void handleOpenConversation(unsigned char * msg, unsigned int size);
@@ -245,11 +249,11 @@ class TygemConnection : public NetworkConnection
 		std::vector<PlayerListing *> decline_all_invitations;
 		QTextCodec * textCodec;
 		unsigned long encode_offset;
+		unsigned long keepaliveIV;
 		
 		std::map <PlayerListing *, QString> pendingConversationMsg;
 		
 		int matchKeepAliveTimerID, matchRequestKeepAliveTimerID;
-		int serverKeepAliveTimerID;
 		int retryLoginTimerID;
 		int opponentDisconnectTimerID;
 		

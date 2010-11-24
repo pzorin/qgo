@@ -134,6 +134,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	http_connect_content_length = 0;
 	current_server_index = -1;
 	encode_offset = 0;
+	keepaliveIV = 0;
 	
 	matchKeepAliveTimerID = 0;
 	matchRequestKeepAliveTimerID = 0;
@@ -1011,9 +1012,6 @@ void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 	sendRequest();
 	connectionState = SETUP;
 	sendName();
-	serverKeepAliveTimerID = startTimer(119000);	//not fast enough? 2 minutes I thought
-							//maybe we're supposed to send something
-							//else soon on login too...
 	/* FIXME currently we have handleFriends doing setConnected which closes the please wait
 	 * getting us out of SETUP.  This means that the players haven't come in yet.
 	 * the problem is that handleFriends puts the friends on a list that's then checked when
@@ -1021,6 +1019,7 @@ void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 	 * CyberORO working better with this, as well as IGS Before we worry about this
 	 * relatively minor problem */
 	sendFriendsBlocksRequest();
+	sendRequest2();				//the 53
 	sendRequestPlayers();
 	//53
 	//11 ae 14 name(91) 95 53
@@ -1089,6 +1088,31 @@ void TygemConnection::sendRequest(void)
 
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending request");
+	delete[] packet;
+}
+
+void TygemConnection::sendRequest2(void)
+{
+	unsigned int length = 8;
+	unsigned char * packet = new unsigned char[length];
+	
+	packet[0] = (length >> 8);
+	packet[1] = length & 0x00ff;
+	packet[2] = TYGEM_PROTOCOL_VERSION;
+	packet[3] = 0x53;
+	packet[4] = 0x00;
+	packet[5] = 0x00;
+	packet[6] = 0x00;
+	packet[7] = 0x00;
+	
+#ifdef RE_DEBUG
+	for(unsigned int i = 0; i < length; i++)
+		printf("%02x", packet[i]);
+	printf("\n");
+#endif //RE_DEBUG
+
+	if(write((const char *)packet, length) < 0)
+		qWarning("*** failed sending request 2");
 	delete[] packet;
 }
 
@@ -1267,7 +1291,6 @@ int TygemConnection::reconnectToServer(void)
 	
 	if(connectionState == CONNECTED)
 	{
-		killTimer(serverKeepAliveTimerID);
 		sendDisconnectMsg();
 		closeConnection(false);
 		reconnecting = true;
@@ -2277,6 +2300,8 @@ void TygemConnection::sendMatchMsg1(const PlayerListing & player, unsigned short
 void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion version)
 {
 	unsigned int length = 0x5c;
+	if(connectionType == TypeTOM)
+		length = 0x60;
 	unsigned char * packet = new unsigned char[length];
 	int i;
 	Room * room = getDefaultRoom();
@@ -2481,6 +2506,7 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 	
 	for(i = 88; i < 92; i++)
 		packet[i] = 0x00;
+	//tom has 91 = 0x61 92 = 0xea and then 4 more bytes with a size of 60?
 	
 #ifdef RE_DEBUG
 	printf("match packet we are sending now: ");
@@ -2503,6 +2529,8 @@ void TygemConnection::sendMatchOffer(const MatchRequest & mr, enum MIVersion ver
 void TygemConnection::sendStartGame(const MatchRequest & mr)
 {
 	unsigned int length = 0x60;
+	if(connectionType == TypeTOM)
+		length = 0x64;
 	unsigned char * packet = new unsigned char[length];
 	int i;
 	Room * room = getDefaultRoom();
@@ -2628,29 +2656,91 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 
 void TygemConnection::sendServerKeepAlive(void)
 {
-	unsigned int length = 8;
+	if(!keepaliveIV)
+	{
+		qDebug("No server keep alive IV");
+		return;
+	}
+	unsigned int length = 0xc;
 	unsigned char * packet = new unsigned char[length];
-	
-	packet[0] = 0x00;
-	packet[1] = 0x08;
+        	
+	packet[0] = (length >> 8);
+	packet[1] = length & 0x00ff;
 	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x4e;
-	packet[4] = 0x00;
-	packet[5] = 0x00;
-	packet[6] = 0x00;
-	packet[7] = 0x00;
+	if(connectionType == TypeTOM)
+	{
+	packet[4] = 0xc4;//??
+	packet[5] = 0x9b;//??
+	packet[6] = 0xba;//??
+	packet[7] = 0x11;//??
+	}
+	else
+	{
+		packet[7] = (keepaliveIV >> 24);
+		packet[6] = (keepaliveIV >> 16) & 0x000000ff;
+		packet[5] = (keepaliveIV >> 8) & 0x000000ff;
+		packet[4] = keepaliveIV & 0x000000ff;
+	}
+	packet[8] = 0x00;
+	packet[9] = 0x00;
+	packet[10] = 0x00;
+	packet[11] = 0x00;
+	
+#ifdef RE_DEBUG
+	printf("server keep alive: ");
+	for(int i = 0; i < (int)length; i++)
+		printf("%02x", packet[i]);
+	printf("\n");
+#endif //RE_DEBUG
 
+	encode(packet, (length / 4) - 2);
+#ifdef RE_DEBUG
+	printf("encoded server keep alive: ");
+	for(int i = 0; i < (int)length; i++)
+		printf("%02x", packet[i]);
+	printf("\n");
+#endif //RE_DEBUG
+	
 	qDebug("Sending server keep alive");
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending server keep alive");
 	delete[] packet;
 }
 
+uint32_t TygemConnection::encodeKeepAliveIV(uint32_t a)
+{
+	uint32_t magic1 = 0x54268553;
+	uint32_t magic2 = 0x347f1064;
+	uint32_t magic3 = 0xb92af7fe;
+	uint32_t magic4 = 0x1301a49a;
+	
+	uint32_t temp1, temp2;
+	int i;
+	//a = htonl(a);
+	for(i = 0; i < 4; i++)
+		((unsigned char *)&temp1)[i] = ((unsigned char *)&a)[i] - ((unsigned char *)&magic1)[i];
+	((unsigned char *)&temp2)[0] = ((unsigned char *)&temp1)[2];
+	((unsigned char *)&temp2)[1] = ((unsigned char *)&temp1)[0];
+	((unsigned char *)&temp2)[2] = ((unsigned char *)&temp1)[3];
+	((unsigned char *)&temp2)[3] = ((unsigned char *)&temp1)[1];
+	for(i = 0; i < 4; i++)
+		((unsigned char *)&temp1)[i] = ((unsigned char *)&temp2)[i] ^ ((unsigned char *)&magic2)[i];
+	for(i = 0; i < 4; i++)
+		((unsigned char *)&temp2)[i] = ((unsigned char *)&temp1)[i] ^ ((unsigned char *)&magic3)[i];
+	((unsigned char *)&temp1)[0] = ((unsigned char *)&temp2)[2];
+	((unsigned char *)&temp1)[1] = ((unsigned char *)&temp2)[1];
+	((unsigned char *)&temp1)[2] = ((unsigned char *)&temp2)[3];
+	((unsigned char *)&temp1)[3] = ((unsigned char *)&temp2)[0];
+	for(i = 0; i < 4; i++)
+		((unsigned char *)&temp2)[i] = ((unsigned char *)&temp1)[i] + ((unsigned char *)&magic4)[i];
+	
+	return temp2;
+}
+
 void TygemConnection::timerEvent(QTimerEvent * event)
 {
-	if(event->timerId() == serverKeepAliveTimerID)
-		sendServerKeepAlive();
-	else if(event->timerId() == retryLoginTimerID)
+	if(event->timerId() == retryLoginTimerID)
 	{
 		//response bit seems necessary here for tygem
 		//at least, double check for tom
@@ -4263,14 +4353,14 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			//3100 0000 0000 0002 6269 7473 0000 0000
 			//0000 0002
 			break;
-		case TPC(0x4d):
-			//this might be when opponent leaves game? possibly?
-			//maybe not, maybe we just have to pick that up
-			//from observers
+		case TPC(TYGEM_SERVERPING):
+#ifdef RE_DEBUG
 			printf("0x064d: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+#endif //RE_DEBUG
+			handleRequestKeepAlive(msg, size);
 			break;
 		case TPC(TYGEM_GAMECHAT):	//in game chat
 			handleGameChat(msg, size);
@@ -4405,6 +4495,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			break;
 		case TPC(0x98):
 			//maybe number of games/players?
+			//definitely not, this is part of the login or something
 #ifdef RE_DEBUG
 			printf("0x0698: ");
 			for(i = 0; i < (int)size; i++)
@@ -4694,6 +4785,7 @@ unsigned int TygemConnection::rankToScore(QString rank)
 	 * tygem doesn't equate rank to points directly I don't think.
          * might be weighted by win/loss ratio or something.
          * at the very least, its logarithmic */
+	/* right now, the score filter goes up to 5d, no more FIXME */
 	if(rank.contains("k"))
 		rp = (19 - ordinal) * 1000;
 	else if(rank.contains("d"))
@@ -4814,7 +4906,8 @@ void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int 
 }
 
 /* These are the number of players on the other servers
- * FIXME */
+ * FIXME 
+ * seem they're sent out maybe every 20 seconds*/
 //0x0654: 
 void TygemConnection::handleServerPlayerCounts(unsigned char * msg, unsigned int size)
 {
@@ -5215,6 +5308,23 @@ void TygemConnection::promptResumeMatch(void)
 	}
 }
 
+void TygemConnection::handleRequestKeepAlive(unsigned char * msg, unsigned int size)
+{
+	if(size != 4)
+	{
+		qDebug("setup keep alive of size %d", size);
+	}
+	keepaliveIV = *(unsigned long *)msg;
+#ifdef RE_DEBUG
+	printf("Keepalive IV %8x\n", keepaliveIV);
+#endif //RE_DEBUG
+	keepaliveIV = encodeKeepAliveIV(keepaliveIV);
+#ifdef RE_DEBUG
+	printf("Keepalive IV encoded %8x\n", keepaliveIV);
+#endif //RE_DEBUG
+	sendServerKeepAlive();
+}
+
 void TygemConnection::handleServerAnnouncement(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
@@ -5242,7 +5352,7 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 	unsigned char * text = new unsigned char[size - 0x23];
 	unsigned char name[15];
 	name[14] = 0x00;
-	QString encoded_name, encoded_name2;
+	QString encoded_name, encoded_name2, rank;
 #ifdef RE_DEBUG
 	printf("serverchat: \n");
 	for(unsigned int i = 0; i < size; i++)
@@ -5250,16 +5360,23 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 	printf("\n");
 #endif //RE_DEBUG
 	p += 4;
-	strncpy((char *)name, (char *)p, 14); 
+	strncpy((char *)name, (char *)&(msg[4]), 14); 
 	encoded_name = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 15;
-	strncpy((char *)name, (char *)p, 11); 
+	if(msg[15] < 0x12)
+		rank = QString::number(0x12 - msg[15]) + 'k';
+	else if(msg[15] > 0x1a)
+		rank = QString::number(msg[15] - 0x1a) + 'p';
+	else
+		rank = QString::number(msg[15] - 0x11) + 'd';
+	p++;
+	strncpy((char *)name, (char *)&(msg[16]), 11);
 	//we lost first three letters here last I checked
 	encoded_name2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
-	p += 0x11;
+	p += 0x10;
 	//don't know what that one byte is, but its not part of text
 	p++;
-	strncpy((char *)text, (char *)p, size - 0x24);
+	strncpy((char *)text, (char *)&(msg[37]), size - 0x24);
 
 	//Room * room = getDefaultRoom(); //3
 	//PlayerListing * player = room->getPlayerListing(player_id);
@@ -5276,7 +5393,7 @@ void TygemConnection::handleServerRoomChat(unsigned char * msg, unsigned int siz
 		u = serverCodec->toUnicode((const char *)text, strlen((char *)text));
 			//u = codec->toUnicode(b, size - 4);
 		if(console_dispatch)
-			console_dispatch->recvText(encoded_name2 + ": " + u);
+			console_dispatch->recvText(encoded_name2 + '[' + rank + "]: " + u);
 	/*}
 	else
 		printf("unknown player says something");*/
@@ -5865,9 +5982,11 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 				 * I'm not seeing MatchMsg1 anymore !!! 
 				 * just they join, we pop up the offer dialog
 				 * and then we send it !!! FIXME*/
-#ifdef FIXME			//necessary when?
-				sendMatchMsg1(*aPlayer, game_number);
-#endif //FIXME
+//#ifdef FIXME			//necessary when?
+				//tom may require this
+				if(connectionType == TypeTOM)
+					sendMatchMsg1(*aPlayer, game_number);
+//#endif //FIXME
 				MatchRequest * mr = new MatchRequest();
 				mr->number = game_number;
 				mr->opponent = aPlayer->name;
