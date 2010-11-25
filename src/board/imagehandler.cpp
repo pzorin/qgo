@@ -93,8 +93,8 @@ ImageHandler::ImageHandler()
 	{
 		altGhostPixmaps = new QList<QPixmap>();//::QList();
 
-		QPixmap alt1 = QPixmap::QPixmap(":/new/prefix1/ressources/pics/alt_ghost_black.png");
-		QPixmap alt2 = QPixmap:: QPixmap(":/new/prefix1/ressources/pics/alt_ghost_white.png");
+		QPixmap alt1 = QPixmap(":/new/prefix1/ressources/pics/alt_ghost_black.png");
+		QPixmap alt2 = QPixmap(":/new/prefix1/ressources/pics/alt_ghost_white.png");
 
 		if (alt1.isNull() || alt2.isNull())
 			qFatal("Could not load alt_ghost pixmaps.");

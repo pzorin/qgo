@@ -176,7 +176,7 @@ class TygemConnection : public NetworkConnection
 		void sendResume(unsigned short game_number);
 		void sendFinishObserving(unsigned short game_number);
 		void sendObserversRequest(unsigned short game_number);
-		void sendServerKeepAlive(void);
+		void sendServerKeepAlive(uint32_t keepaliveIV);
 		uint32_t encodeKeepAliveIV(uint32_t a);
 		void sendMatchInvite(const PlayerListing & player, enum MIVersion version = offer, unsigned short room_number = 0xffff);
 		void sendMatchOffer(const MatchRequest & mr, enum MIVersion version = offer);
@@ -249,7 +249,6 @@ class TygemConnection : public NetworkConnection
 		std::vector<PlayerListing *> decline_all_invitations;
 		QTextCodec * textCodec;
 		unsigned long encode_offset;
-		unsigned long keepaliveIV;
 		
 		std::map <PlayerListing *, QString> pendingConversationMsg;
 		

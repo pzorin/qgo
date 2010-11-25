@@ -347,7 +347,7 @@ void Board::drawBackground()
 		}
 
 	//redraws the image on a brush to set the background
-	canvas->setBackgroundBrush ( QBrush::QBrush(image));
+	canvas->setBackgroundBrush ( QBrush(image));
 
 }
 

@@ -274,13 +274,13 @@ void ClockDisplay::updateTimers()
 
 	if(b_time > 3600 || w_time > 3600)
 	{
-		bt = QTime::QTime(0,0).addSecs(abs(b_time)).toString("h:mm:ss") ;
-		wt = QTime::QTime(0,0).addSecs(abs(w_time)).toString("h:mm:ss") ;
+		bt = QTime(0,0).addSecs(abs(b_time)).toString("h:mm:ss") ;
+		wt = QTime(0,0).addSecs(abs(w_time)).toString("h:mm:ss") ;
 	}
 	else
 	{
-		bt = QTime::QTime(0,0).addSecs(abs(b_time)).toString("m:ss") ;
-		wt = QTime::QTime(0,0).addSecs(abs(w_time)).toString("m:ss") ;
+		bt = QTime(0,0).addSecs(abs(b_time)).toString("m:ss") ;
+		wt = QTime(0,0).addSecs(abs(w_time)).toString("m:ss") ;
 	}
 	
 	switch(timeSystem)

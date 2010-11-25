@@ -1125,7 +1125,7 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 	 * probably FIXME, I just wonder why its like that in the first place */
 	
 	QPalette p(QApplication::palette());
-	p.setColor(  QPalette::Base , QColor::QColor("cyan"));
+	p.setColor(  QPalette::Base , QColor("cyan"));
 	
 	qDebug("GameDialog::recvRequest");
 	/* If there's no existing request, then nothing should have changed

@@ -109,7 +109,7 @@ Mark(x, y)
 		setPen(QPen(col, 2));
 //	else
 
-	pa = QPolygon::QPolygon(3);
+	pa = QPolygon(3);
 
 //		setPen(QPen(col, 1));
 	setSize(s, s);

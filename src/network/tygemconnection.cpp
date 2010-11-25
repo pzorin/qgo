@@ -134,7 +134,6 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	http_connect_content_length = 0;
 	current_server_index = -1;
 	encode_offset = 0;
-	keepaliveIV = 0;
 	
 	matchKeepAliveTimerID = 0;
 	matchRequestKeepAliveTimerID = 0;
@@ -2654,7 +2653,7 @@ void TygemConnection::sendStartGame(const MatchRequest & mr)
 	delete[] packet;
 }
 
-void TygemConnection::sendServerKeepAlive(void)
+void TygemConnection::sendServerKeepAlive(uint32_t keepaliveIV)
 {
 	if(!keepaliveIV)
 	{
@@ -2700,15 +2699,15 @@ void TygemConnection::sendServerKeepAlive(void)
 	for(int i = 0; i < (int)length; i++)
 		printf("%02x", packet[i]);
 	printf("\n");
-#endif //RE_DEBUG
 	
 	qDebug("Sending server keep alive");
+#endif //RE_DEBUG
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending server keep alive");
 	delete[] packet;
 }
 
-uint32_t TygemConnection::encodeKeepAliveIV(uint32_t a)
+uint32_t TygemConnection::encodeKeepAliveIV(uint32_t server)
 {
 	uint32_t magic1 = 0x54268553;
 	uint32_t magic2 = 0x347f1064;
@@ -2717,9 +2716,8 @@ uint32_t TygemConnection::encodeKeepAliveIV(uint32_t a)
 	
 	uint32_t temp1, temp2;
 	int i;
-	//a = htonl(a);
 	for(i = 0; i < 4; i++)
-		((unsigned char *)&temp1)[i] = ((unsigned char *)&a)[i] - ((unsigned char *)&magic1)[i];
+		((unsigned char *)&temp1)[i] = ((unsigned char *)&server)[i] - ((unsigned char *)&magic1)[i];
 	((unsigned char *)&temp2)[0] = ((unsigned char *)&temp1)[2];
 	((unsigned char *)&temp2)[1] = ((unsigned char *)&temp1)[0];
 	((unsigned char *)&temp2)[2] = ((unsigned char *)&temp1)[3];
@@ -5314,15 +5312,14 @@ void TygemConnection::handleRequestKeepAlive(unsigned char * msg, unsigned int s
 	{
 		qDebug("setup keep alive of size %d", size);
 	}
-	keepaliveIV = *(unsigned long *)msg;
 #ifdef RE_DEBUG
-	printf("Keepalive IV %8x\n", keepaliveIV);
+	printf("Keepalive IV %8x\n", *(uint32_t *)msg);
 #endif //RE_DEBUG
-	keepaliveIV = encodeKeepAliveIV(keepaliveIV);
+	uint32_t keepaliveIV = encodeKeepAliveIV(*(uint32_t *)msg);
 #ifdef RE_DEBUG
 	printf("Keepalive IV encoded %8x\n", keepaliveIV);
 #endif //RE_DEBUG
-	sendServerKeepAlive();
+	sendServerKeepAlive(keepaliveIV);
 }
 
 void TygemConnection::handleServerAnnouncement(unsigned char * msg, unsigned int size)
@@ -7748,7 +7745,11 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	printf("0671 TIME SETTINGS: %d %d %d %d %d %d\n", p[0], p[1], p[2], p[3], p[4], p[5]);
 #endif //RE_DEBUG
 	aGameData->handicap = msg[40];
-	aGameData->komi = (float)msg[41] + .5;
+	/* Either all komi is 6.5 or its not in the 0671 anymore */
+	if(gl)
+		aGameData->komi = gl->komi;
+	else
+		aGameData->komi = (float)msg[41] + .5;
 	p += 4;
 	p += 2;
 	/* This isn't white first flag I don't think, its first player
@@ -7782,6 +7783,8 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 	strncpy((char *)name, (char *)&(msg[60]), 11);
 	encoded_nameA2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	p += 10;
+
+
 	//p[1] is color byte
 	/* We assume ascii names are in same order */
 	//if(p[1] == 0x02)

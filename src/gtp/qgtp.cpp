@@ -341,7 +341,7 @@ int msglen = strlen(s);
 	_cpt++;
 
 	qDebug("flush -> %s",s);
-	uint i= programProcess->write(QByteArray::QByteArray(s));
+	uint i= programProcess->write(QByteArray(s));
 
 //	int j= programProcess->waitForBytesWritten ( 100 );
 
