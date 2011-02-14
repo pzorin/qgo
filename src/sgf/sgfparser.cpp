@@ -224,6 +224,7 @@ SGFParser::SGFParser(Tree * _tree)
 	stream = NULL;
 	tree = _tree;
 	readCodec = 0;
+	loadedfromfile = false;
 //	xmlParser = NULL;
 }
 
@@ -322,7 +323,7 @@ QString SGFParser::loadFile(const QString &fileName)
 #ifdef DEBUG_CODEC
 	QMessageBox::information(0, "READING", toParse);
 #endif
-
+	loadedfromfile = true;		//no need to check the codec later
 	return toParse;
 }
 
@@ -427,6 +428,16 @@ bool SGFParser::doParse(const QString &toParseStr)
 		qWarning("Failed loading from file. Is it empty?");
 		return false;
 	}
+	QString tmp;
+
+	if(!loadedfromfile)
+	{
+		/* This bit of ugliness is because sgfs are used to duplicate boards as well
+		 * as load from file FIXME */
+		parseProperty(toParseStr, "CA", tmp);		//codec
+		if (!tmp.isEmpty())
+			readCodec = QTextCodec::codecForName(tmp.toLatin1().constData());
+	}
 	
 	const MyString *toParse = NULL;
 
@@ -470,7 +481,6 @@ bool SGFParser::doParse(const QString &toParseStr)
 	toRemove.setAutoDelete(TRUE);
 */
 	// Initialises the tree with board size
-	QString tmp;
 	parseProperty(toParseStr, "SZ", tmp);
 //	Tree *tree = new Tree(tmp.isEmpty() ? 19 : tmp.toInt()) ;// boardHandler->getTree();
 	

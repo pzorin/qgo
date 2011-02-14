@@ -73,6 +73,7 @@ private:
 //	XMLParser *xmlParser;
 	int asciiOffsetX, asciiOffsetY;
 	Tree *tree;
+	bool loadedfromfile;
 };
 
 #endif
