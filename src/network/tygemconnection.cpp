@@ -2027,12 +2027,14 @@ void TygemConnection::sendFinishObserving(unsigned short game_number)
  * decent checking on it now.*/
 void TygemConnection::sendCreateRoom(void)
 {
-	unsigned int length = 40;
+	unsigned int length = 0x28;
+	if(connectionType == TypeTOM)
+		length = 0x30;			//at least for actual button
 	char *packet = new char[length];
 	unsigned int i;
 	
-	packet[0] = 0x00;
-	packet[1] = 0x28;
+	packet[0] = (length >> 8);
+	packet[1] = (length & 0xff);
 	packet[2] = TYGEM_PROTOCOL_VERSION;
 	packet[3] = 0x36;
 	for(i = 4; i < length; i++)
@@ -2204,6 +2206,8 @@ void TygemConnection::sendMatchInvite(const PlayerListing & player, enum MIVersi
 	}
 	else if(version == alreadyingame)
 	{
+		//0x000b is sent out on TOM to decline when we have match invite
+		//settings off
 		packet[60] = 0x01;
 		packet[61] = 0x0b;		//doublecheck FIXME
 		packet[62] = 0xff;
