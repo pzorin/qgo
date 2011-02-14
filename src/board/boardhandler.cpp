@@ -168,9 +168,7 @@ void BoardHandler::slotNavPrevComment()
 
 	Q_CHECK_PTR(tree);
 
-	Move  *m = tree->getCurrent()->parent ;
-
-	Q_CHECK_PTR(m);
+	Move  *m = tree->getCurrent()->parent;
 
 	while (m != NULL)
 	{
@@ -194,17 +192,13 @@ void BoardHandler::slotNavNextComment()
 //	if (gameMode == modeScore)
 //		return;
 
-
 	Q_CHECK_PTR(tree);
 
-	Move  *m = tree->getCurrent()->son ;
-
-	Q_CHECK_PTR(m);
-	//out of memory error here after using erase tree button
+	Move  *m = tree->getCurrent()->son;
 
 	while (m != NULL)
 	{
-		if (m->getComment() != "" )
+		if (m->getComment() != "")
 			break;
 		if (m->son == NULL)
 			break;
@@ -573,7 +567,7 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 //		board->setCurStoneColor();
 //	}
 	updateButtons(m->getColor());
-	updateCursor(m->getColor());
+	updateCursor(m->getColor());			//FIXME what about moveControl ?
 //	board->setCursorType(cur);
 	
 
@@ -608,8 +602,17 @@ void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
 		}
 		else if(m->getTimeinfo())
 		{
-			int other_time = (m->parent && m->parent->getMoveNumber() != 0 ? (int)m->parent->getTimeLeft() : 0);
-			int other_stones_periods = (m->parent && m->parent->getMoveNumber() != 0 ? (m->parent->getOpenMoves() == 0 ? -1 : m->parent->getOpenMoves()): -1);
+			int other_time, other_stones_periods;
+			if(m->parent && m->parent->getMoveNumber() != 0 && m->parent->getTimeinfo())
+			{
+				other_time = (int)m->parent->getTimeLeft();
+				other_stones_periods = (m->parent->getOpenMoves() == 0 ? -1 : m->parent->getOpenMoves());
+			}
+			else
+			{
+				other_time = 0;
+				other_stones_periods = -1;
+			}
 			if(!boardwindow->qgoboard->getBlackTurn())
 				boardwindow->getClockDisplay()->setTimeInfo((int)m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves(), other_time, other_stones_periods);
 			else
