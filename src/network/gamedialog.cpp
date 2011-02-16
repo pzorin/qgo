@@ -1363,7 +1363,10 @@ unsigned int GameDialog::timeToSeconds(QString time)
 		sec = re.cap(2).toInt();	
 	}
 	else
+	{
 		qDebug("Bad time string");
+		return 0;
+	}
 	
 	return (60 * min) + sec;
 }
