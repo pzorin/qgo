@@ -45,6 +45,7 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	dontsend = false;
 	boardTimerId = 0;
 	controlling_player = QString();
+	reviewCurrent = 0;
 	// what about review games?  games without timers ??
 
 }
@@ -127,7 +128,9 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 {
 	int move_number, move_counter, handicap;
 	Move * remember, * last;
+	Move * goto_move;
 	//static bool offset_1 = false;
+	int i;
 	
 	dontsend = false;		//clear the dontsend bit
 	
@@ -136,8 +139,15 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		m->flags = MoveRecord::REMOVE;
 
 	remember = tree->getCurrent();
-	last = tree->findLastMoveInMainBranch();
 	
+	if(boardwindow->getReviewMode())
+	{
+		if(!reviewCurrent)
+			reviewCurrent = tree->findLastMoveInMainBranch();
+		last = reviewCurrent;
+	}
+	else
+		last = tree->findLastMoveInMainBranch();
 	tree->setCurrent(last);
 
 	move_number = m->number;
@@ -388,6 +398,44 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::REFUSEUNDO:
 			//handled by protocol as a recvKibitz for whatever reason
 			break;
+		case MoveRecord::FORWARD:
+			for(i = 0; i < move_number; i++)
+				tree->nextMove();
+			break;
+		case MoveRecord::BACKWARD:
+			for(i = 0; i < move_number; i++)
+			{
+				if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
+					break;
+				tree->previousMove();
+			}
+			break;
+		case MoveRecord::RESETBRANCH:
+			goto_move = tree->getCurrent();
+			while(!tree->isInMainBranch(goto_move))
+				goto_move = goto_move->parent;
+			boardwindow->getBoardHandler()->gotoMove(goto_move);
+			break;
+		case MoveRecord::RESETGAME:
+			goto_move = tree->getRoot();
+			boardwindow->getBoardHandler()->gotoMove(goto_move);
+			break;
+		case MoveRecord::TOEND:
+			goto_move = tree->findLastMoveInMainBranch();
+			boardwindow->getBoardHandler()->gotoMove(goto_move);
+			break;
+		case MoveRecord::SETMOVE:
+			/* Might later want to record this
+			 * also we should have already set the game to the last move and disabled nav*/
+			goto_move = tree->findNode(tree->getRoot(), m->number);
+
+			if (goto_move)
+				boardwindow->getBoardHandler()->gotoMove(goto_move);
+			else
+			{
+				QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("Cannot set move to move number %1").arg(m->number));
+			}
+			break;
 		default:
 		case MoveRecord::NONE:
 			
@@ -424,6 +472,9 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			break;
 	}
 	
+	if(boardwindow->getReviewMode())
+		reviewCurrent = tree->getCurrent();
+	
 	//check whether we should update to the incoming move or not
 	if (remember != last)
 		tree->setCurrent(remember);
@@ -455,18 +506,10 @@ void qGoBoardNetworkInterface::slotSendComment()
 	// be calling same code from two different places, so the whole
 	// thing should be fixed up.
 	our_name.prepend( "(" + QString::number(getMoveNumber()) + ") ");
-	/* We shouldn't copy it to msg window if we also receive it from server 
-	 * If we don't receive it from server, then that's an issue!! 
-	 * hint IGS versus WING FIXME
-	 * The likely solution if this is an issue is to block kibitzs
-	 * from ourself from the network code and have the append here.*/
-	/* FIXME: looks like there's a further issue here.  Namely, looks
-	 * like we don't need to copy in observing but we do in our own
-	 * matches.  Verify that this is case and come back here and then
-	 * void observer chat from us kibitz*/
-	/* Again, this is redundant in an ORO observer game, don't know
-	 * about match */
-	boardwindow->getUi()->commentEdit->append(our_name + ": " + boardwindow->getUi()->commentEdit2->text());
+	/* Kibitz echoes from self are blocked in network code */
+	boardwindow->getUi()->commentEdit->append(our_name + "[" + 
+		boardwindow->getBoardDispatch()->getOurRank() + "]: " +
+		boardwindow->getUi()->commentEdit2->text());
 	boardwindow->getUi()->commentEdit2->clear();
 }
 
