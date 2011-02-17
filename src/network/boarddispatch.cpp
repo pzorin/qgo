@@ -157,9 +157,8 @@ void BoardDispatch::closeBoard(void)
 		if(gameData)
 		{
 			qDebug("Closing board dispatch\n");
-			int number = gameData->number;
+			connection->closeBoardDispatch(gameData->number);
 			gameData = 0;
-			connection->closeBoardDispatch(number);
 		}
 	}
 	//lets have closeBoardDispatch do this
@@ -177,6 +176,14 @@ void BoardDispatch::recvMove(MoveRecord * m)
 	{
 		qDebug("Board dispatch has no board window\n");
 		return;
+	}
+	if(m->flags == MoveRecord::SETMOVE ||
+		m->flags == MoveRecord::BACKWARD ||
+		m->flags == MoveRecord::FORWARD ||
+		m->flags == MoveRecord::RESETBRANCH ||
+		m->flags == MoveRecord::RESETGAME)
+	{
+		boardwindow->setReviewMode();
 	}
 	boardwindow->qgoboard->handleMove(m);
 }
@@ -369,13 +376,19 @@ void BoardDispatch::recvResult(GameResult * r)
 	}
 	boardwindow->qgoboard->setResult(*r);
 	
+	//saveRecordToGameData();
+	//testing
+	//connection->sendRematchRequest(gameData->number);
+}
+
+/* Why doesn't this appear to save comments that we've seen in ORO games when rejoined?!? FIXME */
+void BoardDispatch::saveRecordToGameData(void)
+{
 	if(gameData->record_sgf == QString())
 	{
 		boardwindow->saveRecordToGameData();		//for ORO
 		connection->saveIfDoesntSave(gameData);		//for ORO
 	}
-	//testing
-	//connection->sendRematchRequest(gameData->number);
 }
 
 void BoardDispatch::sendResult(GameResult * r)
@@ -683,6 +696,7 @@ void BoardDispatch::mergeListingIntoRecord(GameData * r, GameListing * l)
 	 * and decline msgs and then fix this up.  Also nigiri cursor */
 	qDebug("bd::mlir %s %s vs %s %s", r->white_name.toLatin1().constData(), r->white_rank.toLatin1().constData(), 
 	       				r->black_name.toLatin1().constData(), r->black_rank.toLatin1().constData());
+	qDebug("komi: %f\n", r->komi);
 	/* FIXME, no komi in ORO listing... and
 	 * what is this function for again?  Maybe we shouldn't
 	 * always do this?? FIXME FIXME */
@@ -770,6 +784,11 @@ void BoardDispatch::requestGameInfo(void)
 	connection->requestGameInfo(gameData->number);
 }
 
+int BoardDispatch::getMoveNumber(void)
+{
+	return boardwindow->qgoboard->getMoveNumber();
+}
+
 GameData * BoardDispatch::getGameData(void)
 {
 	return gameData;
@@ -807,6 +826,12 @@ QString BoardDispatch::getOpponentName(void)
 }
 
 QString BoardDispatch::getUsername(void) { return connection->getUsername(); }
+
+QString BoardDispatch::getOurRank(void)
+{
+	const PlayerListing & p = connection->getOurListing();
+	return p.rank;
+}
 
 bool BoardDispatch::getBlackTurn(void)
 {

@@ -43,6 +43,7 @@ class BoardDispatch
 		void recvTime(const class TimeRecord & wt, const class TimeRecord & bt);
 		void recvAddTime(int minutes, QString player_name);
 		void recvResult(class GameResult * r);
+		void saveRecordToGameData(void);
 		void recvObserver(class PlayerListing * p, bool present);
 		void clearObservers(void);
 		void recvKibitz(QString name, QString text);
@@ -91,11 +92,15 @@ class BoardDispatch
 		void swapColors(bool noswap = false);
 		
 		void requestGameInfo(void);
+		int getMoveNumber(void);
+		bool getReviewInVariation(void) { return reviewInVariation; };	//tygem
+		void setReviewInVariation(bool b) { reviewInVariation = b; };	//tygem
 		class GameData * getGameData(void);
 		class TimeRecord getOurTimeRecord(void);
 		class TimeRecord getTheirTimeRecord(void);
 		QString getOpponentName(void);
 		QString getUsername(void);
+		QString getOurRank(void);
 		bool getBlackTurn(void);
 		class ObserverListModel * getObserverListModelForRematch(void);
 		void setObserverListModel(class ObserverListModel * olm);
@@ -125,4 +130,5 @@ class BoardDispatch
 		class ObserverListModel * observerListModel;
 		
 		bool clockStopped;
+		bool reviewInVariation;
 };
