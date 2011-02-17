@@ -138,6 +138,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	setupBoardUI();
 
 	setGamePhase(phaseOngoing);
+	reviewMode = false;
 	show();
 	checkHideToolbar(height());
 	setFocus();
@@ -918,6 +919,12 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			break;
 	}
 	gamePhase = gp;
+}
+
+/* This should maybe be replaced if more review stuff is added */
+void BoardWindow::setReviewMode(void)
+{
+	reviewMode = true;
 }
 
 /*
