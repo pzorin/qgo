@@ -203,9 +203,14 @@ void CyberOroConnection::closeBoardDispatch(unsigned int game_id)
 	}
 	else
 	{
-	/*if(room_were_in == g->number)
-		sendLeave(*g);
-	else*/
+		/* I've been saving boards that have results but I think maybe that's
+		 * supposed to be for betting matches in general.  I.e., we should check
+		 * here if we need to save the board */
+		if(g->isBetting || g->result != QString())
+		{
+			BoardDispatch * b = getIfBoardDispatch(game_id);
+			b->saveRecordToGameData();
+		}
 	/* Looks like finish observing is sent for both
 	 * also possibly finish observing used in matches somehow as well? */
 		/* Order here matters apparently, leave is for leaving the room,
@@ -5404,11 +5409,11 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	/* Okay, final solution.  We store the game number when we start to
 	 * observe and the move list picks it up. */
 	/* We still can get time settings here and store them on the listing?? */
-	game_number = p[0] + (p[1] << 8);
+	game_number = msg[0] + (msg[1] << 8);
 	
 	p += 2;
 	/* The next two bytes might help. or not*/
-	if(p[0] == 0xff && p[1] == 0xff)
+	if(msg[2] == 0xff && msg[3] == 0xff)
 	{
 		/* If these are ffff, we can add it to the listing I think */
 		joining = false;
@@ -5416,7 +5421,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		printf("not for joining\n");
 #endif //RE_DEBUG
 	}
-	else if(our_player_id == p[0] + (p[1] << 8))
+	else if(our_player_id == msg[2] + (msg[3] << 8))
 	{
 		joining = true;
 #ifdef RE_DEBUG
@@ -5452,22 +5457,22 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	//0100 0000 0600 2c01 6900 2500 0404 0000 1400 0400 0200 6b61 
 	//1b00 ffff 
 	//0100 0000 0600 8403 8403 8403 0303 0000 1e00 0300 0200
-	aGameData->handicap = p[0];
-	if(p[1])
-		aGameData->komi = -((float)(p[2])) - 0.5;
+	aGameData->handicap = msg[6];
+	if(msg[7])
+		aGameData->komi = -((float)(msg[8])) - 0.5;
 	else
-		aGameData->komi = ((float)(p[2])) + 0.5;
+		aGameData->komi = ((float)(msg[8])) + 0.5;
 	
 	p += 6;	//skip first time?
-	black_seconds = p[0] + (p[1] << 8);
+	black_seconds = msg[12] + (msg[13] << 8);
 	p += 2;
-	white_seconds = p[0] + (p[1] << 8);
+	white_seconds = msg[14] + (msg[15] << 8);
 	p += 2;
-	black_periods = p[0];
-	white_periods = p[1];
+	black_periods = msg[16];
+	white_periods = msg[17];
 	p += 2;
-	black_in_byoyomi = p[0];
-	white_in_byoyomi = p[1];
+	black_in_byoyomi = msg[18];
+	white_in_byoyomi = msg[19];
 	if(!black_in_byoyomi)
 		black_periods = -1;	//FIXME, awkward flags
 	if(!white_in_byoyomi)
@@ -5475,10 +5480,10 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 	
 	p += 2;
 	aGameData->maintime = black_seconds;
-	aGameData->periodtime = p[0] + (p[1] << 8);
+	aGameData->periodtime = msg[20] + (msg[21] << 8);
 	p += 2;
-	aGameData->stones_periods = p[0];
-	switch(p[1])
+	aGameData->stones_periods = msg[22];
+	switch(msg[23])
 	{
 		case 0:
 			aGameData->timeSystem = byoyomi;
@@ -5508,14 +5513,13 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 			newGameListing = new GameListing();
 			aGameListing = newGameListing;
 		}
-		aGameListing = new GameListing();
 		aGameListing->running = true;
 		aGameListing->isBetting = true;
 		aGameListing->number = aGameData->number;
 		aGameListing->handicap = aGameData->handicap;
 		aGameListing->game_code = aGameData->number;	//because broadcast?? 
 		aGameListing->komi = aGameData->komi;
-		strncpy((char *)name, (char *)p, 10);
+		strncpy((char *)name, (char *)&(msg[28]), 10);
 		p += 10;
 		/* First two names often seem to choke? FIXME, try second two */
 		/*aGameListing->black = room->getPlayerListing(p[0] + (p[1] << 8));
@@ -5525,7 +5529,7 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 			aGameListing->_black_name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 		/*}
 		p += 2;*/
-		strncpy((char *)name, (char *)p, 10);
+		strncpy((char *)name, (char *)&(msg[38]), 10);
 		p += 10;
 		/*aGameListing->white = room->getPlayerListing(p[0] + (p[1] << 8));
 		if(!aGameListing->white)
@@ -5535,41 +5539,41 @@ void CyberOroConnection::handleBettingMatchStart(unsigned char * msg, unsigned i
 		/*}
 		p += 2;*/
 		//two more names, unicode??
-		strncpy((char *)name, (char *)p, 10);
+		strncpy((char *)name, (char *)&(msg[48]), 10);
 			//aGameListing->_black_name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 		p += 10;
 		//printf("Othername: %s\n", name);
-		strncpy((char *)name, (char *)p, 10);
+		strncpy((char *)name, (char *)&(msg[58]), 10);
 			//aGameListing->_white_name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 		p += 10;
 		//printf("Othername2: %s\n", name);
-		QString country = getCountryFromCode(p[0]);
+		QString country = getCountryFromCode(msg[68]);
 		aGameListing->_black_name += ("[" + country[0] + "]");
 		country = getCountryFromCode(p[1]);
 		aGameListing->_white_name += ("[" + country[0] + "]"); 
 		p += 2;
-		if((p[0] & 0xC0) == 0xC0)
+		if((msg[70] & 0xC0) == 0xC0)
 		{
-			aGameListing->_black_rank = QString::number(p[0] & 0x0f) + "p";
-			aGameListing->_black_rank_score = 34000 + ((p[0] & 0x0f) * 1000);
+			aGameListing->_black_rank = QString::number(msg[70] & 0x0f) + "p";
+			aGameListing->_black_rank_score = 34000 + ((msg[70] & 0x0f) * 1000);
 		}
-		else if((p[0] & 0xA0) == 0xA0)
+		else if((msg[70] & 0xA0) == 0xA0)
 		{
-			aGameListing->_black_rank = QString::number(p[0] & 0x0f) + "d";
-			aGameListing->_black_rank_score = 25000 + ((p[0] & 0x0f) * 1000);
+			aGameListing->_black_rank = QString::number(msg[70] & 0x0f) + "d";
+			aGameListing->_black_rank_score = 25000 + ((msg[70] & 0x0f) * 1000);
 		}
-		if((p[1] & 0xC0) == 0xC0)
+		if((msg[71] & 0xC0) == 0xC0)
 		{
-			aGameListing->_white_rank = QString::number(p[1] & 0x0f) + "p";
-			aGameListing->_white_rank_score = 34000 + ((p[1] & 0x0f) * 1000);
+			aGameListing->_white_rank = QString::number(msg[71] & 0x0f) + "p";
+			aGameListing->_white_rank_score = 34000 + ((msg[71] & 0x0f) * 1000);
 		}
-		else if((p[1] & 0xA0) == 0xA0)
+		else if((msg[71] & 0xA0) == 0xA0)
 		{
-			aGameListing->_white_rank = QString::number(p[1] & 0x0f) + "d";
-			aGameListing->_white_rank_score = 25000 + ((p[1] & 0x0f) * 1000);
+			aGameListing->_white_rank = QString::number(msg[71] & 0x0f) + "d";
+			aGameListing->_white_rank_score = 25000 + ((msg[71] & 0x0f) * 1000);
 		}
 #ifdef RE_DEBUG
-		printf(" %02x%02x%02x%02x\n", p[0], p[1], p[2], p[3]);
+		printf(" %02x%02x%02x%02x\n", msg[70], msg[71], msg[72], msg[73]);
 #endif //RE_DEBUG
 		p += 2;
 #ifdef RE_DEBUG
@@ -5632,15 +5636,15 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 	{
 		qDebug("create room msg of strange size: %d", size);
 	}
-	aPlayer = room->getPlayerListing(p[0] + (p[1] << 8));
+	aPlayer = room->getPlayerListing(msg[0] + (msg[1] << 8));
 #ifdef RE_DEBUG
 	if(aPlayer)
-		qDebug("player %s %02x%02x chat room/match\n", aPlayer->name.toLatin1().constData(), p[0], p[1]);
+		qDebug("player %s %02x%02x chat room/match\n", aPlayer->name.toLatin1().constData(), msg[0], msg[1]);
 	else
-		qDebug("can't find player %02x%02x\n", p[0], p[1]);
+		qDebug("can't find player %02x%02x\n", msg[0], msg[1]);
 #endif //RE_DEBUG
 	p += 2;
-	room_number = p[0] + (p[1] << 8);
+	room_number = msg[2] + (msg[3] << 8);
 	GameListing * aGameListing = new GameListing();
 	aGameListing->running = true;
 	aGameListing->number = room_number;
@@ -5654,7 +5658,7 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 	//probably room info
 	//0000 00
 	//4011
-	switch(p[0])
+	switch(msg[7])
 	{
 		case 0xc0:
 			break;
@@ -5663,10 +5667,10 @@ void CyberOroConnection::handleCreateRoom(unsigned char * msg, unsigned int size
 		case 0x09:
 			break;
 		case 0x00:
-			aGameListing->_black_name = "** wished " + QString::number(p[1], 16);
+			aGameListing->_black_name = "** wished " + QString::number(msg[8], 16);
 			break;
 	}
-	room_type = p[0];
+	room_type = msg[7];
 	aGameListing->white = aPlayer;
 	
 	aGameListing->black = 0;
@@ -5751,14 +5755,34 @@ void CyberOroConnection::handleBettingMatchResult(unsigned char * msg, unsigned 
 	if(!boarddispatch)
 		return;
 	GameResult aGameResult;
-	
+	//3875020100000000000000000000001c B+R
+	//35750101332e35000000000000000015 B+3.5 "3.5"	//FIXME should convert and double check with what we get
+	//37750202000000000000000000000015 W+R
+	if(msg[2] == 0x01)
+	{
+		aGameResult.result = GameResult::SCORE;
+		float margin;
+		sscanf((char *)&(msg[4]), "%f", &margin);
+		aGameResult.winner_score = margin;
+		aGameResult.loser_score = 0.0;
+	}
+	else if(msg[2] == 0x02)
+	{
+		aGameResult.result = GameResult::RESIGN;
+	}
+	if(msg[3] == 0x01)
+	{
+		aGameResult.winner_color = stoneBlack;
+	}
+	else if(msg[3] == 0x02)
+	{
+		aGameResult.winner_color = stoneWhite;
+	}
 	//4d75 0202 302e 3500 0000 0000 0000 0015
-	/* FIXME */
-	/* Seriously, fix this... score too */
-	aGameResult.result = GameResult::RESIGN;
 	boarddispatch->recvResult(&aGameResult);
 	
-	
+	/* Rejoining a betting match that one had already joined after it was over, doesn't pop up the
+	 * result again that I can tell FIXME */
 	
 	/* Sure they never hang around with the game over thing ? */
 	//aGameListing->running = false;
@@ -6829,7 +6853,7 @@ void CyberOroConnection::handleTimeLoss(unsigned char * msg, unsigned int size)
 	/* What about killing the listing or something??*/
 }
 
-//dcaf
+//dcaf	(42f4 goes here as well)
 void CyberOroConnection::handleMove(unsigned char * msg, unsigned int size)
 {
 	Room * room = getDefaultRoom();
@@ -7530,6 +7554,8 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 				 * this is ugly incidentally, that we add this strange thing to store the
 				 * gameData because ORO doesn't resend on rejoin, and then we have to go
 				 * around it like this. */
+				/* FIXME pretty sure this can happen sometimes when there's no rematch
+				 * so there must be an additional flag */
 				GameListing * listing = room->getGameListing(game_number);
 				delete listing->gameData;
 				listing->gameData = 0;
@@ -7608,7 +7634,10 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	}
 #ifdef RE_DEBUG
 	printf("Unknown indicator: %02x\n", p[1]);
-	//very likely this means a resume after disconnect
+	/* very likely this means a resume after disconnect
+	 * I saw 00 for a legitimate rematch... its possible that the ones
+	 * that shouldn't open a new window are 01 but I need to verify,
+	 * note that this can be in "observer rematch" as well*/
 #endif //RE_DEBUG
 	p += 2;
 	
@@ -8529,7 +8558,10 @@ int CyberOroConnection::time_to_seconds(const QString & time)
 		sec = re.cap(2).toInt();	
 	}
 	else
+	{
 		qDebug("Bad time string");
+		return 0xffff;
+	}
 	
 	return (60 * min) + sec;
 }
