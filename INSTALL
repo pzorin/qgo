@@ -1,20 +1,21 @@
-qmake instructions
-__________________
-
-> qmake -o Makefile qgo2.pro
-> gmake -f Makefile
-
-
-Some additional notes
+Compiling and Installing
 ____________________
 
-> cd src
-> qmake src.pro
+> qmake
 > make
 (and then as root:)
 # make install
+
+If you get an error about /bin/lrelease you can usually fix it by doing
+> export QTDIR=/bin
+before doing make install
 
 On Mac Systems, there's a line in src.pro: 
 QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
 You may have to change this to MacOSX10.5.sdk or something else depending on
 where those libraries are installed.
+
+You may also need to do
+> cd src
+> qmake src.pro
+> make
