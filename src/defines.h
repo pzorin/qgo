@@ -229,8 +229,8 @@ extern QString applicationPath;
 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
 	#define TRANSLATIONS_PATH_PREFIX		"qGo.app/Contents/Resources/Translations/"
 #else //Q_OS_WIN or Q_WSWIN?
-	#define SOUND_PATH_PREFIX			"ressources/sounds/"
-	#define TRANSLATIONS_PATH_PREFIX		"ressources/translations/"
+	#define SOUND_PATH_PREFIX			"sounds/"
+	#define TRANSLATIONS_PATH_PREFIX		"translations/"
 #endif
 
 void startqGo(void);
