@@ -166,7 +166,6 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	else if(gd->free_rated == TEACHING)
 		boardwindow->getUi()->freeratedLabel->setText("Teaching");
 	
-	qDebug("Komi: %f captures %d\n", gd->komi, gd->handicap);
 	boardwindow->getUi()->komi->setText(QString().setNum(gd->komi));
 	boardwindow->getUi()->handicap->setText(QString().setNum(gd->handicap));
 }
