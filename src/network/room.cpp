@@ -94,13 +94,13 @@ void Room::setupUI(void)
 	//IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
 	gamesView->setColumnWidth ( 0, 40 );	//35
 	gamesView->setColumnWidth ( 1, 100 );
-	gamesView->setColumnWidth ( 2, 35 );	//35
+	gamesView->setColumnWidth ( 2, 40 );	//35
 	gamesView->setColumnWidth ( 3, 100 );
-	gamesView->setColumnWidth ( 4, 35 );	//35
+	gamesView->setColumnWidth ( 4, 40 );	//35
 	gamesView->setColumnWidth ( 5, 30 );	//30
 	gamesView->setColumnWidth ( 6, 30 ); //25
 	gamesView->setColumnWidth ( 7, 20 ); //20
-	gamesView->setColumnWidth ( 8, 30 ); //30
+	gamesView->setColumnWidth ( 8, 35 ); //30
 	gamesView->setColumnWidth ( 9, 35 ); //25
 	gamesView->setColumnWidth ( 10, 35 ); //20
 	gamesView->setColumnWidth ( 11, 30 ); //25
