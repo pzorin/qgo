@@ -186,7 +186,6 @@ void WingConnection::handle_info(QString line)
 	//PlayerListing * aPlayer;
 	static PlayerListing * statsPlayer;
 	BoardDispatch * boarddispatch;
-	GameResult * aGameResult;
 	Room * room = getDefaultRoom();
 	static QString memory_str;
 	static int memory = 0;
@@ -1049,7 +1048,8 @@ void WingConnection::handle_info(QString line)
 #ifdef FIXME
 		aGame->running = false;
 #endif //FIXME
-			
+		
+		GameResult * aGameResult = new GameResult();
 		aGameResult->loser_name = element(line, 0, " ");
 		aGameResult->result = GameResult::TIME;
 		/* We need to set unknown/none color here */
