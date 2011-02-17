@@ -503,7 +503,7 @@ void NetworkConnection::drawPleaseWait(void)
 	cancelConnecting = connectingDialog->addButton(QMessageBox::Cancel);
 	connect(cancelConnecting, SIGNAL(clicked()), this, SLOT(slot_cancelConnecting()));
 	connectingDialog->show();
-	connectingDialog->setFixedSize(180, 100);
+	connectingDialog->setMinimumSize(180, 100);
 }
 
 /* Slots */
