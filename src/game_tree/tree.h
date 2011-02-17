@@ -63,7 +63,7 @@ public:
 	Move* findLastMoveInMainBranch();
 	Move* findNode(Move *m, int node);
 	void traverseFind(Move *m, int x, int y, QStack<Move*> &result);
-
+	bool isInMainBranch(Move * m) const;
 /*
  * Former Boardhandler functions called by SGF parser
  */
@@ -108,7 +108,6 @@ private:
 	Move * assignCurrent(Move * & o, Move * & n);
 	void invalidateAdjacentCheckPositionGroups(MatrixStone m);
 	void invalidateCheckPositionGroups(void);
-	bool isInMainBranch(Move * m) const;
 	void updateCurrentMatrix(StoneColor c, int x, int y);
 	void deleteGroupMatrices(void);
 	Move *root, *current, *lastMoveInMainBranch;
