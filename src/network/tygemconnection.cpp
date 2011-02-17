@@ -270,11 +270,6 @@ void TygemConnection::sendToggle(const QString & param, bool val)
  * iffy too... */
 void TygemConnection::sendObserve(const GameListing & game)
 {
-	if(game.FR.contains("V"))
-	{
-		QMessageBox::information(0, tr("Sorry"), tr("Review games are not yet supported"));
-		return;
-	}
 	sendJoin(game.number);
 }
 
@@ -864,6 +859,7 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 				if(*p != '[')
 				{
 					qDebug("Server info parse error");
+					connectionState = PROTOCOL_ERROR;
 					closeConnection();
 					return;
 				}
@@ -2691,20 +2687,20 @@ void TygemConnection::sendServerKeepAlive(uint32_t keepaliveIV)
 	packet[11] = 0x00;
 	
 #ifdef RE_DEBUG
-	printf("server keep alive: ");
+	/*printf("server keep alive: ");
 	for(int i = 0; i < (int)length; i++)
 		printf("%02x", packet[i]);
-	printf("\n");
+	printf("\n");*/
 #endif //RE_DEBUG
 
 	encode(packet, (length / 4) - 2);
 #ifdef RE_DEBUG
-	printf("encoded server keep alive: ");
+	/*printf("encoded server keep alive: ");
 	for(int i = 0; i < (int)length; i++)
 		printf("%02x", packet[i]);
 	printf("\n");
 	
-	qDebug("Sending server keep alive");
+	qDebug("Sending server keep alive");*/
 #endif //RE_DEBUG
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending server keep alive");
@@ -2872,6 +2868,7 @@ void TygemConnection::sendMove(unsigned int game_id, MoveRecord * move)
 	//CSP 0 233 0
 	//CST 0 234 
 	//FOR 0 186 1
+	//BEG 0 47
 	//INI is in gibo files also as move number 1
 	/* Might also just be stone color here without the flag */
 	//player_number = ((r->black_name == getUsername()) ^ r->white_first_flag) + 1;
@@ -4357,10 +4354,10 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			break;
 		case TPC(TYGEM_SERVERPING):
 #ifdef RE_DEBUG
-			printf("0x064d: ");
+			/*printf("0x064d: ");
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
-			printf("\n");
+			printf("\n");*/
 #endif //RE_DEBUG
 			handleRequestKeepAlive(msg, size);
 			break;
@@ -4409,6 +4406,7 @@ void TygemConnection::handleMessage(unsigned char * msg, unsigned int size)
 			for(i = 0; i < (int)size; i++)
 				printf("%02x", msg[i]);
 			printf("\n");
+			//I think this starts the review, maybe not
 			break;
 			//an REM -1 -1 likely proceeds these as meaning done?
 		case TPC(TYGEM_ENDGAMEMSG):   
@@ -4871,7 +4869,7 @@ void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int 
 	unsigned int i;
 	
 	QString encoded_name;
-	name[15] = 0x00;
+	name[14] = 0x00;
 	int records = (msg[0] << 8) + msg[1];
 	if((records * 16) + 4 != (int)size)
 	{
@@ -5317,11 +5315,11 @@ void TygemConnection::handleRequestKeepAlive(unsigned char * msg, unsigned int s
 		qDebug("setup keep alive of size %d", size);
 	}
 #ifdef RE_DEBUG
-	printf("Keepalive IV %8x\n", *(uint32_t *)msg);
+	//printf("Keepalive IV %8x\n", *(uint32_t *)msg);
 #endif //RE_DEBUG
 	uint32_t keepaliveIV = encodeKeepAliveIV(*(uint32_t *)msg);
 #ifdef RE_DEBUG
-	printf("Keepalive IV encoded %8x\n", keepaliveIV);
+	//printf("Keepalive IV encoded %8x\n", keepaliveIV);
 #endif //RE_DEBUG
 	sendServerKeepAlive(keepaliveIV);
 }
@@ -5446,6 +5444,7 @@ void TygemConnection::handleGameChat(unsigned char * msg, unsigned int size)
 	if(encoded_name2 == getUsername())
 	{
 		//block as echo
+		//but then our rank doesn't appear ... FIXME check with oro, igs
 		return;
 	}
 	p += 0x1c;
@@ -6418,6 +6417,8 @@ void TygemConnection::handleScoreMsg1(unsigned char * msg, unsigned int /*size*/
 	//0087 0101 6261 696e 6974 6500 0000 0000
 	//0000 0011 0000 0055 0116 0000 031e 00a0
 	//0334 0040 0024 0668
+	
+	//0x0683: 0183aa01050000000318008003260040
 }
 
 //an REM -1 -1 likely proceeds these as meaning done?
@@ -6620,6 +6621,12 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 				aMove->flags = MoveRecord::UNREMOVE;
 				sendMove(game_number, aMove);
 				delete aMove;
+				/* I think tygem is updated so you can no longer mark dead stones, maybe
+				 * so it just does the score and tells you and you can reject it if you want
+				 * but I'm not sure what that does.  So I'm altering this and the accept
+				 * below for now since its a pain to get the score thing totally right
+				 * right now ... but obviously I should. */
+				boarddispatch->sendRejectCount();	//FIXME
 			}
 		}
 		else //if(msg[36] == 0x01)
@@ -6627,7 +6634,10 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 			boarddispatch->recvKibitz(QString(), QString("%1 accepts result").arg(
 					(encoded_name == game->black_name ? game->white_name : game->black_name)));
 			if(encoded_name == getUsername())	//i.e., meant for us
+			{
 				boarddispatch->recvAcceptCount();
+				boarddispatch->sendAcceptCount();	//FIXME
+			}
 		}
 	}
 	else if(msg[33] == 0xf0)
@@ -7069,7 +7079,10 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	else if(p[0] == 0x01)		//from invitee
 		player_number2 = 1;
 	else
+	{
+		player_number2 = -1;
 		qDebug("Strange invitation byte in move");
+	}
 #ifdef RE_DEBUG
 	printf("%02x vs %02x!!\n", p[0], gr->our_invitation);
 #endif //RE_DEBUG
@@ -7103,9 +7116,11 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	//SKI 0 player_number		//skip? pass?
 	
 	//BAC 0 246 1 	//part of review
-	//CSP 0 233 0	//possibly something to do with sscoring
-	//CST 0 234 
+	//CSP 0 233 0	//possibly something to do with sscoring   (This might start the review) actually i think it resets it
+	//CST 0 234 	//this might start placing the new stones (CSP and CST are opposites)
 	//FOR 0 186 1
+	//CRE 0 119	//maybe resets the board to the game, or just the tree.
+	// END 0 119 	//end review?
 	
 	// don't know, something on pro broadcast
 	//WIT 0 8 2
@@ -7312,17 +7327,21 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 	else if(strncmp((char *)p, "BAC ", 4) == 0)
 	{
 		MoveRecord * aMove = new MoveRecord();
+		int moves_to_move;
 		/* I assume this is backup, or go back to a particular point.  I'm not quite sure
 		 * what to do with it right now, since currently observer can look at any move.
 		 * but quite likely it just sets the move to something. */
+		/* Can go back and forward 1 to 5 */
 		p += 4;
-		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &player_number) != 3)
+		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &moves_to_move) != 3)
 		{
 			qDebug("Bad BAC move");
 			delete aMove;
 			return;
 		}
-		qDebug("BAC msg %d %d", aMove->number, player_number);
+		aMove->flags = MoveRecord::BACKWARD;
+		aMove->number = moves_to_move;
+		qDebug("BAC msg %d %d", aMove->number, moves_to_move);
 		/*if(opponents_move)
 		{
 			//can this even happen?
@@ -7330,27 +7349,24 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 				qDebug("Opp sends bad move message number: %d", aMove->number);
 			move_message_number = aMove->number;
 			move_message_number_ack = aMove->number;
-		}
-		
-		aMove->number = NOMOVENUMBER;
-		aMove->flags = MoveRecord::UNDO;
-		boarddispatch->recvMove(aMove);*/
+		}*/
+		boarddispatch->recvMove(aMove);
 		delete aMove;
 	}
 	else if(strncmp((char *)p, "FOR ", 4) == 0)
 	{
 		MoveRecord * aMove = new MoveRecord();
-		/* I assume this is backup, or go back to a particular point.  I'm not quite sure
-		 * what to do with it right now, since currently observer can look at any move.
-		 * but quite likely it just sets the move to something. */
+		int moves_to_move;
 		p += 4;
-		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &player_number) != 3)
+		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &moves_to_move) != 3)
 		{
-			qDebug("Bad BAC move");
+			qDebug("Bad FOR move");
 			delete aMove;
 			return;
 		}
-		qDebug("BAC msg %d %d", aMove->number, player_number);
+		aMove->flags = MoveRecord::FORWARD;
+		aMove->number = moves_to_move;
+		qDebug("FOR msg %d %d", aMove->number, moves_to_move);
 		/*if(opponents_move)
 		{
 			//can this even happen?
@@ -7358,11 +7374,130 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 				qDebug("Opp sends bad move message number: %d", aMove->number);
 			move_message_number = aMove->number;
 			move_message_number_ack = aMove->number;
+		}*/
+		boarddispatch->recvMove(aMove);
+		delete aMove;
+	}
+	else if(strncmp((char *)p, "CRE ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		p += 4;
+		if(sscanf((char *)p, "%d %d", &number0, &aMove->number) != 2)
+		{
+			qDebug("Bad CRE move");
+			delete aMove;
+			return;
 		}
-		
+		aMove->flags = MoveRecord::RESETBRANCH;
 		aMove->number = NOMOVENUMBER;
-		aMove->flags = MoveRecord::UNDO;
-		boarddispatch->recvMove(aMove);*/
+		qDebug("CRE msg %d", aMove->number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+			move_message_number_ack = aMove->number;
+		}*/
+		boarddispatch->recvMove(aMove);
+		boarddispatch->setReviewInVariation(false);
+		delete aMove;
+	}
+	else if(strncmp((char *)p, "CSP ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		p += 4;
+		if(sscanf((char *)p, "%d %d %d", &number0, &aMove->number, &player_number) != 3)
+		{
+			qDebug("Bad CSP move");
+			delete aMove;
+			return;
+		}
+		aMove->flags = MoveRecord::RESETBRANCH;
+		aMove->number = NOMOVENUMBER;
+		qDebug("CSP msg %d %d", aMove->number, player_number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+			move_message_number_ack = aMove->number;
+		}*/
+		boarddispatch->recvMove(aMove);
+		delete aMove;
+	}
+	else if(strncmp((char *)p, "CST ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		p += 4;
+		if(sscanf((char *)p, "%d %d", &number0, &aMove->number) != 2)
+		{
+			qDebug("Bad CST move");
+			delete aMove;
+			return;
+		}
+		//aMove->flags = MoveRecord::FORWARD;
+		//aMove->number = NOMOVENUMBER;
+		qDebug("CST msg %d", aMove->number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+			move_message_number_ack = aMove->number;
+		}*/
+		//boarddispatch->recvMove(aMove);
+		boarddispatch->setReviewInVariation(true);
+		delete aMove;
+	}
+	else if(strncmp((char *)p, "BEG ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		p += 4;
+		if(sscanf((char *)p, "%d %d", &number0, &aMove->number) != 2)
+		{
+			qDebug("Bad BEG move");
+			delete aMove;
+			return;
+		}
+		aMove->flags = MoveRecord::RESETGAME;
+		aMove->number = NOMOVENUMBER;
+		qDebug("BEG msg %d", aMove->number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+			move_message_number_ack = aMove->number;
+		}*/
+		boarddispatch->recvMove(aMove);
+		delete aMove;
+	}
+	else if(strncmp((char *)p, "END ", 4) == 0)
+	{
+		MoveRecord * aMove = new MoveRecord();
+		p += 4;
+		if(sscanf((char *)p, "%d %d", &number0, &aMove->number) != 2)
+		{
+			qDebug("Bad END move");
+			delete aMove;
+			return;
+		}
+		aMove->flags = MoveRecord::TOEND;
+		aMove->number = NOMOVENUMBER;
+		qDebug("END msg %d", aMove->number);
+		/*if(opponents_move)
+		{
+			//can this even happen?
+			if(aMove->number != (unsigned)move_message_number + 1)
+				qDebug("Opp sends bad move message number: %d", aMove->number);
+			move_message_number = aMove->number;
+			move_message_number_ack = aMove->number;
+		}*/
+		boarddispatch->recvMove(aMove);
 		delete aMove;
 	}
 	else
@@ -8433,7 +8568,10 @@ int TygemConnection::time_to_seconds(const QString & time)
 		sec = re.cap(2).toInt();	
 	}
 	else
+	{
 		qDebug("Bad time string");
+		return 0xffff;
+	}
 	
 	return (60 * min) + sec;
 }
