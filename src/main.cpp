@@ -23,8 +23,10 @@
 #include <QApplication>
 #include <QtGui>
 
+#include <time.h>
 #include "mainwindow.h"
 #include "defines.h"
+
 
 struct _preferences preferences;
 MainWindow * mainwindow = 0;
