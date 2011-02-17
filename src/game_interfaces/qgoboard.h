@@ -317,6 +317,7 @@ protected:
 	QString game_Id;
 	bool dontsend;
 	QString controlling_player;
+	Move * reviewCurrent;
 };
 
 class qGoBoardObserveInterface : public qGoBoardNetworkInterface
