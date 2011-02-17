@@ -319,6 +319,9 @@ void GameDialog::slot_timeTab(int value)
 		case 2:
 			t = tvasia;
 			break;
+		default:
+			t = none;
+			break;
 	}
 	if(current_match_request->timeSystem == t)	//must have changed to get here
 	{
@@ -349,7 +352,7 @@ void GameDialog::slot_timeSpin(const QTime & v)
 	}
 	/*if(current_match_request->timeSystem == canadian)
 	{*/
-		int seconds = (v.hour() * 3600) + (v.minute() * 60) + v.second();
+		int seconds = timeToSeconds(v);
 		if(current_match_request->maintime == seconds)
 		{
 			dialog_changed--;
@@ -432,7 +435,7 @@ void GameDialog::slot_BYTimeSpin(const QTime & v)
 	}
 	if(current_match_request->timeSystem == byoyomi)
 	{
-		int seconds = (v.minute() * 60) + v.second();
+		int seconds = timeToSeconds(v);
 		if(current_match_request->maintime == seconds)
 		{
 			dialog_changed--;
@@ -460,7 +463,7 @@ void GameDialog::slot_BYPeriodTimeSpin(const QTime & v)
 	}
 	if(current_match_request->timeSystem == byoyomi)
 	{
-		int seconds = (v.minute() * 60) + v.second();
+		int seconds = timeToSeconds(v);
 		if(current_match_request->periodtime == seconds)
 		{
 			dialog_changed--;
@@ -515,7 +518,7 @@ void GameDialog::slot_ASIATimeSpin(const QTime & v)
 	}
 	if(current_match_request->timeSystem == tvasia)
 	{
-		int seconds = (v.minute() * 60) + v.second();
+		int seconds = timeToSeconds(v);
 		if(current_match_request->maintime == seconds)
 		{
 			dialog_changed--;
@@ -543,7 +546,7 @@ void GameDialog::slot_ASIAPeriodTimeSpin(const QTime & v)
 	}
 	if(current_match_request->timeSystem == tvasia)
 	{
-		int seconds = (v.minute() * 60) + v.second();
+		int seconds = timeToSeconds(v);
 		if(current_match_request->periodtime == seconds)
 		{
 			dialog_changed--;
@@ -1365,7 +1368,7 @@ unsigned int GameDialog::timeToSeconds(QString time)
 	else
 	{
 		qDebug("Bad time string");
-		return 0;
+		return 0xffff;
 	}
 	
 	return (60 * min) + sec;
