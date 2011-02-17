@@ -52,7 +52,8 @@ struct MoveRecord
 	StoneColor color;	//maybe we update this with mark class or something later
 	// having accept and refuse undo here is a little weird but its almost a kind
 	// of move... we'll see how other protocols handle this stuff
-	enum Flags { NONE, HANDICAP, PASS, RESIGN, REMOVE, UNREMOVE, UNDO, REQUESTUNDO, REFUSEUNDO, TERRITORY, UNDO_TERRITORY, REMOVE_AREA, UNREMOVE_AREA, DONE_SCORING } flags;
+	enum Flags { NONE, HANDICAP, PASS, RESIGN, REMOVE, UNREMOVE, UNDO, REQUESTUNDO, REFUSEUNDO, TERRITORY, UNDO_TERRITORY, REMOVE_AREA, UNREMOVE_AREA, DONE_SCORING,
+			SETMOVE, BACKWARD, FORWARD, RESETBRANCH, RESETGAME, TOEND } flags;
 	MoveRecord() : number(NOMOVENUMBER), color(stoneNone), flags(NONE) {};
 	MoveRecord(Flags f) : number(NOMOVENUMBER), flags(f) {};
 	MoveRecord(unsigned int n, Flags f) : number(n), flags(f) {};
