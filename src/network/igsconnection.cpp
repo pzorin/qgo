@@ -908,7 +908,10 @@ int IGSConnection::time_to_seconds(const QString & time)
 		sec = re.cap(2).toInt();	
 	}
 	else
+	{
 		qDebug("Bad time string");
+		return 0xffff;
+	}
 	
 	return (60 * min) + sec;
 }
