@@ -47,6 +47,11 @@ void MainWindow::cleanupServerData(void)
  
 void MainWindow::slot_cmdactivated(const QString &cmd)
 {
+	if(connection->consoleIsChat())
+	{
+		connection->sendMsg(0, cmd);
+		return;
+	}
 	if (cmd.trimmed().isEmpty())
 		return;
 	if (cmd.mid(0,2).contains("ob"))
