@@ -59,6 +59,8 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 		qDebug("Nigiri unsettled");
 		//return;
 	}
+	if(boardwindow->getGamePhase() == phaseScore && !boardwindow->getBoardDispatch()->canMarkStonesDeadinScore())
+			return;
 	if(dontsend)
 		return;
 	// to prevent double clicking and upsetting servers...
@@ -140,7 +142,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 
 	remember = tree->getCurrent();
 	
-	if(boardwindow->getReviewMode())
+	if(boardwindow->getGameData()->gameMode == modeReview)
 	{
 		if(!reviewCurrent)
 			reviewCurrent = tree->findLastMoveInMainBranch();
@@ -254,10 +256,21 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				{
 					tree->undoMove();
 					move_counter--;
+					// FIXME This shouldn't be necessary just to force a redraw with multiple undos:
+					if(move_counter > move_number + 1)
+						boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 				}
 			}
 			else
+			{
 				tree->undoMove();
+				if ((getBlackTurn() && m->color == stoneBlack) ||
+					((!getBlackTurn()) && m->color == stoneWhite))
+				{
+					boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+					tree->undoMove();
+				}
+			}
 			/* I've turned off multiple undo for tygem, just for now... 
 			 * since NOMOVENUMBER FIXME, actually I'm not sure if tygem
 			 * has a normal multiple undo, though it might for review games */
@@ -400,14 +413,14 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			break;
 		case MoveRecord::FORWARD:
 			for(i = 0; i < move_number; i++)
-				tree->nextMove();
+				boardwindow->getBoardHandler()->slotNavForward();
 			break;
 		case MoveRecord::BACKWARD:
 			for(i = 0; i < move_number; i++)
 			{
 				if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
 					break;
-				tree->previousMove();
+				boardwindow->getBoardHandler()->slotNavBackward();
 			}
 			break;
 		case MoveRecord::RESETBRANCH:
@@ -421,7 +434,10 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			boardwindow->getBoardHandler()->gotoMove(goto_move);
 			break;
 		case MoveRecord::TOEND:
-			goto_move = tree->findLastMoveInMainBranch();
+			if(boardwindow->getBoardDispatch()->getReviewInVariation())
+				goto_move = tree->findLastMoveInCurrentBranch();
+			else
+				goto_move = tree->findLastMoveInMainBranch();
 			boardwindow->getBoardHandler()->gotoMove(goto_move);
 			break;
 		case MoveRecord::SETMOVE:
@@ -472,13 +488,16 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			break;
 	}
 	
-	if(boardwindow->getReviewMode())
+	if(boardwindow->getGameData()->gameMode == modeReview)	//for now review mode means no navigation, see interfacehandler comment
 		reviewCurrent = tree->getCurrent();
-	
-	//check whether we should update to the incoming move or not
-	if (remember != last)
-		tree->setCurrent(remember);
-	
+	else
+	{
+		if (remember != last)
+		{
+			tree->setCurrent(remember);
+			boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+		}
+	}
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 }
 
@@ -499,17 +518,32 @@ void qGoBoardNetworkInterface::slotSendComment()
 {
 	QString our_name = boardwindow->getBoardDispatch()->getUsername();
 	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi()->commentEdit2->text());
-
+	
 	// why isn't this added to SGF files?? FIXME
 	// qGoBoard::kibitzReceived has the code for adding this
 	// to the tree and thus to the file, but we shouldn't
 	// be calling same code from two different places, so the whole
 	// thing should be fixed up.
-	our_name.prepend( "(" + QString::number(getMoveNumber()) + ") ");
-	/* Kibitz echoes from self are blocked in network code */
-	boardwindow->getUi()->commentEdit->append(our_name + "[" + 
+	/* Its also ugly adding this to the sgf comments both here and in kibitzRecieved FIXME */
+	QString ourcomment;
+	QString txt = tree->getCurrent()->getComment();
+	bool prepend_with_movenumber = false;
+	if(txt == QString())
+		prepend_with_movenumber = true;
+		
+	ourcomment = boardwindow->getUi()->commentEdit2->text() + our_name + "[" + 
 		boardwindow->getBoardDispatch()->getOurRank() + "]: " +
-		boardwindow->getUi()->commentEdit2->text());
+		boardwindow->getUi()->commentEdit2->text();
+	if (boardwindow->getUi()->commentEdit2->text().isEmpty())
+		ourcomment.append('\n');
+
+	txt.append(ourcomment);
+	tree->getCurrent()->setComment(txt);
+	
+	/* Kibitz echoes from self are blocked in network code */
+	if(prepend_with_movenumber)
+		ourcomment.prepend( "(" + QString::number(getMoveNumber()) + ") ");
+	boardwindow->getUi()->commentEdit->append(ourcomment);
 	boardwindow->getUi()->commentEdit2->clear();
 }
 
