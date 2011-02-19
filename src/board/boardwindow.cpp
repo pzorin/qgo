@@ -138,7 +138,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	setupBoardUI();
 
 	setGamePhase(phaseOngoing);
-	reviewMode = false;
 	show();
 	checkHideToolbar(height());
 	setFocus();
@@ -592,7 +591,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 	case 0:
 		editMark = markNone;
 		if(gamePhase == phaseEdit)
-				current->setGamePhase(phaseEdit);	//permanent on this move, right?
+			current->setGamePhase(phaseEdit);	//permanent on this move, right?
 		break;
 		
 	case 1:
@@ -913,18 +912,13 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			//Disable the draw button? 
 			/* FIXME doublecheck, what is doneButton connected to
 			 * in observing a game ?? */
-			ui.doneButton->setEnabled(true);
+			if(getBoardDispatch() && getBoardDispatch()->canMarkStonesDeadinScore())	//FIXME or maybe as for tygem, it accepts the score as is
+				ui.doneButton->setEnabled(true);
 			break;
 		default:
 			break;
 	}
 	gamePhase = gp;
-}
-
-/* This should maybe be replaced if more review stuff is added */
-void BoardWindow::setReviewMode(void)
-{
-	reviewMode = true;
 }
 
 /*

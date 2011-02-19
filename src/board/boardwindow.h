@@ -64,8 +64,6 @@ public:
 	MarkType getEditMark()			{return editMark;}
 	void setBoardSize(int sz)		{boardSize=sz;}
 	void setGamePhase(GamePhase gp);
-	void setReviewMode(void);
-	bool getReviewMode(void)		{ return reviewMode; };
 	void setTree(Tree *t)			{tree=t;}
 	void checkHideToolbar(int h);
 	void gameDataChanged(void);	
@@ -120,7 +118,6 @@ private:
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
 	class BoardDispatch * dispatch;		//may not be the best place!!!
-	bool reviewMode;			//definitely not the best place
 
 	GameData *gameData;
 	GamePhase gamePhase;
