@@ -40,7 +40,7 @@ class TygemConnection : public NetworkConnection
 		~TygemConnection();
 		/* Protocols are way similar so probably most of these don't have to be
 		 * virtual FIXME */
-		virtual void sendText(QString) {};
+		virtual void sendText(QString);
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);
 		virtual void sendMsg(unsigned int game_id, QString text);
@@ -111,11 +111,12 @@ class TygemConnection : public NetworkConnection
 		virtual unsigned long getGameDialogFlags(void);	
 		virtual bool supportsMultipleUndo(void) { return false; };
 		virtual bool supportsObserveOutside(void) { return false; };
-		virtual bool supportsRequestCount(void) { return true; };
+		virtual bool supportsRequestCount(void) { return false; };
 		virtual bool supportsRequestDraw(void) { return true; };
 		virtual bool clientCountsTime(void) { return false; };
 		virtual bool clientSendsTime(void) { return true; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return true; };
+		virtual bool canMarkStonesDeadinScore(void) { return false; };
 		virtual bool cantMarkOppStonesDead(void) { return true; };
 		virtual bool twoPassesEndsGame(void) { return true; };
 		virtual bool supportsServerChange(void) { return true; };
