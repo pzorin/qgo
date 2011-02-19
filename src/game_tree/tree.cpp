@@ -615,6 +615,19 @@ Move *Tree::findLastMoveInMainBranch()
 	return lastMoveInMainBranch;
 }
 
+Move *Tree::findLastMoveInCurrentBranch()
+{
+	Move *m = getCurrent();
+	Q_CHECK_PTR(m);
+
+	if (m==NULL)
+	return NULL;
+  
+	while (m->son != NULL)
+		m = m->son;
+	return m;
+}
+
 void Tree::addEmptyMove( bool /*brother*/)
 {
 	// qDebug("BoardHandler::createMoveSGF() - %d", mode);

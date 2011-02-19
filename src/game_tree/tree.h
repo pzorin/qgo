@@ -57,11 +57,12 @@ public:
 	Move* getRoot() const { return root; }
 	void setRoot(Move *m) { root = m; }
 	int mainBranchSize();
-	Move* findMoveInMainBranch(int x, int y) { return findMove(root, x, y, false); }
+	Move * findMoveInMainBranch(int x, int y) { return findMove(root, x, y, false); }
 	Move * findMoveInCurrentBranch(int x, int y) { return findMove(root, x, y, true); }
-	Move* findMoveInBranch(int x, int y) { return findMove(current, x, y, true); }
-	Move* findLastMoveInMainBranch();
-	Move* findNode(Move *m, int node);
+	Move * findMoveInBranch(int x, int y) { return findMove(current, x, y, true); }
+	Move * findLastMoveInMainBranch();
+	Move * findLastMoveInCurrentBranch();
+	Move * findNode(Move *m, int node);
 	void traverseFind(Move *m, int x, int y, QStack<Move*> &result);
 	bool isInMainBranch(Move * m) const;
 /*
