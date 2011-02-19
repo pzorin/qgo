@@ -516,15 +516,13 @@ void NetworkConnection::slot_cancelConnecting(void)
 
 void NetworkConnection::OnConnected()
 {
-	/* Invalid read of size 1 here FIXME 
-	 * also prints garbage... */
-	if(console_dispatch)
-		console_dispatch->recvText(QString("Connected to ") + qsocket->peerAddress().toString() + " " +  QString::number(qsocket->peerPort()));
 }
 
 void NetworkConnection::onAuthenticationNegotiated(void)
 {
 	setupRoomAndConsole();
+	console_dispatch->recvText(QString("Connected"));	//peerAddress returns 0 for some reason FIXME
+	//console_dispatch->recvText(QString("Connected to ") + qsocket->peerAddress().toString() + " " +  QString::number(qsocket->peerPort()));
 }
 
 void NetworkConnection::onReady(void)
