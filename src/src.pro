@@ -164,7 +164,7 @@ SOURCES += displayboard.cpp \
 	   sgf/sgfparser.cpp
 
 QT -= qt3support
-DEPENDPATH += """"""board sgf game_tree game_interfaces gtp""""""
+DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""
 macx {
     CONFIG += x86 ppc
     QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
