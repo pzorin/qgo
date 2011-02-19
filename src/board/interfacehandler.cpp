@@ -222,7 +222,27 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(" " + QObject::tr("sons"));
 	boardwindow->getUi()->varLabel->setText(s);
 	
-	if (boardwindow->getGameMode() == modeNormal || boardwindow->getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
+	if(boardwindow->getGameMode() == modeReview)
+	{
+		/* For now, just disable navigation if its in the review mode, they can always duplicate
+		 * the board and a lot more is necessary for qgo to do reviews. */
+		boardwindow->getUi()->navPrevVar->setEnabled(false);
+		boardwindow->getUi()->navNextVar->setEnabled(false);
+		boardwindow->getUi()->navBackward->setEnabled(false);
+		boardwindow->getUi()->navForward->setEnabled(false);
+		boardwindow->getUi()->navFirst->setEnabled(false);
+		boardwindow->getUi()->navStartVar->setEnabled(false);
+		boardwindow->getUi()->navMainBranch->setEnabled(false);
+		boardwindow->getUi()->navLast->setEnabled(false);
+		boardwindow->getUi()->navNextBranch->setEnabled(false);
+		boardwindow->getUi()->swapVarButton->setEnabled(false);
+		boardwindow->getUi()->navPrevComment->setEnabled(false);
+		boardwindow->getUi()->navNextComment->setEnabled(false);
+		boardwindow->getUi()->navIntersection->setEnabled(false);
+		
+		boardwindow->getUi()->slider->setEnabled(false);
+	}
+	else if (boardwindow->getGameMode() == modeNormal || boardwindow->getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
 	{
 		// Update the toolbar buttons
 		boardwindow->getUi()->navPrevVar->setEnabled(hasPrev);
@@ -237,7 +257,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		boardwindow->getUi()->swapVarButton->setEnabled(hasPrev);
 		boardwindow->getUi()->navPrevComment->setEnabled(hasParent);
 		boardwindow->getUi()->navNextComment->setEnabled(sons);
-    	boardwindow->getUi()->navIntersection->setEnabled(true);
+		boardwindow->getUi()->navIntersection->setEnabled(true);
 		
 		boardwindow->getUi()->slider->setEnabled(true);
 	}
