@@ -47,6 +47,7 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	observerListModel = 0;
 	
 	clockStopped = false;
+	reviewInVariation = false;
 	/* New rules.  The boarddispatch creates the game data or
 	 * whatever loads the game data before passing it to the
 	 * boardwindow creates it.  The boardwindow deletes it.
@@ -183,7 +184,7 @@ void BoardDispatch::recvMove(MoveRecord * m)
 		m->flags == MoveRecord::RESETBRANCH ||
 		m->flags == MoveRecord::RESETGAME)
 	{
-		boardwindow->setReviewMode();
+		gameData->gameMode = modeReview;
 	}
 	boardwindow->qgoboard->handleMove(m);
 }
@@ -875,5 +876,6 @@ bool BoardDispatch::clientCountsTime(void) { return connection->clientCountsTime
 bool BoardDispatch::clientSendsTime(void) { return connection->clientSendsTime(); }
 bool BoardDispatch::twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); }
 bool BoardDispatch::undoResetsScore(void) { return connection->undoResetsScore(); }
+bool BoardDispatch::canMarkStonesDeadinScore(void) { return connection->canMarkStonesDeadinScore(); }
 bool BoardDispatch::unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); }
 bool BoardDispatch::cantMarkOppStonesDead(void) { return connection->cantMarkOppStonesDead(); }
