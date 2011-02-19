@@ -178,11 +178,13 @@ class NetworkConnection : public QObject
 		virtual bool supportsObserveOutside(void) { return false; };
 		virtual bool supportsServerChange(void) { return false; };
 		virtual bool supportsRefreshListsButtons(void) { return false; };
+		virtual bool consoleIsChat(void) { return true; };
 		virtual bool supportsRematch(void) { return false; };
 		virtual bool startTimerOnOpen(void) { return false; };	//name?? no "supports"?
 		virtual bool clientCountsTime(void) { return true; };
 		virtual bool clientSendsTime(void) { return false; };
 		virtual bool undoResetsScore(void) { return false; };
+		virtual bool canMarkStonesDeadinScore(void) { return true; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
 		virtual bool cantMarkOppStonesDead(void) { return false; };
 		virtual bool twoPassesEndsGame(void) { return false; };		//used?? FIXME
