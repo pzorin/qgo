@@ -38,6 +38,7 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 	
 	//data used for observing games, when getting the already played moves
 	stated_mv_count = -1;	
+	lastMoveInGame = 0;
 
 	gameData = gd;
 
@@ -279,6 +280,7 @@ void qGoBoard::setResult(GameResult & r)
 		qDebug("Already received result");
 		return;
 	}
+	lastMoveInGame = tree->getCurrent();
 	if(r.result != GameResult::NOGAME)
 		kibitzReceived("\n" + r.shortMessage());
 	boardwindow->getGameData()->result = r.shortMessage();

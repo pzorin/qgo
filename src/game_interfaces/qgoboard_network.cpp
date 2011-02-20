@@ -449,8 +449,8 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::TOEND:
 			if(boardwindow->getBoardDispatch()->getReviewInVariation())
 				goto_move = tree->findLastMoveInCurrentBranch();
-			else	//FIXME this can go too far if there's review moves after the end of the game
-				goto_move = tree->findLastMoveInMainBranch();
+			else
+				goto_move = lastMoveInGame;
 			boardwindow->getBoardHandler()->gotoMove(goto_move);
 			break;
 		case MoveRecord::SETMOVE:

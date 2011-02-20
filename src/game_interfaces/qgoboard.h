@@ -76,7 +76,6 @@ public:
 	virtual void timerEvent(QTimerEvent*);
 	class TimeRecord getOurTimeRecord(void);		//awkward
 	class TimeRecord getTheirTimeRecord(void);
-	//virtual void deleteNode();
 	virtual void enterScoreMode();
 	virtual void leaveScoreMode();
 	void toggleGroupAt(int x, int y);
@@ -140,8 +139,6 @@ public:
 	void addtime_b(int m);
 	void addtime_w(int m);
 	void set_myName(const QString &n) { myName = n; }
-	void clearObserverList() { win->getListView_observers()->clear(); }
-	void playComputer(StoneColor);
 
 	// teaching features
 	bool        ExtendedTeachingGame;
@@ -176,26 +173,6 @@ public slots:
 	virtual void slotUpdateComment();
 	virtual void slotSendComment() {};
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
-/*	void slot_stoneComputer(enum StoneColor, int, int);    
-	void slot_PassComputer(StoneColor c) ;                 
-	void slot_UndoComputer(StoneColor c) ;                 
- 	void slot_DoneComputer() ;                 
-	
-	void slot_doResign();
-	void slot_doUndo();
-	void slot_doAdjourn();
-	void slot_doDone();
-	void slot_doRefresh();
-
-	// normaltools
-	void slot_addtimePauseW();
-	void slot_addtimePauseB();
-
-	// teachtools
-	void slot_ttOpponentSelected(const QString&);
-	void slot_ttControls(bool);
-	void slot_ttMark(bool);
-*/
 protected:
 	BoardWindow *boardwindow;
 	Tree *tree;
@@ -219,6 +196,7 @@ protected:
 //	qGo         *qgo;
 //	int         mv_counter;
 	int	stated_mv_count;
+	Move * lastMoveInGame;
 	bool	playSound;
 //	int         bt_i, wt_i;
 //	QString     bt, wt;
