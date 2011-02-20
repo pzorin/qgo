@@ -205,6 +205,7 @@ bool Tree::addSon(Move *node)
 				qFatal("Failed to add a brother.");
 				return false;
 			}
+			current->parent->marker = node;
 			assignCurrent(current, node);
 			return true;
 		}
@@ -624,7 +625,12 @@ Move *Tree::findLastMoveInCurrentBranch()
 	return NULL;
   
 	while (m->son != NULL)
-		m = m->son;
+	{
+		if(m->marker)
+			m = m->marker;
+		else
+			m = m->son;
+	}
 	return m;
 }
 
