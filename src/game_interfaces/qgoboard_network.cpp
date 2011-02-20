@@ -437,10 +437,13 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			}
 			break;
 		case MoveRecord::RESETBRANCH:
+		case MoveRecord::DELETEBRANCH:
 			goto_move = tree->getCurrent();
 			while(!tree->isInMainBranch(goto_move))
 				goto_move = goto_move->parent;
 			boardwindow->getBoardHandler()->gotoMove(goto_move);
+			if(m->flags == MoveRecord::DELETEBRANCH) {}
+				
 			break;
 		case MoveRecord::RESETGAME:
 			goto_move = tree->getRoot();
@@ -542,7 +545,10 @@ void qGoBoardNetworkInterface::slotSendComment()
 	QString txt = tree->getCurrent()->getComment();
 	bool prepend_with_movenumber = false;
 	if(stated_mv_count != tree->findLastMoveInMainBranch()->getMoveNumber())
+	{
+		stated_mv_count = tree->findLastMoveInMainBranch()->getMoveNumber();
 		prepend_with_movenumber = true;
+	}
 		
 	ourcomment = our_name + "[" + boardwindow->getBoardDispatch()->getOurRank() + "]: " +
 		boardwindow->getUi()->commentEdit2->text();
