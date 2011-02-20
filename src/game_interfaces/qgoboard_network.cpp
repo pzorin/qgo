@@ -439,8 +439,13 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::RESETBRANCH:
 		case MoveRecord::DELETEBRANCH:
 			goto_move = tree->getCurrent();
-			while(!tree->isInMainBranch(goto_move))
-				goto_move = goto_move->parent;
+			if(goto_move->getMoveNumber() > lastMoveInGame->getMoveNumber())
+				goto_move = lastMoveInGame;
+			else
+			{
+				while(!tree->isInMainBranch(goto_move))
+					goto_move = goto_move->parent;
+			}
 			boardwindow->getBoardHandler()->gotoMove(goto_move);
 			if(m->flags == MoveRecord::DELETEBRANCH) {}
 				
