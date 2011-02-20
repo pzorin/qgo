@@ -412,13 +412,26 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			//handled by protocol as a recvKibitz for whatever reason
 			break;
 		case MoveRecord::FORWARD:
+			if(!boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
+			{
+				/* In case it was in a variation previously to remove the marker.
+				 * this should be elsewhere like on the setReviewInVariation(); FIXME */
+				tree->getCurrent()->marker = NULL;
+			}
 			for(i = 0; i < move_number; i++)
-				boardwindow->getBoardHandler()->slotNavForward();
+			{
+				/*if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
+				{
+					boardwindow->getBoardHandler()->gotoMove(inVariationBranch);
+				}
+				else*/
+					boardwindow->getBoardHandler()->slotNavForward();
+			}
 			break;
 		case MoveRecord::BACKWARD:
 			for(i = 0; i < move_number; i++)
 			{
-				if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
+				if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->getCurrent() && tree->isInMainBranch(tree->getCurrent()))
 					break;
 				boardwindow->getBoardHandler()->slotNavBackward();
 			}
@@ -436,7 +449,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::TOEND:
 			if(boardwindow->getBoardDispatch()->getReviewInVariation())
 				goto_move = tree->findLastMoveInCurrentBranch();
-			else
+			else	//FIXME this can go too far if there's review moves after the end of the game
 				goto_move = tree->findLastMoveInMainBranch();
 			boardwindow->getBoardHandler()->gotoMove(goto_move);
 			break;
@@ -528,18 +541,17 @@ void qGoBoardNetworkInterface::slotSendComment()
 	QString ourcomment;
 	QString txt = tree->getCurrent()->getComment();
 	bool prepend_with_movenumber = false;
-	if(txt == QString())
+	if(stated_mv_count != tree->findLastMoveInMainBranch()->getMoveNumber())
 		prepend_with_movenumber = true;
 		
-	ourcomment = boardwindow->getUi()->commentEdit2->text() + our_name + "[" + 
-		boardwindow->getBoardDispatch()->getOurRank() + "]: " +
+	ourcomment = our_name + "[" + boardwindow->getBoardDispatch()->getOurRank() + "]: " +
 		boardwindow->getUi()->commentEdit2->text();
 	if (boardwindow->getUi()->commentEdit2->text().isEmpty())
 		ourcomment.append('\n');
-
-	txt.append(ourcomment);
+	if(boardwindow->getGamePhase() != phaseEnded)
+		txt.append(ourcomment);
 	tree->getCurrent()->setComment(txt);
-	
+
 	/* Kibitz echoes from self are blocked in network code */
 	if(prepend_with_movenumber)
 		ourcomment.prepend( "(" + QString::number(getMoveNumber()) + ") ");
