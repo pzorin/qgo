@@ -2920,11 +2920,10 @@ void TygemConnection::sendMove(unsigned int game_id, MoveRecord * move)
 			sendEndgameMsg(r, accept_undo_request);
 			int undo_player_number;
 			// double check FIXME
-			if((boarddispatch->getBlackTurn() && r->black_name == getUsername()) ||
-			    (!boarddispatch->getBlackTurn() && r->white_name == getUsername()))
-				undo_player_number = (player_number == 1 ? 2 : 1);
+			if(r->black_name == getUsername())
+				undo_player_number = 2;//(player_number == 1 ? 2 : 1);
 			else
-				undo_player_number = player_number;
+				undo_player_number = 1;//player_number;
 			sprintf(move_str, "WIT %d %d %d\n", 0, move_message_number, undo_player_number);
 			break;
 		case MoveRecord::NONE:
@@ -6196,7 +6195,7 @@ void TygemConnection::handleGameResult(unsigned char * msg, unsigned int size)
 	p += 2;
 	//times
 	
-	enum TimeFlags f = handleTimeChunk(boarddispatch, p, gd->white_first_flag);		//this can still get time flipped FIXME
+	enum TimeFlags f = handleTimeChunk(boarddispatch, &(msg[28]), gd->white_first_flag);		//this can still get time flipped FIXME
 	/* FIXME unreliable !! not necessary */
 	if(f == BLACK_LOSES)
 		black_loses_on_time = true;
