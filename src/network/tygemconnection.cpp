@@ -4571,7 +4571,12 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 	
 	players = (p[0] << 8) + p[1];
 	p += 4;
-
+	//printf("Players %d\n", players);
+	if(!received_players && players < 512)
+	{
+		setConnected();
+		received_players = true;
+	}
 	//make sure these aren't one off, FIXME,
 	//i.e., cutting off last record, also check on ORO
 	while(p < (msg + size - 0x37) || (p < (msg + size - 19) && p[0] == 0x01))
@@ -4733,10 +4738,8 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 		qDebug("handlePlayerListing packet strange size %d", (msg + size) - p);
 	}
 	
-	received_players = true;
 	if(received_games && match_negotiation_state->canEnterRematchAdjourned())
 		promptResumeMatch();
-	return;
 }
 
 QString TygemConnection::rating_pointsToRank(unsigned int rp)
@@ -4896,7 +4899,6 @@ void TygemConnection::handleFriendsBlocksList(unsigned char * msg, unsigned int 
 #endif //RE_DEBUG
 		i++;
 	}
-	setConnected();		//might be a better place for this
 }
 
 /* These are the number of players on the other servers
@@ -5051,6 +5053,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		if(!aGameListing)
 			aGameListing = ag;
 		aGameListing->number = id;
+		aGameListing->FR = "";
 		if(game_record[2] == 0x01)
 		{
 
@@ -5066,6 +5069,11 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 			aGameListing->running = false;
 			room->recvGameListing(aGameListing);
 			continue;
+		}
+		if(game_record[3] & 0x01)
+		{
+			aGameListing->FR += "L";
+			aGameListing->isLocked = true;
 		}
 		//p[4] == 0x02 is some other kind of record
 #ifdef GAMESLIST_DEBUG
@@ -5090,8 +5098,7 @@ void TygemConnection::handleGamesList(unsigned char * msg, unsigned int size)
 		p++;
 		//impacts time
 		//there's also 0x30, I think 0x50, etc.. issues here
-		aGameListing->white_first_flag = p[0] & 0x01;
-		aGameListing->FR = "";
+		aGameListing->white_first_flag = p[0] & 0x01;		//game_record[5]
 		//aGameListing->FR += QString::number(p[0], 16) + " ";
 		/* 40 looks like a lit 2 computer screens, 50 like 2 dark computers */
 		/* 30 is just betting and over*/
@@ -7387,7 +7394,7 @@ void TygemConnection::handleMove(unsigned char * msg, unsigned int size)
 			delete aMove;
 			return;
 		}
-		aMove->flags = MoveRecord::RESETBRANCH;
+		aMove->flags = MoveRecord::DELETEBRANCH;
 		aMove->number = NOMOVENUMBER;
 		qDebug("CRE msg %d", aMove->number);
 		/*if(opponents_move)
