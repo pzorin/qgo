@@ -743,17 +743,16 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 	{
 	case modeNormal :
 	case modeTeach :
-	case modeReview :
 	case modeUndefined:
-		if (boardwindow->getGamePhase() == phaseScore ||boardwindow->getGamePhase() == phaseEdit )
+		if (boardwindow->getGamePhase() == phaseScore || boardwindow->getGamePhase() == phaseEdit )
 			cur = cursorIdle;
 		else
 			cur = (currentMoveColor == stoneBlack ? cursorGhostWhite : cursorGhostBlack);
-		break; 
-
+		break;
+	case modeReview:
+		break;
 	case modeObserve :
-		break;//cur = cursorIdle;
-
+		break;
 	case modeMatch :
 		if (boardwindow->getGamePhase() == phaseScore)
 			cur = cursorIdle;
@@ -780,7 +779,6 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 	}
 
 	board->setCursorType(cur);
-//	return cursorIdle;
 }
 
 void BoardHandler::updateButtons(StoneColor currentMoveColor)
