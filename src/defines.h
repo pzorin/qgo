@@ -153,6 +153,7 @@ struct _preferences
 	void fill(void)
 	{
 		QSettings settings;
+		QVariant var;
 		
 		nmatch_black = settings.value("NMATCH_BLACK").toBool();
 		nmatch_white = settings.value("NMATCH_WHITE").toBool();
@@ -175,15 +176,42 @@ struct _preferences
 		
 		warn_about_codecs = !settings.value("DONT_WARN_ABOUT_CODECS").toBool();
 		
-		default_stonesmaintime = settings.value("DEFAULT_STONESMAIN").toInt();
-		default_stonestime = settings.value("DEFAULT_STONEST").toInt();
-		default_stones = settings.value("DEFAULT_STONES").toInt();
-		default_byomaintime = settings.value("DEFAULT_BYOMAIN").toInt();
-		default_byoperiodtime = settings.value("DEFAULT_BYOPERIODT").toInt();
-		default_byoperiods = settings.value("DEFAULT_BYOPERIODS").toInt();
-		default_asiamaintime = settings.value("DEFAULT_TVASIAMAIN").toInt();
-		default_asiaperiodtime = settings.value("DEFAULT_TVASIAPERIODT").toInt();
-		default_asiaperiods = settings.value("DEFAULT_TVASIAPERIODS").toInt();
+		if((var = settings.value("DEFAULT_STONESMAIN")) == QVariant())
+			default_stonesmaintime = 600;
+		else
+			default_stonesmaintime = var.toInt();
+		if((var = settings.value("DEFAULT_STONEST")) == QVariant())
+			default_stonestime = 600;
+		else
+			default_stonestime = var.toInt();
+		if((var = settings.value("DEFAULT_STONES")) == QVariant())
+			default_stones = 25;
+		else
+			default_stones = var.toInt();
+		if((var = settings.value("DEFAULT_BYOMAIN")) == QVariant())
+			default_byomaintime = 600;
+		else
+			default_byomaintime = var.toInt();
+		if((var = settings.value("DEFAULT_BYOPERIODT")) == QVariant())
+			default_byoperiodtime = 30;
+		else
+			default_byoperiodtime = var.toInt();
+		if((var = settings.value("DEFAULT_BYOPERIODS")) == QVariant())
+			default_byoperiods = 3;
+		else
+			default_byoperiods = var.toInt();
+		if((var = settings.value("DEFAULT_TVASIAMAIN")) == QVariant())
+			default_asiamaintime = 30;
+		else
+			default_asiamaintime = var.toInt();
+		if((var = settings.value("DEFAULT_TVASIAPERIODT")) == QVariant())
+			default_asiaperiodtime = 30;
+		else
+			default_asiaperiodtime = var.toInt();
+		if((var = settings.value("DEFAULT_TVASIAPERIODS")) == QVariant())
+			default_asiaperiods = 4;
+		else
+			default_asiaperiods = var.toInt();
 		
 		
 	}
