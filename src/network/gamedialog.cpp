@@ -281,6 +281,14 @@ void GameDialog::slot_handicapSpin(int value)
 		//already disabled
 		//ui.komiSpin->setEnabled(false);
 	}
+	else
+	{
+		/* We do this anyway, its just not disabled so it can be changed after */
+		if(value == 0)
+			ui.komiSpin->setValue(6);
+		else
+			ui.komiSpin->setValue(0);
+	}
 }
 
 void GameDialog::slot_komiSpin(int value)
