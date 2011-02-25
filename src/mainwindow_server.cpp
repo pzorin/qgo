@@ -50,6 +50,7 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 	if(connection->consoleIsChat())
 	{
 		connection->sendMsg(0, cmd);
+		ui.cb_cmdLine->clearEditText();
 		return;
 	}
 	if (cmd.trimmed().isEmpty())
