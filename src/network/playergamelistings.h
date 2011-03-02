@@ -189,7 +189,7 @@ struct GameListing
 	_white_rank_score(0), 
 	_black_rank_score(0), 
 	observers(0), 
-	result(0),
+	result(""),
 	flags(IN_PROGRESS),
 	rated(0), 
 	owner_id(0), 
