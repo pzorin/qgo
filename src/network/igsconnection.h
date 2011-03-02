@@ -86,6 +86,7 @@ class IGSConnection : public NetworkConnection
 		/* I thought we didn't start time until after first move
 		 * but I check today and we do, so I'll change it... doublecheck */
 		virtual bool startTimerOnOpen(void) { return true; };
+		virtual bool flipCoords(void) { return false; };
 		virtual bool supportsRequestAdjourn(void) { return true; };
 		virtual bool supportsAddTime(void) { return true; };
 		virtual bool undoResetsScore(void) { return true; };
