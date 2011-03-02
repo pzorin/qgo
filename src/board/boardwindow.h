@@ -45,7 +45,7 @@ public:
 	~BoardWindow();
 	
 	void init();
-	bool loadSGF(const QString fileName, const QString SGFLoaded=0);
+	bool loadSGF(const QString fileName, const QString SGFLoaded=QString::null);
 	bool doSave(QString fileName, bool force);
 	QString getCandidateFileName();
 
