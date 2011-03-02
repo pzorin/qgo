@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2009 by The qGo Project                                 *
+ *   Copyright (C) 2011 by The qGo Project                                 *
  *                                                                         *
  *   This file is part of qGo.   					   *
  *                                                                         *
@@ -42,9 +42,7 @@
 #include "quickconnection.h"
 #include "matchnegotiationstate.h"
 #include <QMessageBox>
-/* We need to eventually clean all the code up with some
- * c++ "syntactic sugar" but it just seems like a pain in
- * the ass right now with no real benefit */
+
 #ifdef NEWPROTOCOL
 #include "protocol.h"
 #endif //NEWPROTOCOL
@@ -155,8 +153,13 @@ void CyberOroConnection::sendText(const char * text)
 }
 
 /* What about a room_id?? */
-void CyberOroConnection::sendMsg(unsigned int, QString text)
+void CyberOroConnection::sendMsg(unsigned int id, QString text)
 {
+	if(id == 0)
+	{
+		sendServerChat(text);
+		return;
+	}
 	sendRoomChat(text.toLatin1().constData());
 }
 
@@ -511,7 +514,8 @@ int CyberOroConnection::reconnectToServer(void)
 	if(openConnection(serverList[server_i]->ipaddress, 7002))
 	{
 		qDebug("Reconnected");
-		setConnected();			//should be just SETUP FIXME
+		connectionState = CONNECTED;
+		setConnected();			//FIXME still need to move this somewhere better
 		game_code_to_number.clear();
 	}
 	else
@@ -631,24 +635,28 @@ void CyberOroConnection::sendRoomChat(const char * text)
 	delete[] packet;
 }
 
-#ifdef FIXME
-void CyberOroConnection::sendServerChat()
+void CyberOroConnection::sendServerChat(QString text)
 {
-	unsigned char packet;
-	unsigned int length = 
+	unsigned int length = text.size() + 8;
+	unsigned char *packet = new unsigned char[length];
+	int i;
+	
 	packet[0] = 0x0a;
 	packet[1] = 0x5a;
 	packet[2] = length & 0x00ff;
 	packet[3] = (length >> 8);
-	//likely our id
-	//and then 00 40?!?
-	//and then the text
+	packet[4] = our_player_id & 0x00ff;
+	packet[5] = (our_player_id >> 8);
+	packet[6] = 0x00;
+	packet[7] = 0x00;			//i've seen 40 here
+	for(i = 8; i < (int)length; i++)
+		packet[i] = text.toLatin1().constData()[i - 8];
+
 	encode(packet, 0x8);
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending server char");
 	delete[] packet;
 }
-#endif //FIXME
 
 void CyberOroConnection::sendSetChatMsg(unsigned short phrase_id)
 {
@@ -1130,7 +1138,7 @@ void CyberOroConnection::sendMatchOfferCancel(const PlayerListing & )
 	delete[] packet;
 }
 
-void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroffer)
+void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool offercounteroffer)
 {
 	unsigned int length = 0xa0;
 	unsigned char * packet = new unsigned char[length];
@@ -1142,7 +1150,7 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 		return;
 	}
 	int i;
-	if(counteroffer)
+	if(offercounteroffer)
 		packet[0] = 0xc8;
 	else
 		packet[0] = 0xcd;
@@ -1152,7 +1160,7 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 	
 	/* This is supposed to be their id for some reason... always?
 	 * or only on accept? */
-	if(counteroffer || mr.rematch)
+	if(offercounteroffer || mr.rematch)
 	{
 		// Careful, might only be our id when we send
 		packet[4] = our_player_id & 0x00ff;
@@ -1211,42 +1219,24 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 			return;
 			break;
 	}
-	//this packet 13 is seriously iffy FIXME
-	/*if(mr.handicap > 1 && mr.challenger_is_black)
-		packet[13] = 0x00;
-	else*/
-	if(mr.color_request == MatchRequest::NIGIRI)
-		packet[13] = 0x00;
-	else if(mr.handicap > 1)
+	//looks like 13 is just whether there is a handicap
+	if(mr.handicap > 1)
 	{
-		/*if(!mr.opponent_is_challenger)
-			packet[13] = 0x01;
-		else if(!mr.opponent_is_challenger && mr.color_request == MatchRequest::WHITE)
-			packet[13] = 0x01;
-		
-		else
-			packet[13] = 0x00;
-		*/
 		packet[13] = 0x01;
 
 	}
-	else if(mr.color_request == MatchRequest::WHITE && !mr.opponent_is_challenger)
-		packet[13] = 0x00;
 	else
-		packet[13] = mr.challenger_is_black;
-	packet[13] = 0x00;
-	//if we're black and we're sending the match offer and no handicap,
-	//then I saw a 0 for 13.  Not sure where challenger_is_black comes from anymore
-	/* challenger_is_black is set to 1 when we send the initial match offer, no matter what
-	 * otherwise, its gotten from a different byte when we receive a match offer.  Its used
-	 * totally inconsistently and this is the only place we send it. We need to figure out
-	 * what this byte is, and then remove challenger_is_black completely */
+		packet[13] = 0x00;
 #ifdef RE_DEBUG
-	printf("challenger is black: %d\n", mr.challenger_is_black);
+	printf("challenger is black, 13: %d %d\n", mr.challenger_is_black, packet[13]);
 #endif //RE_DEBUG
 	packet[14] = mr.handicap;	//handicap I'd warrant
+	/* FIXME
+	 * handicap may force komi = 0.5 rather than whatever we've set it at.  Really
+	 * gamedialog should set this up properly with some flag.  Also, we don't seem to
+	 * check the komi later and we should, actually looks like oro ignores it even if its set */
 	//if this is 0x01, then its negative komi, taken from white
-	packet[15] = (mr.komi < 0 ? 0x01 : 0x00);		
+	packet[15] = (mr.komi < 0 ? 0x01 : 0x00);		//not sure about this
 	packet[16] = (int)(fabs(mr.komi) - 0.5);
 #ifdef RE_DEBUG
 	printf("komi: %02x %f %f\n", packet[16], mr.komi, fabs(mr.komi) - .5);
@@ -1321,12 +1311,6 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool counteroff
 	packet[63] = 0x00;
 	//challengers name first... 
 	// maybe challenger first if nigiri? otherwise black first?
-	/* FIXME FIXME FIXME
-	 * This is not enough.  If we send the match offer and we choose to play black
-	 * opponent can play a black stone, thinking that they're black and its screwed
-	 * from there.  If we choose to play white, its okay.  There's either another
-	 * flag or something. Could even be a problem in another message like a start
-	 * game message FIXME FIXME FIXME*/
 	const QString * first_name, * second_name;
 	unsigned short first_id, second_id;
 	switch(mr.color_request)
@@ -1966,8 +1950,9 @@ void CyberOroConnection::sendTimeLoss(unsigned int game_id)
 
 void CyberOroConnection::sendRemoveStones(unsigned int game_code, const MoveRecord * move)
 {
-	unsigned int length = 0x10;
+	unsigned int length = 0x10;/* + (2 * deadStonesList.size());*/
 	unsigned char * packet = new unsigned char[length];
+	//unsigned int i;
 	
 	packet[0] = 0xe2;
 	packet[1] = 0xb3;
@@ -1986,7 +1971,7 @@ void CyberOroConnection::sendRemoveStones(unsigned int game_code, const MoveReco
 	else	//if(move->flags == MoveRecord::UNREMOVE)
 		packet[12] = 0x02;
 	packet[13] = 0x00;		//is this list - 1?
-	//packet[13] = deadStonesList.size();
+	//packet[13] = deadStonesList.size() - 1;		//this got us disconnected
 	
 	packet[14] = move->x;
 	packet[15] = move->y;
@@ -2287,7 +2272,10 @@ void CyberOroConnection::sendRematchRequest(void)
 	if(write((const char *)packet, length) < 0)
 		qWarning("*** failed sending rematch request");
 	delete[] packet;
-	match_negotiation_state->sendRematch();
+	
+	/* Since end of game resets the match state */
+	PlayerListing * player = getDefaultRoom()->getPlayerListing(gr->opponent_id);
+	match_negotiation_state->sendRematch(player);
 }
 
 void CyberOroConnection::sendRematchAccept(void)
@@ -2428,6 +2416,7 @@ void CyberOroConnection::sendNigiri(unsigned short game_code, bool /*odd*/)
 
 #ifdef FIXME
 /* FIXME, let's get this one working first in a joined room game */
+/* FIXME delete this?  I guess I got it working at sendRoomChat */
 void CyberOroConnection::sendGameChat(const GameData & game, unsigned char * text)
 {
 	unsigned int length = 8 + strlen(text);
@@ -2970,6 +2959,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
 			break;
 		case 0x68f6:
+			//could this mean connected?
 #ifdef RE_DEBUG
 			printf("0x68f6: ");
 			for(unsigned int i = 0; i < size; i++)
@@ -3263,8 +3253,12 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 		case 0xa479: 
 			handleDeclineMatchInvite(msg, size);
 			break;
+		case 0x285a:	//maybe a special tournament announcement or something
 		case ORO_SERVERANNOUNCE:
 			handleServerAnnouncement(msg, size);
+			break;
+		case 0x645a:
+			handleServerAnnouncementwithLink(msg, size);
 			break;
 		case 0x0c2b: 
 #ifdef RE_DEBUG
@@ -4634,6 +4628,37 @@ void CyberOroConnection::handleServerAnnouncement(unsigned char * msg, unsigned 
 		console_dispatch->recvText("*** " + u);
 }
 
+//645a
+void CyberOroConnection::handleServerAnnouncementwithLink(unsigned char * msg, unsigned int size)
+{
+	unsigned char * p = msg;
+	
+#ifdef RE_DEBUG
+	printf("645a: ");
+	for(unsigned int i = 0; i < size; i++)
+		printf("%02x", msg[i]);
+	printf("\n");
+#endif //RE_DEBUG
+	p += 2;
+
+	/* FIXME, likely first two bytes are something else */
+	QString u;
+	QString link;
+	unsigned int len = 0;
+	while((msg[8 + len] || msg[9 + len])&& len + 8 < 260)
+		len += 2;
+	printf("Server anon len %d\n", len);
+	u = serverCodec->toUnicode((const char *)&(msg[8]), len);
+			//u = codec->toUnicode(b, size - 4);
+	len = 0;
+	while(msg[264 + len] && len + 264 < size)
+		len++;
+	printf("Server anon len2 %d\n", len);
+	link = QString((const char *)&(msg[264]));	//not unicode
+	if(console_dispatch)
+		console_dispatch->recvText("*** " + u + ": " + link);
+}
+
 void CyberOroConnection::handleServerRoomChat(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
@@ -4872,7 +4897,7 @@ void CyberOroConnection::removeObserverFromGameListing(const PlayerListing * p)
 	if(!game)
 		return;
 #ifdef RE_DEBUG
-	printf("Removing observer from game %d with %d observers\n", game->number, game->observers);
+	//printf("Removing observer from game %d with %d observers\n", game->number, game->observers);
 #endif //RE_DEBUG
 	if(game->observers == 0)
 	{
@@ -5078,8 +5103,8 @@ void CyberOroConnection::handleGameEnded(unsigned char * msg, unsigned int size)
 		qDebug("GameEnded of strange size: %d", size);
 		return;
 	}
-	game_code = p[0] + (p[1] << 8);
-	game_number = p[2] + (p[3] << 8);
+	game_code = msg[0] + (msg[1] << 8);
+	game_number = msg[2] + (msg[3] << 8);
 	p += 4;
 #ifdef RE_DEBUG
 	//DOUBLECHECK
@@ -6197,9 +6222,16 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 	printf("0x327d: unexplained bytes: %02x %02x\n", p[0], p[1]);
 #endif //RE_DEBUG
 	if(!match_negotiation_state->sentMatchOffer() && !match_negotiation_state->sentRematch())
+	{
+		match_negotiation_state->reset();
 		return;
+	}
 	if(!match_negotiation_state->verifyPlayer(player))
+	{
+		qDebug("Bad player from rematch decline");
+		match_negotiation_state->reset();
 		return;
+	}
 	GameDialog * gameDialogDispatch = getIfGameDialog(*player);
 	if(gameDialogDispatch)
 	{
@@ -6356,11 +6388,8 @@ void CyberOroConnection::startMatchTimers(bool ourTurn)
  * or maybe e7b31400 2f05 640b 2f05 5c6d 0102 1106 0804 1106
  * is really the final ?!?!? FIXME  */
 //e2b31200 2f05 640b 2f05 2863 0201 1106 0804
-#ifdef RE_DEBUG
+
 void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int size)
-#else
-void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*size*/)
-#endif //RE_DEBUG
 {
 	Room * room = getDefaultRoom();
 	BoardDispatch * boarddispatch;
@@ -6368,14 +6397,14 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 	bool unremove;
 	int number_of_marks;
 	PlayerListing * player;
-	player = room->getPlayerListing(p[0] + (p[1] << 8));
+	player = room->getPlayerListing(msg[0] + (msg[1] << 8));
 	if(!player)
 	{
 		printf("Can't find player for id %02x%02x for enterscoremode\n", p[0], p[1]);
 		return;
 	}
 	p += 2;
-	unsigned short game_code = p[0] + (p[1] << 8);
+	unsigned short game_code = msg[2] + (msg[3] << 8);
 	unsigned short game_number = game_code_to_number[game_code];
 	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
@@ -6395,17 +6424,21 @@ void CyberOroConnection::handleRemoveStones(unsigned char * msg, unsigned int /*
 	//weird two bytes
 	p += 2;
 	// a 01 or 02
-	unremove = (p[0] == 2);
+	unremove = (msg[8] == 2);
 	p++;
-	number_of_marks = p[0];
+	number_of_marks = msg[9];
 	p++;
 	MoveRecord aMove;
-	aMove.x = p[0];
-	aMove.y = p[1];
+	aMove.x = msg[10];
+	aMove.y = msg[11];
 	/* First one is the new one, the rest is the full list */
 	/* Also, I think if its an unremove, its removed from the list,
 	 * both in this packet and ensuing ones */
-	
+	//129d 0102 0f09 1310 0f09
+
+	/* Instead might be an acknowledge of previous sends. */
+	//aMove.x = msg[size - 2];	//definitely not right
+	//aMove.y = msg[size - 1];
 	if(unremove)
 	{
 		aMove.flags = MoveRecord::UNREMOVE_AREA;
@@ -6471,7 +6504,7 @@ void CyberOroConnection::handleStonesDone(unsigned char * msg, unsigned int /*si
 	player = room->getPlayerListing(p[0] + (p[1] << 8));
 	if(!player)
 	{
-		printf("Can't find player for id %02x%02x for enterscoremode\n", p[0], p[1]);
+		printf("Can't find player for id %02x%02x for stones done\n", p[0], p[1]);
 		return;
 	}
 	p += 2;
@@ -7128,10 +7161,12 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 	bool enterScore = false;
 	GameData * gr;
 	MoveRecord * aMove = new MoveRecord();
+	unsigned short game_number;
 	p += 2;
-	unsigned short game_code = p[0] + (p[1] << 8);
+	unsigned short game_code = msg[2] + (msg[3] << 8);
+	game_number = game_code_to_number[game_code];
 	p += 2;
-	boarddispatch = getIfBoardDispatch(game_code_to_number[game_code]);
+	boarddispatch = getIfBoardDispatch(game_number);
 	if(!boarddispatch)
 	{
 		qDebug("No board dispatch for %02x%02x", p[0], p[1]);
@@ -7143,7 +7178,7 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 	 * from the old code that I just copied without completely
 	 * replacing, we do need to take this into account. FIXME */
 	
-	number_of_moves = p[0] + (p[1] << 8);
+	number_of_moves = msg[4] + (msg[5] << 8);
 	p += 2;
 	p += 4;
 #ifdef RE_DEBUG
@@ -7162,10 +7197,10 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 	{
 		//aMove->color = stoneNone;	//keep resetting this
 		aMove->number = i;	//or i + !?
-		aMove->x = p[0];
-		aMove->y = p[1];
+		aMove->x = msg[10 + (2 * (i - 1))];
+		aMove->y = msg[11 + (2 * (i - 1))];
 #ifdef RE_DEBUG
-		printf("Move: %d %d\n", p[0], p[1]);
+		printf("Move: %d %d\n", msg[10 + (2 * (i - 1))], msg[11 + (2 * (i - 1))]);
 #endif //RE_DEBUG
 		if(aMove->x == 0)
 		{
@@ -7188,8 +7223,11 @@ void CyberOroConnection::handleMoveList(unsigned char * msg, unsigned int size)
 	delete aMove;
 	if(p != (msg + size))
 		qDebug("Move list with strange size: %d", size);	//20
-	if(enterScore)
+	/* We get this if we go back into match mode.  Only question is whether if
+	 * we crash during score mode, we get a separate message to enter score mode */
+	if(enterScore && !match_negotiation_state->isOurGame(game_number))
 	{
+		printf("Enter score mode, not our game\n");
 		boarddispatch->recvEnterScoreMode();
 		match_negotiation_state->enterScoreMode();
 	}
@@ -7532,6 +7570,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 	#endif //RE_DEBUG
 					//if so, need to restart timers!!! FIXME, added to boarddispatch but doublecheck
 					boarddispatch->recvLeaveScoreMode();
+					match_negotiation_state->startMatch();
 					return;
 				}
 			}
@@ -7630,6 +7669,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 			break;
 		default:
 			printf("Strange boardsize indicator: %02x\n", p[0]);
+			board_size = 19;
 			break;
 	}
 #ifdef RE_DEBUG

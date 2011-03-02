@@ -100,6 +100,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
 		virtual bool playerTrackingByID(void) { return true; };
+		virtual bool netWillEnterScoreMode(void) { return true; };
 		virtual bool supportsMultipleUndo(void) { return true; };
 		virtual bool supportsRequestMatchMode(void) { return true; };
 		virtual bool supportsRequestAdjourn(void) { return true; };
@@ -122,6 +123,7 @@ class CyberOroConnection : public NetworkConnection
 		void sendPersonalChat(const PlayerListing & player, const char * text);
 		void sendRoomChat(const char * text);
 		friend class SetPhrasePalette;
+		void sendServerChat(QString text);
 		void requestAccountInfo(void);
 		void sendLogin(void);
 		void sendSetChatMsg(unsigned short phrase_id);
@@ -138,7 +140,7 @@ class CyberOroConnection : public NetworkConnection
 		void sendDeclineMatchOffer(const PlayerListing & player);
 		void sendMatchOfferPending(const PlayerListing & player);
 		void sendMatchOfferCancel(const PlayerListing & player);
-		void sendMatchOffer(const MatchRequest & mr, bool counteroffer = false);
+		void sendMatchOffer(const MatchRequest & mr, bool offercounteroffer = false);
 		void sendInvitationSettings(bool invite);
 		void sendUndo(unsigned int game_code, const MoveRecord * move);
 		void sendDeclineUndo(unsigned int game_code, const MoveRecord * move);
@@ -170,6 +172,7 @@ class CyberOroConnection : public NetworkConnection
 		void removeObserverFromGameListing(const PlayerListing * p);
 		void handlePlayerDisconnect2(unsigned char * msg, unsigned int size);
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);
+		void handleServerAnnouncementwithLink(unsigned char * msg, unsigned int size);
 		void handleServerRoomChat(unsigned char * msg, unsigned int size);
 		void handlePersonalChat(unsigned char * msg, unsigned int size);
 		void handleRoomChat(unsigned char * msg, unsigned int size);
