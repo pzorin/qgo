@@ -308,18 +308,21 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			 * although some servers might have two pass models
 			 * and we need a flag for that */
 			//if(!boardwindow->getMyColorIsBlack())	//if we're white
-			if(boardwindow->getBoardDispatch()->twoPassesEndsGame())
+			if(!boardwindow->getBoardDispatch()->netWillEnterScoreMode())	//ugly for oro FIXME
 			{
-				if(tree->getCurrent()->isPassMove())	
-					enterScoreMode();
-			}
-			else
-			{
-				if(tree->getCurrent()->parent &&
-				   tree->getCurrent()->isPassMove() &&
-				   tree->getCurrent()->parent->isPassMove())
-					enterScoreMode();
-					//boardwindow->setGamePhase ( phaseScore );	//okay?	
+				if(boardwindow->getBoardDispatch()->twoPassesEndsGame())
+				{
+					if(tree->getCurrent()->isPassMove())
+						enterScoreMode();
+				}
+				else
+				{
+					if(tree->getCurrent()->parent &&
+					tree->getCurrent()->isPassMove() &&
+					tree->getCurrent()->parent->isPassMove())
+						enterScoreMode();
+						//boardwindow->setGamePhase ( phaseScore );	//okay?	
+				}
 			}
 			//FIXME potentially white/black here should come from color from network which is unreliable now
 			boardwindow->qgoboard->kibitzReceived(QString(getBlackTurn() ? "Black" : "White") + " passes.");
