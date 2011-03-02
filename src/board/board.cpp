@@ -51,6 +51,8 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	isDisplayBoard = FALSE;
 	marks = NULL;
+	vCoords1 = NULL;
+	coordType = uninit;
 }
 
 void Board::init(int size)
@@ -93,24 +95,6 @@ void Board::init(int size)
 
 	imageHandler->init(square_size, isDisplayBoard);
 	
-/*	
-	// Initialize some class variables
-	nodeResultsDlg = NULL;
-	fastLoad = false;
-	isModified = false;
-	mouseState = NoButton;
-	for (int i=0; i<400; i++)
-	{
-		if (i < 52)
-			letterPool[i] = false;
-		numberPool[i] = false;
-	}
-	//coordsTip = new Tip(this);
-#ifdef Q_WS_WIN
-	resizeDelayFlag = false;
-#endif
-	showCursor = setting->readBoolEntry("CURSOR");
-*/	
 	curX = curY = -1;
 	downX = downY = -1;
 //	isLocalGame = true;
@@ -130,35 +114,42 @@ void Board::init(int size)
 	//Init the stones
 	stones = new QHash<int,Stone *>();//::QHash();
 
+	setupCoords();
+}
+
+void Board::setupCoords(void)
+{
+	QString hTxt,vTxt;
+
 	// Init the coordinates
 	vCoords1 = new QList<QGraphicsSimpleTextItem*>;
 	hCoords1 = new QList<QGraphicsSimpleTextItem*>;
 	vCoords2 = new QList<QGraphicsSimpleTextItem*>;
 	hCoords2 = new QList<QGraphicsSimpleTextItem*>;
-
-	QString hTxt,vTxt;
-
+	
 	for (int i=0; i<board_size; i++)
 	{
-		// Left side
-		if(showSGFCoords)
+		switch(coordType)
 		{
-			vTxt = QString(QChar(static_cast<const char>('a' + i)));
-			hTxt = QString(QChar(static_cast<const char>('a' + i)));
-		}
-		else
-		{
-			vTxt = QString::number(board_size - i);
-			hTxt = QString(QChar(static_cast<const char>('A' + (i<8?i:i+1))));
+			case sgf:
+				vTxt = QString(QChar(static_cast<const char>('a' + i)));
+				hTxt = QString(QChar(static_cast<const char>('a' + i)));
+				break;
+			case numberbottomi:
+				vTxt = QString::number(i + 1);
+				hTxt = QString(QChar(static_cast<const char>('A' + i)));
+				break;
+			case numbertopnoi:
+			default:
+				vTxt = QString::number(board_size - i);
+				hTxt = QString(QChar(static_cast<const char>('A' + (i<8?i:i+1))));
+				break;
 		}
 
-//		vCoord = new QGraphicsSimpleTextItem(hTxt, 0, canvas);
-//		hCoord = 
 		vCoords1->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
 		hCoords1->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
 		vCoords2->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
 		hCoords2->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
-
 	}
 }
 

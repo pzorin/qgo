@@ -28,6 +28,7 @@
 #include <QtGui>
 
 enum CursorType { cursorIdle, cursorGhostBlack , cursorGhostWhite , cursorWait , cursorNavTo };
+enum CoordType { uninit, sgf, numbertopnoi, numberbottomi };
 
 class ImageHandler;
 class Move;
@@ -45,12 +46,13 @@ public:
 	void clearData();
 	void changeSize();
 	void init(int size);
+	void setCoordType(CoordType c) { coordType = c; };
 	void setShowCoords(bool b);
 	void resizeBoard(int w, int h);
 
 	void removeGhosts();
 	void setVarGhost(StoneColor c, int x, int y);
-	void setMark(int x, int y, MarkType t, bool update=true, QString txt=0, bool overlay=true);
+	void setMark(int x, int y, MarkType t, bool update=true, QString txt=QString::null, bool overlay=true);
 	Mark* hasMark(int x, int y);
 	void removeMark(int x, int y, bool update = false);
 	void removeDeadMarks();
@@ -62,7 +64,7 @@ public:
 //	void updateDeadMarks(int &black, int &white);
 	unsigned int getSize()	{return board_size;}
 	void exportPicture(const QString &fileName,  QString *filter, bool toClipboard);
-
+		
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
 	void signalWheelEvent(QWheelEvent *);
@@ -74,6 +76,7 @@ protected:
 	void drawBackground();
 	void initGatter();
 	void drawGatter();
+	void setupCoords(void);
 	void drawCoordinates();
 //	void drawStarPoint(int x, int y);
 	int convertCoordsToPoint(int c, int o);
@@ -103,6 +106,7 @@ private:
 	bool letterPool[52];
 	Stone *curStone;
 	CursorType cursor;
+	CoordType coordType;
 	short curX, curY;
 	short downX, downY;	//FIXME can we combine safely somehow with curX, curY?
 

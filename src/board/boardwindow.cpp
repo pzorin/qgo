@@ -76,7 +76,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	
 	gamePhase = phaseInit;
 	boardSize = gd->board_size;
-
+	
 	//Creates the game tree
 	tree = new Tree(&boardSize);
 
@@ -260,8 +260,13 @@ void BoardWindow::setupUI(void)
 	ui.toolBar->insertWidget ( ui.actionImport, exportButton );
 
 	clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
+	
+	if(dispatch && dispatch->flipCoords())
+		ui.board->setCoordType(numberbottomi);
+	else
+		ui.board->setCoordType(numbertopnoi);
 	ui.board->init(boardSize);
-
+	
 	interfaceHandler = new InterfaceHandler( this);
 	interfaceHandler->toggleMode(gameData->gameMode);
 
