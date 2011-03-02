@@ -306,9 +306,10 @@ void MatchNegotiationState::sendMatchModeRequest(void)
 	state = MSMATCHMODEREQUEST;
 }
 
-void MatchNegotiationState::sendRematch(void)
+void MatchNegotiationState::sendRematch(PlayerListing * p)
 {
 	state = MSSENTREMATCH;
+	player = p;
 }
 
 void MatchNegotiationState::sendRematchAccept(void)

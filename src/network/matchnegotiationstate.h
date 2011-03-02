@@ -80,7 +80,7 @@ struct MatchNegotiationState
 	void receiveDoneCounting(void);
 	void setDoneCounting(void);
 	void sendMatchModeRequest(void);
-	void sendRematch(void);
+	void sendRematch(PlayerListing * p);
 	void sendRematchAccept(void);
 	void opponentDisconnect(void);
 	void sendAdjournResume(void);
