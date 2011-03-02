@@ -865,6 +865,7 @@ bool BoardDispatch::supportsRematch(void)
 	return false;
 }
 
+bool BoardDispatch::flipCoords(void) { return connection->flipCoords(); }
 bool BoardDispatch::supportsMultipleUndo(void) { return connection->supportsMultipleUndo(); }
 bool BoardDispatch::supportsRequestMatchMode(void) { return connection->supportsRequestMatchMode(); };
 bool BoardDispatch::supportsRequestCount(void) { return connection->supportsRequestCount(); };
@@ -875,6 +876,7 @@ bool BoardDispatch::startTimerOnOpen(void) {return connection->startTimerOnOpen(
 bool BoardDispatch::clientCountsTime(void) { return connection->clientCountsTime(); }
 bool BoardDispatch::clientSendsTime(void) { return connection->clientSendsTime(); }
 bool BoardDispatch::twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); }
+bool BoardDispatch::netWillEnterScoreMode(void) { return connection->netWillEnterScoreMode(); }
 bool BoardDispatch::undoResetsScore(void) { return connection->undoResetsScore(); }
 bool BoardDispatch::canMarkStonesDeadinScore(void) { return connection->canMarkStonesDeadinScore(); }
 bool BoardDispatch::unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); }

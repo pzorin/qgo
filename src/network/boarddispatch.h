@@ -104,6 +104,7 @@ class BoardDispatch
 		bool getBlackTurn(void);
 		class ObserverListModel * getObserverListModelForRematch(void);
 		void setObserverListModel(class ObserverListModel * olm);
+		bool flipCoords(void);
 		bool supportsMultipleUndo(void);
 		bool supportsRequestMatchMode(void);
 		bool supportsAddTime(void);
@@ -115,6 +116,7 @@ class BoardDispatch
 		bool clientCountsTime(void);
 		bool clientSendsTime(void);
 		bool twoPassesEndsGame(void);
+		bool netWillEnterScoreMode(void);
 		bool undoResetsScore(void);
 		bool canMarkStonesDeadinScore(void);
 		bool unmarkUnmarksAllDeadStones(void);

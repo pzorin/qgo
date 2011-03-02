@@ -169,6 +169,7 @@ class NetworkConnection : public QObject
 		virtual int gd_verifyBoardSize(int v) { return v; };
 		
 		virtual bool playerTrackingByID(void) { return false; };
+		virtual bool flipCoords(void) { return true; };
 		virtual bool supportsMultipleUndo(void) { return false; };
 		virtual bool supportsRequestMatchMode(void) { return false; };
 		virtual bool supportsRequestAdjourn(void) { return false; };
@@ -184,6 +185,7 @@ class NetworkConnection : public QObject
 		virtual bool clientCountsTime(void) { return true; };
 		virtual bool clientSendsTime(void) { return false; };
 		virtual bool undoResetsScore(void) { return false; };
+		virtual bool netWillEnterScoreMode(void) { return false; };
 		virtual bool canMarkStonesDeadinScore(void) { return true; };
 		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
 		virtual bool cantMarkOppStonesDead(void) { return false; };
