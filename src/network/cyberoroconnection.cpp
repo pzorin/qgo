@@ -1423,6 +1423,8 @@ void CyberOroConnection::sendGameUpdate(unsigned short game_code)
 	/* Okay looks like packet[6] controls the smiley faces ?
 	 * 0b might be 0 shaped mouth, 0a could be yawn with tear? */
 	packet[6] = 0x09;	//huh?? 0b
+	/* Also seen 0x0b 0x0d 0x12 0x11 0x0b which might be a preplay mode, an estimate, possibly
+	 * a clear or a return to preplay mode or something else and then back to match */
 	packet[7] = 0x00;
 	
 	packet[8] = 0x00;
@@ -1912,47 +1914,13 @@ void CyberOroConnection::sendDeclineRequestMatchMode(unsigned int game_id)
 void CyberOroConnection::sendTimeLoss(unsigned int game_id)
 {
 	sendEndgame12Msg(game_id, 0xf6b3);
-#ifdef OLD
-	unsigned int length = 0x0c;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_id);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us a timeloss");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xf6;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = aGameData->game_code & 0x00ff;
-	packet[7] = (aGameData->game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-
-	encode(packet, 0xc);
-	qDebug("Sending time loss");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending timeloss packet");
-	delete[] packet;
-#endif //OLD
 	killActiveMatchTimers();
 }
 
 void CyberOroConnection::sendRemoveStones(unsigned int game_code, const MoveRecord * move)
 {
-	unsigned int length = 0x10;/* + (2 * deadStonesList.size());*/
+	unsigned int length = 0x10;
 	unsigned char * packet = new unsigned char[length];
-	//unsigned int i;
 	
 	packet[0] = 0xe2;
 	packet[1] = 0xb3;
@@ -1970,17 +1938,10 @@ void CyberOroConnection::sendRemoveStones(unsigned int game_code, const MoveReco
 		packet[12] = 0x01;		//probably unremove bit
 	else	//if(move->flags == MoveRecord::UNREMOVE)
 		packet[12] = 0x02;
-	packet[13] = 0x00;		//is this list - 1?
-	//packet[13] = deadStonesList.size() - 1;		//this got us disconnected
+	packet[13] = 0x00;
 	
 	packet[14] = move->x;
 	packet[15] = move->y;
-	
-	/*for(i = 0; i < deadStonesList.size(); i++)
-	{
-		packet[16 + (i * 2)] = deadStonesList[i].x;
-		packet[17 + (i * 2)] = deadStonesList[i].y;
-	}*/
 	
 //e2 b3 10 00 ec 05 fa 01 ec 05 01 00 01 00 03 04
 //e2 b3 10 00 ec 05 fa 01 ec 05 98 66 01 00 03 10
@@ -2002,39 +1963,6 @@ void CyberOroConnection::sendRemoveStones(unsigned int game_code, const MoveReco
 void CyberOroConnection::sendEnterScoring(unsigned int game_code)
 {
 	sendEndgame12Msg(game_code_to_number[game_code], 0xc9b3);
-#ifdef OLD
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	GameData * aGameData;
-	BoardDispatch * boarddispatch = getIfBoardDispatch(game_code_to_number[game_code]);
-	if(!boarddispatch)
-	{
-		qDebug("How can there not be a board dispatch, it just sent us a timeloss");
-		return;
-	}
-	aGameData = boarddispatch->getGameData();
-	packet[0] = 0xc9;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = game_code & 0x00ff;
-	packet[7] = (game_code >> 8);
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-	
-	encode(packet, 0x0c);
-	qDebug("Sending enter scoring");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending enter scoring");
-	delete[] packet;
-#endif //OLD
 }
 
 void CyberOroConnection::sendDoneScoring(unsigned int game_code, unsigned short opp_id)
@@ -2137,34 +2065,6 @@ void CyberOroConnection::sendDoneScoring(unsigned int game_code, unsigned short 
 void CyberOroConnection::sendResign(unsigned int game_code)
 {
 	sendEndgame12Msg(game_code_to_number[game_code], 0xb0b3);
-#ifdef OLD
-	unsigned int length = 0xc;
-	unsigned char * packet = new unsigned char[length];
-	packet[0] = 0xb0;
-	packet[1] = 0xb3;
-	packet[2] = 0x0c;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	packet[6] = game_code & 0x00ff;
-	packet[7] = (game_code >> 8);
-	//I'm adding this color thing later, it wasn't here before but I can't see why it wouldn't be
-	//doublecheck FIXME
-	if(aGameData->white_name == getUsername())
-		packet[8] = 0x01;
-	else
-		packet[8] = 0x00;
-	//packet[8] = 0x00;
-	packet[9] = 0x00;
-	packet[10] = 0x00;
-	packet[11] = 0x00;
-//b0 b3 0c 00 ec 05 8b 02 00 00 00 00
-	encode(packet, 0x0c);
-	qDebug("Sending resign");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending resign");
-	delete[] packet;
-#endif //OLD
 }
 
 void CyberOroConnection::sendAdjournRequest(void)
@@ -2413,36 +2313,6 @@ void CyberOroConnection::sendNigiri(unsigned short game_code, bool /*odd*/)
 		sendGameUpdate(gr->game_code);
 }
 
-
-#ifdef FIXME
-/* FIXME, let's get this one working first in a joined room game */
-/* FIXME delete this?  I guess I got it working at sendRoomChat */
-void CyberOroConnection::sendGameChat(const GameData & game, unsigned char * text)
-{
-	unsigned int length = 8 + strlen(text);
-	unsigned char * packet = new unsigned char[length];
-	packet[0] = 0xec;
-	packet[1] = 0x59;
-	packet[2] = length & 0x00ff;
-	packet[3] = (length >> 8);
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	
-	packet[6] = 0x00;
-	packet[7] = 0xec;	//special byte?? I have no idea could be first byte
-				// of player id FIXME
-	for(i = 8; i < (int)length; i++)
-		packet[i] = text[i - 8];
-	
-//ec 59 1c 00 d3 04 00 ec text
-	encode(packet, 0x08);
-	qDebug("Sending game chat");
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending game chat");
-	delete[] packet;
-}
-
-#endif //FIXME
 /* As in leave a played or in room game?  Maybe rooms as well? 
  * Double check, all those zeroes are suspicious. 
  * Actually, probably same as sendObserve message for joining
@@ -2459,25 +2329,12 @@ void CyberOroConnection::sendLeave(const GameListing &)
 		qDebug("Attempted to sendLeave but in lobby!");
 		return;
 	}
-	unsigned int length = 0x12;
-	unsigned char * packet = new unsigned char[length];
-	int i;
-	packet[0] = 0xde;
-	packet[1] = 0x5d;
-	packet[2] = 0x12;
-	packet[3] = 0x00;
-	packet[4] = our_player_id & 0x00ff;
-	packet[5] = (our_player_id >> 8);
-	for(i = 6; i < (int)length; i++)
-		packet[i] = 0x00;
-//de 5d 12 00 ec 05 00 00 00 ...
-	encode(packet, 0x12);
 #ifdef RE_DEBUG
 	qDebug("Sending leave");
 #endif //RE_DEBUG
-	if(write((const char *)packet, length) < 0)
-		qWarning("*** failed sending leave");
-	delete[] packet;
+
+	sendJoinRoom(0, NULL);
+	
 	setRoomNumber(0);
 }
 
@@ -2841,17 +2698,6 @@ void CyberOroConnection::encode(unsigned char * h, unsigned int cycle_size)
 		}
 	}
 }
-
-/*void CyberOroConnection::sendServerChat(unsigned char * msg)
-{
-	F0 8C FF 56 99 DD 00 6E
-			good games
-	
-	DB A5 D8 2A 53 C5 00 E5
-	0E 2A D7 B5 69 56 00 86 
-			
-			68 65 6C 6C 6F 20 61 6C  .*..iV..hello al
-}*/
 
 bool CyberOroConnection::isReady(void)
 {
@@ -3257,7 +3103,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 		case ORO_SERVERANNOUNCE:
 			handleServerAnnouncement(msg, size);
 			break;
-		case 0x645a:
+		case ORO_SERVERANNOUNCELINK:
 			handleServerAnnouncementwithLink(msg, size);
 			break;
 		case 0x0c2b: 
@@ -3382,7 +3228,7 @@ void CyberOroConnection::handleCodeTable(unsigned char * msg, unsigned int size)
 		codetable[i] = p[i];
 	codetable_IV = p[1000];
 	codetable_IV2 = 0;
-	//qDebug("IV = %02x", codetable_IV);
+
 	sendChallengeResponse();
 }
 
