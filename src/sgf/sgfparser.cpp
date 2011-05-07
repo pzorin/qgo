@@ -493,6 +493,8 @@ bool SGFParser::doParse(const QString &toParseStr)
 	
 	// qDebug("File length = %d", strLength);
 	
+	tree->setLoadingSGF(true);
+	
 	progress.setValue(0);
 	QString sss="";
 	do {
@@ -504,7 +506,9 @@ bool SGFParser::doParse(const QString &toParseStr)
 				cancel = true;
 				break;
 			}
+			QApplication::processEvents();
 		}
+		
 		
 //		qDebug("POINTER = %d: %c", pointer, toParse->Str[pointer]);
 				
@@ -639,16 +643,12 @@ bool SGFParser::doParse(const QString &toParseStr)
 				uint tmppos=0;
 				pos = toParse->next_nonspace (pos);
 				
-//				 qDebug("READING PROPERTY AT %d: %c", pos, toParse->at(pos));
-				
-				// if (toParse->find("B[", pos) == pos)
 				if (toParse->at(pos) == 'B' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
 				{
 					prop = moveBlack;
 					pos = tmppos;
 					black = true;
 				}
-				// else if (toParse->find("W[", pos) == pos)
 				else if (toParse->at(pos) == 'W' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
 				{
 					prop = moveWhite;
@@ -1284,7 +1284,8 @@ bool SGFParser::doParse(const QString &toParseStr)
 	} while (pointer < strLength && pos >= 0);
 
 	progress.setValue(strLength);
-
+	tree->setLoadingSGF(false);
+	
 	delete toParse;
 	return !cancel;
 }
@@ -1294,7 +1295,7 @@ bool SGFParser::corruptSgf(int where, QString reason)
 	QMessageBox::warning(0, PACKAGE, QObject::tr("Corrupt SGF file at position") + " " +
 			     QString::number(where) + "\n\n" +
 			     (reason.isNull() || reason.isEmpty() ? QString("") : reason));
-
+	tree->setLoadingSGF(false);
 	return false;
 }
 

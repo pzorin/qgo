@@ -37,6 +37,7 @@ Tree::Tree(int * board_size)
 	groupMatrixCurrent = NULL;
 	init(board_size);
 	lastValidMoveChecked = NULL;
+	loadingSGF = false;
 	koStoneX = 0;
 	koStoneY = 0;
 	lastCaptures = 0;
@@ -205,7 +206,9 @@ bool Tree::addSon(Move *node)
 				qFatal("Failed to add a brother.");
 				return false;
 			}
-			current->parent->marker = node;
+			if(!loadingSGF)		//since this would put every branch on the last brother
+				current->parent->marker = node;
+			
 			assignCurrent(current, node);
 			return true;
 		}

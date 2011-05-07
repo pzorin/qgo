@@ -99,7 +99,8 @@ public:
 	bool insertStone(Move *node);
 	void setInsertStone (bool val) { insertStoneFlag = val; };
 	bool getInsertStone () { return insertStoneFlag; };
-
+	void setLoadingSGF(bool b) { loadingSGF = b; };
+	
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
@@ -125,6 +126,7 @@ private:
 	Move * lastValidMoveChecked;
  // true - insert stone directly to position, false - insert stone as new variation (default)
 	bool insertStoneFlag;
+	bool loadingSGF;
 };
 
 #endif
