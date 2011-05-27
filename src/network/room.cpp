@@ -164,6 +164,9 @@ void Room::setupUI(void)
 	connect(watchesCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showWatches(int)));
 	connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
 	editFriendsWatchesListButton->setEnabled(true);
+	whoOpenCheckBox->setEnabled(true);
+	friendsCheckBox->setEnabled(true);
+	watchesCheckBox->setEnabled(true);
 }
 
 Room::~Room()
@@ -211,6 +214,9 @@ Room::~Room()
 	whoOpenCheckBox->setChecked(false);
 	friendsCheckBox->setChecked(false);
 	watchesCheckBox->setChecked(false);
+	whoOpenCheckBox->setEnabled(false);
+	friendsCheckBox->setEnabled(false);
+	watchesCheckBox->setEnabled(false);
 }
 
 void Room::onError(void)
