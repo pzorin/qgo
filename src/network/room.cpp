@@ -181,6 +181,11 @@ Room::~Room()
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
 	qDebug("Deconstructing room");
+	/* blockSignals necessary in qt 4.7 otherwise setModel(0) crashes stupidly */
+	playerView->blockSignals(true);
+	gamesView->blockSignals(true);
+	playerView->header()->blockSignals(true);
+	gamesView->header()->blockSignals(true);
 	playerView->setModel(0);
 	gamesView->setModel(0);
 	delete playerListModel;
