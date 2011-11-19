@@ -110,9 +110,9 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	
 	while(p < ((char *)msg + length))
 	{
-		while(p < ((char *)msg + length - 1) && (p[0] != '\r' || p[1] != '\n'))
+		while(p < ((char *)msg + length - 1) && p[0] != '\n')
 			p++;
-		p += 2;
+		p++;
 		//FIXME, check for size
 		if(strncmp(p, "/LIVE ", 6) == 0)
 		{
