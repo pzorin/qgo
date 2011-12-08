@@ -167,6 +167,10 @@ void Room::setupUI(void)
 	whoOpenCheckBox->setEnabled(true);
 	friendsCheckBox->setEnabled(true);
 	watchesCheckBox->setEnabled(true);
+	playerView->blockSignals(false);
+	gamesView->blockSignals(false);
+	playerView->header()->blockSignals(false);
+	gamesView->header()->blockSignals(false);
 }
 
 Room::~Room()
