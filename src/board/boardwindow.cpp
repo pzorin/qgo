@@ -162,7 +162,7 @@ BoardWindow::~BoardWindow()
 	
 	settings.setValue("BOARD_WINDOW_SIZE_X", width());
 	settings.setValue("BOARD_WINDOW_SIZE_Y", height());
-	settings.setValue("BOARD_SIZES", ui.boardSplitter->saveState());
+//	settings.setValue("BOARD_SIZES", ui.boardSplitter->saveState());
 	
 	delete tree;	//okay?
 	
@@ -285,8 +285,8 @@ void BoardWindow::setupUI(void)
 		resize(window_x, window_y);
 	}
 	QVariant board_sizes_for_splitter = settings.value("BOARD_SIZES");
-	if(board_sizes_for_splitter != QVariant())
-		ui.boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
+//	if(board_sizes_for_splitter != QVariant())
+//		ui.boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
 	
 	// Connects the nav buttons to the slots
 	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
