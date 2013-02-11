@@ -362,16 +362,13 @@ void GamesListModel::removeListing(GameListing * const l)
 
 void GamesListModel::clearList(void)
 {
-	if(!items.count())
-		return;
 	//emit beginRemoveRows(QModelIndex(), 0, items.count() - 1);
-	for(int i = 0; i < items.count(); i++)
+	while(items.count()>0)
 	{
-		const GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
-		emit beginRemoveRows(QModelIndex(), i, i);
-		items.removeAt(i);
+		const GamesListItem * item = static_cast<const GamesListItem *>(items[0]);
+		emit beginRemoveRows(QModelIndex(), 0, 0);
+		items.removeAt(0);
 		emit endRemoveRows();
-		i--;		//right FIXME?? 
 		delete item;
 	}
 }

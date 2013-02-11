@@ -640,12 +640,9 @@ void Board::setCursorType(CursorType cur)
   */
 int Board::hasStone(int x, int y)
 {
-	Stone *s;
-	
 	if (!stones->contains(coordsToKey(x, y)))
 		return 0;
 
-	s = stones->find(coordsToKey(x, y)).value();
 	if (stones->find(coordsToKey(x, y)).value()->isVisible())
 		return 1;
 	
