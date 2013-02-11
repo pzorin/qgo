@@ -93,14 +93,13 @@ void ObserverListModel::removeListing(PlayerListing * const listing)
 
 void ObserverListModel::clearList(void)
 {
-	if(!items.count())
+	if(items.count() == 0)
 		return;
 	emit beginRemoveRows(QModelIndex(), 0, items.count() - 1);
-	for(int i = 0; i < items.count(); i++)
+	while(items.count() > 0)
 	{
-		const ObserverListItem * item = static_cast<const ObserverListItem *>(items[i]);
-		items.removeAt(i);
-		i--;		//right? FIXME
+		const ObserverListItem * item = static_cast<const ObserverListItem *>(items[0]);
+		items.removeAt(0);
 		delete item;
 	}
 	emit endRemoveRows();
