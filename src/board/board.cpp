@@ -79,6 +79,11 @@ void Board::init(int size)
 	// Init the canvas
 	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
 	Q_CHECK_PTR(canvas);
+	// Set background texture
+	canvas->setBackgroundBrush(QBrush(*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString()))));
+	table = canvas->addRect(QRectF(),
+				QPen(Qt::NoPen),
+				QBrush(* (ImageHandler::getBoardPixmap(settings.value("SKIN").toString()))));
 
 	setScene(canvas);
 	gatter = new Gatter(canvas, board_size);
@@ -252,93 +257,72 @@ void Board::drawGatter()
 /*
 * draws the table under the goban, and the goban wood texture
 */
+// FIXME: draw shadow
 void Board::drawBackground()
 {
-	QSettings settings;
-
-	int 	w = (int)canvas->width(),
-		h = (int)canvas->height();
-	
-	// Create pixmap of appropriate size
-	//QPixmap all(w, h);
-	QImage image(w, h, QImage::Format_RGB32);
-
-	// Paint table and board on the pixmap
-	QPainter painter;
-
-	painter.begin(&image);
-	painter.setPen(Qt::NoPen);
-
-
-	painter.drawTiledPixmap (0, 0, w, h,*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString())));
-
-	painter.drawTiledPixmap (
-		offsetX - offset,
+	table->setRect(offsetX - offset,
 		offsetY - offset,
 		board_pixel_size + offset*2,
-		board_pixel_size + offset*2,
-		* (ImageHandler::getBoardPixmap(settings.value("SKIN").toString())));
-
-	painter.end();
+		board_pixel_size + offset*2);
 
 	//QImage image = all.toImage();
-	int lighter=20;
-	int darker=60;
-	int width = 3; 
-
-	int x,y;
-	for(x=0;x<width;x++)
-		for (y= offsetY - offset +x ; y<offsetY + board_pixel_size + offset-x ;y++)
-		{
-			image.setPixel(
-				offsetX - offset+x , 
-				y, 
-				QColor(image.pixel(offsetX - offset+x,y)).dark(int(100 + darker*(width-x)*(width-x)/width/width)).rgb());
-
-			image.setPixel(
-				offsetX + board_pixel_size + offset-x -1, 
-				y,
-				QColor(image.pixel(offsetX + board_pixel_size + offset-x-1,y)).light(100+ int(lighter*(width-x)*(width-x)/width/width)).rgb());
-		}
-
-	for(y=0;y<width;y++)
-		for (x= offsetX - offset +y ; x<offsetX + board_pixel_size + offset-y ;x++)
-		{
-			image.setPixel(
-				x,
-				offsetY - offset+y , 
-				QColor(image.pixel(x,offsetY - offset+y)).light(int(100 + lighter*(width-y)*(width-y)/width/width)).rgb());
-
-			image.setPixel(
-				x,
-				offsetY + board_pixel_size + offset-y -1, 
-				QColor(image.pixel(x,offsetY + board_pixel_size + offset-y-1)).dark(100+ int(darker*(width-y)*(width-y)/width/width)).rgb());
-		}
-
-
-	width = 10;
-	darker=50;
-
-	for(x=0;(x<=width)&&(offsetX - offset-x >0) ;x++)
-		for (y= offsetY - offset+x ; (y<offsetY + board_pixel_size + offset+x)&&(y<h) ;y++)
-		{
-			image.setPixel(
-				offsetX - offset-1-x  , 
-				y, 
-				QColor(image.pixel(offsetX - offset-1-x,y)).dark(int(100 + darker*(width-x)/width)).rgb());
-		}
-
-	for(y=0;(y<=width)&&(offsetY + board_pixel_size + offset+y+1<h);y++)
-		for (x= (offsetX - offset - y > 0 ? offsetX - offset - y:0) ; x<offsetX + board_pixel_size + offset-y ;x++)
-		{
-			image.setPixel(
-				x,
-				offsetY + board_pixel_size + offset+y +1, 
-				QColor(image.pixel(x,offsetY + board_pixel_size + offset+y+1)).dark(100+ int(darker*(width-y)/width)).rgb());
-		}
+// 	int lighter=20;
+// 	int darker=60;
+// 	int width = 3; 
+// 
+// 	int x,y;
+// 	for(x=0;x<width;x++)
+// 		for (y= offsetY - offset +x ; y<offsetY + board_pixel_size + offset-x ;y++)
+// 		{
+// 			image.setPixel(
+// 				offsetX - offset+x , 
+// 				y, 
+// 				QColor(image.pixel(offsetX - offset+x,y)).dark(int(100 + darker*(width-x)*(width-x)/width/width)).rgb());
+// 
+// 			image.setPixel(
+// 				offsetX + board_pixel_size + offset-x -1, 
+// 				y,
+// 				QColor(image.pixel(offsetX + board_pixel_size + offset-x-1,y)).light(100+ int(lighter*(width-x)*(width-x)/width/width)).rgb());
+// 		}
+// 
+// 	for(y=0;y<width;y++)
+// 		for (x= offsetX - offset +y ; x<offsetX + board_pixel_size + offset-y ;x++)
+// 		{
+// 			image.setPixel(
+// 				x,
+// 				offsetY - offset+y , 
+// 				QColor(image.pixel(x,offsetY - offset+y)).light(int(100 + lighter*(width-y)*(width-y)/width/width)).rgb());
+// 
+// 			image.setPixel(
+// 				x,
+// 				offsetY + board_pixel_size + offset-y -1, 
+// 				QColor(image.pixel(x,offsetY + board_pixel_size + offset-y-1)).dark(100+ int(darker*(width-y)*(width-y)/width/width)).rgb());
+// 		}
+// 
+// 
+// 	width = 10;
+// 	darker=50;
+// 
+// 	for(x=0;(x<=width)&&(offsetX - offset-x >0) ;x++)
+// 		for (y= offsetY - offset+x ; (y<offsetY + board_pixel_size + offset+x)&&(y<h) ;y++)
+// 		{
+// 			image.setPixel(
+// 				offsetX - offset-1-x  , 
+// 				y, 
+// 				QColor(image.pixel(offsetX - offset-1-x,y)).dark(int(100 + darker*(width-x)/width)).rgb());
+// 		}
+// 
+// 	for(y=0;(y<=width)&&(offsetY + board_pixel_size + offset+y+1<h);y++)
+// 		for (x= (offsetX - offset - y > 0 ? offsetX - offset - y:0) ; x<offsetX + board_pixel_size + offset-y ;x++)
+// 		{
+// 			image.setPixel(
+// 				x,
+// 				offsetY + board_pixel_size + offset+y +1, 
+// 				QColor(image.pixel(x,offsetY + board_pixel_size + offset+y+1)).dark(100+ int(darker*(width-y)/width)).rgb());
+// 		}
 
 	//redraws the image on a brush to set the background
-	canvas->setBackgroundBrush ( QBrush(image));
+	//canvas->setBackgroundBrush ( QBrush(image));
 
 }
 

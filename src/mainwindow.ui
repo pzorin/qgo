@@ -128,8 +128,9 @@
         <string>Preferences</string>
        </property>
        <property name="icon">
-        <iconset resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_5.png</normaloff>:/ressources/pics/toolbar_5.png</iconset>
+        <iconset theme="preferences-other">
+         <normaloff/>
+        </iconset>
        </property>
       </item>
       <item>
@@ -137,8 +138,9 @@
         <string>Servers</string>
        </property>
        <property name="icon">
-        <iconset resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_4.png</normaloff>:/ressources/pics/toolbar_4.png</iconset>
+        <iconset theme="preferences-system-network">
+         <normaloff/>
+        </iconset>
        </property>
       </item>
      </widget>
@@ -146,7 +148,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Server">
        <layout class="QGridLayout">
@@ -978,8 +980,9 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="application.qrc">
-                <normaloff>:/ressources/pics/refresh_games.png</normaloff>:/ressources/pics/refresh_games.png</iconset>
+               <iconset theme="view-refresh">
+                <normaloff/>
+               </iconset>
               </property>
              </widget>
             </item>
@@ -1277,6 +1280,9 @@
                <property name="text">
                 <string>New game</string>
                </property>
+               <property name="icon">
+                <iconset theme="document-new"/>
+               </property>
               </widget>
              </item>
             </layout>
@@ -1350,19 +1356,7 @@
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
                   <widget class="DisplayBoard" name="displayBoard" native="true">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
-                    <size>
-                     <width>150</width>
-                     <height>150</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
                     <size>
                      <width>150</width>
                      <height>150</height>
@@ -1372,22 +1366,6 @@
                     <string>Board preview</string>
                    </property>
                   </widget>
-                 </item>
-                 <item>
-                  <spacer>
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeType">
-                    <enum>QSizePolicy::Expanding</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
                  </item>
                 </layout>
                </item>
@@ -1698,6 +1676,9 @@
                  <property name="text">
                   <string>Open game</string>
                  </property>
+                 <property name="icon">
+                  <iconset theme="document-open"/>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -1936,6 +1917,9 @@
              <property name="text">
               <string>Start game</string>
              </property>
+             <property name="icon">
+              <iconset theme="document-new"/>
+             </property>
             </widget>
            </item>
           </layout>
@@ -2014,6 +1998,9 @@
              </property>
              <property name="text">
               <string>Open game</string>
+             </property>
+             <property name="icon">
+              <iconset theme="document-open"/>
              </property>
             </widget>
            </item>

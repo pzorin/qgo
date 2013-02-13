@@ -6286,23 +6286,27 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </widget>
   <action name="actionFileSave">
    <property name="icon">
-    <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/filesave.png</normaloff>:/new/prefix1/ressources/pics/filesave.png</iconset>
+    <iconset theme="document-save"/>
    </property>
    <property name="text">
-    <string>fileSave</string>
+    <string>Save...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionFileSaveAs">
    <property name="icon">
-    <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/filesaveas.png</normaloff>:/new/prefix1/ressources/pics/filesaveas.png</iconset>
+    <iconset theme="document-save-as"/>
    </property>
    <property name="text">
-    <string>fileSaveAs</string>
+    <string>Save As...</string>
    </property>
    <property name="toolTip">
-    <string>Save file as ...</string>
+    <string>Save As...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionQuit">
@@ -6311,7 +6315,10 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
      <normaloff>:/new/prefix1/ressources/pics/exit2.png</normaloff>:/new/prefix1/ressources/pics/exit2.png</iconset>
    </property>
    <property name="text">
-    <string>quit</string>
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close window</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>

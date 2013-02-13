@@ -89,6 +89,7 @@ protected:
 private:
 
 	QGraphicsScene *canvas;
+	QGraphicsRectItem *table;
 	Gatter *gatter;
 	ImageHandler *imageHandler;
 //	GamePhase gamePhase;
