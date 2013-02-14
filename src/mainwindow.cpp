@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
 	connect(ui.channelsCB,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_channelListClicked(const QString &)));
 
+	GameLoaded = NULL;
 	SGFloaded = "";
 	SGFloaded2 = "";
 
@@ -112,7 +113,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.button_loadGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
 	connect(ui.button_newComputerGame,SIGNAL(pressed()),SLOT(slot_computerNewBoard()));
-	connect(ui.button_loadComputerGame,SIGNAL(pressed()),SLOT(slot_computerOpenBoard()));
+	connect(ui.button_loadComputerGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
 	connect(ui.dirView_1, SIGNAL(expanded(const QModelIndex &)), this, SLOT(slot_expanded(const QModelIndex &)));
 	connect(ui.dirView_2, SIGNAL(expanded(const QModelIndex &)), this, SLOT(slot_expanded(const QModelIndex &)));
@@ -251,45 +252,47 @@ void MainWindow::initStatusBar()
 /* 
  * Loads the file header data from the item selected in the directory display
  */
+bool MainWindow::selectFile(const QModelIndex &index)
+{
+	if (model->isDir(index))
+		return false;
+
+	fileLoaded = model->filePath(index);
+	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
+	if (SGFloaded == NULL)
+		return false;
+	
+	if (GameLoaded != NULL)
+		delete GameLoaded;
+	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
+	return !(GameLoaded == NULL);
+}
+
 void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
 	GameLoaded = NULL;
 	SGFloaded = QString();
 	ui.displayBoard->clearData();
-
-	ui.File_WhitePlayer->setText("");
-	ui.File_BlackPlayer->setText("");
-	ui.File_Date->setText("");
-	ui.File_Handicap->setText("");
-	ui.File_Result->setText("");
-	ui.File_Komi->setText("");
-	ui.File_Size->setText("");
-
 	QVariant v = topLeft.data(QDirModel::FilePathRole);
 	//qDebug( "Selected item : %s" ,v.toString().toLatin1().constData());
 
-	if (model->isDir(topLeft))
+	if (!selectFile(topLeft))
 	{
 		ui.button_loadGame->setDisabled(true);
+		
+		ui.File_WhitePlayer->setText("");
+		ui.File_BlackPlayer->setText("");
+		ui.File_Date->setText("");
+		ui.File_Handicap->setText("");
+		ui.File_Result->setText("");
+		ui.File_Komi->setText("");
+		ui.File_Size->setText("");
+		
 		return ;
-	}
-	//qDebug( "Selected file : %s \n" ,model->filePath(topLeft).toLatin1().constData());
-
-	fileLoaded = model->filePath(topLeft);
-	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
-	
-	if (SGFloaded == NULL)
-	{
-		ui.button_loadGame->setDisabled(true);
-		return ;
-	}
-
-	ui.button_loadGame->setEnabled(true);
-	
-	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
-	GameLoaded->gameMode = modeNormal;
-	if (GameLoaded)
-	{
+	} else {
+		GameLoaded->gameMode = modeNormal;
+		ui.button_loadGame->setEnabled(true);
+		
 		QString komi, hcp, sz;
 		komi.setNum(GameLoaded->komi);	
 		hcp.setNum(GameLoaded->handicap);
@@ -302,22 +305,21 @@ void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QMode
 		ui.File_Result->setText(GameLoaded->result);
 		ui.File_Komi->setText(komi);
 		ui.File_Size->setText(sz);
-
-		displayGame();
-	}	
-
+		
+		displayGame(ui.displayBoard);
+	}
 }
 
 /*
  *
  */
-void MainWindow::displayGame()
+void MainWindow::displayGame(DisplayBoard *board)
 {
-	
-	if (ui.displayBoard->getSize() != GameLoaded->board_size)
-		ui.displayBoard->init(GameLoaded->board_size);
+	board->clearData();
+	if (board->getSize() != GameLoaded->board_size)
+		board->init(GameLoaded->board_size);
 		
-	ui.displayBoard->displayHandicap(GameLoaded->handicap);
+	board->displayHandicap(GameLoaded->handicap);
 
 	QString s = SGFloaded.trimmed();
 	int end_main = s.indexOf(")(");
@@ -335,7 +337,7 @@ void MainWindow::displayGame()
 	{
 		x = s.at(cursor+3).unicode() - a_offset;
 		y = s.at(cursor+4).unicode() - a_offset;
-		ui.displayBoard->updateStone(stoneBlack,x,y);
+		board->updateStone(stoneBlack,x,y);
 		cursor = s.indexOf(";B[",cursor +1);
 
 	}
@@ -347,7 +349,7 @@ void MainWindow::displayGame()
 	{
 		x = s.at(cursor+3).unicode() - a_offset;
 		y = s.at(cursor+4).unicode() - a_offset;
-		ui.displayBoard->updateStone(stoneWhite,x,y);
+		board->updateStone(stoneWhite,x,y);
 		cursor = s.indexOf(";W[",cursor +1);
 
 	}
@@ -358,48 +360,31 @@ void MainWindow::displayGame()
  */
 void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
 {
-	GameLoaded2 = NULL;
-	SGFloaded2 = QString();
 	QVariant v = topLeft.data(QDirModel::FilePathRole);
 
-	if (model->isDir(topLeft))
+	if (!selectFile(topLeft))
 	{
 		ui.button_loadComputerGame->setDisabled(true);
-		return ;
-	}
-
-	fileLoaded2 = model->filePath(topLeft).toLatin1().constData();
-	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
-	
-	if (SGFloaded2 == NULL)
-	{
-		ui.button_loadComputerGame->setDisabled(true);
-		return ;
-	}
-
-	ui.button_loadComputerGame->setEnabled(true);
-	
-	GameLoaded2 = MW_SGFparser-> initGame(SGFloaded2, fileLoaded2);
-	GameLoaded2->gameMode = modeComputer;
-	//draw board FIXME?
-	if (GameLoaded2)
-	{
+	} else {
+		GameLoaded->gameMode = modeComputer;
+		ui.button_loadComputerGame->setEnabled(true);
+		
 		QString komi, hcp, sz;
-		komi.setNum(GameLoaded2->komi);	
-		hcp.setNum(GameLoaded2->handicap);
-		sz.setNum(GameLoaded2->board_size);
+		komi.setNum(GameLoaded->komi);	
+		hcp.setNum(GameLoaded->handicap);
+		sz.setNum(GameLoaded->board_size);
 
-		ui.File_WhitePlayer->setText(GameLoaded2->white_name);
-		ui.File_BlackPlayer->setText(GameLoaded2->black_name);
-		ui.File_Date->setText(GameLoaded2->date);
+		ui.File_WhitePlayer->setText(GameLoaded->white_name);
+		ui.File_BlackPlayer->setText(GameLoaded->black_name);
+		ui.File_Date->setText(GameLoaded->date);
 		ui.File_Handicap->setText(hcp);
-		ui.File_Result->setText(GameLoaded2->result);
+		ui.File_Result->setText(GameLoaded->result);
 		ui.File_Komi->setText(komi);
 		ui.File_Size->setText(sz);
 
-		/* FIXME, displayGame does GameLoaded not GameLoaded2, and
+		/* FIXME, displayGame does displayBoard not displayBoard2, and
 		 * why are there two of these ?!?!? */
-		//displayGame();
+		displayGame(ui.displayBoard2);
 	}	
 }
 
@@ -465,14 +450,14 @@ void MainWindow::slot_newComputer_HandicapChange(int a)
 
 void MainWindow::slot_fileOpenBoard()
 {
-	new BoardWindow(new GameData(GameLoaded), TRUE, TRUE);
+	if(GameLoaded)
+		new BoardWindow(new GameData(GameLoaded), TRUE, TRUE);
 }
 
 void MainWindow::slot_fileOpenBoard(const QModelIndex & i)
 {
 	slot_displayFileHeader(i, QModelIndex());
-	if(GameLoaded)
-		slot_fileOpenBoard();
+	slot_fileOpenBoard();
 }
 
 /*
@@ -510,16 +495,10 @@ void MainWindow::slot_computerNewBoard()
 /*
  * The 'New Game' button in 'Go Engine' tab has been pressed.
  */
-void MainWindow::slot_computerOpenBoard()
-{
-	new BoardWindow(new GameData(GameLoaded2) , TRUE, TRUE );
-}
-
 void MainWindow::slot_computerOpenBoard(const QModelIndex & i)
 {
 	slot_loadComputerFile(i, QModelIndex());
-	if(GameLoaded2)
-		slot_computerOpenBoard();
+	slot_fileOpenBoard();
 }
 
 void MainWindow::addBoardWindow(BoardWindow * bw)

@@ -78,7 +78,6 @@ public slots:
 	
 	// go engine slots
 	void slot_computerNewBoard();
-	void slot_computerOpenBoard();
 	void slot_computerOpenBoard(const QModelIndex &);
 	void slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & bottomRight );
 	void slot_getComputerPath();
@@ -134,18 +133,19 @@ private:
 	int closeConnection(bool error = false);
 	
 	void cleanupServerData(void);
+	bool selectFile(const QModelIndex &);
 	
 	friend class Room;	//FIXME awkward
 	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
-	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2 ;
+	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2;
 	GameData * GameLoaded , * GameLoaded2 ;
 	Sound *connectSound, *gameSound;
 
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 	void initStatusBar();
-	void displayGame();
+	void displayGame(DisplayBoard *);
 
 	// online time
 	int	onlineCount;
