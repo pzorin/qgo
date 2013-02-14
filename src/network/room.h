@@ -81,7 +81,7 @@ class Room : public QObject
 		GamesSortProxy * gamesSortProxy;
 
 		FilteredView * playerView, * gamesView;
-		QToolButton * refreshGamesButton, * refreshPlayersButton;
+		QAction * refreshGamesAction, * refreshPlayersAction;
 		QPushButton * editFriendsWatchesListButton;
 		QComboBox * whoBox1, * whoBox2;
 		QCheckBox * whoOpenCheckBox, * friendsCheckBox, * watchesCheckBox;

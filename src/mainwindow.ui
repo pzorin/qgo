@@ -148,7 +148,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Server">
        <layout class="QGridLayout">
@@ -582,7 +582,56 @@
             <string>Lists</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_6">
-            <item row="0" column="0" colspan="9">
+            <item row="1" column="4">
+             <widget class="QCheckBox" name="watchesCheck">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="toolTip">
+               <string>Only show games played by watched players</string>
+              </property>
+              <property name="text">
+               <string>Watch</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5">
+             <widget class="QPushButton" name="editFriendsWatchesPB">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="toolTip">
+               <string>Change the friends/watches/blocks lists</string>
+              </property>
+              <property name="text">
+               <string>Edit Friends/Watch</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QPushButton" name="createRoomPB">
+              <property name="text">
+               <string>Create Room</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="8">
+             <widget class="FilteredView" name="gamesView">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="rootIsDecorated">
+               <bool>false</bool>
+              </property>
+              <property name="itemsExpandable">
+               <bool>false</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="8">
              <widget class="FilteredView" name="playerView">
               <property name="contextMenuPolicy">
                <enum>Qt::CustomContextMenu</enum>
@@ -912,20 +961,6 @@
              </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QToolButton" name="pbRefreshPlayers">
-              <property name="toolTip">
-               <string>Refresh players list</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="application.qrc">
-                <normaloff>:/ressources/pics/refresh_players.png</normaloff>:/ressources/pics/refresh_players.png</iconset>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
              <widget class="QCheckBox" name="friendsCheck">
               <property name="enabled">
                <bool>false</bool>
@@ -935,70 +970,6 @@
               </property>
               <property name="text">
                <string>Friends</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="5">
-             <widget class="QCheckBox" name="watchesCheck">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="toolTip">
-               <string>Only show games played by watched players</string>
-              </property>
-              <property name="text">
-               <string>Watch</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="6">
-             <widget class="QPushButton" name="editFriendsWatchesPB">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="toolTip">
-               <string>Change the friends/watches/blocks lists</string>
-              </property>
-              <property name="text">
-               <string>Edit Friends/Watch</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="7">
-             <widget class="QPushButton" name="createRoomPB">
-              <property name="text">
-               <string>Create Room</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="8">
-             <widget class="QToolButton" name="pbRefreshGames">
-              <property name="toolTip">
-               <string>Refresh games list</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset theme="view-refresh">
-                <normaloff/>
-               </iconset>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="9">
-             <widget class="FilteredView" name="gamesView">
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="rootIsDecorated">
-               <bool>false</bool>
-              </property>
-              <property name="itemsExpandable">
-               <bool>false</bool>
-              </property>
-              <property name="sortingEnabled">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -1047,7 +1018,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="SGFEditor">
        <layout class="QVBoxLayout">
         <property name="spacing">
          <number>6</number>
@@ -3639,6 +3610,20 @@ up to :</string>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionRefreshPlayers"/>
+   <addaction name="actionRefreshGames"/>
+   <addaction name="actionQuit"/>
+  </widget>
   <action name="actionSgf_editor">
    <property name="icon">
     <iconset>
@@ -3664,6 +3649,56 @@ up to :</string>
    </property>
    <property name="text">
     <string>Go server</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="application-exit"/>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionRefreshGames">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="view-refresh"/>
+   </property>
+   <property name="text">
+    <string>Refresh Games</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh game list</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="actionRefreshPlayers">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="view-refresh">
+     <normaloff/>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Refresh Players</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh players list</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
    </property>
   </action>
  </widget>
@@ -3696,6 +3731,22 @@ up to :</string>
     <hint type="destinationlabel">
      <x>897</x>
      <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>512</x>
+     <y>378</y>
     </hint>
    </hints>
   </connection>

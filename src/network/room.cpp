@@ -36,8 +36,8 @@ Room::Room()
 {
 	playerView = mainwindow->getUi()->playerView;
 	gamesView = mainwindow->getUi()->gamesView;
-	refreshPlayersButton = mainwindow->getUi()->pbRefreshPlayers;
-	refreshGamesButton = mainwindow->getUi()->pbRefreshGames;
+	refreshPlayersAction = mainwindow->getUi()->actionRefreshPlayers;
+	refreshGamesAction = mainwindow->getUi()->actionRefreshGames;
 	whoBox1 = mainwindow->getUi()->whoBox1;
 	whoBox2 = mainwindow->getUi()->whoBox2;
 	whoOpenCheckBox = mainwindow->getUi()->whoOpenCheck;
@@ -155,8 +155,8 @@ void Room::setupUI(void)
 	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
 	connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
 	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-	connect(refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
-	connect(refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
+	connect(refreshPlayersAction, SIGNAL(activated()), SLOT(slot_refreshPlayers()));
+	connect(refreshGamesAction, SIGNAL(activated()), SLOT(slot_refreshGames()));
 	connect(whoBox1, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
 	connect(whoBox2, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
 	connect(whoOpenCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showOpen(int)));

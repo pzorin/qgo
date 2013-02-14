@@ -195,14 +195,14 @@ void MainWindow::setupConnection(void)
 	}
 	if(connection->supportsRefreshListsButtons())
 	{
-		ui.pbRefreshPlayers->show();
-		ui.pbRefreshGames->show();
+		ui.actionRefreshPlayers->setEnabled(true);
+		ui.actionRefreshGames->setEnabled(true);
 		//network/room has the connect calls
 	}
 	else
 	{
-		ui.pbRefreshPlayers->hide();
-		ui.pbRefreshGames->hide();
+		ui.actionRefreshPlayers->setEnabled(false);
+		ui.actionRefreshGames->setEnabled(false);
 	}
 	
 	if(connection->supportsSeek())
