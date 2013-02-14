@@ -73,23 +73,26 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.dirView_1->hideColumn(1);
 	ui.dirView_1->hideColumn(2);
 	ui.dirView_1->setColumnWidth(0,300);
-	if(currentWorkingDir == QString())
-		ui.dirView_1->setCurrentIndex(model->index(QDir::homePath()));
-	else
-		ui.dirView_1->setCurrentIndex(model->index(currentWorkingDir));
-	if (model->isDir(ui.dirView_1->currentIndex()))
-		ui.dirView_1->expand(ui.dirView_1->currentIndex());
+	
 	ui.dirView_2->setModel(model);
 
 	ui.dirView_2->hideColumn(1);
 	ui.dirView_2->hideColumn(2);
 	ui.dirView_2->setColumnWidth(0,300); 
-	if(currentWorkingDir == QString())
-		ui.dirView_2->setCurrentIndex(model->index(QDir::homePath ()));
-	else
+	
+	if(currentWorkingDir.isEmpty())
+	{
+		ui.dirView_1->setCurrentIndex(model->index(QDir::homePath()));
+		ui.dirView_2->setCurrentIndex(model->index(QDir::homePath()));
+	} else {
+		ui.dirView_1->setCurrentIndex(model->index(currentWorkingDir));
 		ui.dirView_2->setCurrentIndex(model->index(currentWorkingDir));
+	}
+	if (model->isDir(ui.dirView_1->currentIndex()))
+		ui.dirView_1->expand(ui.dirView_1->currentIndex());
 	if (model->isDir(ui.dirView_2->currentIndex()))
 		ui.dirView_2->expand(ui.dirView_2->currentIndex());
+	
 	//init the small board display
 	ui.displayBoard->init(19);
 	ui.displayBoard2->init(19);
