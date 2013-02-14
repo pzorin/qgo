@@ -53,7 +53,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	GameLoaded = NULL;
 	SGFloaded = "";
-	SGFloaded2 = "";
 
 	// loads the settings
 	loadSettings();
@@ -118,7 +117,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.dirView_1, SIGNAL(expanded(const QModelIndex &)), this, SLOT(slot_expanded(const QModelIndex &)));
 	connect(ui.dirView_2, SIGNAL(expanded(const QModelIndex &)), this, SLOT(slot_expanded(const QModelIndex &)));
 	connect(ui.dirView_1, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_fileOpenBoard(const QModelIndex &)));
-	connect(ui.dirView_2, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_computerOpenBoard(const QModelIndex &)));
+	connect(ui.dirView_2, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_fileOpenBoard(const QModelIndex &)));
 	connect(ui.dirView_1->selectionModel(),  
 		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
 		this,
@@ -249,6 +248,26 @@ void MainWindow::initStatusBar()
 
 }
 
+bool MainWindow::loadSGF(QString fileName)
+{
+	fileLoaded = fileName.toLatin1().constData();
+	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
+	
+	if (SGFloaded == NULL)
+		return false;
+	
+	if (GameLoaded != NULL)
+		delete GameLoaded;
+	
+	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
+	if (GameLoaded == NULL)
+		return false;
+	
+	GameLoaded->gameMode = modeNormal;
+	
+	return (GameLoaded != NULL);
+}
+
 /* 
  * Loads the file header data from the item selected in the directory display
  */
@@ -257,15 +276,7 @@ bool MainWindow::selectFile(const QModelIndex &index)
 	if (model->isDir(index))
 		return false;
 
-	fileLoaded = model->filePath(index);
-	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
-	if (SGFloaded == NULL)
-		return false;
-	
-	if (GameLoaded != NULL)
-		delete GameLoaded;
-	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
-	return !(GameLoaded == NULL);
+	return loadSGF( model->filePath(index) );
 }
 
 void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
@@ -388,25 +399,6 @@ void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModel
 	}	
 }
 
-bool MainWindow::loadSgfFile(QString fn)
-{
-	fileLoaded2 = fn.toLatin1().constData();
-	SGFloaded2 = MW_SGFparser->loadFile(fileLoaded2);
-	
-	if (SGFloaded2 == NULL)
-	{
-		ui.button_loadComputerGame->setDisabled(true);
-		return false;
-	}
-
-	ui.button_loadComputerGame->setEnabled(true);
-	
-	GameLoaded2 = MW_SGFparser->initGame(SGFloaded2, fileLoaded2);
-	GameLoaded2->gameMode = modeNormal;
-	new BoardWindow(new GameData(GameLoaded2), TRUE, TRUE);
-	return true;
-}
-
 void MainWindow::slot_expanded(const QModelIndex & i)
 {
 	//refresh file system info
@@ -456,8 +448,8 @@ void MainWindow::slot_fileOpenBoard()
 
 void MainWindow::slot_fileOpenBoard(const QModelIndex & i)
 {
-	slot_displayFileHeader(i, QModelIndex());
-	slot_fileOpenBoard();
+	if (selectFile(i))
+		slot_fileOpenBoard();
 }
 
 /*
@@ -490,15 +482,6 @@ void MainWindow::slot_computerNewBoard()
 	{
 		delete gd; gd = NULL;
 	}
-}
-
-/*
- * The 'New Game' button in 'Go Engine' tab has been pressed.
- */
-void MainWindow::slot_computerOpenBoard(const QModelIndex & i)
-{
-	slot_loadComputerFile(i, QModelIndex());
-	slot_fileOpenBoard();
 }
 
 void MainWindow::addBoardWindow(BoardWindow * bw)

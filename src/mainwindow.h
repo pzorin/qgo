@@ -50,7 +50,7 @@ public:
 	~MainWindow();
 
 	void set_sessionparameter(QString par, bool val); //FIXME
-	bool loadSgfFile(QString fn);
+	bool loadSGF(QString);
 	void onConnectionError(void);
 	
 	void recvSeekCondition(class SeekCondition * s);
@@ -78,7 +78,6 @@ public slots:
 	
 	// go engine slots
 	void slot_computerNewBoard();
-	void slot_computerOpenBoard(const QModelIndex &);
 	void slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & bottomRight );
 	void slot_getComputerPath();
 	void slot_computerPathChanged(const QString &);
@@ -139,8 +138,8 @@ private:
 	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
-	QString SGFloaded, SGFloaded2, fileLoaded , fileLoaded2;
-	GameData * GameLoaded , * GameLoaded2 ;
+	QString SGFloaded, fileLoaded;
+	GameData * GameLoaded;
 	Sound *connectSound, *gameSound;
 
 	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;

@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
 	Q_INIT_RESOURCE(application);
 	QApplication app(argc, argv);
 	QTranslator translator;
-	QString *sgf_file = NULL;
 
 	QCoreApplication::setOrganizationName("qGo");
 	QCoreApplication::setApplicationName("qGo");
@@ -52,19 +51,13 @@ int main(int argc, char *argv[])
 
 	if ( argc > 1 )
 	{
-		sgf_file = new QString( argv[1] );
-	}
-
-	if ( sgf_file )
-	{
-		bool success = mainwindow->loadSgfFile( *sgf_file );
-		delete sgf_file;
-		if(!success)
+		QString sgf_file( argv[1] );
+		if (mainwindow->loadSGF( sgf_file ))
+		{
+			mainwindow->slot_fileOpenBoard();
+		} else
 			return -1;
-		//mainwindow->hide();
-	}
-	else
-	{
+	} else {
 		mainwindow->show();
 	}
 
