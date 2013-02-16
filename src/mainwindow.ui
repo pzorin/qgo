@@ -146,7 +146,7 @@
     <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Server">
        <layout class="QGridLayout" name="_2">
@@ -433,7 +433,7 @@
                   </size>
                  </property>
                  <property name="text">
-                  <string>Rooms</string>
+                  <string>Room</string>
                  </property>
                 </widget>
                </item>
@@ -456,7 +456,7 @@
                   </size>
                  </property>
                  <property name="text">
-                  <string>Channels</string>
+                  <string>Channel</string>
                  </property>
                 </widget>
                </item>

@@ -5,7 +5,12 @@ RESOURCES = application.qrc  \
 	    board/board.qrc
 QT = core gui \
 network
-TARGET = ../bin/qgo
+DESTDIR = ../build
+TARGET = qgo
+OBJECTS_DIR = $${DESTDIR}/objects
+MOC_DIR = $${DESTDIR}/moc
+RCC_DIR = $${DESTDIR}/rcc
+UI_DIR = $${DESTDIR}/ui
 CONFIG += warn_on \
           thread \
           qtestlib \
@@ -19,8 +24,7 @@ win32 {
     # also
     RC_FILE = qgo.rc
 }
-TEMPLATE = app 
-OBJECTS_DIR = objects
+TEMPLATE = app
 TRANSLATIONS = translations/qgo_cz.ts \
 	    	translations/qgo_de.ts \
 		translations/qgo_dk.ts \

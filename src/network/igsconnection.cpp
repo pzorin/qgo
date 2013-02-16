@@ -93,11 +93,7 @@ void IGSConnection::sendText(QString text)
 	//text += "\r\n";
 	qDebug("sendText: %s", text.toLatin1().constData());
 	QByteArray raw = textCodec->fromUnicode(text);
-	bool wr;
-	if(writeReady)
-		wr = true;
-	else
-		wr = false;
+    bool wr=writeReady;
 	if(write(raw.data(), raw.size()) < 0)
 		qWarning("*** failed sending to host: %s", raw.data());
 	else
@@ -272,8 +268,8 @@ void IGSConnection::sendJoinRoom(const RoomListing & room, const char * /*passwo
 	Room * roomhandle = getDefaultRoom();
 	roomhandle->clearPlayerList();
 	roomhandle->clearGamesList();
-	sendPlayersRequest();
-	sendGamesRequest();
+    //sendPlayersRequest();
+    //sendGamesRequest();
 }
 
 void IGSConnection::sendJoinChannel(const ChannelListing & room)
@@ -789,13 +785,13 @@ void IGSConnection::onReady(void)
 			//sendText("toggle quiet off\r\n");
 			//sendText("toggle review on\r\n");
 			
-			sendPlayersRequest();
+            //sendPlayersRequest();
 			
 			sendNmatchParameters();
 			sendText("seek config_list\r\n");
 		}
 	
-		sendGamesRequest();
+        //sendGamesRequest();
 		recvRoomListing(new RoomListing(0, "Lobby"));
 		sendRoomListRequest();
 		sendListChannels();
