@@ -42,8 +42,11 @@ enum GameListingColumn { GC_ID=0, GC_WHITENAME, GC_WHITERANK, GC_BLACKNAME,
 
 ObserverListModel::ObserverListModel()
 {
-	for(int i = 0; i < O_TOTALCOLUMNS; i++)
-		sort_priority.append(i);
+    for(int i = 0; i < columnCount(); i++)
+    {
+        sort_priority.append(i);
+        sort_order.append(Qt::AscendingOrder);
+    }
 }
 
 ObserverListModel::~ObserverListModel()
@@ -130,8 +133,11 @@ QVariant ObserverListModel::data(const QModelIndex & index, int role) const
 
 PlayerListModel::PlayerListModel()
 {
-	for(int i = 0; i < P_TOTALCOLUMNS; i++)
+    for(int i = 0; i < columnCount(); i++)
+    {
         sort_priority.append(i);
+        sort_order.append(Qt::AscendingOrder);
+    }
 }
 
 PlayerListModel::~PlayerListModel()
@@ -317,8 +323,11 @@ QVariant SimplePlayerListModel::data(const QModelIndex & index, int role) const
 
 GamesListModel::GamesListModel()
 {
-	for(int i = 0; i < G_TOTALCOLUMNS; i++)
+    for(int i = 0; i < columnCount(); i++)
+    {
         sort_priority.append(i);
+        sort_order.append(Qt::AscendingOrder);
+    }
 }
 
 GamesListModel::~GamesListModel()
@@ -460,7 +469,7 @@ GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
 }
 
 /* FIXME we should possibly use that order variable somehow. */
-void ListModel::sort(int column, Qt::SortOrder /*order*/)
+void ListModel::sort(int column, Qt::SortOrder order)
 {
 	/* Take column out of previous place in sort_priority and
 	 * put it in first place */
@@ -470,19 +479,14 @@ void ListModel::sort(int column, Qt::SortOrder /*order*/)
         {
             sort_priority.removeAt(i);
             sort_priority.prepend(column);
+            sort_order.removeAt(i);
+            sort_order.prepend(order);
 
             //qDebug("sort! %d %d\n", sort_priority[0], order);
             quicksort(0, items.count() - 1);
             break;
         }
     }
-		/* This method below of swapping the sort order is annoying
-		 * because it makes it almost like a puzzle trying to get it
-		 * to properly prioritize in the right ascension order. At
-		 * the very least, we need a different sort order for
-		 * each column, which data can check out at the time.
-		 * Sort also seems a bit slow right now, there's a definite
-		 * beat there... FIXME */
 }
 
 void ListModel::quicksort(int b, int e)
@@ -543,6 +547,8 @@ int ListModel::priorityCompare(const ListItem & i, const ListItem & j)
     int result;
     do {
         result = i.compare(j, sort_priority[k]);
+        if (sort_order[k] == Qt::DescendingOrder)
+            result = -result;
         k++;
     } while (result == EQUALTO && k < 3 && k < columns - 1);
     return result;

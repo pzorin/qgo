@@ -155,6 +155,7 @@ class ListModel : public QAbstractTableModel	//QAbstractItemModel??
          * we have to know which keys are more important.
          * FIXME: store the order for each key */
         QList <int> sort_priority;
+        QList <Qt::SortOrder> sort_order;
 		FilteredView * view;
 	private:
 		void quicksort(int b, int e);
