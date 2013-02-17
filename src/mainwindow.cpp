@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 //	ui.displayBoard->setShowCoords(FALSE);
 
 	// connecting the Go server tab buttons and signals
-	connect( ui.pb_connect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
+    connect( ui.actionConnect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
 
 	connect( ui.cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
 //	connect( ui.cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );

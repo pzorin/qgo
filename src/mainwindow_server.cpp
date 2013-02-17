@@ -91,13 +91,9 @@ void MainWindow::slot_connect(bool b)
 			return;
 		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
 		if(logindialog->exec())
-		{
-			ui.pb_connect->blockSignals(true);
-			ui.pb_connect->setChecked(true);
-			ui.pb_connect->blockSignals(false);
+        {
 			ui.cb_connect->setEnabled(false);
-			ui.pb_connect->setIcon(QIcon(":/ressources/pics/connected.png"));
-			ui.pb_connect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
+            ui.actionConnect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
 			setupConnection();
 			
 			/* FIXME shouldn't say ONLINE here but tired of it saying
@@ -106,9 +102,9 @@ void MainWindow::slot_connect(bool b)
 		}
 		else
 		{
-			ui.pb_connect->blockSignals(true);
-			ui.pb_connect->setChecked(FALSE);
-			ui.pb_connect->blockSignals(false);
+            ui.actionConnect->blockSignals(true);
+            ui.actionConnect->setChecked(false);
+            ui.actionConnect->blockSignals(false);
 		}
 		//delete logindialog;	//not supposed to delete?
 		logindialog = 0;
@@ -135,9 +131,9 @@ void MainWindow::slot_connect(bool b)
 		}
 		if(closeConnection() < 0)
 		{
-			ui.pb_connect->blockSignals(true);
-			ui.pb_connect->setChecked(TRUE);
-			ui.pb_connect->blockSignals(false);
+            ui.actionConnect->blockSignals(true);
+            ui.actionConnect->setChecked(true);
+            ui.actionConnect->blockSignals(false);
 			return;
 		}
 		ui.cb_connect->setEnabled(true);
@@ -272,9 +268,9 @@ int MainWindow::closeConnection(bool error)
 			return -1;
 		NetworkConnection * c = connection;
 		connection = 0;
-		ui.pb_connect->blockSignals(true);
-		ui.pb_connect->setChecked(false);	//doublecheck all this?
-		ui.pb_connect->blockSignals(false);
+        ui.actionConnect->blockSignals(true);
+        ui.actionConnect->setChecked(false);	//doublecheck all this?
+        ui.actionConnect->blockSignals(false);
 		delete c;
 	}
 	
@@ -284,8 +280,7 @@ int MainWindow::closeConnection(bool error)
 	// show current Server name in status bar
 	statusServer->setText(" OFFLINE ");
 
-	ui.pb_connect->setIcon(QIcon(":/ressources/pics/connect_no2.png"));
-	ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+    ui.actionConnect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
 	return 0;
 }
 
@@ -305,10 +300,9 @@ void MainWindow::slot_connexionClosed()
 	// set to offline:
 	myAccount->set_offline();
 #endif //FIXME
-	//pb_connect->setOn(FALSE);
-	ui.pb_connect->blockSignals(true);
-	ui.pb_connect->setChecked(FALSE);
-	ui.pb_connect->blockSignals(false);
+    ui.actionConnect->blockSignals(true);
+    ui.actionConnect->setChecked(false);
+    ui.actionConnect->blockSignals(false);
 	seekMenu->clear();
 
 #ifdef FIXME
@@ -1146,8 +1140,8 @@ void MainWindow::slot_checkbox(int nr, bool val)
 
 void MainWindow::slot_cbconnectChanged(int)
 {
-	if(!ui.pb_connect->isChecked())
-		ui.pb_connect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+    if(!ui.actionConnect->isChecked())
+        ui.actionConnect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
 }
 
 /*

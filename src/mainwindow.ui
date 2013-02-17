@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1009</width>
-    <height>754</height>
+    <width>1007</width>
+    <height>752</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -233,35 +233,6 @@
                    <string>Tom</string>
                   </property>
                  </item>
-                </widget>
-               </item>
-               <item>
-                <widget class="QToolButton" name="pb_connect">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Connect to service</string>
-                 </property>
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="application.qrc">
-                   <normaloff>:/ressources/pics/connect_no2.png</normaloff>:/ressources/pics/connect_no2.png</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>22</width>
-                   <height>22</height>
-                  </size>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
                 </widget>
                </item>
               </layout>
@@ -2854,6 +2825,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
    </attribute>
    <addaction name="actionRefreshPlayers"/>
    <addaction name="actionRefreshGames"/>
+   <addaction name="actionConnect"/>
    <addaction name="actionQuit"/>
   </widget>
   <action name="actionSgf_editor">
@@ -2932,6 +2904,24 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="applications-internet" resource="application.qrc">
+     <normaloff>:/ressources/pics/connect_no2.png</normaloff>:/ressources/pics/connect_no2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect to server</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>
