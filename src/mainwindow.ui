@@ -27,7 +27,7 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_8">
+   <layout class="QGridLayout" name="_4">
     <property name="leftMargin">
      <number>3</number>
     </property>
@@ -507,7 +507,7 @@
            <attribute name="title">
             <string>Shouts</string>
            </attribute>
-           <layout class="QGridLayout">
+           <layout class="QGridLayout" name="_5">
             <property name="margin">
              <number>9</number>
             </property>
@@ -527,7 +527,7 @@
            <attribute name="title">
             <string>Messages</string>
            </attribute>
-           <layout class="QGridLayout">
+           <layout class="QGridLayout" name="_6">
             <property name="margin">
              <number>9</number>
             </property>
@@ -610,44 +610,6 @@
              <widget class="QPushButton" name="createRoomPB">
               <property name="text">
                <string>Create Room</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="8">
-             <widget class="FilteredView" name="gamesView">
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="rootIsDecorated">
-               <bool>false</bool>
-              </property>
-              <property name="itemsExpandable">
-               <bool>false</bool>
-              </property>
-              <property name="sortingEnabled">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="8">
-             <widget class="FilteredView" name="playerView">
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="rootIsDecorated">
-               <bool>false</bool>
-              </property>
-              <property name="itemsExpandable">
-               <bool>false</bool>
-              </property>
-              <property name="sortingEnabled">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -971,6 +933,50 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0" colspan="8">
+             <widget class="FilteredView" name="playerView">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="showGrid">
+               <bool>false</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+              <property name="cornerButtonEnabled">
+               <bool>false</bool>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="8">
+             <widget class="FilteredView" name="gamesView">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="showGrid">
+               <bool>false</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+              <property name="cornerButtonEnabled">
+               <bool>false</bool>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+             </widget>
+            </item>
            </layout>
           </widget>
           <widget class="QWidget" name="tab_2">
@@ -1029,7 +1035,7 @@
           <property name="title">
            <string>New file</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_11">
+          <layout class="QGridLayout" name="_7">
            <item row="0" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
@@ -1266,7 +1272,7 @@
           <property name="title">
            <string>Open file</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
+          <layout class="QGridLayout" name="_8">
            <item row="0" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
@@ -1341,7 +1347,7 @@
                 </layout>
                </item>
                <item>
-                <layout class="QGridLayout">
+                <layout class="QGridLayout" name="_9">
                  <property name="horizontalSpacing">
                   <number>2</number>
                  </property>
@@ -1689,7 +1695,7 @@
           <property name="title">
            <string>New game</string>
           </property>
-          <layout class="QGridLayout">
+          <layout class="QGridLayout" name="_10">
            <property name="margin">
             <number>9</number>
            </property>
@@ -1774,7 +1780,7 @@
             </layout>
            </item>
            <item row="0" column="3">
-            <spacer>
+            <spacer name="spacer_3">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -1868,7 +1874,7 @@
           <property name="title">
            <string>Open started game</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout">
+          <layout class="QGridLayout" name="_11">
            <item row="0" column="0">
             <widget class="QTreeView" name="dirView_2">
              <property name="minimumSize">
@@ -2134,7 +2140,7 @@ Delay between the moves in autoplay mode in seconds.</string>
           <property name="title">
            <string>Goban and table</string>
           </property>
-          <layout class="QGridLayout">
+          <layout class="QGridLayout" name="_12">
            <property name="margin">
             <number>9</number>
            </property>
@@ -2937,7 +2943,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
   </customwidget>
   <customwidget>
    <class>FilteredView</class>
-   <extends>QTreeView</extends>
+   <extends>QTableView</extends>
    <header>listviews.h</header>
   </customwidget>
  </customwidgets>

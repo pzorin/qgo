@@ -75,7 +75,6 @@ void Room::setupUI(void)
 	/* No sort indicator??? */
 	/* Qt 4.4.1 made sortIndicatorShown necesssary for sort behavior
 	 * !!!! */
-	gamesView->header()->setSortIndicatorShown ( true );
 
 	//gamesView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	/*ui.gamesView->setColumnWidth ( 0, 40 );	//35
@@ -119,7 +118,6 @@ void Room::setupUI(void)
 	playerView->setModel(playerListModel);
 	playerListModel->setView(playerView);
 	playerView->setFilter(new PlayerListFilter(playerListModel));
-	playerView->header()->setSortIndicatorShown ( true );
 	
 	playerView->setColumnWidth ( 0, 40 );
 	playerView->setColumnWidth ( 1, 100 );
@@ -169,8 +167,6 @@ void Room::setupUI(void)
 	watchesCheckBox->setEnabled(true);
 	playerView->blockSignals(false);
 	gamesView->blockSignals(false);
-	playerView->header()->blockSignals(false);
-	gamesView->header()->blockSignals(false);
 }
 
 Room::~Room()
@@ -191,8 +187,6 @@ Room::~Room()
 	/* blockSignals necessary in qt 4.7 otherwise setModel(0) crashes stupidly */
 	playerView->blockSignals(true);
 	gamesView->blockSignals(true);
-	playerView->header()->blockSignals(true);
-	gamesView->header()->blockSignals(true);
 	playerView->setModel(0);
 	gamesView->setModel(0);
 	delete playerListModel;
@@ -293,7 +287,7 @@ void Room::slot_playersDoubleClicked(const QModelIndex & index)
 
 void Room::slot_showPopup(const QPoint & iPoint)
 {
-	popup_item = playerView->indexAt(iPoint);
+    popup_item = playerView->indexAt(iPoint);
 	if (popup_item != QModelIndex())
 	{
 		/* If we have the listing now, we don't need to look it up

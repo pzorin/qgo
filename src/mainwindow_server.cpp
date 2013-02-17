@@ -1217,16 +1217,8 @@ void MainWindow::slot_cbquiet()
 
 void MainWindow::slot_alternateListColorsCB(bool b)
 {
-	if(b)
-	{
-		ui.playerView->setAlternatingRowColors(true);
-		ui.gamesView->setAlternatingRowColors(true);
-	}
-	else
-	{
-		ui.playerView->setAlternatingRowColors(false);
-		ui.gamesView->setAlternatingRowColors(false);
-	}
+    ui.playerView->setAlternatingRowColors(b);
+    ui.gamesView->setAlternatingRowColors(b);
 }
 
 void MainWindow::timerEvent(QTimerEvent* e)

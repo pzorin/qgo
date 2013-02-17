@@ -235,21 +235,23 @@ void IGSConnection::periodicListRefreshes(bool b)
 {
 	if(b)
 	{
-		if(!playersListRefreshTimer)
-		{
+        if(playersListRefreshTimer == 0)
 			playersListRefreshTimer = startTimer(PLAYERSLISTREFRESH_SECONDS * 1000);
+        if(gamesListRefreshTimer == 0)
 			gamesListRefreshTimer = startTimer(GAMESLISTREFRESH_SECONDS * 1000);
-		}
 	}
 	else
 	{
-		if(playersListRefreshTimer)
+        if(playersListRefreshTimer != 0)
 		{
 			killTimer(playersListRefreshTimer);
-			killTimer(gamesListRefreshTimer);
 			playersListRefreshTimer = 0;
-			gamesListRefreshTimer = 0;
 		}
+        if(gamesListRefreshTimer != 0)
+        {
+            killTimer(gamesListRefreshTimer);
+            gamesListRefreshTimer = 0;
+        }
 	}
 }
 
@@ -268,8 +270,8 @@ void IGSConnection::sendJoinRoom(const RoomListing & room, const char * /*passwo
 	Room * roomhandle = getDefaultRoom();
 	roomhandle->clearPlayerList();
 	roomhandle->clearGamesList();
-    //sendPlayersRequest();
-    //sendGamesRequest();
+    sendPlayersRequest();
+    sendGamesRequest();
 }
 
 void IGSConnection::sendJoinChannel(const ChannelListing & room)

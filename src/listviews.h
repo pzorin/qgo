@@ -118,10 +118,10 @@ class GamesListFilter : public ListFilter
 		bool watches;
 };
 
-class FilteredView : public QTreeView
+class FilteredView : public QTableView
 {
 	public:
-		FilteredView(QWidget * p = 0) : QTreeView(p), listFilter(0) {};
+        FilteredView(QWidget * p = 0) : QTableView(p), listFilter(0) {};
 		~FilteredView() { delete listFilter; };
 		void setFilter(ListFilter * l) { listFilter = l; };
 		ListFilter * getFilter(void) { return listFilter; };
@@ -130,7 +130,7 @@ class FilteredView : public QTreeView
 		ListFilter * listFilter;
 };
 
-class ListModel : public QAbstractItemModel	//QAbstractItemModel??
+class ListModel : public QAbstractTableModel	//QAbstractItemModel??
 {
 	 public:
 	 	ListModel();
@@ -139,27 +139,22 @@ class ListModel : public QAbstractItemModel	//QAbstractItemModel??
 		//void updateListing(const ListItem & item);
 		//void removeListing(const ListItem & item);
 		int priorityCompare(const ListItem & i, const ListItem & j);
-		QModelIndex parent(const QModelIndex & index) const;
-		//bool hasChildren(const QModelIndex & parent) const;
-		virtual int rowCount(const QModelIndex & parent) const;
-		int columnCount(const QModelIndex & parent) const;
+        virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
+        virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
 		//bool hasIndex(int row, int column, const QModelIndex & parent) const;
-		QModelIndex index(int row, int column, const QModelIndex & parent) const;
-		virtual QVariant data(const QModelIndex & index, int role) const;
+        virtual QVariant data(const QModelIndex & index, int role) const;
 		Qt::ItemFlags flags(const QModelIndex & index) const;
-		QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
-		QModelIndex getIndex(int row, int column) { return createIndex(row, column); };		
-		void setView(FilteredView * v) { view = v; };
+        virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+        void setView(FilteredView * v) { view = v; };
 	protected:
 		friend class PlayerListFilter;
 		friend class GamesListFilter;
-		friend class FilteredView;
-		ListItem * headerItem;
+        friend class FilteredView;
 		QList <ListItem *> items;	//try it with the one list
-		QList <int> sort_priority;
-		Qt::SortOrder list_sort_order;
-		bool isGamesListAwkwardVariable;
+        /* Since we sort lexicographically with several keys
+         * we have to know which keys are more important.
+         * FIXME: store the order for each key */
+        QList <int> sort_priority;
 		FilteredView * view;
 	private:
 		void quicksort(int b, int e);
@@ -175,6 +170,8 @@ class ObserverListModel : public ListModel
 		~ObserverListModel();
 		void insertListing(PlayerListing * const l);
 		void removeListing(PlayerListing * const l);
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
 		void setAccountName(QString name) { account_name = name; };
@@ -187,7 +184,9 @@ class PlayerListModel : public ListModel
 	public:
 		PlayerListModel();
 		~PlayerListModel();
-		void insertListing(PlayerListing * const l);
+        virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
+        void insertListing(PlayerListing * const l);
 		void updateListing(PlayerListing * const l);
 		void removeListing(PlayerListing * const l);
 		void clearList(void);
@@ -205,7 +204,9 @@ class SimplePlayerListModel: public PlayerListModel
 {
 	public:
 		SimplePlayerListModel(bool _notify_column);
-		virtual QVariant data(const QModelIndex & index, int role) const;
+        virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
+        virtual QVariant data(const QModelIndex & index, int role) const;
 	private:
 		bool notify_column;
 };
@@ -215,7 +216,9 @@ class GamesListModel : public ListModel
 	public:
 		GamesListModel();
 		~GamesListModel();
-		void insertListing(GameListing * const l);
+        virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
+        void insertListing(GameListing * const l);
 		void updateListing(GameListing * const l);
 		void removeListing(GameListing * const l);
 		void clearList(void);

@@ -99,7 +99,7 @@ void MainWindow::slot_currentChanged(int i)
 {
 	static int former=-1;
 	QSettings settings;
-	bool resend = FALSE;
+    bool resend = FALSE;
 
 	if ((former == 3) || (former == 4))
 	{
@@ -121,7 +121,7 @@ void MainWindow::slot_currentChanged(int i)
 #endif //FIXME
 	}
 	if(i == 1 || i == 2)
-	{
+    {
 		//refresh file system model
 		/* Apparently unnecessary and causes large slowdown in windows 
 		 * EXCEPT, it might be nice to be able to refresh the file

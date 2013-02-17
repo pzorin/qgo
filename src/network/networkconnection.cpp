@@ -292,10 +292,10 @@ QTime NetworkConnection::gd_checkMainTime(TimeSystem s, const QTime & t)
 {
 	if(s == canadian)
 	{
-		int seconds = (t.minute() * 60) + t.second();
+//		int seconds = (t.minute() * 60) + t.second();
 		if(t.second())
 		{
-			seconds = (t.minute() * 60);
+//			seconds = (t.minute() * 60);
 			return QTime(0, t.minute(), 0);
 		}
 	}
