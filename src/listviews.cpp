@@ -114,10 +114,10 @@ void ObserverListModel::clearList(void)
 
 QVariant ObserverListModel::data(const QModelIndex & index, int role) const
 {
-    if(!index.isValid() || index.row() > rowCount() || index.column() > columnCount())
+    if(!index.isValid())
 		return QVariant();
 
-    ObserverListItem * item = static_cast<ObserverListItem*>(items[index.row()]);
+    ObserverListItem * item = static_cast<ObserverListItem*>(index.internalPointer());
 	if(role == Qt::DisplayRole)
 		return item->data(index.column());
 	else if(role == Qt::ForegroundRole)
@@ -236,10 +236,10 @@ void PlayerListModel::clearList(void)
 
 QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 {
-    if(!index.isValid() || index.row() > rowCount() || index.column() > columnCount())
+    if(!index.isValid())
         return QVariant();
 	
-    PlayerListItem * item = static_cast<PlayerListItem*>(items[index.row()]);
+    PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
 	
 	if(role == Qt::DisplayRole)
 		return item->data(index.column());
@@ -298,10 +298,10 @@ QVariant SimplePlayerListModel::headerData(int section, Qt::Orientation orientat
 
 QVariant SimplePlayerListModel::data(const QModelIndex & index, int role) const
 {
-    if(!index.isValid() || index.row() > rowCount() || index.column() > columnCount())
+    if(!index.isValid())
 		return QVariant();
 
-    PlayerListItem * item = static_cast<PlayerListItem*>(items[index.row()]);
+    PlayerListItem * item = static_cast<PlayerListItem*>(index.internalPointer());
 	if(role == Qt::DisplayRole)
 	{
 		switch(index.column())
@@ -448,10 +448,10 @@ void GamesListModel::clearList(void)
 
 QVariant GamesListModel::data(const QModelIndex & index, int role) const
 {
-    if(!index.isValid() || index.row() > rowCount() || index.column() > columnCount())
+    if(!index.isValid())
 		return QVariant();
 	
-    GamesListItem * item = static_cast<GamesListItem*>(items[index.row()]);
+    GamesListItem * item = static_cast<GamesListItem*>(index.internalPointer());
 	if(role == Qt::DisplayRole)
 		return item->data(index.column());
 	else if(role == Qt::ForegroundRole)
@@ -998,6 +998,12 @@ int ListModel::columnCount(const QModelIndex &) const
 {
     return 0; // Overriden by inheriting classes
 }
+
+QModelIndex ListModel::index ( int row, int column, const QModelIndex & ) const
+{
+    return createIndex(row,column,items[row]);
+}
+
 
 /* This is overridden */
 QVariant ListModel::data(const QModelIndex & index, int role) const

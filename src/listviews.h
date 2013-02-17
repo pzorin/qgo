@@ -130,7 +130,7 @@ class FilteredView : public QTableView
 		ListFilter * listFilter;
 };
 
-class ListModel : public QAbstractTableModel	//QAbstractItemModel??
+class ListModel : public QAbstractTableModel
 {
 	 public:
 	 	ListModel();
@@ -141,7 +141,7 @@ class ListModel : public QAbstractTableModel	//QAbstractItemModel??
 		int priorityCompare(const ListItem & i, const ListItem & j);
         virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
-		//bool hasIndex(int row, int column, const QModelIndex & parent) const;
+        QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
         virtual QVariant data(const QModelIndex & index, int role) const;
 		Qt::ItemFlags flags(const QModelIndex & index) const;
         virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
