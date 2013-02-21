@@ -196,7 +196,9 @@ linux-* {
     INSTALLS += desktopfile
     filetype.path = /usr/share/mimelnk/text
     filetype.files = sgf.desktop
-    INSTALLS += filetype
+    mimetype.path = /usr/share/mime/text
+    mimetype.files = x-sgf.xml
+    INSTALLS += filetype mimetype
 }
 INCLUDEPATH += network \
 audio \
