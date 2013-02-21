@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="text/go-sgf">
+  <!--Created automatically by update-mime-database. DO NOT EDIT!-->
+  <comment>Smart Go Format</comment>
+  <comment xml:lang="ja">賢い囲碁フォーマット</comment>
+  <comment xml:lang="ko"></comment>쑤시는바둑체재</comment>
+  <comment xml:lang="zh_CN">智慧围棋格式</comment>
+  <comment xml:lang="zh_TW">智慧圍棋格式</comment>
+  <acronym>SGF</acronym>
+  <expanded-acronym>Smart Go(Weiqi, Yi Go, Baduk) Format</expanded-acronym>
+  <icon>qgo</icon>
+  <sub-class-of type="text/plain"/>
+  <glob pattern="*.sgf"/>
+</mime-type>
