@@ -331,16 +331,7 @@ void BoardWindow::setupUI(void)
 void BoardWindow::setupBoardUI(void)
 {
 	//make sure to set the sound button to the proper state before anything
-	if (qgoboard->getPlaySound())
-	{
-		ui.actionSound->setChecked(FALSE);
-		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_on.png"));
-	}
-	else
-	{
-		ui.actionSound->setChecked(TRUE);
-		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_off.png"));
-	}
+    ui.actionSound->setChecked(qgoboard->getPlaySound());
 	
 	//Connects the board to the interface and boardhandler
 	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
@@ -780,11 +771,7 @@ void BoardWindow::slotGameInfo(bool /*toggle*/)
  */
 void BoardWindow::slotSound(bool toggle)
 {
-	qgoboard->setPlaySound(!toggle);
-	if (toggle)
-		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_off.png"));
-	else
-		ui.actionSound->setIcon(QIcon(":/new/prefix1/ressources/pics/sound_on.png"));
+    qgoboard->setPlaySound(toggle);
 }
 
 /* 

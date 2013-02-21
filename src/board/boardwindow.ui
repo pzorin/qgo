@@ -6286,7 +6286,9 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </widget>
   <action name="actionFileSave">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Save...</string>
@@ -6297,7 +6299,9 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionFileSaveAs">
    <property name="icon">
-    <iconset theme="document-save-as"/>
+    <iconset theme="document-save-as">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Save As...</string>
@@ -6356,11 +6360,14 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionGameInfo">
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="dialog-information" resource="board.qrc">
      <normaloff>:/new/prefix1/ressources/pics/idea.png</normaloff>:/new/prefix1/ressources/pics/idea.png</iconset>
    </property>
    <property name="text">
     <string>gameInfo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
   <action name="actionSound">
@@ -6368,7 +6375,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="audio-volume-high" resource="board.qrc">
      <normaloff>:/new/prefix1/ressources/pics/sound_on.png</normaloff>:/new/prefix1/ressources/pics/sound_on.png</iconset>
    </property>
    <property name="text">
@@ -6464,7 +6471,6 @@ Export current board to ASCII.</string>
  </customwidgets>
  <resources>
   <include location="board.qrc"/>
-  <include location="../application.qrc"/>
  </resources>
  <connections>
   <connection>
