@@ -927,8 +927,8 @@ void BoardWindow::setGamePhase(GamePhase gp)
 }
 
 /*
- * Generate a candidate for the filename for this game
- */
+* Generate a candidate for the filename for this game
+*/
 QString BoardWindow::getCandidateFileName()
 {
 	

@@ -30,8 +30,8 @@
 
  /*************************************************************
   *
-  * Initialises the gatter intersections and hoshis points
-  *
+  * Initialises the gatter intersections and hoshis points
+  *
   *************************************************************/
 Gatter::Gatter(QGraphicsScene *Canvas, int size)
 {
@@ -89,8 +89,8 @@ Gatter::Gatter(QGraphicsScene *Canvas, int size)
 }
 
  /*
-  * Destroys the gatter
-  */
+  * Destroys the gatter
+  */
 Gatter::~Gatter()
 {
 	int i,j; 
@@ -117,8 +117,8 @@ Gatter::~Gatter()
 
 
  /*
-  * Calculates the gatter intersections and hoshis position
-  */
+  * Calculates the gatter intersections and hoshis position
+  */
 void Gatter::resize(int offsetX, int offsetY, int square_size)
 {
 	int i,j;
@@ -188,8 +188,8 @@ void Gatter::showAll()
 }
 
  /*
-  * Hides an intersection (when placing a letter mark)
-  */
+  * Hides an intersection (when placing a letter mark)
+  */
 void Gatter::hide(int i, int j)
 {
 	QGraphicsEllipseItem *e;
@@ -208,8 +208,8 @@ void Gatter::hide(int i, int j)
 }
 
  /*
-  * shows an intersection (when removing a letter mark)
-  */
+  * shows an intersection (when removing a letter mark)
+  */
 void Gatter::show(int i, int j)
 {
 	QGraphicsEllipseItem *e;
