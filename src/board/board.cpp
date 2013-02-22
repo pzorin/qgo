@@ -56,6 +56,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
     showCoords = true;//TODO setting->readBoolEntry("BOARD_COORDS");
     showSGFCoords = false;//TODO setting->readBoolEntry("SGF_BOARD_COORDS");
     //antiClicko = setting->readBoolEntry("ANTICLICKO");
+    board_size = 19;
 
     curX = curY = -1;
     downX = downY = -1;
@@ -83,13 +84,36 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
     setScene(canvas);
     viewport()->setMouseTracking(true);
     setUpdatesEnabled(true);
+
+    vCoords1 = new QList<QGraphicsSimpleTextItem*>;
+    hCoords1 = new QList<QGraphicsSimpleTextItem*>;
+    vCoords2 = new QList<QGraphicsSimpleTextItem*>;
+    hCoords2 = new QList<QGraphicsSimpleTextItem*>;
+
+    gatter = new Gatter(canvas, board_size);
+}
+
+Board::~Board()
+{
+    setUpdatesEnabled(false);
+
+    delete stones;
+    delete ghosts;
+    delete marks;
+
+    delete hCoords1;
+    delete hCoords2;
+    delete vCoords1;
+    delete vCoords2;
+    delete gatter;
+    delete imageHandler;
+
+    delete canvas; // Also deletes all remaining QGraphicsItem's
 }
 
 void Board::init(int size)
 {
 	board_size = size;//DEFAULT_BOARD_SIZE;
-
-	gatter = new Gatter(canvas, board_size);
 	
 	// Init the gatter size and the imagehandler pixmaps
 	calculateSize();
@@ -108,14 +132,17 @@ void Board::init(int size)
 
 void Board::setupCoords(void)
 {
+    qDeleteAll(*hCoords1);
+    qDeleteAll(*hCoords2);
+    qDeleteAll(*vCoords1);
+    qDeleteAll(*vCoords2);
+    hCoords1->clear();
+    hCoords2->clear();
+    vCoords1->clear();
+    vCoords2->clear();
 	QString hTxt,vTxt;
 
 	// Init the coordinates
-	vCoords1 = new QList<QGraphicsSimpleTextItem*>;
-	hCoords1 = new QList<QGraphicsSimpleTextItem*>;
-	vCoords2 = new QList<QGraphicsSimpleTextItem*>;
-	hCoords2 = new QList<QGraphicsSimpleTextItem*>;
-	
 	for (int i=0; i<board_size; i++)
 	{
 		switch(coordType)
@@ -142,22 +169,6 @@ void Board::setupCoords(void)
 	}
 }
 
-Board::~Board()
-{
-    qDeleteAll(*stones);
-    stones->clear();
-    qDeleteAll(*ghosts);
-    ghosts->clear();
-    qDeleteAll(*marks);
-    marks->clear();
-
-	delete stones;
-	delete ghosts;
-	delete marks;
-
-	delete canvas;
-}
-
 /*
  * cleans up the board
  */
@@ -165,11 +176,12 @@ void Board::clearData()
 {
 	qDeleteAll(*stones);
 	stones->clear();
-
 	qDeleteAll(*ghosts);
 	ghosts->clear();
+    qDeleteAll(*marks);
+    marks->clear();
 
-	repaint();
+    update();
 }
 
 /*
