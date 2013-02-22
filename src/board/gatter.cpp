@@ -172,5 +172,5 @@ void Gatter::show(int x, int y)
     HGatter[indexOf(x,y)]->show();
 
     if (hoshisList.contains(indexOf(x,y)))
-        hoshisList.value(board_size*x+y)->show();
+        hoshisList.value(indexOf(x,y))->show();
 }
