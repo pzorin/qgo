@@ -27,7 +27,7 @@
 #include "sgfparser.h"
 #include "tree.h"
 #include "listviews.h"
-#include "network/serverliststorage.h"
+#include "connectionwidget.h"
 
 #include <QtGui>
 
@@ -39,30 +39,15 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	ui.setupUi(this);
 	//hide by default
-    ui.changeServerButton->hide();
-    ui.createRoomButton->hide();
 	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));
 	initStatusBar();
 	/* FIXME, really need a list of such things, 0s */
-	connection = 0;
-	logindialog = 0;
-
-	/* We need to integrate this room list with the new room code FIXME */
-    connect(ui.roomComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
-    connect(ui.channelComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_channelListClicked(const QString &)));
 
 	GameLoaded = NULL;
 	SGFloaded = "";
 
 	// loads the settings
 	loadSettings();
-
-	//creates the connection code
-	seekMenu = new QMenu();
-    ui.seekToolButton->setMenu(seekMenu);
-
-	connect(seekMenu,SIGNAL(triggered(QAction*)), SLOT(slot_seek(QAction*)));		
-    connect(ui.seekToolButton, SIGNAL( toggled(bool) ), SLOT( slot_seek(bool) ) );
 
 	// filling the file view
 	QStringList filters = (QStringList() << "*.sgf" << "*.SGF");
@@ -94,10 +79,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		ui.dirView_2->expand(ui.dirView_2->currentIndex());
 
 	// connecting the Go server tab buttons and signals
-    connect( ui.actionConnect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
-
-    connect( ui.commandLineComboBox, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
-//	connect( ui.commandLineComboBox, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
 
 	// connecting the new game button
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
@@ -121,13 +102,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		SLOT(slot_loadComputerFile(const QModelIndex & , const QModelIndex &  )));
 	connect( ui.computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
 	connect(ui.LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
-
-	
-	// connecting the server tab buttons
-    connect(ui.serverComboBox, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
-    connect( ui.quietCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
-    connect( ui.openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
-    connect( ui.lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
 	
 	connect(ui.newFile_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newFile_HandicapChange(int)));
 	connect(ui.newComputer_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newComputer_HandicapChange(int)));
@@ -139,13 +113,9 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
 	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
 	connect(ui.comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
-	connect( ui.alternateListColorsCB, SIGNAL( clicked(bool) ), this, SLOT( slot_alternateListColorsCB(bool) ) );
 
 	// Creates the SGF parser for displaying the file infos
 	MW_SGFparser = new SGFParser(NULL);
-	
-	// for saving server ip lists
-	serverliststorage = new ServerListStorage();
 
 	//sound
 	connectSound = 	SoundFactory::newSound(SOUND_PATH_PREFIX"static.wav");
@@ -153,14 +123,12 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 MainWindow::~MainWindow()
 {
-	delete serverliststorage;
-	cleanupServerData();
 }
 
 void MainWindow::closeEvent(QCloseEvent * e)
 {
 	/* Close connection if open */
-	if(closeConnection() < 0)
+    if(ui.connectionWidget->closeConnection() < 0)
 	{
 		e->ignore();
 		return;

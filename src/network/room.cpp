@@ -27,23 +27,24 @@
 #include "messages.h"
 #include "gamedialog.h"
 #include "../mainwindow.h"
+#include "../connectionwidget.h"
 #include "playergamelistings.h"
 #include "boarddispatch.h"	//so we can remove observers
 #include "friendslistdialog.h"
 
+#include "ui_connectionwidget.h" // Contains declaration of Ui::ConnectionWidget, needed in Room::Room, FIXME
+
 //#define PLAYERLISTING_ISSUES
 Room::Room()
 {
-	playerView = mainwindow->getUi()->playerView;
-	gamesView = mainwindow->getUi()->gamesView;
-	refreshPlayersAction = mainwindow->getUi()->actionRefreshPlayers;
-	refreshGamesAction = mainwindow->getUi()->actionRefreshGames;
-    filterRank1ComboBox = mainwindow->getUi()->filterRank1ComboBox;
-    filterRank2ComboBox = mainwindow->getUi()->filterRank2ComboBox;
-    whoOpenCheckBox = mainwindow->getUi()->filterOpenCheckBox;
-    friendsCheckBox = mainwindow->getUi()->filterFriendsCheckBox;
-    watchesCheckBox = mainwindow->getUi()->filterWatchesCheckBox;
-    editFriendsWatchesListButton = mainwindow->getUi()->editFriendsWatchesButton;
+    playerView = connectionWidget->getUi()->playerView;
+    gamesView = connectionWidget->getUi()->gamesView;
+    filterRank1ComboBox = connectionWidget->getUi()->filterRank1ComboBox;
+    filterRank2ComboBox = connectionWidget->getUi()->filterRank2ComboBox;
+    whoOpenCheckBox = connectionWidget->getUi()->filterOpenCheckBox;
+    friendsCheckBox = connectionWidget->getUi()->filterFriendsCheckBox;
+    watchesCheckBox = connectionWidget->getUi()->filterWatchesCheckBox;
+    editFriendsWatchesListButton = connectionWidget->getUi()->editFriendsWatchesButton;
 	/* Normally the dispatch and the UI are created at the sametime
 	* by the connection or dispatch code.  In this case,
 	* the UI already exists and is being passed straight in here,
@@ -115,8 +116,8 @@ void Room::setupUI(void)
 	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
 	connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
 	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-	connect(refreshPlayersAction, SIGNAL(activated()), SLOT(slot_refreshPlayers()));
-	connect(refreshGamesAction, SIGNAL(activated()), SLOT(slot_refreshGames()));
+    connect(connectionWidget->getUi()->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
+    connect(connectionWidget->getUi()->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
     connect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
     connect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
 	connect(whoOpenCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showOpen(int)));
@@ -138,8 +139,8 @@ Room::~Room()
 	delete gameListingRegistry;
 	
 	/* FIXME: Should probably be part of something else this P G stuff */
-	mainwindow->statusUsers->setText(" P: 0");
-	mainwindow->statusGames->setText(" G: 0");
+    //mainwindow->statusUsers->setText(" P: 0");
+    //mainwindow->statusGames->setText(" G: 0");
 
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
@@ -514,12 +515,12 @@ void Room::slot_editFriendsWatchesList(void)
 
 void Room::talkOpened(Talk * d)
 {
-	mainwindow->talkOpened(d);
+    connectionWidget->talkOpened(d);
 }
 
 void Room::recvToggle(int type, bool val)
 {
-	mainwindow->slot_checkbox(type, val);
+    connectionWidget->slot_checkbox(type, val);
 }
 
 GameListing * Room::registerGameListing(GameListing * l)
@@ -787,7 +788,7 @@ void Room::recvPlayerListing(PlayerListing * player)
  * ui classes */
 void Room::recvExtPlayerListing(class PlayerListing * player)
 {
-	mainwindow->slot_statsPlayer(player);
+    connectionWidget->slot_statsPlayer(player);
 }
 
 void Room::updatePlayerListing(class PlayerListing & player)

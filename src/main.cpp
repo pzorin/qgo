@@ -30,6 +30,7 @@
 
 struct _preferences preferences;
 MainWindow * mainwindow = 0;
+ConnectionWidget * connectionWidget = 0;
 
 QTranslator * translatorPtr;
 void installTranslator(enum Language, QApplication *);

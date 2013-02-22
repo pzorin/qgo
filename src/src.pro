@@ -44,7 +44,8 @@ FORMS += mainwindow.ui \
 	 network/friendslistdialog.ui \
 	 network/gamedialog.ui \
 	 network/login.ui \
-	 network/talk_gui.ui
+	 network/talk_gui.ui \
+    connectionwidget.ui
 
 HEADERS += defines.h \
 displayboard.h \
@@ -105,13 +106,13 @@ network/tomconnection.h \
 network/tygemconnection.h \
 network/tygemprotocol.h \
 network/wing.h \
-sgf/sgfparser.h
+sgf/sgfparser.h \
+    connectionwidget.h
 
 SOURCES += displayboard.cpp \
            listviews.cpp \
  	   main.cpp \
            mainwindow.cpp \
-           mainwindow_server.cpp \
            mainwindow_settings.cpp \
  	   newline_pipe.h \
            audio/audio.cpp \
@@ -165,7 +166,8 @@ SOURCES += displayboard.cpp \
 	   network/tomconnection.cpp \
 	   network/tygemconnection.cpp \
 	   network/wing.cpp \
-	   sgf/sgfparser.cpp
+	   sgf/sgfparser.cpp \
+    connectionwidget.cpp
 
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""

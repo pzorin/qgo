@@ -87,7 +87,7 @@ void LoginDialog::slot_connect(void)
 	 * there should be at least the possibility of multiple netdispatches
 	 * somehow and we still need to fix the closeConnection stuff
 	 * maybe?  Figure out what should logically close what, and when */
-	mainwindow->setNetworkConnection(connection);
+    connectionWidget->setNetworkConnection(connection);
 	//netdispatch->setMainWindow(mainwindow);
 	/* We need to wait here to get authorization confirm, no errors,
 	   maybe popup either "please wait" dialog, which we'd annoyingly
@@ -98,34 +98,37 @@ void LoginDialog::slot_connect(void)
 		QApplication::processEvents(QEventLoop::AllEvents, 300);
 	serverlistdialog_open = false;
 
-	if(connectionStatus == ND_BADPASSWORD)
-	{
+    switch(connectionStatus)
+    {
+    case ND_BADPASSWORD:
 		QMessageBox::information(this, tr("Bad Password"), tr("Invalid Password"));
-	}
-	else if(connectionStatus == ND_BADLOGIN)
-	{
+        break;
+    case ND_BADLOGIN:
 		QMessageBox::information(this, tr("Bad Login"), tr("Invalid Login"));
-	}
-	else if(connectionStatus == ND_ALREADYLOGGEDIN)
-	{
+        break;
+    case ND_ALREADYLOGGEDIN:
 		/* FIXME possibly either here or in network specific code, we want to
 		 * prompt to disconnect the other account, or just do it automatically */
 		QMessageBox::information(this, tr("Already Logged In"), tr("Are you logged in somewhere else?"));
-	}
-	else if(connectionStatus == ND_BADCONNECTION || connectionStatus == ND_BADHOST)
-	{
+        break;
+    case ND_BADCONNECTION:
+    case ND_BADHOST:
 		QMessageBox::information(this, tr("Can't connect"), tr("Can't connect to host!"));
-	}
-	else if(connectionStatus == ND_CONN_REFUSED)
-	{
+        break;
+    case ND_CONN_REFUSED:
 		QMessageBox::information(this, tr("Connection Refused"), tr("Server may be down"));
-	}
-	else if(connectionStatus == ND_PROTOCOL_ERROR)
-	{
+        break;
+    case ND_PROTOCOL_ERROR:
 		QMessageBox::information(this, tr("Protocol Error"), tr("Check for qGo update"));
-	}
-	else if(connectionStatus == ND_CONNECTED)
-	{
+        break;
+    case ND_USERCANCELED:
+        /* I think login is now responsible for mediating that
+         * first connection netdispatch, calls mainwindow
+         * which will close the connection.  FIXME, responsibilities
+         * are not clear even if they work out. */
+        show();
+        break;
+    case ND_CONNECTED:
 		for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
 		{
 			if((*hi)->host() == connectionName)
@@ -140,21 +143,12 @@ void LoginDialog::slot_connect(void)
 		}
 		Host * h = new Host(connectionName, ui.loginEdit->currentText(), 
 			(ui.savepasswordCB->isChecked() ? ui.passwordEdit->text() : QString()));
-			hostlist->insert(0, h);
+        hostlist->insert(0, h);
 		//SUCCESS
 		done(1);
 		return;
 	}
-	else if(connectionStatus == ND_USERCANCELED)
-	{
-		/* I think login is now responsible for mediating that
-		 * first connection netdispatch, calls mainwindow
-		 * which will close the connection.  FIXME, responsibilities
-		 * are not clear even if they work out. */
-		show();
-	}
-	//connection->onError();
-	mainwindow->setNetworkConnection(0);
+    connectionWidget->setNetworkConnection(0);
 	delete connection;
 	connection = 0;
 	

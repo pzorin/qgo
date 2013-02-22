@@ -49,29 +49,14 @@ public:
 	MainWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 );
 	~MainWindow();
 
-	void set_sessionparameter(QString par, bool val); //FIXME
 	bool loadSGF(QString);
-
-    // FIXME: this should be in a separate class that handles the server connection widget
-	void onConnectionError(void);
-	
-	void recvSeekCondition(class SeekCondition * s);
-	void recvSeekCancel(void);
-	void recvSeekPlayer(QString player, QString condition);
-
-	/* This is awkward here but has the same life as mainwindow */
-	ServerListStorage & getServerListStorage(void) { return *serverliststorage; };
-
-	void recvRoomListing(const RoomListing & room, bool b);
-	void recvChannelListing(const ChannelListing & channel, bool b);
-	void changeChannel(const QString & s);
-	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
-	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
-    // End FIXME
 
 	void addBoardWindow(BoardWindow *);
 	void removeBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
+
+    Ui::MainWindow ui; // Used at weird places, FIXME
+    QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 public slots:
 	void slot_expanded(const QModelIndex & i);
 	// sfg slots
@@ -93,106 +78,27 @@ public slots:
 	void slot_getTablePath();
 	void slot_newFile_HandicapChange(int);
 	void slot_newComputer_HandicapChange(int);
+    void slot_languageChanged(int);
 
-    // FIXME: this should be in a separate class that handles the server connection widget
-	// client slots
-	void slot_connect(bool b);
-	//void slot_textReceived(const QString &txt);
-	void slot_message(QString, QColor = Qt::black);
-//	void slot_message(QString txt);
-	void slot_createRoom(void);
-	void slot_changeServer(void);
-	void set_tn_ready();
-	//void slot_sendCommand(const QString &, bool);
-//	void slot_cmdactivated_int(int);
-	void slot_cmdactivated(const QString&);
-	
-	void slot_roomListClicked(const QString &);
-	void slot_channelListClicked(const QString &);
-	void slot_seek(bool);
-	void slot_seek(QAction *);
-	void slot_talk(const QString& , const QString &, bool );
-	void talkOpened(Talk * d);
-	void talkRecv(Talk * d);
-	void slot_pbRelOneTab(QWidget *w);
-	void slot_cbconnectChanged(int);
-	void slot_languageChanged(int);
-	void slot_cblooking();
-	void slot_cbopen();
-	void slot_cbquiet();
-    void slot_alternateListColorsCB(bool);
-    // End FIXME
-
-	// parser slots
-	void slot_statsPlayer(PlayerListing*);
-	void slot_checkbox(int , bool );
-	//void slot_playerConnected(Player*);
-	void slot_connexionClosed();
-	void slot_msgBox(const QString&);
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
 	void saveSettings();
 
 private:
-    // FIXME: this should be in a separate class that handles the server connection widget
-	void setupConnection(void);
-	int closeConnection(bool error = false);
-	
-	void cleanupServerData(void);
-    // online time
-    int	onlineCount;
-    bool	youhavemsg;
-    bool	playerListEmpty;
-//	bool    gamesListEmpty;
-    bool	autoAwayMessage;
-    int 	mainServerTimer;
-    // cmd_xx get current cmd number, and, if higher than last, cmd is valid,
-    //    else cmd is from history list
-    int	cmd_count;
-    bool	cmd_valid;
-
-    // telnet ready
-    bool	tn_ready;
-    bool	tn_wait_for_tn_ready;
-    HostList hostlist;
-    LoginDialog * logindialog;
-    NetworkConnection * connection;
-    ServerListStorage * serverliststorage;
-    QMenu 		*seekMenu;
-    QList<Talk*>	talkList;
-    QList<GameDialog*> matchList;
-    QList<const RoomListing *> roomList;
-    QList<const ChannelListing *> channelList;
-    int 	seekButtonTimer;
-
-    //players table
-    void showOpen(bool show);
-    void setColumnsForExtUserInfo();
-    QString rkToKey(QString txt, bool integer=FALSE);
-    QString rkMax, rkMin;
-
-    friend class Room;	//FIXME awkward
-    // End FIXME
-
 	bool selectFile(const QModelIndex &);
 	
-	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
 	QString SGFloaded, fileLoaded;
 	GameData * GameLoaded;
 	Sound *connectSound, *gameSound;
 
-	QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 	void initStatusBar();
 	void displayGame(DisplayBoard *);
 
     QList<BoardWindow *> boardWindowList;
 	QString currentWorkingDir;
-
-	// timing aids
-	void 		timerEvent(QTimerEvent*);
 };
 
 #endif

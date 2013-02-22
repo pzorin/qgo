@@ -75,7 +75,7 @@ void MainWindow::slot_languageChanged(int)
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		if(closeConnection() < 0)
+        if(ui.connectionWidget->closeConnection() < 0)
 			goto lc_no_close;
 		if(checkForOpenBoards() < 0)
 			goto lc_no_close;
@@ -217,16 +217,16 @@ void MainWindow::saveSettings()
 	
 	//saves hosts list
 	settings.beginWriteArray("HOSTS");
-	for (int i = 0; i < hostlist.size(); ++i) 
+    for (int i = 0; i < ui.connectionWidget->hostlist->size(); ++i)
 	{
 		settings.setArrayIndex(i);
-		settings.setValue("server", hostlist.at(i)->host());
-		settings.setValue("loginName", hostlist.at(i)->loginName());
-		settings.setValue("password", hostlist.at(i)->password());
+        settings.setValue("server", ui.connectionWidget->hostlist->at(i)->host());
+        settings.setValue("loginName", ui.connectionWidget->hostlist->at(i)->loginName());
+        settings.setValue("password", ui.connectionWidget->hostlist->at(i)->password());
 	}
 	settings.endArray();
 
-    settings.setValue("ACCOUNT", ui.serverComboBox->currentIndex());
+    //settings.setValue("ACCOUNT", ui.connectionWidget->ui->serverComboBox->currentIndex());
 
 	//server games default values
 	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
@@ -312,10 +312,10 @@ void MainWindow::loadSettings()
 	ui.observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
 	bool b = (settings.value("ALTERNATELISTCOLORS") == 1);
 	ui.alternateListColorsCB->setChecked(b);
-	slot_alternateListColorsCB(b);
+    ui.connectionWidget->slot_alternateListColorsCB(b);
 	
 	//server list
-	hostlist.clear();
+    ui.connectionWidget->hostlist->clear();
     //ui.serverComboBox->clear();
 	Host *h;
 	int size = settings.beginReadArray("HOSTS");
@@ -325,11 +325,11 @@ void MainWindow::loadSettings()
 		h = new Host(settings.value("server").toString(),
 				settings.value("loginName").toString(),
 				settings.value("password").toString());
-		hostlist.append(h);
+        ui.connectionWidget->hostlist->append(h);
 	}
  	settings.endArray();
 
-    ui.serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
+    //ui.connectionWidget->ui->serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
 
 
 	//server games default values

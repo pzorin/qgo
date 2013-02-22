@@ -73,7 +73,7 @@ Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connec
 	 * a talk dialog through the room which also, at that time, might request
 	 * stats from the network connection.  Then the talk dialog here notifies
 	 * the mainwindow to add it to the list of talk dialogs */
-	mainwindow->talkOpened(this);
+    connectionWidget->talkOpened(this);
 }
 
 Talk::~Talk()

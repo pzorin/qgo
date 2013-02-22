@@ -242,6 +242,7 @@ struct _preferences
  * used in weird places, so we'll make them global */
 extern _preferences preferences;
 extern class MainWindow * mainwindow;
+extern class ConnectionWidget * connectionWidget;
 
 #ifdef Q_WS_WIN
 extern QString applicationPath;

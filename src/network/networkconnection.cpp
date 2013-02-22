@@ -31,7 +31,7 @@
 #include "room.h"
 #include "dispatchregistries.h"
 #include "playergamelistings.h"
-#include "mainwindow.h"			//don't like so much
+#include "connectionwidget.h"			//don't like so much
 #include "matchnegotiationstate.h"
 
 #define FRIENDWATCH_NOTIFY_DEFAULT	1
@@ -188,7 +188,7 @@ void NetworkConnection::writeZeroPaddedString(char * dst, const QString & src, i
 
 class ServerListStorage & NetworkConnection::getServerListStorage(void)
 {
-	return mainwindow->getServerListStorage(); 
+    return connectionWidget->getServerListStorage();
 }
 
 int NetworkConnection::checkForOpenBoards(void)
@@ -528,26 +528,26 @@ void NetworkConnection::onAuthenticationNegotiated(void)
 void NetworkConnection::onReady(void)
 {
 	QSettings settings;
-	
+    // FIXME should happen in the widget class
 	if(settings.value("LOOKING_FOR_GAMES").toBool())
 	{
 		sendToggle("looking", true);
-        mainwindow->getUi()->lookingCheckBox->setChecked(true);
+        //connectionWidget->getUi()->lookingCheckBox->setChecked(true);
 	}
 	else
 	{
 		sendToggle("looking", false);
-        mainwindow->getUi()->lookingCheckBox->setChecked(false);
+        //connectionWidget->getUi()->lookingCheckBox->setChecked(false);
 	}
 	if(settings.value("OPEN_FOR_GAMES").toBool())
 	{
 		sendToggle("open", true);
-        mainwindow->getUi()->openCheckBox->setChecked(true);
+        //connectionWidget->getUi()->openCheckBox->setChecked(true);
 	}
 	else
 	{
 		sendToggle("open", false);
-        mainwindow->getUi()->openCheckBox->setChecked(false);
+        //connectionWidget->getUi()->openCheckBox->setChecked(false);
 	}
 }
 
@@ -644,8 +644,8 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	
 	/* FIXME, we need to also notify the board dispatches, etc., not just ignore it, it should close everything and prevent
 	 * those board window, do you want to resign messages */
-	if(mainwindow)	//mainwindow can ignore if loginDialog is open
-		mainwindow->onConnectionError();
+    if(connectionWidget)	//mainwindow can ignore if loginDialog is open
+        connectionWidget->onConnectionError();
 }
 
 void NetworkConnection::setupRoomAndConsole(void)
@@ -818,44 +818,44 @@ void NetworkConnection::sendConsoleText(const char * text)
   * the subconnection FIXME */
 void NetworkConnection::recvRoomListing(class RoomListing * r)
 { 
-	if(mainwindow) 
-		mainwindow->recvRoomListing(*r, true);
+    if(connectionWidget)
+        connectionWidget->recvRoomListing(*r, true);
 	else
 		delete r;
 }
 
 void NetworkConnection::recvChannelListing(class ChannelListing * r)
 { 
-	if(mainwindow) 
-		mainwindow->recvChannelListing(*r, true);
+    if(connectionWidget)
+        connectionWidget->recvChannelListing(*r, true);
 	else
 		delete r;
 }
 
 void NetworkConnection::changeChannel(const QString & s)
 {
-	if(mainwindow) 
-		mainwindow->changeChannel(s);
+    if(connectionWidget)
+        connectionWidget->changeChannel(s);
 }
 				
 void NetworkConnection::recvSeekCondition(class SeekCondition * s)
 {
-	if(mainwindow)
-		mainwindow->recvSeekCondition(s);
+    if(connectionWidget)
+        connectionWidget->recvSeekCondition(s);
 	else
 		delete s;
 }
 
 void NetworkConnection::recvSeekCancel(void)
 {
-	if(mainwindow)
-		mainwindow->recvSeekCancel();
+    if(connectionWidget)
+        connectionWidget->recvSeekCancel();
 }
 
 void NetworkConnection::recvSeekPlayer(QString player, QString condition)
 {
-	if(mainwindow)
-		mainwindow->recvSeekPlayer(player, condition);
+    if(connectionWidget)
+        connectionWidget->recvSeekPlayer(player, condition);
 }
 
 /* FIXME These are really more like netdispatch type functions, but the registries

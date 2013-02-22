@@ -38,12 +38,12 @@ ConsoleDispatch::~ConsoleDispatch()
 
 void ConsoleDispatch::recvText(const char * text)
 {
-	mainwindow->slot_message(text);	
+    connectionWidget->slot_message(text);
 }
 
 void ConsoleDispatch::recvText(QString text)
 {
-	mainwindow->slot_message(text);	
+    connectionWidget->slot_message(text);
 }
 
 /* This is going to be a problem.  The \r\n is for IGS, but if
