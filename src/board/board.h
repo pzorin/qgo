@@ -70,8 +70,6 @@ signals:
 
 
 protected:
-	bool isDisplayBoard;
-    bool showCoords;
 	void calculateSize();
 	void drawBackground();
 	void initGatter();
@@ -85,13 +83,16 @@ protected:
 	QList<Mark*> *marks;
 	QList<Stone*> *ghosts;
 	QList<QGraphicsSimpleTextItem*> *hCoords1, *hCoords2 , *vCoords1,*vCoords2 ;
+    // Accessed by DisplayBoard:
+    bool isDisplayBoard;
+    ImageHandler *imageHandler;
+    bool showCoords;
 
 private:
 
 	QGraphicsScene *canvas;
 	QGraphicsRectItem *table;
 	Gatter *gatter;
-	ImageHandler *imageHandler;
 //	GamePhase gamePhase;
 
 	int board_size, offset, offsetX, offsetY, square_size, board_pixel_size;

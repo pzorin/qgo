@@ -47,8 +47,8 @@ public:
 	ImageHandler();
 	~ImageHandler();
 	
-	void init(int size, bool isDisplay = FALSE);
-	void rescale(int size);
+    void setDisplay(bool isDisplay = FALSE);
+    void setSquareSize(int size);
 	static QPixmap *getBoardPixmap(QString ) ;
 	static QPixmap *getTablePixmap(QString ) ;
 #ifdef DONTREDRAWSTONES

@@ -110,8 +110,8 @@ Gatter::~Gatter()
 	VGatter.clear();	
 	HGatter.clear();
 
+    qDeleteAll(hoshisList);
 	hoshisList.clear();
-
 }
 
 

@@ -56,17 +56,21 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
     showCoords = true;//TODO setting->readBoolEntry("BOARD_COORDS");
     showSGFCoords = false;//TODO setting->readBoolEntry("SGF_BOARD_COORDS");
     //antiClicko = setting->readBoolEntry("ANTICLICKO");
-    board_size = 19;
 
     curX = curY = -1;
     downX = downY = -1;
 
-	vCoords1 = NULL;
 	coordType = uninit;
     marks = new QList<Mark*>;
     stones = new QHash<int,Stone *>();
     ghosts = new QList<Stone*>;
     lastMoveMark = NULL;
+    gatter = NULL;
+
+    vCoords1 = new QList<QGraphicsSimpleTextItem*>;
+    hCoords1 = new QList<QGraphicsSimpleTextItem*>;
+    vCoords2 = new QList<QGraphicsSimpleTextItem*>;
+    hCoords2 = new QList<QGraphicsSimpleTextItem*>;
 
     imageHandler = new ImageHandler();
     Q_CHECK_PTR(imageHandler);
@@ -83,14 +87,17 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
     //setRenderHints(QPainter::SmoothPixmapTransform);
     setScene(canvas);
     viewport()->setMouseTracking(true);
+
+    init(DEFAULT_BOARD_SIZE);
+
+    // Init the ghost cursor stone
+    cursor = cursorIdle;
+    curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
+    curStone->setZValue(4);
+    curStone->hide();
+    showCursor = FALSE;
+
     setUpdatesEnabled(true);
-
-    vCoords1 = new QList<QGraphicsSimpleTextItem*>;
-    hCoords1 = new QList<QGraphicsSimpleTextItem*>;
-    vCoords2 = new QList<QGraphicsSimpleTextItem*>;
-    hCoords2 = new QList<QGraphicsSimpleTextItem*>;
-
-    gatter = new Gatter(canvas, board_size);
 }
 
 Board::~Board()
@@ -113,21 +120,12 @@ Board::~Board()
 
 void Board::init(int size)
 {
-	board_size = size;//DEFAULT_BOARD_SIZE;
-	
-	// Init the gatter size and the imagehandler pixmaps
-	calculateSize();
-
-	imageHandler->init(square_size, isDisplayBoard);
-
-	// Init the ghost cursor stone
-	cursor = cursorIdle;
-	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
-	curStone->setZValue(4);
-	curStone->hide();
-	showCursor = FALSE;
-
-	setupCoords();
+    board_size = size;
+    if (gatter != NULL)
+        delete gatter;
+    gatter = new Gatter(canvas, board_size);
+    setupCoords();
+    resizeBoard();
 }
 
 void Board::setupCoords(void)
@@ -332,7 +330,7 @@ void Board::resizeBoard()
 	calculateSize();
 
 	// Rescale the pixmaps in the ImageHandler
-	imageHandler->rescale(square_size);
+    imageHandler->setSquareSize(square_size);
 
 	// Delete gatter lines and update stones positions
 	QList<QGraphicsItem *> list = canvas->items();
@@ -529,7 +527,8 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 			stone = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,true);
 			Q_CHECK_PTR(stone);
 			
-			stone->setPos(offsetX + square_size * (x-1.5) ,offsetY + square_size * (y-1.5));			
+            stone->setPos(offsetX + square_size * (x - 1) - stone->pixmap().width()/2,
+                offsetY + square_size * (y - 1) - stone->pixmap().height()/2 );
 
 			stones->insert(coordsToKey(x,y) , stone);
 			modified = true;

@@ -92,14 +92,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 		ui.dirView_1->expand(ui.dirView_1->currentIndex());
 	if (model->isDir(ui.dirView_2->currentIndex()))
 		ui.dirView_2->expand(ui.dirView_2->currentIndex());
-	
-	//init the small board display
-	ui.displayBoard->init(19);
-	ui.displayBoard2->init(19);
-	// Make preview boards aware of their size
-    ui.displayBoard->resizeBoard();
-    ui.displayBoard2->resizeBoard();
-//	ui.displayBoard->setShowCoords(FALSE);
 
 	// connecting the Go server tab buttons and signals
     connect( ui.actionConnect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );

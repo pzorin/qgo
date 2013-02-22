@@ -31,21 +31,19 @@
 struct _preferences preferences;
 MainWindow * mainwindow = 0;
 
-QApplication * appPtr;
 QTranslator * translatorPtr;
-void installTranslator(enum Language);
+void installTranslator(enum Language, QApplication *);
 
 int main(int argc, char *argv[])
 {
 	Q_INIT_RESOURCE(application);
-	QApplication app(argc, argv);
+    QApplication * app = new QApplication(argc, argv);
 	QTranslator translator;
 
-	QCoreApplication::setOrganizationName("qGo");
-	QCoreApplication::setApplicationName("qGo");
+    app->setOrganizationName("qGo");
+    app->setApplicationName("qGo");
 
-	appPtr = &app;
-	translatorPtr = &translator;
+    translatorPtr = &translator;
 	
 	startqGo();
 
@@ -63,7 +61,7 @@ int main(int argc, char *argv[])
 
 	srand(time(NULL));
 
-	return app.exec();
+    return app->exec();
 }
 
 void installTranslator(enum Language l)
@@ -109,7 +107,7 @@ void installTranslator(enum Language l)
      			translatorPtr->load(QString(TRANSLATIONS_PATH_PREFIX"qgo_") + locale);
 			return;
 	}
-	appPtr->installTranslator(translatorPtr);
+    QCoreApplication::instance()->installTranslator(translatorPtr);
 }
 
 void startqGo(void)
@@ -117,7 +115,7 @@ void startqGo(void)
 	QSettings settings;
 	bool restarting = false;
 
-	installTranslator((enum Language)settings.value("LANGUAGE").toInt());		//temporary place for this
+    installTranslator((enum Language)settings.value("LANGUAGE").toInt());		//temporary place for this
 	if(mainwindow)
 	{
 		restarting = true;

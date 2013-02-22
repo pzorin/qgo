@@ -27,14 +27,12 @@
 
 #include <QtGui>
 
-/*
- * This initialises everything on the board : background, gatter, cursor, etc ....
- */
 DisplayBoard::DisplayBoard(QWidget *parent, QGraphicsScene *c)
 : Board(parent,c)
 {
     isDisplayBoard = true;
     showCoords = false;
+    imageHandler->setDisplay(true);
 }
 
 DisplayBoard::~DisplayBoard()
