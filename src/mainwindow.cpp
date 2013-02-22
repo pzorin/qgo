@@ -208,6 +208,16 @@ void MainWindow::initStatusBar()
 
 }
 
+void MainWindow::setGameCountStat(int count)
+{
+    statusGames->setText(QVariant(count).toString().prepend(" G: "));
+}
+
+void MainWindow::setPlayerCountStat(int count)
+{
+    statusUsers->setText(QVariant(count).toString().prepend(" P: "));
+}
+
 bool MainWindow::loadSGF(QString fileName)
 {
 	fileLoaded = fileName.toLatin1().constData();

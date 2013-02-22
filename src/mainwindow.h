@@ -55,7 +55,7 @@ public:
 	void removeBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
 
-    Ui::MainWindow ui; // Used at weird places, FIXME
+    // Used at weird places, FIXME
     QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 public slots:
 	void slot_expanded(const QModelIndex & i);
@@ -80,12 +80,17 @@ public slots:
 	void slot_newComputer_HandicapChange(int);
     void slot_languageChanged(int);
 
+    void setGameCountStat(int);
+    void setPlayerCountStat(int);
+
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
 	void saveSettings();
 
 private:
+    Ui::MainWindow ui;
+
 	bool selectFile(const QModelIndex &);
 	
 	QDirModel *model;

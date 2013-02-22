@@ -14,6 +14,7 @@
 
 #include "network/serverliststorage.h"
 
+
 ConnectionWidget::ConnectionWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConnectionWidget)
@@ -99,6 +100,36 @@ void ConnectionWidget::slot_cmdactivated(const QString &cmd)
     {
         connection->sendConsoleText(cmd.toLatin1().constData());
         ui->commandLineComboBox->clearEditText();
+    }
+}
+
+void ConnectionWidget::setNetworkConnection(NetworkConnection * conn)
+{
+    if (connection != NULL)
+        connection->disconnect(this);
+    connection = conn;
+    if (connection != NULL)
+        connect(connection,SIGNAL(ready()),SLOT(loadConnectionSettings()));
+}
+
+void ConnectionWidget::loadConnectionSettings(void)
+{
+    QSettings settings;
+    const bool looking = settings.value("LOOKING_FOR_GAMES").toBool();
+    connectionWidget->getUi()->lookingCheckBox->setChecked(looking);
+
+    const bool open = settings.value("OPEN_FOR_GAMES").toBool();
+    connectionWidget->getUi()->openCheckBox->setChecked(open);
+
+    if (connection != NULL)
+    {
+        connection->sendToggle("looking", looking);
+        connection->sendToggle("open", open);
+
+        // FIXME: this connection should probably be done somewhere else
+        // Note that pointer casting allows to omit the corresponding headers from this file, thus speeding up compilation
+        connect((QObject*)connection->getDefaultRoom(),SIGNAL(playerCountChanged(int)),(QObject*)mainwindow,SLOT(setPlayerCountStat(int)));
+        connect((QObject*)connection->getDefaultRoom(),SIGNAL(gameCountChanged(int)),(QObject*)mainwindow,SLOT(setGameCountStat(int)));
     }
 }
 

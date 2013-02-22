@@ -26,7 +26,7 @@
 #include "talk.h"
 #include "messages.h"
 #include "gamedialog.h"
-#include "../mainwindow.h"
+#include "../defines.h"
 #include "../connectionwidget.h"
 #include "playergamelistings.h"
 #include "boarddispatch.h"	//so we can remove observers
@@ -124,6 +124,7 @@ void Room::setupUI(void)
 	connect(friendsCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showFriends(int)));
 	connect(watchesCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showWatches(int)));
 	connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
+
 	editFriendsWatchesListButton->setEnabled(true);
 	whoOpenCheckBox->setEnabled(true);
 	friendsCheckBox->setEnabled(true);
@@ -228,14 +229,9 @@ void Room::setConnection(NetworkConnection * c)
 
 void Room::updateRoomStats(void)
 {
-	/* With sort, it might be better to get these from the registries? 
-	 * possible FIXME */
-	players = playerListModel->rowCount(QModelIndex());
-	games = gamesListModel->rowCount(QModelIndex());
-	
-	//qDebug("%d %d", players, games);
-	mainwindow->statusUsers->setText(" P: " + QString::number(players));
-	mainwindow->statusGames->setText(" G: " + QString::number(games));
+    // It might be better to emit these signals elsewhere FIXME
+    emit playerCountChanged(playerListModel->rowCount(QModelIndex()));
+    emit gameCountChanged(gamesListModel->rowCount(QModelIndex()));
 }
 
 //stats

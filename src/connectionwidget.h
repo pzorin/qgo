@@ -40,7 +40,7 @@ public:
     void recvChannelListing(const ChannelListing & channel, bool b);
     void changeChannel(const QString & s);
     Ui::ConnectionWidget * getUi(void) { return ui; };		//for room class... FIXME?
-    void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
+    void setNetworkConnection(NetworkConnection *);
 
     int closeConnection(bool error = false);
 
@@ -49,6 +49,7 @@ public:
     HostList * hostlist;
 
 public slots:
+    void loadConnectionSettings(void);
     void slot_connect(bool b);
     //void slot_textReceived(const QString &txt);
     void slot_message(QString, QColor = Qt::black);

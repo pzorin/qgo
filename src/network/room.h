@@ -38,7 +38,6 @@ class PlayerListModel;
 class PlayerSortProxy;
 class GamesListModel;
 class GamesSortProxy;
-class MainWindow;
 
 class Room : public QObject
 {
@@ -89,6 +88,9 @@ class Room : public QObject
 		
 		GameListing * popup_gamelisting;
 		PlayerListing * popup_playerlisting;
+signals:
+        void playerCountChanged(int value);
+        void gameCountChanged(int value);
 	private slots:
 		void slot_playersDoubleClicked(const QModelIndex &);
 		void slot_gamesDoubleClicked(const QModelIndex &);

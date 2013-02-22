@@ -217,6 +217,9 @@ class NetworkConnection : public QObject
 		void recvSeekPlayer(QString player, QString condition);
 		virtual void sendSeek(class SeekCondition *) {};
 		virtual void sendSeekCancel(void) {};
+
+    signals:
+        void ready(void);
 		
 	protected:
 		void closeConnection(bool send_disconnect = true);

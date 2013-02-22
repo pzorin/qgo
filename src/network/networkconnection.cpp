@@ -527,28 +527,7 @@ void NetworkConnection::onAuthenticationNegotiated(void)
 
 void NetworkConnection::onReady(void)
 {
-	QSettings settings;
-    // FIXME should happen in the widget class
-	if(settings.value("LOOKING_FOR_GAMES").toBool())
-	{
-		sendToggle("looking", true);
-        //connectionWidget->getUi()->lookingCheckBox->setChecked(true);
-	}
-	else
-	{
-		sendToggle("looking", false);
-        //connectionWidget->getUi()->lookingCheckBox->setChecked(false);
-	}
-	if(settings.value("OPEN_FOR_GAMES").toBool())
-	{
-		sendToggle("open", true);
-        //connectionWidget->getUi()->openCheckBox->setChecked(true);
-	}
-	else
-	{
-		sendToggle("open", false);
-        //connectionWidget->getUi()->openCheckBox->setChecked(false);
-	}
+    emit ready();
 }
 
 void NetworkConnection::OnReadyRead()
