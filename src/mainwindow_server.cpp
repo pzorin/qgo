@@ -50,7 +50,7 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 	if(connection->consoleIsChat())
 	{
 		connection->sendMsg(0, cmd);
-		ui.cb_cmdLine->clearEditText();
+        ui.commandLineComboBox->clearEditText();
 		return;
 	}
 	if (cmd.trimmed().isEmpty())
@@ -70,12 +70,12 @@ void MainWindow::slot_cmdactivated(const QString &cmd)
 		cmd2.replace(QRegExp("^[\\S]+\\s"), "");
 		connection->getConsoleDispatch()->recvText(cmd2);	 //copy back since otherwise doesn't appear
 		connection->sendConsoleText(cmd.toLatin1().constData());
-		ui.cb_cmdLine->clearEditText();
+        ui.commandLineComboBox->clearEditText();
 	}
 	else
 	{
 		connection->sendConsoleText(cmd.toLatin1().constData());
-		ui.cb_cmdLine->clearEditText();
+        ui.commandLineComboBox->clearEditText();
 	}
 }
 
@@ -89,11 +89,11 @@ void MainWindow::slot_connect(bool b)
 	{
 		if(connection)
 			return;
-		logindialog = new LoginDialog(ui.cb_connect->currentText(), &hostlist);
+        logindialog = new LoginDialog(ui.serverComboBox->currentText(), &hostlist);
 		if(logindialog->exec())
         {
-			ui.cb_connect->setEnabled(false);
-            ui.actionConnect->setToolTip(tr("Disconnect from") + " " + ui.cb_connect->currentText());
+            ui.serverComboBox->setEnabled(false);
+            ui.actionConnect->setToolTip(tr("Disconnect from") + " " + ui.serverComboBox->currentText());
 			setupConnection();
 			
 			/* FIXME shouldn't say ONLINE here but tired of it saying
@@ -136,7 +136,7 @@ void MainWindow::slot_connect(bool b)
             ui.actionConnect->blockSignals(false);
 			return;
 		}
-		ui.cb_connect->setEnabled(true);
+        ui.serverComboBox->setEnabled(true);
 		/* FIXME
 		 * this looks ugly grayed out but it shouldn't be changeable...
 		 * we should really set some text or something somewhere, or the ONLINE
@@ -155,12 +155,12 @@ void MainWindow::setupConnection(void)
 	unsigned long rs_flags = connection->getRoomStructureFlags();
 	if(rs_flags & RS_NOROOMLIST)
 	{
-		ui.RoomList->hide();
+        ui.roomComboBox->hide();
 		ui.roomsLabel->hide();
 	}
 	else if(rs_flags & RS_SHORTROOMLIST)
 	{
-		ui.RoomList->show();
+        ui.roomComboBox->show();
 		ui.roomsLabel->show();
 	}
 	else if(rs_flags & RS_LONGROOMLIST)
@@ -173,21 +173,21 @@ void MainWindow::setupConnection(void)
 	
 	if(connection->supportsServerChange())
 	{
-		ui.changeServerPB->show();
-		connect(ui.changeServerPB, SIGNAL(clicked()), SLOT(slot_changeServer()));
+        ui.changeServerButton->show();
+        connect(ui.changeServerButton, SIGNAL(clicked()), SLOT(slot_changeServer()));
 	}
 	else
 	{
-		ui.changeServerPB->hide();
+        ui.changeServerButton->hide();
 	}
 	if(connection->supportsCreateRoom())
 	{
-		ui.createRoomPB->show();
-		connect(ui.createRoomPB, SIGNAL(clicked()), SLOT(slot_createRoom()));
+        ui.createRoomButton->show();
+        connect(ui.createRoomButton, SIGNAL(clicked()), SLOT(slot_createRoom()));
 	}
 	else
 	{
-		ui.createRoomPB->hide();
+        ui.createRoomButton->hide();
 	}
 	if(connection->supportsRefreshListsButtons())
 	{
@@ -203,30 +203,30 @@ void MainWindow::setupConnection(void)
 	
 	if(connection->supportsSeek())
 	{
-		ui.toolSeek->show();
-		ui.seekHandicapList->show();
+        ui.seekToolButton->show();
+        ui.handicapComboBox->show();
 	}
 	else
 	{
-		ui.toolSeek->hide();
-		ui.seekHandicapList->hide();
+        ui.seekToolButton->hide();
+        ui.handicapComboBox->hide();
 	}
 	if(connection->supportsChannels())
 	{
 		ui.channelsLabel->show();
-		ui.channelsCB->show();
+        ui.channelComboBox->show();
 	}
 	else
 	{
 		ui.channelsLabel->hide();
-		ui.channelsCB->hide();
+        ui.channelComboBox->hide();
 	}
 
 	/* FIXME Also need away message and maybe game/player refresh */
 #ifdef FIXME	
 	// quiet mode? if yes do clear table before refresh
-	gamesListSteadyUpdate = ! ui.setQuietMode->isChecked(); 
-	playerListSteadyUpdate = ! ui.setQuietMode->isChecked(); 
+    gamesListSteadyUpdate = ! ui.quietCheckBox->isChecked();
+    playerListSteadyUpdate = ! ui.quietCheckBox->isChecked();
 
 	// enable extended user info features
 	setColumnsForExtUserInfo();
@@ -280,7 +280,7 @@ int MainWindow::closeConnection(bool error)
 	// show current Server name in status bar
 	statusServer->setText(" OFFLINE ");
 
-    ui.actionConnect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+    ui.actionConnect->setToolTip( tr("Connect with") + " " + ui.serverComboBox->currentText());
 	return 0;
 }
 
@@ -493,8 +493,8 @@ void MainWindow::prepareTables(InfoType cmd)
 //			QToolTip::add(statusChannel, tr("Current channels and users"));
 
 			//We prepare the rooms list as well here
-			while (ui.RoomList->count() > 1)
-     				ui.RoomList->removeItem(1);
+            while (ui.roomComboBox->count() > 1)
+                    ui.roomComboBox->removeItem(1);
 
 			break;
 		}
@@ -598,10 +598,10 @@ void MainWindow::recvSeekCondition(class SeekCondition * s)
 
 void MainWindow::recvSeekCancel(void)
 {	
-	ui.toolSeek->setChecked(FALSE);
-	ui.toolSeek->setMenu(seekMenu);
-//	ui.toolSeek->setPopupDelay(1);
-	ui.toolSeek->setIcon(QIcon(":/ressources/pics/not_seeking.png"));
+    ui.seekToolButton->setChecked(FALSE);
+    ui.seekToolButton->setMenu(seekMenu);
+//	ui.seekToolButton->setPopupDelay(1);
+    ui.seekToolButton->setIcon(QIcon(":/ressources/pics/not_seeking.png"));
 	killTimer(seekButtonTimer);
 	seekButtonTimer = 0;
 
@@ -655,8 +655,8 @@ void MainWindow::slot_seek(bool b)
  */
 void MainWindow::slot_seek(QAction *act)
 {
-	ui.toolSeek->setChecked(true);
-	ui.toolSeek->setMenu(NULL);
+    ui.seekToolButton->setChecked(true);
+    ui.seekToolButton->setMenu(NULL);
 
 	//childish, but we want to have an animated icon there
 	seekButtonTimer = startTimer(200);
@@ -664,7 +664,7 @@ void MainWindow::slot_seek(QAction *act)
 	SeekCondition * s = new SeekCondition();
 	s->number = act->data().toInt();
 	qDebug("preparing to send seek");
-	switch (ui.seekHandicapList->currentIndex())
+    switch (ui.handicapComboBox->currentIndex())
 	{
 		case 0 :
 			s->strength_wished = "1 1 0";
@@ -735,12 +735,11 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 	if(rf & RS_SHORTROOMLIST)
 	{
 		//do we already have the same room number in list ?
-		//if (ui.RoomList->findText(room.name.left(3), Qt::MatchStartsWith )!= -1)
+        //if (ui.roomComboBox->findText(room.name.left(3), Qt::MatchStartsWith )!= -1)
 		//	return;
 		//so far, we just create the room if it is open
 		//if(b)
-		ui.RoomList->addItem(room.name);//,  -1 );
-		//RoomList->item(RoomList->count()-1)->setSelectable(!b);	
+        ui.roomComboBox->addItem(room.name);
 	}
 	else if(rf & RS_LONGROOMLIST)
 	{
@@ -768,18 +767,18 @@ void MainWindow::recvChannelListing(const ChannelListing & channel, bool b)
 		return;		//removed channel not found
 	channelList.push_back(&channel);
 	if(channel.number == 0)
-		ui.channelsCB->addItem(channel.name);
+        ui.channelComboBox->addItem(channel.name);
 	else
-		ui.channelsCB->addItem(QString::number(channel.number) + " " + channel.name);
+        ui.channelComboBox->addItem(QString::number(channel.number) + " " + channel.name);
 }
 
 void MainWindow::changeChannel(const QString & s)
 {
-	for(int i = 0; i < ui.channelsCB->count(); i++)
+    for(int i = 0; i < ui.channelComboBox->count(); i++)
 	{
-		if(ui.channelsCB->itemText(i).contains(s))
+        if(ui.channelComboBox->itemText(i).contains(s))
 		{
-			ui.channelsCB->setCurrentIndex(i);
+            ui.channelComboBox->setCurrentIndex(i);
 			return;
 		}
 	}
@@ -1117,19 +1116,19 @@ void MainWindow::slot_checkbox(int nr, bool val)
 		// open
 		case 0:
 			//toolOpen->setOn(val); 
-			ui.setOpenMode->setChecked(val);
+            ui.openCheckBox->setChecked(val);
 			break;
 
 		// looking
 		case 1:
 			//toolLooking->setOn(val); 
-			ui.setLookingMode->setChecked(val);
+            ui.lookingCheckBox->setChecked(val);
 			break;
 
 		// quiet
 		case 2:
 			//toolQuiet->setOn(val); 
-			ui.setQuietMode->setChecked(val);
+            ui.quietCheckBox->setChecked(val);
 			break;
 
 		default:
@@ -1141,7 +1140,7 @@ void MainWindow::slot_checkbox(int nr, bool val)
 void MainWindow::slot_cbconnectChanged(int)
 {
     if(!ui.actionConnect->isChecked())
-        ui.actionConnect->setToolTip( tr("Connect with") + " " + ui.cb_connect->currentText());
+        ui.actionConnect->setToolTip( tr("Connect with") + " " + ui.serverComboBox->currentText());
 }
 
 /*
@@ -1149,7 +1148,7 @@ void MainWindow::slot_cbconnectChanged(int)
  */
 void MainWindow::slot_cblooking()
 {
-	bool val = ui.setLookingMode->isChecked(); 
+    bool val = ui.lookingCheckBox->isChecked();
 	set_sessionparameter("looking", val);
 
 	if (val)
@@ -1174,7 +1173,7 @@ void MainWindow::slot_cblooking()
  */
 void MainWindow::slot_cbopen()
 {
-	bool val = ui.setOpenMode->isChecked();
+    bool val = ui.openCheckBox->isChecked();
 	set_sessionparameter("open", val);
 	qDebug("Setting session open: %d", val);
 	if (!val)
@@ -1192,7 +1191,7 @@ void MainWindow::slot_cbopen()
  */
 void MainWindow::slot_cbquiet()
 {
-	bool val = ui.setQuietMode->isChecked();
+    bool val = ui.quietCheckBox->isChecked();
 	set_sessionparameter("quiet", val);
 
 	/* FIXME periodic list refreshes may not be necessary, set quiet true does a lot */
@@ -1231,7 +1230,7 @@ void MainWindow::timerEvent(QTimerEvent* e)
 	{	
 		imagecounter = (imagecounter+1) % 4;
 		QString ic = ":/ressources/pics/seeking" + QString::number(imagecounter + 1) +".png";
-		ui.toolSeek->setIcon(QIcon(ic));
+        ui.seekToolButton->setIcon(QIcon(ic));
 		return;
 	}
 	// else its the mainServerTimer

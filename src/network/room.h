@@ -83,7 +83,7 @@ class Room : public QObject
 		FilteredView * playerView, * gamesView;
 		QAction * refreshGamesAction, * refreshPlayersAction;
 		QPushButton * editFriendsWatchesListButton;
-		QComboBox * whoBox1, * whoBox2;
+		QComboBox * filterRank1ComboBox, * filterRank2ComboBox;
 		QCheckBox * whoOpenCheckBox, * friendsCheckBox, * watchesCheckBox;
 		NetworkConnection * connection;
 		QModelIndex popup_item;

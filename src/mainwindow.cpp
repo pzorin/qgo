@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	ui.setupUi(this);
 	//hide by default
-	ui.changeServerPB->hide();
-	ui.createRoomPB->hide();
+    ui.changeServerButton->hide();
+    ui.createRoomButton->hide();
 	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));
 	initStatusBar();
 	/* FIXME, really need a list of such things, 0s */
@@ -48,8 +48,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	logindialog = 0;
 
 	/* We need to integrate this room list with the new room code FIXME */
-	connect(ui.RoomList,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
-	connect(ui.channelsCB,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_channelListClicked(const QString &)));
+    connect(ui.roomComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
+    connect(ui.channelComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_channelListClicked(const QString &)));
 
 	GameLoaded = NULL;
 	SGFloaded = "";
@@ -59,10 +59,10 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	//creates the connection code
 	seekMenu = new QMenu();
-	ui.toolSeek->setMenu(seekMenu);
+    ui.seekToolButton->setMenu(seekMenu);
 
 	connect(seekMenu,SIGNAL(triggered(QAction*)), SLOT(slot_seek(QAction*)));		
-	connect(ui.toolSeek, SIGNAL( toggled(bool) ), SLOT( slot_seek(bool) ) );
+    connect(ui.seekToolButton, SIGNAL( toggled(bool) ), SLOT( slot_seek(bool) ) );
 
 	// filling the file view
 	QStringList filters = (QStringList() << "*.sgf" << "*.SGF");
@@ -96,8 +96,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// connecting the Go server tab buttons and signals
     connect( ui.actionConnect, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
 
-	connect( ui.cb_cmdLine, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
-//	connect( ui.cb_cmdLine, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
+    connect( ui.commandLineComboBox, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
+//	connect( ui.commandLineComboBox, SIGNAL( activated(int) ), this, SLOT( slot_cmdactivated_int(int) ) );
 
 	// connecting the new game button
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
@@ -124,10 +124,10 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	
 	// connecting the server tab buttons
-	connect(ui.cb_connect, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
-	connect( ui.setQuietMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
-	connect( ui.setOpenMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
-	connect( ui.setLookingMode, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
+    connect(ui.serverComboBox, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
+    connect( ui.quietCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
+    connect( ui.openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
+    connect( ui.lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
 	
 	connect(ui.newFile_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newFile_HandicapChange(int)));
 	connect(ui.newComputer_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newComputer_HandicapChange(int)));

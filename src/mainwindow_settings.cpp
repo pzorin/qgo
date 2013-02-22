@@ -226,7 +226,7 @@ void MainWindow::saveSettings()
 	}
 	settings.endArray();
 
-	settings.setValue("ACCOUNT", ui.cb_connect->currentIndex());
+    settings.setValue("ACCOUNT", ui.serverComboBox->currentIndex());
 
 	//server games default values
 	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
@@ -316,7 +316,7 @@ void MainWindow::loadSettings()
 	
 	//server list
 	hostlist.clear();
-	//ui.cb_connect->clear();
+    //ui.serverComboBox->clear();
 	Host *h;
 	int size = settings.beginReadArray("HOSTS");
 	for (int i = 0; i < size; ++i) 
@@ -329,7 +329,7 @@ void MainWindow::loadSettings()
 	}
  	settings.endArray();
 
-	ui.cb_connect->setCurrentIndex(settings.value("ACCOUNT").toInt());
+    ui.serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
 
 
 	//server games default values

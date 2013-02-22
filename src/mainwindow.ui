@@ -184,7 +184,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QComboBox" name="cb_connect">
+            <widget class="QComboBox" name="serverComboBox">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -232,7 +232,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="changeServerPB">
+            <widget class="QPushButton" name="changeServerButton">
              <property name="minimumSize">
               <size>
                <width>110</width>
@@ -248,7 +248,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="setOpenMode">
+            <widget class="QCheckBox" name="openCheckBox">
              <property name="minimumSize">
               <size>
                <width>140</width>
@@ -264,7 +264,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="setLookingMode">
+            <widget class="QCheckBox" name="lookingCheckBox">
              <property name="minimumSize">
               <size>
                <width>160</width>
@@ -277,7 +277,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="setQuietMode">
+            <widget class="QCheckBox" name="quietCheckBox">
              <property name="minimumSize">
               <size>
                <width>140</width>
@@ -298,7 +298,7 @@
               <number>2</number>
              </property>
              <item row="0" column="0">
-              <widget class="QToolButton" name="toolSeek">
+              <widget class="QToolButton" name="seekToolButton">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -330,7 +330,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QComboBox" name="seekHandicapList">
+              <widget class="QComboBox" name="handicapComboBox">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -386,7 +386,7 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QComboBox" name="RoomList">
+              <widget class="QComboBox" name="roomComboBox">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -409,7 +409,7 @@
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QComboBox" name="channelsCB">
+              <widget class="QComboBox" name="channelComboBox">
                <property name="enabled">
                 <bool>true</bool>
                </property>
@@ -519,7 +519,7 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -527,7 +527,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_6">
             <item row="1" column="4">
-             <widget class="QCheckBox" name="watchesCheck">
+             <widget class="QCheckBox" name="filterWatchesCheckBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -540,7 +540,7 @@
              </widget>
             </item>
             <item row="1" column="5">
-             <widget class="QPushButton" name="editFriendsWatchesPB">
+             <widget class="QPushButton" name="editFriendsWatchesButton">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -553,14 +553,14 @@
              </widget>
             </item>
             <item row="1" column="6">
-             <widget class="QPushButton" name="createRoomPB">
+             <widget class="QPushButton" name="createRoomButton">
               <property name="text">
                <string>Create Room</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QComboBox" name="whoBox1">
+             <widget class="QComboBox" name="filterRank1ComboBox">
               <property name="toolTip">
                <string>Only show players within these ranks</string>
               </property>
@@ -707,7 +707,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="whoBox2">
+             <widget class="QComboBox" name="filterRank2ComboBox">
               <property name="toolTip">
                <string>Only show players within these ranks</string>
               </property>
@@ -854,7 +854,7 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QCheckBox" name="whoOpenCheck">
+             <widget class="QCheckBox" name="filterOpenCheckBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -867,7 +867,7 @@
              </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QCheckBox" name="friendsCheck">
+             <widget class="QCheckBox" name="filterFriendsCheckBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -956,7 +956,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="cb_cmdLine">
+             <widget class="QComboBox" name="commandLineComboBox">
               <property name="editable">
                <bool>true</bool>
               </property>
@@ -2892,12 +2892,12 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>87</y>
+     <x>87</x>
+     <y>122</y>
     </hint>
     <hint type="destinationlabel">
-     <x>897</x>
-     <y>12</y>
+     <x>989</x>
+     <y>47</y>
     </hint>
    </hints>
   </connection>

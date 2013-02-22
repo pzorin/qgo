@@ -532,22 +532,22 @@ void NetworkConnection::onReady(void)
 	if(settings.value("LOOKING_FOR_GAMES").toBool())
 	{
 		sendToggle("looking", true);
-		mainwindow->getUi()->setLookingMode->setChecked(true);
+        mainwindow->getUi()->lookingCheckBox->setChecked(true);
 	}
 	else
 	{
 		sendToggle("looking", false);
-		mainwindow->getUi()->setLookingMode->setChecked(false);
+        mainwindow->getUi()->lookingCheckBox->setChecked(false);
 	}
 	if(settings.value("OPEN_FOR_GAMES").toBool())
 	{
 		sendToggle("open", true);
-		mainwindow->getUi()->setOpenMode->setChecked(true);
+        mainwindow->getUi()->openCheckBox->setChecked(true);
 	}
 	else
 	{
 		sendToggle("open", false);
-		mainwindow->getUi()->setOpenMode->setChecked(false);
+        mainwindow->getUi()->openCheckBox->setChecked(false);
 	}
 }
 

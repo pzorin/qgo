@@ -38,12 +38,12 @@ Room::Room()
 	gamesView = mainwindow->getUi()->gamesView;
 	refreshPlayersAction = mainwindow->getUi()->actionRefreshPlayers;
 	refreshGamesAction = mainwindow->getUi()->actionRefreshGames;
-	whoBox1 = mainwindow->getUi()->whoBox1;
-	whoBox2 = mainwindow->getUi()->whoBox2;
-	whoOpenCheckBox = mainwindow->getUi()->whoOpenCheck;
-	friendsCheckBox = mainwindow->getUi()->friendsCheck;
-	watchesCheckBox = mainwindow->getUi()->watchesCheck;
-	editFriendsWatchesListButton = mainwindow->getUi()->editFriendsWatchesPB;
+    filterRank1ComboBox = mainwindow->getUi()->filterRank1ComboBox;
+    filterRank2ComboBox = mainwindow->getUi()->filterRank2ComboBox;
+    whoOpenCheckBox = mainwindow->getUi()->filterOpenCheckBox;
+    friendsCheckBox = mainwindow->getUi()->filterFriendsCheckBox;
+    watchesCheckBox = mainwindow->getUi()->filterWatchesCheckBox;
+    editFriendsWatchesListButton = mainwindow->getUi()->editFriendsWatchesButton;
 	/* Normally the dispatch and the UI are created at the sametime
 	* by the connection or dispatch code.  In this case,
 	* the UI already exists and is being passed straight in here,
@@ -146,8 +146,8 @@ void Room::setupUI(void)
 	ui.ListView_players->setColumnWidth ( 10, 50 );
 //	ui.ListView_players->setColumnWidth ( 11, 25 );*/
 
-	whoBox1->setCurrentIndex(0);
-	whoBox2->setCurrentIndex(0);
+    filterRank1ComboBox->setCurrentIndex(0);
+    filterRank2ComboBox->setCurrentIndex(0);
 	/* Maybe also a "clicked" for something? */
 	connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClicked(const QModelIndex &)));
 	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
@@ -155,8 +155,8 @@ void Room::setupUI(void)
 	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
 	connect(refreshPlayersAction, SIGNAL(activated()), SLOT(slot_refreshPlayers()));
 	connect(refreshGamesAction, SIGNAL(activated()), SLOT(slot_refreshGames()));
-	connect(whoBox1, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
-	connect(whoBox2, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
+    connect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
+    connect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
 	connect(whoOpenCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showOpen(int)));
 	connect(friendsCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showFriends(int)));
 	connect(watchesCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showWatches(int)));
@@ -178,9 +178,7 @@ Room::~Room()
 	/* FIXME: Should probably be part of something else this P G stuff */
 	mainwindow->statusUsers->setText(" P: 0");
 	mainwindow->statusGames->setText(" G: 0");
-	//mainwindow->ui.changeServerPB->hide();	//done in mainwindow_server
-	//mainwindow->ui.createRoomPB->hide();
-	
+
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
 	qDebug("Deconstructing room");
@@ -192,8 +190,8 @@ Room::~Room()
 	delete playerListModel;
 	delete gamesListModel;
 	
-	disconnect(whoBox1, SIGNAL(currentIndexChanged(int)), 0, 0);
-	disconnect(whoBox2, SIGNAL(currentIndexChanged(int)), 0, 0);
+    disconnect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), 0, 0);
+    disconnect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
 	disconnect(whoOpenCheckBox, SIGNAL(stateChanged(int)), 0, 0);
 	disconnect(friendsCheckBox, SIGNAL(stateChanged(int)), 0, 0);
@@ -201,10 +199,10 @@ Room::~Room()
 	editFriendsWatchesListButton->setDisabled(true);
 	
 	QSettings settings;
-	settings.setValue("LOWRANKFILTER", whoBox1->currentIndex());
-	settings.setValue("HIGHRANKFILTER", whoBox2->currentIndex());
-	whoBox1->setCurrentIndex(0);
-	whoBox2->setCurrentIndex(0);
+    settings.setValue("LOWRANKFILTER", filterRank1ComboBox->currentIndex());
+    settings.setValue("HIGHRANKFILTER", filterRank2ComboBox->currentIndex());
+    filterRank1ComboBox->setCurrentIndex(0);
+    filterRank2ComboBox->setCurrentIndex(0);
 	
 	settings.setValue("OPENFILTER", whoOpenCheckBox->isChecked());
 	settings.setValue("FRIENDSFILTER", friendsCheckBox->isChecked());
@@ -256,8 +254,8 @@ void Room::setConnection(NetworkConnection * c)
 	QVariant var = settings.value("LOWRANKFILTER");
 	if(var != QVariant())
 	{
-		whoBox1->setCurrentIndex(var.toInt());
-		whoBox2->setCurrentIndex(settings.value("HIGHRANKFILTER").toInt());
+        filterRank1ComboBox->setCurrentIndex(var.toInt());
+        filterRank2ComboBox->setCurrentIndex(settings.value("HIGHRANKFILTER").toInt());
 	}
 	
 	whoOpenCheckBox->setChecked(settings.value("OPENFILTER").toBool());
@@ -473,55 +471,55 @@ void Room::slot_setRankSpreadView(void)
 	QString rkMin, rkMax;
 	QString r1,r2;
 
-	if ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() == 0))
+    if ((filterRank1ComboBox->currentIndex() == 0) && (filterRank2ComboBox->currentIndex() == 0))
 	{
 		rkMin = "NR";
 		rkMax = "9p";
 	}
 
-	else if ( ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() == 1)) ||
-		((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() == 0))  ||
-		((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() ==1)) )
+    else if ( ((filterRank1ComboBox->currentIndex() == 0) && (filterRank2ComboBox->currentIndex() == 1)) ||
+        ((filterRank1ComboBox->currentIndex() == 1) && (filterRank2ComboBox->currentIndex() == 0))  ||
+        ((filterRank1ComboBox->currentIndex() == 1) && (filterRank2ComboBox->currentIndex() ==1)) )
 	{
 		rkMin = "1p";
 		rkMax = "9p";
 	}	
 
-	else if ((whoBox1->currentIndex() == 0) && (whoBox2->currentIndex() > 1))
+    else if ((filterRank1ComboBox->currentIndex() == 0) && (filterRank2ComboBox->currentIndex() > 1))
 	{
-		rkMin = whoBox2->currentText();
-		rkMax = whoBox2->currentText();
+        rkMin = filterRank2ComboBox->currentText();
+        rkMax = filterRank2ComboBox->currentText();
 	}	
 
 
-	else if ((whoBox1->currentIndex() > 1) && (whoBox2->currentIndex() == 0))
+    else if ((filterRank1ComboBox->currentIndex() > 1) && (filterRank2ComboBox->currentIndex() == 0))
 	{
-		rkMin = whoBox1->currentText();
-		rkMax = whoBox1->currentText();
+        rkMin = filterRank1ComboBox->currentText();
+        rkMax = filterRank1ComboBox->currentText();
 	}	
 
-	else if ((whoBox1->currentIndex() > 1) && (whoBox2->currentIndex() == 1))
+    else if ((filterRank1ComboBox->currentIndex() > 1) && (filterRank2ComboBox->currentIndex() == 1))
 	{
-		rkMin = whoBox1->currentText();
+        rkMin = filterRank1ComboBox->currentText();
 		rkMax = "9p";
 	}	
 
-	else if ((whoBox1->currentIndex() == 1) && (whoBox2->currentIndex() > 1))
+    else if ((filterRank1ComboBox->currentIndex() == 1) && (filterRank2ComboBox->currentIndex() > 1))
 	{
-		rkMin = whoBox2->currentText();
+        rkMin = filterRank2ComboBox->currentText();
 		rkMax = "9p";
 	}
 
 
-	else if ((whoBox2->currentIndex() >= whoBox1->currentIndex() ))
+    else if ((filterRank2ComboBox->currentIndex() >= filterRank1ComboBox->currentIndex() ))
 	{
-		rkMin = whoBox2->currentText();
-		rkMax = whoBox1->currentText();
+        rkMin = filterRank2ComboBox->currentText();
+        rkMax = filterRank1ComboBox->currentText();
 	} 
 	else 
 	{
-		rkMin = whoBox1->currentText();
-		rkMax = whoBox2->currentText();
+        rkMin = filterRank1ComboBox->currentText();
+        rkMax = filterRank2ComboBox->currentText();
 	} 
 
 	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(connection->rankToScore(rkMin), connection->rankToScore(rkMax));
