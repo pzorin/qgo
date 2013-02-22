@@ -33,7 +33,8 @@
 DisplayBoard::DisplayBoard(QWidget *parent, QGraphicsScene *c)
 : Board(parent,c)
 {
-	isDisplayBoard = TRUE;
+    isDisplayBoard = true;
+    showCoords = false;
 }
 
 DisplayBoard::~DisplayBoard()

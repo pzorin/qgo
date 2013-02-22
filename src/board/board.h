@@ -44,11 +44,10 @@ public:
 	Board(QWidget *parent=0, QGraphicsScene *c=0 );
 	~Board();
 	void clearData();
-	void changeSize();
-	void init(int size);
+    void init(int size);
 	void setCoordType(CoordType c) { coordType = c; };
 	void setShowCoords(bool b);
-	void resizeBoard(int w, int h);
+    void resizeBoard();
 
 	void removeGhosts();
 	void setVarGhost(StoneColor c, int x, int y);
@@ -72,6 +71,7 @@ signals:
 
 protected:
 	bool isDisplayBoard;
+    bool showCoords;
 	void calculateSize();
 	void drawBackground();
 	void initGatter();
@@ -95,7 +95,6 @@ private:
 //	GamePhase gamePhase;
 
 	int board_size, offset, offsetX, offsetY, square_size, board_pixel_size;
-	bool showCoords;
 	bool showSGFCoords;
 	bool showCursor;
 	bool antiClicko;

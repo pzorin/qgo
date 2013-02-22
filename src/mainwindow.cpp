@@ -97,8 +97,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.displayBoard->init(19);
 	ui.displayBoard2->init(19);
 	// Make preview boards aware of their size
-	ui.displayBoard->changeSize();
-	ui.displayBoard2->changeSize();
+    ui.displayBoard->resizeBoard();
+    ui.displayBoard2->resizeBoard();
 //	ui.displayBoard->setShowCoords(FALSE);
 
 	// connecting the Go server tab buttons and signals

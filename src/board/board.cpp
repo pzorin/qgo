@@ -47,77 +47,61 @@ class ImageHandler;
 Board::Board(QWidget *parent, QGraphicsScene *c)
 : QGraphicsView(c,parent)
 {
+    QSettings settings;
+
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	isDisplayBoard = FALSE;
-	marks = NULL;
+    isDisplayBoard = false;
+    lockResize =  false;
+    showCoords = true;//TODO setting->readBoolEntry("BOARD_COORDS");
+    showSGFCoords = false;//TODO setting->readBoolEntry("SGF_BOARD_COORDS");
+    //antiClicko = setting->readBoolEntry("ANTICLICKO");
+
+    curX = curY = -1;
+    downX = downY = -1;
+
 	vCoords1 = NULL;
 	coordType = uninit;
+    marks = new QList<Mark*>;
+    stones = new QHash<int,Stone *>();
+    ghosts = new QList<Stone*>;
+    lastMoveMark = NULL;
+
+    imageHandler = new ImageHandler();
+    Q_CHECK_PTR(imageHandler);
+
+    // Init the canvas
+    canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
+    Q_CHECK_PTR(canvas);
+    // Set background texture
+    canvas->setBackgroundBrush(QBrush(*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString()))));
+    table = canvas->addRect(QRectF(),
+                QPen(Qt::NoPen),
+                QBrush(* (ImageHandler::getBoardPixmap(settings.value("SKIN").toString()))));
+
+    //setRenderHints(QPainter::SmoothPixmapTransform);
+    setScene(canvas);
+    viewport()->setMouseTracking(true);
+    setUpdatesEnabled(true);
 }
 
 void Board::init(int size)
 {
-	QSettings settings;
-//	setRenderHints(QPainter::SmoothPixmapTransform);
-//	gamePhase = phaseInit;
-
-	viewport()->setMouseTracking(TRUE);
-	setUpdatesEnabled ( TRUE );
-	
-//	isModified = false;
-	lockResize =  false ;
 	board_size = size;//DEFAULT_BOARD_SIZE;
-	showCoords = !isDisplayBoard;//true;//TODO setting->readBoolEntry("BOARD_COORDS");
-	showSGFCoords = false;//TODO setting->readBoolEntry("SGF_BOARD_COORDS");
-/*	antiClicko = setting->readBoolEntry("ANTICLICKO");
-	
-*/	
-	// Create an ImageHandler instance.
-	imageHandler = new ImageHandler();
-	Q_CHECK_PTR(imageHandler);
-	
-	// Init the canvas
-	canvas = new QGraphicsScene(0,0, BOARD_X, BOARD_Y,this);
-	Q_CHECK_PTR(canvas);
-	// Set background texture
-	canvas->setBackgroundBrush(QBrush(*(ImageHandler::getTablePixmap(  settings.value("SKIN_TABLE").toString()))));
-	table = canvas->addRect(QRectF(),
-				QPen(Qt::NoPen),
-				QBrush(* (ImageHandler::getBoardPixmap(settings.value("SKIN").toString()))));
 
-	setScene(canvas);
 	gatter = new Gatter(canvas, board_size);
-	
-	// Init data storage for marks and ghosts
-	marks = new QList<Mark*>;
-//	marks->setAutoDelete(TRUE);
-	lastMoveMark = NULL;
-	
-	ghosts = new QList<Stone*>;
 	
 	// Init the gatter size and the imagehandler pixmaps
 	calculateSize();
 
 	imageHandler->init(square_size, isDisplayBoard);
-	
-	curX = curY = -1;
-	downX = downY = -1;
-//	isLocalGame = true;
-	
+
 	// Init the ghost cursor stone
 	cursor = cursorIdle;
 	curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
 	curStone->setZValue(4);
 	curStone->hide();
 	showCursor = FALSE;
-/*
-	lockResize = false;
-	navIntersectionStatus = false;
-
-*/
-
-	//Init the stones
-	stones = new QHash<int,Stone *>();//::QHash();
 
 	setupCoords();
 }
@@ -160,6 +144,13 @@ void Board::setupCoords(void)
 
 Board::~Board()
 {
+    qDeleteAll(*stones);
+    stones->clear();
+    qDeleteAll(*ghosts);
+    ghosts->clear();
+    qDeleteAll(*marks);
+    marks->clear();
+
 	delete stones;
 	delete ghosts;
 	delete marks;
@@ -172,21 +163,6 @@ Board::~Board()
  */
 void Board::clearData()
 {
-
-//    hideAllMarks();
-//    removeLastMoveMark();
-//    boardHandler->clearData();
-//    if (curStone != NULL)
-//		curStone->setColor(stoneBlack);
-//    canvas->update();
-//	isModified = false;
-/*    if (nodeResultsDlg != NULL)
-    {
-		nodeResultsDlg->hide();
-		delete nodeResultsDlg;
-		nodeResultsDlg = NULL;
-    }
-*/
 	qDeleteAll(*stones);
 	stones->clear();
 
@@ -255,75 +231,14 @@ void Board::drawGatter()
 }
 
 /*
-* draws the table under the goban, and the goban wood texture
+* draws the goban wood texture
 */
-// FIXME: draw shadow
 void Board::drawBackground()
 {
 	table->setRect(offsetX - offset,
 		offsetY - offset,
 		board_pixel_size + offset*2,
 		board_pixel_size + offset*2);
-
-	//QImage image = all.toImage();
-// 	int lighter=20;
-// 	int darker=60;
-// 	int width = 3; 
-// 
-// 	int x,y;
-// 	for(x=0;x<width;x++)
-// 		for (y= offsetY - offset +x ; y<offsetY + board_pixel_size + offset-x ;y++)
-// 		{
-// 			image.setPixel(
-// 				offsetX - offset+x , 
-// 				y, 
-// 				QColor(image.pixel(offsetX - offset+x,y)).dark(int(100 + darker*(width-x)*(width-x)/width/width)).rgb());
-// 
-// 			image.setPixel(
-// 				offsetX + board_pixel_size + offset-x -1, 
-// 				y,
-// 				QColor(image.pixel(offsetX + board_pixel_size + offset-x-1,y)).light(100+ int(lighter*(width-x)*(width-x)/width/width)).rgb());
-// 		}
-// 
-// 	for(y=0;y<width;y++)
-// 		for (x= offsetX - offset +y ; x<offsetX + board_pixel_size + offset-y ;x++)
-// 		{
-// 			image.setPixel(
-// 				x,
-// 				offsetY - offset+y , 
-// 				QColor(image.pixel(x,offsetY - offset+y)).light(int(100 + lighter*(width-y)*(width-y)/width/width)).rgb());
-// 
-// 			image.setPixel(
-// 				x,
-// 				offsetY + board_pixel_size + offset-y -1, 
-// 				QColor(image.pixel(x,offsetY + board_pixel_size + offset-y-1)).dark(100+ int(darker*(width-y)*(width-y)/width/width)).rgb());
-// 		}
-// 
-// 
-// 	width = 10;
-// 	darker=50;
-// 
-// 	for(x=0;(x<=width)&&(offsetX - offset-x >0) ;x++)
-// 		for (y= offsetY - offset+x ; (y<offsetY + board_pixel_size + offset+x)&&(y<h) ;y++)
-// 		{
-// 			image.setPixel(
-// 				offsetX - offset-1-x  , 
-// 				y, 
-// 				QColor(image.pixel(offsetX - offset-1-x,y)).dark(int(100 + darker*(width-x)/width)).rgb());
-// 		}
-// 
-// 	for(y=0;(y<=width)&&(offsetY + board_pixel_size + offset+y+1<h);y++)
-// 		for (x= (offsetX - offset - y > 0 ? offsetX - offset - y:0) ; x<offsetX + board_pixel_size + offset-y ;x++)
-// 		{
-// 			image.setPixel(
-// 				x,
-// 				offsetY + board_pixel_size + offset+y +1, 
-// 				QColor(image.pixel(x,offsetY + board_pixel_size + offset+y+1)).dark(100+ int(darker*(width-y)/width)).rgb());
-// 		}
-
-	//redraws the image on a brush to set the background
-	//canvas->setBackgroundBrush ( QBrush(image));
-
 }
 
 /*
@@ -332,89 +247,31 @@ void Board::drawBackground()
 void Board::drawCoordinates()
 {
 	QGraphicsSimpleTextItem *coord;
-	int i;
 	
 	// centres the coordinates text within the remaining space at table edge
 	const int coord_centre = (offset - square_size/2 )/2; 
-	QString txt;
 
-	// Draw vertical coordinates. Numbers
-/*	for (i=0; i<board_size; i++)
-	{
-		// Left side
-		if(showSGFCoords)
-			txt = QString(QChar(static_cast<const char>('a' + i)));
-		else
-			txt = QString::number(board_size - i);
-
-		coord = new QGraphicsSimpleTextItem(txt, 0, canvas);
-		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
-
-		coord->show();
-
-		// Right side
-		coord = new QGraphicsSimpleTextItem(txt, 0,canvas);
-    		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
-
-		coord->show();
-	}
-	
-	// Draw horizontal coordinates. Letters (Note: Skip 'i')
-	for (i=0; i<board_size; i++)
-	{
-		if(showSGFCoords)
-			txt = QString(QChar(static_cast<const char>('a' + i)));
-		else
-			txt = QString(QChar(static_cast<const char>('A' + (i<8?i:i+1))));
-		// Top
-		coord = new QGraphicsSimpleTextItem(txt, 0, canvas);
-		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 , offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
-		coord->show();
-		// Bottom
-		coord = new QGraphicsSimpleTextItem(txt,0, canvas);
-		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 ,offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2  );
-		coord->show();
-	}
-*/
-
-	for (i=0; i<board_size; i++)
+    for (int i=0; i<board_size; i++)
 	{
 		// Left side
 		coord = vCoords1->at(i);
 		coord->setPos(offsetX - offset + coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
-
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
+        coord->setVisible(showCoords);
 
 		// Right side
-		
 		coord = vCoords2->at(i);
-    		coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
-
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
+        coord->setPos(offsetX + board_pixel_size + offset - coord_centre - coord->boundingRect().width()/2 , offsetY + square_size * i - coord->boundingRect().height()/2);
+        coord->setVisible(showCoords);
 
 		// Top
 		coord = hCoords1->at(i);
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 , offsetY - offset + coord_centre - coord->boundingRect().height()/2 );
-		
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
+        coord->setVisible(showCoords);
 		
 		// Bottom
 		coord = hCoords2->at(i);
 		coord->setPos(offsetX + square_size * i - coord->boundingRect().width()/2 ,offsetY + offset + board_pixel_size - coord_centre - coord->boundingRect().height()/2  );
-		
-		if (showCoords)
-			coord->show();
-		else
-			coord->hide();
+        coord->setVisible(showCoords);
 	}
 }
 
@@ -423,10 +280,11 @@ void Board::drawCoordinates()
 */
 void Board::setShowCoords(bool b)
 {
-	bool old = showCoords;
-	showCoords = b;
-	if (old != showCoords)
-		changeSize();  // Redraw the board if the value changed.
+    if (b != showCoords)
+    {
+        showCoords = b;
+        resizeBoard();  // Redraw the board if the value changed.
+    }
 }
 
 /*
@@ -439,39 +297,24 @@ void Board::resizeEvent(QResizeEvent*)
     {
 		resizeDelayFlag = true;
 		// not necessary?
-		QTimer::singleShot(50, this, SLOT(changeSize()));
+        QTimer::singleShot(50, this, SLOT(resizeBoard()));
     }
 #else
 	if (!lockResize)
-		changeSize();
+        resizeBoard();
 #endif
-}
-
-/*
-* called by the resize event
-*/
-void Board::changeSize()
-{
-//#ifdef Q_WS_WIN
-//	resizeDelayFlag = false;
-//#endif
-
-//	QSize s = QSize::QSize(width()-5, height()-5);
-//	resizeBoard(s.width(), s.height());
-
-	resizeBoard(width()-5, height()-5);
 }
 
 /*
 * does the resizing work
 */
-void Board::resizeBoard(int w, int h)
+void Board::resizeBoard()
 {
-	if (w < 30 || h < 30)
+    if (width() < 30 || height() < 30)
 		return;
 
 	// Resize canvas
-	canvas->setSceneRect(0,0,w,h);
+    canvas->setSceneRect(0,0,width(),height());
 
 	// Recalculate the size values
 	calculateSize();
@@ -548,7 +391,7 @@ void Board::resizeBoard(int w, int h)
 	drawBackground();
 	drawGatter();
 //	if (showCoords && !isDisplayBoard)
-		drawCoordinates();
+    drawCoordinates();
 
   // Redraw the mark on the last played stone                             
 //  updateLastMove(m_save->getColor(), m_save->getX(), m_save->getY()); 
@@ -763,11 +606,8 @@ void Board::setVarGhost(StoneColor c, int x, int y)
  */
 void Board::removeGhosts()
 {
-	// Remove all variation ghosts
-	while (! ghosts->isEmpty())
-		delete ghosts->takeFirst();
-	//Might not be needed
-	ghosts->clear();
+    qDeleteAll(*ghosts);
+    ghosts->clear();
 }
 
 /*
