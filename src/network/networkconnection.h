@@ -51,8 +51,6 @@ class QMessageBox;
 
 /* I think this needs to inherit from QObject so that it can pick up signals, if those
  * are still necessary */
-/*game_id and key are used interchangeably, we should unify them under
- * name game_id */
 class NetworkConnection : public QObject
 {
 	Q_OBJECT

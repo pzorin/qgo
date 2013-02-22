@@ -32,7 +32,7 @@
 class Gatter
 {
 public:
-	Gatter(QGraphicsScene *Canvas, int board_size);
+    Gatter(QGraphicsScene *canvas, int board_size);
 	~Gatter();
 	void hide (int x, int y);
 	void show (int x, int y);
@@ -41,8 +41,9 @@ public:
 
 private:
 	int board_size;
+    inline int indexOf(int x, int y) { return (x-1)*board_size + y-1; }
 	QGraphicsScene *canvas;
-	std::vector< std::vector<QGraphicsLineItem *> > VGatter, HGatter ;
+    QList<QGraphicsLineItem *> VGatter, HGatter ;
 	QMap<int,QGraphicsEllipseItem*> hoshisList ;
 };
 

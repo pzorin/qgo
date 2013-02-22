@@ -478,17 +478,16 @@ void MainWindow::slot_computerNewBoard()
 
 void MainWindow::addBoardWindow(BoardWindow * bw)
 {
-	boardWindowList.push_back(bw);
+    boardWindowList.append(bw);
 }
 
 void MainWindow::removeBoardWindow(BoardWindow * bw)
 {
-	std::vector<BoardWindow *>::iterator i;
-	for(i = boardWindowList.begin(); i != boardWindowList.end(); i++)
+    for(int i = 0; i < boardWindowList.length(); i++)
 	{
-		if(*i == bw)
+        if(boardWindowList[i] == bw)
 		{
-			boardWindowList.erase(i);
+            boardWindowList.removeAt(i);
 			return;
 		}
 	}
@@ -496,18 +495,13 @@ void MainWindow::removeBoardWindow(BoardWindow * bw)
 
 int MainWindow::checkForOpenBoards(void)
 {
-	std::vector<BoardWindow *>::iterator i;
-	for(i = boardWindowList.begin(); i != boardWindowList.end(); i++)
+    for(int i = 0; i < boardWindowList.length(); i++)
 	{
-		if(!(*i)->okayToQuit())
+        if(!(boardWindowList[i]->okayToQuit()))
 			return -1;
 	}
 	//close all open, since boardwindow no longer has parent because of windows task bar issue:
-	i = boardWindowList.begin();
-	while(i != boardWindowList.end())
-	{
-		delete (*i);
-		i = boardWindowList.begin();
-	}
+    qDeleteAll(boardWindowList);
+    boardWindowList.clear();
 	return 0;
 }

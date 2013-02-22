@@ -65,31 +65,9 @@ Room::Room()
 void Room::setupUI(void)
 {
 	gamesListModel = new GamesListModel();
-
-	/*ui.ListView_games->header()->setSortIndicatorShown ( FALSE );
-	ui.ListView_games->hideColumn(12);
-	ui.ListView_games->hideColumn(13);*/
 	gamesView->setModel(gamesListModel);
 	gamesView->setFilter(new GamesListFilter(gamesListModel));
-	/* Justifications??? */
-	/* No sort indicator??? */
-	/* Qt 4.4.1 made sortIndicatorShown necesssary for sort behavior
-	 * !!!! */
 
-	//gamesView->setSelectionBehavior(QAbstractItemView::SelectRows);
-	/*ui.gamesView->setColumnWidth ( 0, 40 );	//35
-	ui.gamesView->setColumnWidth ( 1, 100 );
-	ui.gamesView->setColumnWidth ( 2, 48 );	//35
-	ui.gamesView->setColumnWidth ( 3, 100 );
-	ui.gamesView->setColumnWidth ( 4, 48 );	//35
-	ui.gamesView->setColumnWidth ( 5, 45 );	//30
-	ui.gamesView->setColumnWidth ( 6, 45 ); //25
-	ui.gamesView->setColumnWidth ( 7, 38 ); //20
-	ui.gamesView->setColumnWidth ( 8, 35 ); //30
-	ui.gamesView->setColumnWidth ( 9, 43 ); //25
-	ui.gamesView->setColumnWidth ( 10, 60 ); //20
-	ui.gamesView->setColumnWidth ( 11, 55 ); //25
-	*/
 	//IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
 	gamesView->setColumnWidth ( 0, 40 );	//35
 	gamesView->setColumnWidth ( 1, 100 );
@@ -128,23 +106,7 @@ void Room::setupUI(void)
 	playerView->setColumnWidth ( 6, 40 );
 	playerView->setColumnWidth ( 7, 40 );
 	playerView->setColumnWidth ( 8, 80 );
-	/*ui.ListView_players->hideColumn(6);
-	ui.ListView_players->hideColumn(7);
-	ui.ListView_players->hideColumn(8);
-	ui.ListView_players->hideColumn(9);
-	ui.ListView_players->hideColumn(12);
-	ui.ListView_players->setColumnWidth ( 0, 30 );
-	ui.ListView_players->setColumnWidth ( 1, 100 );
-	ui.ListView_players->setColumnWidth ( 2, 30 );
-	ui.ListView_players->setColumnWidth ( 3, 30 );
-	ui.ListView_players->setColumnWidth ( 4, 30);
-	ui.ListView_players->setColumnWidth ( 5, 30 );
-//	ui.ListView_players->setColumnWidth ( 6, 80 );
-	ui.ListView_players->setColumnWidth ( 7, 80 );
-//	ui.ListView_players->setColumnWidth ( 8, 30 );
-//	ui.ListView_players->setColumnWidth ( 9, 25 );
-	ui.ListView_players->setColumnWidth ( 10, 50 );
-//	ui.ListView_players->setColumnWidth ( 11, 25 );*/
+
 
     filterRank1ComboBox->setCurrentIndex(0);
     filterRank2ComboBox->setCurrentIndex(0);

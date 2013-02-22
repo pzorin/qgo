@@ -34,12 +34,8 @@
 void MainWindow::cleanupServerData(void)
 {
 	//delete serverliststorage;	no header, done in mainwindow FIXME awkward
-	std::vector<const RoomListing *>::iterator r;
-	for(r = roomList.begin(); r != roomList.end(); r++)
-		delete *r;
-	std::vector<const ChannelListing *>::iterator c;
-	for(c = channelList.begin(); c != channelList.end(); c++)
-		delete *c;
+    qDeleteAll(roomList);
+    qDeleteAll(channelList);
 }
 /*
  * return pressed in edit line -> command to send
@@ -384,16 +380,14 @@ void MainWindow::set_sessionparameter(QString par, bool val)
 void MainWindow::slot_roomListClicked(const QString& text)
 {
 	if(!connection)
-		return;	
-	std::vector <const RoomListing *>::iterator it = roomList.begin();
-	while(it != roomList.end())
+        return;
+    for(int i=0; i < roomList.length(); i++)
 	{
-		if((*it)->name == text)
+        if(roomList[i]->name == text)
 		{
-			connection->sendJoinRoom((**it));
+            connection->sendJoinRoom(*(roomList[i]));
 			return;
 		}
-		it++;
 	}
 	qDebug("Can't find room %s", text.toLatin1().constData());
 	
@@ -418,15 +412,13 @@ void MainWindow::slot_channelListClicked(const QString& text)
 	
 		return;
 	}
-	std::vector <const ChannelListing *>::iterator it = channelList.begin();
-	while(it != channelList.end())
-	{
-		if(text.contains(QString::number((*it)->number)))
+    for(int i=0; i < channelList.length(); i++)
+    {
+        if(text.contains(QString::number(channelList[i]->number)))
 		{
-			connection->sendJoinChannel((**it));
+            connection->sendJoinChannel(*(channelList[i]));
 			return;
 		}
-		it++;
 	}
 	qDebug("Can't find channel %s", text.toLatin1().constData());	
 }
@@ -706,15 +698,14 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 	/* FIXME, either way, we should keep a list of RoomListings
 	 * some where */
 	//qDebug("Recv room listing %d %s", room.number, room.name.toLatin1().constData());
-	std::vector <const RoomListing *>::iterator it = roomList.begin();
-	while(it != roomList.end())
+    for(int i=0; i < roomList.length(); i++)
 	{
-		if((*it)->name == room.name)
+        if(roomList[i]->name == room.name)
 		{
 			if(!b)
 			{
 				//room has been removed
-				roomList.erase(it);
+                roomList.removeAt(i);
 				if(rf & RS_SHORTROOMLIST)
 				{
 					//remove item from list	
@@ -726,11 +717,10 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 			}
 			return;
 		}
-		it++;
 	}
 	if(!b)
 		return;		//removed room not found
-	roomList.push_back(&room);
+    roomList.append(&room);
 	
 	if(rf & RS_SHORTROOMLIST)
 	{
@@ -749,23 +739,21 @@ void MainWindow::recvRoomListing(const RoomListing & room, bool b)
 
 void MainWindow::recvChannelListing(const ChannelListing & channel, bool b)
 {
-	std::vector <const ChannelListing *>::iterator it = channelList.begin();
-	while(it != channelList.end())
-	{
-		if((*it)->name.contains(QString::number(channel.number)))
+    for(int i=0; i < channelList.length(); i++)
+    {
+        if(channelList[i]->name.contains(QString::number(channel.number)))
 		{
 			if(!b)
 			{
 				//channel has been removed
-				channelList.erase(it);
+                channelList.removeAt(i);
 			}
 			return;
 		}
-		it++;
 	}
 	if(!b)
 		return;		//removed channel not found
-	channelList.push_back(&channel);
+    channelList.append(&channel);
 	if(channel.number == 0)
         ui.channelComboBox->addItem(channel.name);
 	else

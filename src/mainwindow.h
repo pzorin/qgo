@@ -51,6 +51,8 @@ public:
 
 	void set_sessionparameter(QString par, bool val); //FIXME
 	bool loadSGF(QString);
+
+    // FIXME: this should be in a separate class that handles the server connection widget
 	void onConnectionError(void);
 	
 	void recvSeekCondition(class SeekCondition * s);
@@ -65,6 +67,8 @@ public:
 	void changeChannel(const QString & s);
 	Ui::MainWindow * getUi(void) { return &ui; };		//for room class... FIXME?
 	void setNetworkConnection(NetworkConnection * conn) { connection = conn; };
+    // End FIXME
+
 	void addBoardWindow(BoardWindow *);
 	void removeBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
@@ -89,6 +93,8 @@ public slots:
 	void slot_getTablePath();
 	void slot_newFile_HandicapChange(int);
 	void slot_newComputer_HandicapChange(int);
+
+    // FIXME: this should be in a separate class that handles the server connection widget
 	// client slots
 	void slot_connect(bool b);
 	//void slot_textReceived(const QString &txt);
@@ -114,7 +120,8 @@ public slots:
 	void slot_cblooking();
 	void slot_cbopen();
 	void slot_cbquiet();
-	void slot_alternateListColorsCB(bool);
+    void slot_alternateListColorsCB(bool);
+    // End FIXME
 
 	// parser slots
 	void slot_statsPlayer(PlayerListing*);
@@ -128,13 +135,48 @@ protected:
 	void saveSettings();
 
 private:
+    // FIXME: this should be in a separate class that handles the server connection widget
 	void setupConnection(void);
 	int closeConnection(bool error = false);
 	
 	void cleanupServerData(void);
+    // online time
+    int	onlineCount;
+    bool	youhavemsg;
+    bool	playerListEmpty;
+//	bool    gamesListEmpty;
+    bool	autoAwayMessage;
+    int 	mainServerTimer;
+    // cmd_xx get current cmd number, and, if higher than last, cmd is valid,
+    //    else cmd is from history list
+    int	cmd_count;
+    bool	cmd_valid;
+
+    // telnet ready
+    bool	tn_ready;
+    bool	tn_wait_for_tn_ready;
+    HostList hostlist;
+    LoginDialog * logindialog;
+    NetworkConnection * connection;
+    ServerListStorage * serverliststorage;
+    QMenu 		*seekMenu;
+    QList<Talk*>	talkList;
+    QList<GameDialog*> matchList;
+    QList<const RoomListing *> roomList;
+    QList<const ChannelListing *> channelList;
+    int 	seekButtonTimer;
+
+    //players table
+    void showOpen(bool show);
+    void setColumnsForExtUserInfo();
+    QString rkToKey(QString txt, bool integer=FALSE);
+    QString rkMax, rkMin;
+
+    friend class Room;	//FIXME awkward
+    // End FIXME
+
 	bool selectFile(const QModelIndex &);
 	
-	friend class Room;	//FIXME awkward
 	Ui::MainWindow ui;
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
@@ -146,38 +188,7 @@ private:
 	void initStatusBar();
 	void displayGame(DisplayBoard *);
 
-	// online time
-	int	onlineCount;
-	bool	youhavemsg;
-	bool	playerListEmpty;
-//	bool    gamesListEmpty;
-	bool	autoAwayMessage;
-	int 	mainServerTimer;
-	// cmd_xx get current cmd number, and, if higher than last, cmd is valid,
-	//    else cmd is from history list
-	int	cmd_count;
-	bool	cmd_valid;
-
-	// telnet ready
-	bool	tn_ready;
-	bool	tn_wait_for_tn_ready;
-	HostList hostlist;
-	LoginDialog * logindialog;
-	NetworkConnection * connection;
-	ServerListStorage * serverliststorage;
-	QMenu 		*seekMenu;
-	QList<Talk*>	talkList;
-	QList<GameDialog*> matchList;
-	std::vector<BoardWindow *> boardWindowList;
-	std::vector<const RoomListing *> roomList;
-	std::vector<const ChannelListing *> channelList;
-	int 	seekButtonTimer;
-	
-	//players table
-	void showOpen(bool show);
-	void setColumnsForExtUserInfo();
-	QString rkToKey(QString txt, bool integer=FALSE);
-	QString rkMax, rkMin;
+    QList<BoardWindow *> boardWindowList;
 	QString currentWorkingDir;
 
 	// timing aids
