@@ -23,7 +23,7 @@
 #include <QtGui>
 #include "login.h"
 #include "mainwindow.h"
-#include "mainwindow_settings.h"		//for hostlist
+#include "host.h"
 #include "network/igsconnection.h"
 #include "network/wing.h"
 #include "network/lgs.h"

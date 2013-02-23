@@ -53,7 +53,6 @@ gamedata.h \
 listviews.h \
 registry.h \
 mainwindow.h \
-mainwindow_settings.h \
 audio/audio.h \
 game_tree/group.h \
 game_tree/matrix.h \
@@ -107,7 +106,8 @@ network/tygemconnection.h \
 network/tygemprotocol.h \
 network/wing.h \
 sgf/sgfparser.h \
-    connectionwidget.h
+    connectionwidget.h \
+    host.h
 
 SOURCES += displayboard.cpp \
            listviews.cpp \
@@ -167,7 +167,8 @@ SOURCES += displayboard.cpp \
 	   network/tygemconnection.cpp \
 	   network/wing.cpp \
 	   sgf/sgfparser.cpp \
-    connectionwidget.cpp
+    connectionwidget.cpp \
+    host.cpp
 
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""

@@ -19,42 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-#include "mainwindow_settings.h"
 #include "mainwindow.h"
-
-/*
- *   Host - Class to save Host info
- */
-
-/* FIXME, there's a cleaner way to define such a simple data structure */
-Host::Host(const QString &host, const QString &login, const QString &pass)
-{
-	h = host;
-	lg = login;
-	pw = pass;
-}
-
-/*
- *   List to help keeping things sorted
- */
-
-int HostList::compareItems(Host* d1, Host* d2)
-{
-	Host *s1 = static_cast<Host*>(d1);
-	Host *s2 = static_cast<Host*>(d2);
-
-	Q_CHECK_PTR(s1);
-	Q_CHECK_PTR(s2);
-
-	if (s1 > s2)
-		return 1;
-	else if (s1 < s2)
-		return -1;
-	else
-		// s1 == s2;
-		return 0;
-}
 
 /*
  * a cancel button has been pressed on the preference pages  

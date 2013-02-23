@@ -24,7 +24,7 @@
 #define MAINWINDOW_H
 
 #include "ui_mainwindow.h"
-#include "mainwindow_settings.h"
+#include "host.h"
 #include "defines.h"
 #include "igsconnection.h"
 #include "audio.h"
@@ -55,8 +55,6 @@ public:
 	void removeBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
 
-    // Used at weird places, FIXME
-    QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 public slots:
 	void slot_expanded(const QModelIndex & i);
 	// sfg slots
@@ -90,6 +88,7 @@ protected:
 
 private:
     Ui::MainWindow ui;
+    QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 
 	bool selectFile(const QModelIndex &);
 	

@@ -98,8 +98,7 @@ enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS,
 			 TypeORO,
 			 TypeTYGEM, TypeEWEIQI, TypeTOM,
 			TypeUNKNOWN, TypeNNGS, TypeCTN, TypeCWS, TypeDEFAULT };
-/* TypeCyberORO?? just IGS, and CyberORO, instead of with Type?? FIXME 
- * and reconcile with mainwindow_settings.h */
+// TypeCyberORO?? just IGS, and CyberORO, instead of with Type?? FIXME
 
 /*
 * Global structs
