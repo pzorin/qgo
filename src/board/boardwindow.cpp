@@ -32,7 +32,6 @@
 #include "../network/boarddispatch.h"
 #include "listviews.h"
 #include "gameinfo.h"
-#include "mainwindow.h"		//for board window lists
 
 #include <QtGui>
 
@@ -150,7 +149,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//update();
 	//gridLayout->update();
 
-	mainwindow->addBoardWindow(this);
 	if(gameData->record_sgf != QString())
 		loadSGF(0, gameData->record_sgf);
 }
@@ -168,7 +166,6 @@ BoardWindow::~BoardWindow()
 	
 	delete gameData;
 	delete addtime_menu;
-	mainwindow->removeBoardWindow(this);
 }
 
 bool BoardWindow::okayToQuit(void)
@@ -315,7 +312,7 @@ void BoardWindow::setupUI(void)
 	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
 
-	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
+    connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotShowCoords(bool)));
 	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
 	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
 	connect(ui.actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
@@ -434,46 +431,11 @@ void BoardWindow::resizeEvent(QResizeEvent * e)
 
 void BoardWindow::checkHideToolbar(int h)
 {
-	if(h < 700)
-	{
-		if(ui.varLabel->isVisible())
-			ui.varLabel->hide();
-	}
-	else
-	{
-		if(!ui.varLabel->isVisible())
-			ui.varLabel->show();
-	}
-	if(h < 660)
-	{
-		if(ui.moveNumLabel->isVisible())
-			ui.moveNumLabel->hide();
-	}
-	else
-	{
-		if(!ui.moveNumLabel->isVisible())
-			ui.moveNumLabel->show();
-	}
-	if(h < 600)
-	{
-		if(ui.matchSettingsFrame->isVisible())
-			ui.matchSettingsFrame->hide();
-	}
-	else
-	{
-		if(!ui.matchSettingsFrame->isVisible())
-			ui.matchSettingsFrame->show();
-	}
-	if(h < 560)
-	{
-		if(statusBar())
-			setStatusBar(0);
-	}
-	else
-	{
-		if(!statusBar())
-			setStatusBar(new QStatusBar());		//Qt deletes
-	}
+    ui.varLabel->setVisible(h > 700);
+    ui.moveNumLabel->setVisible(h > 660);
+    ui.matchSettingsFrame->setVisible(h > 600);
+    if(statusBar())
+        statusBar()->setVisible(h > 560);
 }
 
 void BoardWindow::gameDataChanged(void)
@@ -542,14 +504,7 @@ bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
 	else 
 		SGFLoaded = SGF;
 
-	if (!sgfParser->doParse(SGFLoaded))
-		return false ;	
-	
-//	board->clearData();
-//	tree->setToFirstMove();	
-//	boardHandler->slotNavFirst();
-
-	return true;
+    return sgfParser->doParse(SGFLoaded);
 }
 
 /*
@@ -751,14 +706,9 @@ void BoardWindow::slotDuplicate()
 /*
  * button 'coordinates' has been toggled
  */
-void BoardWindow::slotViewCoords(bool toggle)
+void BoardWindow::slotShowCoords(bool toggle)
 {
-	if (toggle)
-		ui.board->setShowCoords(false);
-	else
-		ui.board->setShowCoords(true);
-	
-//	statusBar()->message(tr("Ready."));
+    ui.board->setShowCoords(toggle);
 }
 
 void BoardWindow::slotGameInfo(bool /*toggle*/)
@@ -974,43 +924,12 @@ void BoardWindow::slotEditDelete()
  * annoying. */
 void BoardWindow::keyPressEvent(QKeyEvent *e)
 {
-#if 0
-	// check for window resize command = number button
-	if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9)
-	{
-		QString strKey = QString::number(e->key() - Qt::Key_0);
-		
-		if (e->state() & AltButton)
-		{
-			// true -> store
-			reStoreWindowSize(strKey, true);
-			return;
-		}
-		else if (e->state() & ControlButton)
-		{
-			// false -> restore
-			if (!reStoreWindowSize(strKey, false))
-			{
-				// sizes not found -> leave
-				e->ignore();
-				return;
-			}
-			
-			return;
-		}
-	}
-#endif
-	
-//	bool localGame = true;
-	// don't view last moves while observing or playing
-	if (//gameData->gameMode == modeObserve ||
-		   gameData->gameMode == modeMatch ||
-		   gameData->gameMode == modeTeach)
+    // don't view last moves while playing
+    if (gameData->gameMode == modeMatch ||
+            gameData->gameMode == modeTeach)
 	{
 		qDebug("Not local game.\n");
-//		localGame = false;
-//		e->accept();
-//		e->ignore();
+        e->ignore();
 		return;
 	}
 	
@@ -1022,19 +941,6 @@ void BoardWindow::keyPressEvent(QKeyEvent *e)
 case Key_W:
 board->debug();
 break;
-
-case Key_L:
-board->openSGF("foo.sgf");
-break;
-
-case Key_S:
-board->saveBoard("foo.sgf");
-break;
-
-case Key_X:
-board->openSGF("foo.xml", "XML");
-break;
-		// /DEBUG
 #endif
 */
 

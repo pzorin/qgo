@@ -394,7 +394,8 @@ void MainWindow::slot_fileNewBoard()
 	gd->black_name = ui.newFile_BlackPlayer->text();
 	gd->white_name = ui.newFile_WhitePlayer->text();
 	gd->komi = ui.newFile_Komi->text().toFloat();
-	new BoardWindow(gd, TRUE, TRUE);
+
+    addBoardWindow(new BoardWindow(gd, TRUE, TRUE));
 }
 
 
@@ -413,7 +414,7 @@ void MainWindow::slot_newComputer_HandicapChange(int a)
 void MainWindow::slot_fileOpenBoard()
 {
 	if(GameLoaded)
-		new BoardWindow(new GameData(GameLoaded), TRUE, TRUE);
+        addBoardWindow(new BoardWindow(new GameData(GameLoaded), TRUE, TRUE));
 }
 
 void MainWindow::slot_fileOpenBoard(const QModelIndex & i)
@@ -447,9 +448,11 @@ void MainWindow::slot_computerNewBoard()
 		delete gd; gd = NULL;
 		return;
 	}
-
-	if(!new BoardWindow(gd , imBlack, imWhite ))
-	{
+    BoardWindow * bw = new BoardWindow(gd , imBlack, imWhite );
+    if(bw)
+    {
+        addBoardWindow(bw);
+    } else {
 		delete gd; gd = NULL;
 	}
 }
@@ -457,13 +460,14 @@ void MainWindow::slot_computerNewBoard()
 void MainWindow::addBoardWindow(BoardWindow * bw)
 {
     boardWindowList.append(bw);
+    connect(bw,SIGNAL(destroyed(QObject*)),SLOT(removeBoardWindow(QObject*)));
 }
 
-void MainWindow::removeBoardWindow(BoardWindow * bw)
+void MainWindow::removeBoardWindow(QObject *bw)
 {
     for(int i = 0; i < boardWindowList.length(); i++)
 	{
-        if(boardWindowList[i] == bw)
+        if(boardWindowList[i] == (BoardWindow*)bw)
 		{
             boardWindowList.removeAt(i);
 			return;

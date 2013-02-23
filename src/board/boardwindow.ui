@@ -6404,12 +6404,18 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="board.qrc">
      <normaloff>:/new/prefix1/ressources/pics/coord2.png</normaloff>:/new/prefix1/ressources/pics/coord2.png</iconset>
    </property>
    <property name="text">
-    <string>coordinates</string>
+    <string>Coordinates</string>
+   </property>
+   <property name="toolTip">
+    <string>Show/hide coordinates</string>
    </property>
   </action>
   <action name="actionPlay">

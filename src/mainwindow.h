@@ -52,10 +52,11 @@ public:
 	bool loadSGF(QString);
 
 	void addBoardWindow(BoardWindow *);
-	void removeBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
 
 public slots:
+    void removeBoardWindow(QObject *);
+
 	void slot_expanded(const QModelIndex & i);
 	// sfg slots
 	void slot_fileNewBoard();

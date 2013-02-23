@@ -93,7 +93,7 @@ signals:
 
 public slots:
 	void slotEditButtonPressed( int id );
-	void slotViewCoords(bool toggle);
+	void slotShowCoords(bool toggle);
 	void slotGameInfo(bool toggle);
 	void slotSound(bool toggle);
 	bool slotFileSave();
