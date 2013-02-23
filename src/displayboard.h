@@ -24,12 +24,8 @@
 #define DISPLAYBOARD_H
 
 #include "board.h"
-#include "stone.h"
-#include "imagehandler.h"
-#include "gatter.h"
 
 #include <QtGui>
-
 
 class DisplayBoard : public Board
 {

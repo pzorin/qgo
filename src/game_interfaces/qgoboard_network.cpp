@@ -26,6 +26,10 @@
 #include "../network/boarddispatch.h"
 #include "../network/messages.h"
 #include "undoprompt.h"
+#include "boardhandler.h"
+#include "clockdisplay.h"
+#include "gamedata.h"
+#include "boardwindow.h"
 
 qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw, t, gd)
 {

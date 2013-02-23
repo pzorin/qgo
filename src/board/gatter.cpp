@@ -23,8 +23,6 @@
 #include "../defines.h"
 #include "gatter.h"
 
-#include <vector>
-
 #include <QtGui>
 
 

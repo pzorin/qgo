@@ -22,6 +22,9 @@
 #include "qgoboard.h"
 #include "tree.h"
 #include "move.h"
+#include "boardhandler.h"
+#include "gamedata.h"
+#include "boardwindow.h"
 
 qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {

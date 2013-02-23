@@ -22,8 +22,9 @@
 
 #include "displayboard.h"
 #include "stone.h"
-#include "gatter.h"
 #include "mark.h"
+#include "board.h"
+#include "imagehandler.h"
 
 #include <QtGui>
 

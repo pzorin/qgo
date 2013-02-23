@@ -24,16 +24,13 @@
 #define BOARDWINDOW_H
 
 #include "ui_boardwindow.h"
-#include "boardhandler.h"
-#include "interfacehandler.h"
-#include "qgoboard.h"
-#include "clockdisplay.h"
 #include "gamedata.h"
 
 class BoardHandler;
 class qGoBoard;
 class ClockDisplay;
 class Tree;
+class InterfaceHandler;
 
 class BoardWindow : public QMainWindow, public Ui::BoardWindow
 {

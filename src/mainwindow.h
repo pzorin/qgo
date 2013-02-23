@@ -24,14 +24,11 @@
 #define MAINWINDOW_H
 
 #include "ui_mainwindow.h"
-#include "host.h"
 #include "defines.h"
-#include "igsconnection.h"
 #include "audio.h"
 
 #include <QtGui>
 
-class HostList;
 class RoomListing;
 class LoginDialog;
 class NetworkConnection;
@@ -40,6 +37,7 @@ class Talk;
 class GameDialog;
 class SGFParser;
 class BoardWindow;
+class GameData;
 
 class MainWindow : public QMainWindow
 {
@@ -96,7 +94,7 @@ private:
 	QDirModel *model;
 	SGFParser * MW_SGFparser;
 	QString SGFloaded, fileLoaded;
-	GameData * GameLoaded;
+    GameData * GameLoaded; // Should be in a separate loader class
 	Sound *connectSound, *gameSound;
 
 	void initStatusBar();

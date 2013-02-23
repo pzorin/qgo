@@ -25,6 +25,9 @@
 #include "move.h"
 #include "network/boarddispatch.h"
 #include "network/messages.h"
+#include "boardhandler.h"
+#include "clockdisplay.h"
+#include "boardwindow.h"
 
 qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {	

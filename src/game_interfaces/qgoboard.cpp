@@ -29,6 +29,9 @@
 #include "network/boarddispatch.h"
 #include "network/messages.h"
 #include "resultdialog.h"
+#include "boardhandler.h"
+#include "clockdisplay.h"
+#include "gamedata.h"
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {

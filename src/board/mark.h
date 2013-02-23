@@ -24,7 +24,8 @@
 #define MARK_H
 
 #include "graphicsitemstypes.h"
-#include "imagehandler.h"
+#include "defines.h"
+#include <QtGui>
 
 
 class Mark

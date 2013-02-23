@@ -30,6 +30,9 @@
 #include "gamedata.h"
 #include "playergamelistings.h"
 #include "networkconnection.h"
+#include "qgoboard.h"
+#include "boardhandler.h"
+#include "clockdisplay.h"
 
 /* It would be difficult to create a board without a connection,
  * but we need to either be certain and not test at all, or assign

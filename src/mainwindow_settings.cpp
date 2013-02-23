@@ -179,19 +179,10 @@ void MainWindow::saveSettings()
 	else
 		i=0;
 	settings.setValue("ALTERNATELISTCOLORS", i);
-	
-	//saves hosts list
-	settings.beginWriteArray("HOSTS");
-    for (int i = 0; i < ui.connectionWidget->hostlist->size(); ++i)
-	{
-		settings.setArrayIndex(i);
-        settings.setValue("server", ui.connectionWidget->hostlist->at(i)->host());
-        settings.setValue("loginName", ui.connectionWidget->hostlist->at(i)->loginName());
-        settings.setValue("password", ui.connectionWidget->hostlist->at(i)->password());
-	}
-	settings.endArray();
 
     //settings.setValue("ACCOUNT", ui.connectionWidget->ui->serverComboBox->currentIndex());
+
+    ui.connectionWidget->saveHostList();
 
 	//server games default values
 	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
@@ -280,19 +271,7 @@ void MainWindow::loadSettings()
     ui.connectionWidget->slot_alternateListColorsCB(b);
 	
 	//server list
-    ui.connectionWidget->hostlist->clear();
-    //ui.serverComboBox->clear();
-	Host *h;
-	int size = settings.beginReadArray("HOSTS");
-	for (int i = 0; i < size; ++i) 
-	{
-		settings.setArrayIndex(i);
-		h = new Host(settings.value("server").toString(),
-				settings.value("loginName").toString(),
-				settings.value("password").toString());
-        ui.connectionWidget->hostlist->append(h);
-	}
- 	settings.endArray();
+    ui.connectionWidget->loadHostList(&settings);
 
     //ui.connectionWidget->ui->serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
 

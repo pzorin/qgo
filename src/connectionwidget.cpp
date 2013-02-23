@@ -22,7 +22,6 @@
 #include "ui_connectionwidget.h"
 
 #include "defines.h"
-#include "sgfparser.h"
 #include "network/networkconnection.h"
 #include "network/talk.h"
 #include "network/gamedialog.h"
@@ -31,6 +30,7 @@
 #include "playergamelistings.h"		//FIXME should be moved out
 #include "network/consoledispatch.h"		//FIXME for channel chat
 #include "host.h"
+#include "messages.h"
 
 #include "network/serverliststorage.h"
 
@@ -65,7 +65,7 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect(ui->serverComboBox, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
     connect( ui->quietCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
     connect( ui->openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
-    connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cblooking() ) );
+    connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( setLooking(bool) ) );
 
     // for saving server ip lists
     serverliststorage = new ServerListStorage();
@@ -314,10 +314,7 @@ void ConnectionWidget::setupConnection(void)
     statusServer->setText(" " + myAccount->svname + " ");
 #endif //FIXME
     // start timer: event every second
-    onlineCount = 0;
-    //mainServerTimer = startTimer(1000);
-
-    //connectSound->play();
+    connectionEstablished = QDateTime::currentDateTime();
 }
 
 /* Shouldn't be here. FIXME */
@@ -364,7 +361,6 @@ void ConnectionWidget::slot_connexionClosed()
 {
     qDebug("slot_connexionClosed");
     // no Timers in offline mode!
-    killTimer(mainServerTimer);
 
 #ifdef FIXME
     /* We may need to set somet status somewhere or like the
@@ -1211,26 +1207,13 @@ void ConnectionWidget::slot_cbconnectChanged(int)
 /*
  * checkbox looking cklicked
  */
-void ConnectionWidget::slot_cblooking()
+void ConnectionWidget::setLooking(bool val)
 {
-    bool val = ui->lookingCheckBox->isChecked();
     set_sessionparameter("looking", val);
 
     if (val)
         // if looking then set open
         set_sessionparameter("open", true);
-
-    /* This shouldn't be here or in slot_cbopen.  Writing to a file
-     * every time a checkbox is clicked is too slow.  We should really
-     * do it only on exit or disconnect.  But right now stuff does
-     * crash a lot so maybe this is okay.  Either FIXME later or
-     * remove this comment. */
-    /* Additionally, the server keeps these settings or we have to set
-     * them on connect (IGS) to sync up.  So no prefs on these at all */
-    /*QSettings settings;
-    settings.setValue("LOOKING_FOR_GAMES", val);
-    if(val)
-        settings.setValue("OPEN_FOR_GAMES", true);*/
 }
 
 /*
@@ -1285,8 +1268,6 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
     static int counter = 899;
     static int holdTheLine = true;
     static int tnwait = 0;
-//	static int statusCnt = 0;
-    static QString statusTxt = QString();
     static int imagecounter = 0;
 
     //qDebug( "timer event, id %d", e->timerId() );
@@ -1355,28 +1336,11 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
 
     counter--;
 
-    // display online time
-    onlineCount++;
-    int hr = onlineCount/3600;
-    int min = (onlineCount % 3600)/60;
-    int sec = onlineCount % 60;
-    QString pre = " ";
-    QString min_;
-    QString sec_;
-
-    if (min < 10)
-        min_ = "0" + QString::number(min);
-    else
-        min_ = QString::number(min);
-
-    if (sec < 10)
-        sec_ = "0" + QString::number(sec);
-    else
-        sec_ = QString::number(sec);
-
-    if (hr)
-        pre += QString::number(hr) + "h ";
-
+    // display online time. FIXME: maybe update every minute
+    /*
+    QTime tempTime(0,0,0,0);
+    tempTime.addSecs(connectionEstablished.secsTo(QDateTime::currentDateTime()));
+    tempTime.toString("HH:mm"); */
     //statusOnlineTime->setText(pre + min_ + ":" + sec_ + " ");
 
     // some statistics
@@ -1386,32 +1350,6 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
 //		tr("Bytes out:") + " " + QString::number(bytesOut));
 //	LineEdit_bytesIn->setText(QString::number(bytesIn));
 //	LineEdit_bytesOut->setText(QString::number(bytesOut));
-
-// DEBUG ONLY BEGIN ****
-    // DEBUG display remaining time
-    hr = counter/3600;
-    min = (counter % 3600)/60;
-    sec = counter % 60;
-    if (autoAwayMessage)
-        pre = "(A) ";
-    else
-        pre = " ";
-
-    if (min < 10)
-        min_ = "0" + QString::number(min);
-    else
-        min_ = QString::number(min);
-
-    if (sec < 10)
-        sec_ = "0" + QString::number(sec);
-    else
-        sec_ = QString::number(sec);
-
-    if (hr)
-        pre += QString::number(hr) + "h ";
-
-    //statusMessage->setText(pre + min_ + ":" + sec_ + (holdTheLine ? " Hold" : " "));
-// DEBUG ONLY END ****
 }
 
 /*
@@ -1422,4 +1360,34 @@ void ConnectionWidget::slot_msgBox(const QString& msg)
     qDebug("slot_msgBox\n");
     ui->talkTabs->setCurrentIndex(1);
     ui->msgTextEdit->append(msg);
+}
+
+void ConnectionWidget::saveHostList(void)
+{
+    QSettings settings;
+    settings.beginWriteArray("HOSTS");
+    for (int i = 0; i < hostlist->size(); ++i)
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("server", hostlist->at(i)->host());
+        settings.setValue("loginName", hostlist->at(i)->loginName());
+        settings.setValue("password", hostlist->at(i)->password());
+    }
+    settings.endArray();
+}
+
+void ConnectionWidget::loadHostList(QSettings *settings)
+{
+    hostlist->clear();
+    Host *h;
+    int size = settings->beginReadArray("HOSTS");
+    for (int i = 0; i < size; ++i)
+    {
+        settings->setArrayIndex(i);
+        h = new Host(settings->value("server").toString(),
+            settings->value("loginName").toString(),
+            settings->value("password").toString());
+        hostlist->append(h);
+    }
+    settings->endArray();
 }

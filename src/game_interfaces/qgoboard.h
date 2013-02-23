@@ -33,10 +33,13 @@
 #ifndef QGOBOARD_H
 #define QGOBOARD_H
 
-#include "boardwindow.h"
-#include "tree.h"
 #include "defines.h"
-#include "qgtp.h"
+
+class BoardWindow;
+class Tree;
+class GameData;
+class Move;
+class QGtp;
 
 /* I think its easier to have the computer and normal modes override a few functions to
  * null then have review and match provide the same complicated net functionality */

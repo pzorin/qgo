@@ -26,6 +26,7 @@
 #include "move.h"
 #include "network/boarddispatch.h"
 #include "network/messages.h"
+#include "boardwindow.h"
 
 
 qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)

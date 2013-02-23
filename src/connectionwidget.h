@@ -22,7 +22,6 @@
 #define CONNECTIONWIDGET_H
 
 #include "defines.h"
-#include "igsconnection.h"
 
 #include <QWidget>
 #include <QtGui>
@@ -33,6 +32,9 @@ class LoginDialog;
 class NetworkConnection;
 class ServerListStorage;
 class Talk;
+class ChannelListing;
+class GameDialog;
+class PlayerListing;
 
 namespace Ui {
 class ConnectionWidget;
@@ -64,10 +66,6 @@ public:
 
     int closeConnection(bool error = false);
 
-    // TODO: make private (currently settings are loaded somewhere outside this class)
-    Ui::ConnectionWidget *ui;
-    HostList * hostlist;
-
 public slots:
     void loadConnectionSettings(void);
     void slot_connect(bool b);
@@ -91,7 +89,7 @@ public slots:
     void talkRecv(Talk * d);
     void slot_pbRelOneTab(QWidget *w);
     void slot_cbconnectChanged(int);
-    void slot_cblooking();
+    void setLooking(bool val);
     void slot_cbopen();
     void slot_cbquiet();
     void slot_alternateListColorsCB(bool);
@@ -100,22 +98,28 @@ public slots:
     void slot_connexionClosed();
 
     void slot_statsPlayer(PlayerListing*);
+
+    void saveHostList(void);
+    void loadHostList(QSettings * settings);
     
 private:
+    Ui::ConnectionWidget *ui;
+
     void setupConnection(void);
 
     void cleanupServerData(void);
     // online time
-    int	onlineCount;
+    QDateTime	connectionEstablished;
     bool	youhavemsg;
     bool	playerListEmpty;
 //	bool    gamesListEmpty;
     bool	autoAwayMessage;
-    int 	mainServerTimer;
     // cmd_xx get current cmd number, and, if higher than last, cmd is valid,
     //    else cmd is from history list
     int	cmd_count;
     bool	cmd_valid;
+
+    HostList * hostlist;
 
     // telnet ready
     bool	tn_ready;

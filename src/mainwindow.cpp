@@ -28,6 +28,7 @@
 #include "tree.h"
 #include "listviews.h"
 #include "connectionwidget.h"
+#include "gamedata.h"
 
 #include <QtGui>
 

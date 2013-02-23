@@ -23,8 +23,11 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
-#include "boardwindow.h"
 #include "audio.h"
+#include "defines.h"
+#include <QtGui>
+
+class BoardWindow;
 
 class ClockDisplay : public QObject
 {

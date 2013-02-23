@@ -24,6 +24,7 @@
 #include "boardwindow.h"
 #include "boardhandler.h"
 #include "board.h"
+#include "clockdisplay.h"
 #include "interfacehandler.h"
 #include "qgoboard.h"
 #include "move.h"

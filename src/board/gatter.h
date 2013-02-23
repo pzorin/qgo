@@ -23,10 +23,6 @@
 #ifndef GATTER_H
 #define GATTER_H
 
-#include "imagehandler.h"
-
-#include <vector>
-
 #include <QtGui>
 
 class Gatter

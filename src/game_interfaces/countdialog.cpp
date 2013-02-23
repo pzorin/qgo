@@ -25,6 +25,9 @@
 #include "countdialog.h"
 #include "board/boardwindow.h"
 #include "../network/boarddispatch.h"
+#include "interfacehandler.h"
+#include "boardhandler.h"
+#include "qgoboard.h"
 
 CountDialog::CountDialog(BoardWindow * parent, BoardDispatch * dis, unsigned int game_id) 
 	: QDialog((QDialog *)parent), dispatch(dis), board(parent)

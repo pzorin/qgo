@@ -31,6 +31,7 @@
 #include "playergamelistings.h"
 #include "boarddispatch.h"	//so we can remove observers
 #include "friendslistdialog.h"
+#include "networkconnection.h"
 
 #include "ui_connectionwidget.h" // Contains declaration of Ui::ConnectionWidget, needed in Room::Room, FIXME
 
