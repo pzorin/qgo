@@ -25,7 +25,6 @@
 #include "defines.h"
 
 class HostList;
-class MainWindow;
 class NetworkConnection;
 class QMessageBox;
 

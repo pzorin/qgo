@@ -1318,14 +1318,6 @@ int TygemConnection::reconnectToServer(void)
 	return 0;
 }
 
-/* Check comment in igs code, FIXME */
-const PlayerListing & TygemConnection::getOurListing(void)
-{
-	PlayerListing * p;
-	p = getDefaultRoom()->getPlayerListing(getUsername());
-	return *p;
-}
-
 unsigned short TygemConnection::getRoomNumber(void)
 {
 	return match_negotiation_state->getGameId();

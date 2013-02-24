@@ -84,6 +84,7 @@ int EWeiQiConnection::requestServerInfo(void)
 	if(write((const char *)packet, length) < 0)
 	{
 		qWarning("*** failed sending server info request");
+        delete[] packet;
 		return -1;
 	}
 	delete[] packet;

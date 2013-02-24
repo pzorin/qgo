@@ -35,9 +35,7 @@ class PlayerListingIDRegistry;
 class Talk;
 class FilteredView;
 class PlayerListModel;
-class PlayerSortProxy;
 class GamesListModel;
-class GamesSortProxy;
 
 class Room : public QObject
 {
@@ -75,9 +73,7 @@ class Room : public QObject
 		PlayerListingIDRegistry * playerListingIDRegistry;
 	private:
 		PlayerListModel * playerListModel;
-		PlayerSortProxy * playerSortProxy;
 		GamesListModel * gamesListModel;
-		GamesSortProxy * gamesSortProxy;
 
 		FilteredView * playerView, * gamesView;
 		QPushButton * editFriendsWatchesListButton;

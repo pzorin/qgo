@@ -23,7 +23,7 @@
 #include <string.h>
 #include "igsconnection.h"
 #include "consoledispatch.h"
-#include "room.h"
+#include "room.h" // Should not depend on room FIXME
 #include "boarddispatch.h"
 #include "gamedialog.h"
 #include "talk.h"
@@ -230,31 +230,6 @@ void IGSConnection::sendGamesRequest(void)
 	sendText("games\r\n");
 }
 
-//FIXME unused, set quiet false is enough
-void IGSConnection::periodicListRefreshes(bool b)
-{
-	if(b)
-	{
-        if(playersListRefreshTimer == 0)
-			playersListRefreshTimer = startTimer(PLAYERSLISTREFRESH_SECONDS * 1000);
-        if(gamesListRefreshTimer == 0)
-			gamesListRefreshTimer = startTimer(GAMESLISTREFRESH_SECONDS * 1000);
-	}
-	else
-	{
-        if(playersListRefreshTimer != 0)
-		{
-			killTimer(playersListRefreshTimer);
-			playersListRefreshTimer = 0;
-		}
-        if(gamesListRefreshTimer != 0)
-        {
-            killTimer(gamesListRefreshTimer);
-            gamesListRefreshTimer = 0;
-        }
-	}
-}
-
 void IGSConnection::sendRoomListRequest(void)
 {
 	sendText("room\r\n");
@@ -267,11 +242,6 @@ void IGSConnection::sendJoinRoom(const RoomListing & room, const char * /*passwo
 	setCurrentRoom(room);	//FIXME unless we get a message after joining?
 							//but then the other send requests should
 							//be there
-	Room * roomhandle = getDefaultRoom();
-	roomhandle->clearPlayerList();
-	roomhandle->clearGamesList();
-    sendPlayersRequest();
-    sendGamesRequest();
 }
 
 void IGSConnection::sendJoinChannel(const ChannelListing & room)
@@ -809,13 +779,6 @@ void IGSConnection::timerEvent(QTimerEvent* e)
 {
 	if(e->timerId() == keepAliveTimer)
 		sendText("ayt\r\n");
-	else if(e->timerId() == playersListRefreshTimer)
-		sendPlayersRequest();
-	else if(e->timerId() == gamesListRefreshTimer)
-	{
-		getDefaultRoom()->clearGamesList();
-		sendGamesRequest();
-	}
 }
 
 void IGSConnection::setKeepAlive(int seconds)
@@ -864,18 +827,6 @@ BoardDispatch * IGSConnection::getBoardFromOurOpponent(QString opponent)
 			return board;
 	}
 	return NULL;
-}
-
-/* Kind of ugly here FIXME.
- * Really everything should be returning references
- * or everything pointers, but there's a lot of different
- * stuff out there, so we'd really need to check every instance
- * of usage of PLayerListing and figure out what's best */
-const PlayerListing & IGSConnection::getOurListing(void)
-{
-	PlayerListing * p;
-	p = getDefaultRoom()->getPlayerListing(getUsername());
-	return *p;
 }
 
 void IGSConnection::requestGameInfo(unsigned int game_id)
@@ -1561,7 +1512,7 @@ void IGSConnection::handle_error(QString line)
 
 		if(!pl)		
 			pl = getPlayerListingNeverFail(aMatch->opponent);
-		PlayerListing * us = room->getPlayerListing(getUsername());
+        const PlayerListing * us = &(getOurListing());
 		if(us)
 		{
 			aMatch->our_name = us->name;

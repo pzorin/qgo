@@ -549,7 +549,8 @@ int CyberOroConnection::reconnectToServer(void)
 	return 0;
 }
 
-/* Check comment in igs code, FIXME */
+/* Check comment in networkconnection code, FIXME */
+// Why is this function different for this connection type? FIXME
 const PlayerListing & CyberOroConnection::getOurListing(void)
 {
 	PlayerListing * p;
@@ -737,6 +738,7 @@ void CyberOroConnection::sendObserveOutside(const GameListing & game)
 	{
 		qDebug("No game code for %d", game.number);
 		// can we send number instead?  where was the game code?
+        delete[] packet;
 		return;
 	}
 	packet[0] = 0x40;
@@ -834,12 +836,14 @@ void CyberOroConnection::sendCreateRoom(RoomCreate * room)
 	if(!room)
 	{
 		qDebug("CreateRoom called on NULL room!!");
+        delete[] packet;
 		return;
 	}
 	if((room->title && strlen((const char *)room->title) > 20) ||
 	   (room->password && strlen((const char *)room->password) > 8))
 	{
 		qDebug("Can't create room, bad title or password");
+        delete[] packet;
 		return;
 	}
 	packet[0] = 0xca;
@@ -1147,6 +1151,7 @@ void CyberOroConnection::sendMatchOffer(const MatchRequest & mr, bool offercount
 	if(!opponent)
 	{
 		qDebug("Can't get opponent listing for match request\n");
+        delete[] packet;
 		return;
 	}
 	int i;
@@ -1446,6 +1451,7 @@ void CyberOroConnection::sendKeepAlive(const GameListing & game)
 	if(!boarddispatch)
 	{
 		qDebug("tried to sendKeepAlive on nonexistent board %d", game.number);
+        delete[] packet;
 		return;
 	}
 	TimeRecord tr = boarddispatch->getOurTimeRecord();
@@ -1489,6 +1495,7 @@ void CyberOroConnection::sendRequestKeepAlive(const GameListing & game)
 	if(!boarddispatch)
 	{
 		qDebug("tried to sendRequestKeepAlive on nonexistent board %d", game.number);
+        delete[] packet;
 		return;
 	}
 	TimeRecord tr = boarddispatch->getOurTimeRecord();
@@ -1694,6 +1701,7 @@ void CyberOroConnection::sendUndo(unsigned int game_code, const MoveRecord * mov
 	if(!boarddispatch)
 	{
 		qDebug("How can there not be a board dispatch, it just sent us an undo");
+        delete[] packet;
 		return;
 	}
 	aGameData = boarddispatch->getGameData();
@@ -1742,6 +1750,7 @@ void CyberOroConnection::sendDeclineUndo(unsigned int game_code, const MoveRecor
 	if(!boarddispatch)
 	{
 		qDebug("How can there not be a board dispatch, it just sent us a timeloss");
+        delete[] packet;
 		return;
 	}
 	aGameData = boarddispatch->getGameData();
@@ -1779,6 +1788,7 @@ void CyberOroConnection::sendAcceptUndo(unsigned int game_code, const MoveRecord
 	if(!boarddispatch)
 	{
 		qDebug("How can there not be a board dispatch, it just sent us a timeloss");
+        delete[] packet;
 		return;
 	}
 	aGameData = boarddispatch->getGameData();
@@ -1816,6 +1826,7 @@ void CyberOroConnection::sendEndgame12Msg(unsigned int game_id, unsigned short m
 	if(!boarddispatch)
 	{
 		qDebug("How can there not be a board dispatch, it just sent us an endgame msg");
+        delete[] packet;
 		return;
 	}
 	aGameData = boarddispatch->getGameData();
@@ -1885,6 +1896,7 @@ void CyberOroConnection::sendAcceptRequestMatchMode(unsigned int game_id)
 	if(!boarddispatch)
 	{
 		qDebug("How can there not be a board dispatch, it just sent us a accept request match mode");
+        delete[] packet;
 		return;
 	}
 	aGameData = boarddispatch->getGameData();
@@ -2095,6 +2107,7 @@ void CyberOroConnection::sendMatchResult(unsigned short game_code)
 	if(!boarddispatch)
 	{
 		qDebug("Can't get board for %d for match result send", game_code_to_number[game_code]);
+        delete[] packet;
 		return;
 	}
 	/* We need to notify boarddispatch of finished game so we can
@@ -2142,13 +2155,13 @@ void CyberOroConnection::sendMatchResult(unsigned short game_code)
  * the window */
 void CyberOroConnection::sendRematchRequest(void)
 {
+    if(!room_were_in)
+    {
+        qDebug("Trying to send rematch request but not in a room");
+        return;
+    }
 	unsigned int length = 10;
 	unsigned char * packet = new unsigned char[length];
-	if(!room_were_in)
-	{
-		qDebug("Trying to send rematch request but not in a room");
-		return;
-	}
 	BoardDispatch * boarddispatch = getIfBoardDispatch(room_were_in);
 	if(!boarddispatch)
 	{
@@ -2180,13 +2193,13 @@ void CyberOroConnection::sendRematchRequest(void)
 
 void CyberOroConnection::sendRematchAccept(void)
 {
+    if(!room_were_in)
+    {
+        qDebug("Trying to send rematch accept but we aren't in room");
+        return;
+    }
 	unsigned int length = 10;
 	unsigned char * packet = new unsigned char[length];
-	if(!room_were_in)
-	{
-		qDebug("Trying to send rematch accept but we aren't in room");
-		return;
-	}
 	BoardDispatch * boarddispatch = getIfBoardDispatch(room_were_in);
 	if(!boarddispatch)
 	{
@@ -2219,15 +2232,15 @@ void CyberOroConnection::sendRematchAccept(void)
  * that the challenged player is holding the stones out? */
 void CyberOroConnection::sendNigiri(unsigned short game_code, bool /*odd*/)
 {
-	unsigned int length = 12;
-	unsigned char * packet = new unsigned char[length];
-	unsigned short room_number = game_code_to_number[game_code];
+    unsigned short room_number = game_code_to_number[game_code];
 	BoardDispatch * boarddispatch = getIfBoardDispatch(room_number);
 	if(!boarddispatch)
 	{
 		qDebug("Can't get board for %d for nigiri send", room_number);
 		return;
 	}
+    unsigned int length = 12;
+    unsigned char * packet = new unsigned char[length];
 	GameData * gr = boarddispatch->getGameData();
 	packet[0] = 0xf5;
 	packet[1] = 0xaf;

@@ -50,8 +50,7 @@ class IGSConnection : public NetworkConnection
 		virtual void stopReviewing(const GameListing & game);
 		virtual void sendStatsRequest(const PlayerListing & opponent);
 		virtual void sendPlayersRequest(void);
-		virtual void sendGamesRequest(void);
-		virtual void periodicListRefreshes(bool b);
+        virtual void sendGamesRequest(void);
 		void sendRoomListRequest(void);
 		virtual void sendMatchInvite(const PlayerListing & player);
 		virtual void sendAddTime(int);
@@ -77,8 +76,7 @@ class IGSConnection : public NetworkConnection
 		
 		BoardDispatch * getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi);
 		BoardDispatch * getBoardFromOurOpponent(QString opponent);
-		virtual const PlayerListing & getOurListing(void);
-		
+
 		virtual void requestGameInfo(unsigned int game_id);
 		virtual void requestGameStats(unsigned int game_id);
 		

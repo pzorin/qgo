@@ -105,7 +105,7 @@ public slots:
 private:
     Ui::ConnectionWidget *ui;
 
-    void setupConnection(void);
+    void setupButtons(void);
 
     void cleanupServerData(void);
     // online time
@@ -139,8 +139,6 @@ private:
     void setColumnsForExtUserInfo();
     QString rkToKey(QString txt, bool integer=FALSE);
     QString rkMax, rkMin;
-
-    friend class Room;	//FIXME awkward
 
     // timing aids
     void 		timerEvent(QTimerEvent*);

@@ -96,7 +96,6 @@ class TygemConnection : public NetworkConnection
 		virtual void requestLongInfo(PlayerListing & player);
 		virtual void requestShortInfo(PlayerListing & player);
 
-		virtual const PlayerListing & getOurListing(void);
 		virtual unsigned short getRoomNumber(void); //FIXME for gamedialog unsure of necessity or reliability here
 		
 		virtual void closeTalk(PlayerListing & opponent);

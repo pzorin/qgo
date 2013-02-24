@@ -154,11 +154,10 @@ class NetworkConnection : public QObject
 		virtual void closeTalk(PlayerListing & opponent);
 		
 		const QString & getUsername(void) { return username; };
-		virtual const PlayerListing & getOurListing(void) = 0;
+        virtual const PlayerListing & getOurListing(void);
 		virtual unsigned short getRoomNumber(void) { return 0; };
 		virtual void requestGameInfo(unsigned int) {};		//for IGS on board open
 		virtual void requestGameStats(unsigned int) {};		//same
-		virtual void periodicListRefreshes(bool) {};
 		virtual unsigned int rankToScore(QString rank) = 0;
 		virtual unsigned long getGameDialogFlags(void) { return 0; };
 		virtual void getAndSetFriendWatchType(PlayerListing & player);

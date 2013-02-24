@@ -22,7 +22,6 @@
 
 #include <QtGui>
 #include "login.h"
-#include "mainwindow.h"
 #include "host.h"
 #include "network/igsconnection.h"
 #include "network/wing.h"
@@ -31,6 +30,7 @@
 #include "network/tygemconnection.h"
 #include "network/eweiqiconnection.h"
 #include "network/tomconnection.h"
+#include "connectionwidget.h"
 
 LoginDialog::LoginDialog(const QString & s, HostList * h)
 {
@@ -79,16 +79,7 @@ void LoginDialog::slot_connect(void)
 
 	serverlistdialog_open = true;
 	connection = newConnection(serverStringToConnectionType(connectionName), ui.loginEdit->currentText(), ui.passwordEdit->text());
-	/* Its awkward to do this here FIXME, just make sure that, for instance
-	 * the connection has the mainwindow set within the network dispatch so its
-	 * not passing information into nothing */
-	/* Another possibility, if we always want netdispatch and mainwindow
-	 * connected, setMainWindow should setNetworkDispatch... but maybe
-	 * there should be at least the possibility of multiple netdispatches
-	 * somehow and we still need to fix the closeConnection stuff
-	 * maybe?  Figure out what should logically close what, and when */
     connectionWidget->setNetworkConnection(connection);
-	//netdispatch->setMainWindow(mainwindow);
 	/* We need to wait here to get authorization confirm, no errors,
 	   maybe popup either "please wait" dialog, which we'd annoyingly
 	   have to handle and then close which might require a separate

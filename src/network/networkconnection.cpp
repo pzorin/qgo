@@ -837,6 +837,18 @@ void NetworkConnection::recvSeekPlayer(QString player, QString condition)
         connectionWidget->recvSeekPlayer(player, condition);
 }
 
+/* Kind of ugly here FIXME.
+ * Really everything should be returning references
+ * or everything pointers, but there's a lot of different
+ * stuff out there, so we'd really need to check every instance
+ * of usage of PLayerListing and figure out what's best */
+const PlayerListing & NetworkConnection::getOurListing(void)
+{
+    PlayerListing * p;
+    p = getDefaultRoom()->getPlayerListing(getUsername());
+    return *p;
+}
+
 /* FIXME These are really more like netdispatch type functions, but the registries
  * are on the connection right now.  We might want to move them though at
  * some point if that does seem to make more sense in terms of the namespace. */

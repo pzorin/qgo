@@ -31,6 +31,7 @@
 #include "network/consoledispatch.h"		//FIXME for channel chat
 #include "host.h"
 #include "messages.h"
+#include "room.h"
 
 #include "network/serverliststorage.h"
 
@@ -40,9 +41,13 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui(new Ui::ConnectionWidget)
 {
     ui->setupUi(this);
-    connectionWidget = this; // FIXME: remove this gloabal variable
+    connectionWidget = this; // FIXME: remove this global variable
     ui->changeServerButton->hide();
+    connect(ui->changeServerButton, SIGNAL(clicked()), SLOT(slot_changeServer()));
+
     ui->createRoomButton->hide();
+    connect(ui->createRoomButton, SIGNAL(clicked()), SLOT(slot_createRoom()));
+
     connection = 0;
     logindialog = 0;
 
@@ -168,7 +173,9 @@ void ConnectionWidget::slot_connect(bool b)
         {
             ui->serverComboBox->setEnabled(false);
             ui->connectButton->setToolTip(tr("Disconnect from") + " " + ui->serverComboBox->currentText());
-            setupConnection();
+            setupButtons();
+            // start timer: event every second
+            connectionEstablished = QDateTime::currentDateTime();
 
             /* FIXME shouldn't say ONLINE here but tired of it saying
             * OFFLINE and not ready to fix it */
@@ -224,7 +231,7 @@ void ConnectionWidget::slot_connect(bool b)
  * reconnect to another service.  At the same time,
  * ORO reconnects as part of its session so that would
  * be a bit tricky.  We'll leave it here for now. */
-void ConnectionWidget::setupConnection(void)
+void ConnectionWidget::setupButtons(void)
 {
     unsigned long rs_flags = connection->getRoomStructureFlags();
     if(rs_flags & RS_NOROOMLIST)
@@ -245,34 +252,10 @@ void ConnectionWidget::setupConnection(void)
         * different rooms */
     }
 
-    if(connection->supportsServerChange())
-    {
-        ui->changeServerButton->show();
-        connect(ui->changeServerButton, SIGNAL(clicked()), SLOT(slot_changeServer()));
-    }
-    else
-    {
-        ui->changeServerButton->hide();
-    }
-    if(connection->supportsCreateRoom())
-    {
-        ui->createRoomButton->show();
-        connect(ui->createRoomButton, SIGNAL(clicked()), SLOT(slot_createRoom()));
-    }
-    else
-    {
-        ui->createRoomButton->hide();
-    }
-    if(connection->supportsRefreshListsButtons())
-    {
-        ui->refreshPlayersButton->setEnabled(true);
-        ui->refreshGamesButton->setEnabled(true);
-    }
-    else
-    {
-        ui->refreshPlayersButton->setEnabled(false);
-        ui->refreshGamesButton->setEnabled(false);
-    }
+    ui->changeServerButton->setVisible(connection->supportsServerChange());
+    ui->createRoomButton->setVisible(connection->supportsCreateRoom());
+    ui->refreshPlayersButton->setEnabled(connection->supportsRefreshListsButtons());
+    ui->refreshGamesButton->setEnabled(connection->supportsRefreshListsButtons());
 
     if(connection->supportsSeek())
     {
@@ -313,8 +296,6 @@ void ConnectionWidget::setupConnection(void)
             // show current Server name in status bar
     statusServer->setText(" " + myAccount->svname + " ");
 #endif //FIXME
-    // start timer: event every second
-    connectionEstablished = QDateTime::currentDateTime();
 }
 
 /* Shouldn't be here. FIXME */
@@ -459,16 +440,14 @@ void ConnectionWidget::slot_roomListClicked(const QString& text)
         if(roomList[i]->name == text)
         {
             connection->sendJoinRoom(*(roomList[i]));
+            connection->getDefaultRoom()->clearPlayerList();
+            connection->getDefaultRoom()->clearGamesList();
+            connection->sendPlayersRequest();
+            connection->sendGamesRequest();
             return;
         }
     }
     qDebug("Can't find room %s", text.toLatin1().constData());
-
-/*	if (room == "0")
-        statusBar()->message(tr("rooms left"));
-    else
-        statusBar()->message(tr("Room ")+ room);
-*/
 }
 
 void ConnectionWidget::slot_channelListClicked(const QString& text)

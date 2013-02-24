@@ -41,13 +41,14 @@ class BoardHandler;
 BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
 	: QMainWindow(0, 0), addtime_menu(0)
 {
-	if(!gd)
-	{
+    if(gd != NULL)
+    {
+        gameData = gd;
+    } else {
 		gameData = new GameData();
 		gameData->gameMode = modeNormal;
 	}
 	
-	gameData = gd;
 	dispatch = _dispatch;
 	
 	if(gameData->nigiriToBeSettled)
@@ -266,10 +267,8 @@ void BoardWindow::setupUI(void)
 	ui.board->init(boardSize);
 	
 	interfaceHandler = new InterfaceHandler( this);
-	interfaceHandler->toggleMode(gameData->gameMode);
-
-	if (gameData)
-		interfaceHandler->updateCaption(gameData);
+    interfaceHandler->toggleMode(gameData->gameMode);
+    interfaceHandler->updateCaption(gameData);
 
 	// creates the board handler for navigating in the tree
 	boardHandler = new BoardHandler(this, tree, &boardSize);
