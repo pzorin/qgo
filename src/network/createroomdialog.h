@@ -21,13 +21,13 @@
 
 
 #include <QDialog>
-//#include "../ui_createroomdialog.h"
+#include "ui_createroomdialog.h"
 
 class QLabel;
 class QDialogButtonBox;
 class NetworkConnection;
 
-class CreateRoomDialog : public QDialog/*, public Ui::CreateRoomDialog*/
+class CreateRoomDialog : public QDialog, public Ui::CreateRoomDialog
 {
 	Q_OBJECT
 	public:
