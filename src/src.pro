@@ -53,6 +53,7 @@ gamedata.h \
 listviews.h \
 registry.h \
 mainwindow.h \
+newline_pipe.h \
 audio/audio.h \
 game_tree/group.h \
 game_tree/matrix.h \
@@ -114,7 +115,6 @@ SOURCES += displayboard.cpp \
  	   main.cpp \
            mainwindow.cpp \
            mainwindow_settings.cpp \
- 	   newline_pipe.h \
            audio/audio.cpp \
            board/board.cpp \
            board/boardhandler.cpp \
@@ -153,9 +153,7 @@ SOURCES += displayboard.cpp \
  	   network/login.cpp \
 	   network/matchinvitedialog.cpp \
 	   network/matchnegotiationstate.cpp \
-	   network/messages.h \
 	   network/networkconnection.cpp \
-	   network/networkconnection.h \
 	   network/orosetphrasechat.cpp \
  	   network/quickconnection.cpp \
  	   network/room.cpp \
