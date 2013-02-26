@@ -42,11 +42,6 @@ enum GameListingColumn { GC_ID=0, GC_WHITENAME, GC_WHITERANK, GC_BLACKNAME,
 
 ObserverListModel::ObserverListModel()
 {
-    for(int i = 0; i < columnCount(); i++)
-    {
-        sort_priority.append(i);
-        sort_order.append(Qt::AscendingOrder);
-    }
 }
 
 ObserverListModel::~ObserverListModel()
@@ -133,11 +128,6 @@ QVariant ObserverListModel::data(const QModelIndex & index, int role) const
 
 PlayerListModel::PlayerListModel()
 {
-    for(int i = 0; i < columnCount(); i++)
-    {
-        sort_priority.append(i);
-        sort_order.append(Qt::AscendingOrder);
-    }
 }
 
 PlayerListModel::~PlayerListModel()
@@ -194,7 +184,7 @@ void PlayerListModel::updateListing(PlayerListing * const l)
 		if(static_cast<PlayerListItem const *>(items[i])->getListing() == l)
 		{
 			//this listing needs to be reloaded
-            if(view) view->_dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
 			return;
 		}
 	}
@@ -212,8 +202,6 @@ void PlayerListModel::removeListing(PlayerListing * const l)
 			items.removeAt(i);
 			emit endRemoveRows();
 			delete item;
-			if(view) view->_dataChanged(createIndex(0, 0, 0),
-                    createIndex(items.count() - 1, columnCount() - 1, 0));
 			return;
 		}
 	}
@@ -265,9 +253,157 @@ PlayerListItem * PlayerListModel::playerListItemFromIndex(const QModelIndex & in
     return static_cast<PlayerListItem*>(items[index.row()]);
 }
 
+ObserverListItemLessThan::ObserverListItemLessThan(int _column, Qt::SortOrder _order)
+    : column(_column)
+{
+    reverseOrder = (_order == Qt::DescendingOrder);
+}
+
+bool ObserverListItemLessThan::operator()(const ListItem *left, const ListItem *right ) const
+{
+    bool result = true;
+    switch(column)
+    {
+        case OC_NAME:
+            result = ( QString::compare(((ObserverListItem *)left)->listing->name, ((ObserverListItem *)right)->listing->name, Qt::CaseInsensitive) < 0);
+            break;
+        case OC_RANK:
+            result = (((ObserverListItem *)left)->listing->rank_score < ((ObserverListItem *)right)->listing->rank_score);
+            break;
+        default:
+            break;
+    }
+    return result ^ reverseOrder;
+}
+
+GamesListItemLessThan::GamesListItemLessThan(int _column, Qt::SortOrder _order)
+    : column(_column)
+{
+    reverseOrder = (_order == Qt::DescendingOrder);
+}
+
+bool GamesListItemLessThan::operator()(const ListItem *left, const ListItem *right ) const
+{
+    bool result = true;
+    switch((GameListingColumn)column)
+    {
+        case GC_ID:
+            result = (((GamesListItem*)left)->listing->number < ((GamesListItem*)right)->listing->number);
+            break;
+        case GC_WHITENAME:
+            result = (QString::compare(((GamesListItem*)left)->listing->white_name(), ((GamesListItem*)right)->listing->white_name(), Qt::CaseInsensitive) < 0);
+            break;
+        case GC_WHITERANK:
+            result = (((GamesListItem*)left)->listing->white_rank_score() < ((GamesListItem*)right)->listing->white_rank_score());
+            break;
+        case GC_BLACKNAME:
+            result = (QString::compare(((GamesListItem*)left)->listing->black_name(), ((GamesListItem*)right)->listing->black_name(), Qt::CaseInsensitive) < 0);
+            break;
+        case GC_BLACKRANK:
+            result = (((GamesListItem*)left)->listing->black_rank_score() < ((GamesListItem*)right)->listing->black_rank_score());
+            break;
+        case GC_MOVES:
+            result = (((GamesListItem*)left)->listing->moves < ((GamesListItem*)right)->listing->moves);
+            break;
+        case GC_SIZE:
+            result = (((GamesListItem*)left)->listing->board_size < ((GamesListItem*)right)->listing->board_size);
+            break;
+        case GC_HANDICAP:
+            result = (((GamesListItem*)left)->listing->handicap < ((GamesListItem*)right)->listing->handicap);
+            break;
+        case GC_KOMI:
+            result = (((GamesListItem*)left)->listing->komi < ((GamesListItem*)right)->listing->komi);
+            break;
+        case GC_BYOMI:
+            result = (((GamesListItem*)left)->listing->By < ((GamesListItem*)right)->listing->By);
+            break;
+        case GC_FLAGS:
+            result = (((GamesListItem*)left)->listing->FR < ((GamesListItem*)right)->listing->FR);
+            break;
+        case GC_OBSERVERS:
+            result = (((GamesListItem*)left)->listing->observers < ((GamesListItem*)right)->listing->observers);
+            break;
+        default:
+            break;
+    }
+    return result ^ reverseOrder;
+}
+
+PlayerListItemLessThan::PlayerListItemLessThan(int _column, Qt::SortOrder _order)
+    : column(_column)
+{
+    reverseOrder = (_order == Qt::DescendingOrder);
+}
+bool PlayerListItemLessThan::operator()(const ListItem *left, const ListItem *right ) const
+{
+    bool result = true;
+    switch((GameListingColumn)column)
+    {
+        case PC_STATUS:
+            result = (((PlayerListItem*)left)->listing->info < ((PlayerListItem*)right)->listing->info);
+            break;
+        case PC_NAME:
+            result = (QString::compare(((PlayerListItem*)left)->listing->name, ((PlayerListItem*)right)->listing->name, Qt::CaseInsensitive) < 0);
+            break;
+        case PC_RANK:
+            result = (((PlayerListItem*)left)->listing->rank_score < ((PlayerListItem*)right)->listing->rank_score);
+            break;
+        case PC_PLAYING:
+            result = (((PlayerListItem*)left)->listing->playing < ((PlayerListItem*)right)->listing->playing);
+            break;
+        case PC_OBSERVING:
+            result = (((PlayerListItem*)left)->listing->observing < ((PlayerListItem*)right)->listing->observing);
+            break;
+        case PC_WINS:
+            result = (((PlayerListItem*)left)->listing->wins < ((PlayerListItem*)right)->listing->wins);
+            break;
+        case PC_LOSSES:
+            result = (((PlayerListItem*)left)->listing->losses < ((PlayerListItem*)right)->listing->losses);
+            break;
+        case PC_IDLE:
+            result = (((PlayerListItem*)left)->listing->seconds_idle < ((PlayerListItem*)right)->listing->seconds_idle);
+            break;
+        case PC_COUNTRY:
+            result = (QString::compare(((PlayerListItem*)left)->listing->country, ((PlayerListItem*)right)->listing->country, Qt::CaseInsensitive) < 0);
+            break;
+        case PC_MATCHPREFS:
+            /* FIXME Need to add this all around */
+            break;
+        default:
+            break;
+    }
+    return result ^ reverseOrder;
+}
+
+void ListModel::sort(int column, Qt::SortOrder order)
+{
+    sort_column = column;
+    sort_order = order;
+}
+
 void PlayerListModel::sort(int column, Qt::SortOrder order)
 {
-	ListModel::sort(column, order);
+    ListModel::sort(column,order);
+    qStableSort(items.begin(),items.end(),PlayerListItemLessThan(column,order));
+    emit dataChanged(createIndex(0, 0), createIndex(items.count() - 1, columnCount() - 1));
+    /* Qt documentation says to emit "layoutChanged()" and not "dataChanged()" here,
+     * but as of now this conflicts with filtering */
+}
+
+void ObserverListModel::sort(int column, Qt::SortOrder order)
+{
+    ListModel::sort(column,order);
+    emit layoutAboutToBeChanged();
+    qStableSort(items.begin(),items.end(),ObserverListItemLessThan(column,order));
+    emit layoutChanged();
+}
+
+void GamesListModel::sort(int column, Qt::SortOrder order)
+{
+    ListModel::sort(column,order);
+    emit layoutAboutToBeChanged();
+    qStableSort(items.begin(),items.end(),GamesListItemLessThan(column,order));
+    emit layoutChanged();
 }
 
 SimplePlayerListModel::SimplePlayerListModel(bool _notify_column)
@@ -323,11 +459,6 @@ QVariant SimplePlayerListModel::data(const QModelIndex & index, int role) const
 
 GamesListModel::GamesListModel()
 {
-    for(int i = 0; i < columnCount(); i++)
-    {
-        sort_priority.append(i);
-        sort_order.append(Qt::AscendingOrder);
-    }
 }
 
 GamesListModel::~GamesListModel()
@@ -468,63 +599,6 @@ GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
 	return item->getListing();
 }
 
-/* FIXME we should possibly use that order variable somehow. */
-void ListModel::sort(int column, Qt::SortOrder order)
-{
-	/* Take column out of previous place in sort_priority and
-	 * put it in first place */
-    for(int i = 0; i < columnCount(); i++)
-    {
-        if(sort_priority[i] == column)
-        {
-            sort_priority.removeAt(i);
-            sort_priority.prepend(column);
-            sort_order.removeAt(i);
-            sort_order.prepend(order);
-
-            //qDebug("sort! %d %d\n", sort_priority[0], order);
-            quicksort(0, items.count() - 1);
-            break;
-        }
-    }
-}
-
-void ListModel::quicksort(int b, int e)
-{
-	if(b < e)
-	{
-		int partition = qs_partition(b, e);
-		quicksort(b, partition - 1);
-		quicksort(partition + 1, e);
-	}
-}
-
-int ListModel::qs_partition(int b, int e)
-{
-	ListItem * item, * pivot_item;
-	pivot_item = items[e];
-	int i, j;
-	i = b - 1;
-	for(j = b; j < e; j++)
-	{
-		item = items[j];
-		switch(priorityCompare(*item, *pivot_item))
-		{
-			case LESSTHAN:
-			case EQUALTO:
-				i++;
-				items[j] = items[i];
-				items[i] = item;
-				break;
-			case GREATERTHAN:
-				break;
-		}
-	}
-	items[e] = items[i + 1];
-	items[i + 1] = pivot_item;
-	return i + 1;
-}
-
 /* With a large list, if you're looking at the middle of it and its
  * changing quickly, then all those new entries are shifting the list
  * around.  Even if the selection stays where it is, its hard to
@@ -540,19 +614,6 @@ void ListModel::insertListing(ListItem & item)
     emit endInsertRows();
 }
 
-int ListModel::priorityCompare(const ListItem & i, const ListItem & j)
-{
-    int k = 0;
-    int columns = columnCount(QModelIndex());
-    int result;
-    do {
-        result = i.compare(j, sort_priority[k]);
-        if (sort_order[k] == Qt::DescendingOrder)
-            result = -result;
-        k++;
-    } while (result == EQUALTO && k < 3 && k < columns - 1);
-    return result;
-}
 
 ObserverListItem::ObserverListItem(PlayerListing * const l) : listing(l)
 {
@@ -579,132 +640,8 @@ int ObserverListItem::columnCount(void) const
 	return O_TOTALCOLUMNS;
 }
 
-int ObserverListItem::compare(const ListItem & i, int column) const
-{
-	const ObserverListItem & l = (const ObserverListItem &)i;
-	switch(column)
-	{
-		case OC_NAME:
-			return compareNames(listing->name, l.listing->name);
-			break;
-		case OC_RANK:
-			if(listing->rank_score > l.listing->rank_score)
-				return GREATERTHAN;
-			else if(listing->rank_score == l.listing->rank_score)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		default:
-			break;
-	}
-	return EQUALTO;
-}
-
 GamesListItem::GamesListItem(GameListing * const l) : listing(l)
 {
-}
-
-int GamesListItem::compare(const ListItem & i, int column) const
-{
-	const GamesListItem & g = (const GamesListItem &)i;
-	if(!listing)
-	{
-		qDebug("!!! No listing on GamesListItem!!!");
-		return LESSTHAN;
-	}
-	switch((GameListingColumn)column)
-	{
-		case GC_ID:
-			if(listing->number > g.getListing()->number)
-				return GREATERTHAN;
-			else if(listing->number == g.getListing()->number)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_WHITENAME:
-			return compareNames(listing->white_name(), g.getListing()->white_name());
-			break;
-		case GC_WHITERANK:
-			if(listing->white_rank_score() > g.getListing()->white_rank_score())
-				return GREATERTHAN;
-			else if(listing->white_rank_score() == g.getListing()->white_rank_score())
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_BLACKNAME:
-			return compareNames(listing->black_name(), g.getListing()->black_name());
-			break;
-		case GC_BLACKRANK:
-			if(listing->black_rank_score() > g.getListing()->black_rank_score())
-				return GREATERTHAN;
-			else if(listing->black_rank_score() == g.getListing()->black_rank_score())
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_MOVES:
-			if(listing->moves > g.getListing()->moves)
-				return GREATERTHAN;
-			else if(listing->moves == g.getListing()->moves)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_SIZE:
-			if(listing->board_size > g.getListing()->board_size)
-				return GREATERTHAN;
-			else if(listing->board_size == g.getListing()->board_size)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_HANDICAP:
-			if(listing->handicap > g.getListing()->handicap)
-				return GREATERTHAN;
-			else if(listing->handicap == g.getListing()->handicap)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_KOMI:
-			if(listing->komi > g.getListing()->komi)
-				return GREATERTHAN;
-			else if(listing->komi == g.getListing()->komi)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_BYOMI:
-			if(listing->By > g.getListing()->By)
-				return GREATERTHAN;
-			else if(listing->By == g.getListing()->By)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_FLAGS:
-			if(listing->FR > g.getListing()->FR)
-				return GREATERTHAN;
-			else if(listing->FR == g.getListing()->FR)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case GC_OBSERVERS: 
-			if(listing->observers > g.getListing()->observers)
-				return GREATERTHAN;
-			else if(listing->observers == g.getListing()->observers)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		default:
-			break;
-	}
-	return EQUALTO;
 }
 
 /* Probably better ways to do this, an enum, something, maybe
@@ -857,82 +794,6 @@ int PlayerListItem::columnCount(void) const
 	return P_TOTALCOLUMNS;
 }
 
-int PlayerListItem::compare(const ListItem & i, int column) const
-{
-	const PlayerListItem & p = (const PlayerListItem &)i;
-	switch((GameListingColumn)column)
-	{
-		case PC_STATUS:
-			if(listing->info > p.getListing()->info)
-				return GREATERTHAN;
-			else if(listing->info == p.getListing()->info)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_NAME:
-			return compareNames(listing->name, p.getListing()->name);
-			break;
-		case PC_RANK:
-			if(listing->rank_score > p.getListing()->rank_score)
-				return GREATERTHAN;
-			else if(listing->rank_score == p.getListing()->rank_score)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_PLAYING:
-			if(listing->playing > p.getListing()->playing)
-				return GREATERTHAN;
-			else if(listing->playing == p.getListing()->playing)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_OBSERVING:
-			if(listing->observing > p.getListing()->observing)
-				return GREATERTHAN;
-			else if(listing->observing == p.getListing()->observing)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_WINS:
-			if(listing->wins > p.getListing()->wins)
-				return GREATERTHAN;
-			else if(listing->wins == p.getListing()->wins)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_LOSSES:
-			if(listing->losses > p.getListing()->losses)
-				return GREATERTHAN;
-			else if(listing->losses == p.getListing()->losses)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_IDLE:
-			if(listing->seconds_idle > p.getListing()->seconds_idle)
-				return GREATERTHAN;
-			else if(listing->seconds_idle == p.getListing()->seconds_idle)
-				return EQUALTO;
-			else
-				return LESSTHAN;
-			break;
-		case PC_COUNTRY:
-			return compareNames(listing->country, p.getListing()->country);
-			break;
-		case PC_MATCHPREFS:
-			/* FIXME Need to add this all around */
-			break;
-		default:
-			break;
-	}
-	return EQUALTO;
-}
-
 ListItem::ListItem(const QList <QVariant> & data)
 {
 	itemData = data;	
@@ -946,32 +807,6 @@ QVariant ListItem::data(int column) const
 int ListItem::columnCount(void) const
 {
 	return itemData.count();
-}
-
-/* This assumes WAY WAY too much about the character sets and locale I think */
-int ListItem::compareNames(const QString & name1, const QString & name2) const
-{
-	int shorter = (name1.count() < name2.count() ? name1.count() : name2.count());
-	char c1, c2;
-	for(int i = 0; i < shorter; i++)
-	{
-		c1 = (char)name1[i].toAscii();
-		c2 = (char)name2[i].toAscii();
-		if(c1 >= 'a')
-			c1 -= ('a' - 'A');
-		if(c2 >= 'a')
-			c2 -= ('a' - 'A');
-		if(c1 < c2)
-			return LESSTHAN;
-		else if(c1 > c2)
-			return GREATERTHAN;
-	}
-	if(name1.count() < name2.count())
-		return LESSTHAN;
-	else if(name1.count() > name2.count())
-		return GREATERTHAN;
-	else
-		return EQUALTO;
 }
 
 ListModel::ListModel()
@@ -1027,20 +862,38 @@ Qt::ItemFlags ListModel::flags(const QModelIndex & index) const
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void FilteredView::_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
+void FilteredView::setFilter(ListFilter * l)
 {
+    listFilter = l;
+    connect(l,SIGNAL(updated()),this,SLOT(updateFilter()));
+};
+
+void FilteredView::updateFilter(void)
+{
+    for(int i = 0; i < this->model()->rowCount(); i++)
+    {
+        setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
+    }
+}
+
+void FilteredView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
+{
+    QTableView::dataChanged(topLeft, bottomRight);
 	for(int i = topLeft.row(); i <= bottomRight.row(); i++)
 	{
-		if(listFilter->filterAcceptsRow(i))
-		{	
-            setRowHidden(i, false);
-		}
-		else
-		{
-            setRowHidden(i, true);
-		}
+        setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
 	}
 }
+
+void FilteredView::rowsInserted ( const QModelIndex & parent, int start, int end )
+{
+    QTableView::rowsInserted(parent,start,end);
+    for(int i = start; i <= end; i++)
+    {
+        setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
+    }
+}
+
 
 bool PlayerListFilter::filterAcceptsRow(int row) const
 {
@@ -1093,21 +946,23 @@ void PlayerListFilter::setFilter(int rn, int rm)
 	// stuff FIXME
 	rankMin = rn;
 	rankMax = rm;
-	qDebug("player sort: %d - %d", rn, rm);
-	listModel->sort(P_TOTALCOLUMNS);	//resort as current
+    // FIXME: a really crude hack, should use a proxy sorting model instead anyway
+    emit updated();
 }
 
 void PlayerListFilter::setFilter(enum PlayerSortFlags f)
 {
 	// might be worth calling sort here ??? FIXME
-	flags ^= f;
-	listModel->sort(P_TOTALCOLUMNS);	//resort as current
+    flags ^= f;
+    // FIXME: a really crude hack, should use a proxy sorting model instead anyway
+    emit updated();
 }
 
+// FIXME: unused?
 void GamesListFilter::toggleWatches(void)
 {
-	watches = !watches;
-	listModel->sort(G_TOTALCOLUMNS);
+    watches = !watches;
+    emit updated();
 }
 
 bool GamesListFilter::filterAcceptsRow(int row) const

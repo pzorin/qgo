@@ -32,6 +32,7 @@
 #include "boarddispatch.h"	//so we can remove observers
 #include "friendslistdialog.h"
 #include "networkconnection.h"
+#include "gamedata.h" // Only used to delete a GameData object at one point; should be part of a listing destructor
 
 #include "ui_connectionwidget.h" // Contains declaration of Ui::ConnectionWidget, needed in Room::Room, FIXME
 

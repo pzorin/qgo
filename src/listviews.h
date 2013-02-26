@@ -38,10 +38,7 @@ class ListItem
 		ListItem(const QList <QVariant> & data);
 		virtual ~ListItem() {};
 		virtual QVariant data(int column) const;
-		virtual int columnCount() const;
-		virtual int compare(const ListItem &, int) const { return 0;};
-	protected:
-		int compareNames(const QString & name1, const QString & name2) const;
+        virtual int columnCount() const;
 	private:
 		QList <QVariant> itemData;
 };
@@ -49,11 +46,11 @@ class ListItem
 class ObserverListItem : public ListItem
 {
 	public:
+    friend class ObserverListItemLessThan;
 		ObserverListItem(PlayerListing * const l);	
 		virtual QVariant data(int column) const;
 		int columnCount() const;
 		PlayerListing * getListing(void) const { return listing; };
-		virtual int compare(const ListItem &, int column) const;
 	private:
 		PlayerListing * const listing;
 };
@@ -61,11 +58,11 @@ class ObserverListItem : public ListItem
 class GamesListItem : public ListItem
 {
 	public:
+    friend class GamesListItemLessThan;
 		GamesListItem(GameListing * const l);
 		virtual QVariant data(int column) const;
 		int columnCount() const;
-		GameListing * getListing(void) const { return listing; };
-		virtual int compare(const ListItem &, int column) const;
+        GameListing * getListing(void) const { return listing; };
 	private:
 		GameListing * const listing;
 };
@@ -73,31 +70,64 @@ class GamesListItem : public ListItem
 class PlayerListItem : public ListItem
 {
 	public:
+        friend class PlayerListItemLessThan;
 		PlayerListItem(PlayerListing * const l);
 		virtual QVariant data(int column) const;
 		int columnCount() const;
 		PlayerListing * getListing(void) const { return listing; };
-		virtual int compare(const ListItem &, int column) const;
 	private:
 		PlayerListing * const listing;
 };
 
-class ListFilter
+class ObserverListItemLessThan
 {
+public:
+    ObserverListItemLessThan(int _column, Qt::SortOrder _order);
+    bool operator()(const ListItem *left, const ListItem *right ) const;
+private:
+    int column;
+    bool reverseOrder;
+};
+
+class GamesListItemLessThan
+{
+public:
+    GamesListItemLessThan(int _column, Qt::SortOrder _order);
+    bool operator()(const ListItem *left, const ListItem *right ) const;
+private:
+    int column;
+    bool reverseOrder;
+};
+
+class PlayerListItemLessThan
+{
+public:
+    PlayerListItemLessThan(int _column, Qt::SortOrder _order);
+    bool operator()(const ListItem *left, const ListItem *right ) const;
+private:
+    int column;
+    bool reverseOrder;
+};
+
+class ListFilter : public QObject
+{
+    Q_OBJECT
 	public:
-		ListFilter(class ListModel * l) : listModel(l) {};
+    ListFilter(class ListModel * l) : QObject(), listModel(l) {};
 		virtual ~ListFilter() {};
 		virtual bool filterAcceptsRow(int row) const = 0;
 		class ListModel * getListModel(void) { return listModel; };
+signals:
+        void updated(void);
 	protected:
-		class ListModel * listModel;
+        class ListModel * listModel;
 };
 
 class PlayerListFilter : public ListFilter
 {
 	public:
 		/* IGS ranks probably up to 10000, but ORO would need 100000 so... */
-		PlayerListFilter(ListModel * l) : ListFilter(l), rankMin(0), rankMax(100000), flags(none) {};
+        PlayerListFilter(ListModel * l) : ListFilter(l), rankMin(0), rankMax(100000), flags(none) {};
 		void setFilter(int rn, int rm);
 		enum PlayerSortFlags { none = 0x0, open = 0x1, friends = 0x2, fans = 0x4, noblock = 0x8 };
 		void setFilter(enum PlayerSortFlags f);
@@ -105,13 +135,13 @@ class PlayerListFilter : public ListFilter
 	private:
 		int rankMin;
 		int rankMax;
-		unsigned char flags;
+        unsigned char flags;
 };
 
 class GamesListFilter : public ListFilter
 {
 	public:
-		GamesListFilter(ListModel * l) : ListFilter(l), watches(false) {};
+        GamesListFilter(ListModel * l) : ListFilter(l), watches(false) {};
 		virtual bool filterAcceptsRow(int row) const;
 		void toggleWatches(void);
 	private:
@@ -120,13 +150,17 @@ class GamesListFilter : public ListFilter
 
 class FilteredView : public QTableView
 {
+    Q_OBJECT
 	public:
         FilteredView(QWidget * p = 0) : QTableView(p), listFilter(0) {};
 		~FilteredView() { delete listFilter; };
-		void setFilter(ListFilter * l) { listFilter = l; };
+        void setFilter(ListFilter * l);
 		ListFilter * getFilter(void) { return listFilter; };
-		void _dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
-	private:
+    protected slots:
+        virtual void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+        virtual void rowsInserted ( const QModelIndex & parent, int start, int end );
+        void updateFilter(void);
+    public:
 		ListFilter * listFilter;
 };
 
@@ -138,30 +172,24 @@ class ListModel : public QAbstractTableModel
 		void insertListing(ListItem & item);
 		//void updateListing(const ListItem & item);
 		//void removeListing(const ListItem & item);
-		int priorityCompare(const ListItem & i, const ListItem & j);
+        int priorityCompare(const ListItem & i, const ListItem & j);
         virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
         QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
         virtual QVariant data(const QModelIndex & index, int role) const;
 		Qt::ItemFlags flags(const QModelIndex & index) const;
-        virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+        //virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
         void setView(FilteredView * v) { view = v; };
-	protected:
+        virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+    protected:
 		friend class PlayerListFilter;
 		friend class GamesListFilter;
         friend class FilteredView;
-		QList <ListItem *> items;	//try it with the one list
-        /* Since we sort lexicographically with several keys
-         * we have to know which keys are more important.
-         * FIXME: store the order for each key */
-        QList <int> sort_priority;
-        QList <Qt::SortOrder> sort_order;
+        QList <ListItem *> items;
+        // FIXME: insert new items at the correct place
+        int sort_column;
+        Qt::SortOrder sort_order;
 		FilteredView * view;
-	private:
-		void quicksort(int b, int e);
-		int qs_partition(int b, int e);
-		
-		QModelIndexList newPersistentIndexes;
 };
 
 class ObserverListModel : public ListModel
@@ -175,7 +203,8 @@ class ObserverListModel : public ListModel
         virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
-		void setAccountName(QString name) { account_name = name; };
+        void setAccountName(QString name) { account_name = name; };
+        virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 	private:
 		QString account_name;
 };
@@ -224,7 +253,8 @@ class GamesListModel : public ListModel
 		void removeListing(GameListing * const l);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
-		GameListing * gameListingFromIndex(const QModelIndex &);
+        GameListing * gameListingFromIndex(const QModelIndex &);
+        virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 };
 
 extern std::map<class PlayerListing *, unsigned short> removed_player;
