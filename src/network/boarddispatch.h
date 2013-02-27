@@ -30,6 +30,7 @@ class BoardDispatch
 		~BoardDispatch();
 		bool canClose(void);
 		void closeBoard(void);
+        void setConnection(NetworkConnection * conn);
 		void recvMove(class MoveRecord * m);
 		void sendMove(class MoveRecord * m);
 		void sendRequestMatchMode();

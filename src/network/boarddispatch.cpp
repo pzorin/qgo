@@ -169,6 +169,14 @@ void BoardDispatch::closeBoard(void)
 	//delete this;
 }
 
+void BoardDispatch::setConnection(NetworkConnection *conn)
+{
+    connection = conn;
+    /* This function is currently called if connection
+     *is closed when a board using that connection is open.
+     *Probably more has to be done here. */
+}
+
 void BoardDispatch::moveControl(QString & player)
 {
 	boardwindow->qgoboard->moveControl(player);

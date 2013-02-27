@@ -29,7 +29,6 @@
 #include "boarddispatch.h"
 #include "gamedialog.h"
 #include "talk.h"
-#include "dispatchregistries.h"
 #include "serverlistdialog.h"
 #include "codecwarndialog.h"
 #include "matchinvitedialog.h"
@@ -4652,7 +4651,7 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 			printf("%02x", text[i]);
 		printf("\n");
 #endif //RE_DEBUG
-		Talk * talk = getTalk(*player);
+        Talk * talk = getTalk(player);
 		if(talk)
 		{
 			talk->recvTalk(QString((char *)text));
@@ -6091,7 +6090,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 		match_negotiation_state->reset();
 		return;
 	}
-	GameDialog * gameDialogDispatch = getIfGameDialog(*player);
+    GameDialog * gameDialogDispatch = getIfGameDialog(player);
 	if(gameDialogDispatch)
 	{
 		gameDialogDispatch->recvRefuseMatch(GD_REFUSE_DECLINE);
@@ -7403,7 +7402,7 @@ void CyberOroConnection::handleMatchOpened(unsigned char * msg, unsigned int siz
 			if(!boarddispatch)
 			{
 				if(player)
-					getAndCloseGameDialog(*player);
+                    getAndCloseGameDialog(player);
 				setRoomNumber(game_number);
 			}
 			else
@@ -7976,7 +7975,7 @@ void CyberOroConnection::handleMatchOffer(unsigned char * msg, unsigned int size
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	GameDialog * gameDialogDispatch = getGameDialog(*player);
+    GameDialog * gameDialogDispatch = getGameDialog(player);
 	gameDialogDispatch->recvRequest(&mr, getGameDialogFlags());
 }
 
@@ -8266,7 +8265,7 @@ void CyberOroConnection::handleMatchOfferPending(unsigned char * msg, unsigned i
 	if(!match_negotiation_state->verifyPlayer(player))
 		return;
 	
-	GameDialog * gd = getGameDialog(*player);
+    GameDialog * gd = getGameDialog(player);
 	gd->recvRequest(0, getGameDialogFlags());
 }
 

@@ -27,7 +27,6 @@
 #include "boarddispatch.h"
 #include "gamedialog.h"
 #include "talk.h"
-#include "dispatchregistries.h"
 #include "playergamelistings.h"
 
 LGSConnection::LGSConnection(const QString & user, const QString & pass) :
@@ -346,7 +345,7 @@ void LGSConnection::handle_info(QString line)
 		}
 		aMatch->their_rank = p->rank;
 
-		GameDialog * gameDialogDispatch = getGameDialog(*p);
+        GameDialog * gameDialogDispatch = getGameDialog(p);
 		gameDialogDispatch->recvRequest(aMatch);
 		delete aMatch;
 	}
@@ -385,7 +384,7 @@ void LGSConnection::handle_info(QString line)
 	{
 		QString opp = element(line, 0, " ");
 		PlayerListing * p = getPlayerListingNeverFail(opp);
-		GameDialog * gameDialogDispatch = getGameDialog(*p);
+        GameDialog * gameDialogDispatch = getGameDialog(p);
 		gameDialogDispatch->recvRefuseMatch(1);
 	}
 			//9 yfh2test declines undo
@@ -1087,7 +1086,7 @@ void LGSConnection::handle_info(QString line)
 		if(statsPlayer)
 		{
 			qDebug("talk name: %s", statsPlayer->name.toLatin1().constData());
-			Talk * talk = getTalk(*statsPlayer);
+            Talk * talk = getTalk(statsPlayer);
 			if(talk)
 				talk->updatePlayerListing();
 			statsPlayer = 0;

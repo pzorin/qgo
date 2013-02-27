@@ -98,7 +98,7 @@ class TygemConnection : public NetworkConnection
 
 		virtual unsigned short getRoomNumber(void); //FIXME for gamedialog unsure of necessity or reliability here
 		
-		virtual void closeTalk(PlayerListing & opponent);
+        virtual void closeTalk(PlayerListing *opponent);
 		virtual void closeBoardDispatch(unsigned int game_id);
 		
 		virtual int gd_verifyBoardSize(int v);

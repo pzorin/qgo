@@ -51,7 +51,6 @@ HEADERS += defines.h \
 displayboard.h \
 gamedata.h \
 listviews.h \
-registry.h \
 mainwindow.h \
 newline_pipe.h \
 audio/audio.h \
@@ -80,7 +79,6 @@ network/consoledispatch.h \
 network/createroomdialog.h \
 network/cyberoroconnection.h \
 network/cyberoroprotocol.h \
-network/dispatchregistries.h \
 network/eweiqiconnection.h \
 network/friendslistdialog.h \
 network/gamedialog.h \

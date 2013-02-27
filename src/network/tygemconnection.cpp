@@ -31,7 +31,6 @@
 #include "boarddispatch.h"
 #include "gamedialog.h"
 #include "talk.h"
-#include "dispatchregistries.h"
 #include "serverlistdialog.h"
 #include "codecwarndialog.h"
 #include "matchinvitedialog.h"
@@ -245,7 +244,7 @@ void TygemConnection::sendText(QString text)
 
 void TygemConnection::sendMsg(PlayerListing & player, QString text)
 {
-	Talk * t = getIfTalk(player);
+    Talk * t = getIfTalk(&player);
 	if(!t)
 	{
 		qDebug("sendMsg called with no talk dialog");
@@ -360,16 +359,16 @@ void TygemConnection::sendResume(unsigned short game_number)
 	match_negotiation_state->sendAdjournResume();
 }
 
-void TygemConnection::closeTalk(PlayerListing & opponent)
+void TygemConnection::closeTalk(PlayerListing * opponent)
 {
-	Talk * t = getIfTalk(opponent);
+    Talk * t = getIfTalk(opponent);
 	if(!t)
 	{
 		qDebug("closing talk but no talk registered!!");
 		return;
 	}
 	if(t->getConversationOpened())
-		sendCloseConversation(opponent);
+        sendCloseConversation(*opponent);
 	NetworkConnection::closeTalk(opponent);
 }
 
@@ -588,7 +587,7 @@ void TygemConnection::declineMatchOffer(const PlayerListing & opponent)
 	unsigned short playing_game_number = match_negotiation_state->getGameId();
 	if(!playing_game_number)
 		return;
-	GameDialog * gameDialogDispatch = getIfGameDialog(opponent);
+    GameDialog * gameDialogDispatch = getIfGameDialog(&opponent);
 	if(!gameDialogDispatch)
 	{
 		qDebug("No game dialog but just got decline!");
@@ -617,7 +616,7 @@ void TygemConnection::acceptMatchOffer(const PlayerListing & opponent, MatchRequ
 	qDebug("accept match offer");
 	if(!mr->opponent_is_challenger)		//should be our_invitation var name maybe
 	{
-		getAndCloseGameDialog(opponent);
+        getAndCloseGameDialog(&opponent);
 		sendStartGame(*mr);
 	}
 	else
@@ -5503,9 +5502,9 @@ void TygemConnection::handleOpenConversation(unsigned char * msg, unsigned int s
 		return;
 	}
 	sendConversationReply(*player, accept);
-	Talk * t = getIfTalk(*player);
+    Talk * t = getIfTalk(player);
 	if(!t)
-		t = getTalk(*player);
+        t = getTalk(player);
 	t->setConversationOpened(true);
 	t->updatePlayerListing();
 }
@@ -5540,7 +5539,7 @@ void TygemConnection::handleConversationReply(unsigned char * msg, unsigned int 
 		qDebug("Unknown player replies to conversation: %s", encoded_name2.toLatin1().constData());
 		return;
 	}
-	Talk * t = getIfTalk(*player);
+    Talk * t = getIfTalk(player);
 	if(!t)
 	{
 		qDebug("No talk for: %s", encoded_name2.toLatin1().constData());
@@ -5626,7 +5625,7 @@ void TygemConnection::handleConversationMsg(unsigned char * msg, unsigned int si
 		qDebug("Unknown player replies to conversation: %s", encoded_name2.toLatin1().constData());
 		return;
 	}
-	Talk * t = getIfTalk(*player);
+    Talk * t = getIfTalk(player);
 	if(!t)
 	{
 		qDebug("Unknown player replies to conversation: %s", encoded_name2.toLatin1().constData());
@@ -5741,7 +5740,7 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 		QString u;
 		
 		u = serverCodec->toUnicode((const char *)text, strlen((char *)text));
-		Talk * talk = getTalk(*player);
+        Talk * talk = getTalk(player);
 		if(talk)
 		{
 			talk->recvTalk(u);
@@ -5990,7 +5989,7 @@ void TygemConnection::handleObserverList(unsigned char * msg, unsigned int size)
 				mr->first_offer = true;
 				mr->timeSystem = byoyomi;
 				
-				GameDialog * gd = getGameDialog(*aPlayer);
+                GameDialog * gd = getGameDialog(aPlayer);
 				gd->recvRequest(mr, getGameDialogFlags());
 				delete mr;
 			}
@@ -8062,7 +8061,7 @@ void TygemConnection::handleMatchOpened(unsigned char * msg, unsigned int size)
 			if(!opponent)
 				qDebug("Can't get opponent to close game dialog");
 			else
-				getAndCloseGameDialog(*opponent);
+                getAndCloseGameDialog(opponent);
 			/* Note that getAndClose will fail if we're rejoining
 			 * a match in progress FIXME, networkconnection reports
 			 * error. */
@@ -8234,7 +8233,7 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 			//return;
 		}
 		//Here, we actually want to pop up game dialog
-		GameDialog * gameDialogDispatch = getGameDialog(*opponent);
+        GameDialog * gameDialogDispatch = getGameDialog(opponent);
 		//for game dialog time checks
 		lastMainTimeChecked = tempmr->maintime;
 		lastPeriodTimeChecked = tempmr->periodtime;
@@ -8250,7 +8249,7 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 		//0x0646: 70657465726975730000000000000008696e74727573696f6e000000000000090032012c2801010001
 		//000001ffffffff000000000001000000000000706574657269757300000002696e74727573696f6e000002
 		//00a00616
-		MatchRequest * mr = getAndCloseGameDialog(*opponent);
+        MatchRequest * mr = getAndCloseGameDialog(opponent);
 		if(!mr)
 		{
 			qDebug("Can't get match request for opponent");
@@ -8270,7 +8269,7 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 	}
 	else if(version == decline)
 	{
-		GameDialog * gameDialogDispatch = getIfGameDialog(*opponent);
+        GameDialog * gameDialogDispatch = getIfGameDialog(opponent);
 		if(!gameDialogDispatch)
 		{
 			qDebug("No game dialog open to be declined");

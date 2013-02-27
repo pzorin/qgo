@@ -630,7 +630,7 @@ void Room::recvPlayerListing(PlayerListing * player)
 				b->recvObserver(player, false);
 			}
 			if(player->dialog_opened)
-				connection->closeTalk(*player);
+                connection->closeTalk(player);
 		}
 		std::vector<unsigned short>::iterator room_listit = player->room_list.begin();
 		while(room_listit != player->room_list.end())
@@ -671,7 +671,7 @@ void Room::recvPlayerListing(PlayerListing * player)
 		 * alread there)*/
 		if(player->dialog_opened)
 		{
-			Talk * t = connection->getIfTalk(*player);
+            Talk * t = connection->getIfTalk(player);
 			if(t)
 				t->updatePlayerListing();
 			else
@@ -737,7 +737,7 @@ void Room::sendStatsRequest(PlayerListing & opponent)
 	 * that generate talk windows */
 	/* This is a little weird now...almost like we're just asking
 	 * for an update on the references */
-	talk = connection->getTalk(opponent);
+    talk = connection->getTalk(&opponent);
 	//connection->sendStatsRequest(opponent);
 	/* This is really only for ORO, and let's see if it works but... */
 	if(talk)

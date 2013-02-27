@@ -27,7 +27,6 @@
 #include "boarddispatch.h"
 #include "gamedialog.h"
 #include "talk.h"
-#include "dispatchregistries.h"
 #include "gamedialogflags.h"
 #include "playergamelistings.h"
 #include "matchnegotiationstate.h"
@@ -257,7 +256,7 @@ void IGSConnection::sendMatchInvite(const PlayerListing & player)
 {
 	MatchRequest * m = 0;
 	/* No match Invites, just popup the dialog */
-	GameDialog * gd = getGameDialog(player);
+    GameDialog * gd = getGameDialog(&player);
 	if(player.nmatch)
 	{
 		const PlayerListing us = getOurListing();
@@ -797,12 +796,10 @@ void IGSConnection::setKeepAlive(int seconds)
 BoardDispatch * IGSConnection::getBoardFromAttrib(QString black_player, unsigned int black_captures, float black_komi, QString white_player, unsigned int white_captures, float white_komi)
 {
 	BoardDispatch * board;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
+    QMap<unsigned int, class BoardDispatch *>::iterator i;
+    for(i = boardDispatchMap.begin(); i != boardDispatchMap.end(); i++)
 	{
-		board = i->second;
+        board = i.value();
 		if(board->isAttribBoard(black_player, black_captures, black_komi, white_player, white_captures, white_komi))
 			return board;
 	}
@@ -812,17 +809,15 @@ BoardDispatch * IGSConnection::getBoardFromAttrib(QString black_player, unsigned
 BoardDispatch * IGSConnection::getBoardFromOurOpponent(QString opponent)
 {
 	BoardDispatch * board;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
+    QMap<unsigned int, class BoardDispatch *>::iterator i;
 	/* Parser may supply our name from the IGS protocol... this is ugly
 	 * but I'm really just trying to reconcile what I think a real
  	 * protocol would be like with the IGS protocol */
 	if(opponent == username)
 		opponent = "";
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
+    for(i = boardDispatchMap.begin(); i != boardDispatchMap.end(); i++)
 	{
-		board = i->second;
+        board = i.value();
 		if(board->isOpponentBoard(username, opponent))
 			return board;
 	}
@@ -1274,21 +1269,21 @@ void IGSConnection::handle_error(QString line)
 		else
 			opp = element(line, 0, " ");
 		PlayerListing * p = getPlayerListingNeverFail(opp);
-		GameDialog * gameDialog = getGameDialog(*p);
+        GameDialog * gameDialog = getGameDialog(p);
 		gameDialog->recvRefuseMatch(GD_REFUSE_INGAME);
 	}
 	else if (line.contains("is not open to match requests"))
 	{
 		QString opp = element(line, 0, "\"", "\"");
 		PlayerListing * p = getPlayerListingNeverFail(opp);
-		GameDialog * gameDialog = getGameDialog(*p);
+        GameDialog * gameDialog = getGameDialog(p);
 		gameDialog->recvRefuseMatch(GD_REFUSE_NOTOPEN);
 	}
 	else if(line.contains("does not accept direct match"))
 	{
 		QString opp = element(line, 0, " ");//, " ");
 		PlayerListing * p = getPlayerListingNeverFail(opp);
-		GameDialog * gameDialog = getGameDialog(*p);
+        GameDialog * gameDialog = getGameDialog(p);
 		gameDialog->recvRefuseMatch(GD_REFUSE_NODIRECT);
 	}
 	else if (line.contains("player is currently not accepting matches"))
@@ -1304,7 +1299,7 @@ void IGSConnection::handle_error(QString line)
 		if(match_playerName.size())
 		{
 			PlayerListing * p = getPlayerListingNeverFail(match_playerName);
-			GameDialog * gameDialog = getGameDialog(*p);
+            GameDialog * gameDialog = getGameDialog(p);
 			gameDialog->recvRefuseMatch(GD_REFUSE_NOTOPEN);
 		}
 	}
@@ -1313,7 +1308,7 @@ void IGSConnection::handle_error(QString line)
 		if(match_playerName.size())
 		{
 			PlayerListing * p = getPlayerListingNeverFail(match_playerName);
-			GameDialog * gameDialog = getGameDialog(*p);
+            GameDialog * gameDialog = getGameDialog(p);
 			gameDialog->recvRefuseMatch(GD_INVALID_PARAMETERS);
 		}
 	}
@@ -1323,7 +1318,7 @@ void IGSConnection::handle_error(QString line)
 		if(match_playerName.size())
 		{
 			PlayerListing * p = getPlayerListingNeverFail(match_playerName);
-			GameDialog * gameDialog = getGameDialog(*p);
+            GameDialog * gameDialog = getGameDialog(p);
 			gameDialog->recvRefuseMatch(GD_OPP_NO_NMATCH);
 		}
 	}
@@ -1367,7 +1362,7 @@ void IGSConnection::handle_error(QString line)
 		QString opponent = element(line, 0, " ");
 		PlayerListing * pl = getPlayerListingNeverFail(opponent);
 		//QString timetochange = element(line, 2, " ");
-		GameDialog * gameDialog = getGameDialog(*pl);
+        GameDialog * gameDialog = getGameDialog(pl);
 		MatchRequest * m = gameDialog->getMatchRequest();
 		MatchRequest * aMatch = new MatchRequest(*m);
 		aMatch->maintime = element(line, 3, " ").toInt();
@@ -1385,7 +1380,7 @@ void IGSConnection::handle_error(QString line)
 		QString opponent = element(line, 0, " ");
 		PlayerListing * pl = getPlayerListingNeverFail(opponent);
 		//QString timetochange = element(line, 2, " ");
-		GameDialog * gameDialog = getGameDialog(*pl);
+        GameDialog * gameDialog = getGameDialog(pl);
 		MatchRequest * m = gameDialog->getMatchRequest();
 		MatchRequest * aMatch = new MatchRequest(*m);
 		aMatch->stones_periods = element(line, 3, " ").toInt();
@@ -1398,7 +1393,7 @@ void IGSConnection::handle_error(QString line)
 		QString opponent = element(line, 0, " ");
 		PlayerListing * pl = getPlayerListingNeverFail(opponent);
 		//QString timetochange = element(line, 2, " ");
-		GameDialog * gameDialog = getGameDialog(*pl);
+        GameDialog * gameDialog = getGameDialog(pl);
 		MatchRequest * m = gameDialog->getMatchRequest();
 		MatchRequest * aMatch = new MatchRequest(*m);
 		aMatch->periodtime = element(line, 3, " ").toInt();
@@ -1410,7 +1405,7 @@ void IGSConnection::handle_error(QString line)
 		//5 x wants Handicap 0 - 0.
 		QString opponent = element(line, 0, " ");
 		PlayerListing * pl = getPlayerListingNeverFail(opponent);
-		GameDialog * gameDialog = getGameDialog(*pl);
+        GameDialog * gameDialog = getGameDialog(pl);
 		MatchRequest * m = gameDialog->getMatchRequest();
 		MatchRequest * aMatch = new MatchRequest(*m);
 		aMatch->handicap = element(line, 3, " ").toInt();
@@ -1439,7 +1434,7 @@ void IGSConnection::handle_error(QString line)
 			if(line.contains("turn"))
 			{
 				pl = getPlayerListingNeverFail(p);
-				gameDialog = getGameDialog(*pl);
+                gameDialog = getGameDialog(pl);
 				MatchRequest * m = gameDialog->getMatchRequest();
 				aMatch = new MatchRequest(*m);
 				if(element(line, 3, " ") == "[B]")
@@ -1521,7 +1516,7 @@ void IGSConnection::handle_error(QString line)
 		aMatch->their_rank = pl->rank;
 		
 		if(!gameDialog)
-			gameDialog = getGameDialog(*pl);
+            gameDialog = getGameDialog(pl);
 		gameDialog->recvRequest(aMatch);
 		delete aMatch;
 	}
@@ -2030,7 +2025,7 @@ void IGSConnection::handle_info(QString line)
 		}
 		aMatch->their_rank = p->rank;
 		
-		GameDialog * gameDialog = getGameDialog(*p);
+        GameDialog * gameDialog = getGameDialog(p);
 		gameDialog->recvRequest(aMatch, flags);
 		delete aMatch;
 	}
@@ -2071,7 +2066,7 @@ void IGSConnection::handle_info(QString line)
 	{
 		QString opp = element(line, 0, " ");
 		PlayerListing * p = getPlayerListingNeverFail(opp);
-		GameDialog * gameDialog = getGameDialog(*p);
+        GameDialog * gameDialog = getGameDialog(p);
 		gameDialog->recvRefuseMatch(1);
 	}
 			//9 yfh2test declines undo
@@ -2767,7 +2762,7 @@ void IGSConnection::handle_info(QString line)
 	else if (line.contains("Defaults"))    //IGS
 	{
 		statsPlayer->extInfo = element(line, 2, " ","EOL");
-		Talk * talk = getTalk(*statsPlayer);
+        Talk * talk = getTalk(statsPlayer);
 		if(talk)
 			talk->updatePlayerListing();
 		statsPlayer = 0;
@@ -2976,7 +2971,7 @@ void IGSConnection::handle_move(QString line)
 					if((white == getUsername() || black == getUsername()) && !getBoardFromOurOpponent(opp))
 					{
 						PlayerListing * p = getPlayerListingNeverFail(opp);
-						MatchRequest * mr = getAndCloseGameDialog(*p);
+                        MatchRequest * mr = getAndCloseGameDialog(p);
 						if(mr)
 						{
 							boarddispatch = getBoardDispatch(number);
@@ -3900,7 +3895,7 @@ void IGSConnection::handle_tell(QString line)
 			* pertaining to this opponent.  We'll assume
 					* one is created I guess */	
 			
-			GameDialog * gameDialog = getGameDialog(*p);
+            GameDialog * gameDialog = getGameDialog(p);
 			gameDialog->recvRefuseMatch(2);
 					////emit signal_matchCanceled(opp);
 		}
@@ -3941,11 +3936,11 @@ void IGSConnection::handle_tell(QString line)
 			// //emit player + message + true (=player)
 			////emit signal_talk(e1, e2, true);
 	PlayerListing * p = getPlayerListingNeverFail(e1);
-	Talk * talk = getIfTalk(*p);
+    Talk * talk = getIfTalk(p);
 	if(!talk)
 	{
 		sendStatsRequest(*p);
-		talk = getTalk(*p);
+        talk = getTalk(p);
 	}
 	if(talk)
 		talk->recvTalk(e2);
@@ -4319,7 +4314,7 @@ void IGSConnection::handle_automatch(QString line)
 		/* Maybe we have to do automatch, rather than accept/decline,
 		 * FIXME */
 		//protocol_save_string = "automatch";
-		GameDialog * gameDialog = getGameDialog(*p);
+        GameDialog * gameDialog = getGameDialog(p);
 		gameDialog->recvRequest(aMatch);
 		
 		delete aMatch;

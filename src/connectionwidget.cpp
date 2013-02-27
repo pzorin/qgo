@@ -1091,7 +1091,7 @@ void ConnectionWidget::slot_pbRelOneTab(QWidget *w)
         ui->talkTabs->removeTab(ui->talkTabs->currentIndex()) ;
         dlg->pageActive = false;
 
-        connection->closeTalk(dlg->get_opponent());
+        connection->closeTalk(&(dlg->get_opponent()));
     }
 
 }

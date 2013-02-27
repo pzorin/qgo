@@ -29,7 +29,6 @@
 #include "talk.h"
 #include "gamedialog.h"
 #include "room.h"
-#include "dispatchregistries.h"
 #include "playergamelistings.h"
 #include "connectionwidget.h"			//don't like so much
 #include "matchnegotiationstate.h"
@@ -42,9 +41,6 @@ default_room(0), console_dispatch(0), qsocket(0)
 	firstonReadyCall = 1;
 	mainwindowroom = 0;
 	friendwatch_notify_default = FRIENDWATCH_NOTIFY_DEFAULT;
-	boardDispatchRegistry = 0;
-	gameDialogRegistry = 0;
-	talkRegistry = 0;
 
 	connectingDialog = 0;
 	match_negotiation_state = new MatchNegotiationState();
@@ -193,15 +189,11 @@ class ServerListStorage & NetworkConnection::getServerListStorage(void)
 
 int NetworkConnection::checkForOpenBoards(void)
 {
-	if(!boardDispatchRegistry)
-		return 0;
 	BoardDispatch * boarddispatch;
-	std::map<unsigned int, class BoardDispatch *>::iterator i;
-	std::map<unsigned int, class BoardDispatch *> * boardDispatchMap =
-		boardDispatchRegistry->getRegistryStorage();
-	for(i = boardDispatchMap->begin(); i != boardDispatchMap->end(); i++)
+    QMap<unsigned int, class BoardDispatch *>::iterator i;
+    for(i = boardDispatchMap.begin(); i != boardDispatchMap.end(); i++)
 	{
-		boarddispatch = i->second;
+        boarddispatch = i.value();
 		if(!boarddispatch->canClose())
 			return -1;
 	}
@@ -279,8 +271,6 @@ NetworkConnection::~NetworkConnection()
 	//In case these still exist
 	//probably unnecessary?
 	delete match_negotiation_state;
-	if(boardDispatchRegistry)
-		qDebug("board dispatch registry unfreed!");
 }
 
 void NetworkConnection::setConsoleDispatch(class ConsoleDispatch * c)
@@ -639,21 +629,20 @@ void NetworkConnection::setupRoomAndConsole(void)
 	console_dispatch = new ConsoleDispatch(this);
 	setConsoleDispatch(console_dispatch);	
 	
-	boardDispatchRegistry = new BoardDispatchRegistry(this);
-	gameDialogRegistry = new GameDialogRegistry(this);
-	talkRegistry = new TalkRegistry(this);
 	loadfriendswatches();
 }
 
 void NetworkConnection::tearDownRoomAndConsole(void)
 {
-	savefriendswatches();
-	delete boardDispatchRegistry;
-	delete gameDialogRegistry;
-	delete talkRegistry;
-	boardDispatchRegistry = 0;
-	gameDialogRegistry = 0;
-	talkRegistry = 0;
+    savefriendswatches();
+    QMap<unsigned int, class BoardDispatch *>::iterator i;
+    for(i = boardDispatchMap.begin(); i != boardDispatchMap.end(); i++)
+    {
+        (i.value())->setConnection(NULL);
+    }
+    boardDispatchMap.clear();
+    talkMap.clear();
+    gameDialogMap.clear(); // FIXME probably unnecessary
 	
 	if(mainwindowroom)
 	{
@@ -857,40 +846,76 @@ const PlayerListing & NetworkConnection::getOurListing(void)
  * some point if that does seem to make more sense in terms of the namespace. */
 BoardDispatch * NetworkConnection::getBoardDispatch(unsigned int game_id)
 {
-	return boardDispatchRegistry->getEntry(game_id);
+    QMap <unsigned int, BoardDispatch *>::const_iterator i = boardDispatchMap.find(game_id);
+    if(i == boardDispatchMap.end())
+    {
+        // Create if it does not exist
+        BoardDispatch * newBoardDispatch = this->getDefaultRoom()->getNewBoardDispatch(game_id);
+        boardDispatchMap.insert(game_id, newBoardDispatch);
+        return newBoardDispatch;
+    }
+    else
+        return i.value();
 }
 
 BoardDispatch * NetworkConnection::getIfBoardDispatch(unsigned int game_id)
 {
-	return boardDispatchRegistry->getIfEntry(game_id);
+    QMap <unsigned int, BoardDispatch *>::const_iterator i = boardDispatchMap.find(game_id);
+    if(i == boardDispatchMap.end())
+        return NULL;
+    else
+        return i.value();
 }
 
 void NetworkConnection::closeBoardDispatch(unsigned int game_id)
 {
-	boardDispatchRegistry->deleteEntry(game_id);
+    QMap <unsigned int, BoardDispatch *>::iterator i = boardDispatchMap.find(game_id);
+    if(i == boardDispatchMap.end())
+        return;
+
+    delete i.value();
+    boardDispatchMap.erase(i);
 }
 
 int NetworkConnection::getBoardDispatches(void)
 {
-	return boardDispatchRegistry->getSize();
+    return boardDispatchMap.count();
 }
 
-GameDialog * NetworkConnection::getGameDialog(const PlayerListing & opponent)
+GameDialog * NetworkConnection::getGameDialog(const PlayerListing * opponent)
 {
-	return gameDialogRegistry->getEntry(&opponent);
+    QMap <const PlayerListing *, GameDialog *>::const_iterator i = gameDialogMap.find(opponent);
+    if(i == gameDialogMap.end())
+    {
+        // Create if it does not exist
+        GameDialog * newDialog = new GameDialog(this, *opponent);
+        gameDialogMap.insert(opponent, newDialog);
+        return newDialog;
+    }
+    else
+        return i.value();
 }
 
-GameDialog * NetworkConnection::getIfGameDialog(const PlayerListing & opponent)
+GameDialog * NetworkConnection::getIfGameDialog(const PlayerListing * opponent)
 {
-	return gameDialogRegistry->getIfEntry(&opponent);
+    QMap <const PlayerListing *, GameDialog *>::const_iterator i = gameDialogMap.find(opponent);
+    if(i == gameDialogMap.end())
+        return NULL;
+    else
+        return i.value();
 }
 
-void NetworkConnection::closeGameDialog(const PlayerListing & opponent)
+void NetworkConnection::closeGameDialog(const PlayerListing * opponent)
 {
-	gameDialogRegistry->deleteEntry(&opponent);
+    QMap <const PlayerListing *, GameDialog *>::iterator i = gameDialogMap.find(opponent);
+    if(i == gameDialogMap.end())
+        return;
+
+    i.value()->deleteLater();
+    gameDialogMap.erase(i);
 }
 
-MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing & opponent)
+MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing * opponent)
 {
 	GameDialog * gd = getIfGameDialog(opponent);
 	MatchRequest * new_mr = 0;
@@ -901,74 +926,39 @@ MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing & op
 		closeGameDialog(opponent);
 	}
 	else
-		qDebug("Couldn't find gamedialog for opponent: %s", opponent.name.toLatin1().constData());
+        qDebug("Couldn't find gamedialog for opponent: %s", opponent->name.toLatin1().constData());
 	return new_mr;
 }
 
-Talk * NetworkConnection::getTalk(PlayerListing & opponent)
+Talk * NetworkConnection::getTalk(PlayerListing * opponent)
 {
-	return talkRegistry->getEntry(&opponent);
+    QMap <const PlayerListing *, Talk *>::const_iterator i = talkMap.find(opponent);
+    if(i == talkMap.end())
+    {
+        // Create if it does not exist
+        Talk * newTalk = new Talk(this, opponent);
+        talkMap.insert(opponent, newTalk);
+        return newTalk;
+    }
+    else
+        return i.value();
 }
 
-Talk * NetworkConnection::getIfTalk(PlayerListing & opponent)
+Talk * NetworkConnection::getIfTalk(PlayerListing * opponent)
 {
-	return talkRegistry->getIfEntry(&opponent);
+    QMap <const PlayerListing *, Talk *>::const_iterator i = talkMap.find(opponent);
+    if(i == talkMap.end())
+        return NULL;
+    else
+        return i.value();
 }
 
-void NetworkConnection::closeTalk(PlayerListing & opponent)
+void NetworkConnection::closeTalk(const PlayerListing * opponent)
 {
-	talkRegistry->deleteEntry(&opponent);
-}
+    QMap <const PlayerListing *, Talk *>::iterator i = talkMap.find(opponent);
+    if(i == talkMap.end())
+        return;
 
-BoardDispatch * BoardDispatchRegistry::getNewEntry(unsigned int game_id)
-{
-	return _c->getDefaultRoom()->getNewBoardDispatch(game_id);
-}
-
-void BoardDispatchRegistry::onErase(BoardDispatch * boarddispatch)
-{
-	delete boarddispatch;
-}
-
-/* This is because there are several IGS protocol messages
- * that do not list the id of the board so it has to be looked
- * up from other information.
- * This may be the case with other messages we find later, but
- * this is a simple solution. 
- * Fairly simple.  It really hurt my feelings when I realized
- * that the registry template had this nice private registry
- * and I had to add this other function to complicate it.*/
-std::map<unsigned int, BoardDispatch *> * BoardDispatchRegistry::getRegistryStorage(void)
-{
-	return getStorage();
-}
-
-GameDialog * GameDialogRegistry::getNewEntry(const PlayerListing * opponent)
-{
-	return new GameDialog(_c, *opponent);
-}
-
-void GameDialogRegistry::onErase(GameDialog * dlg)
-{
-	dlg->deleteLater();
-}
-
-Talk * TalkRegistry::getNewEntry(PlayerListing * opponent)
-{
-	/* I don't want the talk windows to be slaved to a room, 
-	* but at the same time, currently its done in the mainwindow,
-	* so we'll have two different functions with a possible
-	* room dispatch that can be notified by the talkdispatch */
-	/* Since we got rid of the dispatches... I don't know if this
-	 * is an issue anymore */
-	/*Room * room = _c->getDefaultRoom();
-	if(room)
-		return new Talk(_c, *opponent, room);
-	else*/
-		return new Talk(_c, *opponent);
-}
-
-void TalkRegistry::onErase(Talk * dlg)
-{
-	dlg->deleteLater();
+    i.value()->deleteLater();
+    talkMap.erase(i);
 }

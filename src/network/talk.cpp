@@ -38,7 +38,7 @@
 
 int Talk::counter = 0;
 
-Talk::Talk(NetworkConnection * conn, PlayerListing & player) : TalkGui(), connection(conn), opponent(player)
+Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connection(conn), opponent(*player)
 {
 	qDebug("Creating Talk for %s", opponent.name.toLatin1().constData());
 	ui.setupUi(this);
@@ -85,7 +85,7 @@ Talk::~Talk()
 void Talk::closeEvent(QCloseEvent *)
 {
 	if(connection)
-		connection->closeTalk(opponent);
+        connection->closeTalk(&opponent);
 }
 
 QString Talk::get_name() const

@@ -628,7 +628,7 @@ void GameDialog::closeEvent(QCloseEvent *)
 {
 	qDebug("GameDialog::closeEvent");
 	if(connection)
-		connection->closeGameDialog(opponent);
+        connection->closeGameDialog(&opponent);
 }
 
 /*

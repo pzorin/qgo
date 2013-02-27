@@ -34,7 +34,7 @@ class Talk : public QDialog, public Ui::TalkGui
 Q_OBJECT
 
 public:
-	Talk(NetworkConnection * conn, PlayerListing & player);
+    Talk(NetworkConnection * conn, PlayerListing *player);
 	virtual ~Talk();
 	QTextEdit      *get_mle() const { return ui.MultiLineEdit1; } 
 	QLineEdit      *get_le() const {return ui.LineEdit1; }

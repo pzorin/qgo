@@ -38,9 +38,6 @@ class GameDialog;
 class Talk;
 
 class NetworkConnection;
-class BoardDispatchRegistry;
-class GameDialogRegistry;
-class TalkRegistry;
 
 class MatchNegotiationState;
 
@@ -148,13 +145,13 @@ public:
 		BoardDispatch * getIfBoardDispatch(unsigned int game_id);
 		virtual void closeBoardDispatch(unsigned int game_id);
 		int getBoardDispatches(void);
-		GameDialog * getGameDialog(const PlayerListing & opponent);
-		GameDialog * getIfGameDialog(const PlayerListing & opponent);
-		void closeGameDialog(const PlayerListing & opponent);
-		class MatchRequest * getAndCloseGameDialog(const PlayerListing & opponent);
-		Talk * getTalk(PlayerListing & opponent);
-		Talk * getIfTalk(PlayerListing & opponent);
-		virtual void closeTalk(PlayerListing & opponent);
+        GameDialog * getGameDialog(const PlayerListing * opponent);
+        GameDialog * getIfGameDialog(const PlayerListing * opponent);
+        void closeGameDialog(const PlayerListing *opponent);
+        class MatchRequest * getAndCloseGameDialog(const PlayerListing *opponent);
+        Talk * getTalk(PlayerListing *opponent);
+        Talk * getIfTalk(PlayerListing *opponent);
+        virtual void closeTalk(const PlayerListing *opponent);
 		
 		const QString & getUsername(void) { return username; };
         virtual const PlayerListing & getOurListing(void);
@@ -241,18 +238,12 @@ public:
 		void changeChannel(const QString & s);
 
 		bool firstonReadyCall;
-		friend class GameDialogRegistry;
-		friend class TalkRegistry;
 		Room * default_room;
 		ConsoleDispatch * console_dispatch;
 		
 		
 		newline_pipe <unsigned char> pending;
 		newline_pipe <unsigned char> send_buffer;	//not always used
-
-		BoardDispatchRegistry * boardDispatchRegistry;
-		GameDialogRegistry * gameDialogRegistry;
-		TalkRegistry * talkRegistry;
 
 		QString username;
 		QString password;
@@ -302,6 +293,13 @@ public:
 		struct timeval latencyLast;
 		unsigned long latencyAverage;
 #endif //LATENCY
+
+protected:
+        QMap <unsigned int, BoardDispatch *> boardDispatchMap;
+        // Accessed by IGS connection class
+private:
+        QMap <const PlayerListing *, GameDialog *> gameDialogMap;
+        QMap <const PlayerListing *, Talk *> talkMap;
 
 	protected slots:
 		virtual void OnConnected();
