@@ -57,6 +57,11 @@ Room::Room(NetworkConnection * c)
 	/* There are further strangenesses here because of the account_name
 	* for making our player listing blue */
 	setupUI();
+
+    connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateListing(PlayerListing*const)));
+    // Note that pointer casting allows to omit the corresponding headers from this file, thus speeding up compilation
+    connect(playerListModel,SIGNAL(countChanged(int)),(QObject*)mainwindow,SLOT(setPlayerCountStat(int)));
+    connect(gamesListModel,SIGNAL(countChanged(int)),(QObject*)mainwindow,SLOT(setGameCountStat(int)));
 	
 	players = 0;
 	games = 0;
@@ -107,7 +112,7 @@ void Room::setupUI(void)
 	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
 	connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
 	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-    connect(connectionWidget->getUi()->refreshPlayersButton, SIGNAL(pressed()), connection, SLOT(sendPlayersRequest()));
+    connect(connectionWidget->getUi()->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
     connect(connectionWidget->getUi()->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
     connect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
     connect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
@@ -344,16 +349,6 @@ void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 		connection->sendObserve(*g);
 }
 
-void Room::clearPlayerList(void)
-{
-	playerListModel->clearList();
-}
-
-void Room::clearGamesList(void)
-{
-	gamesListModel->clearList();
-}
-
 void Room::slot_refreshGames(void)
 {
 	/* First clear list.  There doesn't
@@ -362,8 +357,14 @@ void Room::slot_refreshGames(void)
 	* getting all info again anyway... 
 	* same with players and perhaps 
 	* observers as well. */
-	clearGamesList();
+    gamesListModel->clearList();
 	connection->sendGamesRequest();
+}
+
+void Room::slot_refreshPlayers(void)
+{
+    playerListModel->clearList();
+    connection->sendPlayersRequest();
 }
 
 /* This code was taken from mainwindow_server.cpp
@@ -687,8 +688,6 @@ void Room::recvPlayerListing(PlayerListing * player)
 		if(it != removed_player.end())
 			removed_player.erase(it);
 	}
-
-    emit playerCountChanged(playerListModel->rowCount(QModelIndex()));
 }
 
 /* These two may want to check that they are the mainwindowroom or the
@@ -699,11 +698,6 @@ void Room::recvPlayerListing(PlayerListing * player)
 void Room::recvExtPlayerListing(class PlayerListing * player)
 {
     connectionWidget->slot_statsPlayer(player);
-}
-
-void Room::updatePlayerListing(class PlayerListing & player)
-{
-	playerListModel->updateListing(&player);
 }
 
 void Room::recvGameListing(GameListing * game)
@@ -729,8 +723,6 @@ void Room::recvGameListing(GameListing * game)
 	}
 	else
         gamesListModel->deleteEntry(key);
-
-    emit gameCountChanged(gamesListModel->rowCount(QModelIndex()));
 }
 
 /* This isn't really just a "sendStats" function anymore, that's

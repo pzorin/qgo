@@ -169,6 +169,7 @@ class FilteredView : public QTableView
 
 class ListModel : public QAbstractTableModel
 {
+    Q_OBJECT
 	 public:
 	 	ListModel();
 		~ListModel();
@@ -183,6 +184,8 @@ class ListModel : public QAbstractTableModel
         //virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
         void setView(FilteredView * v) { view = v; };
         virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+signals:
+        void countChanged(int);
     protected:
         void removeItem(int i);
 		friend class PlayerListFilter;
@@ -214,13 +217,13 @@ class ObserverListModel : public ListModel
 
 class PlayerListModel : public ListModel
 {
+    Q_OBJECT
 	public:
 		PlayerListModel();
 		~PlayerListModel();
         virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
         void insertListing(PlayerListing * const l);
-		void updateListing(PlayerListing * const l);
 		void removeListing(PlayerListing * const l);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
@@ -235,6 +238,8 @@ class PlayerListModel : public ListModel
         PlayerListing * getPlayerFromNotNickName(const QString & notnickname);
         void deleteEntry(const QString & name);
         void deleteEntry(unsigned int id);
+public slots:
+        void updateListing(PlayerListing * const l);
 	private:
 		friend class PlayerListFilter;
 		QString account_name;

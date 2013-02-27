@@ -43,8 +43,6 @@ class Room : public QObject
 		void setConnection(NetworkConnection * c);
 		virtual ~Room();
         void onError(void);
-		void clearPlayerList(void);
-		void clearGamesList(void);
 		void talkOpened(Talk * d);
 		void recvToggle(int type, bool val);
 		PlayerListing * getPlayerListing(const QString & name);
@@ -54,7 +52,6 @@ class Room : public QObject
 		BoardDispatch * getNewBoardDispatch(unsigned int key);
 		void recvPlayerListing(class PlayerListing * g);
 		void recvExtPlayerListing(class PlayerListing * player);
-		void updatePlayerListing(class PlayerListing & player);
 		void recvGameListing(class GameListing * g);
 		void sendStatsRequest(PlayerListing & opponent);
 	protected:
@@ -77,13 +74,12 @@ class Room : public QObject
 		
 		GameListing * popup_gamelisting;
 		PlayerListing * popup_playerlisting;
-signals:
-        void playerCountChanged(int value);
-        void gameCountChanged(int value);
+public slots:
+        void slot_refreshGames(void);
+        void slot_refreshPlayers(void);
 	private slots:
 		void slot_playersDoubleClicked(const QModelIndex &);
 		void slot_gamesDoubleClicked(const QModelIndex &);
-		void slot_refreshGames(void);
 		void slot_setRankSpreadView(void);
 		void slot_editFriendsWatchesList(void);
 		void slot_showPopup(const QPoint & iPoint);

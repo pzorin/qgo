@@ -150,11 +150,6 @@ void ConnectionWidget::loadConnectionSettings(void)
     {
         connection->sendToggle("looking", looking);
         connection->sendToggle("open", open);
-
-        // FIXME: this connection should probably be done somewhere else
-        // Note that pointer casting allows to omit the corresponding headers from this file, thus speeding up compilation
-        connect((QObject*)connection->getDefaultRoom(),SIGNAL(playerCountChanged(int)),(QObject*)mainwindow,SLOT(setPlayerCountStat(int)));
-        connect((QObject*)connection->getDefaultRoom(),SIGNAL(gameCountChanged(int)),(QObject*)mainwindow,SLOT(setGameCountStat(int)));
     }
 }
 
@@ -440,10 +435,8 @@ void ConnectionWidget::slot_roomListClicked(const QString& text)
         if(roomList[i]->name == text)
         {
             connection->sendJoinRoom(*(roomList[i]));
-            connection->getDefaultRoom()->clearPlayerList();
-            connection->getDefaultRoom()->clearGamesList();
-            connection->sendPlayersRequest();
-            connection->sendGamesRequest();
+            connection->getDefaultRoom()->slot_refreshPlayers();
+            connection->getDefaultRoom()->slot_refreshGames();
             return;
         }
     }

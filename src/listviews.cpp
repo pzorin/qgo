@@ -757,6 +757,7 @@ void ListModel::insertListing(ListItem & item)
     emit beginInsertRows(QModelIndex(), items.count(), items.count());
     items.append(&item);
     emit endInsertRows();
+    emit countChanged(items.count());
 }
 
 
@@ -1012,6 +1013,7 @@ void ListModel::removeItem(int i)
     emit beginRemoveRows(QModelIndex(), i, i);
     items.removeAt(i);
     emit endRemoveRows();
+    emit countChanged(items.count());
 }
 
 void FilteredView::setFilter(ListFilter * l)

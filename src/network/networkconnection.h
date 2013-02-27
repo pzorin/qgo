@@ -222,6 +222,7 @@ public:
 
     signals:
         void ready(void);
+        void playerListingUpdated(PlayerListing *);
 		
 	protected:
 		void closeConnection(bool send_disconnect = true);
