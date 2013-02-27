@@ -14,7 +14,6 @@
 #include "boarddispatch.h"
 #include "gamedialogdispatch.h"
 #include "talkdispatch.h"
-#include "listviews.h" //for rankToScore alone FIXME
 
 // Parsing of Go Server messages
 Parser::Parser() //: QObject()//, Misc<QString>()

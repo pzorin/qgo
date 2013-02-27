@@ -26,7 +26,6 @@
 #include "boardwindow.h"
 #include "sgfparser.h"
 #include "tree.h"
-#include "listviews.h"
 #include "connectionwidget.h"
 #include "gamedata.h"
 

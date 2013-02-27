@@ -31,7 +31,6 @@
 #include "tree.h"
 #include "sgf/sgfparser.h"
 #include "../network/boarddispatch.h"
-#include "listviews.h"
 #include "gameinfo.h"
 
 #include <QtGui>
