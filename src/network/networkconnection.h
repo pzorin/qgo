@@ -49,8 +49,8 @@ class QMessageBox;
 
 #define NOT_MAIN_CONNECTION		true
 
-/* I think this needs to inherit from QObject so that it can pick up signals, if those
- * are still necessary */
+/* Some of these methods should be converted to slots.
+ * Also, NetworkConnection should emit signals for many events */
 class NetworkConnection : public QObject
 {
 	Q_OBJECT
@@ -61,6 +61,9 @@ class NetworkConnection : public QObject
 		int getConnectionState();	//should probably return enum
 		void userCanceled(void) { connectionState = CANCELED; /* anything else? */};
 		int checkForOpenBoards(void);
+public slots:
+        virtual void sendPlayersRequest(void) = 0;
+public:
 		void onClose(void);	//so far private? we're going to have tygem use it...
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
@@ -74,7 +77,6 @@ class NetworkConnection : public QObject
 		virtual void stopObserving(const GameListing &) {};
 		virtual void stopReviewing(const GameListing &) {};
 		virtual void sendStatsRequest(const PlayerListing & opponent) = 0;
-		virtual void sendPlayersRequest(void) = 0;
 		virtual void sendGamesRequest(void) = 0;
 		virtual void sendMatchInvite(const PlayerListing &) = 0;
 		virtual void adjournGame(const GameListing &) {};
@@ -106,6 +108,7 @@ class NetworkConnection : public QObject
 		virtual void sendAdjournRequest(void) {};
 		virtual void sendAdjourn(void) {};
 		virtual void sendRefuseAdjourn(void) {};
+public:
 		int write(const char * packet, unsigned int size);
 		void setConsoleDispatch(ConsoleDispatch * c);
 		void setDefaultRoom(Room * r) { default_room = r; };

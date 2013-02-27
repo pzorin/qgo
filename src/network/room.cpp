@@ -37,8 +37,9 @@
 #include "ui_connectionwidget.h" // Contains declaration of Ui::ConnectionWidget, needed in Room::Room, FIXME
 
 //#define PLAYERLISTING_ISSUES
-Room::Room()
+Room::Room(NetworkConnection * c)
 {
+    connection = c; // has to be set before the signals are connected.
     playerView = connectionWidget->getUi()->playerView;
     gamesView = connectionWidget->getUi()->gamesView;
     filterRank1ComboBox = connectionWidget->getUi()->filterRank1ComboBox;
@@ -84,17 +85,9 @@ void Room::setupUI(void)
 	gamesView->setColumnWidth ( 9, 35 ); //25
 	gamesView->setColumnWidth ( 10, 35 ); //20
 	gamesView->setColumnWidth ( 11, 30 ); //25
-	//ui.gamesView->show();
-	
+
 	playerListModel = new PlayerListModel();
-	/* FIXME the below seems to have no affect, so I commented it out.
-	 * I changed references to the listmodel to the sortproxy in the id
-	 * registries, in the hope that they would... well I think that was the
-	 * wrong way, but I can't be sure since it could be an issue with
-	 * the network connection as well... anyway, if I get it working
-	 * correctly, probably more like the way it was, then I should change
-	 * the sortproxy references back maybe... */
-	
+
    // playerView->setIconSize(QSize(20, 20));
 	playerView->setModel(playerListModel);
 	playerListModel->setView(playerView);
@@ -118,13 +111,14 @@ void Room::setupUI(void)
 	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
 	connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
 	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-    connect(connectionWidget->getUi()->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
+    connect(connectionWidget->getUi()->refreshPlayersButton, SIGNAL(pressed()), connection, SLOT(sendPlayersRequest()));
     connect(connectionWidget->getUi()->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
     connect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
     connect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
-	connect(whoOpenCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showOpen(int)));
-	connect(friendsCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showFriends(int)));
-	connect(watchesCheckBox, SIGNAL(stateChanged(int)), SLOT(slot_showWatches(int)));
+    connect(whoOpenCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(playerView->getFilter()), SLOT(setFilterOpen(bool)));
+    connect(friendsCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(playerView->getFilter()), SLOT(setFilterFriends(bool)));
+    connect(watchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(playerView->getFilter()), SLOT(setFilterFans(bool)));
+    connect(watchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<GamesListFilter *>(gamesView->getFilter()), SLOT(setFilterWatch(bool)));
 	connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
 
 	editFriendsWatchesListButton->setEnabled(true);
@@ -140,10 +134,6 @@ Room::~Room()
 	delete playerListingRegistry;
 	delete playerListingIDRegistry;
 	delete gameListingRegistry;
-	
-	/* FIXME: Should probably be part of something else this P G stuff */
-    //mainwindow->statusUsers->setText(" P: 0");
-    //mainwindow->statusGames->setText(" G: 0");
 
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
@@ -227,13 +217,6 @@ void Room::setConnection(NetworkConnection * c)
 	whoOpenCheckBox->setChecked(settings.value("OPENFILTER").toBool());
 	friendsCheckBox->setChecked(settings.value("FRIENDSFILTER").toBool());
 	watchesCheckBox->setChecked(settings.value("WATCHESFILTER").toBool());
-}
-
-void Room::updateRoomStats(void)
-{
-    // It might be better to emit these signals elsewhere FIXME
-    emit playerCountChanged(playerListModel->rowCount(QModelIndex()));
-    emit gameCountChanged(gamesListModel->rowCount(QModelIndex()));
 }
 
 //stats
@@ -380,14 +363,6 @@ void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 		connection->sendObserve(*g);
 }
 
-void Room::slot_refreshPlayers(void)
-{
-	//we don't have to clear the players list
-	//if we're checking for existing player records
-	//clearPlayerList();
-	connection->sendPlayersRequest();
-}
-
 void Room::clearPlayerList(void)
 {
 	playerListModel->clearList();
@@ -483,24 +458,9 @@ void Room::slot_setRankSpreadView(void)
         rkMax = filterRank2ComboBox->currentText();
 	} 
 
-	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(connection->rankToScore(rkMin), connection->rankToScore(rkMax));
+    dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilterMinRank(connection->rankToScore(rkMin));
+    dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilterMaxRank(connection->rankToScore(rkMax));
 	qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
-}
-
-void Room::slot_showOpen(int)
-{
-	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(PlayerListFilter::open);
-}
-
-void Room::slot_showFriends(int)
-{
-	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(PlayerListFilter::friends);
-}
-
-void Room::slot_showWatches(int)
-{
-	dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilter(PlayerListFilter::fans);
-	dynamic_cast<GamesListFilter *>(gamesView->getFilter())->toggleWatches();
 }
 
 void Room::slot_editFriendsWatchesList(void)
@@ -776,7 +736,8 @@ void Room::recvPlayerListing(PlayerListing * player)
 		if(it != removed_player.end())
 			removed_player.erase(it);
 	}
-	updateRoomStats();	//in case we lost one or added one
+
+    emit playerCountChanged(playerListModel->rowCount(QModelIndex()));
 }
 
 /* These two may want to check that they are the mainwindowroom or the
@@ -817,7 +778,8 @@ void Room::recvGameListing(GameListing * game)
 	}
 	else
 		gameListingRegistry->deleteEntry(key);
-	updateRoomStats();	//in case we lost one or added one
+
+    emit gameCountChanged(gamesListModel->rowCount(QModelIndex()));
 }
 
 /* This isn't really just a "sendStats" function anymore, that's

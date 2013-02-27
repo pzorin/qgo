@@ -866,7 +866,7 @@ void FilteredView::setFilter(ListFilter * l)
 {
     listFilter = l;
     connect(l,SIGNAL(updated()),this,SLOT(updateFilter()));
-};
+}
 
 void FilteredView::updateFilter(void)
 {
@@ -938,30 +938,49 @@ bool PlayerListFilter::filterAcceptsRow(int row) const
 	return true;
 }
 
-void PlayerListFilter::setFilter(int rn, int rm)
+void PlayerListFilter::setFilterOpen(bool state)
 {
-	// might be worth calling sort here ???
-	// but what's the active sort column? That
-	// needs to be fixed anyway with the ascending
-	// stuff FIXME
-	rankMin = rn;
-	rankMax = rm;
-    // FIXME: a really crude hack, should use a proxy sorting model instead anyway
+    if (state)
+        flags |= open;
+    else
+        flags &= (~open);
     emit updated();
 }
 
-void PlayerListFilter::setFilter(enum PlayerSortFlags f)
+void PlayerListFilter::setFilterFriends(bool state)
 {
-	// might be worth calling sort here ??? FIXME
-    flags ^= f;
-    // FIXME: a really crude hack, should use a proxy sorting model instead anyway
+    if (state)
+        flags |= friends;
+    else
+        flags &= (~friends);
+    emit updated();
+}
+
+void PlayerListFilter::setFilterFans(bool state)
+{
+    if (state)
+        flags |= fans;
+    else
+        flags &= (~fans);
+    emit updated();
+}
+
+void PlayerListFilter::setFilterMinRank(int rank)
+{
+    rankMin = rank;
+    emit updated();
+}
+
+void PlayerListFilter::setFilterMaxRank(int rank)
+{
+    rankMax = rank;
     emit updated();
 }
 
 // FIXME: unused?
-void GamesListFilter::toggleWatches(void)
+void GamesListFilter::setFilterWatch(bool state)
 {
-    watches = !watches;
+    watches = state;
     emit updated();
 }
 

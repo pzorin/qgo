@@ -629,8 +629,11 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 
 void NetworkConnection::setupRoomAndConsole(void)
 {
-	mainwindowroom = new Room();
-	mainwindowroom->setConnection(this);
+    mainwindowroom = new Room(this);
+    mainwindowroom->setConnection(this);
+    /* Two calls are needed beacause Room has a two step
+     * initialization process that should be merged
+     * in the constructor FIXME */
 	setDefaultRoom(mainwindowroom);
 	
 	console_dispatch = new ConsoleDispatch(this);

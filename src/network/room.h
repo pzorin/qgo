@@ -42,11 +42,10 @@ class Room : public QObject
 	Q_OBJECT
 
 	public:
-		Room();
+        Room(NetworkConnection * c);
 		void setConnection(NetworkConnection * c);
 		virtual ~Room();
-		void onError(void);
-		void updateRoomStats(void);
+        void onError(void);
 		void clearPlayerList(void);
 		void clearGamesList(void);
 		void talkOpened(Talk * d);
@@ -90,12 +89,8 @@ signals:
 	private slots:
 		void slot_playersDoubleClicked(const QModelIndex &);
 		void slot_gamesDoubleClicked(const QModelIndex &);
-		void slot_refreshPlayers(void);
 		void slot_refreshGames(void);
 		void slot_setRankSpreadView(void);
-		void slot_showOpen(int);
-		void slot_showFriends(int);
-		void slot_showWatches(int);
 		void slot_editFriendsWatchesList(void);
 		void slot_showPopup(const QPoint & iPoint);
 		void slot_showGamesPopup(const QPoint & iPoint);

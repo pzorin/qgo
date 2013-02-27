@@ -125,25 +125,32 @@ signals:
 
 class PlayerListFilter : public ListFilter
 {
+    Q_OBJECT
 	public:
 		/* IGS ranks probably up to 10000, but ORO would need 100000 so... */
         PlayerListFilter(ListModel * l) : ListFilter(l), rankMin(0), rankMax(100000), flags(none) {};
-		void setFilter(int rn, int rm);
 		enum PlayerSortFlags { none = 0x0, open = 0x1, friends = 0x2, fans = 0x4, noblock = 0x8 };
-		void setFilter(enum PlayerSortFlags f);
 		virtual bool filterAcceptsRow(int row) const;
-	private:
-		int rankMin;
-		int rankMax;
-        unsigned char flags;
+public slots:
+    void setFilterOpen(bool state);
+    void setFilterFriends(bool state);
+    void setFilterFans(bool state);
+    void setFilterMinRank(int rank);
+    void setFilterMaxRank(int rank);
+private:
+    int rankMin;
+    int rankMax;
+    unsigned char flags;
 };
 
 class GamesListFilter : public ListFilter
 {
+    Q_OBJECT
 	public:
         GamesListFilter(ListModel * l) : ListFilter(l), watches(false) {};
 		virtual bool filterAcceptsRow(int row) const;
-		void toggleWatches(void);
+public slots:
+        void setFilterWatch(bool state);
 	private:
 		bool watches;
 };
@@ -171,8 +178,7 @@ class ListModel : public QAbstractTableModel
 		~ListModel();
 		void insertListing(ListItem & item);
 		//void updateListing(const ListItem & item);
-		//void removeListing(const ListItem & item);
-        int priorityCompare(const ListItem & i, const ListItem & j);
+        //void removeListing(const ListItem & item);
         virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
         QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
