@@ -22,7 +22,6 @@
 
 #include "room.h"
 #include "../listviews.h"
-#include "roomregistries.h"
 #include "talk.h"
 #include "messages.h"
 #include "gamedialog.h"
@@ -58,9 +57,6 @@ Room::Room(NetworkConnection * c)
 	/* There are further strangenesses here because of the account_name
 	* for making our player listing blue */
 	setupUI();
-	
-	playerListingRegistry = 0;
-	playerListingIDRegistry = 0;
 	
 	players = 0;
 	games = 0;
@@ -131,10 +127,6 @@ void Room::setupUI(void)
 
 Room::~Room()
 {
-	delete playerListingRegistry;
-	delete playerListingIDRegistry;
-	delete gameListingRegistry;
-
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
 	qDebug("Deconstructing room");
@@ -181,17 +173,6 @@ void Room::onError(void)
 void Room::setConnection(NetworkConnection * c)
 {
 	connection = c;
-	if(connection->playerTrackingByID())
-	{
-		qDebug("Creating player ID Registry");
-		playerListingIDRegistry = new PlayerListingIDRegistry(playerListModel);
-	}
-	else
-	{
-		qDebug("Creating player Registry");
-		playerListingRegistry = new PlayerListingRegistry(playerListModel);
-	}
-	gameListingRegistry = new GameListingRegistry(gamesListModel);
 	
 	playerListModel->setAccountName(connection->getUsername());
 	// FIXME, what about observerListModels when they come up on boards?
@@ -366,25 +347,11 @@ void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 void Room::clearPlayerList(void)
 {
 	playerListModel->clearList();
-	if(connection->playerTrackingByID())
-	{
-		qDebug("Recreating player ID Registry");
-		delete playerListingIDRegistry;
-		playerListingIDRegistry = new PlayerListingIDRegistry(playerListModel);
-	}
-	else
-	{
-		qDebug("Recreating player Registry");
-		delete playerListingRegistry;
-		playerListingRegistry = new PlayerListingRegistry(playerListModel);
-	}
 }
 
 void Room::clearGamesList(void)
 {
 	gamesListModel->clearList();
-	delete gameListingRegistry;
-	gameListingRegistry = new GameListingRegistry(gamesListModel);
 }
 
 void Room::slot_refreshGames(void)
@@ -483,31 +450,20 @@ void Room::recvToggle(int type, bool val)
 
 GameListing * Room::registerGameListing(GameListing * l)
 {
-	return gameListingRegistry->getEntry(l->number, l);
+    return gamesListModel->getEntry(l->number, l);
 }
 
 /* This appears to be unused, recvGameListing does stuff
  * with "->running" FIXME */
 void Room::unRegisterGameListing(unsigned int key)
 {
-	gameListingRegistry->deleteEntry(key);
+    gamesListModel->deleteEntry(key);
 }
 
 PlayerListing * Room::getPlayerListing(const QString & name)
 {
 	PlayerListing * p;
-	if(!playerListingRegistry)
-	{
-		if(playerListingIDRegistry)
-			p = playerListingIDRegistry->getPlayerFromName(name);
-		else
-		{
-			qDebug("No player listing registry!");
-			return NULL;
-		}
-	}
-	else
-		p = playerListingRegistry->getEntry(name);	//note getNewEntry not defined and so returns 0 like getIfEntry
+    p = playerListModel->getEntry(name); //returns 0 if name not found
 
 #ifdef FIXME
 	/* this is tricky FIXME */
@@ -520,12 +476,7 @@ PlayerListing * Room::getPlayerListing(const QString & name)
 
 PlayerListing * Room::getPlayerListing(const unsigned int id)
 {
-	if(!playerListingIDRegistry)	//FIXME
-	{
-		qDebug("No player listing registry!");
-		return NULL;
-	}
-	PlayerListing * p = playerListingIDRegistry->getEntry(id);
+    PlayerListing * p = playerListModel->getEntry(id);
 	// FIXME
 	/*if(!p)
 		connection->sendStatsRequest(id);*/	
@@ -550,13 +501,13 @@ PlayerListing * Room::getPlayerListing(const unsigned int id)
 PlayerListing * Room::getPlayerListingByNotNickname(const QString & notnickname)
 {
 	PlayerListing * p;
-	if(!playerListingRegistry)
+    if(connection->playerTrackingByID())
 	{
 		qDebug("No player listing registry!");
 		return NULL;
 	}
 	else
-		p = playerListingRegistry->getPlayerFromNotNickName(notnickname);
+        p = playerListModel->getPlayerFromNotNickName(notnickname);
 
 	/* Should probably return & FIXME */
 	return p;	
@@ -568,7 +519,7 @@ PlayerListing * Room::getPlayerListingByNotNickname(const QString & notnickname)
  * the games/player registries by passing them */
 GameListing * Room::getGameListing(unsigned int key)
 {
-	GameListing * l = gameListingRegistry->getEntry(key);
+    GameListing * l = gamesListModel->getEntry(key);
 	/* I'm not sure we'd ever want to automatically
 	 * requestGameStats.  Either the listing is on the way
 	 * or we request it from some other place.  The main
@@ -696,19 +647,19 @@ void Room::recvPlayerListing(PlayerListing * player)
 	PlayerListing * registered_player = 0;
 	if(player->online)
 		connection->getAndSetFriendWatchType(*player);
-	if(playerListingIDRegistry)
+    if(connection->playerTrackingByID())
 	{
 		if(player->online)
-			registered_player = playerListingIDRegistry->getEntry(player->id, player);
+            registered_player = playerListModel->getEntry(player->id, player);
 		else
-			playerListingIDRegistry->deleteEntry(player->id);	
+            playerListModel->deleteEntry(player->id);
 	}
 	else
 	{
 		if(player->online)
-			registered_player = playerListingRegistry->getEntry(player->name, player);
+            registered_player = playerListModel->getEntry(player->name, player);
 		else
-			playerListingRegistry->deleteEntry(player->name);
+            playerListModel->deleteEntry(player->name);
 	}
 	
 	if(registered_player && player->online)
@@ -773,11 +724,11 @@ void Room::recvGameListing(GameListing * game)
 	
 	if(game->running)
 	{
-		game = gameListingRegistry->getEntry(key, game);
+        game = gamesListModel->getEntry(key, game);
 		connection->checkGameWatched(*game);
 	}
 	else
-		gameListingRegistry->deleteEntry(key);
+        gamesListModel->deleteEntry(key);
 
     emit gameCountChanged(gamesListModel->rowCount(QModelIndex()));
 }
@@ -799,62 +750,4 @@ void Room::sendStatsRequest(PlayerListing & opponent)
 	/* This is really only for ORO, and let's see if it works but... */
 	if(talk)
 		talk->updatePlayerListing();
-}
-
-/*** GameListing/PlayerListing Registry functions ***/
-
-void GameListingRegistry::initEntry(GameListing * l)
-{
-	gamesListModel->updateListing(l);
-}
-
-void GameListingRegistry::onErase(GameListing * l)
-{
-	gamesListModel->removeListing(l);
-	delete l->gameData;		//used by ORO
-	delete l;
-}
-
-void PlayerListingRegistry::initEntry(PlayerListing * l)
-{
-	playerListModel->updateListing(l);
-}
-
-void PlayerListingRegistry::onErase(PlayerListing * l)
-{
-	playerListModel->removeListing(l);
-	delete l;
-}
-
-PlayerListing * PlayerListingRegistry::getPlayerFromNotNickName(const QString & notnickname)
-{
-	std::map<QString, PlayerListing *>::iterator i;
-	for(i = getStorage()->begin(); i != getStorage()->end(); i++)
-	{
-		if(i->second->notnickname == notnickname)
-			return (i->second);
-	}
-	return NULL;
-}
-
-void PlayerListingIDRegistry::initEntry(PlayerListing * l)
-{
-	playerListModel->updateListing(l);
-}
-
-void PlayerListingIDRegistry::onErase(PlayerListing * l)
-{
-	playerListModel->removeListing(l);
-	delete l;
-}
-
-PlayerListing * PlayerListingIDRegistry::getPlayerFromName(const QString & name)
-{
-	std::map<unsigned int, PlayerListing *>::iterator i;
-	for(i = getStorage()->begin(); i != getStorage()->end(); i++)
-	{
-		if(i->second->name == name)
-			return (i->second);
-	}
-	return NULL;
 }

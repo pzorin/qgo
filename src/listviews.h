@@ -25,10 +25,6 @@
 class GameListing;
 class PlayerListing;
 
-#define LESSTHAN	-1
-#define EQUALTO		0
-#define GREATERTHAN	1
-
 /* ListItem can't have pure virtual functions because
  * we do actually use it for the header items */
 class ListItem
@@ -188,6 +184,7 @@ class ListModel : public QAbstractTableModel
         void setView(FilteredView * v) { view = v; };
         virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
     protected:
+        void removeItem(int i);
 		friend class PlayerListFilter;
 		friend class GamesListFilter;
         friend class FilteredView;
@@ -229,8 +226,15 @@ class PlayerListModel : public ListModel
 		virtual QVariant data(const QModelIndex & index, int role) const;
 		PlayerListing * playerListingFromIndex(const QModelIndex &);
 		PlayerListItem * playerListItemFromIndex(const QModelIndex &) const;
-		void setAccountName(QString name) { account_name = name; };
+        void setAccountName(const QString & name) { account_name = name; };
 		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+        PlayerListing * getEntry(const QString & name);
+        PlayerListing * getEntry(const QString & name, const PlayerListing * listing);
+        PlayerListing * getEntry(unsigned int id);
+        PlayerListing * getEntry(unsigned int id, const PlayerListing * listing);
+        PlayerListing * getPlayerFromNotNickName(const QString & notnickname);
+        void deleteEntry(const QString & name);
+        void deleteEntry(unsigned int id);
 	private:
 		friend class PlayerListFilter;
 		QString account_name;
@@ -257,6 +261,9 @@ class GamesListModel : public ListModel
         void insertListing(GameListing * const l);
 		void updateListing(GameListing * const l);
 		void removeListing(GameListing * const l);
+        GameListing * getEntry(unsigned int id);
+        GameListing * getEntry(unsigned int id, const GameListing * listing);
+        void deleteEntry(unsigned int id);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
         GameListing * gameListingFromIndex(const QModelIndex &);

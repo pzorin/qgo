@@ -23,6 +23,7 @@
 #include "listviews.h"
 #include "network/messages.h"
 #include "playergamelistings.h"
+#include "gamedata.h"
 
 #define QUICKQUICKSORT
 
@@ -198,9 +199,7 @@ void PlayerListModel::removeListing(PlayerListing * const l)
 		PlayerListItem * item = static_cast<PlayerListItem *>(items[i]);
 		if(item->getListing() == l)
 		{
-			emit beginRemoveRows(QModelIndex(), i, i);
-			items.removeAt(i);
-			emit endRemoveRows();
+            removeItem(i);
 			delete item;
 			return;
 		}
@@ -251,6 +250,110 @@ PlayerListing * PlayerListModel::playerListingFromIndex(const QModelIndex & inde
 PlayerListItem * PlayerListModel::playerListItemFromIndex(const QModelIndex & index) const
 {
     return static_cast<PlayerListItem*>(items[index.row()]);
+}
+
+PlayerListing * PlayerListModel::getEntry(const QString &name)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->name == name)
+            return result;
+    }
+    return NULL;
+}
+
+PlayerListing * PlayerListModel::getEntry(unsigned int id)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->id == id)
+            return result;
+    }
+    return NULL;
+}
+
+PlayerListing * PlayerListModel::getEntry(unsigned int id, const PlayerListing * listing)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->id == id)
+        {
+            *result = *listing;
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            return result;
+        }
+    }
+    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
+    insertListing(result);
+    return result;
+}
+
+PlayerListing * PlayerListModel::getEntry(const QString &name, const PlayerListing * listing)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->name == name)
+        {
+            *result = *listing;
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            return result;
+        }
+    }
+    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
+    insertListing(result);
+    return result;
+}
+
+PlayerListing * PlayerListModel::getPlayerFromNotNickName(const QString & notnickname)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->notnickname == notnickname)
+            return result;
+    }
+    return NULL;
+}
+
+void PlayerListModel::deleteEntry(const QString & name)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->name == name)
+        {
+            removeItem(i);
+            delete result;
+            return;
+        }
+    }
+    return;
+}
+
+void PlayerListModel::deleteEntry(unsigned int id)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->id == id)
+        {
+            removeItem(i);
+            delete result;
+            return;
+        }
+    }
+    return;
 }
 
 ObserverListItemLessThan::ObserverListItemLessThan(int _column, Qt::SortOrder _order)
@@ -549,9 +652,7 @@ void GamesListModel::removeListing(GameListing * const l)
 		{
 			/* Really this is supposed to be not QModelIndex() but the
 			 * parent model index of the model... ?!?? */
-			emit beginRemoveRows(QModelIndex(), i, i);
-			items.removeAt(i);
-			emit endRemoveRows();
+            removeItem(i);
 			//qDebug("Removing %p %s %p %s", item->getListing()->white, item->getListing()->white_name().toLatin1().constData(),
 			 //     item->getListing()->black, item->getListing()->black_name().toLatin1().constData());
 			delete item;
@@ -562,11 +663,55 @@ void GamesListModel::removeListing(GameListing * const l)
 	qDebug("Couldn't find listing to remove for game id %d", l->number);
 }
 
+GameListing * GamesListModel::getEntry(unsigned int id)
+{
+    GameListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((GamesListItem *)(items[i]))->getListing();
+        if (result->number == id)
+            return result;
+    }
+    return NULL;
+}
+
+GameListing * GamesListModel::getEntry(unsigned int id, const GameListing * listing)
+{
+    GameListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((GamesListItem *)(items[i]))->getListing();
+        if (result->number == id)
+        {
+            *result = *listing;
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            return result;
+        }
+    }
+    result = new GameListing(*listing); // Should not create a copy here? FIXME
+    insertListing(result);
+    return result;
+}
+
+void GamesListModel::deleteEntry(unsigned int id)
+{
+    GameListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((GamesListItem *)(items[i]))->getListing();
+        if (result->number == id)
+        {
+            removeItem(i);
+            delete result->gameData;		//used by ORO
+            delete result;
+            return;
+        }
+    }
+    return;
+}
+
 void GamesListModel::clearList(void)
 {
-    if (items.count() == 0)
-        return;
-
     emit beginRemoveRows(QModelIndex(), 0, items.count() - 1);
     for(int i = 0; i < items.count(); i++)
 	{
@@ -860,6 +1005,13 @@ Qt::ItemFlags ListModel::flags(const QModelIndex & index) const
 	if(!index.isValid())
 		return Qt::ItemIsEnabled;
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+void ListModel::removeItem(int i)
+{
+    emit beginRemoveRows(QModelIndex(), i, i);
+    items.removeAt(i);
+    emit endRemoveRows();
 }
 
 void FilteredView::setFilter(ListFilter * l)

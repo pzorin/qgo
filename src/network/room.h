@@ -29,9 +29,6 @@ class NetworkConnection;
 class BoardDispatch;
 class PlayerListing;
 class GameListing;
-class GameListingRegistry;
-class PlayerListingRegistry;
-class PlayerListingIDRegistry;
 class Talk;
 class FilteredView;
 class PlayerListModel;
@@ -67,9 +64,6 @@ class Room : public QObject
 		
 		unsigned int players;
 		unsigned int games;
-		GameListingRegistry * gameListingRegistry;
-		PlayerListingRegistry * playerListingRegistry;
-		PlayerListingIDRegistry * playerListingIDRegistry;
 	private:
 		PlayerListModel * playerListModel;
 		GamesListModel * gamesListModel;

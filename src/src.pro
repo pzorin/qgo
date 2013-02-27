@@ -97,7 +97,6 @@ network/playergamelistings.h \
 network/protocol.h \
 network/quickconnection.h \
 network/room.h \
-network/roomregistries.h \
 network/serverlistdialog.h \
 network/serverliststorage.h \
 network/setphrasepalette.h \
