@@ -26,9 +26,7 @@
 #include <QWidget>
 #include <QtGui>
 
-class HostList;
 class RoomListing;
-class LoginDialog;
 class NetworkConnection;
 class ServerListStorage;
 class Talk;
@@ -40,6 +38,7 @@ namespace Ui {
 class ConnectionWidget;
 }
 
+/* This class should probably be merged into Room */
 class ConnectionWidget : public QWidget
 {
     Q_OBJECT
@@ -66,9 +65,14 @@ public:
 
     int closeConnection(bool error = false);
 
+    /* Ugly hack, need a unique function
+     * that is called when connection is established */
+    bool isConnected(void);
+    void setupButtons(void);
+
 public slots:
     void loadConnectionSettings(void);
-    void slot_connect(bool b);
+    void disconnectFromServer(void);
     //void slot_textReceived(const QString &txt);
     void slot_message(QString, QColor = Qt::black);
 //	void slot_message(QString txt);
@@ -88,7 +92,6 @@ public slots:
     void talkOpened(Talk * d);
     void talkRecv(Talk * d);
     void slot_pbRelOneTab(QWidget *w);
-    void slot_cbconnectChanged(int);
     void setLooking(bool val);
     void slot_cbopen();
     void slot_cbquiet();
@@ -98,18 +101,11 @@ public slots:
     void slot_connexionClosed();
 
     void slot_statsPlayer(PlayerListing*);
-
-    void saveHostList(void);
-    void loadHostList(QSettings * settings);
     
 private:
     Ui::ConnectionWidget *ui;
 
-    void setupButtons(void);
-
     void cleanupServerData(void);
-    // online time
-    QDateTime	connectionEstablished;
     bool	youhavemsg;
     bool	playerListEmpty;
 //	bool    gamesListEmpty;
@@ -119,12 +115,9 @@ private:
     int	cmd_count;
     bool	cmd_valid;
 
-    HostList * hostlist;
-
     // telnet ready
     bool	tn_ready;
     bool	tn_wait_for_tn_ready;
-    LoginDialog * logindialog;
     NetworkConnection * connection;
     ServerListStorage * serverliststorage;
     QMenu 		*seekMenu;
@@ -142,6 +135,7 @@ private:
 
     // timing aids
     void 		timerEvent(QTimerEvent*);
+    QDateTime	connectionEstablished; // online time
 };
 
 #endif // CONNECTIONWIDGET_H

@@ -288,7 +288,7 @@ public:
 		
 		Room * mainwindowroom;
 
-		QMessageBox * connectingDialog;
+        QMessageBox * connectingDialog;
 #ifdef LATENCY
 		struct timeval latencyLast;
 		unsigned long latencyAverage;

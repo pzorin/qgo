@@ -1957,8 +1957,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionRefreshPlayers"/>
-   <addaction name="actionRefreshGames"/>
+   <addaction name="actionConnect"/>
    <addaction name="actionQuit"/>
   </widget>
   <action name="actionSgf_editor">
@@ -2003,40 +2002,16 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionRefreshGames">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
+  <action name="actionConnect">
    <property name="icon">
-    <iconset theme="view-refresh" resource="application.qrc">
-     <normaloff>:/ressources/pics/refresh_games.png</normaloff>:/ressources/pics/refresh_games.png</iconset>
+    <iconset theme="network-transmit-receive" resource="application.qrc">
+     <normaloff>:/ressources/pics/connect_no2.png</normaloff>:/ressources/pics/connect_no2.png</iconset>
    </property>
    <property name="text">
-    <string>Refresh Games</string>
-   </property>
-   <property name="toolTip">
-    <string>Refresh game list</string>
+    <string>Connect...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+R</string>
-   </property>
-  </action>
-  <action name="actionRefreshPlayers">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="view-refresh" resource="application.qrc">
-     <normaloff>:/ressources/pics/refresh_players.png</normaloff>:/ressources/pics/refresh_players.png</iconset>
-   </property>
-   <property name="text">
-    <string>Refresh Players</string>
-   </property>
-   <property name="toolTip">
-    <string>Refresh players list</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>

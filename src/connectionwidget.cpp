@@ -25,11 +25,9 @@
 #include "network/networkconnection.h"
 #include "network/talk.h"
 #include "network/gamedialog.h"
-#include "network/login.h"
 #include "listviews.h"
 #include "playergamelistings.h"		//FIXME should be moved out
 #include "network/consoledispatch.h"		//FIXME for channel chat
-#include "host.h"
 #include "messages.h"
 #include "room.h"
 
@@ -49,9 +47,8 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect(ui->createRoomButton, SIGNAL(clicked()), SLOT(slot_createRoom()));
 
     connection = 0;
-    logindialog = 0;
 
-    connect( ui->connectButton, SIGNAL( toggled(bool) ), SLOT( slot_connect(bool) ) );
+    connect( ui->connectButton, SIGNAL(clicked()), SLOT( disconnectFromServer(void) ) );
 
     /* We need to integrate this room list with the new room code FIXME */
     connect(ui->roomComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
@@ -67,14 +64,12 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect( ui->commandLineComboBox, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
 
     // connecting the server tab buttons
-    connect(ui->serverComboBox, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
     connect( ui->quietCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
     connect( ui->openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
     connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( setLooking(bool) ) );
 
     // for saving server ip lists
     serverliststorage = new ServerListStorage();
-    hostlist = new HostList;
 }
 
 ConnectionWidget::~ConnectionWidget()
@@ -133,6 +128,7 @@ void ConnectionWidget::setNetworkConnection(NetworkConnection * conn)
     if (connection != NULL)
         connection->disconnect(this);
     connection = conn;
+    connectionEstablished = QDateTime::currentDateTime();
     if (connection != NULL)
         connect(connection,SIGNAL(ready()),SLOT(loadConnectionSettings()));
 }
@@ -141,10 +137,10 @@ void ConnectionWidget::loadConnectionSettings(void)
 {
     QSettings settings;
     const bool looking = settings.value("LOOKING_FOR_GAMES").toBool();
-    connectionWidget->getUi()->lookingCheckBox->setChecked(looking);
+    ui->lookingCheckBox->setChecked(looking);
 
     const bool open = settings.value("OPEN_FOR_GAMES").toBool();
-    connectionWidget->getUi()->openCheckBox->setChecked(open);
+    ui->openCheckBox->setChecked(open);
 
     if (connection != NULL)
     {
@@ -157,40 +153,10 @@ void ConnectionWidget::loadConnectionSettings(void)
 /*
  * slot_connect: emitted when connect button has toggled
  */
-void ConnectionWidget::slot_connect(bool b)
+void ConnectionWidget::disconnectFromServer(void)
 {
-    if (b)
-    {
-        if(connection)
-            return;
-        logindialog = new LoginDialog(ui->serverComboBox->currentText(), hostlist);
-        if(logindialog->exec())
-        {
-            ui->serverComboBox->setEnabled(false);
-            ui->connectButton->setToolTip(tr("Disconnect from") + " " + ui->serverComboBox->currentText());
-            setupButtons();
-            // start timer: event every second
-            connectionEstablished = QDateTime::currentDateTime();
-
-            /* FIXME shouldn't say ONLINE here but tired of it saying
-            * OFFLINE and not ready to fix it */
-            //statusServer->setText(" ONLINE ");
-        }
-        else
-        {
-            ui->connectButton->blockSignals(true);
-            ui->connectButton->setChecked(false);
-            ui->connectButton->blockSignals(false);
-        }
-        //delete logindialog;	//not supposed to delete?
-        logindialog = 0;
-    }
-    else	// toggled off
-    {
-        if(!connection)
-            return;
-        if(logindialog)
-        {
+    if(!connection)
+        return;
             /* There was definitely a crash from disconnecting
              * with a logindialog open because the logindialog kept
              * calling network connection code.  What doesn't make
@@ -199,26 +165,9 @@ void ConnectionWidget::slot_connect(bool b)
              * button, breaking the modality of the logindialog and
              * allowing a crash here... FIXME But we should never
              * get here. */
-            /* We can't delete it like this... */
-            qDebug("Shouldn't be here, mainwindow_server line %d", __LINE__);
-            //delete logindialog;
-            //logindialog->deleteLater();
-            logindialog = 0;
-        }
-        if(closeConnection() < 0)
-        {
-            ui->connectButton->blockSignals(true);
-            ui->connectButton->setChecked(true);
-            ui->connectButton->blockSignals(false);
-            return;
-        }
-        ui->serverComboBox->setEnabled(true);
-        /* FIXME
-         * this looks ugly grayed out but it shouldn't be changeable...
-         * we should really set some text or something somewhere, or the ONLINE
-         * text and it should all be done in a central place. */
-        /* Also FIXME clear the rooms list on disconnect */
-    }
+            // For the time being just made the dialog modal
+    if (closeConnection() == 0)
+        this->setEnabled(false);
 }
 
 /* FIXME I feel like all the UI elements below that hide
@@ -297,13 +246,12 @@ void ConnectionWidget::setupButtons(void)
 /* Maybe it should be here? */
 void ConnectionWidget::onConnectionError(void)
 {
-    if(logindialog)
-        return;
     qDebug("onConnectionError");
     closeConnection(true);		//probably don't care about return here since connection is likely dead.
                     //could be a crash here though or maybe shouldn't be here at all doublecheck FIXME
     /* FIXME this can get stuck open if we get a connection error on connect, like the app doesn't quit when
      * the main window is closed */
+    this->setEnabled(false);
 }
 
 int ConnectionWidget::closeConnection(bool error)
@@ -319,14 +267,6 @@ int ConnectionWidget::closeConnection(bool error)
         ui->connectButton->blockSignals(false);
         delete c;
     }
-
-
-    //connectSound->play();
-
-    // show current Server name in status bar
-    //statusServer->setText(" OFFLINE ");
-
-    ui->connectButton->setToolTip( tr("Connect with") + " " + ui->serverComboBox->currentText());
     return 0;
 }
 
@@ -361,9 +301,6 @@ void ConnectionWidget::slot_connexionClosed()
 
 }
 
-/* We need a separate server panel class with changeServer and maybe seek and the room and channel
- * lists  It would need access to the mainwindow ui and could handle a lot of things that weren't
- * room specific and also to the network dispatch */
 void ConnectionWidget::slot_changeServer(void)
 {
     if(connection)
@@ -1170,12 +1107,6 @@ void ConnectionWidget::slot_checkbox(int nr, bool val)
     }
 }
 
-void ConnectionWidget::slot_cbconnectChanged(int)
-{
-    if(!ui->connectButton->isChecked())
-        ui->connectButton->setToolTip( tr("Connect with") + " " + ui->serverComboBox->currentText());
-}
-
 /*
  * checkbox looking cklicked
  */
@@ -1334,32 +1265,7 @@ void ConnectionWidget::slot_msgBox(const QString& msg)
     ui->msgTextEdit->append(msg);
 }
 
-void ConnectionWidget::saveHostList(void)
+bool ConnectionWidget::isConnected(void)
 {
-    QSettings settings;
-    settings.beginWriteArray("HOSTS");
-    for (int i = 0; i < hostlist->size(); ++i)
-    {
-        settings.setArrayIndex(i);
-        settings.setValue("server", hostlist->at(i)->host());
-        settings.setValue("loginName", hostlist->at(i)->loginName());
-        settings.setValue("password", hostlist->at(i)->password());
-    }
-    settings.endArray();
-}
-
-void ConnectionWidget::loadHostList(QSettings *settings)
-{
-    hostlist->clear();
-    Host *h;
-    int size = settings->beginReadArray("HOSTS");
-    for (int i = 0; i < size; ++i)
-    {
-        settings->setArrayIndex(i);
-        h = new Host(settings->value("server").toString(),
-            settings->value("loginName").toString(),
-            settings->value("password").toString());
-        hostlist->append(h);
-    }
-    settings->endArray();
+    return (connection != NULL);
 }

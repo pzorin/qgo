@@ -29,10 +29,10 @@
 
 #include <QtGui>
 
+class HostList;
 class RoomListing;
 class LoginDialog;
 class NetworkConnection;
-class ServerListStorage;
 class Talk;
 class GameDialog;
 class SGFParser;
@@ -80,6 +80,8 @@ public slots:
     void setGameCountStat(int);
     void setPlayerCountStat(int);
 
+    void openConnectDialog(void);
+
 protected:
 	void closeEvent(QCloseEvent *e);
 	void loadSettings();
@@ -102,6 +104,10 @@ private:
 
     QList<BoardWindow *> boardWindowList;
 	QString currentWorkingDir;
+
+    void saveHostList(void);
+    void loadHostList(QSettings * settings);
+    HostList * hostlist;
 };
 
 #endif

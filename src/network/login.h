@@ -32,12 +32,14 @@ class LoginDialog : public QDialog, Ui::LoginDialog
 {
 	Q_OBJECT
 	public:
-		LoginDialog(const QString &, HostList * h);
+        LoginDialog(HostList * h);
 	private slots:		//or can these be private?
 		void slot_cancel(void);
 		void slot_connect(void);
+        void slot_cbconnectChanged(int);
 		void slot_editTextChanged(const QString &);
 	private:
+        void loadAccounts(void);
 		ConnectionType serverStringToConnectionType(const QString & s);
 		NetworkConnection * newConnection(ConnectionType connType, QString username, QString password);
 		QString connectionTypeToServerString(const ConnectionType c);

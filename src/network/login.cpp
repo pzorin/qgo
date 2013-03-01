@@ -32,41 +32,30 @@
 #include "network/tomconnection.h"
 #include "connectionwidget.h"
 
-LoginDialog::LoginDialog(const QString & s, HostList * h)
+LoginDialog::LoginDialog(HostList * h)
 {
 	ui.setupUi(this);
-	connectionName = s;
+    connectionName = ui.serverComboBox->currentText();
 	connection = 0;
 	serverlistdialog_open = false;
+
+    hostlist = h; // Should just read it from settings here
+    loadAccounts();
 	
-	setWindowTitle(connectionName);
-	
+    connect(ui.serverComboBox, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
 	connect(ui.connectPB, SIGNAL(clicked()), this, SLOT(slot_connect()));
 	connect(ui.cancelPB, SIGNAL(clicked()), this, SLOT(slot_cancel()));
-	
-	hostlist = h;
-	int firstloginitem = 1;
-	for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
-	{
-		if((*hi)->host() == connectionName)
-		{
-			ui.loginEdit->addItem((*hi)->loginName());
-			if(firstloginitem)
-			{
-				if((*hi)->password() != QString())
-				{
-					ui.passwordEdit->setText((*hi)->password());
-					ui.savepasswordCB->setChecked(true);
-				}
-				firstloginitem = 0;
-			}
-		}
-	}
+
 	connect(ui.loginEdit, SIGNAL(editTextChanged(const QString &)), this, SLOT(slot_editTextChanged(const QString &)));
 }
 
 void LoginDialog::slot_connect(void)
 {
+    this->setEnabled(false);
+    /* Here a possibility to cancel the connection
+     * while it is being created could be provided using
+     * void NetworkConnection::slot_cancelConnecting(void) */
+
 	//if(ui.connectPB->isDown())	//wth?  unreliable?
 	if(serverlistdialog_open)
 		return;
@@ -128,7 +117,7 @@ void LoginDialog::slot_connect(void)
 				{
 					delete (*hi);
 					hostlist->erase(hi);
-					break;
+                    break;
 				}
 			}
 		}
@@ -136,13 +125,16 @@ void LoginDialog::slot_connect(void)
 			(ui.savepasswordCB->isChecked() ? ui.passwordEdit->text() : QString()));
         hostlist->insert(0, h);
 		//SUCCESS
+        // This should be handled by connectionWidget itself.
+        connectionWidget->setupButtons();
+        connectionWidget->setEnabled(true);
 		done(1);
 		return;
 	}
     connectionWidget->setNetworkConnection(0);
 	delete connection;
 	connection = 0;
-	
+    this->setEnabled(true);
 }
 
 void LoginDialog::slot_cancel(void)
@@ -252,4 +244,35 @@ NetworkConnection * LoginDialog::newConnection(ConnectionType connType, QString 
 			// ERROR handling???
 			return 0;
 	}
+}
+
+void LoginDialog::slot_cbconnectChanged(int)
+{
+    connectionName = ui.serverComboBox->currentText();
+    loadAccounts();
+}
+
+void LoginDialog::loadAccounts(void)
+{
+    ui.loginEdit->blockSignals(true);
+    ui.loginEdit->clear();
+    ui.passwordEdit->clear();
+    bool firstloginitem = true;
+    for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
+    {
+        if((*hi)->host() == connectionName)
+        {
+            ui.loginEdit->addItem((*hi)->loginName());
+            if(firstloginitem)
+            {
+                if((*hi)->password() != QString())
+                {
+                    ui.passwordEdit->setText((*hi)->password());
+                    ui.savepasswordCB->setChecked(true);
+                }
+                firstloginitem = false;
+            }
+        }
+    }
+    ui.loginEdit->blockSignals(false);
 }

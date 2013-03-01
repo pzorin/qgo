@@ -28,8 +28,8 @@
 #include "tree.h"
 #include "connectionwidget.h"
 #include "gamedata.h"
-
-#include <QtGui>
+#include "login.h"
+#include "host.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	: QMainWindow( parent,  flags )
@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	SGFloaded = "";
 
 	// loads the settings
+    hostlist = new HostList;
 	loadSettings();
 
 	// filling the file view
@@ -119,6 +120,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	//sound
 	connectSound = 	SoundFactory::newSound(SOUND_PATH_PREFIX"static.wav");
+
+    connect( ui.actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
 }
 
 MainWindow::~MainWindow()
@@ -216,6 +219,36 @@ void MainWindow::setGameCountStat(int count)
 void MainWindow::setPlayerCountStat(int count)
 {
     statusUsers->setText(QVariant(count).toString().prepend(" P: "));
+}
+
+void MainWindow::saveHostList(void)
+{
+    QSettings settings;
+    settings.beginWriteArray("HOSTS");
+    for (int i = 0; i < hostlist->size(); ++i)
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("server", hostlist->at(i)->host());
+        settings.setValue("loginName", hostlist->at(i)->loginName());
+        settings.setValue("password", hostlist->at(i)->password());
+    }
+    settings.endArray();
+}
+
+void MainWindow::loadHostList(QSettings *settings)
+{
+    hostlist->clear();
+    Host *h;
+    int size = settings->beginReadArray("HOSTS");
+    for (int i = 0; i < size; ++i)
+    {
+        settings->setArrayIndex(i);
+        h = new Host(settings->value("server").toString(),
+            settings->value("loginName").toString(),
+            settings->value("password").toString());
+        hostlist->append(h);
+    }
+    settings->endArray();
 }
 
 bool MainWindow::loadSGF(QString fileName)
@@ -486,4 +519,14 @@ int MainWindow::checkForOpenBoards(void)
     qDeleteAll(boardWindowList);
     boardWindowList.clear();
 	return 0;
+}
+
+void MainWindow::openConnectDialog(void)
+{
+    /* The login dialog is responsible for creating the connection
+     *and notifying the connectionWidget about it. */
+    if(connectionWidget->isConnected())
+        return;
+    LoginDialog * logindialog = new LoginDialog(hostlist);
+    logindialog->exec();
 }

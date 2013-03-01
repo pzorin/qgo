@@ -2,11 +2,14 @@
 <ui version="4.0">
  <class>ConnectionWidget</class>
  <widget class="QWidget" name="ConnectionWidget">
+  <property name="enabled">
+   <bool>false</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>906</width>
+    <width>921</width>
     <height>686</height>
    </rect>
   </property>
@@ -35,85 +38,27 @@
       </size>
      </property>
      <property name="title">
-      <string>Server status</string>
+      <string>Status</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QComboBox" name="serverComboBox">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Select service</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>IGS</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>WING</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>LGS</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>CyberORO</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Tygem</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>eWeiQi</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Tom</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="connectButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>70</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Connect</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="connectButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Disconnect</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="changeServerButton">
@@ -295,7 +240,7 @@
         <item row="2" column="1">
          <widget class="QComboBox" name="channelComboBox">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <property name="minimumSize">
            <size>
@@ -500,7 +445,9 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset theme="view-refresh"/>
+          <iconset theme="view-refresh">
+           <normaloff/>
+          </iconset>
          </property>
         </widget>
        </item>
@@ -778,7 +725,9 @@
           <string>Refresh players list</string>
          </property>
          <property name="icon">
-          <iconset theme="view-refresh"/>
+          <iconset theme="view-refresh">
+           <normaloff/>
+          </iconset>
          </property>
         </widget>
        </item>
@@ -904,24 +853,6 @@
     </widget>
    </item>
   </layout>
-  <action name="actionConnect">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="applications-internet" resource="application.qrc">
-     <normaloff>:/ressources/pics/connect_no2.png</normaloff>:/ressources/pics/connect_no2.png</iconset>
-   </property>
-   <property name="text">
-    <string>Connect</string>
-   </property>
-   <property name="toolTip">
-    <string>Connect to server</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
-   </property>
-  </action>
   <zorder>groupBox_3</zorder>
   <zorder>talkTabs</zorder>
   <zorder>tabWidget</zorder>

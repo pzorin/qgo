@@ -182,7 +182,7 @@ void MainWindow::saveSettings()
 
     //settings.setValue("ACCOUNT", ui.connectionWidget->ui->serverComboBox->currentIndex());
 
-    ui.connectionWidget->saveHostList();
+    saveHostList();
 
 	//server games default values
 	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
@@ -271,7 +271,7 @@ void MainWindow::loadSettings()
     ui.connectionWidget->slot_alternateListColorsCB(b);
 	
 	//server list
-    ui.connectionWidget->loadHostList(&settings);
+    loadHostList(&settings);
 
     //ui.connectionWidget->ui->serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
 

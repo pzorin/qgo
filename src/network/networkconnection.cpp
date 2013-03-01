@@ -42,7 +42,7 @@ default_room(0), console_dispatch(0), qsocket(0)
 	mainwindowroom = 0;
 	friendwatch_notify_default = FRIENDWATCH_NOTIFY_DEFAULT;
 
-	connectingDialog = 0;
+    connectingDialog = 0;
 	match_negotiation_state = new MatchNegotiationState();
 }
 
@@ -83,11 +83,11 @@ int NetworkConnection::getConnectionState(void)
 
 void NetworkConnection::setConnected(void)
 {
-	if(connectingDialog)
-	{
-		connectingDialog->deleteLater();
-		connectingDialog = 0;
-	}
+    if(connectingDialog)
+    {
+        connectingDialog->deleteLater();
+        connectingDialog = 0;
+    }
 	connectionState = CONNECTED;
 }
 
@@ -212,11 +212,11 @@ void NetworkConnection::closeConnection(bool send_disconnect)
 	* there's a MainWindow::connexionClosed that does
 	* good stuff we should move into somewhere
 	* nearby., also what about onError?*/
-	if(connectingDialog)
-	{
-		connectingDialog->deleteLater();
-		connectingDialog = 0;
-	}
+    if(connectingDialog)
+    {
+        connectingDialog->deleteLater();
+        connectingDialog = 0;
+    }
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
 		if(send_disconnect)
@@ -485,23 +485,23 @@ void NetworkConnection::checkGameWatched(GameListing & game)
 
 void NetworkConnection::drawPleaseWait(void)
 {
-	QPushButton * cancelConnecting;
+    QPushButton * cancelConnecting;
 
-	connectingDialog = new QMessageBox(QMessageBox::NoIcon, tr("Please wait"), tr("Connecting..."));
-	//connectingDialog->setWindowTitle();
-	//connectingDialog->setText();
-	cancelConnecting = connectingDialog->addButton(QMessageBox::Cancel);
-	connect(cancelConnecting, SIGNAL(clicked()), this, SLOT(slot_cancelConnecting()));
-	connectingDialog->show();
-	connectingDialog->setMinimumSize(180, 100);
+    connectingDialog = new QMessageBox(QMessageBox::NoIcon, tr("Please wait"), tr("Connecting..."));
+    //connectingDialog->setWindowTitle();
+    //connectingDialog->setText();
+    cancelConnecting = connectingDialog->addButton(QMessageBox::Cancel);
+    connect(cancelConnecting, SIGNAL(clicked()), this, SLOT(slot_cancelConnecting()));
+    connectingDialog->show();
+    connectingDialog->setMinimumSize(180, 100);
 }
 
 /* Slots */
 void NetworkConnection::slot_cancelConnecting(void)
 {
 	userCanceled();
-	connectingDialog->deleteLater();
-	connectingDialog = 0;
+    connectingDialog->deleteLater();
+    connectingDialog = 0;
 }
 
 void NetworkConnection::OnConnected()
@@ -601,12 +601,12 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 			break;
 	}
 	
-	if(connectingDialog)
-	{
-		connectingDialog->deleteLater();
-		connectingDialog = 0;
-	}
-	//sendTextToApp("ERROR - Connection closed.\n"+ qsocket->errorString() );
+    if(connectingDialog)
+    {
+        connectingDialog->deleteLater();
+        connectingDialog = 0;
+    }
+    //sendTextToApp("ERROR - Connection closed.\n"+ qsocket->errorString() );
 	qDebug("Socket Error\n");
 	//OnReadyRead();
 	/* We need to toggle the connection flag, close things up, etc.. */
