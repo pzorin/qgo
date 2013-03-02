@@ -108,10 +108,11 @@ private:
 class ListFilter : public QObject
 {
     Q_OBJECT
-	public:
-    ListFilter(class ListModel * l) : QObject(), listModel(l) {};
+public:
+    ListFilter(class ListModel * l) : QObject(), listModel(NULL) {};
 		virtual ~ListFilter() {};
 		virtual bool filterAcceptsRow(int row) const = 0;
+    void setListModel(ListModel * l) { listModel = l; };
 		class ListModel * getListModel(void) { return listModel; };
 signals:
         void updated(void);
@@ -159,6 +160,7 @@ class FilteredView : public QTableView
 		~FilteredView() { delete listFilter; };
         void setFilter(ListFilter * l);
 		ListFilter * getFilter(void) { return listFilter; };
+        virtual void setModel ( ListModel * model );
     protected slots:
         virtual void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
         virtual void rowsInserted ( const QModelIndex & parent, int start, int end );

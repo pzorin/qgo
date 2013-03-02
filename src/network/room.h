@@ -43,7 +43,6 @@ class Room : public QObject
 		void setConnection(NetworkConnection * c);
 		virtual ~Room();
         void onError(void);
-		void talkOpened(Talk * d);
 		void recvToggle(int type, bool val);
 		PlayerListing * getPlayerListing(const QString & name);
 		PlayerListing * getPlayerListing(const unsigned int id);
@@ -67,8 +66,6 @@ class Room : public QObject
 
 		FilteredView * playerView, * gamesView;
 		QPushButton * editFriendsWatchesListButton;
-		QComboBox * filterRank1ComboBox, * filterRank2ComboBox;
-		QCheckBox * whoOpenCheckBox, * friendsCheckBox, * watchesCheckBox;
 		NetworkConnection * connection;
 		QModelIndex popup_item;
 		
@@ -80,7 +77,6 @@ public slots:
 	private slots:
 		void slot_playersDoubleClicked(const QModelIndex &);
 		void slot_gamesDoubleClicked(const QModelIndex &);
-		void slot_setRankSpreadView(void);
 		void slot_editFriendsWatchesList(void);
 		void slot_showPopup(const QPoint & iPoint);
 		void slot_showGamesPopup(const QPoint & iPoint);

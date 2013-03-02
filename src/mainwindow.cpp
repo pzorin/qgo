@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	qDebug( "Home Path : %s" ,QDir::homePath().toLatin1().constData());	
 	qDebug( "Current Path : %s" ,QDir::currentPath ().toLatin1().constData());
 
+    this->setAttribute( Qt::WA_DeleteOnClose );
 	ui.setupUi(this);
 	//hide by default
 	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));

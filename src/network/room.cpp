@@ -39,14 +39,9 @@
 Room::Room(NetworkConnection * c)
 {
     connection = c; // has to be set before the signals are connected.
-    playerView = connectionWidget->getUi()->playerView;
-    gamesView = connectionWidget->getUi()->gamesView;
-    filterRank1ComboBox = connectionWidget->getUi()->filterRank1ComboBox;
-    filterRank2ComboBox = connectionWidget->getUi()->filterRank2ComboBox;
-    whoOpenCheckBox = connectionWidget->getUi()->filterOpenCheckBox;
-    friendsCheckBox = connectionWidget->getUi()->filterFriendsCheckBox;
-    watchesCheckBox = connectionWidget->getUi()->filterWatchesCheckBox;
-    editFriendsWatchesListButton = connectionWidget->getUi()->editFriendsWatchesButton;
+    playerView = connectionWidget->ui->playerView;
+    gamesView = connectionWidget->ui->gamesView;
+    editFriendsWatchesListButton = connectionWidget->ui->editFriendsWatchesButton;
 	/* Normally the dispatch and the UI are created at the sametime
 	* by the connection or dispatch code.  In this case,
 	* the UI already exists and is being passed straight in here,
@@ -71,61 +66,42 @@ void Room::setupUI(void)
 {
 	gamesListModel = new GamesListModel();
 	gamesView->setModel(gamesListModel);
-	gamesView->setFilter(new GamesListFilter(gamesListModel));
-
-	//IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
-	gamesView->setColumnWidth ( 0, 40 );	//35
-	gamesView->setColumnWidth ( 1, 100 );
-	gamesView->setColumnWidth ( 2, 40 );	//35
-	gamesView->setColumnWidth ( 3, 100 );
-	gamesView->setColumnWidth ( 4, 40 );	//35
-	gamesView->setColumnWidth ( 5, 30 );	//30
-	gamesView->setColumnWidth ( 6, 30 ); //25
-	gamesView->setColumnWidth ( 7, 20 ); //20
-	gamesView->setColumnWidth ( 8, 35 ); //30
-	gamesView->setColumnWidth ( 9, 35 ); //25
-	gamesView->setColumnWidth ( 10, 35 ); //20
-	gamesView->setColumnWidth ( 11, 30 ); //25
+    //IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
+    gamesView->setColumnWidth ( 0, 40 );	//35
+    gamesView->setColumnWidth ( 1, 100 );
+    gamesView->setColumnWidth ( 2, 40 );	//35
+    gamesView->setColumnWidth ( 3, 100 );
+    gamesView->setColumnWidth ( 4, 40 );	//35
+    gamesView->setColumnWidth ( 5, 30 );	//30
+    gamesView->setColumnWidth ( 6, 30 ); //25
+    gamesView->setColumnWidth ( 7, 20 ); //20
+    gamesView->setColumnWidth ( 8, 35 ); //30
+    gamesView->setColumnWidth ( 9, 35 ); //25
+    gamesView->setColumnWidth ( 10, 35 ); //20
+    gamesView->setColumnWidth ( 11, 30 ); //25
 
 	playerListModel = new PlayerListModel();
-
-   // playerView->setIconSize(QSize(20, 20));
 	playerView->setModel(playerListModel);
 	playerListModel->setView(playerView);
-	playerView->setFilter(new PlayerListFilter(playerListModel));
-	
-	playerView->setColumnWidth ( 0, 40 );
-	playerView->setColumnWidth ( 1, 100 );
-	playerView->setColumnWidth ( 2, 40 );
-	playerView->setColumnWidth ( 3, 40 );
-	playerView->setColumnWidth ( 4, 40);
-	playerView->setColumnWidth ( 5, 40 );
-	playerView->setColumnWidth ( 6, 40 );
-	playerView->setColumnWidth ( 7, 40 );
-	playerView->setColumnWidth ( 8, 80 );
+    playerView->setColumnWidth ( 0, 40 );
+    playerView->setColumnWidth ( 1, 100 );
+    playerView->setColumnWidth ( 2, 40 );
+    playerView->setColumnWidth ( 3, 40 );
+    playerView->setColumnWidth ( 4, 40);
+    playerView->setColumnWidth ( 5, 40 );
+    playerView->setColumnWidth ( 6, 40 );
+    playerView->setColumnWidth ( 7, 40 );
+    playerView->setColumnWidth ( 8, 80 );
 
-
-    filterRank1ComboBox->setCurrentIndex(0);
-    filterRank2ComboBox->setCurrentIndex(0);
 	/* Maybe also a "clicked" for something? */
 	connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClicked(const QModelIndex &)));
 	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
 	connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
 	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-    connect(connectionWidget->getUi()->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
-    connect(connectionWidget->getUi()->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
-    connect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
-    connect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slot_setRankSpreadView()));
-    connect(whoOpenCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(playerView->getFilter()), SLOT(setFilterOpen(bool)));
-    connect(friendsCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(playerView->getFilter()), SLOT(setFilterFriends(bool)));
-    connect(watchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(playerView->getFilter()), SLOT(setFilterFans(bool)));
-    connect(watchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<GamesListFilter *>(gamesView->getFilter()), SLOT(setFilterWatch(bool)));
+    connect(connectionWidget->ui->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
+    connect(connectionWidget->ui->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
 	connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
 
-	editFriendsWatchesListButton->setEnabled(true);
-	whoOpenCheckBox->setEnabled(true);
-	friendsCheckBox->setEnabled(true);
-	watchesCheckBox->setEnabled(true);
 	playerView->blockSignals(false);
 	gamesView->blockSignals(false);
 }
@@ -143,29 +119,7 @@ Room::~Room()
 	delete playerListModel;
 	delete gamesListModel;
 	
-    disconnect(filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), 0, 0);
-    disconnect(filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), 0, 0);
 	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
-	disconnect(whoOpenCheckBox, SIGNAL(stateChanged(int)), 0, 0);
-	disconnect(friendsCheckBox, SIGNAL(stateChanged(int)), 0, 0);
-	disconnect(watchesCheckBox, SIGNAL(stateChanged(int)), 0, 0);
-	editFriendsWatchesListButton->setDisabled(true);
-	
-	QSettings settings;
-    settings.setValue("LOWRANKFILTER", filterRank1ComboBox->currentIndex());
-    settings.setValue("HIGHRANKFILTER", filterRank2ComboBox->currentIndex());
-    filterRank1ComboBox->setCurrentIndex(0);
-    filterRank2ComboBox->setCurrentIndex(0);
-	
-	settings.setValue("OPENFILTER", whoOpenCheckBox->isChecked());
-	settings.setValue("FRIENDSFILTER", friendsCheckBox->isChecked());
-	settings.setValue("WATCHESFILTER", watchesCheckBox->isChecked());
-	whoOpenCheckBox->setChecked(false);
-	friendsCheckBox->setChecked(false);
-	watchesCheckBox->setChecked(false);
-	whoOpenCheckBox->setEnabled(false);
-	friendsCheckBox->setEnabled(false);
-	watchesCheckBox->setEnabled(false);
 }
 
 void Room::onError(void)
@@ -178,31 +132,7 @@ void Room::onError(void)
 void Room::setConnection(NetworkConnection * c)
 {
 	connection = c;
-	
 	playerListModel->setAccountName(connection->getUsername());
-	// FIXME, what about observerListModels when they come up on boards?
-	unsigned long flags = connection->getPlayerListColumns();
-	if(flags & PL_NOWINSLOSSES)
-	{
-		playerView->hideColumn(5);
-		playerView->hideColumn(6);
-	}
-	if(flags & PL_NOMATCHPREFS)
-	{
-		playerView->hideColumn(9);	
-	}
-	
-	QSettings settings;
-	QVariant var = settings.value("LOWRANKFILTER");
-	if(var != QVariant())
-	{
-        filterRank1ComboBox->setCurrentIndex(var.toInt());
-        filterRank2ComboBox->setCurrentIndex(settings.value("HIGHRANKFILTER").toInt());
-	}
-	
-	whoOpenCheckBox->setChecked(settings.value("OPENFILTER").toBool());
-	friendsCheckBox->setChecked(settings.value("FRIENDSFILTER").toBool());
-	watchesCheckBox->setChecked(settings.value("WATCHESFILTER").toBool());
 }
 
 //stats
@@ -235,7 +165,6 @@ void Room::slot_showPopup(const QPoint & iPoint)
 		
 	menu.addAction(matchAct);
 	
-		
 	menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
 	menu.addSeparator();
     	if(popup_playerlisting->friendWatchType == PlayerListing::friended)
@@ -367,81 +296,12 @@ void Room::slot_refreshPlayers(void)
     connection->sendPlayersRequest();
 }
 
-/* This code was taken from mainwindow_server.cpp
- * I guess it figures out which is min and which
- * is max?? */
-void Room::slot_setRankSpreadView(void)
-{
-	QString rkMin, rkMax;
-	QString r1,r2;
-
-    if ((filterRank1ComboBox->currentIndex() == 0) && (filterRank2ComboBox->currentIndex() == 0))
-	{
-		rkMin = "NR";
-		rkMax = "9p";
-	}
-
-    else if ( ((filterRank1ComboBox->currentIndex() == 0) && (filterRank2ComboBox->currentIndex() == 1)) ||
-        ((filterRank1ComboBox->currentIndex() == 1) && (filterRank2ComboBox->currentIndex() == 0))  ||
-        ((filterRank1ComboBox->currentIndex() == 1) && (filterRank2ComboBox->currentIndex() ==1)) )
-	{
-		rkMin = "1p";
-		rkMax = "9p";
-	}	
-
-    else if ((filterRank1ComboBox->currentIndex() == 0) && (filterRank2ComboBox->currentIndex() > 1))
-	{
-        rkMin = filterRank2ComboBox->currentText();
-        rkMax = filterRank2ComboBox->currentText();
-	}	
-
-
-    else if ((filterRank1ComboBox->currentIndex() > 1) && (filterRank2ComboBox->currentIndex() == 0))
-	{
-        rkMin = filterRank1ComboBox->currentText();
-        rkMax = filterRank1ComboBox->currentText();
-	}	
-
-    else if ((filterRank1ComboBox->currentIndex() > 1) && (filterRank2ComboBox->currentIndex() == 1))
-	{
-        rkMin = filterRank1ComboBox->currentText();
-		rkMax = "9p";
-	}	
-
-    else if ((filterRank1ComboBox->currentIndex() == 1) && (filterRank2ComboBox->currentIndex() > 1))
-	{
-        rkMin = filterRank2ComboBox->currentText();
-		rkMax = "9p";
-	}
-
-
-    else if ((filterRank2ComboBox->currentIndex() >= filterRank1ComboBox->currentIndex() ))
-	{
-        rkMin = filterRank2ComboBox->currentText();
-        rkMax = filterRank1ComboBox->currentText();
-	} 
-	else 
-	{
-        rkMin = filterRank1ComboBox->currentText();
-        rkMax = filterRank2ComboBox->currentText();
-	} 
-
-    dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilterMinRank(connection->rankToScore(rkMin));
-    dynamic_cast<PlayerListFilter *>(playerView->getFilter())->setFilterMaxRank(connection->rankToScore(rkMax));
-	qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
-}
-
 void Room::slot_editFriendsWatchesList(void)
 {
 	//does this crash if we do it too soon?
 	FriendsListDialog * fld = new FriendsListDialog(connection);
 	fld->exec();
 	delete fld;		//okay?
-}
-
-void Room::talkOpened(Talk * d)
-{
-    connectionWidget->talkOpened(d);
 }
 
 void Room::recvToggle(int type, bool val)

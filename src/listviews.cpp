@@ -1022,8 +1022,16 @@ void FilteredView::setFilter(ListFilter * l)
     connect(l,SIGNAL(updated()),this,SLOT(updateFilter()));
 }
 
+void FilteredView::setModel ( ListModel * model )
+{
+    listFilter->setListModel(model);
+    QTableView::setModel(model);
+}
+
 void FilteredView::updateFilter(void)
 {
+    if (!(this->model()))
+        return;
     for(int i = 0; i < this->model()->rowCount(); i++)
     {
         setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
@@ -1051,6 +1059,8 @@ void FilteredView::rowsInserted ( const QModelIndex & parent, int start, int end
 
 bool PlayerListFilter::filterAcceptsRow(int row) const
 {
+    if (listModel == NULL)
+        return true;
 	const PlayerListing * p;
 	p = static_cast<PlayerListItem*>(listModel->items[row])->getListing();
 	
@@ -1140,6 +1150,8 @@ void GamesListFilter::setFilterWatch(bool state)
 
 bool GamesListFilter::filterAcceptsRow(int row) const
 {
+    if (listModel == NULL)
+        return true;
 	const GameListing * g;
 	g = static_cast<GamesListItem *>(listModel->items[row])->getListing();
 	if(watches)

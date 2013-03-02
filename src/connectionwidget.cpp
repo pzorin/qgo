@@ -38,15 +38,38 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConnectionWidget)
 {
+    connection = 0;
     ui->setupUi(this);
     connectionWidget = this; // FIXME: remove this global variable
+    ui->gamesView->setFilter(new GamesListFilter(NULL));
+    ui->playerView->setFilter(new PlayerListFilter(NULL));
+    connect(ui->filterOpenCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterOpen(bool)));
+    connect(ui->filterFriendsCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterFriends(bool)));
+    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterFans(bool)));
+    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<GamesListFilter *>(ui->gamesView->getFilter()), SLOT(setFilterWatch(bool)));
+
+    QSettings settings;
+    QVariant var = settings.value("LOWRANKFILTER");
+    connect(ui->filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setRankSpreadView()));
+    connect(ui->filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setRankSpreadView()));
+    if(var != QVariant())
+    {
+        ui->filterRank1ComboBox->setCurrentIndex(var.toInt());
+        ui->filterRank2ComboBox->setCurrentIndex(settings.value("HIGHRANKFILTER").toInt());
+    } else {
+        ui->filterRank1ComboBox->setCurrentIndex(0);
+        ui->filterRank2ComboBox->setCurrentIndex(0);
+    }
+
+    ui->filterOpenCheckBox->setChecked(settings.value("OPENFILTER").toBool());
+    ui->filterFriendsCheckBox->setChecked(settings.value("FRIENDSFILTER").toBool());
+    ui->filterWatchesCheckBox->setChecked(settings.value("WATCHESFILTER").toBool());
+
     ui->changeServerButton->hide();
     connect(ui->changeServerButton, SIGNAL(clicked()), SLOT(slot_changeServer()));
 
     ui->createRoomButton->hide();
     connect(ui->createRoomButton, SIGNAL(clicked()), SLOT(slot_createRoom()));
-
-    connection = 0;
 
     connect( ui->connectButton, SIGNAL(clicked()), SLOT( disconnectFromServer(void) ) );
 
@@ -74,6 +97,13 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
 
 ConnectionWidget::~ConnectionWidget()
 {
+    QSettings settings;
+    settings.setValue("LOWRANKFILTER", ui->filterRank1ComboBox->currentIndex());
+    settings.setValue("HIGHRANKFILTER", ui->filterRank2ComboBox->currentIndex());
+
+    settings.setValue("OPENFILTER", ui->filterOpenCheckBox->isChecked());
+    settings.setValue("FRIENDSFILTER", ui->filterFriendsCheckBox->isChecked());
+    settings.setValue("WATCHESFILTER", ui->filterWatchesCheckBox->isChecked());
     delete ui;
     delete serverliststorage;
     cleanupServerData();
@@ -130,7 +160,20 @@ void ConnectionWidget::setNetworkConnection(NetworkConnection * conn)
     connection = conn;
     connectionEstablished = QDateTime::currentDateTime();
     if (connection != NULL)
+    {
         connect(connection,SIGNAL(ready()),SLOT(loadConnectionSettings()));
+        unsigned long flags = connection->getPlayerListColumns();
+        if(flags & PL_NOWINSLOSSES)
+        {
+            ui->playerView->hideColumn(5);
+            ui->playerView->hideColumn(6);
+        }
+        if(flags & PL_NOMATCHPREFS)
+        {
+            ui->playerView->hideColumn(9);
+        }
+        setRankSpreadView();
+    }
 }
 
 void ConnectionWidget::loadConnectionSettings(void)
@@ -1268,4 +1311,70 @@ void ConnectionWidget::slot_msgBox(const QString& msg)
 bool ConnectionWidget::isConnected(void)
 {
     return (connection != NULL);
+}
+
+/* This code was taken from mainwindow_server.cpp
+ * I guess it figures out which is min and which
+ * is max?? */
+void ConnectionWidget::setRankSpreadView(void)
+{
+    QString rkMin, rkMax;
+
+    if ((ui->filterRank1ComboBox->currentIndex() == 0) && (ui->filterRank2ComboBox->currentIndex() == 0))
+    {
+        rkMin = "NR";
+        rkMax = "9p";
+    }
+
+    else if ( ((ui->filterRank1ComboBox->currentIndex() == 0) && (ui->filterRank2ComboBox->currentIndex() == 1)) ||
+        ((ui->filterRank1ComboBox->currentIndex() == 1) && (ui->filterRank2ComboBox->currentIndex() == 0))  ||
+        ((ui->filterRank1ComboBox->currentIndex() == 1) && (ui->filterRank2ComboBox->currentIndex() ==1)) )
+    {
+        rkMin = "1p";
+        rkMax = "9p";
+    }
+
+    else if ((ui->filterRank1ComboBox->currentIndex() == 0) && (ui->filterRank2ComboBox->currentIndex() > 1))
+    {
+        rkMin = ui->filterRank2ComboBox->currentText();
+        rkMax = ui->filterRank2ComboBox->currentText();
+    }
+
+
+    else if ((ui->filterRank1ComboBox->currentIndex() > 1) && (ui->filterRank2ComboBox->currentIndex() == 0))
+    {
+        rkMin = ui->filterRank1ComboBox->currentText();
+        rkMax = ui->filterRank1ComboBox->currentText();
+    }
+
+    else if ((ui->filterRank1ComboBox->currentIndex() > 1) && (ui->filterRank2ComboBox->currentIndex() == 1))
+    {
+        rkMin = ui->filterRank1ComboBox->currentText();
+        rkMax = "9p";
+    }
+
+    else if ((ui->filterRank1ComboBox->currentIndex() == 1) && (ui->filterRank2ComboBox->currentIndex() > 1))
+    {
+        rkMin = ui->filterRank2ComboBox->currentText();
+        rkMax = "9p";
+    }
+
+
+    else if ((ui->filterRank2ComboBox->currentIndex() >= ui->filterRank1ComboBox->currentIndex() ))
+    {
+        rkMin = ui->filterRank2ComboBox->currentText();
+        rkMax = ui->filterRank1ComboBox->currentText();
+    }
+    else
+    {
+        rkMin = ui->filterRank1ComboBox->currentText();
+        rkMax = ui->filterRank2ComboBox->currentText();
+    }
+
+    if (connection)
+    {
+        dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter())->setFilterMinRank(connection->rankToScore(rkMin));
+        dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter())->setFilterMaxRank(connection->rankToScore(rkMax));
+    }
+    qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
 }

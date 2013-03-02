@@ -33,6 +33,7 @@ class Talk;
 class ChannelListing;
 class GameDialog;
 class PlayerListing;
+class Room;
 
 namespace Ui {
 class ConnectionWidget;
@@ -60,7 +61,6 @@ public:
     void recvRoomListing(const RoomListing & room, bool b);
     void recvChannelListing(const ChannelListing & channel, bool b);
     void changeChannel(const QString & s);
-    Ui::ConnectionWidget * getUi(void) { return ui; };		//for room class... FIXME?
     void setNetworkConnection(NetworkConnection *);
 
     int closeConnection(bool error = false);
@@ -69,6 +69,8 @@ public:
      * that is called when connection is established */
     bool isConnected(void);
     void setupButtons(void);
+
+    friend class Room;
 
 public slots:
     void loadConnectionSettings(void);
@@ -101,6 +103,9 @@ public slots:
     void slot_connexionClosed();
 
     void slot_statsPlayer(PlayerListing*);
+
+private slots:
+    void setRankSpreadView(void);
     
 private:
     Ui::ConnectionWidget *ui;
