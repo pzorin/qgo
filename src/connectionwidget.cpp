@@ -41,8 +41,8 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connection = 0;
     ui->setupUi(this);
     connectionWidget = this; // FIXME: remove this global variable
-    ui->gamesView->setFilter(new GamesListFilter(NULL));
-    ui->playerView->setFilter(new PlayerListFilter(NULL));
+    ui->gamesView->setFilter(new GamesListFilter());
+    ui->playerView->setFilter(new PlayerListFilter());
     connect(ui->filterOpenCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterOpen(bool)));
     connect(ui->filterFriendsCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterFriends(bool)));
     connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterFans(bool)));

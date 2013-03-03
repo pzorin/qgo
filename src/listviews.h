@@ -24,6 +24,7 @@
 #include <QtGui>
 class GameListing;
 class PlayerListing;
+class ListModel;
 
 /* ListItem can't have pure virtual functions because
  * we do actually use it for the header items */
@@ -109,7 +110,7 @@ class ListFilter : public QObject
 {
     Q_OBJECT
 public:
-    ListFilter(class ListModel * l) : QObject(), listModel(NULL) {};
+    ListFilter() : QObject(), listModel(NULL) {};
 		virtual ~ListFilter() {};
 		virtual bool filterAcceptsRow(int row) const = 0;
     void setListModel(ListModel * l) { listModel = l; };
@@ -125,7 +126,7 @@ class PlayerListFilter : public ListFilter
     Q_OBJECT
 	public:
 		/* IGS ranks probably up to 10000, but ORO would need 100000 so... */
-        PlayerListFilter(ListModel * l) : ListFilter(l), rankMin(0), rankMax(100000), flags(none) {};
+        PlayerListFilter() : ListFilter(), rankMin(0), rankMax(100000), flags(none) {};
 		enum PlayerSortFlags { none = 0x0, open = 0x1, friends = 0x2, fans = 0x4, noblock = 0x8 };
 		virtual bool filterAcceptsRow(int row) const;
 public slots:
@@ -144,7 +145,7 @@ class GamesListFilter : public ListFilter
 {
     Q_OBJECT
 	public:
-        GamesListFilter(ListModel * l) : ListFilter(l), watches(false) {};
+        GamesListFilter() : ListFilter(), watches(false) {};
 		virtual bool filterAcceptsRow(int row) const;
 public slots:
         void setFilterWatch(bool state);
@@ -233,15 +234,13 @@ class PlayerListModel : public ListModel
 		PlayerListItem * playerListItemFromIndex(const QModelIndex &) const;
         void setAccountName(const QString & name) { account_name = name; };
 		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
-        PlayerListing * getEntry(const QString & name);
-        PlayerListing * getEntry(const QString & name, const PlayerListing * listing);
-        PlayerListing * getEntry(unsigned int id);
-        PlayerListing * getEntry(unsigned int id, const PlayerListing * listing);
+        PlayerListing * getEntry(const QString & name, const PlayerListing * listing = NULL);
+        PlayerListing * getEntry(unsigned int id, const PlayerListing * listing = NULL);
         PlayerListing * getPlayerFromNotNickName(const QString & notnickname);
         void deleteEntry(const QString & name);
         void deleteEntry(unsigned int id);
 public slots:
-        void updateListing(PlayerListing * const l);
+        void updateListing(PlayerListing * l);
 	private:
 		friend class PlayerListFilter;
 		QString account_name;
@@ -268,8 +267,7 @@ class GamesListModel : public ListModel
         void insertListing(GameListing * const l);
 		void updateListing(GameListing * const l);
 		void removeListing(GameListing * const l);
-        GameListing * getEntry(unsigned int id);
-        GameListing * getEntry(unsigned int id, const GameListing * listing);
+        GameListing * getEntry(unsigned int id, const GameListing * listing = NULL);
         void deleteEntry(unsigned int id);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;

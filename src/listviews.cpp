@@ -175,7 +175,7 @@ void PlayerListModel::insertListing(PlayerListing * const l)
 	ListModel::insertListing(*item);
 }
 
-void PlayerListModel::updateListing(PlayerListing * const l)
+void PlayerListModel::updateListing(PlayerListing * l)
 {
 	//if(!l)
 	//	return;	//nothing to update
@@ -252,30 +252,6 @@ PlayerListItem * PlayerListModel::playerListItemFromIndex(const QModelIndex & in
     return static_cast<PlayerListItem*>(items[index.row()]);
 }
 
-PlayerListing * PlayerListModel::getEntry(const QString &name)
-{
-    PlayerListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = ((PlayerListItem *)(items[i]))->getListing();
-        if (result->name == name)
-            return result;
-    }
-    return NULL;
-}
-
-PlayerListing * PlayerListModel::getEntry(unsigned int id)
-{
-    PlayerListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = ((PlayerListItem *)(items[i]))->getListing();
-        if (result->id == id)
-            return result;
-    }
-    return NULL;
-}
-
 PlayerListing * PlayerListModel::getEntry(unsigned int id, const PlayerListing * listing)
 {
     PlayerListing * result;
@@ -284,13 +260,20 @@ PlayerListing * PlayerListModel::getEntry(unsigned int id, const PlayerListing *
         result = ((PlayerListItem *)(items[i]))->getListing();
         if (result->id == id)
         {
-            *result = *listing;
-            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            if (listing)
+            {
+                *result = *listing;
+                emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            }
             return result;
         }
     }
-    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
-    insertListing(result);
+    if (listing)
+    {
+        result = new PlayerListing(*listing); // Should not create a copy here? FIXME
+        insertListing(result);
+    } else
+        result = NULL;
     return result;
 }
 
@@ -302,13 +285,20 @@ PlayerListing * PlayerListModel::getEntry(const QString &name, const PlayerListi
         result = ((PlayerListItem *)(items[i]))->getListing();
         if (result->name == name)
         {
-            *result = *listing;
-            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            if (listing)
+            {
+                *result = *listing;
+                emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            }
             return result;
         }
     }
-    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
-    insertListing(result);
+    if (listing)
+    {
+        result = new PlayerListing(*listing); // Should not create a copy here? FIXME
+        insertListing(result);
+    } else
+        result = NULL;
     return result;
 }
 
@@ -663,18 +653,6 @@ void GamesListModel::removeListing(GameListing * const l)
 	qDebug("Couldn't find listing to remove for game id %d", l->number);
 }
 
-GameListing * GamesListModel::getEntry(unsigned int id)
-{
-    GameListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = ((GamesListItem *)(items[i]))->getListing();
-        if (result->number == id)
-            return result;
-    }
-    return NULL;
-}
-
 GameListing * GamesListModel::getEntry(unsigned int id, const GameListing * listing)
 {
     GameListing * result;
@@ -683,13 +661,20 @@ GameListing * GamesListModel::getEntry(unsigned int id, const GameListing * list
         result = ((GamesListItem *)(items[i]))->getListing();
         if (result->number == id)
         {
-            *result = *listing;
-            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            if (listing)
+            {
+                *result = *listing;
+                emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            }
             return result;
         }
     }
-    result = new GameListing(*listing); // Should not create a copy here? FIXME
-    insertListing(result);
+    if (listing)
+    {
+        result = new GameListing(*listing); // Should not create a copy here? FIXME
+        insertListing(result);
+    } else
+        result = NULL;
     return result;
 }
 
