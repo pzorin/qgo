@@ -93,7 +93,6 @@ public slots:
     void slot_talk(const QString& , const QString &, bool );
     void talkOpened(Talk * d);
     void talkRecv(Talk * d);
-    void slot_pbRelOneTab(QWidget *w);
     void setLooking(bool val);
     void slot_cbopen();
     void slot_cbquiet();
@@ -135,7 +134,6 @@ private:
     //players table
     void showOpen(bool show);
     void setColumnsForExtUserInfo();
-    QString rkToKey(QString txt, bool integer=FALSE);
     QString rkMax, rkMin;
 
     // timing aids

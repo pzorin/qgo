@@ -797,103 +797,6 @@ void ConnectionWidget::changeChannel(const QString & s)
     }
 }
 
-// convert rk to key for sorting;
-// if integer is true, then result can be used to calculate handicap
-// this is for sort list
-QString ConnectionWidget::rkToKey(QString txt, bool integer)
-{
-    QString rk = txt;
-    QString keyStr;
-
-    if (integer)
-    {
-        // NR
-        if (rk == "NR")
-            return "0000";
-
-        // BC ( IGS new rating stops at 23 k = BC )
-        if (rk == "BC")
-            return "0800";
-
-        // get number
-        QString buffer = rk;
-        buffer.replace(QRegExp("[pdk+?\\*\\s]"), "");
-        bool ok;
-        int pt = buffer.toInt(&ok);
-        if (!ok)
-            return "0000";
-
-        // check for k,d,p
-        if (rk.indexOf("k") != -1)
-        {
-            pt = (31 - pt)*100 ;//+ ( (rk.find("+") != -1) ? 10:0) ;
-        }
-        else if (rk.indexOf("d") != -1)
-        {
-            /* Former code replaced
-            // 7d == 1p
-            if (pt > 7)
-                pt = 3670 + (pt - 6)*30 + ((rk.find("+") != -1) ? 10:0);
-            else
-                pt = 3000 + pt*100 + ((rk.find("+") != -1) ? 10:0);
-            */
-
-            /* New formula */
-            pt = 3000 + pt*100 ;//+ ((rk.find("+") != -1) ? 10:0);
-        }
-        else if (rk.indexOf("p") != -1)
-        {
-
-            /* Former code replaced
-            // 7d == 1p
-            pt = 3670 + pt*30;
-            */
-            /* New formula : still 7d ~ 1p */
-            pt = 3600 + pt*100 ;//+ ((rk.find("+") != -1) ? 10:0);
-
-        }
-        else
-            return "0000";
-
-        buffer = QString::number(pt).rightJustified(4, '0');
-        return buffer;
-    }
-    else
-    {
-        // NR
-        if (rk == "NR" || rk == "BC")
-            return "nr";
-
-        // check for k,d,p
-        if (rk.indexOf("k") != -1)
-            keyStr = "c";
-        else if (rk.indexOf("d") != -1)
-            keyStr = "b";
-        else if (rk.indexOf("p") != -1)
-            keyStr = "a";
-        else
-            keyStr = "z";
-
-        // get number
-        QString buffer = rk;
-        buffer.replace(QRegExp("[pdk+?\\*\\s]"), "");
-        if (buffer.length() < 2)
-        {
-            keyStr += "0";
-
-            // reverse sort order for dan/pro players
-            if ((keyStr == "a0") || (keyStr == "b0"))
-            {
-                int i = buffer.toInt();
-                i = 10 - i;
-                buffer = QString::number(i);
-            }
-        }
-
-        return keyStr + buffer;
-    }
-}
-
 /* FIXME If nothing uses this, we should remove it */
  // handle chat boxes in a list
 void ConnectionWidget::slot_talk(const QString &name, const QString &text, bool /*isplayer*/)
@@ -953,15 +856,8 @@ void ConnectionWidget::slot_talk(const QString &name, const QString &text, bool 
                 ui->talkTabs->setCurrentWidget(dlg->get_tabWidget());
 
             dlg->pageActive = true;
-            connect(dlg->get_le(), SIGNAL(returnPressed()), dlg, SLOT(slot_returnPressed()));
-            connect(dlg, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
 
-//			QPalette pal = dlg->get_mle()->palette();
-//			pal.setColor(QColorGroup::Base, setting->colorBackground);
-//			dlg->get_mle()->setPalette(pal);
-//			dlg->get_le()->setPalette(pal);
 
-            //if (!name.isEmpty() && name != tr("Shouts*") && currentCommand->get_txt() !="stats")
 #ifdef FIXME
             if (!name.isEmpty() && isplayer)
                 slot_sendCommand("stats " + name, false);    // automatically request stats
@@ -1022,15 +918,6 @@ void ConnectionWidget::slot_talk(const QString &name, const QString &text, bool 
 void ConnectionWidget::talkOpened(Talk * d)
 {
     talkList.insert(0, d);
-    // make new multiline field
-    ui->talkTabs->addTab(d->get_tabWidget(), d->get_name());
-
-    ui->talkTabs->setCurrentWidget(d->get_tabWidget());
-
-    d->pageActive = true;
-    connect(d->get_le(), SIGNAL(returnPressed()), d, SLOT(slot_returnPressed()));
-    connect(d, SIGNAL(signal_pbRelOneTab(QWidget*)), this, SLOT(slot_pbRelOneTab(QWidget*)));
-
     if (!d->pageActive)
     {
         ui->talkTabs->addTab(d->get_tabWidget(), d->get_name());
@@ -1053,30 +940,6 @@ void ConnectionWidget::talkRecv(Talk * d)
 }
 
 /*
- * close button pressed on talk tab
- */
-void ConnectionWidget::slot_pbRelOneTab(QWidget *w)
-{
-    // seek dialog
-    Talk *dlg = talkList.at(0);
-    int i= talkList.indexOf((Talk*)w);
-
-    if ( i != -1)
-    {
-        if (w != ui->talkTabs->currentWidget())
-            //we have a problem !
-            return;
-
-//		dlg = talkList.takeAt(i);
-        ui->talkTabs->removeTab(ui->talkTabs->currentIndex()) ;
-        dlg->pageActive = false;
-
-        connection->closeTalk(&(dlg->get_opponent()));
-    }
-
-}
-
-/*
  * 'stats' information has been received by the parser
  */
 void ConnectionWidget::slot_statsPlayer(PlayerListing *p)
@@ -1095,24 +958,7 @@ void ConnectionWidget::slot_statsPlayer(PlayerListing *p)
         }
         //  found
         if (dlg)
-        {
-            dlg->getUi().stats_rating->setText(p->rank);
-            dlg->getUi().stats_info->setText(p->info);
-            dlg->getUi().stats_default->setText(p->extInfo);
-            dlg->getUi().stats_wins->setText(QString::number(p->wins) + " /");
-            dlg->getUi().stats_loss->setText(QString::number(p->losses) );
-            dlg->getUi().stats_country->setText(p->country);
-            dlg->getUi().stats_playing->setText(QString::number(p->playing));
-            //dlg->getUi().stats_rated->setText(p->rated);
-            dlg->getUi().stats_address->setText(p->email_address);
-
-            // stored either idle time or last access
-            dlg->getUi().stats_idle->setText(p->idletime);
-            if (!p->idletime.isEmpty())
-                dlg->getUi().Label_Idle->setText(p->idletime.at(0).isDigit() ? "Idle :": "Last log :");
-
-
-        }
+            dlg->displayData(p);
     }
 }
 

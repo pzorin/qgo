@@ -43,8 +43,8 @@ Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connect
 	qDebug("Creating Talk for %s", opponent.name.toLatin1().constData());
 	ui.setupUi(this);
 	opponent.dialog_opened = true;
-	
 	conversationOpened = false;
+    pageActive = false;
 
 	// create a new tab
 	QString s = "MultiLineEdit1_" + QString::number(++counter);
@@ -67,6 +67,7 @@ Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connect
 */
 	connect (ui.pb_releaseTalkTab, SIGNAL(pressed()),SLOT(slot_pbRelTab()));
 	connect (ui.pb_match, SIGNAL(pressed()),SLOT(slot_match()));
+    connect(ui.LineEdit1, SIGNAL(returnPressed()), SLOT(slot_returnPressed()));
 	
 	/* Here's how the talk stuff works for future reference. FIXME.
 	 * double clicking on a name or typing a console command (maybe) opens
@@ -97,7 +98,7 @@ PlayerListing & Talk::get_opponent() const
 // release current Tab
 void Talk::slot_pbRelTab()
 {
-	emit signal_pbRelOneTab( this);	
+    connection->closeTalk(&opponent);
 }
 
 void Talk::slot_returnPressed()
@@ -155,22 +156,27 @@ void Talk::recvTalk(QString text)
  * need to update things for it
  * We could just call this update and have it use the reference.*/
  /* What, what is this comment about? */
+void Talk::displayData(PlayerListing * p)
+{
+    ui.stats_rating->setText(p->rank);
+    ui.stats_info->setText(p->info);
+    ui.stats_default->setText(p->extInfo);
+    ui.stats_wins->setText(QString::number(p->wins) + " /");
+    ui.stats_loss->setText(QString::number(p->losses) );
+    ui.stats_country->setText(p->country);
+    ui.stats_playing->setText(QString::number(p->playing));
+            //ui.stats_rated->setText(p->rated);
+    ui.stats_address->setText(p->email_address);
+
+            // stored either idle time or last access
+    ui.stats_idle->setText(p->idletime);
+    if (!p->idletime.isEmpty())
+        ui.Label_Idle->setText(p->idletime.at(0).isDigit() ? "Idle :": "Last log :");
+}
+
 void Talk::updatePlayerListing(void)
 {
-	ui.stats_rating->setText(opponent.rank);
-	ui.stats_info->setText(opponent.info);
-	ui.stats_default->setText(opponent.extInfo);
-	ui.stats_wins->setText(QString::number(opponent.wins) + " /");
-	ui.stats_loss->setText(QString::number(opponent.losses) );
-	ui.stats_country->setText(opponent.country);
-	ui.stats_playing->setText(QString::number(opponent.playing));
-			//ui.stats_rated->setText(opponent.rated);
-	ui.stats_address->setText(opponent.email_address);
-			
-			// stored either idle time or last access	 
-	ui.stats_idle->setText(opponent.idletime);
-	if (!opponent.idletime.isEmpty())
-		ui.Label_Idle->setText(opponent.idletime.at(0).isDigit() ? "Idle :": "Last log :");
+    displayData(&opponent);
 }
 
 void Talk::setTalkWindowColor(QPalette pal)

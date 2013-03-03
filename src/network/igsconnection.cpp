@@ -150,35 +150,6 @@ void IGSConnection::sendMsg(unsigned int game_id, QString text)
 void IGSConnection::sendMsg(PlayerListing & player, QString text)
 {
 	sendText("tell " + player.name + " " + text + "\r\n");
-	/* Taken from MainWindow::slot_talkTo */
-	//FIXME
-	/*case IGS:
-			{
-				bool ok;
-				// test if it's a number -> channel
-				receiver.toInt(&ok);
-				if (ok)
-					// yes, channel talk
-					sendcommand("yell " + txt, false);
-//				else if (receiver.contains('*'))
-//					sendcommand("shout " + txt, false);
-				else
-					sendcommand("tell " + receiver + " " + txt, false);
-			}
-				break;
-
-			default:
-				// send tell command w/o echo
-				if (receiver.contains('*'))
-					sendcommand("shout " + txt, false);
-				else
-					sendcommand("tell " + receiver + " " + txt, false);
-				break;
-		}
-
-		// lokal echo in talk window
-		slot_talk(receiver, "-> " + txt, true);
-	*/
 }
 
 void IGSConnection::sendToggle(const QString & param, bool val)
