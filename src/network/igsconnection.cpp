@@ -3637,7 +3637,7 @@ void IGSConnection::handle_shout(QString line)
 
 		//emit signal_game(aGame);
 #endif //OLD
-		qDebug("Match %d %s %s", aGame->number, aGame->white_name().toLatin1().constData(), aGame->white_name().toLatin1().constData());
+        qDebug("Match %d %s %s", aGame->number, aGame->white_name().toLatin1().constData(), aGame->black_name().toLatin1().constData());
 		room->recvGameListing(aGame);
 		delete l;
 		return;
