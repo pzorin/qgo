@@ -11,17 +11,8 @@ OBJECTS_DIR = $${DESTDIR}/objects
 MOC_DIR = $${DESTDIR}/moc
 RCC_DIR = $${DESTDIR}/rcc
 UI_DIR = $${DESTDIR}/ui
-CONFIG += warn_on \
-          thread \
-          qtestlib \
-          stl \
-          debug
 #Because I can't figureout how to turn console and exceptions off:
 win32 {
-    QMAKE_LFLAGS = -static -enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,windows
-    QMAKE_LFLAGS_CONSOLE =
-    QMAKE_LFLAGS_EXCEPTIONS_ON =
-    # also
     RC_FILE = qgo.rc
 }
 TEMPLATE = app
@@ -198,7 +189,7 @@ linux-* {
     mimetype.files = x-sgf.xml
     INSTALLS += filetype mimetype
 }
-INCLUDEPATH += network \
+INCLUDEPATH += . network \
 audio \
 gtp \
 game_interfaces \
