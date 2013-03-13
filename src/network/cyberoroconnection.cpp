@@ -2420,14 +2420,14 @@ void CyberOroConnection::handleAccountInfoMsg(int size, char * msg)
 void CyberOroConnection::sendLogin(void)
 {
 	//term code could be version, probably just junk
-	unsigned char term_code[2] = { 0x5b, 0x02 };
+	unsigned char term_code[2] = { 0x57, 0x04 }; //= { 0x5b, 0x02 };
 	int length = 0x1a;	//10 + user and pass padded to 10
 	unsigned char * packet = new unsigned char[length];
 	unsigned char * p = packet;
 	int i;
 	
-	p[0] = 0x6e;
-	p[1] = 0xe2;
+	p[0] = 0x0b; //= 0x6e;
+	p[1] = 0xe1; //= 0xe2;
 	p[2] = length;
 	p[3] = 0x00;
 	p += 4;
