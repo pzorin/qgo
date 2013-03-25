@@ -74,7 +74,13 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	} else {
 		ui.dirView_1->setCurrentIndex(model->index(currentWorkingDir));
 		ui.dirView_2->setCurrentIndex(model->index(currentWorkingDir));
+		
+		if (!ui.dirView_1->currentIndex().isValid()) {
+			ui.dirView_1->setCurrentIndex(model->index(QDir::homePath()));
+			ui.dirView_2->setCurrentIndex(model->index(QDir::homePath()));
+		}
 	}
+	
 	if (model->isDir(ui.dirView_1->currentIndex()))
 		ui.dirView_1->expand(ui.dirView_1->currentIndex());
 	if (model->isDir(ui.dirView_2->currentIndex()))
