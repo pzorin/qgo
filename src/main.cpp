@@ -50,12 +50,8 @@ int main(int argc, char *argv[])
 
 	if ( argc > 1 )
 	{
-		QString sgf_file( argv[1] );
-		if (mainwindow->loadSGF( sgf_file ))
-		{
-			mainwindow->slot_fileOpenBoard();
-		} else
-			return -1;
+        // FIXME
+        qDebug("Opening files from command line not supported at the moment.");
 	} else {
 		mainwindow->show();
 	}

@@ -284,13 +284,13 @@ QString SGFParser::loadFile(const QString &fileName)
 	
 	if (!file.exists())
 	{
-		QMessageBox::warning(0, PACKAGE, QObject::tr("Could not find file:") + " " + fileName);
+        qDebug() << "Could not find file: " << fileName;
 		return NULL;
 	}
 	
 	if (!file.open(QIODevice::ReadOnly))
 	{
-		QMessageBox::warning(0, PACKAGE, QObject::tr("Could not open file:") + " " + fileName);
+        qDebug() << "Could not open file: " << fileName;
 		return NULL;
 	}
 	
@@ -298,7 +298,7 @@ QString SGFParser::loadFile(const QString &fileName)
 	stream = &txt;
 	if (!setCodec())
 	{
-		QMessageBox::critical(0, PACKAGE, QObject::tr("Invalid text encoding given. Please check preferences!"));
+        qDebug() << "Invalid text encoding given. Please check preferences!";
 		return NULL;
 	}
 	

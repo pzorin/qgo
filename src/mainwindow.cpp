@@ -24,12 +24,10 @@
 #include "defines.h"
 #include "mainwindow.h"
 #include "boardwindow.h"
-#include "sgfparser.h"
-#include "tree.h"
 #include "connectionwidget.h"
-#include "gamedata.h"
 #include "login.h"
 #include "host.h"
+#include "sgfpreview.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	: QMainWindow( parent,  flags )
@@ -44,70 +42,19 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	initStatusBar();
 	/* FIXME, really need a list of such things, 0s */
 
-	GameLoaded = NULL;
-	SGFloaded = "";
-
 	// loads the settings
     hostlist = new HostList;
 	loadSettings();
-
-	// filling the file view
-	QStringList filters = (QStringList() << "*.sgf" << "*.SGF");
-	model = new QDirModel(filters,  QDir::AllEntries | QDir::AllDirs , QDir::Name,0);
-
-	ui.dirView_1->setModel(model);
-
-	ui.dirView_1->hideColumn(1);
-	ui.dirView_1->hideColumn(2);
-	ui.dirView_1->setColumnWidth(0,300);
-	
-	ui.dirView_2->setModel(model);
-
-	ui.dirView_2->hideColumn(1);
-	ui.dirView_2->hideColumn(2);
-	ui.dirView_2->setColumnWidth(0,300); 
-	
-	if(currentWorkingDir.isEmpty())
-	{
-		ui.dirView_1->setCurrentIndex(model->index(QDir::homePath()));
-		ui.dirView_2->setCurrentIndex(model->index(QDir::homePath()));
-	} else {
-		ui.dirView_1->setCurrentIndex(model->index(currentWorkingDir));
-		ui.dirView_2->setCurrentIndex(model->index(currentWorkingDir));
-		
-		if (!ui.dirView_1->currentIndex().isValid()) {
-			ui.dirView_1->setCurrentIndex(model->index(QDir::homePath()));
-			ui.dirView_2->setCurrentIndex(model->index(QDir::homePath()));
-		}
-	}
-	
-	if (model->isDir(ui.dirView_1->currentIndex()))
-		ui.dirView_1->expand(ui.dirView_1->currentIndex());
-	if (model->isDir(ui.dirView_2->currentIndex()))
-		ui.dirView_2->expand(ui.dirView_2->currentIndex());
-
 	// connecting the Go server tab buttons and signals
 
 	// connecting the new game button
+    connect( ui.actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpenBoard()) );
+
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
-	connect(ui.button_loadGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
 	connect(ui.button_newComputerGame,SIGNAL(pressed()),SLOT(slot_computerNewBoard()));
-	connect(ui.button_loadComputerGame,SIGNAL(pressed()),SLOT(slot_fileOpenBoard()));
 
-	connect(ui.dirView_1, SIGNAL(expanded(const QModelIndex &)), this, SLOT(slot_expanded(const QModelIndex &)));
-	connect(ui.dirView_2, SIGNAL(expanded(const QModelIndex &)), this, SLOT(slot_expanded(const QModelIndex &)));
-	connect(ui.dirView_1, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_fileOpenBoard(const QModelIndex &)));
-	connect(ui.dirView_2, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slot_fileOpenBoard(const QModelIndex &)));
-	connect(ui.dirView_1->selectionModel(),  
-		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
-		this,
-		SLOT(slot_displayFileHeader(const QModelIndex & , const QModelIndex &  )));
 
-	connect(ui.dirView_2->selectionModel(),  
-		SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex &  )),
-		this,
-		SLOT(slot_loadComputerFile(const QModelIndex & , const QModelIndex &  )));
 	connect( ui.computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
 	connect(ui.LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
 	
@@ -121,9 +68,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
 	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
 	connect(ui.comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
-
-	// Creates the SGF parser for displaying the file infos
-	MW_SGFparser = new SGFParser(NULL);
 
 	//sound
 	connectSound = 	SoundFactory::newSound(SOUND_PATH_PREFIX"static.wav");
@@ -258,168 +202,6 @@ void MainWindow::loadHostList(QSettings *settings)
     settings->endArray();
 }
 
-bool MainWindow::loadSGF(QString fileName)
-{
-	fileLoaded = fileName.toLatin1().constData();
-	SGFloaded = MW_SGFparser->loadFile(fileLoaded);
-	
-	if (SGFloaded == NULL)
-		return false;
-	
-	if (GameLoaded != NULL)
-		delete GameLoaded;
-	
-	GameLoaded = MW_SGFparser->initGame(SGFloaded, fileLoaded);
-	if (GameLoaded == NULL)
-		return false;
-	
-	GameLoaded->gameMode = modeNormal;
-	
-	return (GameLoaded != NULL);
-}
-
-/* 
- * Loads the file header data from the item selected in the directory display
- */
-bool MainWindow::selectFile(const QModelIndex &index)
-{
-	if (model->isDir(index))
-		return false;
-
-	return loadSGF( model->filePath(index) );
-}
-
-void MainWindow::slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
-{
-	GameLoaded = NULL;
-	SGFloaded = QString();
-	ui.displayBoard->clearData();
-	QVariant v = topLeft.data(QDirModel::FilePathRole);
-	//qDebug( "Selected item : %s" ,v.toString().toLatin1().constData());
-
-	if (!selectFile(topLeft))
-	{
-		ui.button_loadGame->setDisabled(true);
-		
-		ui.File_WhitePlayer->setText("");
-		ui.File_BlackPlayer->setText("");
-		ui.File_Date->setText("");
-		ui.File_Handicap->setText("");
-		ui.File_Result->setText("");
-		ui.File_Komi->setText("");
-		ui.File_Size->setText("");
-		
-		return ;
-	} else {
-		GameLoaded->gameMode = modeNormal;
-		ui.button_loadGame->setEnabled(true);
-		
-		QString komi, hcp, sz;
-		komi.setNum(GameLoaded->komi);	
-		hcp.setNum(GameLoaded->handicap);
-		sz.setNum(GameLoaded->board_size);
-
-		ui.File_WhitePlayer->setText(GameLoaded->white_name);
-		ui.File_BlackPlayer->setText(GameLoaded->black_name);
-		ui.File_Date->setText(GameLoaded->date);
-		ui.File_Handicap->setText(hcp);
-		ui.File_Result->setText(GameLoaded->result);
-		ui.File_Komi->setText(komi);
-		ui.File_Size->setText(sz);
-		
-		displayGame(ui.displayBoard);
-	}
-}
-
-/*
- *
- */
-void MainWindow::displayGame(DisplayBoard *board)
-{
-	board->clearData();
-	if (board->getSize() != GameLoaded->board_size)
-		board->init(GameLoaded->board_size);
-		
-	board->displayHandicap(GameLoaded->handicap);
-
-	QString s = SGFloaded.trimmed();
-	int end_main = s.indexOf(")(");
-	if (end_main == -1)
-		end_main = s.size();
-	int a_offset = QChar::fromAscii('a').unicode() - 1 ;
-	int cursor = 0;
-	int x,y;
-	int nb_displayed = 20;
-	QString coords;
-
-	cursor = s.indexOf(";B[");
-
-	while ((cursor >0) && (cursor < end_main) && (nb_displayed--) )
-	{
-		x = s.at(cursor+3).unicode() - a_offset;
-		y = s.at(cursor+4).unicode() - a_offset;
-		board->updateStone(stoneBlack,x,y);
-		cursor = s.indexOf(";B[",cursor +1);
-
-	}
-
-	cursor = s.indexOf(";W[");
-	nb_displayed = 20;
-
-	while ( (cursor >0) &&  (cursor < end_main) && (nb_displayed--) )
-	{
-		x = s.at(cursor+3).unicode() - a_offset;
-		y = s.at(cursor+4).unicode() - a_offset;
-		board->updateStone(stoneWhite,x,y);
-		cursor = s.indexOf(";W[",cursor +1);
-
-	}
-}
-
-/* 
- * Loads file from the item selected in the directory display
- */
-void MainWindow::slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & /*bottomRight*/ )
-{
-	QVariant v = topLeft.data(QDirModel::FilePathRole);
-
-	if (!selectFile(topLeft))
-	{
-		ui.button_loadComputerGame->setDisabled(true);
-	} else {
-		GameLoaded->gameMode = modeComputer;
-		ui.button_loadComputerGame->setEnabled(true);
-		
-		QString komi, hcp, sz;
-		komi.setNum(GameLoaded->komi);	
-		hcp.setNum(GameLoaded->handicap);
-		sz.setNum(GameLoaded->board_size);
-
-		ui.File_WhitePlayer->setText(GameLoaded->white_name);
-		ui.File_BlackPlayer->setText(GameLoaded->black_name);
-		ui.File_Date->setText(GameLoaded->date);
-		ui.File_Handicap->setText(hcp);
-		ui.File_Result->setText(GameLoaded->result);
-		ui.File_Komi->setText(komi);
-		ui.File_Size->setText(sz);
-
-		/* FIXME, displayGame does displayBoard not displayBoard2, and
-		 * why are there two of these ?!?!? */
-		displayGame(ui.displayBoard2);
-	}	
-}
-
-void MainWindow::slot_expanded(const QModelIndex & i)
-{
-	//refresh file system info
-	//before I was calling it on "i" but it didn't like that
-	// in 4.4.1, catually still crashes on this.
-	//model->refresh(i);
-	//FIXME
-	//really would like a refresh here	
-	currentWorkingDir = model->filePath(i);
-}
-
 /*
  * The 'New Game' button in 'sgf editor' tab has been pressed.
  */
@@ -453,14 +235,15 @@ void MainWindow::slot_newComputer_HandicapChange(int a)
 
 void MainWindow::slot_fileOpenBoard()
 {
-	if(GameLoaded)
-        addBoardWindow(new BoardWindow(new GameData(GameLoaded), TRUE, TRUE));
-}
-
-void MainWindow::slot_fileOpenBoard(const QModelIndex & i)
-{
-	if (selectFile(i))
-		slot_fileOpenBoard();
+    QFileDialog *dialog = new QFileDialog(this);
+    SGFPreview *previewWidget = new SGFPreview(dialog);
+    QGridLayout *layout = (QGridLayout*)dialog->layout();
+    layout->addWidget(previewWidget, 1, 3);
+    connect(dialog,SIGNAL(currentChanged(QString)),previewWidget,SLOT(setPath(QString)));
+    connect(dialog,SIGNAL(accepted()),previewWidget,SLOT(openSGF()));
+    dialog->setNameFilter("Smart Game Format (*.sgf *.SGF)");
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->show(); // Maybe exec()
 }
 
 /*

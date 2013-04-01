@@ -47,25 +47,19 @@ public:
 	MainWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 );
 	~MainWindow();
 
-	bool loadSGF(QString);
-
 	void addBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
 
 public slots:
     void removeBoardWindow(QObject *);
 
-	void slot_expanded(const QModelIndex & i);
 	// sfg slots
 	void slot_fileNewBoard();
 	void slot_fileOpenBoard();
-	void slot_fileOpenBoard(const QModelIndex &);
-	void slot_displayFileHeader(const QModelIndex & topLeft, const QModelIndex & bottomRight );
-	
+
 	// go engine slots
 	void slot_computerNewBoard();
-	void slot_loadComputerFile(const QModelIndex & topLeft, const QModelIndex & bottomRight );
-	void slot_getComputerPath();
+    void slot_getComputerPath();
 	void slot_computerPathChanged(const QString &);
 
 	//preferences tabs slots
@@ -91,16 +85,9 @@ private:
     Ui::MainWindow ui;
     QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
 
-	bool selectFile(const QModelIndex &);
-	
-	QDirModel *model;
-	SGFParser * MW_SGFparser;
-	QString SGFloaded, fileLoaded;
-    GameData * GameLoaded; // Should be in a separate loader class
 	Sound *connectSound, *gameSound;
 
-	void initStatusBar();
-	void displayGame(DisplayBoard *);
+    void initStatusBar();
 
     QList<BoardWindow *> boardWindowList;
 	QString currentWorkingDir;
@@ -111,5 +98,3 @@ private:
 };
 
 #endif
-
-

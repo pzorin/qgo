@@ -45,7 +45,8 @@ FORMS += mainwindow.ui \
 	 network/gamedialog.ui \
 	 network/login.ui \
 	 network/talk_gui.ui \
-    connectionwidget.ui
+    connectionwidget.ui \
+    sgfpreview.ui
 
 HEADERS += defines.h \
 displayboard.h \
@@ -105,7 +106,8 @@ network/tygemprotocol.h \
 network/wing.h \
 sgf/sgfparser.h \
     connectionwidget.h \
-    host.h
+    host.h \
+    sgfpreview.h
 
 SOURCES += displayboard.cpp \
            listviews.cpp \
@@ -163,7 +165,8 @@ SOURCES += displayboard.cpp \
 	   network/wing.cpp \
 	   sgf/sgfparser.cpp \
     connectionwidget.cpp \
-    host.cpp
+    host.cpp \
+    sgfpreview.cpp
 
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""
