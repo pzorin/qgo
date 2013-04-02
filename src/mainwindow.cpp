@@ -236,6 +236,7 @@ void MainWindow::slot_newComputer_HandicapChange(int a)
 void MainWindow::slot_fileOpenBoard()
 {
     QFileDialog *dialog = new QFileDialog(this);
+    dialog->setOption(QFileDialog::DontUseNativeDialog, true);
     SGFPreview *previewWidget = new SGFPreview(dialog);
     QGridLayout *layout = (QGridLayout*)dialog->layout();
     layout->addWidget(previewWidget, 1, 3);

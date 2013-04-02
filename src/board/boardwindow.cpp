@@ -637,7 +637,7 @@ void BoardWindow::slotExportPic()
 		tr("Export image as"),
 		QString(""),
 		QString("JPEG (*.jpeg);;PNG (*.png);;BMP (*.bmp);;XPM (*.xpm);;XBM (*.xbm);;PNM (*.pnm);;GIF (*.gif);;MNG (*.mng)"),
-		filter);
+        filter, QFileDialog::DontUseNativeDialog);
 
 
 	if (fileName.isEmpty())
@@ -741,7 +741,7 @@ bool BoardWindow::doSave(QString fileName, bool force)
               	else
                 	fileName.append(base);
 		}
-		fileName = QFileDialog::getSaveFileName(this,tr("Save File"), fileName, tr("SGF Files (*.sgf);;All Files (*)") );
+        fileName = QFileDialog::getSaveFileName(this,tr("Save File"), fileName, tr("SGF Files (*.sgf);;All Files (*)"), new QString(""), QFileDialog::DontUseNativeDialog );
 	}
 	
 	if (fileName.isEmpty())
