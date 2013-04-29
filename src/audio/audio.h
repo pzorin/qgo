@@ -23,7 +23,7 @@
 #ifndef _AUDIO_H_
 #define _AUDIO_H_
 
-#include <QSound>
+#include <QtMultimedia/QMediaPlayer>
 
 class Sound : public QObject
 {
@@ -46,7 +46,7 @@ public:
 
 	virtual void play();
 private:
-	QSound *qSound;
+    QMediaPlayer *player;
 };
 
 class SoundFactory

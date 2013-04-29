@@ -24,19 +24,16 @@
 #include <QDir>
 #include <QFile>
 
-#ifdef Q_OS_LINUX
-#include "audio/alsa.h"
-#endif
-
 QSoundSound::QSoundSound(const QString &filename, QObject *parent)
 	: Sound(filename, parent)
 {
-	qSound = new QSound(filename, this);
+    player = new QMediaPlayer;
+    player->setMedia(QUrl::fromLocalFile(filename));
 }
 
 void QSoundSound::play(void)
 {
-	qSound->play();
+    player->play();
 }
 
 Sound *SoundFactory::newSound(const QString &filename, QObject *parent)
@@ -57,9 +54,5 @@ Sound *SoundFactory::newSound(const QString &filename, QObject *parent)
 	}
 	else
 		f = new QFile(filename);
-#ifdef Q_OS_LINUX
-	return new QAlsaSound(f->fileName(), parent);
-#else
 	return new QSoundSound(f->fileName(), parent);
-#endif
 }
