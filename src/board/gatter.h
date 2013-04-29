@@ -23,7 +23,7 @@
 #ifndef GATTER_H
 #define GATTER_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class Gatter
 {

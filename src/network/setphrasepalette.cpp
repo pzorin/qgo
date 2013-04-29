@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "setphrasepalette.h"
 #include "orosetphrasechat.h"
 #include "cyberoroconnection.h"

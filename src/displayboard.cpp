@@ -26,7 +26,7 @@
 #include "board.h"
 #include "imagehandler.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 DisplayBoard::DisplayBoard(QWidget *parent, QGraphicsScene *c)
 : Board(parent,c)

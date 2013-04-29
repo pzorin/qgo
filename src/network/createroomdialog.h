@@ -58,8 +58,9 @@ class CreateRoomDialog : public QDialog, public Ui::CreateRoomDialog
 		//Ui::CreateRoomDialog ui;
 };
 
-struct RoomCreate
+class RoomCreate
 {
+public:
 	unsigned char * title;
 	unsigned char * password;
 	enum roomType { GAME = 0, GOMOKU, CHAT, REVIEW, MULTI, VARIATION } type;	

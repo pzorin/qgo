@@ -119,7 +119,7 @@ QVariant ObserverListModel::data(const QModelIndex & index, int role) const
 	else if(role == Qt::ForegroundRole)
 	{
 		if(item->getListing() && item->getListing()->name == account_name)
-			return Qt::blue;
+            return QColor(Qt::blue);
 		else
 			return QVariant();
 	}
@@ -233,7 +233,7 @@ QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 	else if(role == Qt::ForegroundRole)
 	{
 		if(item->getListing()->name == account_name)
-			return Qt::blue;
+            return QColor(Qt::blue);
 		else
 			return QVariant();
 	}

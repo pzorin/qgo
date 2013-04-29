@@ -39,13 +39,14 @@
  * just depend on that data not getting deleted while a connectionInfo struct
  * uses it... so far this is a safe bet... but its something to worry about.*/
 
-#define tr_macro(x)   QCoreApplication::translate("Game messages", x, "", QCoreApplication::DefaultCodec)
+#define tr_macro(x)   QCoreApplication::translate("Game messages", x, "")
 	
 
 class PlayerListing;
 
-struct MoveRecord
+class MoveRecord
 {
+public:
 	unsigned int number;
 #define NOMOVENUMBER		0xffff
 	unsigned int x, y;
@@ -66,16 +67,18 @@ struct MoveRecord
  * ugly, unclear, we should change this all around.  It is true though
  * that since the server updates us, there's almost no need to know
  * how much is left... except when do we enter byoyomi/period time??? */
-struct TimeRecord
+class TimeRecord
 {
+public:
 	int time;
 	int stones_periods;
 	TimeRecord() : time(0), stones_periods(-1) {};
 	TimeRecord(int t, int s) : time(t), stones_periods(s) {};
 };
 
-struct GameResult
+class GameResult
 {
+public:
 	unsigned int game_number;
 	StoneColor winner_color;	//this needs to be standardized obviously
 	QString winner_name;	
@@ -211,8 +214,9 @@ struct GameResult
 };
 
 /* Maybe we need consistent names for these messages!!! FIXME*/
-struct MatchRequest
+class MatchRequest
 {
+public:
 	QString opponent;
 	QString our_name;	//for convenience (multiple accounts?)
 	QString our_rank;
@@ -269,14 +273,16 @@ struct MatchRequest
 // but it brings up good points about when we should use a "message" and
 // when a function... basically determined by the usage of the message or
 // its prevalence  Fix all of this stuff eventually
-struct AccountAttrib
+class AccountAttrib
 {
+public:
 	bool looking, open, quiet;
 	//which changes, we could probably just do separate functions FIXME
 };
 
-struct RoomStats
+class RoomStats
 {
+public:
 	int players;
 	int games;
 	RoomStats() {};
@@ -284,8 +290,9 @@ struct RoomStats
 };
 
 /* Confusing name since we use games as rooms with ORO, maybe not an issue */
-struct RoomListing
+class RoomListing
 {
+public:
 	int number;
 	QString name;
 	bool locked;
@@ -295,8 +302,9 @@ struct RoomListing
 	RoomListing(int n, QString t) : number(n), name(t) {};	
 };
 
-struct ChannelListing
+class ChannelListing
 {
+public:
 	int number;
 	QString name;
 	std::vector<PlayerListing *> members;
@@ -306,8 +314,9 @@ struct ChannelListing
 	ChannelListing(int n, QString t) : number(n), name(t) {};
 };
 
-struct SeekCondition
+class SeekCondition
 {
+public:
 	int number;
 	int maintime;
 	int periodtime;

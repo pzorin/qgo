@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "login.h"
 #include "host.h"
 #include "network/igsconnection.h"

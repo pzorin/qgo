@@ -25,7 +25,7 @@
 
 #include "graphicsitemstypes.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class Stone : public QGraphicsPixmapItem
 {
@@ -41,7 +41,7 @@ public:
 	int posY() const { return myY; }
 	QGraphicsSimpleTextItem * getNum() {return moveNum;}
 	void setCoord(int x, int y) { myX = x; myY = y; }
-	void togglePixmap(QList<QPixmap> *a, bool showShadow = TRUE);
+	void togglePixmap(QList<QPixmap> *a, bool showShadow = true);
 
 	bool isDead() const { return dead; }
 	void setDead(bool b=true) { dead = b; seki = false;}

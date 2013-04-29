@@ -27,8 +27,9 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QDialogButtonBox;
 
-struct ServerItem
+class ServerItem
 {
+public:
 	char ipaddress[16];
 	QString name;
 	char * codec;

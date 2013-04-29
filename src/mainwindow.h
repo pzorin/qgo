@@ -27,7 +27,7 @@
 #include "defines.h"
 #include "audio.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class HostList;
 class RoomListing;

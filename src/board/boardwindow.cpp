@@ -33,7 +33,7 @@
 #include "../network/boarddispatch.h"
 #include "gameinfo.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class BoardHandler;
 
@@ -240,7 +240,7 @@ void BoardWindow::setupUI(void)
 	editButtons->addButton(ui.labelLetterButton, 5);
 	editButtons->addButton(ui.labelNumberButton, 6);
 	editButtons->addButton(ui.colorButton, 7);
-	editButtons->setExclusive(FALSE);
+	editButtons->setExclusive(false);
 
 
 	QMenu *menu = new QMenu();
@@ -519,20 +519,20 @@ void BoardWindow::slotEditButtonPressed( int m )
 	{
 		if ( m== editButtons->checkedId())
 		{
-//			editButtons->button (m)->setChecked( FALSE );
+//			editButtons->button (m)->setChecked( false);
 			gamePhase = phaseOngoing;
 			boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
-			editButtons->button (7)->setDisabled( FALSE );
+			editButtons->button (7)->setDisabled( false);
 		}
 		else
 		{
 			gamePhase = phaseEdit;
 			boardHandler->updateCursor( );		//this still has turn change FIXME
-			editButtons->button (7)->setDisabled( TRUE );
+			editButtons->button (7)->setDisabled( true);
 
 			for (int i= 0;i<7;i++)
 				if (i!=m)
-					editButtons->button (i)->setChecked( FALSE );
+					editButtons->button (i)->setChecked( false);
 
 		}
 	}
@@ -655,7 +655,7 @@ void BoardWindow::slotExportPic()
 	if (!fileName.endsWith(ext))
 		fileName.append(ext);
 
-	ui.board->exportPicture(fileName, new QString(filter->section(" ",0,0)), FALSE);//->left(3));
+	ui.board->exportPicture(fileName, new QString(filter->section(" ",0,0)), false);//->left(3));
 }
 
 /*
@@ -664,7 +664,7 @@ void BoardWindow::slotExportPic()
 void BoardWindow::slotExportPicClipB()
 {
 	QString null = "";
-	ui.board->exportPicture(0, 0 , TRUE);	
+	ui.board->exportPicture(0, 0 , true);	
 }
 
 /*
@@ -676,7 +676,7 @@ void BoardWindow::slotDuplicate()
 	GameData * gd = new GameData(gameData);
 	gd->gameMode = modeNormal;
 	gd->fileName = "";
-	BoardWindow *b = new BoardWindow(gd, TRUE, TRUE);
+	BoardWindow *b = new BoardWindow(gd, true, true);
 	
 	//doublecheck FIXME
 	/* Note also that this does not duplicate any ui.board->marks
@@ -896,10 +896,10 @@ bool BoardWindow::slotFileSave()
 //			fileName = setting->readEntry("LAST_DIR");
 //		else
 //			fileName = QString::null;
-		return doSave(fileName, FALSE);
+		return doSave(fileName, false);
 	}
 	else
-		return doSave(fileName, TRUE);
+		return doSave(fileName, true);
 }
 
 /*
@@ -907,7 +907,7 @@ bool BoardWindow::slotFileSave()
  */
 bool BoardWindow::slotFileSaveAs()
 {
-	return doSave(0, FALSE);
+	return doSave(0, false);
 }
 
 /*

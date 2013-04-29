@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "matchinvitedialog.h"
 
 MatchInviteDialog::MatchInviteDialog(QString name, QString rank, bool canRefuseFuture)

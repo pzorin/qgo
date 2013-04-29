@@ -24,8 +24,9 @@ class PlayerListing;
 class MatchRequest;
 class GameData;
 
-struct MatchNegotiationState
+class MatchNegotiationState
 {
+public:
 	MatchNegotiationState(void) : state(MSNONE), player(0), opponent(QString()), game_number(0), negotiation_broken(false), match_request(0) {};
 	
 	bool broken(void) { return negotiation_broken; };

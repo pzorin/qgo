@@ -44,8 +44,8 @@ public:
 	void countMarked(void);
 	class GameResult retrieveScore(void);
 	void exitScore();
-	void updateMove(Move *m=0, bool ignore_update = false);
-	bool updateAll(Move *move, bool toDraw=true);
+    void updateMove(Move *m=0, bool ignore_update = false);
+    bool updateAll(Move *move, bool toDraw=true);
 	void updateCursor(StoneColor c=stoneNone);
 	void updateButtons(StoneColor c=stoneNone);
 	void gotoMove(Move *m);

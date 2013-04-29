@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "codecwarndialog.h"
 #include "../defines.h"
 

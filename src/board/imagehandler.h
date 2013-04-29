@@ -26,7 +26,7 @@
 #include "../defines.h"
 #include <cmath>
 
-#include <QtGui>
+#include <QtWidgets>
 
 /* DONTREDRAWSTONES lets Qt do the scaling rather than redrawing them
  * to scale.  I'm not convinced it improves the speed all that much
@@ -47,7 +47,7 @@ public:
 	ImageHandler();
 	~ImageHandler();
 	
-    void setDisplay(bool isDisplay = FALSE);
+    void setDisplay(bool isDisplay = false);
     void setSquareSize(int size);
 	static QPixmap *getBoardPixmap(QString ) ;
 	static QPixmap *getTablePixmap(QString ) ;

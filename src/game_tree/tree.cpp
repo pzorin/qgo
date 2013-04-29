@@ -135,8 +135,8 @@ bool Tree::addBrother(Move *node)
 }
 
 /*
- * Returns: True  - A son found, added as brother
- *          False - No son found, added as first son
+ * Returns: true  - A son found, added as brother
+ *          false - No son found, added as first son
  */
 bool Tree::addSon(Move *node)
 {
@@ -1025,8 +1025,8 @@ void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
 }
 
 /*
- *	Returns: True  - son of current move was found
- *           False - 
+ *	Returns: true  - son of current move was found
+ *           false - 
  */
 bool Tree::insertStone(Move *node)
 {

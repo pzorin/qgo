@@ -189,7 +189,7 @@ void qGoBoardMatchInterface::leaveScoreMode()
 void qGoBoardMatchInterface::slotReviewPressed()
 {
 #ifdef OLD
-	emit signal_sendCommandFromBoard("review create_prevgame", FALSE); 
+	emit signal_sendCommandFromBoard("review create_prevgame", false); 
 #endif //OLD
 }
 

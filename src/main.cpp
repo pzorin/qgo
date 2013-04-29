@@ -21,7 +21,7 @@
 
 
 #include <QApplication>
-#include <QtGui>
+#include <QtWidgets>
 
 #include <time.h>
 #include "mainwindow.h"

@@ -27,6 +27,7 @@
 #include "defines.h"
 #include <QtGui>
 
+#include <QtWidgets>
 
 class Mark
 {
@@ -131,8 +132,8 @@ class MarkOtherLine : public QGraphicsLineItem
 {
 public:
 	MarkOtherLine(QGraphicsScene *canvas)
-		: QGraphicsLineItem(0,canvas)
-	{ }
+        : QGraphicsLineItem(0)
+    { canvas->addItem(this); }
 	int type() const { return RTTI_MARK_OTHERLINE; }
 };
 

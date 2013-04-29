@@ -109,7 +109,7 @@ void qGoBoardComputerInterface::localPassRequest()
 	 * its redundant with subclass sendPassToInterface FIXME */
 	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 
-	tree->doPass(FALSE);
+	tree->doPass(false);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
 	sendPassToInterface(c);
@@ -295,7 +295,7 @@ void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 //	mv_counter++;
 	//StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 	doPass();
-	//tree->doPass(FALSE);
+	//tree->doPass(false);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
 	
@@ -357,7 +357,7 @@ void qGoBoardComputerInterface::set_move(StoneColor sc, QString pt, QString/* mv
 	
 	else
 	{
-		int i = pt[0].unicode() - QChar::fromAscii('A').unicode() + 1;
+        int i = pt[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
 		// skip j
 		if (i > 8)
 			i--;

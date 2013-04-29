@@ -25,7 +25,7 @@
 
 #include "audio.h"
 #include "defines.h"
-#include <QtGui>
+#include <QtWidgets>
 
 class BoardWindow;
 

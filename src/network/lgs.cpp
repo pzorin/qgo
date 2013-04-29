@@ -427,7 +427,7 @@ void LGSConnection::handle_info(QString line)
 			boarddispatch = getBoardDispatch(protocol_save_int);
 			QString pt = element(line, 2, " ");
 			aMove->flags = MoveRecord::REMOVE;
-			aMove->x = (int)(pt.toAscii().at(0));
+			aMove->x = (int)(pt.toLatin1().at(0));
 			aMove->x -= 'A';
 			if(aMove->x < 9)	//no I on IGS
 				aMove->x++;
@@ -1174,7 +1174,7 @@ void WING_kibitz::handleMsg(QString line)
 				QString point = element(line, 5, " ", "EOL");
 				qDebug("Removal point: %s", point.toLatin1().constData());
 				
-				aMove->x = (int)(point.toAscii().at(0));
+				aMove->x = (int)(point.toLatin1().at(0));
 				aMove->x -= 'A';
 				point.remove(0,1);
 				aMove->y = element(point, 0, " ").toInt();

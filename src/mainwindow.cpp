@@ -216,8 +216,7 @@ void MainWindow::slot_fileNewBoard()
 	gd->black_name = ui.newFile_BlackPlayer->text();
 	gd->white_name = ui.newFile_WhitePlayer->text();
 	gd->komi = ui.newFile_Komi->text().toFloat();
-
-    addBoardWindow(new BoardWindow(gd, TRUE, TRUE));
+    addBoardWindow(new BoardWindow(gd, true, true));
 }
 
 

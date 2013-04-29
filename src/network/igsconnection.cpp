@@ -3233,7 +3233,7 @@ void IGSConnection::handle_move(QString line)
 			if(!r->handicap)
 				aMove->number++;
 			//qDebug("board size from record: %d", r->board_size);
-			aMove->x = (int)(point.toAscii().at(0));
+			aMove->x = (int)(point.toLatin1().at(0));
 			aMove->x -= 'A';
 			point.remove(0,1);
 			//qDebug("move number: %d\n", aMove->number);
@@ -4120,7 +4120,7 @@ void IGSConnection::handle_undo(QString line)
 		QString player = element(line, 0, " ");
 		QString point = element(line, 0, "(", ")");
 
-		aMove->x = (int)(point.toAscii().at(0));
+		aMove->x = (int)(point.toLatin1().at(0));
 		aMove->x -= 'A';
 		if(aMove->x < 9)	//no I on IGS
 			aMove->x++;
@@ -4140,7 +4140,7 @@ void IGSConnection::handle_undo(QString line)
 		QString nr = element(line, 3, " ");
 		nr.truncate(nr.length() - 1);
 		QString point = element(line, 7, " ");
-		aMove->x = (int)(point.toAscii().at(0));
+		aMove->x = (int)(point.toLatin1().at(0));
 		aMove->x -= 'A';
 		if(aMove->x < 9)	//no I on IGS
 			aMove->x++;
@@ -4539,7 +4539,7 @@ void IGSConnection::handleRemovingAt(unsigned int game, QString pt)
 		
 	MoveRecord * aMove = new MoveRecord();
 	aMove->flags = MoveRecord::REMOVE;
-	aMove->x = (int)(pt.toAscii().at(0));
+	aMove->x = (int)(pt.toLatin1().at(0));
 	aMove->x -= 'A';
 	if(aMove->x < 9)	//no I on IGS
 		aMove->x++;

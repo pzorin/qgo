@@ -730,13 +730,13 @@ Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group, Grou
 	tmp->c =  color;
 
 	int mark = 0;
-	bool found = FALSE;
+	bool found = false;
 
 	while ( mark < group->count() && !found )
 	{
 		//Do we find the same stone in the group ?
 		if (! group->compareItems(tmp, group->at(mark)))
-			found = TRUE ;
+			found = true ;
 
 		mark ++;
 	}
@@ -756,7 +756,7 @@ Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group, Grou
 
 /*
  * Counts and returns the number of liberties of a group of adjacetn stones
- * Since we replaced checkPosition, this might only be called by checkFalseEye
+ * Since we replaced checkPosition, this might only be called by checkfalseEye
  * if anything.  */
 int Matrix::countLiberties(Group *group) 
 {
@@ -1492,13 +1492,13 @@ Group* Matrix::assembleAreaGroups(MatrixStone *stone)
 
 /*
  * Returns true if the stone at x,y belongs to a groups with only 1 liberty
- * Previously checkFalseEye worked on the scored liberties.  The problem
+ * Previously checkfalseEye worked on the scored liberties.  The problem
  * was that it missed certain eyes on disconnected groups that could be
  * connected.  I don't know why it would only look at scored liberties.
  * If group is dead that's another matter, but I don't think that's an
  * issue. 
 */
-bool Matrix::checkFalseEye( int x, int y, StoneColor col)
+bool Matrix::checkfalseEye( int x, int y, StoneColor col)
 {
 	MatrixStone *tmp= new MatrixStone ;
 

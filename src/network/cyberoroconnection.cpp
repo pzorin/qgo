@@ -4183,7 +4183,7 @@ void CyberOroConnection::handleGamesList(unsigned char * msg, unsigned int size)
 	//FIXME try without
 	//delete ag;
 	if(p != (msg + size))
-		printf("gameslist3 error: %d %d\n", size, p - msg);
+        printf("gameslist3 error: %d %ld\n", size, p - msg);
 }
 
 //0456

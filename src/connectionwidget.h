@@ -24,7 +24,7 @@
 #include "defines.h"
 
 #include <QWidget>
-#include <QtGui>
+#include <QtWidgets>
 
 class RoomListing;
 class NetworkConnection;

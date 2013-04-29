@@ -30,7 +30,7 @@
 * Marks used in editing a game
 */
 /* FIXME, I multiplied these by 10 because they prevented the use of countLiberties
- * by checkFalseEye by corrupting the stone.  It seems to me rather silly to
+ * by checkfalseEye by corrupting the stone.  It seems to me rather silly to
  * have defines like these in addition to the marking system, but they are sort
  * of internal marks.  At any rate, things still seem to work so I guess
  * this fixed things.  But its still ugly and there could still be more problems */
@@ -95,7 +95,7 @@ public:
 	void invalidateAdjacentGroups(MatrixStone m, Group *** gm);
 	void invalidateAllGroups(Group *** gm);
 
-	bool checkFalseEye( int x, int y, StoneColor col);
+	bool checkfalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
 	void toggleStoneAt(int x, int y);
 	void markStoneDead(int x, int y);

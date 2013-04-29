@@ -34,7 +34,7 @@
 #include "matrix.h"
 #include "gamedata.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -455,7 +455,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 		moves = 0,
 		i, x=-1, y=-1;
 
-	int 	a_offset = QChar::fromAscii('a').unicode() - 1 ;
+	int 	a_offset = QChar::fromLatin1('a').unicode() - 1 ;
 
 	unsigned int pointer = 0,
 		strLength = toParse->length();
@@ -476,9 +476,9 @@ bool SGFParser::doParse(const QString &toParseStr)
 	/* FIXME toRemove, et., al., appears unused Remove it */
 	QStack<Position*> toRemove;
 /*
-////TODO	stack.setAutoDelete(FALSE);
-	movesStack.setAutoDelete(TRUE);
-	toRemove.setAutoDelete(TRUE);
+////TODO	stack.setAutoDelete(false);
+	movesStack.setAutoDelete(true);
+	toRemove.setAutoDelete(true);
 */
 	// Initialises the tree with board size
 	parseProperty(toParseStr, "SZ", tmp);
@@ -1359,7 +1359,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 		
 	// White player name
 	if (!parseProperty(toParse, "PW", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->white_name = tmp;
 	else
@@ -1367,7 +1367,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 
 	// White player rank
 	if (!parseProperty(toParse, "WR", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->white_rank = tmp;
 	else
@@ -1375,7 +1375,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 
 	// Black player name
 	if (!parseProperty(toParse, "PB", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->black_name = tmp;
 	else
@@ -1383,7 +1383,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Black player rank
 	if (!parseProperty(toParse, "BR", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->black_rank = tmp;
 	else
@@ -1391,7 +1391,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Board size
 	if (!parseProperty(toParse, "SZ", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->board_size = tmp.toInt();
 	else
@@ -1399,7 +1399,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Komi
 	if (!parseProperty(toParse, "KM", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->komi = tmp.toFloat();
 	else
@@ -1407,7 +1407,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Handicap
 	if (!parseProperty(toParse, "HA", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->handicap = tmp.toInt();
 	else
@@ -1415,7 +1415,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Result
 	if (!parseProperty(toParse, "RE", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->result = tmp;
 	else
@@ -1423,7 +1423,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Date
 	if (!parseProperty(toParse, "DT", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->date = tmp;
 	else
@@ -1431,7 +1431,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Place
 	if (!parseProperty(toParse, "PC", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->place = tmp;
 	else
@@ -1439,7 +1439,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Copyright
 	if (!parseProperty(toParse, "CP", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->copyright = tmp;
 	else
@@ -1447,7 +1447,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 	
 	// Game Name
 	if (!parseProperty(toParse, "GN", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->gameName = tmp;
 	else
@@ -1455,7 +1455,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 
 	// Comments style
 	if (!parseProperty(toParse, "ST", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 		gameData->style = tmp.toInt();
 	else
@@ -1463,7 +1463,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 
 	// Timelimit
 	if (!parseProperty(toParse, "TM", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 	{
 		gameData->timelimit = tmp.toInt();
@@ -1477,7 +1477,7 @@ GameData * SGFParser::initGame(const QString &toParse, const QString &fileName)
 
 	// Overtime == time system
 	if (!parseProperty(toParse, "OT", tmp))
-		return false;
+        return NULL;
 	if (!tmp.isEmpty())
 	{
 		gameData->overtime = tmp;
@@ -1826,7 +1826,7 @@ bool SGFParser::parseASCIIStream(QTextStream *stream, ASCII_Import *charset)
 	CHECK_PTR(stream);
 	
 	QStrList asciiLines;
-	asciiLines.setAutoDelete(TRUE);
+	asciiLines.setAutoDelete(true);
 	
 	int i=0, first=-1, last=-1, y=1;
 	bool flag=false;

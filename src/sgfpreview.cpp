@@ -48,7 +48,7 @@ void SGFPreview::clearData()
 void SGFPreview::openSGF()
 {
     if (GameLoaded != NULL)
-        mainwindow->addBoardWindow(new BoardWindow(new GameData(GameLoaded), TRUE, TRUE));
+        mainwindow->addBoardWindow(new BoardWindow(new GameData(GameLoaded), true, true));
 }
 
 void SGFPreview::setPath(QString path)
@@ -102,7 +102,7 @@ void SGFPreview::setPath(QString path)
         int end_main = s.indexOf(")(");
         if (end_main == -1)
             end_main = s.size();
-        int a_offset = QChar::fromAscii('a').unicode() - 1 ;
+        int a_offset = QChar::fromLatin1('a').unicode() - 1 ;
         int cursor = 0;
         int x,y;
         int nb_displayed = 20;

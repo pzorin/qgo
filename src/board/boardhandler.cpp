@@ -989,7 +989,7 @@ void BoardHandler::countScore(void)
 				m->at(i, j) == MARK_TERRITORY_DONE_WHITE) 
 			{
 				StoneColor col = (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ? stoneBlack : stoneWhite);
-				if (m->checkFalseEye(i, j, col)) 
+				if (m->checkfalseEye(i, j, col)) 
 				{
 					current_matrix->removeMark(i + 1, j + 1);
 					if (col == stoneBlack)

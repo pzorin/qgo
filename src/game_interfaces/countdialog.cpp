@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "../network/messages.h"
 #include "countdialog.h"
 #include "board/boardwindow.h"

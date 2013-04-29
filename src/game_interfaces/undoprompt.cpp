@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "undoprompt.h"
 
 UndoPrompt::UndoPrompt(const QString * _name, bool multiple, int _moves) : name(_name), moves(_moves)

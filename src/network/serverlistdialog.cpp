@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "serverlistdialog.h"
 
 ServerListDialog::ServerListDialog(std::vector <ServerItem *> serverlist, int current)

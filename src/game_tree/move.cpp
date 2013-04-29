@@ -41,7 +41,7 @@ Move::Move(int board_size)
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
 	timeinfo = false;
-	handicapMove = FALSE;
+	handicapMove = false;
 	matrix = new Matrix(board_size);
 }
 
@@ -60,7 +60,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &m
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
 	timeinfo = false;
-	handicapMove = FALSE;
+	handicapMove = false;
 	matrix = new Matrix(mat, clearAllMarks);
 	// Make all matrix values positive
 	//matrix->absMatrix();
@@ -82,7 +82,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
 	timeinfo = false;
-	handicapMove = FALSE;
+	handicapMove = false;
 }
 
 Move::~Move()
@@ -208,7 +208,7 @@ const QString Move::saveMove(bool isRoot)
 	if (fastLoadMarkDict == NULL)
 	{
 		fastLoadMarkDict = new QMap<int, FastLoadMark>;
-/////TODO		fastLoadMarkDict->setAutoDelete(TRUE);
+/////TODO		fastLoadMarkDict->setAutoDelete(true);
 	}
 	
 	FastLoadMark *flm = new FastLoadMark;

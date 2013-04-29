@@ -615,7 +615,7 @@ void ConnectionWidget::recvSeekCondition(class SeekCondition * s)
 
 void ConnectionWidget::recvSeekCancel(void)
 {
-    ui->seekToolButton->setChecked(FALSE);
+    ui->seekToolButton->setChecked(false);
     ui->seekToolButton->setMenu(seekMenu);
 //	ui->seekToolButton->setPopupDelay(1);
     ui->seekToolButton->setIcon(QIcon(":/ressources/pics/not_seeking.png"));

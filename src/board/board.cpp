@@ -36,7 +36,7 @@
 #include "move.h"		//for updateLastMove, cleaner and yet not FIXME
 #include "graphicsitemstypes.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class ImageHandler;
 
@@ -95,7 +95,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
     curStone = new Stone(imageHandler->getGhostPixmaps(), canvas, stoneBlack, 0, 0);
     curStone->setZValue(4);
     curStone->hide();
-    showCursor = FALSE;
+    showCursor = false;
 
     setUpdatesEnabled(true);
 }
@@ -141,6 +141,7 @@ void Board::setupCoords(void)
 	QString hTxt,vTxt;
 
 	// Init the coordinates
+    QGraphicsSimpleTextItem *tmp;
 	for (int i=0; i<board_size; i++)
 	{
 		switch(coordType)
@@ -160,10 +161,18 @@ void Board::setupCoords(void)
 				break;
 		}
 
-		vCoords1->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords1->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
-		vCoords2->append(new QGraphicsSimpleTextItem(vTxt, 0, canvas));
-		hCoords2->append(new QGraphicsSimpleTextItem(hTxt, 0, canvas));
+        tmp = new QGraphicsSimpleTextItem(vTxt, 0);
+        vCoords1->append(tmp);
+        canvas->addItem(tmp);
+        tmp = new QGraphicsSimpleTextItem(hTxt, 0);
+        hCoords1->append(tmp);
+        canvas->addItem(tmp);
+        tmp = new QGraphicsSimpleTextItem(vTxt, 0);
+        vCoords2->append(tmp);
+        canvas->addItem(tmp);
+        tmp = new QGraphicsSimpleTextItem(hTxt, 0);
+        hCoords2->append(tmp);
+        canvas->addItem(tmp);
 	}
 }
 
@@ -200,8 +209,10 @@ void Board::calculateSize()
 	offset = table_size * 2/100 ;  
 
 
-	QGraphicsSimpleTextItem *coordV = new QGraphicsSimpleTextItem(QString::number(board_size),0, canvas);
-	QGraphicsSimpleTextItem *coordH = new QGraphicsSimpleTextItem("A",0, canvas);
+    QGraphicsSimpleTextItem *coordV = new QGraphicsSimpleTextItem(QString::number(board_size),0);
+    QGraphicsSimpleTextItem *coordH = new QGraphicsSimpleTextItem("A",0);
+    canvas->addItem(coordV);
+    canvas->addItem(coordH);
 	int coord_width = (int)coordV->boundingRect().width();
 	int coord_height = (int)coordH->boundingRect().height();
 
@@ -243,7 +254,7 @@ void Board::drawGatter()
 /*
 * draws the goban wood texture
 */
-void Board::drawBackground()
+void Board::drawBack()
 {
 	table->setRect(offsetX - offset,
 		offsetY - offset,
@@ -359,7 +370,7 @@ void Board::resizeBoard()
 
 			//TODO introduce a ghost list in the stone class so that this becomes redundant code
 			if (s->isDead())
-				s->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+				s->togglePixmap(imageHandler->getGhostPixmaps(), false);
 
 
 			
@@ -398,7 +409,7 @@ void Board::resizeBoard()
 	 * moving it earlier doesn't fix anything */
 	
 	// Redraw the board
-	drawBackground();
+    drawBack();
 	drawGatter();
 //	if (showCoords && !isDisplayBoard)
     drawCoordinates();
@@ -425,7 +436,7 @@ void Board::setCursorType(CursorType cur)
 			if (cursor == cursorNavTo || cursor == cursorWait)
 				setCursor(Qt::ArrowCursor);
 			
-			showCursor = FALSE;
+			showCursor = false;
 			curStone->hide();
 			break;
 		}
@@ -436,7 +447,7 @@ void Board::setCursorType(CursorType cur)
 				setCursor(Qt::ArrowCursor);
 
 			curStone->setColor(stoneBlack);
-			showCursor = TRUE;
+			showCursor = true;
 			break;
 		}
 
@@ -446,14 +457,14 @@ void Board::setCursorType(CursorType cur)
 				setCursor(Qt::ArrowCursor);
 
 			curStone->setColor(stoneWhite);
-			showCursor = TRUE;
+			showCursor = true;
 			break;
 		}	
 	
 		case cursorNavTo :
 		{
 			setCursor(Qt::PointingHandCursor);		
-			showCursor = FALSE;
+			showCursor = false;
 			curStone->hide();
 			break;
 		}
@@ -461,7 +472,7 @@ void Board::setCursorType(CursorType cur)
 		case cursorWait :
 		{
 			setCursor(Qt::WaitCursor);
-			showCursor = FALSE;
+			showCursor = false;
 			curStone->hide();
 			break;
 		}			
@@ -497,10 +508,10 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
 	{
 		s=ghosts->at(i);
 		if (s->posX() == x && s->posY() == y && s->getColor() == c)
-			return TRUE;
+			return true;
 	}
 		
-	return FALSE;
+	return false;
 }
 
 /*
@@ -549,13 +560,13 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 		// We need to check wether the stones have been toggled dead or seki before (scoring mode)
 		if ((stone->isDead() || stone->isSeki()) && !dead)
 		{
-			stone->togglePixmap(imageHandler->getStonePixmaps(), TRUE);
-			stone->setDead(FALSE);
+			stone->togglePixmap(imageHandler->getStonePixmaps(), true);
+			stone->setDead(false);
 		}
 		
 		if ((!stone->isDead()) && dead)
 		{
-			stone->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+			stone->togglePixmap(imageHandler->getGhostPixmaps(), false);
 			stone->setDead();
 		}
 
@@ -591,7 +602,7 @@ void Board::setVarGhost(StoneColor c, int x, int y)
 //	if (setting->readIntEntry("VAR_GHOSTS") == vardisplayGhost) TODO
 //		s = new Stone(imageHandler->getGhostPixmaps(), canvas, c, x, y);
 //	else if (setting->readIntEntry("VAR_GHOSTS") == vardisplaySmallStone)
-		s = new Stone(imageHandler->getAlternateGhostPixmaps(), canvas, c, x, y, FALSE);
+		s = new Stone(imageHandler->getAlternateGhostPixmaps(), canvas, c, x, y, false);
 //	else
 //		return;
 		
@@ -731,7 +742,7 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 		if (hasStone(x, y) == 1)
 		{
 			//getStoneAt(x, y)->setDead(true);
-			//getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+			//getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), false);
 //			getStoneAt(x, y)->shadow->hide();
 //			boardHandler->markedDead = true;
 			updateStone(stoneWhite, x, y, true);
@@ -747,7 +758,7 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 		if (hasStone(x, y) == 1)
 		{
 			//getStoneAt(x, y)->setDead(true);
-			//getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), FALSE);
+			//getStoneAt(x, y)->togglePixmap(imageHandler->getGhostPixmaps(), false);
 //			boardHandler->getStoneHandler()->getStoneAt(x, y)->shadow->hide();
 //			boardHandler->markedDead = true;
 			updateStone(stoneBlack, x, y, true);
@@ -799,7 +810,7 @@ void Board::removeDeadMarks()
 		{
 			i.value()->setDead(false);
 			i.value()->setSeki(false);
-			i.value()->togglePixmap(imageHandler->getStonePixmaps(), TRUE);
+			i.value()->togglePixmap(imageHandler->getStonePixmaps(), true);
 		}
 	}
 
@@ -1113,6 +1124,6 @@ void Board::exportPicture(const QString &fileName,  QString *filter, bool toClip
 	}
 
 
-	if (!pix.save(fileName, filter->toAscii()))
+    if (!pix.save(fileName, filter->toLatin1()))
 		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
 }

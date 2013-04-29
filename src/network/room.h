@@ -23,7 +23,7 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class NetworkConnection;
 class BoardDispatch;

@@ -24,7 +24,7 @@
 #define FRIENDSLISTDIALOG_H
 
 #include "ui_friendslistdialog.h"
-#include <QtGui>
+#include <QtWidgets>
 
 class NetworkConnection;
 

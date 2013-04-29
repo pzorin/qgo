@@ -140,7 +140,7 @@ class IGSConnection : public NetworkConnection
 		void sendToggleClientOn(void);
 		void sendListChannels(void);
 
-		QString element(const QString &line, int index, const QString &del1, const QString &del2="", bool killblanks=FALSE);
+		QString element(const QString &line, int index, const QString &del1, const QString &del2="", bool killblanks=false);
 		unsigned int idleTimeToSeconds(QString time);
 		void fixRankString(QString * rank);
 		PlayerListing * getPlayerListingNeverFail(QString & name);
@@ -152,7 +152,7 @@ class IGSConnection : public NetworkConnection
 		
 		QString protocol_save_string;
 		int protocol_save_int;
-		struct ChannelListing * channel;
+        ChannelListing * channel;
 		int game_were_playing;
 		QString match_playerName;
 		TimeRecord * btime, * wtime;

@@ -24,7 +24,7 @@
 #define TALK_H
 
 #include "ui_talk_gui.h"
-#include <QtGui>
+#include <QtWidgets>
 
 class NetworkConnection;
 class PlayerListing;

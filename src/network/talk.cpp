@@ -48,12 +48,12 @@ Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connect
 
 	// create a new tab
 	QString s = "MultiLineEdit1_" + QString::number(++counter);
-	ui.MultiLineEdit1->setObjectName(s.toAscii()) ;
+	ui.MultiLineEdit1->setObjectName(s.toLatin1()) ;
   
 //	MultiLineEdit1->setCurrentFont(setting->fontComments); 
 
 	s = "LineEdit1_" + QString::number(++counter);
-	ui.LineEdit1->setObjectName(s.toAscii());
+	ui.LineEdit1->setObjectName(s.toLatin1());
 //	LineEdit1->setFont(setting->fontComments);
 /*
 	// do not add a button for shouts* or channels tab

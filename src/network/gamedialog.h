@@ -25,7 +25,7 @@
 
 #include "ui_gamedialog.h"
 #include "defines.h"
-#include <QtGui>
+#include <QtWidgets>
 
 class NetworkConnection;
 class PlayerListing;

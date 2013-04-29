@@ -25,7 +25,7 @@
 
 #include "defines.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 enum CursorType { cursorIdle, cursorGhostBlack , cursorGhostWhite , cursorWait , cursorNavTo };
 enum CoordType { uninit, sgf, numbertopnoi, numberbottomi };
@@ -51,14 +51,14 @@ public:
 
 	void removeGhosts();
 	void setVarGhost(StoneColor c, int x, int y);
-	void setMark(int x, int y, MarkType t, bool update=true, QString txt=QString::null, bool overlay=true);
+    void setMark(int x, int y, MarkType t, bool update=true, QString txt=QString::null, bool overlay=true);
 	Mark* hasMark(int x, int y);
-	void removeMark(int x, int y, bool update = false);
+    void removeMark(int x, int y, bool update = false);
 	void removeDeadMarks();
 	void updateLastMove(Move * move);
 
 //	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
-	bool updateStone(StoneColor c, int x, int y, bool dead = false);
+    bool updateStone(StoneColor c, int x, int y, bool dead = false);
 	void setCursorType(CursorType cur);
 //	void updateDeadMarks(int &black, int &white);
 	unsigned int getSize()	{return board_size;}
@@ -71,7 +71,7 @@ signals:
 
 protected:
 	void calculateSize();
-	void drawBackground();
+    void drawBack(); // old drawBackground
 	void initGatter();
 	void drawGatter();
 	void setupCoords(void);

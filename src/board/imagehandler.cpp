@@ -32,7 +32,7 @@
 #include "defines.h"
 #include "imagehandler.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 #ifdef Q_WS_WIN
  #ifndef M_PI
@@ -527,7 +527,7 @@ void ImageHandler::setSquareSize(int size)
 	//repaint black stones
 	QImage ib = QImage(size, size, QImage::Format_ARGB32);
 	QImage iws;
-//	ib.setAlphaBuffer(TRUE);
+//	ib.setAlphaBuffer(true);
 	paintBlackStone(ib, size, stone_look);
 	//stonePixmaps->append(QPixmap::fromImage(ib));//, 
 //		Qt::PreferDither | 

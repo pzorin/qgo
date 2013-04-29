@@ -37,9 +37,10 @@ Mark::~Mark()
 */
 
 MarkSquare::MarkSquare(int x, int y, double size, QGraphicsScene *canvas, QColor col)
-: QGraphicsRectItem(0,canvas),
+: QGraphicsRectItem(0),
 Mark(x, y)
 {
+    canvas->addItem(this);
 //	if (setting->readBoolEntry("SMALL_MARKS"))
 //		size_d *= 0.85;
 
@@ -56,10 +57,11 @@ Mark(x, y)
 */
 
 MarkCircle::MarkCircle(int x, int y, double size,QGraphicsScene *canvas, QColor col, bool s)
-: QGraphicsEllipseItem(0,canvas),
+: QGraphicsEllipseItem(0),
 Mark(x, y),
 small(s)
 {
+    canvas->addItem(this);
 //	if (setting->readBoolEntry("BOLD_MARKS"))
 		setPen(QPen(col, 2));
 //	else
@@ -102,9 +104,10 @@ void MarkCircle::setSize(double x, double y)
 * MarkTriangle
 */
 MarkTriangle::MarkTriangle(int x, int y, double s, QGraphicsScene *canvas, QColor col)
-: QGraphicsPolygonItem(0,canvas),
+: QGraphicsPolygonItem(0),
 Mark(x, y)
 {
+    canvas->addItem(this);
 //	if (setting->readBoolEntry("BOLD_MARKS"))
 		setPen(QPen(col, 2));
 //	else
@@ -145,9 +148,11 @@ void MarkTriangle::setSize(double w, double)
 */
 
 MarkCross::MarkCross(int x, int y, double s, QGraphicsScene *canvas, QColor col, bool plus)
-: QGraphicsLineItem(0,canvas),
+: QGraphicsLineItem(0),
 Mark(x, y), size(s)
 {
+    canvas->addItem(this);
+
 	plussign = plus;
 	ol = NULL;
 
@@ -219,9 +224,11 @@ int MarkText::maxLength = 1;
 
 MarkText::MarkText( int x, int y, double size, const QString &txt,
 			 QGraphicsScene *canvas, QColor col, short c, bool bold, bool  /*overlay*/)
-			 : QGraphicsSimpleTextItem(txt,0, canvas),
+             : QGraphicsSimpleTextItem(txt,0),
 			 Mark(x, y), curSize(size), counter(c)
 {
+    canvas->addItem(this);
+
 //	rect = NULL;
 	useBold = bold;
 //	maxLength = 1;
@@ -271,7 +278,7 @@ void MarkText::setSize(double x, double)
 //	font().setPointSize((int)x);
 
 //	f.setPointSize((int)x);
-	f.setBold(FALSE);
+	f.setBold(false);
 	f.setStyleStrategy(QFont::NoAntialias);
 //	f.setWeight(10);
 	setFont(f);
@@ -283,8 +290,10 @@ void MarkText::setSize(double x, double)
 }
 
 MarkSmallStoneTerr::MarkSmallStoneTerr(int x, int y, double s, StoneColor c, QList<QPixmap> * p, QGraphicsScene *canvas)
-	: Mark(x, y), QGraphicsPixmapItem(0, canvas), _x(x), _y(y), col(c), size(s)
+    : Mark(x, y), QGraphicsPixmapItem(0), _x(x), _y(y), col(c), size(s)
 {
+    canvas->addItem(this);
+
 	//FIXME the ZValue keeps the gatter and hoshi marks from messing with
 	//the territory marks, but I get the feeling that ZValues are inconsistently
 	//used and that the gatter drawing could be significantly sped up

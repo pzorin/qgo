@@ -35,7 +35,7 @@
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {
-	isModified = FALSE;	
+	isModified = false;	
 	tree = t;
 	boardwindow = bw;
 	
@@ -82,7 +82,7 @@ void qGoBoard::setHandicap(int handicap)
 		 * of handicap stones won't change that */
 		//currentMove++;
 		tree->getCurrent()->setMoveNumber(0);
-		tree->getCurrent()->setHandicapMove(TRUE);
+		tree->getCurrent()->setHandicapMove(true);
 //	}
 	if(tree->getCurrent()->getNumBrothers())
 		qDebug("handi has brother??");
@@ -325,7 +325,7 @@ void qGoBoard::setResult(GameResult & r)
 	}
 	QSettings settings;
 	if( settings.value("AUTOSAVE").toBool())
-		boardwindow->doSave(boardwindow->getCandidateFileName(),TRUE);
+		boardwindow->doSave(boardwindow->getCandidateFileName(),true);
 	
 	boardwindow->setGamePhase(phaseEnded);
 	/* FIXME:  getting the result doesn't set the result
@@ -436,7 +436,7 @@ void qGoBoard::doPass()
 {
 //	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 
-	tree->doPass(FALSE);
+	tree->doPass(false);
 	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
 	setModified();
@@ -448,7 +448,7 @@ void qGoBoard::doPass()
  */
 bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 {
-	bool validMove = TRUE;
+	bool validMove = true;
 
 	if(dontplayyet && !tree->checkMoveIsValid(c, x, y))
 		validMove = false;
@@ -513,16 +513,16 @@ bool qGoBoard::getBlackTurn(bool time)
 		return tree->getCurrent()->getPLnextMove() == stoneBlack;
 	
 	//if (tree->getCurrent() == tree->getRoot())
-	//	return TRUE;
+	//	return true;
 	
 	// the first handicap move bears number 0 as well
 	if (tree->getCurrent()->getMoveNumber() == 0)
 	{
 		// Handicap, so white starts
 		if (gameData->handicap >= 2)
-			return FALSE;
+			return false;
 			
-		return TRUE;
+		return true;
 	}
 	
 	// Normal mode
@@ -549,7 +549,7 @@ bool qGoBoard::getBlackTurn(bool time)
 
 	// Crap happened. 50% chance this is correct .)
 	qWarning("Oops, crap happened in BoardHandler::getBlackTurn() !");
-	return TRUE;
+	return true;
 }
 
 /*

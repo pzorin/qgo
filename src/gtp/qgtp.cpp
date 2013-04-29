@@ -36,7 +36,7 @@ QGtp::QGtp()
 {
 	/*openGtpSession(filename);*/
 	programProcess = NULL; // This to permit proper ending
-	responseReceived = FALSE;
+	responseReceived = false;
 	answer = "";
 }
 
@@ -66,7 +66,7 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	
 	programProcess = new QProcess();
 	QStringList arguments;
-	issueCmdNb = FALSE;
+	issueCmdNb = false;
 	
 	if(!filename.count())
 	{
@@ -77,7 +77,7 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	if (filename.toLower().contains("gnugo"))
 	{
 		arguments << "--mode" << "gtp" << "--quiet" ;
-		issueCmdNb = TRUE;
+		issueCmdNb = true;
 	}
 
 	if (filename.toLower().contains("mogo"))
@@ -179,7 +179,7 @@ void QGtp::slot_readFromStdout()
 	} while (!s.isEmpty());
 	if(answer[answer.length() - 1] != '\n')
 		return;
-	responseReceived = TRUE;
+	responseReceived = true;
 		
 	answer=answer.trimmed();
 	if (answer.length() != 0)
@@ -190,7 +190,7 @@ void QGtp::slot_readFromStdout()
 	
 	if(buff != "=" && buff != "?")
 	{
-		responseReceived = FALSE;
+		responseReceived = false;
 		return;
 	}
 
@@ -211,7 +211,7 @@ void QGtp::slot_readFromStdout()
 	{
 		case GENMOVE:
 			emit signal_computerPlayed( (buff != "?") , _response );
-			responseReceived = FALSE;
+			responseReceived = false;
 		default:
 			;
 	}
@@ -279,7 +279,7 @@ QGtp::waitResponse()
 	_response = _response.right(_response.length() - pos - 1);
 	*/
 	qDebug("** QGtp::waitResponse():  \'%s\'" , _response.toLatin1().constData());
-	responseReceived = FALSE;
+	responseReceived = false;
 
 	if (buff == "?") //symbole=='?')
 	{
@@ -900,7 +900,7 @@ QGtp::genmoveBlack ()
 	waitResponse();
 
 	emit signal_computerPlayed( (buff != "?") , _response );
-//	responseReceived = FALSE;
+//	responseReceived = false;
 
 	return OK;
 }
@@ -921,7 +921,7 @@ QGtp::genmoveWhite ()
 	waitResponse();
 
 	emit signal_computerPlayed( (buff != "?") , _response );
-//	responseReceived = FALSE;
+//	responseReceived = false;
 
 	return OK;
 }

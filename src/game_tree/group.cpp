@@ -94,7 +94,7 @@ bool Group::isAttachedTo(MatrixStone *s)
 #ifndef NO_DEBUG
 void Group::debug()
 {
-	qDebug(QString("Count: %1 - Liberties: %2").arg(count()).arg(liberties).toLatin1().constData());
+    qDebug(QString("Count: %1 - Liberties: %2").arg(count()).arg(liberties).toLatin1().constData());
 	MatrixStone *s;
 
 	//QList<MatrixStone*>::Iterator it(this);

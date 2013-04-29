@@ -25,7 +25,7 @@
 
 #include "board.h"
 
-#include <QtGui>
+#include <QtWidgets>
 
 class DisplayBoard : public Board
 {

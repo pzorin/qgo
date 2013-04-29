@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "../network/messages.h"
 #include "resultdialog.h"
 #include "../network/boarddispatch.h"

@@ -36,8 +36,10 @@
  * Creates the stone as a GraphicsScene item
  */
 Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int y , bool has_shadow)
-: QGraphicsPixmapItem(0, canvas), color(c), myX(x), myY(y)
+: QGraphicsPixmapItem(0), color(c), myX(x), myY(y)
 {
+    canvas->addItem(this);
+
 	pixmapList = a;
 
 	// We use a trick here with the count of the pixmap list
@@ -51,10 +53,11 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 	
 	if (has_shadow) 
 	{
-		shadow = new QGraphicsPixmapItem(0, canvas);
+        shadow = new QGraphicsPixmapItem(0);
 		shadow->setPixmap(pixmapList->last());
 		shadow->setZValue(4);
-	}
+        canvas->addItem(shadow);
+    }
 	
 	moveNum = new QGraphicsSimpleTextItem("",this);
 	moveNum->setPen(QPen(( color == stoneBlack ? Qt::white : Qt::black)));

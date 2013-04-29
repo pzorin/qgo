@@ -21,7 +21,7 @@
 
 #ifndef LISTVIEWS_H
 #define LISTVIEWS_H
-#include <QtGui>
+#include <QtWidgets>
 class GameListing;
 class PlayerListing;
 class ListModel;

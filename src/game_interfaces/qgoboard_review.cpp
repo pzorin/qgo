@@ -97,7 +97,7 @@ void qGoBoardReviewInterface::set_move(StoneColor sc, QString pt, QString mv_nr)
 void qGoBoardReviewInterface::sendPassToInterface(StoneColor /*c*/)
 {
 	/* What really is this doing in the review interface ??? */
-	emit signal_sendCommandFromBoard("pass", FALSE);
+	emit signal_sendCommandFromBoard("pass", false);
 	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(MoveRecord::PASS));
 }
 #endif //OLD
@@ -126,7 +126,7 @@ void qGoBoardReviewInterface::sendMoveToInterface(StoneColor c, int x, int y)
 
 	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(0, x, y, c)); 
 
-	emit signal_sendCommandFromBoard(QString(c1) + QString::number(c2) + " " + id, FALSE);
+	emit signal_sendCommandFromBoard(QString(c1) + QString::number(c2) + " " + id, false);
 
 	
 

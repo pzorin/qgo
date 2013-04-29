@@ -21,12 +21,13 @@
 
 
 #ifndef PLAYERGAMELISTING_H
-#define PLAYER_GAMELISTING_H
+#define PLAYERGAMELISTING_H
 
 class GameData;
 
-struct PlayerListing
+class PlayerListing
 {
+public:
 	unsigned short id;
 	bool online;
 	QString name;
@@ -95,9 +96,10 @@ struct PlayerListing
 /* We need to alter copy constructor to have and respect a bit field.
  * this is heavy, but I think its necessary... unless we get the
  * existing listing before change and update.*/
-struct GameListing
+class GameListing
 {
-	bool running;
+public:
+    bool running;
 	unsigned int number;
 	unsigned short game_code;	//ORO join games code FIXME
 	unsigned int moves;

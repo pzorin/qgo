@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include <QtGui>
+#include <QtWidgets>
 #include "createroomdialog.h"
 #include "networkconnection.h"
  

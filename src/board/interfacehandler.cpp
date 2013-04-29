@@ -281,7 +281,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		slider->setDisabled(true);
 */	
 	// Update slider
-	boardwindow->getUi()->slider->blockSignals (TRUE);
+	boardwindow->getUi()->slider->blockSignals (true);
 
 //	int mv = boardwindow->getUi()->slider->maximum();
 //	int v = boardwindow->getUi()->slider->value();
@@ -298,7 +298,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 //	(board->getGameMode() == modeObserve && mv < n && v==n-1))
 		boardwindow->getUi()->slider->setValue(n);
 
-	boardwindow->getUi()->slider->blockSignals (FALSE);
+	boardwindow->getUi()->slider->blockSignals (false);
 }
 
 
@@ -363,18 +363,18 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeNormal:
 //		modeButton->setEnabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
-		boardwindow->getUi()->actionPlay->setEnabled(TRUE);
+		boardwindow->getUi()->actionPlay->setEnabled(true);
 		boardwindow->getUi()->tabTools->setCurrentIndex(0) ;//setVisible(false);
-		boardwindow->getUi()->scoreButton->setEnabled(TRUE);
+		boardwindow->getUi()->scoreButton->setEnabled(true);
 //		scoreButton->setText(QObject::tr("Score", "button label"));
-		boardwindow->getUi()->passButton_2->setEnabled(TRUE);
-//		boardwindow->getUi()->refreshButton_2->setDisabled(TRUE);
+		boardwindow->getUi()->passButton_2->setEnabled(true);
+//		boardwindow->getUi()->refreshButton_2->setDisabled(true);
 //		undoButton->setDisabled(true);
 //		resignButton->setDisabled(true);
 //		adjournButton->setDisabled(true);
 //		refreshButton->setDisabled(true);
-		boardwindow->getUi()->commentEdit->setReadOnly(FALSE);
-		boardwindow->getUi()->commentEdit2->setDisabled(TRUE);
+		boardwindow->getUi()->commentEdit->setReadOnly(false);
+		boardwindow->getUi()->commentEdit2->setDisabled(true);
 //		statusMode->setText(" " + QObject::tr("E", "Board status line: edit mode") + " ");
 //		statusMark->setText(getStatusMarkText(board->getMarkType()));
 		return;
@@ -383,19 +383,19 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 //		boardwindow->getUi()->tabTools->removeTab(0) ;
-		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
-		boardwindow->getUi()->tabTools->setVisible(FALSE) ;
+		boardwindow->getUi()->actionPlay->setDisabled(true);
+		boardwindow->getUi()->tabTools->setVisible(false) ;
 //		boardwindow->getUi()->toolFrame->layout()->addItem(new QSpacerItem()) ;
-//		boardwindow->getUi()->scoreButton_2->setDisabled(TRUE);
+//		boardwindow->getUi()->scoreButton_2->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi()->passButton_2->setDisabled(TRUE);
+		boardwindow->getUi()->passButton_2->setDisabled(true);
 //		boardwindow->getUi()->undoButton->setDisabled(true);
 //		boardwindow->getUi()->resignButton->setDisabled(true);
 //		boardwindow->getUi()->adjournButton->setDisabled(true);
-//		boardwindow->getUi()->refreshButton_2->setEnabled(TRUE);
-		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
+//		boardwindow->getUi()->refreshButton_2->setEnabled(true);
+		boardwindow->getUi()->commentEdit->setReadOnly(true);
+		boardwindow->getUi()->commentEdit2->setReadOnly(false);
+		boardwindow->getUi()->commentEdit2->setEnabled(true);
 //		editCut->setEnabled(false);
 //		editDelete->setEnabled(false);
 //		fileNew->setEnabled(false);
@@ -408,35 +408,35 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeMatch : 
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->actionPlay->setDisabled(true);
 		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
-		boardwindow->getUi()->scoreButton->setDisabled(TRUE);
+		boardwindow->getUi()->scoreButton->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi()->passButton->setEnabled(TRUE);
+		boardwindow->getUi()->passButton->setEnabled(true);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi()->undoButton->setEnabled(TRUE);
-		boardwindow->getUi()->resignButton->setEnabled(TRUE);
-		boardwindow->getUi()->reviewButton->setDisabled(TRUE);
-		boardwindow->getUi()->reviewButton->setVisible(TRUE);
+		boardwindow->getUi()->undoButton->setEnabled(true);
+		boardwindow->getUi()->resignButton->setEnabled(true);
+		boardwindow->getUi()->reviewButton->setDisabled(true);
+		boardwindow->getUi()->reviewButton->setVisible(true);
 		/*boardwindow->getUi()->reviewButton->setText(QApplication::translate("BoardWindow", "Request Count", 0, QApplication::UnicodeUTF8));
 		if(boardwindow->getBoardDispatch()->supportsRequestCount())
-			boardwindow->getUi()->reviewButton->setEnabled(TRUE);
+			boardwindow->getUi()->reviewButton->setEnabled(true);
 		else
-			boardwindow->getUi()->reviewButton->setEnabled(FALSE);*/
-		boardwindow->getUi()->adjournButton->setEnabled(TRUE);
+			boardwindow->getUi()->reviewButton->setEnabled(false);*/
+		boardwindow->getUi()->adjournButton->setEnabled(true);
 		/* FIXME we could have the refreshButton refresh the observers on
 		 * IGS.  This requires a "supports" protocol function, etc., to
 		 * send the refresh.  Or we could just periodically refresh the
 		 * observers.
 		 * But note that its currently not "connect"ed to anything. */
-		//boardwindow->getUi()->refreshButton->setEnabled(TRUE);
-		boardwindow->getUi()->refreshButton->setEnabled(FALSE);
+		//boardwindow->getUi()->refreshButton->setEnabled(true);
+		boardwindow->getUi()->refreshButton->setEnabled(false);
 		
-		boardwindow->getUi()->doneButton->setEnabled(FALSE);
-		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
-		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi()->navButtonsFrame->setEnabled(FALSE);
+		boardwindow->getUi()->doneButton->setEnabled(false);
+		boardwindow->getUi()->commentEdit->setReadOnly(true);
+		boardwindow->getUi()->commentEdit2->setEnabled(true);
+		boardwindow->getUi()->commentEdit2->setReadOnly(false);
+		boardwindow->getUi()->navButtonsFrame->setEnabled(false);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		fileNew->setEnabled(false);
@@ -449,21 +449,21 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case   modeComputer :
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->actionPlay->setDisabled(true);
 		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
-		boardwindow->getUi()->scoreButton->setDisabled(TRUE);
+		boardwindow->getUi()->scoreButton->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi()->passButton->setEnabled(TRUE);
+		boardwindow->getUi()->passButton->setEnabled(true);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi()->undoButton->setEnabled(TRUE);
-		boardwindow->getUi()->resignButton->setEnabled(TRUE);
-		boardwindow->getUi()->adjournButton->setEnabled(FALSE);
-		//boardwindow->getUi()->refreshButton->setEnabled(FALSE);
-		boardwindow->getUi()->doneButton->setEnabled(FALSE);
-		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi()->navButtonsFrame->setEnabled(FALSE);
-		boardwindow->getUi()->commentEdit2->setDisabled(TRUE);
-		boardwindow->getUi()->reviewButton->setDisabled(TRUE);
+		boardwindow->getUi()->undoButton->setEnabled(true);
+		boardwindow->getUi()->resignButton->setEnabled(true);
+		boardwindow->getUi()->adjournButton->setEnabled(false);
+		//boardwindow->getUi()->refreshButton->setEnabled(false);
+		boardwindow->getUi()->doneButton->setEnabled(false);
+		boardwindow->getUi()->commentEdit->setReadOnly(true);
+		boardwindow->getUi()->navButtonsFrame->setEnabled(false);
+		boardwindow->getUi()->commentEdit2->setDisabled(true);
+		boardwindow->getUi()->reviewButton->setDisabled(true);
 //		fileNew->setEnabled(false);
 //		fileNewBoard->setEnabled(false);
 //		fileOpen->setEnabled(false);
@@ -474,7 +474,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeTeach:
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
-		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->actionPlay->setDisabled(true);
 		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi()->scoreButton->setDisabled(true);
@@ -488,8 +488,8 @@ void InterfaceHandler::toggleMode(GameMode mode)
 		boardwindow->getUi()->doneButton->setEnabled(false);
 		boardwindow->getUi()->commentEdit->setReadOnly(true);
 		boardwindow->getUi()->navButtonsFrame->setEnabled(false);
-		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
+		boardwindow->getUi()->commentEdit2->setReadOnly(false);
+		boardwindow->getUi()->commentEdit2->setEnabled(true);
 //		commentEdit2->setReadOnly(false);
 //		commentEdit2->setDisabled(false);
 //		fileNew->setEnabled(false);
@@ -502,21 +502,21 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	case modeReview :
 //		board->setMode(modeTeach);
 //		modeButton->setDisabled(true);
-		boardwindow->getUi()->actionPlay->setDisabled(TRUE);
+		boardwindow->getUi()->actionPlay->setDisabled(true);
 		boardwindow->getUi()->tabTools->setCurrentIndex(1) ;
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
-		boardwindow->getUi()->scoreButton->setDisabled(TRUE);
+		boardwindow->getUi()->scoreButton->setDisabled(true);
 //		scoreButton->setText(QObject::tr("Edit", "button label"));
-		boardwindow->getUi()->passButton->setEnabled(TRUE);
+		boardwindow->getUi()->passButton->setEnabled(true);
 //		passButton->setText(QObject::tr("Pass", "button label"));
-		boardwindow->getUi()->undoButton->setEnabled(TRUE);
-		boardwindow->getUi()->resignButton->setEnabled(TRUE);
-		boardwindow->getUi()->adjournButton->setEnabled(TRUE);
-		//boardwindow->getUi()->refreshButton->setEnabled(TRUE);
-		boardwindow->getUi()->doneButton->setEnabled(FALSE);
-		boardwindow->getUi()->commentEdit->setReadOnly(TRUE);
-		boardwindow->getUi()->commentEdit2->setReadOnly(FALSE);
-		boardwindow->getUi()->commentEdit2->setEnabled(TRUE);
+		boardwindow->getUi()->undoButton->setEnabled(true);
+		boardwindow->getUi()->resignButton->setEnabled(true);
+		boardwindow->getUi()->adjournButton->setEnabled(true);
+		//boardwindow->getUi()->refreshButton->setEnabled(true);
+		boardwindow->getUi()->doneButton->setEnabled(false);
+		boardwindow->getUi()->commentEdit->setReadOnly(true);
+		boardwindow->getUi()->commentEdit2->setReadOnly(false);
+		boardwindow->getUi()->commentEdit2->setEnabled(true);
 //		fileNew->setEnabled(false);
 //		fileNewBoard->setEnabled(false);
 //		fileOpen->setEnabled(false);

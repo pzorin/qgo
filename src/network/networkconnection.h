@@ -314,8 +314,9 @@ private:
 		void slot_cancelConnecting(void);
 };
 
-struct FriendWatchListing
+class FriendWatchListing
 {
+public:
 	FriendWatchListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {};
 	FriendWatchListing(QString n) : name(n), id(0), notify(false), online(false) {};		//blocked has no notify
 	QString name;

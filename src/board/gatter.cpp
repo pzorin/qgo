@@ -23,42 +23,67 @@
 #include "../defines.h"
 #include "gatter.h"
 
-#include <QtGui>
+#include <QList>
+#include <QtWidgets>
 
 
- /*************************************************************
-  *
-  * Initialises the gatter intersections and hoshis points
-  *
-  *************************************************************/
+/*************************************************************
+ *
+ * Initialises the gatter intersections and hoshis points
+ *
+ *************************************************************/
 Gatter::Gatter(QGraphicsScene *canvas, int size)
 {
 	board_size = size;
 
     VGatter.reserve(board_size*board_size);
     HGatter.reserve(board_size*board_size);
+    QGraphicsLineItem *tmp1;
     for (int i=0; i<board_size*board_size; i++)
     {
-        VGatter.append(new QGraphicsLineItem(0,canvas));
-        HGatter.append(new QGraphicsLineItem(0,canvas));
-	}
+        tmp1 = new QGraphicsLineItem(0);
+        canvas->addItem(tmp1);
+        VGatter[i] = tmp1;
+        tmp1 = new QGraphicsLineItem(0);
+        canvas->addItem(tmp1);
+        HGatter[i] = tmp1;
+    }
 	
-	int edge_dist = (board_size > 12 ? 4 : 3);
+    QGraphicsEllipseItem *tmp2;
+    int edge_dist = (board_size > 12 ? 4 : 3);
 	int low = edge_dist;
 	int middle = (board_size + 1) / 2;
 	int high = board_size + 1 - edge_dist;
 	if (board_size % 2 && board_size > 9)
 	{
-        hoshisList.insert(indexOf(middle, low) , new QGraphicsEllipseItem(0,canvas));
-        hoshisList.insert(indexOf(middle, middle) , new QGraphicsEllipseItem(0,canvas));
-        hoshisList.insert(indexOf(middle, high) , new QGraphicsEllipseItem(0,canvas));
-        hoshisList.insert(indexOf(low, middle) , new QGraphicsEllipseItem(0,canvas));
-        hoshisList.insert(indexOf(high, middle) , new QGraphicsEllipseItem(0,canvas));
-	}
-    hoshisList.insert(indexOf(low, low) ,new QGraphicsEllipseItem(0,canvas));
-    hoshisList.insert(indexOf(high, low) , new QGraphicsEllipseItem(0,canvas));
-    hoshisList.insert(indexOf(high, high) , new QGraphicsEllipseItem(0,canvas));
-    hoshisList.insert(indexOf(low, high) ,new QGraphicsEllipseItem(0,canvas));
+        tmp2 = new QGraphicsEllipseItem(0);
+        hoshisList.insert(middle*board_size + low , tmp2);
+        canvas->addItem(tmp2);
+        tmp2 = new QGraphicsEllipseItem(0);
+        hoshisList.insert(middle*board_size + middle , tmp2);
+        canvas->addItem(tmp2);
+        tmp2 = new QGraphicsEllipseItem(0);
+        hoshisList.insert(middle*board_size + high , tmp2);
+        canvas->addItem(tmp2);
+        tmp2 = new QGraphicsEllipseItem(0);
+        hoshisList.insert(low*board_size + middle , tmp2);
+        canvas->addItem(tmp2);
+        tmp2 = new QGraphicsEllipseItem(0);
+        hoshisList.insert(high*board_size + middle , tmp2);
+        canvas->addItem(tmp2);
+    }
+    tmp2 = new QGraphicsEllipseItem(0);
+    hoshisList.insert(low*board_size + low , tmp2);
+    canvas->addItem(tmp2);
+    tmp2 = new QGraphicsEllipseItem(0);
+    hoshisList.insert(high*board_size + low , tmp2);
+    canvas->addItem(tmp2);
+    tmp2 = new QGraphicsEllipseItem(0);
+    hoshisList.insert(high*board_size + high , tmp2);
+    canvas->addItem(tmp2);
+    tmp2 = new QGraphicsEllipseItem(0);
+    hoshisList.insert(low*board_size + high , tmp2);
+    canvas->addItem(tmp2);
 
 
 	QMapIterator<int,QGraphicsEllipseItem*> it( hoshisList );
@@ -73,9 +98,9 @@ Gatter::Gatter(QGraphicsScene *canvas, int size)
 	showAll();
 }
 
- /*
-  * Destroys the gatter
-  */
+/*
+ * Destroys the gatter
+ */
 Gatter::~Gatter()
 {
     qDeleteAll(HGatter);
@@ -83,9 +108,10 @@ Gatter::~Gatter()
     qDeleteAll(hoshisList);
 }
 
- /*
-  * Calculates the gatter intersections and hoshis position
-  */
+
+/*
+ * Calculates the gatter intersections and hoshis position
+ */
 void Gatter::resize(int offsetX, int offsetY, int square_size)
 {
 	int size = square_size / 5;
@@ -143,9 +169,9 @@ void Gatter::showAll()
 
 }
 
- /*
-  * Hides an intersection (when placing a letter mark)
-  */
+/*
+ * Hides an intersection (when placing a letter mark)
+ */
 void Gatter::hide(int x, int y)
 {
     if (( x<1) || (x > board_size) || ( y<1) || (y > board_size))
@@ -158,9 +184,9 @@ void Gatter::hide(int x, int y)
         hoshisList.value(indexOf(x,y))->hide();
 }
 
- /*
-  * shows an intersection (when removing a letter mark)
-  */
+/*
+ * shows an intersection (when removing a letter mark)
+ */
 void Gatter::show(int x, int y)
 {
     if (( x<1) || (x > board_size) || ( y<1) || (y > board_size))

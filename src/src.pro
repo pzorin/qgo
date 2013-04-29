@@ -3,8 +3,7 @@
 #message($${CONFIG})
 RESOURCES = application.qrc  \
 	    board/board.qrc
-QT = core gui \
-network
+QT += core gui widgets network multimedia
 DESTDIR = ../build
 TARGET = qgo
 OBJECTS_DIR = $${DESTDIR}/objects
@@ -161,21 +160,11 @@ SOURCES += displayboard.cpp \
 
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""
-macx {
-    CONFIG += x86 ppc
-    QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
-}
 
 linux-* {
     QGO_INSTALL_PATH = /usr/share/qgo
     QGO_INSTALL_BIN_PATH = /usr/bin
 
-    SOURCES += audio/alsa.cpp
-    HEADERS += audio/alsa.h
-    RESOURCES += sounds.qrc
-
-    LIBS += -lasound
-    
     icon.path = /usr/share/pixmaps
     icon.files = ressources/pics/qgo.png
     icon.files += ressources/pics/qgo_16x16.xpm

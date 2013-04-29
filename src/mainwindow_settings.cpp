@@ -64,7 +64,7 @@ void MainWindow::slot_currentChanged(int i)
 {
 	static int former=-1;
 	QSettings settings;
-    bool resend = FALSE;
+    bool resend = false;
 
 	if ((former == 3) || (former == 4))
 	{
@@ -227,9 +227,9 @@ void MainWindow::loadSettings()
 	ui.comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
 	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
 	if(settings.value("COMPUTER_PLAYS_WHITE").toBool())
-		ui.computerPlaysWhite->setChecked(TRUE);
+		ui.computerPlaysWhite->setChecked(true);
 	else
-		ui.computerPlaysBlack->setChecked(TRUE);
+		ui.computerPlaysBlack->setChecked(true);
 	ui.newComputer_Handicap->setValue(settings.value("COMPUTER_HANDICAP").toInt());
 	if((var = settings.value("LAST_PATH")) == QVariant())
 		currentWorkingDir = QString();
@@ -241,11 +241,11 @@ void MainWindow::loadSettings()
 		var = 5.5;
 	ui.newComputer_Komi->setText(var.toString());
 	
-	ui.radioButtonStones_real->setChecked(TRUE);
+	ui.radioButtonStones_real->setChecked(true);
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
 	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
 
-	ui.radioButton_allGameSound->setChecked(TRUE);
+	ui.radioButton_allGameSound->setChecked(true);
 	ui.radioButton_noSound->setChecked((settings.value("SOUND")==1));
 	ui.radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
 
@@ -286,9 +286,9 @@ void MainWindow::loadSettings()
 	ui.timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
 	ui.BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
 
-	ui.checkBox_Nmatch_Black->setChecked(settings.value("NMATCH_BLACK", QVariant(TRUE)).toBool());
-	ui.checkBox_Nmatch_White->setChecked(settings.value("NMATCH_WHITE", QVariant(TRUE)).toBool());
-	ui.checkBox_Nmatch_Nigiri->setChecked(settings.value("NMATCH_NIGIRI", QVariant(TRUE)).toBool());
+	ui.checkBox_Nmatch_Black->setChecked(settings.value("NMATCH_BLACK", QVariant(true)).toBool());
+	ui.checkBox_Nmatch_White->setChecked(settings.value("NMATCH_WHITE", QVariant(true)).toBool());
+	ui.checkBox_Nmatch_Nigiri->setChecked(settings.value("NMATCH_NIGIRI", QVariant(true)).toBool());
 	ui.HandicapSpin_Nmatch->setValue(settings.value("NMATCH_HANDICAP", QVariant(8)).toInt());	
 	ui.timeSpin_Nmatch->setValue(settings.value("NMATCH_MAIN_TIME", QVariant(99)).toInt());
 	ui.BYSpin_Nmatch->setValue(settings.value("NMATCH_BYO_TIME", QVariant(60)).toInt());
