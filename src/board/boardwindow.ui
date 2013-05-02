@@ -4060,7 +4060,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/2leftarrow.png</normaloff>:/new/prefix1/ressources/pics/2leftarrow.png</iconset>
+                <normaloff>:/boardicons/resources/pics/2leftarrow.png</normaloff>:/boardicons/resources/pics/2leftarrow.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4083,7 +4083,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/previous.png</normaloff>:/new/prefix1/ressources/pics/previous.png</iconset>
+                <normaloff>:/boardicons/resources/pics/previous.png</normaloff>:/boardicons/resources/pics/previous.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4106,7 +4106,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/next.png</normaloff>:/new/prefix1/ressources/pics/next.png</iconset>
+                <normaloff>:/boardicons/resources/pics/next.png</normaloff>:/boardicons/resources/pics/next.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4129,7 +4129,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/2rightarrow.png</normaloff>:/new/prefix1/ressources/pics/2rightarrow.png</iconset>
+                <normaloff>:/boardicons/resources/pics/2rightarrow.png</normaloff>:/boardicons/resources/pics/2rightarrow.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4162,7 +4162,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/previous_comment.png</normaloff>:/new/prefix1/ressources/pics/previous_comment.png</iconset>
+                <normaloff>:/boardicons/resources/pics/previous_comment.png</normaloff>:/boardicons/resources/pics/previous_comment.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4185,7 +4185,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/goto_move.png</normaloff>:/new/prefix1/ressources/pics/goto_move.png</iconset>
+                <normaloff>:/boardicons/resources/pics/goto_move.png</normaloff>:/boardicons/resources/pics/goto_move.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4208,7 +4208,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/next_comment.png</normaloff>:/new/prefix1/ressources/pics/next_comment.png</iconset>
+                <normaloff>:/boardicons/resources/pics/next_comment.png</normaloff>:/boardicons/resources/pics/next_comment.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4248,7 +4248,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/top.png</normaloff>:/new/prefix1/ressources/pics/top.png</iconset>
+                <normaloff>:/boardicons/resources/pics/top.png</normaloff>:/boardicons/resources/pics/top.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4271,7 +4271,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/up.png</normaloff>:/new/prefix1/ressources/pics/up.png</iconset>
+                <normaloff>:/boardicons/resources/pics/up.png</normaloff>:/boardicons/resources/pics/up.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4294,7 +4294,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/reload.png</normaloff>:/new/prefix1/ressources/pics/reload.png</iconset>
+                <normaloff>:/boardicons/resources/pics/reload.png</normaloff>:/boardicons/resources/pics/reload.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4317,7 +4317,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/down.png</normaloff>:/new/prefix1/ressources/pics/down.png</iconset>
+                <normaloff>:/boardicons/resources/pics/down.png</normaloff>:/boardicons/resources/pics/down.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4340,7 +4340,7 @@ byo-yomi: e.g. Byo: 7x30s, 7 periods at 30 seconds; if a stone is placed within 
               </property>
               <property name="icon">
                <iconset resource="board.qrc">
-                <normaloff>:/new/prefix1/ressources/pics/bottom.png</normaloff>:/new/prefix1/ressources/pics/bottom.png</iconset>
+                <normaloff>:/boardicons/resources/pics/bottom.png</normaloff>:/boardicons/resources/pics/bottom.png</iconset>
               </property>
               <property name="flat">
                <bool>true</bool>
@@ -4457,7 +4457,7 @@ Edit stones on the board. Left click for a black, right click for a white stone.
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_add.png</normaloff>:/new/prefix1/ressources/pics/stone_add.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_add.png</normaloff>:/boardicons/resources/pics/stone_add.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4509,7 +4509,7 @@ Set the color of next move. If left untouched, default color is chosen.</string>
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_black.png</normaloff>:/new/prefix1/ressources/pics/stone_black.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_black.png</normaloff>:/boardicons/resources/pics/stone_black.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4568,7 +4568,7 @@ Edit square marks on the board. Left click sets a mark, right click removes it.<
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_square.png</normaloff>:/new/prefix1/ressources/pics/stone_square.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_square.png</normaloff>:/boardicons/resources/pics/stone_square.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4620,7 +4620,7 @@ Edit circle marks on the board. Left click sets a mark, right click removes it.<
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_circle.png</normaloff>:/new/prefix1/ressources/pics/stone_circle.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_circle.png</normaloff>:/boardicons/resources/pics/stone_circle.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4666,7 +4666,7 @@ Edit triangle marks on the board. Left click sets a mark, right click removes it
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_triangle.png</normaloff>:/new/prefix1/ressources/pics/stone_triangle.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_triangle.png</normaloff>:/boardicons/resources/pics/stone_triangle.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4718,7 +4718,7 @@ Edit cross marks on the board. Left click sets a mark, right click removes it.</
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_cross.png</normaloff>:/new/prefix1/ressources/pics/stone_cross.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_cross.png</normaloff>:/boardicons/resources/pics/stone_cross.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4770,7 +4770,7 @@ Edit letter marks on the board. Left click sets a mark, right click removes it. 
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_letter.png</normaloff>:/new/prefix1/ressources/pics/stone_letter.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_letter.png</normaloff>:/boardicons/resources/pics/stone_letter.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4822,7 +4822,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                     </property>
                     <property name="icon">
                      <iconset resource="board.qrc">
-                      <normaloff>:/new/prefix1/ressources/pics/stone_number.png</normaloff>:/new/prefix1/ressources/pics/stone_number.png</iconset>
+                      <normaloff>:/boardicons/resources/pics/stone_number.png</normaloff>:/boardicons/resources/pics/stone_number.png</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -4899,7 +4899,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                   </property>
                   <property name="icon">
                    <iconset resource="board.qrc">
-                    <normaloff>:/new/prefix1/ressources/pics/empty_branch.png</normaloff>:/new/prefix1/ressources/pics/empty_branch.png</iconset>
+                    <normaloff>:/boardicons/resources/pics/empty_branch.png</normaloff>:/boardicons/resources/pics/empty_branch.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -4949,7 +4949,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                   </property>
                   <property name="icon">
                    <iconset resource="board.qrc">
-                    <normaloff>:/new/prefix1/ressources/pics/duplicate_move.png</normaloff>:/new/prefix1/ressources/pics/duplicate_move.png</iconset>
+                    <normaloff>:/boardicons/resources/pics/duplicate_move.png</normaloff>:/boardicons/resources/pics/duplicate_move.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -4999,7 +4999,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                   </property>
                   <property name="icon">
                    <iconset resource="board.qrc">
-                    <normaloff>:/new/prefix1/ressources/pics/swap_variations.png</normaloff>:/new/prefix1/ressources/pics/swap_variations.png</iconset>
+                    <normaloff>:/boardicons/resources/pics/swap_variations.png</normaloff>:/boardicons/resources/pics/swap_variations.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -5049,7 +5049,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                   </property>
                   <property name="icon">
                    <iconset resource="board.qrc">
-                    <normaloff>:/new/prefix1/ressources/pics/insert_move.png</normaloff>:/new/prefix1/ressources/pics/insert_move.png</iconset>
+                    <normaloff>:/boardicons/resources/pics/insert_move.png</normaloff>:/boardicons/resources/pics/insert_move.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -5099,7 +5099,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                   </property>
                   <property name="icon">
                    <iconset resource="board.qrc">
-                    <normaloff>:/new/prefix1/ressources/pics/eraser.png</normaloff>:/new/prefix1/ressources/pics/eraser.png</iconset>
+                    <normaloff>:/boardicons/resources/pics/eraser.png</normaloff>:/boardicons/resources/pics/eraser.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -5166,7 +5166,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                 </property>
                 <property name="icon">
                  <iconset resource="board.qrc">
-                  <normaloff>:/new/prefix1/ressources/pics/editcut.png</normaloff>:/new/prefix1/ressources/pics/editcut.png</iconset>
+                  <normaloff>:/boardicons/resources/pics/editcut.png</normaloff>:/boardicons/resources/pics/editcut.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -5216,7 +5216,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                 </property>
                 <property name="icon">
                  <iconset resource="board.qrc">
-                  <normaloff>:/new/prefix1/ressources/pics/paste.png</normaloff>:/new/prefix1/ressources/pics/paste.png</iconset>
+                  <normaloff>:/boardicons/resources/pics/paste.png</normaloff>:/boardicons/resources/pics/paste.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -5266,7 +5266,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                 </property>
                 <property name="icon">
                  <iconset resource="board.qrc">
-                  <normaloff>:/new/prefix1/ressources/pics/paste_as_var.png</normaloff>:/new/prefix1/ressources/pics/paste_as_var.png</iconset>
+                  <normaloff>:/boardicons/resources/pics/paste_as_var.png</normaloff>:/boardicons/resources/pics/paste_as_var.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -6316,7 +6316,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   <action name="actionQuit">
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/exit2.png</normaloff>:/new/prefix1/ressources/pics/exit2.png</iconset>
+     <normaloff>:/boardicons/resources/pics/exit2.png</normaloff>:/boardicons/resources/pics/exit2.png</iconset>
    </property>
    <property name="text">
     <string>Close</string>
@@ -6337,7 +6337,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    </property>
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/export2.png</normaloff>:/new/prefix1/ressources/pics/export2.png</iconset>
+     <normaloff>:/boardicons/resources/pics/export2.png</normaloff>:/boardicons/resources/pics/export2.png</iconset>
    </property>
    <property name="text">
     <string>export</string>
@@ -6352,7 +6352,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    </property>
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/import2.png</normaloff>:/new/prefix1/ressources/pics/import2.png</iconset>
+     <normaloff>:/boardicons/resources/pics/import2.png</normaloff>:/boardicons/resources/pics/import2.png</iconset>
    </property>
    <property name="text">
     <string>import</string>
@@ -6361,7 +6361,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   <action name="actionGameInfo">
    <property name="icon">
     <iconset theme="dialog-information" resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/idea.png</normaloff>:/new/prefix1/ressources/pics/idea.png</iconset>
+     <normaloff>:/boardicons/resources/pics/idea.png</normaloff>:/boardicons/resources/pics/idea.png</iconset>
    </property>
    <property name="text">
     <string>gameInfo</string>
@@ -6376,7 +6376,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    </property>
    <property name="icon">
     <iconset theme="audio-volume-high" resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/sound_on.png</normaloff>:/new/prefix1/ressources/pics/sound_on.png</iconset>
+     <normaloff>:/boardicons/resources/pics/sound_on.png</normaloff>:/boardicons/resources/pics/sound_on.png</iconset>
    </property>
    <property name="text">
     <string>sound</string>
@@ -6385,7 +6385,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   <action name="actionWhatsThis">
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/contexthelp.png</normaloff>:/new/prefix1/ressources/pics/contexthelp.png</iconset>
+     <normaloff>:/boardicons/resources/pics/contexthelp.png</normaloff>:/boardicons/resources/pics/contexthelp.png</iconset>
    </property>
    <property name="text">
     <string>whatsThis</string>
@@ -6394,7 +6394,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   <action name="actionDuplicate">
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/duplicate.png</normaloff>:/new/prefix1/ressources/pics/duplicate.png</iconset>
+     <normaloff>:/boardicons/resources/pics/duplicate.png</normaloff>:/boardicons/resources/pics/duplicate.png</iconset>
    </property>
    <property name="text">
     <string>duplicate</string>
@@ -6409,7 +6409,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    </property>
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/coord2.png</normaloff>:/new/prefix1/ressources/pics/coord2.png</iconset>
+     <normaloff>:/boardicons/resources/pics/coord2.png</normaloff>:/boardicons/resources/pics/coord2.png</iconset>
    </property>
    <property name="text">
     <string>Coordinates</string>
@@ -6424,7 +6424,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
    </property>
    <property name="icon">
     <iconset resource="board.qrc">
-     <normaloff>:/new/prefix1/ressources/pics/player_play.png</normaloff>:/new/prefix1/ressources/pics/player_play.png</iconset>
+     <normaloff>:/boardicons/resources/pics/player_play.png</normaloff>:/boardicons/resources/pics/player_play.png</iconset>
    </property>
    <property name="text">
     <string>play</string>

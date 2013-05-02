@@ -23,36 +23,24 @@
 #include "audio/audio.h"
 #include <QDir>
 #include <QFile>
+#include <defines.h>
 
-QSoundSound::QSoundSound(const QString &filename, QObject *parent)
-	: Sound(filename, parent)
+Sound::Sound(const QString &filename, QObject *parent)
+    : QObject(parent)
 {
     player = new QMediaPlayer;
     player->setMedia(QUrl::fromLocalFile(filename));
 }
 
-void QSoundSound::play(void)
+void Sound::play(void)
 {
     player->play();
 }
 
 Sound *SoundFactory::newSound(const QString &filename, QObject *parent)
 {
-	QFile * f;
-	if (!QFile::exists(filename))
-	{
-		QStringList sl;
-		sl << QDir::homePath() + "/ressources/sounds" 
-			<< "../ressources/sounds"
-			<< "../../src/ressources/sounds"
-			<< "../src/ressources/sounds"
-			<< ":/ressources/sounds";
-
-		QDir::setSearchPaths("sounds", sl);
-
-		f = new QFile("sounds:" + filename.right(filename.length() - filename.lastIndexOf('/') - 1));
-	}
-	else
-		f = new QFile(filename);
-	return new QSoundSound(f->fileName(), parent);
+    if (QDir().exists(SOUND_PATH_PREFIX + filename))
+        return new Sound(QDir().absoluteFilePath(SOUND_PATH_PREFIX + filename), parent);
+    else
+        return new Sound("", parent);
 }

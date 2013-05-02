@@ -166,11 +166,11 @@ linux-* {
     QGO_INSTALL_BIN_PATH = /usr/bin
 
     icon.path = /usr/share/pixmaps
-    icon.files = ressources/pics/qgo.png
-    icon.files += ressources/pics/qgo_16x16.xpm
-    icon.files += ressources/pics/qgo_32x32.xpm
-    icon.files += ressources/pics/qgo_48x48.png
-    icon.files += ressources/pics/qgo_48x48.xpm
+    icon.files = resources/pics/qgo.png
+    icon.files += resources/pics/qgo_16x16.xpm
+    icon.files += resources/pics/qgo_32x32.xpm
+    icon.files += resources/pics/qgo_48x48.png
+    icon.files += resources/pics/qgo_48x48.xpm
     INSTALLS += icon
     desktopfile.path = /usr/share/applications
     desktopfile.files = qgo.desktop
@@ -195,18 +195,29 @@ languages.files = translations/*.qm
 INSTALLS += languages
 
 boardpics.path = $${QGO_INSTALL_PATH}/boardtextures
-boardpics.files = board/ressources/pics/barcelona_cherry.png
-boardpics.files += board/ressources/pics/eurobeech.png
-boardpics.files += board/ressources/pics/goldenbeech.png
-boardpics.files += board/ressources/pics/lemontree.png
-boardpics.files += board/ressources/pics/manitoba.png
-boardpics.files += board/ressources/pics/maple.png
-boardpics.files += board/ressources/pics/paper.png
-boardpics.files += board/ressources/pics/wood.png
-boardpics.files += board/ressources/pics/wood3.png
-boardpics.files += board/ressources/pics/wood4.png
-boardpics.files += board/ressources/pics/wood5.png
+boardpics.files = board/resources/pics/barcelona_cherry.png
+boardpics.files += board/resources/pics/eurobeech.png
+boardpics.files += board/resources/pics/goldenbeech.png
+boardpics.files += board/resources/pics/lemontree.png
+boardpics.files += board/resources/pics/manitoba.png
+boardpics.files += board/resources/pics/maple.png
+boardpics.files += board/resources/pics/paper.png
+boardpics.files += board/resources/pics/wood.png
+boardpics.files += board/resources/pics/wood3.png
+boardpics.files += board/resources/pics/wood4.png
+boardpics.files += board/resources/pics/wood5.png
 INSTALLS += boardpics
+
+sounds.path = $${QGO_INSTALL_PATH}/sounds
+sounds.files += resources/sounds/blip.wav
+sounds.files += resources/sounds/buzzer.wav
+sounds.files += resources/sounds/doorbell.wav
+sounds.files += resources/sounds/ns.wav
+sounds.files += resources/sounds/pop.wav
+sounds.files += resources/sounds/static.wav
+sounds.files += resources/sounds/stone.wav
+sounds.files += resources/sounds/timer.wav
+INSTALLS += sounds
 
 target.path = $${QGO_INSTALL_BIN_PATH}
 INSTALLS += target

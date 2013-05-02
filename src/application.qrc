@@ -1,20 +1,26 @@
 <RCC>
-    <qresource prefix="/" >
-        <file>ressources/pics/Bowl.png</file>
-        <file>ressources/pics/close.png</file>
-        <file>ressources/pics/connect_no2.png</file>
-        <file>ressources/pics/connected.png</file>
-        <file>ressources/pics/not_seeking.png</file>
-        <file>ressources/pics/refresh_games.png</file>
-        <file>ressources/pics/refresh_players.png</file>
-        <file>ressources/pics/seeking1.png</file>
-        <file>ressources/pics/seeking2.png</file>
-        <file>ressources/pics/seeking3.png</file>
-        <file>ressources/pics/seeking4.png</file>
-        <file>ressources/pics/toolbar_1.png</file>
-        <file>ressources/pics/toolbar_2.png</file>
-        <file>ressources/pics/toolbar_3.png</file>
-        <file>ressources/pics/toolbar_4.png</file>
-        <file>ressources/pics/toolbar_5.png</file>
+    <qresource prefix="/">
+        <file>resources/pics/Bowl.ico</file>
+        <file>resources/pics/Bowl.png</file>
+        <file>resources/pics/close.png</file>
+        <file>resources/pics/connect_no2.png</file>
+        <file>resources/pics/connected.png</file>
+        <file>resources/pics/not_seeking.png</file>
+        <file>resources/pics/qgo_16x16.xpm</file>
+        <file>resources/pics/qgo_32x32.xpm</file>
+        <file>resources/pics/qgo_48x48.png</file>
+        <file>resources/pics/qgo_48x48.xpm</file>
+        <file>resources/pics/qgo.png</file>
+        <file>resources/pics/refresh_games.png</file>
+        <file>resources/pics/refresh_players.png</file>
+        <file>resources/pics/seeking1.png</file>
+        <file>resources/pics/seeking2.png</file>
+        <file>resources/pics/seeking3.png</file>
+        <file>resources/pics/seeking4.png</file>
+        <file>resources/pics/toolbar_1.png</file>
+        <file>resources/pics/toolbar_2.png</file>
+        <file>resources/pics/toolbar_3.png</file>
+        <file>resources/pics/toolbar_4.png</file>
+        <file>resources/pics/toolbar_5.png</file>
     </qresource>
 </RCC>

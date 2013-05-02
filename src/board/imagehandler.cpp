@@ -64,15 +64,15 @@ ImageHandler::ImageHandler()
 {
 	// Load the pixmaps
 //	if (tablePixmap == NULL)
-		tablePixmap =  new QPixmap(":/new/prefix1/ressources/pics/table.png");
+		tablePixmap =  new QPixmap(":/boardicons/resources/pics/table.png");
 //	if (woodPixmap1 == NULL)
-		woodPixmap1 =  new QPixmap(":/new/prefix1/ressources/pics/wood.png");
+		woodPixmap1 =  new QPixmap(":/boardicons/resources/pics/wood.png");
 		/* I wanted to make it look like an old style go manual, but apparently
 		 * this is possible by changing the stone type to "Ugly 2d" and I 
 		 * made this little paper graphic with some speckle... but I'll add a
 		 * comment here in case someone else has the same bright idea for a
 		 * "classic" mode */
-		//paperPixmap =  new QPixmap(":/new/prefix1/ressources/pics/paper.png");
+		//paperPixmap =  new QPixmap(":/boardicons/resources/pics/paper.png");
 
 //    if (tablePixmap == NULL || tablePixmap->isNull())
 //		qFatal("Could not load pixmaps.");
@@ -93,8 +93,8 @@ ImageHandler::ImageHandler()
 	{
 		altGhostPixmaps = new QList<QPixmap>();//::QList();
 
-		QPixmap alt1 = QPixmap(":/new/prefix1/ressources/pics/alt_ghost_black.png");
-		QPixmap alt2 = QPixmap(":/new/prefix1/ressources/pics/alt_ghost_white.png");
+		QPixmap alt1 = QPixmap(":/boardicons/resources/pics/alt_ghost_black.png");
+		QPixmap alt2 = QPixmap(":/boardicons/resources/pics/alt_ghost_white.png");
 
 		if (alt1.isNull() || alt2.isNull())
 			qFatal("Could not load alt_ghost pixmaps.");

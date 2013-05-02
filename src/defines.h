@@ -247,11 +247,8 @@ extern class ConnectionWidget * connectionWidget;
 extern QString applicationPath;
 #endif
 
-/* Non alsa, i.e., windows and mac use QSound which cannot use embedded resources.
- * Phonon fixes this but it doesn't compile with mingw on windows.  So Sounds will
- * only be embedded on linux and mac and windows will have to install them. */
 #ifdef Q_OS_LINUX
-	#define SOUND_PATH_PREFIX			":/ressources/sounds/"
+    #define SOUND_PATH_PREFIX			"/usr/share/qgo/sounds/"
 	#define TRANSLATIONS_PATH_PREFIX		"/usr/share/qgo/languages/"
 #elif defined(Q_OS_MAC)
 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"

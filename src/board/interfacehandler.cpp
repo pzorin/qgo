@@ -205,7 +205,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 	s = black ? QObject::tr("Black to play") : QObject::tr("White to play");
 	boardwindow->getUi()->turnLabel->setText(s);
 	
-	boardwindow->getUi()->colorButton->setIcon(black ? QIcon(":/new/prefix1/ressources/pics/stone_black.png") : QIcon(":/new/prefix1/ressources/pics/stone_white.png") );
+	boardwindow->getUi()->colorButton->setIcon(black ? QIcon(":/boardicons/resources/pics/stone_black.png") : QIcon(":/boardicons/resources/pics/stone_white.png") );
 
 	// sons and variatons display
 	s = "";

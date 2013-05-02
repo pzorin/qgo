@@ -142,7 +142,7 @@
           </property>
           <property name="icon">
            <iconset resource="application.qrc">
-            <normaloff>:/ressources/pics/not_seeking.png</normaloff>:/ressources/pics/not_seeking.png</iconset>
+            <normaloff>:/resources/pics/not_seeking.png</normaloff>:/resources/pics/not_seeking.png</iconset>
           </property>
           <property name="iconSize">
            <size>

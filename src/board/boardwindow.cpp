@@ -577,7 +577,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
 //#else
-			ui.colorButton->setIcon(QIcon(":/new/prefix1/ressources/pics/stone_white.png"));
+			ui.colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_white.png"));
 			boardHandler->updateCursor(stoneBlack);
 //#endif
 		}
@@ -587,7 +587,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
 //#else
-			ui.colorButton->setIcon(QIcon(":/new/prefix1/ressources/pics/stone_black.png"));
+			ui.colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_black.png"));
 			boardHandler->updateCursor(stoneWhite);
 //#endif
 		}

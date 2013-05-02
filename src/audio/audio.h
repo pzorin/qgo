@@ -30,21 +30,10 @@ class Sound : public QObject
 Q_OBJECT
 
 public:
-	Sound( const QString &, QObject *parent = 0) : QObject(parent) {};
-	virtual ~Sound() {};
+    Sound(const QString& filename, QObject* parent=0);
+    ~Sound() {delete player;};
 
-	virtual void play() {}
-};
-
-
-class QSoundSound : public Sound
-{
-Q_OBJECT
-
-public:
-	QSoundSound( const QString& filename, QObject* parent=0);
-
-	virtual void play();
+    void play(void);
 private:
     QMediaPlayer *player;
 };

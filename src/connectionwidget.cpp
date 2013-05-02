@@ -618,7 +618,7 @@ void ConnectionWidget::recvSeekCancel(void)
     ui->seekToolButton->setChecked(false);
     ui->seekToolButton->setMenu(seekMenu);
 //	ui->seekToolButton->setPopupDelay(1);
-    ui->seekToolButton->setIcon(QIcon(":/ressources/pics/not_seeking.png"));
+    ui->seekToolButton->setIcon(QIcon(":/resources/pics/not_seeking.png"));
     killTimer(seekButtonTimer);
     seekButtonTimer = 0;
 
@@ -1067,7 +1067,7 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
     if (e->timerId() == seekButtonTimer)
     {
         imagecounter = (imagecounter+1) % 4;
-        QString ic = ":/ressources/pics/seeking" + QString::number(imagecounter + 1) +".png";
+        QString ic = ":/resources/pics/seeking" + QString::number(imagecounter + 1) +".png";
         ui->seekToolButton->setIcon(QIcon(ic));
         return;
     }

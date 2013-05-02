@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="application.qrc">
-    <normaloff>:/ressources/pics/Bowl.png</normaloff>:/ressources/pics/Bowl.png</iconset>
+    <normaloff>:/resources/pics/Bowl.png</normaloff>:/resources/pics/Bowl.png</iconset>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -102,7 +102,7 @@
        </property>
        <property name="icon">
         <iconset resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_1.png</normaloff>:/ressources/pics/toolbar_1.png</iconset>
+         <normaloff>:/resources/pics/toolbar_1.png</normaloff>:/resources/pics/toolbar_1.png</iconset>
        </property>
       </item>
       <item>
@@ -111,7 +111,7 @@
        </property>
        <property name="icon">
         <iconset resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_2.png</normaloff>:/ressources/pics/toolbar_2.png</iconset>
+         <normaloff>:/resources/pics/toolbar_2.png</normaloff>:/resources/pics/toolbar_2.png</iconset>
        </property>
       </item>
       <item>
@@ -120,7 +120,7 @@
        </property>
        <property name="icon">
         <iconset resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_3.png</normaloff>:/ressources/pics/toolbar_3.png</iconset>
+         <normaloff>:/resources/pics/toolbar_3.png</normaloff>:/resources/pics/toolbar_3.png</iconset>
        </property>
       </item>
       <item>
@@ -129,7 +129,7 @@
        </property>
        <property name="icon">
         <iconset theme="preferences-other" resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_5.png</normaloff>:/ressources/pics/toolbar_5.png</iconset>
+         <normaloff>:/resources/pics/toolbar_5.png</normaloff>:/resources/pics/toolbar_5.png</iconset>
        </property>
       </item>
       <item>
@@ -138,7 +138,7 @@
        </property>
        <property name="icon">
         <iconset theme="preferences-system-network" resource="application.qrc">
-         <normaloff>:/ressources/pics/toolbar_4.png</normaloff>:/ressources/pics/toolbar_4.png</iconset>
+         <normaloff>:/resources/pics/toolbar_4.png</normaloff>:/resources/pics/toolbar_4.png</iconset>
        </property>
       </item>
      </widget>
@@ -1428,7 +1428,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
   <action name="actionQuit">
    <property name="icon">
     <iconset theme="application-exit" resource="application.qrc">
-     <normaloff>:/ressources/pics/close.png</normaloff>:/ressources/pics/close.png</iconset>
+     <normaloff>:/resources/pics/close.png</normaloff>:/resources/pics/close.png</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
@@ -1443,7 +1443,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
   <action name="actionConnect">
    <property name="icon">
     <iconset theme="network-transmit-receive" resource="application.qrc">
-     <normaloff>:/ressources/pics/connect_no2.png</normaloff>:/ressources/pics/connect_no2.png</iconset>
+     <normaloff>:/resources/pics/connect_no2.png</normaloff>:/resources/pics/connect_no2.png</iconset>
    </property>
    <property name="text">
     <string>Connect...</string>
