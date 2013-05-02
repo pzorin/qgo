@@ -43,10 +43,10 @@ Gatter::Gatter(QGraphicsScene *canvas, int size)
     {
         tmp1 = new QGraphicsLineItem(0);
         canvas->addItem(tmp1);
-        VGatter[i] = tmp1;
+        VGatter.append(tmp1);
         tmp1 = new QGraphicsLineItem(0);
         canvas->addItem(tmp1);
-        HGatter[i] = tmp1;
+        HGatter.append(tmp1);
     }
 	
     QGraphicsEllipseItem *tmp2;
