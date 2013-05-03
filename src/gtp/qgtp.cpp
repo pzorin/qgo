@@ -23,7 +23,7 @@ email                :
 enum CommandType {PROTOCOL, BOARDSIZE, KNOWN_COMMAND, LEVEL, KOMI, PLAY_BLACK, PLAY_WHITE, GENMOVE};
 #include "qgtp.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <Windows.h>
 #endif
 
@@ -244,7 +244,7 @@ QGtp::waitResponse()
 	do //FIXME : we don't nned this, since the process sends the readyRead signal
 	{
 		qApp->processEvents();
-/*#ifdef Q_WS_WIN
+/*#ifdef Q_OS_WIN
 		Sleep(100000);
 #else
 		usleep(100000);

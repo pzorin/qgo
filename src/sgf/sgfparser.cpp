@@ -359,7 +359,7 @@ bool SGFParser::setCodec(QString c)
 #ifdef DEBUG_CODEC
 		QMessageBox::information(0, "CODEC", "Big5");
 #endif
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 		codec = new QBig5Codec();
 #endif
 		break;

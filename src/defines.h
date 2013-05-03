@@ -23,8 +23,6 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#include "audio.h"
-
 #include <QtCore>
 
 /*
@@ -243,7 +241,7 @@ extern _preferences preferences;
 extern class MainWindow * mainwindow;
 extern class ConnectionWidget * connectionWidget;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 extern QString applicationPath;
 #endif
 
@@ -253,7 +251,7 @@ extern QString applicationPath;
 #elif defined(Q_OS_MAC)
 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
 	#define TRANSLATIONS_PATH_PREFIX		"qGo.app/Contents/Resources/Translations/"
-#else //Q_OS_WIN or Q_WSWIN?
+#else //Q_OS_WIN
 	#define SOUND_PATH_PREFIX			"sounds/"
 	#define TRANSLATIONS_PATH_PREFIX		"translations/"
 #endif

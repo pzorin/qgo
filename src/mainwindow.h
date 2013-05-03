@@ -25,7 +25,6 @@
 
 #include "ui_mainwindow.h"
 #include "defines.h"
-#include "audio.h"
 
 #include <QtWidgets>
 
@@ -38,6 +37,7 @@ class GameDialog;
 class SGFParser;
 class BoardWindow;
 class GameData;
+class Sound;
 
 class MainWindow : public QMainWindow
 {

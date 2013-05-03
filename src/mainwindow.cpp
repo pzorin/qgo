@@ -28,6 +28,7 @@
 #include "login.h"
 #include "host.h"
 #include "sgfpreview.h"
+#include "audio.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	: QMainWindow( parent,  flags )

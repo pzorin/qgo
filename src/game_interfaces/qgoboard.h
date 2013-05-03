@@ -40,6 +40,7 @@ class Tree;
 class GameData;
 class Move;
 class QGtp;
+class Sound;
 
 /* I think its easier to have the computer and normal modes override a few functions to
  * null then have review and match provide the same complicated net functionality */

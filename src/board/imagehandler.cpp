@@ -34,7 +34,7 @@
 
 #include <QtWidgets>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
  #ifndef M_PI
   #define M_PI 3.141592653
  #endif //M_PI

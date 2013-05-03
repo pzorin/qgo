@@ -53,7 +53,7 @@ Room::Room(NetworkConnection * c)
 	* for making our player listing blue */
 	setupUI();
 
-    connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateListing(PlayerListing*const)));
+    connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateListing(PlayerListing*)));
     // Note that pointer casting allows to omit the corresponding headers from this file, thus speeding up compilation
     connect(playerListModel,SIGNAL(countChanged(int)),(QObject*)mainwindow,SLOT(setPlayerCountStat(int)));
     connect(gamesListModel,SIGNAL(countChanged(int)),(QObject*)mainwindow,SLOT(setGameCountStat(int)));
