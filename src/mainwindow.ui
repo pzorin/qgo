@@ -1534,6 +1534,9 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset theme="document-open"/>
+   </property>
    <property name="text">
     <string>Open...</string>
    </property>
