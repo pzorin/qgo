@@ -23,7 +23,9 @@
 #ifndef _AUDIO_H_
 #define _AUDIO_H_
 
-#include <QtMultimedia/QMediaPlayer>
+#include<QObject>
+
+class QMediaPlayer;
 
 class Sound : public QObject
 {
@@ -31,17 +33,11 @@ Q_OBJECT
 
 public:
     Sound(const QString& filename, QObject* parent=0);
-    ~Sound() {delete player;};
+    ~Sound();
 
     void play(void);
 private:
     QMediaPlayer *player;
-};
-
-class SoundFactory
-{
-public:
-	static Sound *newSound(const QString &filename, QObject *parent = 0);
 };
 
 #endif // _AUDIO_H_

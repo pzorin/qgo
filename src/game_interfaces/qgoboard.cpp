@@ -45,7 +45,7 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 
 	gameData = gd;
 
-    clickSound = SoundFactory::newSound("stone.wav");
+    clickSound = new Sound("stone.wav");
 
 	dontCheckValidity = false;
 	lastSound = QTime(0,0,0);

@@ -35,7 +35,7 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
 	: QDialog(), Ui::GameDialog(), connection(conn), opponent(opp)
 {
 	ui.setupUi(this);
-    gameSound = SoundFactory::newSound("blip.wav");
+    gameSound = new Sound("blip.wav");
 	
 	setWindowTitle(tr("New Game"));
 

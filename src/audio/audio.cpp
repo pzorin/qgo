@@ -22,25 +22,23 @@
 
 #include "audio/audio.h"
 #include <QDir>
-#include <QFile>
 #include <defines.h>
+#include <QtMultimedia/QMediaPlayer>
 
 Sound::Sound(const QString &filename, QObject *parent)
     : QObject(parent)
 {
     player = new QMediaPlayer;
-    player->setMedia(QUrl::fromLocalFile(filename));
+    if (QDir().exists(SOUND_PATH_PREFIX + filename))
+        player->setMedia(QMediaContent(QUrl::fromLocalFile(QDir().absoluteFilePath(SOUND_PATH_PREFIX + filename))));
+}
+
+Sound::~Sound()
+{
+    delete player;
 }
 
 void Sound::play(void)
 {
     player->play();
-}
-
-Sound *SoundFactory::newSound(const QString &filename, QObject *parent)
-{
-    if (QDir().exists(SOUND_PATH_PREFIX + filename))
-        return new Sound(QDir().absoluteFilePath(SOUND_PATH_PREFIX + filename), parent);
-    else
-        return new Sound("", parent);
 }

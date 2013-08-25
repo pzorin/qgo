@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	connect(ui.comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
 
 	//sound
-    connectSound = 	SoundFactory::newSound("static.wav");
+    connectSound = 	new Sound("static.wav");
 
     connect( ui.actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
 }

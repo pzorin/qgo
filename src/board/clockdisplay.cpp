@@ -66,7 +66,7 @@ ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _pe
 	playWarningSound = settings.value("BYO_SOUND_WARNING").toBool();
 	warningSecs = settings.value("BYO_SEC_WARNING").toInt();
 
-    warningSound = 	SoundFactory::newSound("timer.wav");
+    warningSound = 	new Sound("timer.wav");
 }
 
 void ClockDisplay::setTimeSettings(TimeSystem s, int m, int p, int o)
