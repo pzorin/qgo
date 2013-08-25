@@ -79,6 +79,7 @@ public:
 	 * going to be everywhere */
 	class BoardDispatch * getBoardDispatch(void) { return dispatch; };
 	void setBoardDispatch(BoardDispatch * d);
+    QLabel *moveNumLabel,*komiLabel,*buyoyomiLabel,*handicapLabel,*freeratedLabel;
 
 protected:
 	void closeEvent(QCloseEvent *e);

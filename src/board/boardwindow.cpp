@@ -230,6 +230,18 @@ void BoardWindow::setupUI(void)
 	ui.setupUi(this);
 	ui.actionWhatsThis = QWhatsThis::createAction ();
 
+
+    moveNumLabel = new QLabel("Move 0");
+    komiLabel = new QLabel("Komi ?");
+    buyoyomiLabel = new QLabel("Byo: ?");
+    handicapLabel = new QLabel("H: ?");
+    freeratedLabel = new QLabel("free");
+    ui.statusbar->addPermanentWidget(moveNumLabel);
+    ui.statusbar->addPermanentWidget(handicapLabel);
+    ui.statusbar->addPermanentWidget(komiLabel);
+    ui.statusbar->addPermanentWidget(buyoyomiLabel);
+    ui.statusbar->addPermanentWidget(freeratedLabel);
+
 	// Initialises the buttons and else
 	editButtons = new QButtonGroup(this);
 	editButtons->addButton(ui.stoneButton, 0);
@@ -431,10 +443,6 @@ void BoardWindow::resizeEvent(QResizeEvent * e)
 void BoardWindow::checkHideToolbar(int h)
 {
     ui.varLabel->setVisible(h > 700);
-    ui.moveNumLabel->setVisible(h > 660);
-    ui.matchSettingsFrame->setVisible(h > 600);
-    if(statusBar())
-        statusBar()->setVisible(h > 560);
 }
 
 void BoardWindow::gameDataChanged(void)

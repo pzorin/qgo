@@ -160,14 +160,14 @@ void InterfaceHandler::updateCaption(GameData *gd)
 	//TODO set  clock
 	
 	if(gd->free_rated == RATED)
-		boardwindow->getUi()->freeratedLabel->setText("Rated");
+        boardwindow->freeratedLabel->setText("Rated");
 	else if(gd->free_rated == FREE)
-		boardwindow->getUi()->freeratedLabel->setText("Free");
+        boardwindow->freeratedLabel->setText("Free");
 	else if(gd->free_rated == TEACHING)
-		boardwindow->getUi()->freeratedLabel->setText("Teaching");
+        boardwindow->freeratedLabel->setText("Teaching");
 	
-	boardwindow->getUi()->komi->setText(QString().setNum(gd->komi));
-	boardwindow->getUi()->handicap->setText(QString().setNum(gd->handicap));
+    boardwindow->komiLabel->setText(QString("Komi: ").append(QString().setNum(gd->komi)));
+    boardwindow->handicapLabel->setText(QString("H: ").append(QString().setNum(gd->handicap)));
 }
 
 /*
@@ -196,7 +196,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		s.append(" " + QObject::tr("Pass") + ")");
 	}
 
-	boardwindow->getUi()->moveNumLabel->setText(s);
+    boardwindow->moveNumLabel->setText(s);
 //	statusTurn->setText(" " + s.right(s.length() - 5) + " ");  // Without 'Move '
 	
 //	statusNav->setText(" " + QString::number(brothers) + "/" + QString::number(sons));
