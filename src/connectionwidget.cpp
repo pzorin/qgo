@@ -93,6 +93,30 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
 
     // for saving server ip lists
     serverliststorage = new ServerListStorage();
+
+    //IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
+    ui->gamesView->setColumnWidth ( 0, 40 );	//35
+    ui->gamesView->setColumnWidth ( 1, 100 );
+    ui->gamesView->setColumnWidth ( 2, 40 );	//35
+    ui->gamesView->setColumnWidth ( 3, 100 );
+    ui->gamesView->setColumnWidth ( 4, 40 );	//35
+    ui->gamesView->setColumnWidth ( 5, 30 );	//30
+    ui->gamesView->setColumnWidth ( 6, 30 ); //25
+    ui->gamesView->setColumnWidth ( 7, 20 ); //20
+    ui->gamesView->setColumnWidth ( 8, 35 ); //30
+    ui->gamesView->setColumnWidth ( 9, 35 ); //25
+    ui->gamesView->setColumnWidth ( 10, 35 ); //20
+    ui->gamesView->setColumnWidth ( 11, 30 ); //25
+
+    ui->playerView->setColumnWidth ( 0, 40 );
+    ui->playerView->setColumnWidth ( 1, 100 );
+    ui->playerView->setColumnWidth ( 2, 40 );
+    ui->playerView->setColumnWidth ( 3, 40 );
+    ui->playerView->setColumnWidth ( 4, 40);
+    ui->playerView->setColumnWidth ( 5, 40 );
+    ui->playerView->setColumnWidth ( 6, 40 );
+    ui->playerView->setColumnWidth ( 7, 40 );
+    ui->playerView->setColumnWidth ( 8, 80 );
 }
 
 ConnectionWidget::~ConnectionWidget()

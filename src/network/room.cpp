@@ -39,8 +39,16 @@
 Room::Room(NetworkConnection * c)
 {
     connection = c; // has to be set before the signals are connected.
-    playerView = connectionWidget->ui->playerView;
+
+    gamesListModel = new GamesListModel();
     gamesView = connectionWidget->ui->gamesView;
+    gamesView->setModel(gamesListModel);
+
+    playerListModel = new PlayerListModel();
+    playerView = connectionWidget->ui->playerView;
+    playerView->setModel(playerListModel);
+    playerListModel->setView(playerView);
+
     editFriendsWatchesListButton = connectionWidget->ui->editFriendsWatchesButton;
 	/* Normally the dispatch and the UI are created at the sametime
 	* by the connection or dispatch code.  In this case,
@@ -50,8 +58,17 @@ Room::Room(NetworkConnection * c)
 	* This is an ugly non-apparent dependency because
 	* the dispatch registries depend on the UI's models */
 	/* There are further strangenesses here because of the account_name
-	* for making our player listing blue */
-	setupUI();
+    * for making our player listing blue */
+    connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClicked(const QModelIndex &)));
+    connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
+    connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
+    connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
+    connect(connectionWidget->ui->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
+    connect(connectionWidget->ui->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
+    connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
+
+    playerView->blockSignals(false);
+    gamesView->blockSignals(false);
 
     connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateListing(PlayerListing*)));
     // Note that pointer casting allows to omit the corresponding headers from this file, thus speeding up compilation
@@ -60,50 +77,6 @@ Room::Room(NetworkConnection * c)
 	
 	players = 0;
 	games = 0;
-}
-
-void Room::setupUI(void)
-{
-	gamesListModel = new GamesListModel();
-	gamesView->setModel(gamesListModel);
-    //IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
-    gamesView->setColumnWidth ( 0, 40 );	//35
-    gamesView->setColumnWidth ( 1, 100 );
-    gamesView->setColumnWidth ( 2, 40 );	//35
-    gamesView->setColumnWidth ( 3, 100 );
-    gamesView->setColumnWidth ( 4, 40 );	//35
-    gamesView->setColumnWidth ( 5, 30 );	//30
-    gamesView->setColumnWidth ( 6, 30 ); //25
-    gamesView->setColumnWidth ( 7, 20 ); //20
-    gamesView->setColumnWidth ( 8, 35 ); //30
-    gamesView->setColumnWidth ( 9, 35 ); //25
-    gamesView->setColumnWidth ( 10, 35 ); //20
-    gamesView->setColumnWidth ( 11, 30 ); //25
-
-	playerListModel = new PlayerListModel();
-	playerView->setModel(playerListModel);
-	playerListModel->setView(playerView);
-    playerView->setColumnWidth ( 0, 40 );
-    playerView->setColumnWidth ( 1, 100 );
-    playerView->setColumnWidth ( 2, 40 );
-    playerView->setColumnWidth ( 3, 40 );
-    playerView->setColumnWidth ( 4, 40);
-    playerView->setColumnWidth ( 5, 40 );
-    playerView->setColumnWidth ( 6, 40 );
-    playerView->setColumnWidth ( 7, 40 );
-    playerView->setColumnWidth ( 8, 80 );
-
-	/* Maybe also a "clicked" for something? */
-	connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClicked(const QModelIndex &)));
-	connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
-	connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
-	connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-    connect(connectionWidget->ui->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
-    connect(connectionWidget->ui->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
-	connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
-
-	playerView->blockSignals(false);
-	gamesView->blockSignals(false);
 }
 
 Room::~Room()

@@ -53,8 +53,7 @@ class Room : public QObject
 		void recvExtPlayerListing(class PlayerListing * player);
 		void recvGameListing(class GameListing * g);
 		void sendStatsRequest(PlayerListing & opponent);
-	protected:
-		void setupUI(void);
+    protected:
 		GameListing * registerGameListing(GameListing * l);
 		void unRegisterGameListing(unsigned int key);
 		
