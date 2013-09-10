@@ -96,67 +96,49 @@ void MainWindow::closeEvent(QCloseEvent * e)
 	saveSettings();
 }
 
-#ifdef FIXME
 	/* We're not sure yet what to do with the status bar,
-	 * how to divy it up */
-#endif //FIXME
+     * how to divy it up FIXME */
 void MainWindow::initStatusBar()
 {
-//	statusBar = new QStatusBar(parent);
-//	statusBar->resize(-1, 20);
-	statusBar()->show();
-//	statusBar()->setSizeGripEnabled(false);
+    statusBar()->show();
 	statusBar()->showMessage(tr("Ready."));  // Normal indicator
 
 	// Standard Text instead of "message" cause WhatsThisButten overlaps
-	statusMessage = new QLabel(statusBar());
+    statusMessage = new QLabel("", statusBar());
 	statusMessage->setAlignment(Qt::AlignCenter /*| SingleLine*/);
-	statusMessage->setText("");
 	statusBar()->addPermanentWidget(statusMessage/*, 0, true*/);  // Permanent indicator
-/*
-	// What's this
-	statusWhatsThis = new QLabel(statusBar);
-	statusWhatsThis->setAlignment(AlignCenter | SingleLine);
-	statusWhatsThis->setText("WHATSTHIS");
-	statusBar->addWidget(statusWhatsThis, 0, true);  // Permanent indicator
-	QWhatsThis::whatsThisButton(statusWhatsThis);
-*/
-	// The users widget
-	statusUsers = new QLabel(statusBar());
+
+    // The users widget
+    statusUsers = new QLabel(" P: 0", statusBar());
 	statusUsers->setAlignment(Qt::AlignCenter /* | SingleLine*/);
-	statusUsers->setText(" P: 0");// / 0 ");
 	statusBar()->addPermanentWidget(statusUsers /*, 0, true*/);  // Permanent indicator
 	statusUsers->setToolTip( tr("Current online players / watched players"));
 	statusUsers->setWhatsThis( tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
 
 	// The games widget
-	statusGames = new QLabel(statusBar());
+    statusGames = new QLabel(" G: 0", statusBar());
 	statusGames->setAlignment(Qt::AlignCenter /*| SingleLine*/);
-	statusGames->setText(" G: 0");// / 0 ");
 	statusBar()->addPermanentWidget(statusGames /*, 0, true*/);  // Permanent indicator
 	statusGames->setToolTip( tr("Current online games / observed games + matches"));
 	statusGames->setWhatsThis( tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
 
 	// The server widget
-	statusServer = new QLabel(statusBar());
+    statusServer = new QLabel(" OFFLINE ", statusBar());
 	statusServer->setAlignment(Qt::AlignCenter /*| SingleLine*/);
-	statusServer->setText(" OFFLINE ");
 	statusBar()->addPermanentWidget(statusServer /*, 0, true*/);  // Permanent indicator
 	statusServer->setToolTip( tr("Current server"));
 	statusServer->setWhatsThis( tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
 /*
 	// The channel widget
-	statusChannel = new QLabel(statusBar());
+    statusChannel = new QLabel("", statusBar());
 	statusChannel->setAlignment(Qt::AlignCenter | SingleLine);
-	statusChannel->setText("");
 	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
 	QToolTip::add(statusChannel, tr("Current channels and users"));
 	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
 */
 	// Online Time
-	statusOnlineTime = new QLabel(statusBar());
+    statusOnlineTime = new QLabel(" 00:00 ", statusBar());
 	statusOnlineTime->setAlignment(Qt::AlignCenter);
-	statusOnlineTime->setText(" 00:00 ");
 	statusBar()->addPermanentWidget(statusOnlineTime /*, 0, true*/);  // Permanent indicator
 	statusOnlineTime->setToolTip( tr("Online Time"));
 	statusOnlineTime->setWhatsThis( tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
