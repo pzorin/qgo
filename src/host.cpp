@@ -20,12 +20,9 @@
  ***************************************************************************/
 #include "host.h"
 
-/* FIXME, there's a cleaner way to define such a simple data structure */
 Host::Host(const QString &host, const QString &login, const QString &pass)
+    : h(host) , lg(login) , pw(pass)
 {
-    h = host;
-    lg = login;
-    pw = pass;
 }
 
 /*

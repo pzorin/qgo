@@ -25,8 +25,6 @@
 #include "playergamelistings.h"
 #include "gamedata.h"
 
-#define QUICKQUICKSORT
-
 enum ObserverListingColumn { OC_NAME=0, OC_RANK, O_TOTALCOLUMNS };
 
 enum PlayerListingColumn { PC_STATUS=0, PC_NAME, PC_RANK, PC_PLAYING,

@@ -21,9 +21,7 @@
 
 
 #include <QApplication>
-#include <QtWidgets>
 
-#include <time.h>
 #include "mainwindow.h"
 #include "defines.h"
 
