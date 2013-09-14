@@ -109,21 +109,23 @@ void MainWindow::initStatusBar()
 	statusBar()->addPermanentWidget(statusMessage/*, 0, true*/);  // Permanent indicator
 
     // The users widget
-    statusUsers = new QLabel(" P: 0", statusBar());
+    statusUsers = new QLabel(statusBar());
+    setPlayerCountStat(0);
 	statusUsers->setAlignment(Qt::AlignCenter /* | SingleLine*/);
 	statusBar()->addPermanentWidget(statusUsers /*, 0, true*/);  // Permanent indicator
 	statusUsers->setToolTip( tr("Current online players / watched players"));
 	statusUsers->setWhatsThis( tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
 
 	// The games widget
-    statusGames = new QLabel(" G: 0", statusBar());
+    statusGames = new QLabel(statusBar());
+    setGameCountStat(0);
 	statusGames->setAlignment(Qt::AlignCenter /*| SingleLine*/);
 	statusBar()->addPermanentWidget(statusGames /*, 0, true*/);  // Permanent indicator
 	statusGames->setToolTip( tr("Current online games / observed games + matches"));
-	statusGames->setWhatsThis( tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
+    statusGames->setWhatsThis( tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
 
 	// The server widget
-    statusServer = new QLabel(" OFFLINE ", statusBar());
+    statusServer = new QLabel(tr(" OFFLINE "), statusBar());
 	statusServer->setAlignment(Qt::AlignCenter /*| SingleLine*/);
 	statusBar()->addPermanentWidget(statusServer /*, 0, true*/);  // Permanent indicator
 	statusServer->setToolTip( tr("Current server"));
@@ -147,12 +149,12 @@ void MainWindow::initStatusBar()
 
 void MainWindow::setGameCountStat(int count)
 {
-    statusGames->setText(QVariant(count).toString().prepend(" G: "));
+    statusGames->setText(tr(" G: %n","Number of games on server",count));
 }
 
 void MainWindow::setPlayerCountStat(int count)
 {
-    statusUsers->setText(QVariant(count).toString().prepend(" P: "));
+    statusUsers->setText(tr(" P: %n","Number of players on server",count));
 }
 
 void MainWindow::saveHostList(void)

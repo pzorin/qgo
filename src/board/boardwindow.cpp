@@ -231,11 +231,11 @@ void BoardWindow::setupUI(void)
 	ui.actionWhatsThis = QWhatsThis::createAction ();
 
 
-    moveNumLabel = new QLabel("Move 0",ui.statusbar);
-    komiLabel = new QLabel("Komi ?",ui.statusbar);
-    buyoyomiLabel = new QLabel("Byo: ?",ui.statusbar);
-    handicapLabel = new QLabel("H: ?",ui.statusbar);
-    freeratedLabel = new QLabel("free",ui.statusbar);
+    moveNumLabel = new QLabel(ui.statusbar);
+    komiLabel = new QLabel(ui.statusbar);
+    buyoyomiLabel = new QLabel(ui.statusbar);
+    handicapLabel = new QLabel(ui.statusbar);
+    freeratedLabel = new QLabel(ui.statusbar);
     ui.statusbar->addPermanentWidget(moveNumLabel);
     ui.statusbar->addPermanentWidget(handicapLabel);
     ui.statusbar->addPermanentWidget(komiLabel);

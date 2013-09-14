@@ -247,13 +247,13 @@ extern QString applicationPath;
 
 #ifdef Q_OS_LINUX
     #define SOUND_PATH_PREFIX			"/usr/share/qgo/sounds/"
-	#define TRANSLATIONS_PATH_PREFIX		"/usr/share/qgo/languages/"
+    #define TRANSLATIONS_PATH		"/usr/share/qgo/languages"
 #elif defined(Q_OS_MAC)
 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
-	#define TRANSLATIONS_PATH_PREFIX		"qGo.app/Contents/Resources/Translations/"
+    #define TRANSLATIONS_PATH		"qGo.app/Contents/Resources/Translations/"
 #else //Q_OS_WIN
 	#define SOUND_PATH_PREFIX			"sounds/"
-	#define TRANSLATIONS_PATH_PREFIX		"translations/"
+    #define TRANSLATIONS_PATH		"translations/"
 #endif
 
 void startqGo(void);
