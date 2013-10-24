@@ -2809,9 +2809,9 @@ void IGSConnection::handle_info(QString line)
 		statsPlayer = 0;*/
 	}
 				
-		//9 ROOM 01: FREE GAME ROOM;PSMNYACF;é©óRëŒã«é∫;19;1;10;1,19,60,600,30,25,10,60,0
-		//9 ROOM 10: SLOW GAME ROOM;PSMNYACF;Ω€∞ëŒã«é∫;19;1;20
-		//9 ROOM 92: PANDA OPEN ROOM;X;åéó·ëÂâÔ;19;10;15
+		//9 ROOM 01: FREE GAME ROOM;PSMNYACF;Ëá™Áî±ÂØæÂ±ÄÂÆ§;19;1;10;1,19,60,600,30,25,10,60,0
+		//9 ROOM 10: SLOW GAME ROOM;PSMNYACF;ÔΩΩÔæõÔΩ∞ÂØæÂ±ÄÂÆ§;19;1;20
+		//9 ROOM 92: PANDA OPEN ROOM;X;Êúà‰æãÂ§ß‰ºö;19;10;15
 	else if (! line.left(5).compare("ROOM "))
 	{
 		QString room = element(line, 0, " ",";");
@@ -4312,7 +4312,7 @@ void IGSConnection::handle_dot(QString)
 		// 42     zz0002  <none>          Japan     NR    0/   0  -   -    1m    QX default 
 		// 42     zz0003  <none> ()       Japan     NR    0/   0  -   -    1m    SX default 
 		// 42       anko                  Taiwan    2k* 168/  97  -   -    1s    -- default 
-		// 42     MUKO12  1/12 Å` 1/15    Japan     4k* 666/ 372  17  -    1m    -X default 
+		// 42     MUKO12  1/12 „Äú 1/15    Japan     4k* 666/ 372  17  -    1m    -X default 
 		// 42        mof  [Igc2000 1.1]   Sweden    2k* 509/ 463 124  -    0s    -X default 
 		// 42     obiyan  <None>          Japan     3k* 1018/ 850  -   50  11s    -- default 
 		// 42    uzumaki                  COM       1k    0/   0  -   -    1s    -X default 

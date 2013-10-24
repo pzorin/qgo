@@ -1208,9 +1208,9 @@ void WingConnection::handle_info(QString line)
 		}
 	}
 				
-		//9 ROOM 01: FREE GAME ROOM;PSMNYACF;Ž©—R‘Î‹ÇŽº;19;1;10;1,19,60,600,30,25,10,60,0
-		//9 ROOM 10: SLOW GAME ROOM;PSMNYACF;½Û°‘Î‹ÇŽº;19;1;20
-		//9 ROOM 92: PANDA OPEN ROOM;X;ŒŽ—á‘å‰ï;19;10;15
+		//9 ROOM 01: FREE GAME ROOM;PSMNYACF;è‡ªç”±å¯¾å±€å®¤;19;1;10;1,19,60,600,30,25,10,60,0
+		//9 ROOM 10: SLOW GAME ROOM;PSMNYACF;ï½½ï¾›ï½°å¯¾å±€å®¤;19;1;20
+		//9 ROOM 92: PANDA OPEN ROOM;X;æœˆä¾‹å¤§ä¼š;19;10;15
 	else if (! line.left(5).compare("ROOM "))
 	{
 

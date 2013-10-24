@@ -6636,8 +6636,8 @@ void TygemConnection::handleEndgameMsg(unsigned char * msg, unsigned int size)
 		/* Both players get this, presumably on a restarted game, note that there aren't necessarily
 		 * any names in it:
 		 * 002c 067b 000b 0101
- 		 * 0000 0000 0000 0000 0000 0000 0000 0000  ................
- 		 * 0000 0000 0000 0000 0000 0000 01f0 0000  .............ð..
+         * 0000 0000 0000 0000 0000 0000 0000 0000
+         * 0000 0000 0000 0000 0000 0000 01f0 0000
 		 * 0000 0000  */             
 #ifdef RE_DEBUG
 		//FIXME do we need to handle these?
@@ -8328,7 +8328,7 @@ void TygemConnection::handleResumeMatch(unsigned char * msg, unsigned int size)
 	//696e 7472 7573 696f 6e00 0000 0000 0001
 
 	//here we get this and we are peterius black, its not our invitation
-	//0000 0028 068e 000b 0000  P..höÏ...(......
+    //0000 0028 068e 000b 0000  P..h.....(......
  	//696e 7472 7573 696f 6e00 0000 0000 0000  intrusion.......
   	//7065 7465 7269 7573 0000 0000 0000 0001  peterius........
  
