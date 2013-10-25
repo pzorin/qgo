@@ -35,8 +35,7 @@ class Talk;
 class IGSConnection : public NetworkConnection
 {
 	public:
-		IGSConnection(const QString & user, const QString & pass);
-		IGSConnection();
+        IGSConnection(const ConnectionCredentials credentials);
 		~IGSConnection();
 		virtual QString getPlaceString();
 		virtual void sendText(QString text);

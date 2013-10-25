@@ -120,11 +120,9 @@ unsigned char zodiac_byte;
 		e0 no picture
 		FIXME */
 
-TygemConnection::TygemConnection(const QString & user, const QString & pass, ConnectionType connType)
+TygemConnection::TygemConnection(const ConnectionCredentials credentials)
+    : NetworkConnection(credentials)
 {
-	username = user;
-	password = pass;
-
 	textCodec = QTextCodec::codecForLocale();
 	serverCodec = QTextCodec::codecForLocale();
 	//FIXME check for validity of codecs ??? 
@@ -147,8 +145,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 	
 	//for server list
 	//error handling FIXME
-	connectionType = connType;
-	if(connType == TypeTYGEM)
+    if(connectionType == TypeTYGEM)
 	{
 		serverCodec = QTextCodec::codecForName(getCodecString());
 		if(!serverCodec)
@@ -163,7 +160,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 			if(reconnectToServer() < 0)
 			{
 				qDebug("User canceled");
-				connectionState = CANCELED;
+                setState(CANCELED);
 				return;
 			}
 		}
@@ -178,7 +175,7 @@ TygemConnection::TygemConnection(const QString & user, const QString & pass, Con
 int TygemConnection::requestServerInfo(void)
 {
 	qDebug("Requesting Tygem Server Info");
-	if(!openConnection("121.189.9.52", 80, NOT_MAIN_CONNECTION))
+    if(!openConnection(hostname, port, NOT_MAIN_CONNECTION))
 	{
 		qDebug("Can't get server info");
 		return -1;
@@ -203,7 +200,7 @@ int TygemConnection::requestServerInfo(void)
 	}
 	delete[] packet;
 	
-	connectionState = INFO;
+    setState(INFO);
 	return 0;
 }
 
@@ -658,7 +655,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 				if(strncmp((const char *)c, "HTTP/1.1 200 OK\r\n", 17) != 0)
 				{
 					qDebug("Server info response not OK!");
-					connectionState = PROTOCOL_ERROR;
+                    setState(PROTOCOL_ERROR);
 					//closeConnection();
 				}
 				else
@@ -714,7 +711,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 						}
 						//00080698ff040000 tom returns from already logged in
 						qDebug("Bad password or login");
-						connectionState = PASS_FAILED;
+                        setState(PASS_FAILED);
 						delete[] c;
 						//closeConnection();
 						return;
@@ -726,7 +723,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 						if(reconnectToServer() < 0)
 						{
 							qDebug("User canceled");
-							connectionState = CANCELED;
+                            setState(CANCELED);
 							delete[] c;
 							return;
 						}
@@ -863,7 +860,7 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 				if(*p != '[')
 				{
 					qDebug("Server info parse error");
-					connectionState = PROTOCOL_ERROR;
+                    setState(PROTOCOL_ERROR);
 					closeConnection();
 					return;
 				}
@@ -907,13 +904,13 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	/* We close here because this first time, its going to close
 	* anyway, and if we don't close here, we'll get an error
 	* and lose the object */
-	connectionState = RECONNECTING;
+    setState(RECONNECTING);
 	closeConnection(false);
 	
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
-		connectionState = CANCELED;
+        setState(CANCELED);
 		return;
 	}
 }
@@ -1009,7 +1006,7 @@ void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 	
 	sendRequestGames();
 	sendRequest();
-	connectionState = SETUP;
+    setState(SETUP);
 	sendName();
 	/* FIXME currently we have handleFriends doing setConnected which closes the please wait
 	 * getting us out of SETUP.  This means that the players haven't come in yet.
@@ -1304,7 +1301,7 @@ int TygemConnection::reconnectToServer(void)
 	if(openConnection(serverList[server_i]->ipaddress, 12320))
 	{
 		qDebug("Reconnected %d", reconnecting);
-		connectionState = LOGIN;
+        setState(LOGIN);
 		sendLogin(false, false);
 		//sendLogin(reconnecting, reconnecting);
 		fflush(stdout);

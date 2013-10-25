@@ -57,30 +57,22 @@
 
 //#define RE_DEBUG
 
-#define CYBERORO_METASERVER			"211.38.95.221"
-
 const char * KoreanCodec = "eucKR";
 const char * ChineseCodec = "GB2312";
 const char * JapaneseCodec = "Shift-JIS";
 const char * LatinCodec = "ISO-8859-1";
 
-CyberOroConnection::CyberOroConnection(const QString & user, const QString & pass)
+CyberOroConnection::CyberOroConnection(const ConnectionCredentials credentials)
+    : NetworkConnection(credentials)
 {
-
-	/* ui.LineEdit_address->setText("211.38.95.204");
-			//ui.LineEdit_port->setText("7002");
-	//Note that this is not world.cyberoro.com
+    //Note that this is not world.cyberoro.com
 	//which right now is 91.91.
 	//This is gateway server which is sent login
 	//information and authenticates us to other
 	//servers that are provided on a list. */
-	/* FIXME, we need to contact some dns listed server
-	 * to get official ip in case it changes */
-	if(openConnection(CYBERORO_METASERVER, 7447, NOT_MAIN_CONNECTION))
+    if(openConnection(hostname, port, NOT_MAIN_CONNECTION))
 	{
-		connectionState = LOGIN;
-		username = user;
-		password = pass;
+        setState(LOGIN);
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
@@ -297,8 +289,8 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
 				//1f27080015270000
 				if(c[0] == 0x1f)
 				{
-					qDebug("Bad password or login");
-					connectionState = PASS_FAILED;
+                    qDebug("CyberOroConnection::handlePendingData : Bad password or login");
+                    setState(PASS_FAILED);
 					delete[] c;
 					//closeConnection();
 					return;
@@ -441,12 +433,12 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	
 	//requestAccountInfo();		//this will close this connection	
 	closeConnection(false);
-	connectionState = RECONNECTING;
+    setState(RECONNECTING);
 	requestAccountInfo();
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
-		connectionState = CANCELED;
+        setState(CANCELED);
 		return;
 	}
 }
@@ -513,7 +505,7 @@ int CyberOroConnection::reconnectToServer(void)
 	if(openConnection(serverList[server_i]->ipaddress, 7002))
 	{
 		qDebug("Reconnected");
-		connectionState = CONNECTED;
+        setState(CONNECTED);
 		setConnected();			//FIXME still need to move this somewhere better
 		game_code_to_number.clear();
 	}
@@ -2353,7 +2345,7 @@ void CyberOroConnection::sendLeave(const GameListing &)
 void CyberOroConnection::requestAccountInfo(void)
 {
 	//QuickConnection * c = new QuickConnection(getQSocket(), NULL, this, QuickConnection::sendRequestAccountInfo);
-	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, NULL, this, QuickConnection::sendRequestAccountInfo);
+    metaserverQC = new QuickConnection(hostname, port, NULL, this, QuickConnection::sendRequestAccountInfo);
 }
 
 char * CyberOroConnection::sendRequestAccountInfo(int * size, void *)
@@ -2489,7 +2481,7 @@ void CyberOroConnection::addFriend(PlayerListing & player)
 		//silent no error might be okay
 		return;
 	}
-	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendAddFriend);
+    metaserverQC = new QuickConnection(hostname, port, (void *)&player, this, QuickConnection::sendAddFriend);
 	NetworkConnection::addFriend(player);
 }
 
@@ -2551,7 +2543,7 @@ void CyberOroConnection::removeFriend(PlayerListing & player)
 		//silent no error might be okay
 		return;
 	}
-	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendRemoveFriend);
+    metaserverQC = new QuickConnection(hostname, port, (void *)&player, this, QuickConnection::sendRemoveFriend);
 	NetworkConnection::removeFriend(player);
 }
 
@@ -2568,7 +2560,7 @@ void CyberOroConnection::addBlock(PlayerListing & player)
 		//silent no error might be okay
 		return;
 	}
-	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendAddBlock);
+    metaserverQC = new QuickConnection(hostname, port, (void *)&player, this, QuickConnection::sendAddBlock);
 	NetworkConnection::addBlock(player);
 }
 
@@ -2580,7 +2572,7 @@ void CyberOroConnection::removeBlock(PlayerListing & player)
 		//silent no error might be okay
 		return;
 	}
-	metaserverQC = new QuickConnection((char *)CYBERORO_METASERVER, 7447, (void *)&player, this, QuickConnection::sendRemoveBlock);
+    metaserverQC = new QuickConnection(hostname, port, (void *)&player, this, QuickConnection::sendRemoveBlock);
 	NetworkConnection::removeBlock(player);
 }
 
@@ -3151,7 +3143,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 			if(reconnectToServer() < 0)
 			{
 				qDebug("User canceled");
-				connectionState = CANCELED;
+                setState(CANCELED);
 				return;
 			}
 #ifdef RE_DEBUG

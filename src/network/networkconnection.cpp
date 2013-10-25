@@ -35,7 +35,7 @@
 
 #define FRIENDWATCH_NOTIFY_DEFAULT	1
 
-NetworkConnection::NetworkConnection() :
+NetworkConnection::NetworkConnection(ConnectionCredentials credentials) :
 default_room(0), console_dispatch(0), qsocket(0)
 {
 	firstonReadyCall = 1;
@@ -44,6 +44,12 @@ default_room(0), console_dispatch(0), qsocket(0)
 
     connectingDialog = 0;
 	match_negotiation_state = new MatchNegotiationState();
+
+    connectionType = credentials.type;
+    hostname = credentials.hostName;
+    port = credentials.port;
+    username = credentials.userName;
+    password = credentials.password;
 }
 
 /* Maybe this should return an enum, but I'm feeling lazy at the moment,
@@ -88,7 +94,7 @@ void NetworkConnection::setConnected(void)
         connectingDialog->deleteLater();
         connectingDialog = 0;
     }
-	connectionState = CONNECTED;
+    setState(CONNECTED);
 }
 
 bool NetworkConnection::openConnection(const QString & host, const unsigned short port, bool not_main_connection)
@@ -567,6 +573,12 @@ void IGSConnection::OnDelayedCloseFinish()
 }
 */
 
+void NetworkConnection::setState(ConnectionState newState)
+{
+    connectionState = newState;
+    emit stateChanged(newState);
+}
+
 void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 {
 	/* FIXME These should pop up information boxes as
@@ -574,30 +586,30 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	 * of other msgs? perhaps? like disconnect msgs?*/
 	switch (i)
 	{
-		case QTcpSocket::ConnectionRefusedError: qDebug("ERROR: connection refused...");
+        case QTcpSocket::ConnectionRefusedError: qDebug("NetworkConnection::OnError : connection refused");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Connection refused!");
-			connectionState = CONN_REFUSED;
+            setState(CONN_REFUSED);
 			break;
-		case QTcpSocket::HostNotFoundError: qDebug("ERROR: host not found...");
+        case QTcpSocket::HostNotFoundError: qDebug("NetworkConnection::OnError : host not found");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Host not found!");
-			connectionState = HOST_NOT_FOUND;
+            setState(HOST_NOT_FOUND);
 			break;
-		case QTcpSocket::SocketTimeoutError: qDebug("ERROR: socket time out ...");
+        case QTcpSocket::SocketTimeoutError: qDebug("NetworkConnection::OnError : socket time out");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Socket time out!");
-			connectionState = SOCK_TIMEOUT;
+            setState(SOCK_TIMEOUT);
 			break;
-		case QTcpSocket::RemoteHostClosedError: qDebug("ERROR: connection closed by host ...");
+        case QTcpSocket::RemoteHostClosedError: qDebug("NetworkConnection::OnError : connection closed by host");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Connection closed by host!");
-			connectionState = PROTOCOL_ERROR;
+            setState(PROTOCOL_ERROR);
 			break;
-		default: qDebug("ERROR: unknown Error...");
+        default: qDebug("NetworkConnection::OnError : unknown error");
 			if(console_dispatch)
 				console_dispatch->recvText("Error: Unknown socket error!");
-			connectionState = UNKNOWN_ERROR;
+            setState(UNKNOWN_ERROR);
 			break;
 	}
 	

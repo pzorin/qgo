@@ -26,7 +26,7 @@
 class WingConnection : public IGSConnection
 {
 	public:
-		WingConnection(const QString & user, const QString & pass);
+        WingConnection(const ConnectionCredentials credentials);
 		virtual QString getPlaceString(void);
 		virtual void sendPlayersRequest(void);
 		virtual void sendMatchRequest(class MatchRequest * mr);

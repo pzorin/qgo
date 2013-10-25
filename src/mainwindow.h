@@ -28,7 +28,6 @@
 
 #include <QtWidgets>
 
-class HostList;
 class RoomListing;
 class LoginDialog;
 class NetworkConnection;
@@ -92,9 +91,7 @@ private:
     QList<BoardWindow *> boardWindowList;
 	QString currentWorkingDir;
 
-    void saveHostList(void);
-    void loadHostList(QSettings * settings);
-    HostList * hostlist;
+    LoginDialog * logindialog;
 };
 
 #endif

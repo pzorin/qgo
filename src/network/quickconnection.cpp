@@ -23,7 +23,7 @@
 #include "quickconnection.h"
 #include "networkconnection.h"
 
-QuickConnection::QuickConnection(char * host, unsigned short port, void * m, NetworkConnection * c, QuickConnectionType t) :
+QuickConnection::QuickConnection(QString hostname, qint16 port, void * m, NetworkConnection * c, QuickConnectionType t) :
 msginfo(m), connection(c), type(t)
 {
 	qsocket = new QTcpSocket();	//try with no parent passed for now
@@ -37,11 +37,9 @@ msginfo(m), connection(c), type(t)
 	connect(qsocket, SIGNAL(readyRead()), SLOT(OnReadyRead()));
 	connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
 	
-	Q_ASSERT(host != 0);
-	Q_ASSERT(port != 0);
-	qDebug("Connecting to %s %d...\n", host, port);
+    qDebug() << QString("QuickConnection::QuickConnection : Connecting to") << hostname << ":" << port;
 	
-	qsocket->connectToHost(QString(host), (quint16) port);
+    qsocket->connectToHost(hostname, port);
 	
 	success = !(qsocket->state() != QTcpSocket::UnconnectedState);
 }
@@ -130,15 +128,15 @@ void QuickConnection::OnError(QAbstractSocket::SocketError err)
 {
 	switch(err)
 	{
-		case QTcpSocket::ConnectionRefusedError: qDebug("ERROR: connection refused...");
+        case QTcpSocket::ConnectionRefusedError: qDebug("QuickConnection::OnError : connection refused");
 			break;
-		case QTcpSocket::HostNotFoundError: qDebug("ERROR: host not found...");
+        case QTcpSocket::HostNotFoundError: qDebug("QuickConnection::OnError : host not found");
 			break;
-		case QTcpSocket::SocketTimeoutError: qDebug("ERROR: socket time out ...");
+        case QTcpSocket::SocketTimeoutError: qDebug("QuickConnection::OnError : socket time out");
 			break;
-		case QTcpSocket::RemoteHostClosedError: qDebug("ERROR: connection closed by host ...");
+        case QTcpSocket::RemoteHostClosedError: qDebug("QuickConnection::OnError : connection closed by host");
 			break;
-		default: qDebug("ERROR: unknown Error...");
+        default: qDebug("QuickConnection::OnError : unknown error");
 			break;
 	}
 }

@@ -27,6 +27,7 @@
 #include <QtNetwork>
 #include "messages.h"
 #include "newline_pipe.h"
+#include "defines.h"
 
 class GameListing;
 class PlayerListing;
@@ -44,6 +45,25 @@ class MatchNegotiationState;
 class Room;
 class QMessageBox;
 
+enum ConnectionState {
+    LOGIN,
+    PASSWORD,
+            PASSWORD_SENT,
+    AUTH_FAILED,
+        PASS_FAILED,
+        INFO,
+    SETUP,
+        CONNECTED,
+        RECONNECTING,
+        CANCELED,
+    PROTOCOL_ERROR,
+    ALREADY_LOGGED_IN,
+        CONN_REFUSED,
+    HOST_NOT_FOUND,
+    SOCK_TIMEOUT,
+    UNKNOWN_ERROR
+};
+
 #define NOT_MAIN_CONNECTION		true
 
 /* Some of these methods should be converted to slots.
@@ -53,10 +73,10 @@ class NetworkConnection : public QObject
 	Q_OBJECT
 
 	public:
-		NetworkConnection();
+        NetworkConnection(ConnectionCredentials credentials);
 		~NetworkConnection();
 		int getConnectionState();	//should probably return enum
-		void userCanceled(void) { connectionState = CANCELED; /* anything else? */};
+        void userCanceled(void) { setState(CANCELED); /* anything else? */};
 		int checkForOpenBoards(void);
 public slots:
         virtual void sendPlayersRequest(void) = 0;
@@ -220,6 +240,7 @@ public:
     signals:
         void ready(void);
         void playerListingUpdated(PlayerListing *);
+        void stateChanged(ConnectionState);
 		
 	protected:
 		void closeConnection(bool send_disconnect = true);
@@ -236,6 +257,7 @@ public:
 		void latencyOnSend(void);
 		void latencyOnRecv(void);
 		void changeChannel(const QString & s);
+        void setState(ConnectionState newState);
 
 		bool firstonReadyCall;
 		Room * default_room;
@@ -245,27 +267,13 @@ public:
 		newline_pipe <unsigned char> pending;
 		newline_pipe <unsigned char> send_buffer;	//not always used
 
+        ConnectionType connectionType;
+        QString hostname;
+        qint16 port;
 		QString username;
 		QString password;
 		
-		enum {
-			LOGIN,
-   			PASSWORD,
-            		PASSWORD_SENT,
-   			AUTH_FAILED,
-      			PASS_FAILED,
-      			INFO,
-			SETUP,
-     			CONNECTED,
-     			RECONNECTING,
-     			CANCELED,
-			PROTOCOL_ERROR,
-   			ALREADY_LOGGED_IN,
-      			CONN_REFUSED,
-			HOST_NOT_FOUND,
-			SOCK_TIMEOUT,
-			UNKNOWN_ERROR
-		} connectionState;
+        ConnectionState connectionState;
 		
 		bool friendwatch_notify_default;
 		

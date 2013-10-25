@@ -36,7 +36,7 @@ class TalkDispatch;
 class TygemConnection : public NetworkConnection
 {
 	public:
-		TygemConnection(const QString & user, const QString & pass, ConnectionType = TypeTYGEM);
+        TygemConnection(const ConnectionCredentials credentials);
 		~TygemConnection();
 		/* Protocols are way similar so probably most of these don't have to be
 		 * virtual FIXME */
@@ -148,8 +148,6 @@ class TygemConnection : public NetworkConnection
 		QTextCodec * serverCodec;
 		std::vector <class ServerItem *> serverList;
 		int current_server_index;
-		
-		ConnectionType connectionType;
 		
 		int move_message_number;	//FIXME can't use if more than one game
 		int move_message_number_ack;

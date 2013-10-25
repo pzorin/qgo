@@ -32,7 +32,7 @@ class QuickConnection : public QObject
 	Q_OBJECT
 	public:
 		enum QuickConnectionType { sendRequestAccountInfo, sendAddFriend, sendRemoveFriend, sendAddBlock, sendRemoveBlock };
-		QuickConnection(char * host, unsigned short port, void * m, NetworkConnection * c, QuickConnectionType t);
+        QuickConnection(QString hostname, qint16 port, void * m, NetworkConnection * c, QuickConnectionType t);
 		QuickConnection(QTcpSocket * q, void * m, NetworkConnection * c, QuickConnectionType t);
 		int checkSuccess(void);
 		~QuickConnection();

@@ -29,18 +29,8 @@
 #include "talk.h"
 #include "playergamelistings.h"
 
-LGSConnection::LGSConnection(const QString & user, const QString & pass) :
-IGSConnection()
-{
-	if(openConnection("lgs.taiwango.net", 9696))
-	{
-		connectionState = LOGIN;
-		username = user;
-		password = pass;
-	}
-	else
-		qDebug("Can't open Connection\n");	//throw error?
-}
+LGSConnection::LGSConnection(const ConnectionCredentials credentials) :
+IGSConnection(credentials) {}
 
 QString LGSConnection::getPlaceString(void)
 {
@@ -75,7 +65,7 @@ void LGSConnection::onReady(void)
 		if(connectionState != PASSWORD_SENT)
 			return;
 		firstonReadyCall = 0;
-		connectionState = CONNECTED;
+        setState(CONNECTED);
 		setKeepAlive(600);
 		sendPlayersRequest();
 		sendGamesRequest();

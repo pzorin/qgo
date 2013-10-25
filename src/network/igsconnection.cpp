@@ -34,18 +34,12 @@
 #define PLAYERSLISTREFRESH_SECONDS		300
 #define GAMESLISTREFRESH_SECONDS		180
 
-IGSConnection::IGSConnection()
+IGSConnection::IGSConnection(const ConnectionCredentials credentials)
+    : NetworkConnection(credentials)
 {
-	init();
-}
-
-IGSConnection::IGSConnection(const QString & user, const QString & pass)
-{
-	if(openConnection("igs.joyjoy.net", 7777))
+    if(openConnection(hostname,port))
 	{
-		connectionState = LOGIN;
-		username = user;
-		password = pass;
+        setState(LOGIN);
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
@@ -619,11 +613,11 @@ void IGSConnection::handleLogin(QString msg)
 		writeReady = true;
 		QString u = username + "\r\n";
 		sendText(u.toLatin1().constData());	
-		connectionState = PASSWORD;
+        setState(PASSWORD);
 	}
 	else if(msg.contains("sorry") > 0)
 	{
-		connectionState = AUTH_FAILED;
+        setState(AUTH_FAILED);
 		if(console_dispatch)
 			console_dispatch->recvText("Sorry");
 	}
@@ -649,13 +643,13 @@ void IGSConnection::handlePassword(QString msg)
 			QString p = password + "\r\n";
 			sendText(p.toLatin1().constData());
 		}	
-		connectionState = PASSWORD_SENT;
+        setState(PASSWORD_SENT);
 	}
 	else if(msg.contains("guest"))
 	{
 		qDebug("Guest account");
 		writeReady = true;
-		connectionState = PASSWORD_SENT;
+        setState(PASSWORD_SENT);
 		guestAccount = true;
 	}
 }
@@ -971,7 +965,7 @@ void IGSConnection::handleMessage(QString msg)
 	if(msg.contains("You have logged in as a guest"))	//WING, doesn't work, plus ugly
 	{
 		guestAccount = true;
-		connectionState = PASSWORD_SENT;
+        setState(PASSWORD_SENT);
 	}
 	if(!type)
 	{	
@@ -1211,14 +1205,14 @@ void IGSConnection::handle_error(QString line)
 	line = line.remove(0, 2).trimmed();
 	if(line.contains("Invalid password"))
 	{
-		connectionState = PASS_FAILED;
+        setState(PASS_FAILED);
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 		//closeConnection();
 		return;
 	}
 	else if(line.contains("string you have typed is illegal"))
 	{
-		connectionState = PROTOCOL_ERROR;
+        setState(PROTOCOL_ERROR);
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 		//closeConnection();
 		return;

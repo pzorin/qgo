@@ -31,8 +31,8 @@
  * the same username meaning that sendMatchOffers may not be received. */
 
 
-TomConnection::TomConnection(const QString & user, const QString & pass)
-: TygemConnection(user, pass, TypeTOM)
+TomConnection::TomConnection(const ConnectionCredentials credentials)
+: TygemConnection(credentials)
 {
 	serverCodec = QTextCodec::codecForName(getCodecString());
 	if(!serverCodec)
@@ -47,7 +47,7 @@ TomConnection::TomConnection(const QString & user, const QString & pass)
 		if(reconnectToServer() < 0)
 		{
 			qDebug("User canceled");
-			connectionState = CANCELED;
+            setState(CANCELED);
 			return;
 		}
 	}
@@ -66,7 +66,7 @@ QString TomConnection::getPlaceString(void)
 int TomConnection::requestServerInfo(void)
 {
 	qDebug("Requesting Tom Server Info");
-	if(!openConnection("61.135.158.147", 80, NOT_MAIN_CONNECTION))
+    if(!openConnection(hostname, port, NOT_MAIN_CONNECTION))
 	{
 		qDebug("Can't get server info");
 		return -1;
@@ -91,7 +91,7 @@ int TomConnection::requestServerInfo(void)
 	}
 	delete[] packet;
 	
-	connectionState = INFO;
+    setState(INFO);
 	return 0;
 }
 
@@ -180,14 +180,14 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	/* We close here because this first time, its going to close
 	* anyway, and if we don't close here, we'll get an error
 	* and lose the object */
-	connectionState = RECONNECTING;
+    setState(RECONNECTING);
 	closeConnection(false);
 	
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
 		closeConnection(false);
-		connectionState = CANCELED;
+        setState(CANCELED);
 		//if(dispatch)
 		//	dispatch->onError();	//not great... FIXME
 		return;

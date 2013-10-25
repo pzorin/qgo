@@ -28,8 +28,8 @@
 #include "serverliststorage.h"
 #include "serverlistdialog.h"
 
-EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
-: TygemConnection(user, pass, TypeEWEIQI)
+EWeiQiConnection::EWeiQiConnection(const ConnectionCredentials credentials)
+: TygemConnection(credentials)
 {
 	serverCodec = QTextCodec::codecForName(getCodecString());
 	if(!serverCodec)
@@ -44,7 +44,7 @@ EWeiQiConnection::EWeiQiConnection(const QString & user, const QString & pass)
 		if(reconnectToServer() < 0)
 		{
 			qDebug("User canceled");
-			connectionState = CANCELED;
+            setState(CANCELED);
 			return;
 		}
 	}
@@ -63,7 +63,7 @@ QString EWeiQiConnection::getPlaceString(void)
 int EWeiQiConnection::requestServerInfo(void)
 {
 	qDebug("Requesting eWeiQi Server Info");
-	if(!openConnection("121.189.9.52", 80, NOT_MAIN_CONNECTION))
+    if(!openConnection(hostname, port, NOT_MAIN_CONNECTION))
 	{
 		qDebug("Can't get server info");
 		return -1;
@@ -89,7 +89,7 @@ int EWeiQiConnection::requestServerInfo(void)
 	}
 	delete[] packet;
 	
-	connectionState = INFO;
+    setState(INFO);
 	return 0;
 }
 

@@ -26,7 +26,6 @@
 #include "boardwindow.h"
 #include "connectionwidget.h"
 #include "login.h"
-#include "host.h"
 #include "sgfpreview.h"
 #include "audio.h"
 
@@ -44,8 +43,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	/* FIXME, really need a list of such things, 0s */
 
 	// loads the settings
-    hostlist = new HostList;
-	loadSettings();
+    loadSettings();
 	// connecting the Go server tab buttons and signals
 
 	// connecting the new game button
@@ -72,6 +70,8 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	//sound
     connectSound = 	new Sound("static.wav");
+
+    logindialog = new LoginDialog(this);
 
     connect( ui.actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
 }
@@ -155,36 +155,6 @@ void MainWindow::setGameCountStat(int count)
 void MainWindow::setPlayerCountStat(int count)
 {
     statusUsers->setText(tr(" P: %n","Number of players on server",count));
-}
-
-void MainWindow::saveHostList(void)
-{
-    QSettings settings;
-    settings.beginWriteArray("HOSTS");
-    for (int i = 0; i < hostlist->size(); ++i)
-    {
-        settings.setArrayIndex(i);
-        settings.setValue("server", hostlist->at(i)->host());
-        settings.setValue("loginName", hostlist->at(i)->loginName());
-        settings.setValue("password", hostlist->at(i)->password());
-    }
-    settings.endArray();
-}
-
-void MainWindow::loadHostList(QSettings *settings)
-{
-    hostlist->clear();
-    Host *h;
-    int size = settings->beginReadArray("HOSTS");
-    for (int i = 0; i < size; ++i)
-    {
-        settings->setArrayIndex(i);
-        h = new Host(settings->value("server").toString(),
-            settings->value("loginName").toString(),
-            settings->value("password").toString());
-        hostlist->append(h);
-    }
-    settings->endArray();
 }
 
 /*
@@ -302,6 +272,5 @@ void MainWindow::openConnectDialog(void)
      *and notifying the connectionWidget about it. */
     if(connectionWidget->isConnected())
         return;
-    LoginDialog * logindialog = new LoginDialog(hostlist);
     logindialog->exec();
 }

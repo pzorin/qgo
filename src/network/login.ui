@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>156</height>
+    <width>488</width>
+    <height>339</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,156 +19,76 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QFormLayout" name="formLayout">
-   <property name="fieldGrowthPolicy">
-    <enum>QFormLayout::ExpandingFieldsGrow</enum>
-   </property>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Password:</string>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTableView" name="credentialView">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
      </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="cancelPB">
+      <widget class="QPushButton" name="editButton"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="editLabel">
        <property name="text">
-        <string>Cancel</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="connectPB">
-       <property name="text">
-        <string>Connect</string>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="default">
-        <bool>true</bool>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelPB">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="text">
+        <string>&amp;Cancel</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="serverComboBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Select service</string>
-     </property>
-     <item>
-      <property name="text">
-       <string>IGS</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>WING</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>LGS</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>CyberORO</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tygem</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>eWeiQi</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tom</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="loginEdit">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>146</width>
-       <height>28</height>
-      </size>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-     <property name="frame">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QCheckBox" name="savepasswordCB">
-     <property name="text">
-      <string>Save Password</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Login:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="passwordEdit">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>127</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="echoMode">
-      <enum>QLineEdit::Password</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Server:</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>cancelPB</sender>
+   <signal>clicked()</signal>
+   <receiver>LoginDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>436</x>
+     <y>314</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

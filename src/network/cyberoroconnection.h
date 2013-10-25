@@ -34,7 +34,7 @@ class QuickConnection;
 class CyberOroConnection : public NetworkConnection
 {
 	public:
-		CyberOroConnection(const QString & user, const QString & pass);
+        CyberOroConnection(const ConnectionCredentials credentials);
 		~CyberOroConnection();
 		virtual void sendText(QString text);
 		virtual void sendText(const char * text);

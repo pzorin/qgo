@@ -49,13 +49,4 @@ private:
     QString pw;
 };
 
-class HostList : public QList<Host*>
-{
-public:
-    HostList() {};
-    virtual ~HostList() {};
-
-    virtual int compareItems(Host * d1, Host * d2);
-};
-
 #endif // HOST_H

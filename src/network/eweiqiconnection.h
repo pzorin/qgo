@@ -25,7 +25,7 @@
 class EWeiQiConnection : public TygemConnection
 {
 	public:
-		EWeiQiConnection(const QString & user, const QString & pass);
+        EWeiQiConnection(const ConnectionCredentials credentials);
 		//~EWeiQiConnection();
 		virtual const char * getCodecString(void);
 		virtual QString getPlaceString(void);

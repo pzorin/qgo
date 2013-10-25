@@ -32,247 +32,403 @@
 #include "network/tomconnection.h"
 #include "connectionwidget.h"
 
-LoginDialog::LoginDialog(HostList * h)
+const char * connectionTypeString[] = {"IGS", "WING", "LGS", "CyberORO", "Tygem", "eWeiQi", "Tom",
+                                       "Default", "None", "Unknown",
+                                       "NNGS", "CTN", "CWS",};
+
+enum CredentialTableColumn { CRED_PROTOCOL, CRED_HOSTNAME, CRED_PORT, CRED_USERNAME, CRED_PASSWORD, CRED_NUMITEMS };
+
+CredentialTableModel::CredentialTableModel(QObject *parent)
+    : QAbstractTableModel(parent)
 {
-	ui.setupUi(this);
-    connectionName = ui.serverComboBox->currentText();
-	connection = 0;
-	serverlistdialog_open = false;
-
-    hostlist = h; // Should just read it from settings here
-    loadAccounts();
-	
-    connect(ui.serverComboBox, SIGNAL(currentIndexChanged ( int )), SLOT(slot_cbconnectChanged(int )));
-	connect(ui.connectPB, SIGNAL(clicked()), this, SLOT(slot_connect()));
-	connect(ui.cancelPB, SIGNAL(clicked()), this, SLOT(slot_cancel()));
-
-	connect(ui.loginEdit, SIGNAL(editTextChanged(const QString &)), this, SLOT(slot_editTextChanged(const QString &)));
+    editable = true;
+    loadCredentials();
 }
 
-void LoginDialog::slot_connect(void)
+CredentialTableModel::~CredentialTableModel() {}
+
+int CredentialTableModel::rowCount(const QModelIndex & parent) const
 {
+    return credentials.size();
+}
+
+int CredentialTableModel::columnCount(const QModelIndex & parent) const
+{
+    return CRED_NUMITEMS;
+}
+
+QModelIndex CredentialTableModel::index ( int row, int column, const QModelIndex & parent ) const
+{
+    return createIndex(row,column);
+}
+
+QVariant CredentialTableModel::data(const QModelIndex &index, int role) const
+{
+    if(!index.isValid())
+        return QVariant();
+    if ((role != Qt::DisplayRole) && (role != Qt::EditRole))
+        return QVariant();
+    switch (index.column())
+    {
+    case CRED_PROTOCOL:
+        if (role == Qt::DisplayRole)
+            return QString(connectionTypeString[int(credentials[index.row()].type)]);
+        else
+            return QVariant(int(credentials[index.row()].type));
+    case CRED_HOSTNAME:
+        return credentials[index.row()].hostName;
+    case CRED_PORT:
+        return QVariant(credentials[index.row()].port);
+    case CRED_USERNAME:
+        return credentials[index.row()].userName;
+    case CRED_PASSWORD:
+        if ((role == Qt::DisplayRole) && ( ! credentials[index.row()].password.isEmpty() ))
+            return QString::fromUtf8( "\u2022\u2022\u2022\u2022\u2022" );
+        else
+            return credentials[index.row()].password;
+    default:
+        return QVariant();
+    }
+}
+
+QVariant CredentialTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
+        switch(section)
+        {
+        case CRED_PROTOCOL:
+            return QVariant("Protocol");
+        case CRED_HOSTNAME:
+            return QVariant("Hostname");
+        case CRED_PORT:
+            return QVariant("Port");
+        case CRED_USERNAME:
+            return QVariant("Username");
+        case CRED_PASSWORD:
+            return QVariant("Password");
+        }
+    return QVariant();
+}
+
+Qt::ItemFlags CredentialTableModel::flags(const QModelIndex & index) const
+{
+    if (editable)
+        return Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    else
+        return Qt::ItemIsEnabled;
+}
+
+bool CredentialTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+    int row = index.row();
+    int column = index.column();
+    if ((row < 0) || (row >= credentials.size()) || (role != Qt::EditRole))
+        return false;
+
+    bool ok;
+    int val;
+    switch (column)
+    {
+    case CRED_PROTOCOL:
+        val = value.toInt(& ok);
+        if ((!ok) || (val<0) || (val >= int(TypeDEFAULT)))
+            return false;
+        credentials[row].type = ConnectionType(val);
+        break;
+    case CRED_HOSTNAME:
+        credentials[row].hostName = value.toString();
+        break;
+    case CRED_PORT:
+        val = value.toInt(& ok);
+        if ((!ok) || (val<0) || (val > 0xFFFF))
+            return false;
+        credentials[row].port = (qint16)val;
+        break;
+    case CRED_USERNAME:
+        credentials[row].userName = value.toString();
+        break;
+    case CRED_PASSWORD:
+        credentials[row].password = value.toString();
+        break;
+    default:
+        return false;
+    }
+    emit dataChanged(index,index);
+    return true;
+}
+
+bool CredentialTableModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    beginRemoveRows(QModelIndex(),row,row+count-1);
+    for(;count>0;count--)
+        credentials.removeAt(row);
+    endRemoveRows();
+    return true;
+}
+
+
+void CredentialTableModel::addCredential(ConnectionCredentials cred)
+{
+    int row = credentials.size();
+    beginInsertRows(QModelIndex(),row,row);
+    credentials.append(cred);
+    endInsertRows();
+}
+
+void CredentialTableModel::loadCredentials(void)
+{
+    QSettings settings;
+    int size = settings.beginReadArray("CREDENTIALS");
+    for (int i = 0; i < size; ++i)
+    {
+        settings.setArrayIndex(i);
+        int j = 0;
+        for (;j < int(TypeDEFAULT); j++)
+        {
+            if (settings.value("type").toString() == QString(connectionTypeString[j]))
+                break;
+        }
+        if (j == int(TypeDEFAULT))
+            break;
+        // We should probably do some sanity checks here
+        // although this is all user-changeable in the GUI, so bad values should be handled gracefully
+        credentials.append(ConnectionCredentials((ConnectionType)(j),
+                                                 settings.value("host").toString(),
+                                                 (qint16)(settings.value("port").toInt()),
+                                                 settings.value("user").toString(),
+                                                 settings.value("password").toString()));
+    }
+    settings.endArray();
+}
+
+void CredentialTableModel::saveCredentials(void)
+{
+    QSettings settings;
+    settings.beginWriteArray("CREDENTIALS");
+    for (int i = 0; i < credentials.size(); ++i)
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("type", connectionTypeString[credentials.at(i).type]);
+        settings.setValue("host", credentials.at(i).hostName);
+        settings.setValue("port", credentials.at(i).port);
+        settings.setValue("user", credentials.at(i).userName);
+        settings.setValue("password", credentials.at(i).password);
+    }
+    settings.endArray();
+
+}
+
+ComboBoxDelegate::ComboBoxDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+{
+}
+
+QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
+     const QStyleOptionViewItem &/* option */,
+     const QModelIndex &/* index */) const
+ {
+     QComboBox *editor = new QComboBox(parent);
+     for (int i=0; i <= (int)TypeDEFAULT; i++)
+         editor->addItem(connectionTypeString[i]);
+     return editor;
+ }
+
+void ComboBoxDelegate::setEditorData(QWidget *editor,
+                                     const QModelIndex &index) const
+ {
+     int value = index.model()->data(index, Qt::EditRole).toInt();
+
+     QComboBox *comboBox = static_cast<QComboBox*>(editor);
+     comboBox->setCurrentIndex(value);
+ }
+
+void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                    const QModelIndex &index) const
+ {
+     QComboBox *comboBox = static_cast<QComboBox*>(editor);
+
+     model->setData(index, comboBox->currentIndex(), Qt::EditRole);
+ }
+
+void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}
+
+LoginDialog::LoginDialog(QWidget *parent)
+    : QDialog(parent)
+{
+	ui.setupUi(this);
+    newCredMenu = new QMenu("New credentials...",this);
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("IGS"),ConnectionCredentials(TypeIGS,"igs.joyjoy.net", 7777,"",""),(QObject*)this)));
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("WING"),ConnectionCredentials(TypeWING,"wing.gr.jp", 1515,"",""),(QObject*)this)));
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("LGS"),ConnectionCredentials(TypeLGS,"lgs.taiwango.net", 9696,"",""),(QObject*)this)));
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("CyberORO"),ConnectionCredentials(TypeORO,"211.38.95.221", 7447,"",""),(QObject*)this)));
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("Tygem"),ConnectionCredentials(TypeTYGEM,"121.189.9.52", 80,"",""),(QObject*)this)));
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("eWeiQi"),ConnectionCredentials(TypeEWEIQI,"121.189.9.52", 80,"",""),(QObject*)this)));
+    newCredMenu->addAction((QAction*)(new NewCredentialsAction(QString("Tom"),ConnectionCredentials(TypeTOM,"61.135.158.147", 80,"",""),(QObject*)this)));
+    credModel = new CredentialTableModel(this);
+    slot_toggleEditable(); // Sets "editable" to false
+    ui.credentialView->setModel((QAbstractTableModel*)credModel);
+    ui.credentialView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.credentialView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.credentialView->setItemDelegateForColumn(0,new ComboBoxDelegate(this));
+    ui.credentialView->setColumnWidth(CRED_PROTOCOL,80);
+    ui.credentialView->setColumnWidth(CRED_PORT,50);
+    connect(ui.editButton, SIGNAL(clicked()), this, SLOT(slot_toggleEditable()));
+    connect(ui.credentialView, SIGNAL(activated(QModelIndex)), this, SLOT(slot_connect(QModelIndex)));
+    connect(newCredMenu, SIGNAL(triggered(QAction *)), this, SLOT(slot_newCredential(QAction *)));
+    ui.credentialView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui.credentialView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
+}
+
+LoginDialog::~LoginDialog()
+{
+    delete newCredMenu;
+    delete credModel;
+}
+
+void LoginDialog::slot_connect(QModelIndex index)
+{
+    if(credModel->editable)
+        return;
+
+    int row = index.row();
+    if ( credModel->credentials.at(row).userName.isEmpty() )
+    {
+        QMessageBox::information(this, tr("Empty Login"), tr("You must enter a username"));
+        return;
+    }
+
     this->setEnabled(false);
     /* Here a possibility to cancel the connection
      * while it is being created could be provided using
      * void NetworkConnection::slot_cancelConnecting(void) */
 
 	//if(ui.connectPB->isDown())	//wth?  unreliable?
-	if(serverlistdialog_open)
-		return;
-	if(ui.loginEdit->currentText() == QString())
-	{
-		QMessageBox::information(this, tr("Empty Login"), tr("You must enter a username"));
-		return;
-	}
-	hide();
 
-	serverlistdialog_open = true;
-	connection = newConnection(serverStringToConnectionType(connectionName), ui.loginEdit->currentText(), ui.passwordEdit->text());
+    connection = newConnection(credModel->credentials.at(row));
+    connect(connection,SIGNAL(stateChanged(ConnectionState)),this,SLOT(slot_receiveConnectionState(ConnectionState)));
     connectionWidget->setNetworkConnection(connection);
-	/* We need to wait here to get authorization confirm, no errors,
-	   maybe popup either "please wait" dialog, which we'd annoyingly
-	   have to handle and then close which might require a separate
-	   dialog class, or just have the connect button grayed out or down.*/
-	int connectionStatus;
-	while((connectionStatus = connection->getConnectionState()) == ND_WAITING)
-		QApplication::processEvents(QEventLoop::AllEvents, 300);
-	serverlistdialog_open = false;
-
-    switch(connectionStatus)
-    {
-    case ND_BADPASSWORD:
-		QMessageBox::information(this, tr("Bad Password"), tr("Invalid Password"));
-        break;
-    case ND_BADLOGIN:
-		QMessageBox::information(this, tr("Bad Login"), tr("Invalid Login"));
-        break;
-    case ND_ALREADYLOGGEDIN:
-		/* FIXME possibly either here or in network specific code, we want to
-		 * prompt to disconnect the other account, or just do it automatically */
-		QMessageBox::information(this, tr("Already Logged In"), tr("Are you logged in somewhere else?"));
-        break;
-    case ND_BADCONNECTION:
-    case ND_BADHOST:
-		QMessageBox::information(this, tr("Can't connect"), tr("Can't connect to host!"));
-        break;
-    case ND_CONN_REFUSED:
-		QMessageBox::information(this, tr("Connection Refused"), tr("Server may be down"));
-        break;
-    case ND_PROTOCOL_ERROR:
-		QMessageBox::information(this, tr("Protocol Error"), tr("Check for qGo update"));
-        break;
-    case ND_USERCANCELED:
-        /* I think login is now responsible for mediating that
-         * first connection netdispatch, calls mainwindow
-         * which will close the connection.  FIXME, responsibilities
-         * are not clear even if they work out. */
-        show();
-        break;
-    case ND_CONNECTED:
-		for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
-		{
-			if((*hi)->host() == connectionName)
-			{
-				if((*hi)->loginName() == ui.loginEdit->currentText())
-				{
-					delete (*hi);
-					hostlist->erase(hi);
-                    break;
-				}
-			}
-		}
-		Host * h = new Host(connectionName, ui.loginEdit->currentText(), 
-			(ui.savepasswordCB->isChecked() ? ui.passwordEdit->text() : QString()));
-        hostlist->insert(0, h);
-		//SUCCESS
-        // This should be handled by connectionWidget itself.
-        connectionWidget->setupButtons();
-        connectionWidget->setEnabled(true);
-		done(1);
-		return;
-	}
-    connectionWidget->setNetworkConnection(0);
-	delete connection;
-	connection = 0;
-    this->setEnabled(true);
 }
 
 void LoginDialog::slot_cancel(void)
 {
 	if(connection)
 		connection->userCanceled();
-	done(0);
+    this->setEnabled(true);
+    reject();
 }
 
-void LoginDialog::slot_editTextChanged(const QString & text)
+void LoginDialog::slot_toggleEditable(void)
 {
-	/* This is a little clumsy but its a short list, probably less than 20 */
-	for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
-	{
-		if((*hi)->host() == connectionName)
-		{
-			if((*hi)->loginName() == text)
-			{
-				if((*hi)->password() != QString())
-				{
-					ui.passwordEdit->setText((*hi)->password());
-					ui.savepasswordCB->setChecked(true);
-				}
-				else
-				{
-					ui.passwordEdit->setText(QString());
-					ui.savepasswordCB->setChecked(false);
-				}
-				return;
-			}
-		}
-	}
-	ui.passwordEdit->setText(QString());
+    credModel->editable = !(credModel->editable);
+    if (credModel->editable)
+    {
+        ui.editButton->setText("&Save");
+        ui.editLabel->setText("Right click to edit");
+    } else {
+        ui.editButton->setText("&Edit");
+        ui.editLabel->setText("");
+        ui.editLabel->repaint();
+        credModel->saveCredentials();
+    }
 }
 
-ConnectionType LoginDialog::serverStringToConnectionType(const QString & s)
+void LoginDialog::slot_newCredential(QAction *action)
 {
-	if(s == "IGS")
-		return TypeIGS;
-	else if(s == "WING")
-		return TypeWING;
-	else if(s == "LGS")
-		return TypeLGS;
-	else if(s == "CyberORO")
-		return TypeORO;
-	else if(s == "Tygem")
-		return TypeTYGEM;
-	else if(s == "eWeiQi")
-		return TypeEWEIQI;
-	else if(s == "Tom")
-		return TypeTOM;
-	else
-		return TypeUNKNOWN;
+    credModel->addCredential(((NewCredentialsAction*)action)->cred);
 }
 
-QString LoginDialog::connectionTypeToServerString(const ConnectionType c)
+void LoginDialog::slot_showPopup(const QPoint & iPoint)
 {
-	switch(c)
+    if (!credModel->editable)
+        return;
+    popup_item = ui.credentialView->indexAt(iPoint);
+    QMenu menu(ui.credentialView);
+    QAction * deleteAction = new QAction(tr("Delete"), 0);
+    menu.addMenu(newCredMenu);
+    if (popup_item != QModelIndex())
+    {
+        connect(deleteAction,SIGNAL(triggered()),this,SLOT(slot_deleteCredential()));
+        menu.addSeparator();
+        menu.addAction(deleteAction);
+    }
+
+    menu.exec(ui.credentialView->mapToGlobal(iPoint));
+    delete deleteAction;
+}
+
+void LoginDialog::slot_deleteCredential(void)
+{
+    credModel->removeRow(popup_item.row());
+}
+
+void LoginDialog::slot_receiveConnectionState(ConnectionState newState)
+{
+    switch(newState)
+    {
+    case CONNECTED:
+        connectionWidget->setupButtons();
+        connectionWidget->setEnabled(true);
+        this->setEnabled(true);
+        this->accept();
+        return;
+    case AUTH_FAILED:
+        QMessageBox::information(this, tr("Bad Login"), tr("Invalid Login"));
+        break;
+    case PASS_FAILED:
+        QMessageBox::information(this, tr("Bad Password"), tr("Invalid Password"));
+        break;
+    case PROTOCOL_ERROR:
+        QMessageBox::information(this, tr("Protocol Error"), tr("This may also result from wrong username or password"));
+        break;
+    case CANCELED:
+        break;
+    case ALREADY_LOGGED_IN:
+        QMessageBox::information(this, tr("Already Logged In"), tr("Are you logged in somewhere else?"));
+        break;
+    case CONN_REFUSED:
+        QMessageBox::information(this, tr("Connection Refused"), tr("Server may be down"));
+        break;
+    case HOST_NOT_FOUND:
+    case SOCK_TIMEOUT:
+    case UNKNOWN_ERROR:
+        QMessageBox::information(this, tr("Can't connect"), tr("Can't connect to host!"));
+        break;
+    default:
+        return; // waiting
+    }
+    // Arrive here only in case of connection error
+    disconnect(connection,SIGNAL(stateChanged(ConnectionState)),this,SLOT(slot_receiveConnectionState(ConnectionState)));
+    connectionWidget->setNetworkConnection(0);
+    connection->deleteLater();
+    connection = 0;
+    this->setEnabled(true);
+}
+
+NetworkConnection * LoginDialog::newConnection(ConnectionCredentials cred)
+{
+    switch(cred.type)
 	{
 		case TypeIGS:
-			return "IGS";
-			break;
-		case TypeWING:
-			return "WING";
-			break;
-		case TypeLGS:
-			return "LGS";
-			break;
+            return new IGSConnection(cred);
 		case TypeORO:
-			return "CyberORO";
-			break;
-		case TypeTYGEM:
-			return "Tygem";
-			break;
-		case TypeEWEIQI:
-			return "eWeiQi";
-			break;
-		case TypeTOM:
-			return "Tom";
-			break;
-		default:
-			return "Unknown";
-			break;
-	}
-}
-
-NetworkConnection * LoginDialog::newConnection(ConnectionType connType, QString username, QString password)
-{
-	switch(connType)	
-	{
-		case TypeIGS:
-			return new IGSConnection(username, password);
-		case TypeORO:
-			return new CyberOroConnection(username, password);
+            return new CyberOroConnection(cred);
 		case TypeWING:
-			return new WingConnection(username, password);
+            return new WingConnection(cred);
 		case TypeLGS:
-			return new LGSConnection(username, password);
+            return new LGSConnection(cred);
 		case TypeTYGEM:
-			return new TygemConnection(username, password);
+            return new TygemConnection(cred);
 		case TypeEWEIQI:
-			return new EWeiQiConnection(username, password);
+            return new EWeiQiConnection(cred);
 		case TypeTOM:
-			return new TomConnection(username, password);
+            return new TomConnection(cred);
 		default:
-			qDebug("Bad connection Type");
+            qDebug("LoginDialog::newConnection : Bad connection Type");
 			// ERROR handling???
 			return 0;
 	}
-}
-
-void LoginDialog::slot_cbconnectChanged(int)
-{
-    connectionName = ui.serverComboBox->currentText();
-    loadAccounts();
-}
-
-void LoginDialog::loadAccounts(void)
-{
-    ui.loginEdit->blockSignals(true);
-    ui.loginEdit->clear();
-    ui.passwordEdit->clear();
-    bool firstloginitem = true;
-    for(HostList::iterator hi = hostlist->begin(); hi != hostlist->end(); hi++)
-    {
-        if((*hi)->host() == connectionName)
-        {
-            ui.loginEdit->addItem((*hi)->loginName());
-            if(firstloginitem)
-            {
-                if((*hi)->password() != QString())
-                {
-                    ui.passwordEdit->setText((*hi)->password());
-                    ui.savepasswordCB->setChecked(true);
-                }
-                firstloginitem = false;
-            }
-        }
-    }
-    ui.loginEdit->blockSignals(false);
 }

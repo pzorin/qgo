@@ -313,7 +313,7 @@ void ConnectionWidget::setupButtons(void)
 /* Maybe it should be here? */
 void ConnectionWidget::onConnectionError(void)
 {
-    qDebug("onConnectionError");
+    qDebug("ConnectionWidget::onConnectionError(void)");
     closeConnection(true);		//probably don't care about return here since connection is likely dead.
                     //could be a crash here though or maybe shouldn't be here at all doublecheck FIXME
     /* FIXME this can get stuck open if we get a connection error on connect, like the app doesn't quit when

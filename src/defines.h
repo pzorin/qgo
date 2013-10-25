@@ -90,13 +90,26 @@ enum TimeSystem { none, absolute, byoyomi, canadian, tvasia };
 
 /*
  * Game server enums
+ * We rely on the fact that the known types come first,
+ * followed by TypeDEFAULT, followed by other types
+ *
+ * Note that a list of user-visible strings corresponding to these types
+ * is maintained in login.cpp; that list must be in the same order.
  */
-/* ConnectionType in line with ui comboBox_server entry. FIXME to make more securely connected */
-enum ConnectionType { TypeNone = 0, TypeIGS, TypeWING, TypeLGS,
-			 TypeORO,
-			 TypeTYGEM, TypeEWEIQI, TypeTOM,
-			TypeUNKNOWN, TypeNNGS, TypeCTN, TypeCWS, TypeDEFAULT };
-// TypeCyberORO?? just IGS, and CyberORO, instead of with Type?? FIXME
+enum ConnectionType { TypeIGS, TypeWING, TypeLGS, TypeORO, TypeTYGEM, TypeEWEIQI, TypeTOM,
+                      TypeDEFAULT, TypeNone, TypeUNKNOWN,
+                      TypeNNGS, TypeCTN, TypeCWS}; // These are not implemented
+class ConnectionCredentials
+{
+public:
+    ConnectionCredentials(ConnectionType t, QString h, qint16 p, QString u, QString pass) :
+        type(t), hostName(h), port(p), userName(u), password(pass) {};
+    ConnectionType type;
+    QString hostName;
+    qint16 port;
+    QString userName;
+    QString password;
+};
 
 /*
 * Global structs

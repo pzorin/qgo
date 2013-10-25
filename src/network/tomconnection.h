@@ -25,7 +25,7 @@
 class TomConnection : public TygemConnection
 {
 	public:
-		TomConnection(const QString & user, const QString & pass);
+        TomConnection(const ConnectionCredentials credentials);
 		//~TomConnection();
 		virtual const char * getCodecString(void);
 		virtual QString getPlaceString(void);

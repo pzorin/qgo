@@ -29,18 +29,8 @@
 #include "talk.h"
 #include "playergamelistings.h"
 
-WingConnection::WingConnection(const QString & user, const QString & pass) :
-IGSConnection()
-{
-	if(openConnection("wing.gr.jp", 1515))
-	{
-		connectionState = LOGIN;
-		username = user;
-		password = pass;
-	}
-	else
-		qDebug("Can't open Connection\n");	//throw error?
-}
+WingConnection::WingConnection(const ConnectionCredentials credentials) :
+IGSConnection(credentials) {}
 
 QString WingConnection::getPlaceString(void)
 {
@@ -168,7 +158,7 @@ void WingConnection::onReady(void)
 		if(connectionState != PASSWORD_SENT)
 			return;
 		firstonReadyCall = 0;
-		connectionState = CONNECTED;
+        setState(CONNECTED);
 		setKeepAlive(600);
 		/* FIXME Note that wing and lgs use "set" instead of
 		 * "toggle" possibly, so that's maybe an issue */
