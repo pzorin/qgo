@@ -4193,14 +4193,6 @@ void TygemConnection::encode(unsigned char * p, unsigned int cycles)
 	*(uint32_t *)p = c;
 }
 
-bool TygemConnection::isReady(void)
-{
-	if(connectionState == CONNECTED)
-		return 1;
-	else
-		return 0;
-}
-
 void TygemConnection::handleMessage(QString)
 {
 }
@@ -4561,9 +4553,9 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 	p += 4;
 	//printf("Players %d\n", players);
 	if(!received_players && players < 512)
-	{
-		setConnected();
-		received_players = true;
+    {
+        setState(CONNECTED);
+        received_players = true;
 	}
 	//make sure these aren't one off, FIXME,
 	//i.e., cutting off last record, also check on ORO

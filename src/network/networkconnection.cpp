@@ -52,51 +52,6 @@ default_room(0), console_dispatch(0), qsocket(0)
     password = credentials.password;
 }
 
-/* Maybe this should return an enum, but I'm feeling lazy at the moment,
- * and don't want to define two different connectionState like enums */
- /* FIXME there's a bug here.  If we're waiting for a connection and
-  * we have a login dialog open and then we hit disconnect, the login
-  * window, even if canceled, can try to call this function, thus
-  * crashing */
-int NetworkConnection::getConnectionState(void)
-{
-	switch(connectionState)
-	{
-		case AUTH_FAILED:
-			return ND_BADLOGIN;
-		case PASS_FAILED:
-			return ND_BADPASSWORD;
-		case PROTOCOL_ERROR:
-			return ND_PROTOCOL_ERROR;
-		case CONNECTED:
-			return ND_CONNECTED;
-		case CANCELED:
-			return ND_USERCANCELED;
-		case ALREADY_LOGGED_IN:
-			return ND_ALREADYLOGGEDIN;
-		case CONN_REFUSED:
-			return ND_CONN_REFUSED;
-		case HOST_NOT_FOUND:
-			return ND_BADHOST;
-		case SOCK_TIMEOUT:
-			return ND_BADCONNECTION;
-		case UNKNOWN_ERROR:
-			return ND_BADCONNECTION;
-		default:
-			return ND_WAITING;
-	}
-}
-
-void NetworkConnection::setConnected(void)
-{
-    if(connectingDialog)
-    {
-        connectingDialog->deleteLater();
-        connectingDialog = 0;
-    }
-    setState(CONNECTED);
-}
-
 bool NetworkConnection::openConnection(const QString & host, const unsigned short port, bool not_main_connection)
 {	
 	qsocket = new QTcpSocket();	//try with no parent passed for now
@@ -576,6 +531,11 @@ void IGSConnection::OnDelayedCloseFinish()
 void NetworkConnection::setState(ConnectionState newState)
 {
     connectionState = newState;
+    if((newState == CONNECTED) && connectingDialog)
+    {
+        connectingDialog->deleteLater();
+        connectingDialog = NULL;
+    }
     emit stateChanged(newState);
 }
 

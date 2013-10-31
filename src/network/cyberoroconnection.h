@@ -67,8 +67,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendAdjourn(void);
 		virtual void sendRefuseAdjourn(void);
 		virtual void handlePendingData(newline_pipe <unsigned char> * p);
-		virtual bool isReady(void);
-		virtual void onReady(void);
+        virtual void onReady(void);
 		virtual void changeServer(void);
 		virtual void createRoom(void);
 		virtual void sendCreateRoom(class RoomCreate * room);

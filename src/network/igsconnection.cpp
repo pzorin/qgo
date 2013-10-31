@@ -654,14 +654,6 @@ void IGSConnection::handlePassword(QString msg)
 	}
 }
 
-bool IGSConnection::isReady(void)
-{
-	if(connectionState == CONNECTED)
-		return 1;
-	else
-		return 0;
-}
-
 void IGSConnection::onAuthenticationNegotiated(void)
 {
 	needToSendClientToggle = false;
@@ -685,7 +677,7 @@ void IGSConnection::onReady(void)
 		if(connectionState != PASSWORD_SENT)
 			return;
 		firstonReadyCall = 0;
-		setConnected();		//shouldbe just SETUP FIXME
+        setState(CONNECTED);
 		setKeepAlive(600);
 		/* This gets called too much, we need a better
 		 * way to call it */

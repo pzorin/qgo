@@ -80,8 +80,7 @@ class TygemConnection : public NetworkConnection
 		virtual void sendRejectCount(class GameData * data);
 		virtual void sendAcceptCount(class GameData * data);
 		virtual void handlePendingData(newline_pipe <unsigned char> * p);
-		virtual bool isReady(void);
-		virtual void onReady(void);
+        virtual void onReady(void);
 		virtual void changeServer(void);
 		virtual void createRoom(void);
 		virtual void sendCreateRoom(class RoomCreate * room);

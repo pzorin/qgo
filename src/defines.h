@@ -60,18 +60,6 @@
 #define GD_OPP_NO_NMATCH		6
 #define GD_RESET			7
 
-/* NetworkDispatch codes */
-#define ND_CONNECTED			1
-#define ND_WAITING			0
-#define ND_BADLOGIN			-1
-#define ND_BADPASSWORD			-2
-#define ND_BADHOST			-3
-#define ND_BADCONNECTION		-4		//something of a default
-#define ND_PROTOCOL_ERROR		-5
-#define ND_USERCANCELED			-6
-#define ND_ALREADYLOGGEDIN		-7
-#define ND_CONN_REFUSED			-8
-
 /*
 * Enum definitions
 */

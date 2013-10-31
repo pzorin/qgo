@@ -75,7 +75,6 @@ class NetworkConnection : public QObject
 	public:
         NetworkConnection(ConnectionCredentials credentials);
 		~NetworkConnection();
-		int getConnectionState();	//should probably return enum
         void userCanceled(void) { setState(CANCELED); /* anything else? */};
 		int checkForOpenBoards(void);
 public slots:
@@ -132,8 +131,7 @@ public:
 		ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; };
 		Room * getDefaultRoom(void) { return default_room; };
 		class PlayerListing * getPlayerListingFromFriendWatchListing(class FriendWatchListing & f);
-		virtual bool isReady(void) = 0;
-		virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
+        virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
 		virtual void changeServer(void) {};
 		virtual void createRoom(void) {};
 		virtual void sendCreateRoom(class RoomCreate *) {};
@@ -246,8 +244,7 @@ public:
 		void closeConnection(bool send_disconnect = true);
 		virtual bool readyToWrite(void) { return true; };
 		virtual void setReadyToWrite(void) {};
-		void setConnected(void);
-		virtual void onAuthenticationNegotiated(void);
+        virtual void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
 		QTcpSocket * getQSocket(void) { return qsocket; };
 		void writeFromBuffer(void);

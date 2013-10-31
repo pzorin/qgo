@@ -506,8 +506,7 @@ int CyberOroConnection::reconnectToServer(void)
 	{
 		qDebug("Reconnected");
         setState(CONNECTED);
-		setConnected();			//FIXME still need to move this somewhere better
-		game_code_to_number.clear();
+        game_code_to_number.clear();
 	}
 	else
 	{
@@ -2701,14 +2700,6 @@ void CyberOroConnection::encode(unsigned char * h, unsigned int cycle_size)
 			 * then do some crazy repeated shit */
 		}
 	}
-}
-
-bool CyberOroConnection::isReady(void)
-{
-	if(connectionState == CONNECTED)
-		return 1;
-	else
-		return 0;
 }
 
 void CyberOroConnection::handleMessage(QString)
