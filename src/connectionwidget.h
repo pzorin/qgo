@@ -28,7 +28,6 @@
 
 class RoomListing;
 class NetworkConnection;
-class ServerListStorage;
 class Talk;
 class ChannelListing;
 class GameDialog;
@@ -54,10 +53,6 @@ public:
     void recvSeekCondition(class SeekCondition * s);
     void recvSeekCancel(void);
     void recvSeekPlayer(QString player, QString condition);
-
-    /* This is awkward here but has the same life as mainwindow */
-    ServerListStorage & getServerListStorage(void) { return *serverliststorage; };
-
     void recvRoomListing(const RoomListing & room, bool b);
     void recvChannelListing(const ChannelListing & channel, bool b);
     void changeChannel(const QString & s);
@@ -123,7 +118,6 @@ private:
     bool	tn_ready;
     bool	tn_wait_for_tn_ready;
     NetworkConnection * connection;
-    ServerListStorage * serverliststorage;
     QMenu 		*seekMenu;
     QList<Talk*>	talkList;
     QList<GameDialog*> matchList;

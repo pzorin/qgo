@@ -25,7 +25,6 @@
 #include "playergamelistings.h"
 #include "gamedata.h"
 #include "room.h"
-#include "serverliststorage.h"
 #include "serverlistdialog.h"
 
 EWeiQiConnection::EWeiQiConnection(const ConnectionCredentials credentials)
@@ -36,18 +35,7 @@ EWeiQiConnection::EWeiQiConnection(const ConnectionCredentials credentials)
 	{
 		new CodecWarnDialog(getCodecString());
 		serverCodec = QTextCodec::codecForLocale();
-	}
-	if(!getServerListStorage().restoreServerList(TypeEWEIQI, serverList))
-			requestServerInfo();
-	else
-	{
-		if(reconnectToServer() < 0)
-		{
-			qDebug("User canceled");
-            setState(CANCELED);
-			return;
-		}
-	}
+    }
 }
 
 const char * EWeiQiConnection::getCodecString(void)

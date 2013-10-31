@@ -31,9 +31,6 @@
 #include "messages.h"
 #include "room.h"
 
-#include "network/serverliststorage.h"
-
-
 ConnectionWidget::ConnectionWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConnectionWidget)
@@ -91,9 +88,6 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect( ui->openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
     connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( setLooking(bool) ) );
 
-    // for saving server ip lists
-    serverliststorage = new ServerListStorage();
-
     //IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
     ui->gamesView->setColumnWidth ( 0, 40 );	//35
     ui->gamesView->setColumnWidth ( 1, 100 );
@@ -129,7 +123,6 @@ ConnectionWidget::~ConnectionWidget()
     settings.setValue("FRIENDSFILTER", ui->filterFriendsCheckBox->isChecked());
     settings.setValue("WATCHESFILTER", ui->filterWatchesCheckBox->isChecked());
     delete ui;
-    delete serverliststorage;
     cleanupServerData();
 }
 

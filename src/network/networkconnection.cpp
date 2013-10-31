@@ -143,11 +143,6 @@ void NetworkConnection::writeZeroPaddedString(char * dst, const QString & src, i
 		dst[i] = 0x00;
 }
 
-class ServerListStorage & NetworkConnection::getServerListStorage(void)
-{
-    return connectionWidget->getServerListStorage();
-}
-
 int NetworkConnection::checkForOpenBoards(void)
 {
 	BoardDispatch * boarddispatch;

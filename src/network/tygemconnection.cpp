@@ -41,7 +41,6 @@
 #include "createroomdialog.h"
 #include "gamedata.h"
 #include "playergamelistings.h"
-#include "serverliststorage.h"
 #include "matchnegotiationstate.h"
 #include <QMessageBox>
 
@@ -153,18 +152,9 @@ TygemConnection::TygemConnection(const ConnectionCredentials credentials)
 			new CodecWarnDialog(getCodecString());
 			serverCodec = QTextCodec::codecForLocale();
 		}
-		if(!getServerListStorage().restoreServerList(TypeTYGEM, serverList))
-			requestServerInfo();
-		else
-		{
-			if(reconnectToServer() < 0)
-			{
-				qDebug("User canceled");
-                setState(CANCELED);
-				return;
-			}
-		}
-	}
+    }
+
+    requestServerInfo();
 }
 
 /* I think we must not request this too often which is why hitting cancel and
@@ -211,8 +201,7 @@ TygemConnection::~TygemConnection()
 	// FIXME for non tygem subclasses!
 	qDebug("Destroying Tygem connection");
 	closeConnection();
-	//backup serverlist
-	getServerListStorage().saveServerList(connectionType, serverList);
+    //maybe backup serverList at this point
 }
 
 void TygemConnection::OnConnected()

@@ -248,9 +248,8 @@ public:
 		virtual void onReady(void);
 		QTcpSocket * getQSocket(void) { return qsocket; };
 		void writeFromBuffer(void);
-		void writeZeroPaddedString(char * dst, const QString & src, int size);
-		class ServerListStorage & getServerListStorage(void);
-		bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
+        void writeZeroPaddedString(char * dst, const QString & src, int size);
+        bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
 		void latencyOnSend(void);
 		void latencyOnRecv(void);
 		void changeChannel(const QString & s);

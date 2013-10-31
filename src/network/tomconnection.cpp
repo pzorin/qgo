@@ -25,7 +25,6 @@
 #include "playergamelistings.h"
 #include "gamedata.h"
 #include "serverlistdialog.h"
-#include "serverliststorage.h"
 #include "codecwarndialog.h"
 /* Note that Tom either has additional checks on this or simply that one cannot play against
  * the same username meaning that sendMatchOffers may not be received. */
@@ -39,18 +38,7 @@ TomConnection::TomConnection(const ConnectionCredentials credentials)
 	{
 		new CodecWarnDialog(getCodecString());
 		serverCodec = QTextCodec::codecForLocale();
-	}
-	if(!getServerListStorage().restoreServerList(TypeTOM, serverList))
-			requestServerInfo();
-	else
-	{
-		if(reconnectToServer() < 0)
-		{
-			qDebug("User canceled");
-            setState(CANCELED);
-			return;
-		}
-	}
+    }
 }
 
 const char * TomConnection::getCodecString(void)

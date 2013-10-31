@@ -87,7 +87,6 @@ network/protocol.h \
 network/quickconnection.h \
 network/room.h \
 network/serverlistdialog.h \
-network/serverliststorage.h \
 network/setphrasepalette.h \
 network/talk.h \
 network/tomconnection.h \
@@ -146,8 +145,7 @@ SOURCES += displayboard.cpp \
 	   network/orosetphrasechat.cpp \
  	   network/quickconnection.cpp \
  	   network/room.cpp \
-	   network/serverlistdialog.cpp \
-	   network/serverliststorage.cpp \
+           network/serverlistdialog.cpp \
 	   network/setphrasepalette.cpp \
  	   network/talk.cpp \
 	   network/tomconnection.cpp \
