@@ -111,6 +111,9 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui->playerView->setColumnWidth ( 6, 40 );
     ui->playerView->setColumnWidth ( 7, 40 );
     ui->playerView->setColumnWidth ( 8, 80 );
+
+    setGameCountStat(0);
+    setPlayerCountStat(0);
 }
 
 ConnectionWidget::~ConnectionWidget()
@@ -1240,4 +1243,14 @@ void ConnectionWidget::setRankSpreadView(void)
         dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter())->setFilterMaxRank(connection->rankToScore(rkMax));
     }
     qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
+}
+
+void ConnectionWidget::setGameCountStat(int count)
+{
+    ui->statusGames->setText(tr(" G: %n","Number of games on server",count));
+}
+
+void ConnectionWidget::setPlayerCountStat(int count)
+{
+    ui->statusUsers->setText(tr(" P: %n","Number of players on server",count));
 }

@@ -239,7 +239,6 @@ struct _preferences
 /* There's only one of each of these, and they're both
  * used in weird places, so we'll make them global */
 extern _preferences preferences;
-extern class MainWindow * mainwindow;
 extern class ConnectionWidget * connectionWidget;
 
 #ifdef Q_OS_WIN

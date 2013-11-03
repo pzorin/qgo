@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 
-#include "stdio.h"
 #include "defines.h"
 #include "mainwindow.h"
 #include "boardwindow.h"
@@ -28,6 +27,7 @@
 #include "login.h"
 #include "sgfpreview.h"
 #include "audio.h"
+#include "sgfparser.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	: QMainWindow( parent,  flags )
@@ -39,8 +39,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	ui.setupUi(this);
 	//hide by default
 	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));
-	initStatusBar();
-	/* FIXME, really need a list of such things, 0s */
 
 	// loads the settings
     loadSettings();
@@ -96,67 +94,6 @@ void MainWindow::closeEvent(QCloseEvent * e)
 	saveSettings();
 }
 
-	/* We're not sure yet what to do with the status bar,
-     * how to divy it up FIXME */
-void MainWindow::initStatusBar()
-{
-    statusBar()->show();
-	statusBar()->showMessage(tr("Ready."));  // Normal indicator
-
-	// Standard Text instead of "message" cause WhatsThisButten overlaps
-    statusMessage = new QLabel("", statusBar());
-	statusMessage->setAlignment(Qt::AlignCenter /*| SingleLine*/);
-	statusBar()->addPermanentWidget(statusMessage/*, 0, true*/);  // Permanent indicator
-
-    // The users widget
-    statusUsers = new QLabel(statusBar());
-    setPlayerCountStat(0);
-	statusUsers->setAlignment(Qt::AlignCenter /* | SingleLine*/);
-	statusBar()->addPermanentWidget(statusUsers /*, 0, true*/);  // Permanent indicator
-	statusUsers->setToolTip( tr("Current online players / watched players"));
-	statusUsers->setWhatsThis( tr("Displays the number of current online players\nand the number of online players you are watching.\nA player you are watching has an entry in the 'watch player:' field."));
-
-	// The games widget
-    statusGames = new QLabel(statusBar());
-    setGameCountStat(0);
-	statusGames->setAlignment(Qt::AlignCenter /*| SingleLine*/);
-	statusBar()->addPermanentWidget(statusGames /*, 0, true*/);  // Permanent indicator
-	statusGames->setToolTip( tr("Current online games / observed games + matches"));
-    statusGames->setWhatsThis( tr("Displays the number of games currently played on this server and the number of games you are observing or playing"));
-
-	// The server widget
-    statusServer = new QLabel(tr(" OFFLINE "), statusBar());
-	statusServer->setAlignment(Qt::AlignCenter /*| SingleLine*/);
-	statusBar()->addPermanentWidget(statusServer /*, 0, true*/);  // Permanent indicator
-	statusServer->setToolTip( tr("Current server"));
-	statusServer->setWhatsThis( tr("Displays the current server's name or OFFLINE if you are not connected to the internet."));
-/*
-	// The channel widget
-    statusChannel = new QLabel("", statusBar());
-	statusChannel->setAlignment(Qt::AlignCenter | SingleLine);
-	statusBar()->addWidget(statusChannel, 0, true);  // Permanent indicator
-	QToolTip::add(statusChannel, tr("Current channels and users"));
-	QWhatsThis::add(statusChannel, tr("Displays the current channels you are in and the number of users inthere.\nThe tooltip text contains the channels' title and users' names"));
-*/
-	// Online Time
-    statusOnlineTime = new QLabel(" 00:00 ", statusBar());
-	statusOnlineTime->setAlignment(Qt::AlignCenter);
-	statusBar()->addPermanentWidget(statusOnlineTime /*, 0, true*/);  // Permanent indicator
-	statusOnlineTime->setToolTip( tr("Online Time"));
-	statusOnlineTime->setWhatsThis( tr("Displays the current online time.\n(A) -> auto answer\n(Hold) -> hold the line"));
-
-}
-
-void MainWindow::setGameCountStat(int count)
-{
-    statusGames->setText(tr(" G: %n","Number of games on server",count));
-}
-
-void MainWindow::setPlayerCountStat(int count)
-{
-    statusUsers->setText(tr(" P: %n","Number of players on server",count));
-}
-
 /*
  * The 'New Game' button in 'sgf editor' tab has been pressed.
  */
@@ -195,10 +132,25 @@ void MainWindow::slot_fileOpenBoard()
     QGridLayout *layout = (QGridLayout*)dialog->layout();
     layout->addWidget(previewWidget, 1, 3);
     connect(dialog,SIGNAL(currentChanged(QString)),previewWidget,SLOT(setPath(QString)));
-    connect(dialog,SIGNAL(accepted()),previewWidget,SLOT(openSGF()));
+    connect(dialog,SIGNAL(fileSelected(QString)),this,SLOT(openSGF(QString)));
     dialog->setNameFilter("Smart Game Format (*.sgf *.SGF)");
     dialog->setFileMode(QFileDialog::ExistingFile);
     dialog->show(); // Maybe exec()
+}
+
+void MainWindow::openSGF(QString path)
+{
+    SGFParser * MW_SGFparser = new SGFParser(NULL);
+    QString SGFloaded = MW_SGFparser->loadFile(path);
+    if (SGFloaded == NULL)
+        return;
+
+    GameData * GameLoaded = MW_SGFparser->initGame(SGFloaded, path);
+    if (GameLoaded == NULL)
+        return;
+
+    GameLoaded->gameMode = modeNormal;
+    this->addBoardWindow(new BoardWindow(new GameData(GameLoaded), true, true));
 }
 
 /*

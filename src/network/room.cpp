@@ -71,9 +71,8 @@ Room::Room(NetworkConnection * c)
     gamesView->blockSignals(false);
 
     connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateListing(PlayerListing*)));
-    // Note that pointer casting allows to omit the corresponding headers from this file, thus speeding up compilation
-    connect(playerListModel,SIGNAL(countChanged(int)),(QObject*)mainwindow,SLOT(setPlayerCountStat(int)));
-    connect(gamesListModel,SIGNAL(countChanged(int)),(QObject*)mainwindow,SLOT(setGameCountStat(int)));
+    connect(playerListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setPlayerCountStat(int)));
+    connect(gamesListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setGameCountStat(int)));
 	
 	players = 0;
 	games = 0;

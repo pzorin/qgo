@@ -45,12 +45,6 @@ void SGFPreview::clearData()
     ui->File_Size->setText("");
 }
 
-void SGFPreview::openSGF()
-{
-    if (GameLoaded != NULL)
-        mainwindow->addBoardWindow(new BoardWindow(new GameData(GameLoaded), true, true));
-}
-
 void SGFPreview::setPath(QString path)
 {
     //if (QFileInfo("path").isFile() == false)
@@ -74,9 +68,6 @@ void SGFPreview::setPath(QString path)
 
     GameLoaded->gameMode = modeNormal;
 
-        GameLoaded->gameMode = modeNormal;
-        //ui->button_loadGame->setEnabled(true);
-
         QString komi, hcp, sz;
         komi.setNum(GameLoaded->komi);
         hcp.setNum(GameLoaded->handicap);
@@ -90,7 +81,6 @@ void SGFPreview::setPath(QString path)
         ui->File_Komi->setText(komi);
         ui->File_Size->setText(sz);
 
-// Copied from MainWindow::displayGame(Board*)
         DisplayBoard* board = ui->displayBoard;
         board->clearData();
         if (board->getSize() != GameLoaded->board_size)

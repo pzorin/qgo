@@ -70,10 +70,9 @@ public slots:
 	void slot_newComputer_HandicapChange(int);
     void slot_languageChanged(int);
 
-    void setGameCountStat(int);
-    void setPlayerCountStat(int);
-
     void openConnectDialog(void);
+
+    void openSGF(QString path);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -82,11 +81,7 @@ protected:
 
 private:
     Ui::MainWindow ui;
-    QLabel *statusMessage, *statusUsers, *statusGames, *statusServer,*statusOnlineTime;
-
 	Sound *connectSound, *gameSound;
-
-    void initStatusBar();
 
     QList<BoardWindow *> boardWindowList;
 	QString currentWorkingDir;

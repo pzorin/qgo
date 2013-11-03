@@ -98,6 +98,9 @@ public slots:
 
     void slot_statsPlayer(PlayerListing*);
 
+    void setGameCountStat(int);
+    void setPlayerCountStat(int);
+
 private slots:
     void setRankSpreadView(void);
     

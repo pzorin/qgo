@@ -20,7 +20,6 @@ public:
     void clearData();
 
 public slots:
-    void openSGF();
     void setPath(QString path);
 
 signals:

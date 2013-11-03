@@ -1464,7 +1464,6 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
@@ -1535,7 +1534,9 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Open...</string>
