@@ -65,9 +65,9 @@ void ObserverListModel::removeListing(PlayerListing * const listing)
 		const ObserverListItem * item = static_cast<const ObserverListItem *>(items[i]);
 		if(item->getListing() == listing)
 		{
-			emit beginRemoveRows(QModelIndex(), i, i);
+            beginRemoveRows(QModelIndex(), i, i);
 			items.removeAt(i);
-			emit endRemoveRows();
+            endRemoveRows();
 			delete item;
 			return;
 		}
@@ -197,7 +197,7 @@ void PlayerListModel::removeListing(PlayerListing * const l)
 		PlayerListItem * item = static_cast<PlayerListItem *>(items[i]);
 		if(item->getListing() == l)
 		{
-            removeItem(i);
+            removeRow(i);
 			delete item;
 			return;
 		}
@@ -209,14 +209,14 @@ void PlayerListModel::clearList(void)
     const int listSize = items.size();
     if(listSize == 0)
 		return;
-    emit beginRemoveRows(QModelIndex(), 0, listSize - 1);
+    beginRemoveRows(QModelIndex(), 0, listSize - 1);
     for(int i = 0; i < items.count(); i++)
     {
         const PlayerListItem * item = static_cast<const PlayerListItem *>(items[i]);
         delete item;
     }
     items.clear();
-    emit endRemoveRows();
+    endRemoveRows();
 }
 
 QVariant PlayerListModel::data(const QModelIndex & index, int role) const
@@ -250,7 +250,7 @@ PlayerListItem * PlayerListModel::playerListItemFromIndex(const QModelIndex & in
     return static_cast<PlayerListItem*>(items[index.row()]);
 }
 
-PlayerListing * PlayerListModel::getEntry(unsigned int id, const PlayerListing * listing)
+PlayerListing * PlayerListModel::getEntry(unsigned int id)
 {
     PlayerListing * result;
     for (int i=0; i < items.count(); i++)
@@ -258,24 +258,13 @@ PlayerListing * PlayerListModel::getEntry(unsigned int id, const PlayerListing *
         result = ((PlayerListItem *)(items[i]))->getListing();
         if (result->id == id)
         {
-            if (listing)
-            {
-                *result = *listing;
-                emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
-            }
             return result;
         }
     }
-    if (listing)
-    {
-        result = new PlayerListing(*listing); // Should not create a copy here? FIXME
-        insertListing(result);
-    } else
-        result = NULL;
-    return result;
+    return NULL;
 }
 
-PlayerListing * PlayerListModel::getEntry(const QString &name, const PlayerListing * listing)
+PlayerListing * PlayerListModel::getEntry(const QString &name)
 {
     PlayerListing * result;
     for (int i=0; i < items.count(); i++)
@@ -283,21 +272,10 @@ PlayerListing * PlayerListModel::getEntry(const QString &name, const PlayerListi
         result = ((PlayerListItem *)(items[i]))->getListing();
         if (result->name == name)
         {
-            if (listing)
-            {
-                *result = *listing;
-                emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
-            }
             return result;
         }
     }
-    if (listing)
-    {
-        result = new PlayerListing(*listing); // Should not create a copy here? FIXME
-        insertListing(result);
-    } else
-        result = NULL;
-    return result;
+    return NULL;
 }
 
 PlayerListing * PlayerListModel::getPlayerFromNotNickName(const QString & notnickname)
@@ -312,6 +290,42 @@ PlayerListing * PlayerListModel::getPlayerFromNotNickName(const QString & notnic
     return NULL;
 }
 
+PlayerListing * PlayerListModel::updateEntryByName(const PlayerListing * listing)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->name == listing->name)
+        {
+            *result = *listing;
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            return result;
+        }
+    }
+    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
+    insertListing(result);
+    return result;
+}
+
+PlayerListing * PlayerListModel::updateEntryByID(const PlayerListing * listing)
+{
+    PlayerListing * result;
+    for (int i=0; i < items.count(); i++)
+    {
+        result = ((PlayerListItem *)(items[i]))->getListing();
+        if (result->id == listing->id)
+        {
+            *result = *listing;
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            return result;
+        }
+    }
+    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
+    insertListing(result);
+    return result;
+}
+
 void PlayerListModel::deleteEntry(const QString & name)
 {
     PlayerListing * result;
@@ -320,7 +334,7 @@ void PlayerListModel::deleteEntry(const QString & name)
         result = ((PlayerListItem *)(items[i]))->getListing();
         if (result->name == name)
         {
-            removeItem(i);
+            removeRow(i);
             delete result;
             return;
         }
@@ -336,7 +350,7 @@ void PlayerListModel::deleteEntry(unsigned int id)
         result = ((PlayerListItem *)(items[i]))->getListing();
         if (result->id == id)
         {
-            removeItem(i);
+            removeRow(i);
             delete result;
             return;
         }
@@ -640,7 +654,7 @@ void GamesListModel::removeListing(GameListing * const l)
 		{
 			/* Really this is supposed to be not QModelIndex() but the
 			 * parent model index of the model... ?!?? */
-            removeItem(i);
+            removeRow(i);
 			//qDebug("Removing %p %s %p %s", item->getListing()->white, item->getListing()->white_name().toLatin1().constData(),
 			 //     item->getListing()->black, item->getListing()->black_name().toLatin1().constData());
 			delete item;
@@ -651,7 +665,7 @@ void GamesListModel::removeListing(GameListing * const l)
 	qDebug("Couldn't find listing to remove for game id %d", l->number);
 }
 
-GameListing * GamesListModel::getEntry(unsigned int id, const GameListing * listing)
+GameListing * GamesListModel::getEntry(unsigned int id)
 {
     GameListing * result;
     for (int i=0; i < items.count(); i++)
@@ -659,20 +673,27 @@ GameListing * GamesListModel::getEntry(unsigned int id, const GameListing * list
         result = ((GamesListItem *)(items[i]))->getListing();
         if (result->number == id)
         {
-            if (listing)
-            {
-                *result = *listing;
-                emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
-            }
             return result;
         }
     }
-    if (listing)
+    return NULL;
+}
+
+GameListing * GamesListModel::updateEntry(const GameListing * listing)
+{
+    GameListing * result;
+    for (int i=0; i < items.count(); i++)
     {
-        result = new GameListing(*listing); // Should not create a copy here? FIXME
-        insertListing(result);
-    } else
-        result = NULL;
+        result = ((GamesListItem *)(items[i]))->getListing();
+        if (result->number == listing->number)
+        {
+            *result = *listing;
+            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
+            return result;
+        }
+    }
+    result = new GameListing(*listing); // Should not create a copy here? FIXME
+    insertListing(result);
     return result;
 }
 
@@ -684,7 +705,7 @@ void GamesListModel::deleteEntry(unsigned int id)
         result = ((GamesListItem *)(items[i]))->getListing();
         if (result->number == id)
         {
-            removeItem(i);
+            removeRow(i);
             delete result->gameData;		//used by ORO
             delete result;
             return;
@@ -695,14 +716,14 @@ void GamesListModel::deleteEntry(unsigned int id)
 
 void GamesListModel::clearList(void)
 {
-    emit beginRemoveRows(QModelIndex(), 0, items.count() - 1);
+    beginRemoveRows(QModelIndex(), 0, items.count() - 1);
     for(int i = 0; i < items.count(); i++)
 	{
         const GamesListItem * item = static_cast<const GamesListItem *>(items[i]);
 		delete item;
 	}
     items.clear();
-    emit endRemoveRows();
+    endRemoveRows();
 }
 
 QVariant GamesListModel::data(const QModelIndex & index, int role) const
@@ -971,12 +992,17 @@ Qt::ItemFlags ListModel::flags(const QModelIndex & index) const
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-void ListModel::removeItem(int i)
+bool ListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    emit beginRemoveRows(QModelIndex(), i, i);
-    items.removeAt(i);
-    emit endRemoveRows();
+    count--;
+    if (items.size() <= row+count)
+        return false;
+    beginRemoveRows(QModelIndex(), row, row+count);
+    for(; count>=0; count--)
+        items.removeAt(row);
+    endRemoveRows();
     emit countChanged(items.count());
+    return true;
 }
 
 void FilteredView::setFilter(ListFilter * l)

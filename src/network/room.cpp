@@ -230,7 +230,7 @@ void Room::recvToggle(int type, bool val)
 
 GameListing * Room::registerGameListing(GameListing * l)
 {
-    return gamesListModel->getEntry(l->number, l);
+    return gamesListModel->updateEntry(l);
 }
 
 PlayerListing * Room::getPlayerListing(const QString & name)
@@ -366,14 +366,14 @@ void Room::recvPlayerListing(PlayerListing * player)
     if(connection->playerTrackingByID())
 	{
 		if(player->online)
-            registered_player = playerListModel->getEntry(player->id, player);
+            registered_player = playerListModel->updateEntryByID(player);
 		else
             playerListModel->deleteEntry(player->id);
 	}
 	else
 	{
 		if(player->online)
-            registered_player = playerListModel->getEntry(player->name, player);
+            registered_player = playerListModel->updateEntryByName(player);
 		else
             playerListModel->deleteEntry(player->name);
 	}
@@ -413,7 +413,7 @@ void Room::recvGameListing(GameListing * game)
 	
 	if(game->running)
 	{
-        game = gamesListModel->getEntry(key, game);
+        game = gamesListModel->updateEntry(game);
 		connection->checkGameWatched(*game);
 	}
 	else

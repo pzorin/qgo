@@ -187,10 +187,10 @@ class ListModel : public QAbstractTableModel
         //virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
         void setView(FilteredView * v) { view = v; };
         virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+        virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex() );
 signals:
         void countChanged(int);
     protected:
-        void removeItem(int i);
 		friend class PlayerListFilter;
 		friend class GamesListFilter;
         friend class FilteredView;
@@ -234,9 +234,11 @@ class PlayerListModel : public ListModel
 		PlayerListItem * playerListItemFromIndex(const QModelIndex &) const;
         void setAccountName(const QString & name) { account_name = name; };
 		virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
-        PlayerListing * getEntry(const QString & name, const PlayerListing * listing = NULL);
-        PlayerListing * getEntry(unsigned int id, const PlayerListing * listing = NULL);
+        PlayerListing * getEntry(const QString & name);
+        PlayerListing * getEntry(unsigned int id);
         PlayerListing * getPlayerFromNotNickName(const QString & notnickname);
+        PlayerListing * updateEntryByName(const PlayerListing * listing);
+        PlayerListing * updateEntryByID(const PlayerListing * listing);
         void deleteEntry(const QString & name);
         void deleteEntry(unsigned int id);
 public slots:
@@ -267,7 +269,8 @@ class GamesListModel : public ListModel
         void insertListing(GameListing * const l);
 		void updateListing(GameListing * const l);
 		void removeListing(GameListing * const l);
-        GameListing * getEntry(unsigned int id, const GameListing * listing = NULL);
+        GameListing * getEntry(unsigned int id);
+        GameListing * updateEntry(const GameListing * listing);
         void deleteEntry(unsigned int id);
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
