@@ -116,6 +116,10 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
 
     setGameCountStat(0);
     setPlayerCountStat(0);
+
+    QFont monospaceFont("Monospace");
+    monospaceFont.setStyleHint(QFont::TypeWriter);
+    ui->MultiLineEdit2->setFont(monospaceFont);
 }
 
 ConnectionWidget::~ConnectionWidget()
