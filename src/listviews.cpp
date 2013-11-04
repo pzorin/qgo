@@ -782,30 +782,10 @@ QVariant GamesListItem::data(int column) const
 	{
 		/* I think this has to do with us getting a games message
 		 * from a game we're playing that isn't in the list FIXME */
-		qDebug("!!! No listing on GamesListItem!!!");
+        qDebug("GamesListItem::data() : missing listing !!!");
 		return QVariant();
 	}
-	
-	std::map<PlayerListing *, unsigned short>::iterator it;
-	if(listing->white)
-		it = removed_player.find(listing->white);
-	if(listing->white && it != removed_player.end())
-	{
-		qDebug("Listing: %p %d", listing, listing->number);
-		qDebug("Found removed white player: %p, %d game %d", listing->white, removed_player[listing->white], listing->number);
-		//QMessageBox here is BAD, its in some Qt draw loop here
-		//QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
-		return QVariant();
-	}
-	if(listing->black)
-		it = removed_player.find(listing->black);
-	if(listing->black && it != removed_player.end())
-	{
-		qDebug("Listing: %p %d", listing, listing->number);
-		qDebug("Found removed black player: %p, %d game %d", listing->black, removed_player[listing->black], listing->number);
-		//QMessageBox::information(0 , "Crash Imminent!", "Game list corruption!");
-		return QVariant();
-	}
+
 	switch(column)
 	{
 		case GC_ID:

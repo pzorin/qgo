@@ -103,6 +103,7 @@ public slots:
 
 private slots:
     void setRankSpreadView(void);
+    void slot_editFriendsWatchesList(void);
     
 private:
     Ui::ConnectionWidget *ui;

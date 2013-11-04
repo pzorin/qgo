@@ -30,6 +30,7 @@
 #include "network/consoledispatch.h"		//FIXME for channel chat
 #include "messages.h"
 #include "room.h"
+#include "friendslistdialog.h"
 
 ConnectionWidget::ConnectionWidget(QWidget *parent) :
     QWidget(parent),
@@ -87,6 +88,7 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect( ui->quietCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
     connect( ui->openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
     connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( setLooking(bool) ) );
+    connect( ui->editFriendsWatchesButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
 
     //IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
     ui->gamesView->setColumnWidth ( 0, 40 );	//35
@@ -1253,4 +1255,15 @@ void ConnectionWidget::setGameCountStat(int count)
 void ConnectionWidget::setPlayerCountStat(int count)
 {
     ui->statusUsers->setText(tr(" P: %n","Number of players on server",count));
+}
+
+
+void ConnectionWidget::slot_editFriendsWatchesList(void)
+{
+    //does this crash if we do it too soon?
+    if (connection == NULL)
+        return;
+    FriendsListDialog * fld = new FriendsListDialog(connection);
+    fld->exec();
+    fld->deleteLater();
 }

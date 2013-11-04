@@ -275,5 +275,4 @@ class GamesListModel : public ListModel
         virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 };
 
-extern std::map<class PlayerListing *, unsigned short> removed_player;
 #endif //!LISTVIEWS_H

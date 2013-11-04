@@ -25,7 +25,7 @@
 #include "gamedialog.h"
 #include "network/messages.h"
 #include "network/playergamelistings.h"
-#include "mainwindow.h"		//for talkOpened
+#include "connectionwidget.h"
 /* I wonder if we could somehow generalize this class to handle
  * all message/windows even if they're part of larger windows.
  * We could even do it for the console, specifying a special

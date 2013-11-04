@@ -2790,7 +2790,7 @@ void IGSConnection::handle_info(QString line)
 		talk->recvPlayerListing(statsPlayer);
 					//talk->recvTalk(e2);
 					
-				//room->recvExtPlayerListing(statsPlayer);
+                //connectionWidget->slot_statsPlayer(statsPlayer);
 		delete statsPlayer;
 		statsPlayer = 0;*/
 	}

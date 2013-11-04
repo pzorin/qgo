@@ -23,19 +23,15 @@
 #include "room.h"
 #include "../listviews.h"
 #include "talk.h"
-#include "messages.h"
 #include "gamedialog.h"
 #include "../defines.h"
 #include "../connectionwidget.h"
 #include "playergamelistings.h"
 #include "boarddispatch.h"	//so we can remove observers
-#include "friendslistdialog.h"
 #include "networkconnection.h"
-#include "gamedata.h" // Only used to delete a GameData object at one point; should be part of a listing destructor
 
 #include "ui_connectionwidget.h" // Contains declaration of Ui::ConnectionWidget, needed in Room::Room, FIXME
 
-//#define PLAYERLISTING_ISSUES
 Room::Room(NetworkConnection * c)
 {
     connection = c; // has to be set before the signals are connected.
@@ -49,23 +45,12 @@ Room::Room(NetworkConnection * c)
     playerView->setModel(playerListModel);
     playerListModel->setView(playerView);
 
-    editFriendsWatchesListButton = connectionWidget->ui->editFriendsWatchesButton;
-	/* Normally the dispatch and the UI are created at the sametime
-	* by the connection or dispatch code.  In this case,
-	* the UI already exists and is being passed straight in here,
-	* so we'll do things backwards and have this create the dispatch */
-	/* UI MUST be created before dispatch.  FIXME
-	* This is an ugly non-apparent dependency because
-	* the dispatch registries depend on the UI's models */
-	/* There are further strangenesses here because of the account_name
-    * for making our player listing blue */
-    connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClicked(const QModelIndex &)));
+    connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playerOpenTalk(const QModelIndex &)));
     connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
     connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
     connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
     connect(connectionWidget->ui->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
     connect(connectionWidget->ui->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
-    connect(editFriendsWatchesListButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
 
     playerView->blockSignals(false);
     gamesView->blockSignals(false);
@@ -76,13 +61,25 @@ Room::Room(NetworkConnection * c)
 	
 	players = 0;
 	games = 0;
+
+    matchAct = new QAction(tr("Match"), 0);
+    statsAct = new QAction(tr("Stats"), 0);
+    talkAct = new QAction(tr("Talk"), 0);
+    removeFriendAct = new QAction(tr("Remove from Friends"), 0);
+    addFriendAct = new QAction(tr("Add to Friends"), 0);
+    removeWatchAct = new QAction(tr("Remove from Watches"), 0);
+    addWatchAct = new QAction(tr("Add to Watches"), 0);
+    blockAct = new QAction(tr("Block"), 0);
+
+    joinObserveAct = new QAction(tr("Join and Observe"), 0);
+    observeOutsideAct = new QAction(tr("Observe Outside"), 0);
 }
 
 Room::~Room()
 {
 	/* If this was a stand alone room, we'd also destroy the UI
 	 * here, I just want to clear the lists */
-	qDebug("Deconstructing room");
+    qDebug("Room::~Room()");
 	/* blockSignals necessary in qt 4.7 otherwise setModel(0) crashes stupidly */
 	playerView->blockSignals(true);
 	gamesView->blockSignals(true);
@@ -90,8 +87,6 @@ Room::~Room()
 	gamesView->setModel(0);
 	delete playerListModel;
 	delete gamesListModel;
-	
-	disconnect(editFriendsWatchesListButton, SIGNAL(pressed()), 0, 0);
 }
 
 void Room::onError(void)
@@ -108,141 +103,104 @@ void Room::setConnection(NetworkConnection * c)
 }
 
 //stats
-void Room::slot_playersDoubleClicked(const QModelIndex & index)
+void Room::slot_playerOpenTalk(const QModelIndex & index)
 {
-	QModelIndex translated = index;
-	PlayerListing * opponent = playerListModel->playerListingFromIndex(translated);
-	sendStatsRequest(*opponent);
+    PlayerListing * opponent = playerListModel->playerListingFromIndex(index);
+    Talk * talk;
+    /* Whenever a talk window is opened, we want stats.  This
+     * means its easier to create the talk window and let it
+     * always create stats, then send out stats messages
+     * that generate talk windows */
+    /* This is a little weird now...almost like we're just asking
+     * for an update on the references */
+    talk = connection->getTalk(opponent);
+    //connection->sendStatsRequest(opponent);
+    /* This is really only for ORO, and let's see if it works but... */
+    if(talk)
+        talk->updatePlayerListing();
 }
 
 void Room::slot_showPopup(const QPoint & iPoint)
 {
     popup_item = playerView->indexAt(iPoint);
-	if (popup_item != QModelIndex())
-	{
-		/* If we have the listing now, we don't need to look it up
-		 * again later FIXME */
-		QModelIndex translated = popup_item;
-		popup_playerlisting = playerListModel->playerListingFromIndex(translated);
-		if(popup_playerlisting->name == connection->getUsername())
-			return;
+    if (popup_item == QModelIndex())
+        return;
+
+    /* If we have the listing now, we don't need to look it up
+     * again later FIXME */
+    popup_playerlisting = playerListModel->playerListingFromIndex(popup_item);
+    if(popup_playerlisting->name == connection->getUsername())
+        return;
 			
-    	QMenu menu(playerView);
-	menu.addAction(tr("Stats"), this, SLOT(slot_popupStats()));
-	QAction * matchAct = new QAction(tr("Match"), 0);
+    QMenu * menu = new QMenu(playerView);
+
+    menu->addAction(statsAct);
+    menu->addAction(matchAct);
+    menu->addAction(talkAct);
+    menu->addSeparator();
 	if(popup_playerlisting->info.contains("X"))
 		matchAct->setEnabled(false);
-	else
-		connect(matchAct, SIGNAL(triggered()), this, SLOT(slot_popupMatch()));
-		
-	menu.addAction(matchAct);
-	
-	menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
-	menu.addSeparator();
-    	if(popup_playerlisting->friendWatchType == PlayerListing::friended)
-    		menu.addAction(tr("Remove from Friends"), this, SLOT(slot_removeFriend()));
-    	else
-    		menu.addAction(tr("Add to Friends"), this, SLOT(slot_addFriend()));
-    	if(popup_playerlisting->friendWatchType == PlayerListing::watched)
-    		menu.addAction(tr("Remove from Watches"), this, SLOT(slot_removeWatch()));
-    	else
-    		menu.addAction(tr("Add to Watches"), this, SLOT(slot_addWatch()));
-    	menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
-    	menu.exec(playerView->mapToGlobal(iPoint));
-	delete matchAct;
-	}
+    if(popup_playerlisting->friendWatchType == PlayerListing::friended)
+        menu->addAction(removeFriendAct);
+    else
+        menu->addAction(addFriendAct);
+    if(popup_playerlisting->friendWatchType == PlayerListing::watched)
+        menu->addAction(removeWatchAct);
+    else
+        menu->addAction(addWatchAct);
+    menu->addAction(blockAct);
+
+    QAction * result = menu->exec(playerView->mapToGlobal(iPoint));
+    if (result == statsAct)
+        connection->sendStatsRequest(*popup_playerlisting);
+    if (result == matchAct)
+        connection->sendMatchInvite(*popup_playerlisting);
+    if (result == talkAct)
+        slot_playerOpenTalk(popup_item);
+    if (result == removeFriendAct)
+        connection->removeFriend(*popup_playerlisting);
+    if (result == addFriendAct)
+        connection->addFriend(*popup_playerlisting);
+    if (result == removeWatchAct)
+        connection->removeWatch(*popup_playerlisting);
+    if (result == addWatchAct)
+        connection->addWatch(*popup_playerlisting);
+    if (result == blockAct)
+        connection->addBlock(*popup_playerlisting);
+    menu->deleteLater();
+    menu = NULL;
+    return;
 }
 
 void Room::slot_showGamesPopup(const QPoint & iPoint)
 {
 	if(!connection)
 		return;
-	if(!connection->supportsObserveOutside())
-		return;
 	popup_item = gamesView->indexAt(iPoint);
-	if (popup_item != QModelIndex())
-	{
-		/* Do not give options on rooms without games */
-		QModelIndex translated = popup_item;
-		popup_gamelisting = gamesListModel->gameListingFromIndex(translated);
-		if(popup_gamelisting->isRoomOnly)
-			return;
-		QMenu menu(gamesView);
-		if(preferences.observe_outside_on_doubleclick)
-		{
-			menu.addAction(tr("Observe Outside"), this, SLOT(slot_popupObserveOutside()));
-			menu.addAction(tr("Join and Observe"), this, SLOT(slot_popupJoinObserve()));
-		}
-		else
-		{
-			menu.addAction(tr("Join and Observe"), this, SLOT(slot_popupJoinObserve()));
-			menu.addAction(tr("Observe Outside"), this, SLOT(slot_popupObserveOutside()));
-		}
-		
-		menu.exec(gamesView->mapToGlobal(iPoint));
-	}
-}
+    if (popup_item == QModelIndex())
+        return;
+    popup_gamelisting = gamesListModel->gameListingFromIndex(popup_item);
+    if(popup_gamelisting->isRoomOnly)
+        return;
+    QMenu * menu = new QMenu(gamesView);
+    menu->addAction(joinObserveAct);
+    if(connection->supportsObserveOutside())
+        menu->addAction(observeOutsideAct);
 
-void Room::slot_addFriend(void)
-{
-	connection->addFriend(*popup_playerlisting);
-}
-
-/* This needs to call a resort or something on the list
- * if we have "friends" checked, same thing with blocked
- * if we don't, just to update that one entry FIXME */
-void Room::slot_removeFriend(void)
-{
-	connection->removeFriend(*popup_playerlisting);
-}
-
-void Room::slot_addWatch(void)
-{
-	connection->addWatch(*popup_playerlisting);
-}
-
-void Room::slot_removeWatch(void)
-{
-	connection->removeWatch(*popup_playerlisting);
-}
-
-void Room::slot_addBlock(void)
-{
-	connection->addBlock(*popup_playerlisting);
-}
-
-void Room::slot_popupStats(void)
-{
-	/* For now, just request stats.  Later, we might open a separate window with a tab for
-	 * game records */
-	connection->sendStatsRequest(*popup_playerlisting);
-}
-
-void Room::slot_popupMatch(void)
-{
-	connection->sendMatchInvite(*popup_playerlisting);
-}
-
-void Room::slot_popupTalk(void)
-{
-	slot_playersDoubleClicked(popup_item);
-}
-
-void Room::slot_popupObserveOutside(void)
-{
-	connection->sendObserveOutside(*popup_gamelisting);
-}
-
-void Room::slot_popupJoinObserve(void)
-{
-	connection->sendObserve(*popup_gamelisting);
+    QAction * result = menu->exec(gamesView->mapToGlobal(iPoint));
+    if (result == observeOutsideAct)
+        connection->sendObserveOutside(*popup_gamelisting);
+    if (result == joinObserveAct)
+        connection->sendObserve(*popup_gamelisting);
+    menu->deleteLater();
+    menu = NULL;
+    return;
 }
 
 //observe
 void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 {
-	QModelIndex translated = index;
-	const GameListing * g = gamesListModel->gameListingFromIndex(translated);
+    const GameListing * g = gamesListModel->gameListingFromIndex(index);
 	if(preferences.observe_outside_on_doubleclick &&
 		  connection->supportsObserveOutside() && !g->isRoomOnly)
 		connection->sendObserveOutside(*g);
@@ -254,10 +212,7 @@ void Room::slot_refreshGames(void)
 {
 	/* First clear list.  There doesn't
 	* seem to be a good way to update it
-	* or update everything [IGS issue].  Since we're
-	* getting all info again anyway... 
-	* same with players and perhaps 
-	* observers as well. */
+    * or update everything [IGS issue]. */
     gamesListModel->clearList();
 	connection->sendGamesRequest();
 }
@@ -266,14 +221,6 @@ void Room::slot_refreshPlayers(void)
 {
     playerListModel->clearList();
     connection->sendPlayersRequest();
-}
-
-void Room::slot_editFriendsWatchesList(void)
-{
-	//does this crash if we do it too soon?
-	FriendsListDialog * fld = new FriendsListDialog(connection);
-	fld->exec();
-	delete fld;		//okay?
 }
 
 void Room::recvToggle(int type, bool val)
@@ -286,38 +233,14 @@ GameListing * Room::registerGameListing(GameListing * l)
     return gamesListModel->getEntry(l->number, l);
 }
 
-/* This appears to be unused, recvGameListing does stuff
- * with "->running" FIXME */
-void Room::unRegisterGameListing(unsigned int key)
-{
-    gamesListModel->deleteEntry(key);
-}
-
 PlayerListing * Room::getPlayerListing(const QString & name)
 {
-	PlayerListing * p;
-    p = playerListModel->getEntry(name); //returns 0 if name not found
-
-#ifdef FIXME
-	/* this is tricky FIXME */
-	if(!p)
-		connection->sendStatsRequest(name);		
-#endif //FIXME
-	/* Should probably return & FIXME */
-	return p;
+    return playerListModel->getEntry(name); //returns 0 if name not found
 }
 
 PlayerListing * Room::getPlayerListing(const unsigned int id)
 {
-    PlayerListing * p = playerListModel->getEntry(id);
-	// FIXME
-	/*if(!p)
-		connection->sendStatsRequest(id);*/	
-#ifdef PLAYERLISTING_ISSUES	
-	if(!p)
-		qDebug("Can't get player listing for %d", id);
-#endif //PLAYERLISTING_ISSUES
-	return p;
+    return playerListModel->getEntry(id);
 }
 
 /* Here's the deal with this.  Tygem has a username and a nickname.
@@ -333,17 +256,13 @@ PlayerListing * Room::getPlayerListing(const unsigned int id)
  /* FIXME don't we usually say "from" instead of "by" change this */
 PlayerListing * Room::getPlayerListingByNotNickname(const QString & notnickname)
 {
-	PlayerListing * p;
     if(connection->playerTrackingByID())
 	{
-		qDebug("No player listing registry!");
+        qDebug("Room::getPlayerListingByNotNickname() : not supported by connection");
 		return NULL;
 	}
 	else
-        p = playerListModel->getPlayerFromNotNickName(notnickname);
-
-	/* Should probably return & FIXME */
-	return p;	
+        return playerListModel->getPlayerFromNotNickName(notnickname);
 }
 
 /* Remember that this and getPlayerListing do return 0.
@@ -352,19 +271,7 @@ PlayerListing * Room::getPlayerListingByNotNickname(const QString & notnickname)
  * the games/player registries by passing them */
 GameListing * Room::getGameListing(unsigned int key)
 {
-    GameListing * l = gamesListModel->getEntry(key);
-	/* I'm not sure we'd ever want to automatically
-	 * requestGameStats.  Either the listing is on the way
-	 * or we request it from some other place.  The main
-	 * thing is we don't want to be requesting it from
-	 * the games listing messages every time we try to
-	 * get an existing listing.  But if its a problem
-	 * to just comment out the below two lines, then
-	 * we'll need a getIfGameListing as with the 
-	 * getIfBoardDispatch FIXME */
-	//if(!l)
-	//	connection->requestGameStats(key);
-	return l;
+    return gamesListModel->getEntry(key);
 }
 
 /* Called from getNewEntry in BoardDispatchRegistry in networkconnection.cpp */
@@ -404,31 +311,10 @@ class BoardDispatch * Room::getNewBoardDispatch(unsigned int key)
 	return new BoardDispatch(connection, listing);
 }
 
-std::map<PlayerListing *, unsigned short> removed_player;
 void Room::recvPlayerListing(PlayerListing * player)
 {
 	if(!player->online)
-	{
-#ifdef VIEWTESTDEBUG
-		if(player->name == "REMOVEMENOTAPLAYER")
-		{
-			int i;
-			delete player;
-			player = 0;
-			do
-			{
-				i = rand() % players;
-			}
-			while(!(player = playerListingIDRegistry->getIfEntry(i)));
-			player->online = false;
-		}
-#endif  //VIEWTESTDEBUG
-		removed_player[player] = player->playing;
-#ifdef PLAYERLISTING_ISSUES
-		qDebug("Removing player %s %p on attached game %d", player->name.toLatin1().constData(), player, player->playing);
-#endif //PLAYERLISTING_ISSUES
-		/* To prevent crashes due to GameListing link to PlayerListing
-		 * FIXME */
+    {
 		if(player->playing)
 		{
 			/* FIXME, something should clear this when games end */
@@ -456,9 +342,6 @@ void Room::recvPlayerListing(PlayerListing * player)
 			BoardDispatch * b = connection->getIfBoardDispatch(player->observing);
 			if(b)
 			{
-#ifdef PLAYERLISTING_ISSUES
-				qDebug("Removing player %s on observing game %d", player->name.toLatin1().constData(), player->observing);
-#endif //PLAYERLISTING_ISSUES
 				b->recvObserver(player, false);
 			}
 			if(player->dialog_opened)
@@ -510,26 +393,6 @@ void Room::recvPlayerListing(PlayerListing * player)
 				qDebug("dialog_opened flag set but no talk dialog");
 		}
 	}
-	
-	/* This is just for those listing bugs... its weird...remove it
-	 * soon */
-	if(registered_player && player->online)
-	{
-		std::map<PlayerListing *, unsigned short>::iterator it;
-		it = removed_player.find(registered_player);
-		if(it != removed_player.end())
-			removed_player.erase(it);
-	}
-}
-
-/* These two may want to check that they are the mainwindowroom or the
- * default room or whatever.  But its not necessary to have a whole
- * other subclass for mainwindowrooms because they both need some
- * kind of ui.  It would be more effective to do something with the
- * ui classes */
-void Room::recvExtPlayerListing(class PlayerListing * player)
-{
-    connectionWidget->slot_statsPlayer(player);
 }
 
 void Room::recvGameListing(GameListing * game)
@@ -555,23 +418,4 @@ void Room::recvGameListing(GameListing * game)
 	}
 	else
         gamesListModel->deleteEntry(key);
-}
-
-/* This isn't really just a "sendStats" function anymore, that's
- * done by the talk object I think and... well its ugly, responsibilities
- * are crossed, etc.. FIXME */
-void Room::sendStatsRequest(PlayerListing & opponent)
-{
-	Talk * talk;
-	/* Whenever a talk window is opened, we want stats.  This
-	 * means its easier to create the talk window and let it
-	 * always create stats, then send out stats messages
-	 * that generate talk windows */
-	/* This is a little weird now...almost like we're just asking
-	 * for an update on the references */
-    talk = connection->getTalk(&opponent);
-	//connection->sendStatsRequest(opponent);
-	/* This is really only for ORO, and let's see if it works but... */
-	if(talk)
-		talk->updatePlayerListing();
 }

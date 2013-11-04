@@ -24,12 +24,12 @@
 #define ROOM_H
 
 #include <QtWidgets>
+#include <QAction>
 
 class NetworkConnection;
 class BoardDispatch;
 class PlayerListing;
 class GameListing;
-class Talk;
 class FilteredView;
 class PlayerListModel;
 class GamesListModel;
@@ -50,45 +50,33 @@ class Room : public QObject
 		GameListing * getGameListing(unsigned int key);
 		BoardDispatch * getNewBoardDispatch(unsigned int key);
 		void recvPlayerListing(class PlayerListing * g);
-		void recvExtPlayerListing(class PlayerListing * player);
-		void recvGameListing(class GameListing * g);
-		void sendStatsRequest(PlayerListing & opponent);
+        void recvGameListing(class GameListing * g);
     protected:
 		GameListing * registerGameListing(GameListing * l);
-		void unRegisterGameListing(unsigned int key);
-		
+
 		unsigned int players;
 		unsigned int games;
 	private:
 		PlayerListModel * playerListModel;
 		GamesListModel * gamesListModel;
 
-		FilteredView * playerView, * gamesView;
-		QPushButton * editFriendsWatchesListButton;
+        FilteredView * playerView, * gamesView;
 		NetworkConnection * connection;
 		QModelIndex popup_item;
 		
 		GameListing * popup_gamelisting;
 		PlayerListing * popup_playerlisting;
+
+        QAction *statsAct, *matchAct, *talkAct, *removeFriendAct, *addFriendAct, *removeWatchAct, *addWatchAct, *blockAct;
+        QAction *joinObserveAct, *observeOutsideAct;
 public slots:
         void slot_refreshGames(void);
         void slot_refreshPlayers(void);
 	private slots:
-		void slot_playersDoubleClicked(const QModelIndex &);
-		void slot_gamesDoubleClicked(const QModelIndex &);
-		void slot_editFriendsWatchesList(void);
+        void slot_playerOpenTalk(const QModelIndex &);
+        void slot_gamesDoubleClicked(const QModelIndex &);
 		void slot_showPopup(const QPoint & iPoint);
 		void slot_showGamesPopup(const QPoint & iPoint);
-		void slot_addFriend(void);
-		void slot_removeFriend(void);
-		void slot_addWatch(void);
-		void slot_removeWatch(void);
-		void slot_addBlock(void);
-		void slot_popupStats(void);
-		void slot_popupMatch(void);
-		void slot_popupTalk(void);
-		void slot_popupObserveOutside(void);
-		void slot_popupJoinObserve(void);	
 };
 
 #endif //ROOM_H

@@ -22,7 +22,7 @@
 
 #ifndef MESSAGES_H
 #define MESSAGES_H
-#include <QCoreApplication>
+#include <QtCore>
 #include "defines.h"
 /* This file is defined as a source file in src.pro because of a
  * linker complaint about undefined destructors.  Might be a cleaner
@@ -267,17 +267,6 @@ public:
 		free_rated(noREQ), 
 		number(0), opponent_id(0), 
 		last_game_code(0), undoAllowed(false), rematch(false), first_offer(false) {};
-};
-
-// FIXME We added a recvToggle function, after having forgotten about this
-// but it brings up good points about when we should use a "message" and
-// when a function... basically determined by the usage of the message or
-// its prevalence  Fix all of this stuff eventually
-class AccountAttrib
-{
-public:
-	bool looking, open, quiet;
-	//which changes, we could probably just do separate functions FIXME
 };
 
 class RoomStats
