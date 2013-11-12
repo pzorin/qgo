@@ -48,6 +48,7 @@
 /*
 * GNUgo default level
 */
+#define DEFAULT_COMPUTER_PATH "/usr/games/gnugo"
 #define GNUGO_LEVEL 10
 
 /* Game refusal motives... like we need a reason.  */

@@ -223,7 +223,13 @@ void MainWindow::loadSettings()
 	QVariant var;
 	
 	ui.comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
-	ui.LineEdit_computer->setText(settings.value("COMPUTER_PATH").toString());
+    QString computer_path = settings.value("COMPUTER_PATH").toString();
+    if (computer_path.isEmpty())
+    {
+        computer_path = QString(DEFAULT_COMPUTER_PATH);
+        settings.setValue("COMPUTER_PATH", computer_path);
+    }
+    ui.LineEdit_computer->setText(computer_path);
 	if(settings.value("COMPUTER_PLAYS_WHITE").toBool())
 		ui.computerPlaysWhite->setChecked(true);
 	else
