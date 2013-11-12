@@ -38,12 +38,11 @@ Room::Room(NetworkConnection * c)
 
     gamesListModel = new GamesListModel();
     gamesView = connectionWidget->ui->gamesView;
-    gamesView->setModel(gamesListModel);
+    connectionWidget->gamesListProxyModel->setSourceModel(gamesListModel);
 
     playerListModel = new PlayerListModel();
     playerView = connectionWidget->ui->playerView;
-    playerView->setModel(playerListModel);
-    playerListModel->setView(playerView);
+    connectionWidget->playerListProxyModel->setSourceModel(playerListModel);
 
     connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playerOpenTalk(const QModelIndex &)));
     connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
@@ -55,7 +54,7 @@ Room::Room(NetworkConnection * c)
     playerView->blockSignals(false);
     gamesView->blockSignals(false);
 
-    connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateListing(PlayerListing*)));
+    connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateEntryByName(PlayerListing*)));
     connect(playerListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setPlayerCountStat(int)));
     connect(gamesListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setGameCountStat(int)));
 	
@@ -83,8 +82,8 @@ Room::~Room()
 	/* blockSignals necessary in qt 4.7 otherwise setModel(0) crashes stupidly */
 	playerView->blockSignals(true);
 	gamesView->blockSignals(true);
-	playerView->setModel(0);
-	gamesView->setModel(0);
+    connectionWidget->playerListProxyModel->setSourceModel(NULL);
+    connectionWidget->gamesListProxyModel->setSourceModel(NULL);
 	delete playerListModel;
 	delete gamesListModel;
 }
@@ -105,7 +104,8 @@ void Room::setConnection(NetworkConnection * c)
 //stats
 void Room::slot_playerOpenTalk(const QModelIndex & index)
 {
-    PlayerListing * opponent = playerListModel->playerListingFromIndex(index);
+    QModelIndex sourceIndex = connectionWidget->playerListProxyModel->mapToSource(index);
+    PlayerListing * opponent = playerListModel->playerListingFromIndex(sourceIndex);
     Talk * talk;
     /* Whenever a talk window is opened, we want stats.  This
      * means its easier to create the talk window and let it
@@ -125,6 +125,7 @@ void Room::slot_showPopup(const QPoint & iPoint)
     popup_item = playerView->indexAt(iPoint);
     if (popup_item == QModelIndex())
         return;
+    popup_item = connectionWidget->playerListProxyModel->mapToSource(popup_item);
 
     /* If we have the listing now, we don't need to look it up
      * again later FIXME */
@@ -179,6 +180,8 @@ void Room::slot_showGamesPopup(const QPoint & iPoint)
 	popup_item = gamesView->indexAt(iPoint);
     if (popup_item == QModelIndex())
         return;
+    popup_item = connectionWidget->gamesListProxyModel->mapToSource(popup_item);
+
     popup_gamelisting = gamesListModel->gameListingFromIndex(popup_item);
     if(popup_gamelisting->isRoomOnly)
         return;
@@ -200,7 +203,8 @@ void Room::slot_showGamesPopup(const QPoint & iPoint)
 //observe
 void Room::slot_gamesDoubleClicked(const QModelIndex & index)
 {
-    const GameListing * g = gamesListModel->gameListingFromIndex(index);
+    QModelIndex sourceIndex = connectionWidget->gamesListProxyModel->mapToSource(index);
+    const GameListing * g = gamesListModel->gameListingFromIndex(sourceIndex);
 	if(preferences.observe_outside_on_doubleclick &&
 		  connection->supportsObserveOutside() && !g->isRoomOnly)
 		connection->sendObserveOutside(*g);
@@ -230,7 +234,7 @@ void Room::recvToggle(int type, bool val)
 
 GameListing * Room::registerGameListing(GameListing * l)
 {
-    return gamesListModel->updateEntry(l);
+    return gamesListModel->updateListing(l);
 }
 
 PlayerListing * Room::getPlayerListing(const QString & name)
@@ -413,7 +417,7 @@ void Room::recvGameListing(GameListing * game)
 	
 	if(game->running)
 	{
-        game = gamesListModel->updateEntry(game);
+        game = gamesListModel->updateListing(game);
 		connection->checkGameWatched(*game);
 	}
 	else

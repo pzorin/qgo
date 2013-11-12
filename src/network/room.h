@@ -60,7 +60,7 @@ class Room : public QObject
 		PlayerListModel * playerListModel;
 		GamesListModel * gamesListModel;
 
-        FilteredView * playerView, * gamesView;
+        QTableView * playerView, * gamesView;
 		NetworkConnection * connection;
 		QModelIndex popup_item;
 		

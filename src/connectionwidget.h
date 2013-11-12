@@ -33,6 +33,8 @@ class ChannelListing;
 class GameDialog;
 class PlayerListing;
 class Room;
+class PlayerListSortFilterProxyModel;
+class GamesListSortFilterProxyModel;
 
 namespace Ui {
 class ConnectionWidget;
@@ -65,7 +67,10 @@ public:
     bool isConnected(void);
     void setupButtons(void);
 
+protected:
     friend class Room;
+    PlayerListSortFilterProxyModel * playerListProxyModel;
+    GamesListSortFilterProxyModel * gamesListProxyModel;
 
 public slots:
     void loadConnectionSettings(void);

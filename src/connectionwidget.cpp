@@ -39,12 +39,14 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connection = 0;
     ui->setupUi(this);
     connectionWidget = this; // FIXME: remove this global variable
-    ui->gamesView->setFilter(new GamesListFilter());
-    ui->playerView->setFilter(new PlayerListFilter());
-    connect(ui->filterOpenCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterOpen(bool)));
-    connect(ui->filterFriendsCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterFriends(bool)));
-    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter()), SLOT(setFilterFans(bool)));
-    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), dynamic_cast<GamesListFilter *>(ui->gamesView->getFilter()), SLOT(setFilterWatch(bool)));
+    gamesListProxyModel = new GamesListSortFilterProxyModel(this);
+    ui->gamesView->setModel(gamesListProxyModel);
+    playerListProxyModel = new PlayerListSortFilterProxyModel(this);
+    ui->playerView->setModel(playerListProxyModel);
+    connect(ui->filterOpenCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterOpen(bool)));
+    connect(ui->filterFriendsCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterFriends(bool)));
+    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterFans(bool)));
+    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), gamesListProxyModel, SLOT(setFilterWatch(bool)));
 
     QSettings settings;
     QVariant var = settings.value("LOWRANKFILTER");
@@ -114,6 +116,30 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui->playerView->setColumnWidth ( 7, 40 );
     ui->playerView->setColumnWidth ( 8, 80 );
 
+    bool ok;
+    int sort_column, sort_order_int;
+    Qt::SortOrder sort_order;
+    sort_column = settings.value("PlayerListSortColumn").toInt(&ok);
+    if ((sort_column <= 0) || (sort_column >= P_TOTALCOLUMNS) || (!ok))
+        sort_column = PC_NAME; // default value
+    sort_order_int = settings.value("PlayerListSortOrder").toInt(&ok);
+    if ((sort_order_int < 0) || (sort_order_int > 1) || (!ok))
+        sort_order = Qt::AscendingOrder; // default value
+    else
+        sort_order = static_cast<Qt::SortOrder>(sort_order_int);
+    ui->playerView->sortByColumn(sort_column,sort_order);
+
+    sort_column = settings.value("GamesListSortColumn").toInt(&ok);
+    if ((sort_column <= 0) || (sort_column >= G_TOTALCOLUMNS) || (!ok))
+        sort_column = GC_ID; // default value
+    sort_order_int = settings.value("GamesListSortOrder").toInt(&ok);
+    if ((sort_order_int < 0) || (sort_order_int > 1) || (!ok))
+        sort_order = Qt::AscendingOrder; // default value
+    else
+        sort_order = static_cast<Qt::SortOrder>(sort_order_int);
+    ui->gamesView->sortByColumn(sort_column,sort_order);
+
+
     setGameCountStat(0);
     setPlayerCountStat(0);
 
@@ -131,6 +157,11 @@ ConnectionWidget::~ConnectionWidget()
     settings.setValue("OPENFILTER", ui->filterOpenCheckBox->isChecked());
     settings.setValue("FRIENDSFILTER", ui->filterFriendsCheckBox->isChecked());
     settings.setValue("WATCHESFILTER", ui->filterWatchesCheckBox->isChecked());
+
+    settings.setValue("PlayerListSortColumn",QVariant(playerListProxyModel->sortColumn()));
+    settings.setValue("PlayerListSortOrder",QVariant(playerListProxyModel->sortOrder()));
+    settings.setValue("GamesListSortColumn",QVariant(gamesListProxyModel->sortColumn()));
+    settings.setValue("GamesListSortOrder",QVariant(gamesListProxyModel->sortOrder()));
     delete ui;
     cleanupServerData();
 }
@@ -1245,8 +1276,8 @@ void ConnectionWidget::setRankSpreadView(void)
 
     if (connection)
     {
-        dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter())->setFilterMinRank(connection->rankToScore(rkMin));
-        dynamic_cast<PlayerListFilter *>(ui->playerView->getFilter())->setFilterMaxRank(connection->rankToScore(rkMax));
+        playerListProxyModel->setFilterMinRank(connection->rankToScore(rkMin));
+        playerListProxyModel->setFilterMaxRank(connection->rankToScore(rkMax));
     }
     qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
 }

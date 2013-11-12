@@ -24,20 +24,7 @@
 #include "network/messages.h"
 #include "playergamelistings.h"
 #include "gamedata.h"
-
-enum ObserverListingColumn { OC_NAME=0, OC_RANK, O_TOTALCOLUMNS };
-
-enum PlayerListingColumn { PC_STATUS=0, PC_NAME, PC_RANK, PC_PLAYING,
-				PC_OBSERVING, PC_WINS, PC_LOSSES, PC_IDLE, PC_COUNTRY,
-				PC_MATCHPREFS, P_TOTALCOLUMNS, PC_NOTIFY};
-				
-enum SimplePlayerListingColumn { SPC_NAME=0, SPC_NOTIFY };
-
-enum GameListingColumn { GC_ID=0, GC_WHITENAME, GC_WHITERANK, GC_BLACKNAME,
-				GC_BLACKRANK,
-				GC_MOVES, GC_SIZE, GC_HANDICAP, GC_KOMI,
-				GC_BYOMI, GC_FLAGS,
-				GC_OBSERVERS, G_TOTALCOLUMNS };
+#include <QColor>
 
 ObserverListModel::ObserverListModel()
 {
@@ -96,14 +83,14 @@ void ObserverListModel::clearList(void)
 {
 	if(items.count() == 0)
 		return;
-    emit beginResetModel();
+    beginResetModel();
     for(int i=0; i < items.count(); i++)
 	{
         const ObserverListItem * item = static_cast<const ObserverListItem *>(items[i]);
 		delete item;
 	}
     items.clear();
-    emit endResetModel();
+    endResetModel();
 }
 
 QVariant ObserverListModel::data(const QModelIndex & index, int role) const
@@ -173,23 +160,6 @@ void PlayerListModel::insertListing(PlayerListing * const l)
 	ListModel::insertListing(*item);
 }
 
-void PlayerListModel::updateListing(PlayerListing * l)
-{
-	//if(!l)
-	//	return;	//nothing to update
-	//removeListing(l);
-	for(int i = 0; i < items.count(); i++)
-	{
-		if(static_cast<PlayerListItem const *>(items[i])->getListing() == l)
-		{
-			//this listing needs to be reloaded
-            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
-			return;
-		}
-	}
-	insertListing(l);
-}
-
 void PlayerListModel::removeListing(PlayerListing * const l)
 {
 	for(int i = 0; i < items.count(); i++)
@@ -235,7 +205,15 @@ QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 		else
 			return QVariant();
 	}
-	else
+    else if(role == LIST_SORT_ROLE)
+    {
+        if (index.column() == PC_RANK)
+        {
+            return QVariant(item->getListing()->rank_score);
+        }
+        else
+            return item->data(index.column());
+    } else
 		return QVariant();
 }
 
@@ -290,7 +268,7 @@ PlayerListing * PlayerListModel::getPlayerFromNotNickName(const QString & notnic
     return NULL;
 }
 
-PlayerListing * PlayerListModel::updateEntryByName(const PlayerListing * listing)
+PlayerListing * PlayerListModel::updateEntryByName(PlayerListing * listing)
 {
     PlayerListing * result;
     for (int i=0; i < items.count(); i++)
@@ -308,7 +286,7 @@ PlayerListing * PlayerListModel::updateEntryByName(const PlayerListing * listing
     return result;
 }
 
-PlayerListing * PlayerListModel::updateEntryByID(const PlayerListing * listing)
+PlayerListing * PlayerListModel::updateEntryByID(PlayerListing *listing)
 {
     PlayerListing * result;
     for (int i=0; i < items.count(); i++)
@@ -480,37 +458,6 @@ bool PlayerListItemLessThan::operator()(const ListItem *left, const ListItem *ri
     return result ^ reverseOrder;
 }
 
-void ListModel::sort(int column, Qt::SortOrder order)
-{
-    sort_column = column;
-    sort_order = order;
-}
-
-void PlayerListModel::sort(int column, Qt::SortOrder order)
-{
-    ListModel::sort(column,order);
-    qStableSort(items.begin(),items.end(),PlayerListItemLessThan(column,order));
-    emit dataChanged(createIndex(0, 0), createIndex(items.count() - 1, columnCount() - 1));
-    /* Qt documentation says to emit "layoutChanged()" and not "dataChanged()" here,
-     * but as of now this conflicts with filtering */
-}
-
-void ObserverListModel::sort(int column, Qt::SortOrder order)
-{
-    ListModel::sort(column,order);
-    emit layoutAboutToBeChanged();
-    qStableSort(items.begin(),items.end(),ObserverListItemLessThan(column,order));
-    emit layoutChanged();
-}
-
-void GamesListModel::sort(int column, Qt::SortOrder order)
-{
-    ListModel::sort(column,order);
-    emit layoutAboutToBeChanged();
-    qStableSort(items.begin(),items.end(),GamesListItemLessThan(column,order));
-    emit layoutChanged();
-}
-
 SimplePlayerListModel::SimplePlayerListModel(bool _notify_column)
 {
     notify_column = _notify_column;
@@ -617,34 +564,6 @@ void GamesListModel::insertListing(GameListing * const l)
 	*/
 }
 
-void GamesListModel::updateListing(GameListing * const l)
-{
-	//if(!l)
-	//	return;	//nothing to update
-	/* FIXME:
-	 * I've come to the conclusion that this isn't really a bug.  It has
-	 * to do with the template registries.  We sort of misused our
-	 * own template when we adapted to the player/games registries.
-	 * Specifically, if there's no player or game there, there's no
-	 * information to create one.  We could create it with just the
-	 * name itself, but then we might as well wait to get the stats
-	 * information.  At any rate, that means we pass a null to the initEntry
-	 * which then calls this.  I think... I think I'm going to alter it to
-	 * send out stats requests all around */
-	//if(!l)
-	//	qDebug("GamesListModel::updateListing passed null listing!!!!!");
-	for(int i = 0; i < items.count(); i++)
-	{
-		if(static_cast<const GamesListItem *>(items[i])->getListing() == l)
-		{
-			//this item needs to be reloaded
-            emit dataChanged(createIndex(i,0), createIndex(i, columnCount() - 1));
-			return;
-		}
-	}
-	insertListing(l);
-}
-
 void GamesListModel::removeListing(GameListing * const l)
 {
 	for(int i = 0; i < items.count(); i++)
@@ -679,7 +598,7 @@ GameListing * GamesListModel::getEntry(unsigned int id)
     return NULL;
 }
 
-GameListing * GamesListModel::updateEntry(const GameListing * listing)
+GameListing * GamesListModel::updateListing(const GameListing * listing)
 {
     GameListing * result;
     for (int i=0; i < items.count(); i++)
@@ -738,6 +657,18 @@ QVariant GamesListModel::data(const QModelIndex & index, int role) const
 	{
 		return QVariant();
 	}
+    else if (role == LIST_SORT_ROLE)
+    {
+        switch (index.column())
+        {
+        case GC_WHITERANK:
+            return QVariant(item->getListing()->white_rank_score());
+        case GC_BLACKRANK:
+            return QVariant(item->getListing()->black_rank_score());
+        default:
+            return item->data(index.column());
+        }
+    }
 	else
 		return QVariant();
 }
@@ -758,9 +689,9 @@ GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
  * I might revisit it when models are ported to QAbstractTableModel */
 void ListModel::insertListing(ListItem & item)
 {
-    emit beginInsertRows(QModelIndex(), items.count(), items.count());
+    beginInsertRows(QModelIndex(), items.count(), items.count());
     items.append(&item);
-    emit endInsertRows();
+    endInsertRows();
     emit countChanged(items.count());
 }
 
@@ -783,11 +714,6 @@ QVariant ObserverListItem::data(int column) const
 			return QVariant();
 			break;
 	}
-}
-
-int ObserverListItem::columnCount(void) const
-{
-	return O_TOTALCOLUMNS;
 }
 
 GamesListItem::GamesListItem(GameListing * const l) : listing(l)
@@ -856,11 +782,6 @@ QVariant GamesListItem::data(int column) const
 	}
 }
 
-int GamesListItem::columnCount(void) const
-{
-	return G_TOTALCOLUMNS;
-}
-
 PlayerListItem::PlayerListItem(PlayerListing * const l) : listing(l)
 {
 }
@@ -919,29 +840,8 @@ QVariant PlayerListItem::data(int column) const
 	}
 }
 
-int PlayerListItem::columnCount(void) const
-{
-	return P_TOTALCOLUMNS;
-}
-
-ListItem::ListItem(const QList <QVariant> & data)
-{
-	itemData = data;	
-}
-
-QVariant ListItem::data(int column) const
-{
-	return itemData.value(column);
-}
-
-int ListItem::columnCount(void) const
-{
-	return itemData.count();
-}
-
 ListModel::ListModel()
 {
-	view = 0;
 }
 
 ListModel::~ListModel()
@@ -973,16 +873,7 @@ QModelIndex ListModel::index ( int row, int column, const QModelIndex & ) const
 /* This is overridden */
 QVariant ListModel::data(const QModelIndex & index, int role) const
 {
-	if(!index.isValid())
-		return QVariant();
-	
-	ListItem * item = static_cast<ListItem*>(index.internalPointer());
-	if(role == Qt::DisplayRole)
-		return item->data(index.column());
-	else if(role == Qt::ForegroundRole)
-		return QVariant();
-	else
-		return QVariant();
+    return QVariant();
 }
 
 Qt::ItemFlags ListModel::flags(const QModelIndex & index) const
@@ -1005,53 +896,17 @@ bool ListModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-void FilteredView::setFilter(ListFilter * l)
+PlayerListSortFilterProxyModel::PlayerListSortFilterProxyModel(QObject * parent) :
+    QSortFilterProxyModel(parent), rankMin(0), rankMax(100000), flags(none)
 {
-    listFilter = l;
-    connect(l,SIGNAL(updated()),this,SLOT(updateFilter()));
+    this->setSortRole(LIST_SORT_ROLE);
 }
 
-void FilteredView::setModel ( ListModel * model )
+bool PlayerListSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+//(int row) const
 {
-    listFilter->setListModel(model);
-    QTableView::setModel(model);
-}
-
-void FilteredView::updateFilter(void)
-{
-    if (!(this->model()))
-        return;
-    for(int i = 0; i < this->model()->rowCount(); i++)
-    {
-        setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
-    }
-}
-
-void FilteredView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
-{
-    QTableView::dataChanged(topLeft, bottomRight);
-	for(int i = topLeft.row(); i <= bottomRight.row(); i++)
-	{
-        setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
-	}
-}
-
-void FilteredView::rowsInserted ( const QModelIndex & parent, int start, int end )
-{
-    QTableView::rowsInserted(parent,start,end);
-    for(int i = start; i <= end; i++)
-    {
-        setRowHidden(i, !(listFilter->filterAcceptsRow(i)));
-    }
-}
-
-
-bool PlayerListFilter::filterAcceptsRow(int row) const
-{
-    if (listModel == NULL)
-        return true;
 	const PlayerListing * p;
-	p = static_cast<PlayerListItem*>(listModel->items[row])->getListing();
+    p = static_cast<PlayerListItem*>(static_cast<PlayerListModel*>(sourceModel())->items[sourceRow])->getListing();
 	
 	if(p->hidden)
 		return false;
@@ -1091,58 +946,61 @@ bool PlayerListFilter::filterAcceptsRow(int row) const
 	return true;
 }
 
-void PlayerListFilter::setFilterOpen(bool state)
+void PlayerListSortFilterProxyModel::setFilterOpen(bool state)
 {
     if (state)
         flags |= open;
     else
         flags &= (~open);
-    emit updated();
+    invalidateFilter();
 }
 
-void PlayerListFilter::setFilterFriends(bool state)
+void PlayerListSortFilterProxyModel::setFilterFriends(bool state)
 {
     if (state)
         flags |= friends;
     else
         flags &= (~friends);
-    emit updated();
+    invalidateFilter();
 }
 
-void PlayerListFilter::setFilterFans(bool state)
+void PlayerListSortFilterProxyModel::setFilterFans(bool state)
 {
     if (state)
         flags |= fans;
     else
         flags &= (~fans);
-    emit updated();
+    invalidateFilter();
 }
 
-void PlayerListFilter::setFilterMinRank(int rank)
+void PlayerListSortFilterProxyModel::setFilterMinRank(int rank)
 {
     rankMin = rank;
-    emit updated();
+    invalidateFilter();
 }
 
-void PlayerListFilter::setFilterMaxRank(int rank)
+void PlayerListSortFilterProxyModel::setFilterMaxRank(int rank)
 {
     rankMax = rank;
-    emit updated();
+    invalidateFilter();
 }
 
-// FIXME: unused?
-void GamesListFilter::setFilterWatch(bool state)
+GamesListSortFilterProxyModel::GamesListSortFilterProxyModel(QObject * parent) :
+    QSortFilterProxyModel(parent), watches(false)
+{
+    setSortRole(LIST_SORT_ROLE);
+}
+
+void GamesListSortFilterProxyModel::setFilterWatch(bool state)
 {
     watches = state;
-    emit updated();
+    invalidateFilter();
 }
 
-bool GamesListFilter::filterAcceptsRow(int row) const
+bool GamesListSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
-    if (listModel == NULL)
-        return true;
 	const GameListing * g;
-	g = static_cast<GamesListItem *>(listModel->items[row])->getListing();
+    g = static_cast<GamesListItem *>(static_cast<GamesListModel*>(sourceModel())->items[sourceRow])->getListing();
 	if(watches)
 	{
 		if((g->black && g->black->friendWatchType == PlayerListing::watched) ||
