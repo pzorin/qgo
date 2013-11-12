@@ -225,7 +225,7 @@ void QGtp::slot_processExited(int exitCode, QProcess::ExitStatus exitStatus)
 //	sprintf (outFile, "%d quit\n", _cpt);
 //	sprintf (outFile, "quit\n");
 //	fflush(outFile);
-	//	return waitResponse();
+    //	return waitResponse();
 }
 
 /* Function:  wait for a go response
@@ -236,48 +236,12 @@ void QGtp::slot_processExited(int exitCode, QProcess::ExitStatus exitStatus)
 int
 QGtp::waitResponse()
 {
-	QString buf = _response;
-	//	QTextStream * inFile;
-	//	char symbole;
-	//int number;
-	//int pos;
-	do //FIXME : we don't nned this, since the process sends the readyRead signal
+    do //FIXME : use the readyRead signal of the process
 	{
-		qApp->processEvents();
-/*#ifdef Q_OS_WIN
-		Sleep(100000);
-#else
-		usleep(100000);
-#endif
-*/
-	} while (!responseReceived/*_response.length() == 0 || _response == buf*/);
-	/*
-	inFile=new QTextStream(programProcess->readStdout(),IO_ReadOnly);
-	do
-	{
-	* inFile>>symbole;
-	* inFile>>number;
-	buff=inFile->readLine();
-	} while(number !=_cpt);
-	*/
-	
-	//	_response=buff.stripWhiteSpace();
-	
-	/*	
-	buff=programProcess->readLineStdout();
-	while(!buff.isEmpty())
-	{
-	_response=_response+"\n"+buff;
-	buff=programProcess->readLineStdout();
-	}
-	*/
-	/*
-	buff = _response[0];
-	if ((pos = _response.indexOf(" ")) < 1)
-		pos = 1;
-	number = _response.mid(1,pos).toInt();
-	_response = _response.right(_response.length() - pos - 1);
-	*/
+        programProcess->waitForReadyRead(10);
+        qApp->processEvents();
+    } while (!responseReceived);
+
 	qDebug("** QGtp::waitResponse():  \'%s\'" , _response.toLatin1().constData());
 	responseReceived = false;
 
