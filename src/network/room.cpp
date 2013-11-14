@@ -223,7 +223,12 @@ void Room::slot_refreshGames(void)
 
 void Room::slot_refreshPlayers(void)
 {
+    /* Also have to refresh the list of games here
+     * because game listings point to player listings that
+     * have to be destroyed */
+    gamesListModel->clearList();
     playerListModel->clearList();
+    connection->sendGamesRequest();
     connection->sendPlayersRequest();
 }
 

@@ -25,7 +25,6 @@
 #include <QSortFilterProxyModel>
 class GameListing;
 class PlayerListing;
-class ListModel;
 
 enum ObserverListingColumn { OC_NAME=0, OC_RANK, O_TOTALCOLUMNS };
 
@@ -42,77 +41,6 @@ enum GameListingColumn { GC_ID=0, GC_WHITENAME, GC_WHITERANK, GC_BLACKNAME,
                 GC_OBSERVERS, G_TOTALCOLUMNS };
 
 #define LIST_SORT_ROLE Qt::UserRole
-
-/* ListItem and its subclasses serve no purpose and should be eliminated */
-class ListItem
-{
-	public:
-        ListItem() {};
-        virtual ~ListItem() {};
-};
-
-class ObserverListItem : public ListItem
-{
-	public:
-    friend class ObserverListItemLessThan;
-		ObserverListItem(PlayerListing * const l);	
-        virtual QVariant data(int column) const;
-		PlayerListing * getListing(void) const { return listing; };
-	private:
-		PlayerListing * const listing;
-};
-
-class GamesListItem : public ListItem
-{
-	public:
-    friend class GamesListItemLessThan;
-		GamesListItem(GameListing * const l);
-        virtual QVariant data(int column) const;
-        GameListing * getListing(void) const { return listing; };
-	private:
-		GameListing * const listing;
-};
-
-class PlayerListItem : public ListItem
-{
-	public:
-        friend class PlayerListItemLessThan;
-		PlayerListItem(PlayerListing * const l);
-        virtual QVariant data(int column) const;
-		PlayerListing * getListing(void) const { return listing; };
-	private:
-		PlayerListing * const listing;
-};
-
-class ObserverListItemLessThan
-{
-public:
-    ObserverListItemLessThan(int _column, Qt::SortOrder _order);
-    bool operator()(const ListItem *left, const ListItem *right ) const;
-private:
-    int column;
-    bool reverseOrder;
-};
-
-class GamesListItemLessThan
-{
-public:
-    GamesListItemLessThan(int _column, Qt::SortOrder _order);
-    bool operator()(const ListItem *left, const ListItem *right ) const;
-private:
-    int column;
-    bool reverseOrder;
-};
-
-class PlayerListItemLessThan
-{
-public:
-    PlayerListItemLessThan(int _column, Qt::SortOrder _order);
-    bool operator()(const ListItem *left, const ListItem *right ) const;
-private:
-    int column;
-    bool reverseOrder;
-};
 
 class PlayerListSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -160,13 +88,12 @@ class ListModel : public QAbstractTableModel
 	 public:
 	 	ListModel();
 		~ListModel();
-        void insertListing(ListItem & item);
+        void insertListing(void * item);
         virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
         virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
         QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
         virtual QVariant data(const QModelIndex & index, int role) const;
 		Qt::ItemFlags flags(const QModelIndex & index) const;
-        //virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
         virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex() );
 signals:
         void countChanged(int);
@@ -174,7 +101,7 @@ signals:
         friend class PlayerListSortFilterProxyModel;
         friend class GamesListSortFilterProxyModel;
         friend class GamesListFilter;
-        QList <ListItem *> items;
+        QList <void *> items;
 };
 
 class ObserverListModel : public ListModel
@@ -206,7 +133,6 @@ class PlayerListModel : public ListModel
 		void clearList(void);
 		virtual QVariant data(const QModelIndex & index, int role) const;
 		PlayerListing * playerListingFromIndex(const QModelIndex &);
-		PlayerListItem * playerListItemFromIndex(const QModelIndex &) const;
         void setAccountName(const QString & name) { account_name = name; };
         PlayerListing * getEntry(const QString & name);
         PlayerListing * getEntry(unsigned int id);

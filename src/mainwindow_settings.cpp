@@ -84,18 +84,8 @@ void MainWindow::slot_currentChanged(int i)
 		if (resend)
 			sendNmatchParameters();
 #endif //FIXME
-	}
-	if(i == 1 || i == 2)
-    {
-		//refresh file system model
-		/* Apparently unnecessary and causes large slowdown in windows 
-		 * EXCEPT, it might be nice to be able to refresh the file
-		 * view somehow.  Need to figure out why its slow in windows.  FIXME*/
-		//model->refresh();
-	}
-
-	former = i;
-	
+    }
+    former = i;
 }
 
 /*

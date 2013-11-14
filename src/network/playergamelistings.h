@@ -113,12 +113,10 @@ public:
 	QString _white_rank;
 	QString _black_rank;
 	unsigned int _white_rank_score;
-	unsigned int _black_rank_score;
-	/* FIXME neither const or & removal kept the below from
-	* crashing */
+    unsigned int _black_rank_score;
 	const QString & white_name(void) const
-	{
-		if(white)
+    {
+        if(white)
 			return white->name;
 		else
 			return _white_name;
