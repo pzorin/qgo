@@ -637,14 +637,6 @@ GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
     return static_cast<GameListing*>(index.internalPointer());
 }
 
-/* With a large list, if you're looking at the middle of it and its
- * changing quickly, then all those new entries are shifting the list
- * around.  Even if the selection stays where it is, its hard to
- * even double click.  I might change this back later, but for
- * now, let's see what it looks like with just, essentially, appends */
-/* The old fix performed very badly (application basically unusable),
- * so I have removed it for the time being.
- * I might revisit it when models are ported to QAbstractTableModel */
 void ListModel::insertListing(void *item)
 {
     beginInsertRows(QModelIndex(), items.count(), items.count());
@@ -707,11 +699,16 @@ PlayerListSortFilterProxyModel::PlayerListSortFilterProxyModel(QObject * parent)
     QSortFilterProxyModel(parent), rankMin(0), rankMax(100000), flags(none)
 {
     setSortCaseSensitivity(Qt::CaseInsensitive);
+    setFilterCaseSensitivity(Qt::CaseInsensitive);
+    setFilterKeyColumn(PC_NAME);
     this->setSortRole(LIST_SORT_ROLE);
 }
 
 bool PlayerListSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
+    if (! QSortFilterProxyModel::filterAcceptsRow(sourceRow,sourceParent))
+        return false;
+
 	const PlayerListing * p;
     p = static_cast<PlayerListing*>(static_cast<PlayerListModel*>(sourceModel())->items[sourceRow]);
 	

@@ -47,6 +47,7 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect(ui->filterFriendsCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterFriends(bool)));
     connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterFans(bool)));
     connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), gamesListProxyModel, SLOT(setFilterWatch(bool)));
+    connect(ui->playerListFilterLineEdit, SIGNAL(textChanged(QString)), playerListProxyModel, SLOT(setFilterWildcard(QString)));
 
     QSettings settings;
     QVariant var = settings.value("LOWRANKFILTER");
