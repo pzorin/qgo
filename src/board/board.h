@@ -25,7 +25,7 @@
 
 #include "defines.h"
 
-#include <QtWidgets>
+#include <QGraphicsView>
 
 enum CursorType { cursorIdle, cursorGhostBlack , cursorGhostWhite , cursorWait , cursorNavTo };
 enum CoordType { uninit, sgf, numbertopnoi, numberbottomi };

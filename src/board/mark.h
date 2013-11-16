@@ -25,9 +25,9 @@
 
 #include "graphicsitemstypes.h"
 #include "defines.h"
-#include <QtGui>
 
-#include <QtWidgets>
+#include <QGraphicsItem>
+#include <QGraphicsView>
 
 class Mark
 {

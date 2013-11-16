@@ -34,7 +34,7 @@
 #include "matrix.h"
 #include "gamedata.h"
 
-#include <QtWidgets>
+#include <QtWidgets> // FIXME: What's the point of a progress indicator for parsing a few kilobytes?
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

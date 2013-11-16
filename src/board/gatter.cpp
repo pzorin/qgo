@@ -21,9 +21,7 @@
 
 #include "gatter.h"
 
-#include <QList>
-#include <QtWidgets>
-
+#include <QGraphicsItem>
 
 /*************************************************************
  *

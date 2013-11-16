@@ -22,7 +22,6 @@
 #define HOST_H
 
 #include <QString>
-#include <QList>
 
 class Host
 {
@@ -32,16 +31,10 @@ public:
     QString host() const { return h; };
     QString loginName() const { return lg; };
     QString password() const { return pw; };
-    // operators <, ==
     int operator== (Host h)
         { return (this->host() == h.host() && this->loginName() == h.loginName()); };
     int operator== (Host *h)
         { return (this->host() == h->host() && this->loginName() == h->loginName()); };
-    /* Do we need any of these anymore? */
-    /*bool operator< (Host h)
-        { return (this->title() < h.title()); };
-    bool operator< (Host *h)
-        { return (this->title() < h->title()); };*/
 
 private:
     QString h;

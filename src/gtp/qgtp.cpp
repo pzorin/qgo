@@ -19,7 +19,7 @@ email                :
 #include <stdio.h>
 //#include <unistd.h>
 #include <stdlib.h>
-//#include <qprocess.h>
+#include <QApplication>
 enum CommandType {PROTOCOL, BOARDSIZE, KNOWN_COMMAND, LEVEL, KOMI, PLAY_BLACK, PLAY_WHITE, GENMOVE};
 #include "qgtp.h"
 

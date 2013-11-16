@@ -30,7 +30,7 @@
 #include "stone.h"
 #include "imagehandler.h"
 
-#include <stdlib.h>
+#include <QGraphicsScene>
 
 /*
  * Creates the stone as a GraphicsScene item

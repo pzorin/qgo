@@ -36,7 +36,10 @@
 #include "move.h"		//for updateLastMove, cleaner and yet not FIXME
 #include "graphicsitemstypes.h"
 
-#include <QtWidgets>
+#include <QMouseEvent>
+#include <QApplication>
+#include <QMessageBox>
+#include <QClipboard>
 
 class ImageHandler;
 

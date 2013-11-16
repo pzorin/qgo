@@ -23,8 +23,9 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include <QtWidgets>
-#include <QAction>
+#include <QObject>
+#include <QString>
+#include <QTableView>
 
 class NetworkConnection;
 class BoardDispatch;
@@ -52,8 +53,6 @@ class Room : public QObject
 		void recvPlayerListing(class PlayerListing * g);
         void recvGameListing(class GameListing * g);
     protected:
-		GameListing * registerGameListing(GameListing * l);
-
 		unsigned int players;
 		unsigned int games;
 	private:

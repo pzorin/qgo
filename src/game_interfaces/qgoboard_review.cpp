@@ -26,6 +26,8 @@
 #include "gamedata.h"
 #include "boardwindow.h"
 
+#include <QMessageBox>
+
 qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {
 	game_Id = QString::number(gd->number);

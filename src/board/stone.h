@@ -25,7 +25,8 @@
 
 #include "graphicsitemstypes.h"
 
-#include <QtWidgets>
+#include <QGraphicsItem>
+#include <QtCore>
 
 class Stone : public QGraphicsPixmapItem
 {

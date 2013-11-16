@@ -21,7 +21,7 @@
 
 
 #include "ui_gameinfo.h"
-#include <QtWidgets>
+#include <QDialog>
 
 class BoardWindow;
 

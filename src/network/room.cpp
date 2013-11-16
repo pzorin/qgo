@@ -237,11 +237,6 @@ void Room::recvToggle(int type, bool val)
     connectionWidget->slot_checkbox(type, val);
 }
 
-GameListing * Room::registerGameListing(GameListing * l)
-{
-    return gamesListModel->updateListing(l);
-}
-
 PlayerListing * Room::getPlayerListing(const QString & name)
 {
     return playerListModel->getEntry(name); //returns 0 if name not found
@@ -306,7 +301,7 @@ class BoardDispatch * Room::getNewBoardDispatch(unsigned int key)
 		* and just hope it gets filled in later */
 		listing = new GameListing();
 		listing->number = key;
-		registerGameListing(listing);
+        gamesListModel->updateListing(listing);
 	}
 	/* Look up game information to pass to board dispatch, if any 
 	* ... actually that might be circular, let's NOT do that.

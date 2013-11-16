@@ -124,8 +124,7 @@ class BoardDispatch
 		bool cantMarkOppStonesDead(void);
 	private:
 		void mergeListingIntoRecord(class GameData * r, class GameListing * l);
-		class MainWindow * mainwindow;
-		class BoardWindow * boardwindow;
+        class BoardWindow * boardwindow;
 		NetworkConnection * connection;
 		class GameData * gameData;
 		class GameListing * gameListing;

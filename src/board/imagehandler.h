@@ -23,10 +23,8 @@
 #ifndef IMAGEDATA_H
 #define IMAGEDATA_H
 
-#include "../defines.h"
-#include <cmath>
-
-#include <QtWidgets>
+#include <QtCore>
+#include <QPixmap>
 
 /* DONTREDRAWSTONES lets Qt do the scaling rather than redrawing them
  * to scale.  I'm not convinced it improves the speed all that much
@@ -35,11 +33,11 @@
  * comment this out */
 
 //#define DONTREDRAWSTONES
-typedef struct WhiteDesc_struct  {
+struct WhiteDesc {
 	double cosTheta, sinTheta;
 	double stripeWidth, xAdd;
 	double stripeMul, zMul;
-} WhiteDesc;
+};
 
 class ImageHandler
 {

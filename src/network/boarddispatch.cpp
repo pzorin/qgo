@@ -274,13 +274,16 @@ void BoardDispatch::gameDataChanged(void)
 
 void BoardDispatch::openBoard(void)
 {
-	if(!boardwindow)
-	{
-		if(!connection)
-		{
-			qDebug("Connection not set on board dispatch\n");
-			return;
-		}
+    if(boardwindow)
+    {
+        qDebug("BoardDispatch::openBoard() : window already open\n");
+        return;
+    }
+    if(!connection)
+    {
+        qDebug("BoardDispatch::openBoard() : connection not set\n");
+        return;
+    }
 		mergeListingIntoRecord(gameData, gameListing);
 		
 		bool imWhite = false;
@@ -312,15 +315,6 @@ void BoardDispatch::openBoard(void)
 		boardwindow->gameDataChanged();	//necessary at least for cursor
 		if(gameData->record_sgf != QString())	//for ORO
 			boardwindow->getBoardHandler()->slotNavLast();
-	}
-	else
-	{
-		/* FIXME we now have a gameDataChanged() function, can we remove this? */
-		
-		/* Mainly to allow accurate IGS status lookups */
-		//gameData->black_prisoners = g->black_prisoners;
-		//gameData->white_prisoners = g->white_prisoners;
-	}
 }
 
 void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)

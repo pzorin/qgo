@@ -30,7 +30,7 @@
 #include "boardwindow.h"
 #include "qgtp.h"
 
-#include <QtGui>
+#include <QMessageBox>
 
 qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw,  t, gd) //, QObject(bw)
 {

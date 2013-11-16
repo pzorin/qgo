@@ -18,8 +18,7 @@
 #ifndef QGTP_H
 #define QGTP_H
 
-#include <qapplication.h>
-#include <qprocess.h>
+#include <QProcess>
 
 #define IGTP_BUFSIZE 2048    /* Size of the response buffer */
 #define OK 0

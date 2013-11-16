@@ -33,8 +33,6 @@
 #include "../network/boarddispatch.h"
 #include "gameinfo.h"
 
-#include <QtWidgets>
-
 class BoardHandler;
 
 BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)

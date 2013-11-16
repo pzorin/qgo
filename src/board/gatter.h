@@ -23,7 +23,8 @@
 #ifndef GATTER_H
 #define GATTER_H
 
-#include <QtWidgets>
+#include <QGraphicsScene>
+#include <QtCore>
 
 class Gatter
 {

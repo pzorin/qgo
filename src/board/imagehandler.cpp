@@ -28,11 +28,11 @@
 *
 */
 
+#include <cmath>
 
 #include "defines.h"
 #include "imagehandler.h"
 
-#include <QtWidgets>
 
 #ifdef Q_OS_WIN
  #ifndef M_PI
