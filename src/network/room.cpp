@@ -139,8 +139,7 @@ void Room::slot_showPopup(const QPoint & iPoint)
     menu->addAction(matchAct);
     menu->addAction(talkAct);
     menu->addSeparator();
-	if(popup_playerlisting->info.contains("X"))
-		matchAct->setEnabled(false);
+    matchAct->setEnabled(!(popup_playerlisting->info.contains("X")));
     if(popup_playerlisting->friendWatchType == PlayerListing::friended)
         menu->addAction(removeFriendAct);
     else
