@@ -35,7 +35,7 @@ class GameDialog : public QDialog,/*public NewGameDialog,*/public Ui::GameDialog
 	Q_OBJECT
 
 public:
-	GameDialog(NetworkConnection * conn, const PlayerListing & opp);//QWidget* parent = 0, const char* name = 0, bool modal = true, WFlags fl = 0);
+    GameDialog(NetworkConnection * conn, const PlayerListing * opp);//QWidget* parent = 0, const char* name = 0, bool modal = true, WFlags fl = 0);
 	~GameDialog();
 	void set_oppRk(QString &rk) 	{ oppRk = rk; qDebug("oppRk: %s",  rk.toLatin1().constData()); }
 	void set_myRk(QString &rk) 	{ myRk = rk; qDebug("myRk: %s",  rk.toLatin1().constData()); }
@@ -122,7 +122,7 @@ private:
 	bool is_nmatch;
 	NetworkConnection * connection;
 	class MatchRequest * current_match_request;
-	const PlayerListing & opponent;
+    const PlayerListing * opponent;
 	class Sound * gameSound;
 	bool offered_and_unrefused;
 	unsigned long flags;

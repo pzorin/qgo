@@ -19,7 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
+#include <QDebug>
 #include "room.h"
 #include "../listviews.h"
 #include "talk.h"
@@ -35,14 +35,39 @@
 Room::Room(NetworkConnection * c)
 {
     connection = c; // has to be set before the signals are connected.
+    connectionWidget->room = this;
 
     gamesListModel = new GamesListModel();
     gamesView = connectionWidget->ui->gamesView;
     connectionWidget->gamesListProxyModel->setSourceModel(gamesListModel);
+    gamesView->setColumnWidth ( GC_ID, 40 );
+    gamesView->setColumnWidth ( GC_WHITENAME, 150 );
+    gamesView->setColumnWidth ( GC_WHITERANK, 40 );
+    gamesView->setColumnWidth ( GC_BLACKNAME, 150 );
+    gamesView->setColumnWidth ( GC_BLACKRANK, 40 );
+    gamesView->setColumnWidth ( GC_MOVES, 40 );
+    gamesView->setColumnWidth ( GC_SIZE, 40 );
+    gamesView->setColumnWidth ( GC_HANDICAP, 40 );
+    gamesView->setColumnWidth ( GC_KOMI, 40 );
+    gamesView->setColumnWidth ( GC_BYOMI, 40 );
+    gamesView->setColumnWidth ( GC_FLAGS, 40 );
+    gamesView->setColumnWidth ( GC_OBSERVERS, 40 );
+
 
     playerListModel = new PlayerListModel();
     playerView = connectionWidget->ui->playerView;
     connectionWidget->playerListProxyModel->setSourceModel(playerListModel);
+    playerView->setColumnWidth ( PC_STATUS, 40 );
+    playerView->setColumnWidth ( PC_NAME, 200 );
+    playerView->setColumnWidth ( PC_RANK, 40 );
+    playerView->setColumnWidth ( PC_PLAYING, 40 );
+    playerView->setColumnWidth ( PC_OBSERVING, 40);
+    playerView->setColumnWidth ( PC_WINS, 60 );
+    playerView->setColumnWidth ( PC_LOSSES, 60 );
+    playerView->setColumnWidth ( PC_IDLE, 60 );
+    playerView->setColumnWidth ( PC_COUNTRY, 100 );
+    playerView->horizontalHeader()->setStretchLastSection(true);
+    //playerView->setColumnWidth ( PC_MATCHPREFS, 200 );
 
     connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playerOpenTalk(const QModelIndex &)));
     connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
@@ -54,7 +79,8 @@ Room::Room(NetworkConnection * c)
     playerView->blockSignals(false);
     gamesView->blockSignals(false);
 
-    connect(connection,SIGNAL(playerListingUpdated(PlayerListing*)),playerListModel,SLOT(updateEntryByName(PlayerListing*)));
+    connect(connection,SIGNAL(playerListingReceived(PlayerListing*)),this,SLOT(recvPlayerListing(PlayerListing*)));
+    connect(connection,SIGNAL(gameListingReceived(GameListing*)),this,SLOT(recvGameListing(GameListing*)));
     connect(playerListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setPlayerCountStat(int)));
     connect(gamesListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setGameCountStat(int)));
 	
@@ -76,14 +102,17 @@ Room::Room(NetworkConnection * c)
 
 Room::~Room()
 {
-	/* If this was a stand alone room, we'd also destroy the UI
-	 * here, I just want to clear the lists */
     qDebug("Room::~Room()");
 	/* blockSignals necessary in qt 4.7 otherwise setModel(0) crashes stupidly */
 	playerView->blockSignals(true);
 	gamesView->blockSignals(true);
     connectionWidget->playerListProxyModel->setSourceModel(NULL);
     connectionWidget->gamesListProxyModel->setSourceModel(NULL);
+    connectionWidget->room = NULL;
+    while (! playerListModel->items.isEmpty())
+        delete playerListModel->items.takeLast();
+    while (! gamesListModel->items.isEmpty())
+        delete gamesListModel->items.takeLast();
 	delete playerListModel;
 	delete gamesListModel;
 }
@@ -151,21 +180,21 @@ void Room::slot_showPopup(const QPoint & iPoint)
 
     QAction * result = menu->exec(playerView->mapToGlobal(iPoint));
     if (result == statsAct)
-        connection->sendStatsRequest(*popup_playerlisting);
+        connection->sendStatsRequest(popup_playerlisting);
     if (result == matchAct)
-        connection->sendMatchInvite(*popup_playerlisting);
+        connection->sendMatchInvite(popup_playerlisting);
     if (result == talkAct)
         slot_playerOpenTalk(popup_item);
     if (result == removeFriendAct)
-        connection->removeFriend(*popup_playerlisting);
+        connection->removeFriend(popup_playerlisting);
     if (result == addFriendAct)
-        connection->addFriend(*popup_playerlisting);
+        connection->addFriend(popup_playerlisting);
     if (result == removeWatchAct)
-        connection->removeWatch(*popup_playerlisting);
+        connection->removeWatch(popup_playerlisting);
     if (result == addWatchAct)
-        connection->addWatch(*popup_playerlisting);
+        connection->addWatch(popup_playerlisting);
     if (result == blockAct)
-        connection->addBlock(*popup_playerlisting);
+        connection->addBlock(popup_playerlisting);
     menu->deleteLater();
     menu = NULL;
     return;
@@ -190,9 +219,9 @@ void Room::slot_showGamesPopup(const QPoint & iPoint)
 
     QAction * result = menu->exec(gamesView->mapToGlobal(iPoint));
     if (result == observeOutsideAct)
-        connection->sendObserveOutside(*popup_gamelisting);
+        connection->sendObserveOutside(popup_gamelisting);
     if (result == joinObserveAct)
-        connection->sendObserve(*popup_gamelisting);
+        connection->sendObserve(popup_gamelisting);
     menu->deleteLater();
     menu = NULL;
     return;
@@ -205,28 +234,18 @@ void Room::slot_gamesDoubleClicked(const QModelIndex & index)
     const GameListing * g = gamesListModel->gameListingFromIndex(sourceIndex);
 	if(preferences.observe_outside_on_doubleclick &&
 		  connection->supportsObserveOutside() && !g->isRoomOnly)
-		connection->sendObserveOutside(*g);
+        connection->sendObserveOutside(g);
 	else
-		connection->sendObserve(*g);
+        connection->sendObserve(g);
 }
 
 void Room::slot_refreshGames(void)
 {
-	/* First clear list.  There doesn't
-	* seem to be a good way to update it
-    * or update everything [IGS issue]. */
-    gamesListModel->clearList();
 	connection->sendGamesRequest();
 }
 
 void Room::slot_refreshPlayers(void)
 {
-    /* Also have to refresh the list of games here
-     * because game listings point to player listings that
-     * have to be destroyed */
-    gamesListModel->clearList();
-    playerListModel->clearList();
-    connection->sendGamesRequest();
     connection->sendPlayersRequest();
 }
 
@@ -237,14 +256,32 @@ void Room::recvToggle(int type, bool val)
 
 PlayerListing * Room::getPlayerListing(const QString & name)
 {
-    return playerListModel->getEntry(name); //returns 0 if name not found
+    //qDebug() << "Room::getPlayerListing() called with argument " << name;
+    PlayerListing * result = playerListModel->getEntry(name);
+    if (result == NULL)
+    {
+        result = new PlayerListing();
+        result->online = true;
+        result->name = name;
+        playerListModel->insertListing(result);
+    }
+    return result;
 }
 
 PlayerListing * Room::getPlayerListing(const unsigned int id)
 {
-    return playerListModel->getEntry(id);
+    PlayerListing * result = playerListModel->getEntry(id);
+    if (result == NULL)
+    {
+        result = new PlayerListing();
+        result->online = true;
+        result->id = id;
+        playerListModel->insertListing(result);
+    }
+    return result;
 }
 
+// The reason to have this function seems to date from performance issues around 2011.
 /* Here's the deal with this.  Tygem has a username and a nickname.
  * the nickname is displayed and generally present, but not always.  The username
  * seems to always be present.  At first glance, it makes sense to lookup by
@@ -258,22 +295,33 @@ PlayerListing * Room::getPlayerListing(const unsigned int id)
  /* FIXME don't we usually say "from" instead of "by" change this */
 PlayerListing * Room::getPlayerListingByNotNickname(const QString & notnickname)
 {
-    if(connection->playerTrackingByID())
-	{
-        qDebug("Room::getPlayerListingByNotNickname() : not supported by connection");
-		return NULL;
-	}
-	else
-        return playerListModel->getPlayerFromNotNickName(notnickname);
+    PlayerListing * result = NULL;
+    /* It is illogical to try to look up things by username first and by "notnickname" second
+     * in this function, but this apparently has some historical reason that I am unaware of. */
+    if (result == NULL)
+        result = playerListModel->getEntry(notnickname);
+    if (result == NULL)
+        playerListModel->getPlayerFromNotNickName(notnickname);
+    if (result == NULL)
+    {
+        result = new PlayerListing();
+        result->online = true;
+        result->notnickname = notnickname;
+        playerListModel->insertListing(result);
+    }
+    return result;
 }
 
-/* Remember that this and getPlayerListing do return 0.
- * getEntry functions like getIfEntry because getNewEntry
- * is not defined, since we create registry entries for
- * the games/player registries by passing them */
 GameListing * Room::getGameListing(unsigned int key)
 {
-    return gamesListModel->getEntry(key);
+    GameListing * result = gamesListModel->getEntry(key);
+    if (result == NULL)
+    {
+        result = new GameListing();
+        result->number = key;
+        gamesListModel->insertListing(result);
+    }
+    return result;
 }
 
 /* Called from getNewEntry in BoardDispatchRegistry in networkconnection.cpp */
@@ -290,52 +338,31 @@ class BoardDispatch * Room::getNewBoardDispatch(unsigned int key)
 	* ORO protocol.  Its a fucking mess. I think we better just store
 	* everything by the key and have a separate lookup, code to key */
 	GameListing * listing = getGameListing(key);
-	if(!listing)
-	{
-		/* I'm not so sure about this.  FIXME We want BoardDispatch
-		* to have an initial listing maybe but perhaps we should
-		* alter BoardDispatch to be more adaptable in case there
-		* is no listing rather than create a dummy one like this
-		* and just hope it gets filled in later */
-		listing = new GameListing();
-		listing->number = key;
-        gamesListModel->updateListing(listing);
-	}
-	/* Look up game information to pass to board dispatch, if any 
-	* ... actually that might be circular, let's NOT do that.
-	* Except, we don't want to overwrite an existing listing */
-
-	/*GameListing * temp_listing = new GameListing();
-	temp_listing->number = key;
-	listing = registerGameListing(temp_listing);
-	delete temp_listing;*/
-	
-	return new BoardDispatch(connection, listing);
+    return new BoardDispatch(connection, listing);
 }
 
-void Room::recvPlayerListing(PlayerListing * player)
+void Room::recvPlayerListing(PlayerListing *player)
 {
-	if(!player->online)
+    playerListModel->updateEntry(player);
+
+    if(!player->online)
     {
 		if(player->playing)
 		{
 			/* FIXME, something should clear this when games end */
 			GameListing * g = getGameListing(player->playing);
-			if(g)
-			{
-				if(g->black == player)
-				{
-					g->black = 0;
-					g->_black_name = player->name;
-					g->_black_rank = player->rank;
-				}
-				else if(g->white == player)
-				{
-					g->white = 0;
-					g->_white_name = player->name;
-					g->_white_rank = player->rank;
-				}
-			}
+            if(g->black == player)
+            {
+                g->black = NULL;
+                g->_black_name = player->name;
+                g->_black_rank = player->rank;
+            }
+            else if(g->white == player)
+            {
+                g->white = NULL;
+                g->_white_name = player->name;
+                g->_white_rank = player->rank;
+            }
 		}
 		if(player->observing)
 		{
@@ -360,46 +387,25 @@ void Room::recvPlayerListing(PlayerListing * player)
 			room_listit = player->room_list.begin();
 		}
 		if(player->friendWatchType != PlayerListing::none)
-			connection->getAndSetFriendWatchType(*player);  //removes
+            connection->getAndSetFriendWatchType(player);  //removes
 	}
-	PlayerListing * registered_player = 0;
-	if(player->online)
-		connection->getAndSetFriendWatchType(*player);
-    if(connection->playerTrackingByID())
-	{
-		if(player->online)
-            registered_player = playerListModel->updateEntryByID(player);
-		else
-            playerListModel->deleteEntry(player->id);
-	}
-	else
-	{
-		if(player->online)
-            registered_player = playerListModel->updateEntryByName(player);
-		else
-            playerListModel->deleteEntry(player->name);
-	}
+
+    if(player->online)
+        connection->getAndSetFriendWatchType(player);
 	
-	if(registered_player && player->online)
-	{
-		/* FIXME consider changing name of getEntry with the object?
-		 * so that its more clear that it returns a new stored object
-		 * based on the one passed. (i.e., looking it up if
-		 * alread there)*/
-		if(player->dialog_opened)
-		{
-            Talk * t = connection->getIfTalk(player);
-			if(t)
-				t->updatePlayerListing();
-			else
-				qDebug("dialog_opened flag set but no talk dialog");
-		}
-	}
+    if(player->online && player->dialog_opened)
+    {
+        Talk * t = connection->getIfTalk(player);
+        if(t)
+            t->updatePlayerListing();
+        else
+            qDebug("dialog_opened flag set but no talk dialog");
+    }
 }
 
 void Room::recvGameListing(GameListing * game)
 {
-	unsigned int key;
+    gamesListModel->updateListing(game);
 	/* This WAS iffy, we WERE using the other ID registry's
 	 * existence to indicate an ORO connection in order
 	 * to use a different key.  Ugly.  Once this works, 
@@ -410,14 +416,10 @@ void Room::recvGameListing(GameListing * game)
 	 * anyway, so who cares */
 	//if(playerListingIDRegistry)
 	//	key = game->game_code;
-	//else
-		key = game->number;
+    //else
 	
 	if(game->running)
-	{
-        game = gamesListModel->updateListing(game);
-		connection->checkGameWatched(*game);
+    {
+        connection->checkGameWatched(game);
 	}
-	else
-        gamesListModel->deleteEntry(key);
 }

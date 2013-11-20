@@ -69,6 +69,7 @@ public:
 
 protected:
     friend class Room;
+    Room * room;
     PlayerListSortFilterProxyModel * playerListProxyModel;
     GamesListSortFilterProxyModel * gamesListProxyModel;
 
@@ -102,9 +103,6 @@ public slots:
     void slot_connexionClosed();
 
     void slot_statsPlayer(PlayerListing*);
-
-    void setGameCountStat(int);
-    void setPlayerCountStat(int);
 
 private slots:
     void setRankSpreadView(void);

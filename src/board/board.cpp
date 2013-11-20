@@ -521,11 +521,10 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
  * Synchronize the board with the given stone color and coordinates
  * This is usually called by boardhandler when scanning a matrix.
  */
-bool Board::updateStone(StoneColor c, int x, int y, bool dead)
+void Board::updateStone(StoneColor c, int x, int y, bool dead)
 {
 	Stone *stone;
-	QHash<int,Stone *>::iterator si;
-	bool modified = false;	
+    QHash<int,Stone *>::iterator si;
 
 	if ((si = stones->find(coordsToKey(x, y))) == stones->end())
 		stone = NULL;
@@ -539,25 +538,19 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 		if (stone == NULL)
 		{
 			stone = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,true);
-			Q_CHECK_PTR(stone);
-			
             stone->setPos(offsetX + square_size * (x - 1) - stone->pixmap().width()/2,
                 offsetY + square_size * (y - 1) - stone->pixmap().height()/2 );
-
-			stones->insert(coordsToKey(x,y) , stone);
-			modified = true;
+            stones->insert(coordsToKey(x,y) , stone);
 			break;
 		}
 		else if (!stone->isVisible())
 		{
-			stone->show();
-			modified = true;
+            stone->show();
 		}
 		
 		if (stone->getColor() != c)
 		{
-			stone->setColor(c);
-			modified = true;
+            stone->setColor(c);
 		}
 		
 		// We need to check wether the stones have been toggled dead or seki before (scoring mode)
@@ -581,8 +574,7 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 	case stoneErase:
 		if (stone && stone->isVisible())
 		{
-			stone->hide();
-			modified = true;
+            stone->hide();
 		}
 		break;
 		
@@ -590,9 +582,6 @@ bool Board::updateStone(StoneColor c, int x, int y, bool dead)
 		qWarning("Bad data <%d> at %d/%d in board::updateStone !",
 			c, x, y);
 	}
-	
-	//its always modified I think FIXME
-	return modified;
 }
 
 /*

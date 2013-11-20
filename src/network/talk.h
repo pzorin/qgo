@@ -39,20 +39,20 @@ public:
 	QTextEdit      *get_mle() const { return ui.MultiLineEdit1; } 
 	QWidget        *get_tabWidget()  { return this; }
 	QString        get_name() const;
-	PlayerListing & get_opponent() const;
-	bool	 	getConversationOpened(void) const { return conversationOpened; };
-	void		setConversationOpened(bool c) { conversationOpened = c; };
+    PlayerListing * get_opponent() const;
+    bool	 	getConversationOpened(void) const { return conversationOpened; }
+    void		setConversationOpened(bool c) { conversationOpened = c; }
 	//void           set_name(QString &n) { name = n; }
 	void           write(const QString &text = QString()) const;
 	void recvTalk(QString text);
     void	       displayData(PlayerListing * p);
-	void	       updatePlayerListing(void);
-	bool           pageActive;
+    bool           pageActive;
 	void           setTalkWindowColor(QPalette pal);
 public slots:
 	void slot_returnPressed();
 	void slot_pbRelTab();
 	void slot_match();
+    void updatePlayerListing();
 
 signals:
 	void signal_talkTo(QString&, QString&);
@@ -64,7 +64,7 @@ private:
 	Ui::TalkGui ui;
 	static int     counter;
 	NetworkConnection * connection;
-	PlayerListing & opponent;
+    PlayerListing * opponent;
 	bool conversationOpened;
 
 };

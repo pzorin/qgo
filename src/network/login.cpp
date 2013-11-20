@@ -47,17 +47,17 @@ CredentialTableModel::CredentialTableModel(QObject *parent)
 
 CredentialTableModel::~CredentialTableModel() {}
 
-int CredentialTableModel::rowCount(const QModelIndex & parent) const
+int CredentialTableModel::rowCount(const QModelIndex &) const
 {
     return credentials.size();
 }
 
-int CredentialTableModel::columnCount(const QModelIndex & parent) const
+int CredentialTableModel::columnCount(const QModelIndex &) const
 {
     return CRED_NUMITEMS;
 }
 
-QModelIndex CredentialTableModel::index ( int row, int column, const QModelIndex & parent ) const
+QModelIndex CredentialTableModel::index ( int row, int column, const QModelIndex &) const
 {
     return createIndex(row,column);
 }
@@ -110,7 +110,7 @@ QVariant CredentialTableModel::headerData(int section, Qt::Orientation orientati
     return QVariant();
 }
 
-Qt::ItemFlags CredentialTableModel::flags(const QModelIndex & index) const
+Qt::ItemFlags CredentialTableModel::flags(const QModelIndex &) const
 {
     if (editable)
         return Qt::ItemIsEnabled | Qt::ItemIsEditable;
@@ -157,7 +157,7 @@ bool CredentialTableModel::setData(const QModelIndex & index, const QVariant & v
     return true;
 }
 
-bool CredentialTableModel::removeRows(int row, int count, const QModelIndex &parent)
+bool CredentialTableModel::removeRows(int row, int count, const QModelIndex &)
 {
     beginRemoveRows(QModelIndex(),row,row+count-1);
     for(;count>0;count--)

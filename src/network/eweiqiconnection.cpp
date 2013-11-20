@@ -96,17 +96,7 @@ QByteArray EWeiQiConnection::getTygemGameRecordQByteArray(GameData * game)
 	int margin = 0;
 	
 	black = room->getPlayerListing(game->black_name); 
-	if(!black)
-	{
-		qDebug("Can't get player listing for black: \"%s\"", game->black_name.toLatin1().constData());
-		return QByteArray();
-	}
 	white = room->getPlayerListing(game->white_name); 
-	if(!white)
-	{
-		qDebug("Can't get player listing for white: \"%s\"", game->white_name.toLatin1().constData());
-		return QByteArray();
-	}
 	sscanf(black->rank.toLatin1().constData(), "%d%c", &black_ordinal, &black_qualifier);
 	if(black_qualifier == 'k')
 	{
@@ -209,7 +199,13 @@ QByteArray EWeiQiConnection::getTygemGameRecordQByteArray(GameData * game)
 			(minute < 10 ? ":0" : ":") + QByteArray::number(minute) + "\\]\r\n";
 	/* Note that its very likely that one of the above strings contains a PM versus
 	 * AM */
-	const char eWeiQi_game_place_array[] = {0xde,0xc4,0xb3,0xc7,0x54,0x59,0x47,0x45,0x4d,0xb6,0xd4,0xde,0xc4};
+    const char eWeiQi_game_place_array[] = {static_cast<const char>(0xde),static_cast<const char>(0xc4),
+                                            static_cast<const char>(0xb3),static_cast<const char>(0xc7),
+                                            static_cast<const char>(0x54),static_cast<const char>(0x59),
+                                            static_cast<const char>(0x47),static_cast<const char>(0x45),
+                                            static_cast<const char>(0x4d),static_cast<const char>(0xb6),
+                                            static_cast<const char>(0xd4),static_cast<const char>(0xde),
+                                            static_cast<const char>(0xc4)};
 	QByteArray eWeiQi_game_place(eWeiQi_game_place_array, 13);
 	string += "\\[GAMEPLACE=" + eWeiQi_game_place + "\\]\r\n";
 	string += "\\[GAMELECNAME=\\]\r\n";

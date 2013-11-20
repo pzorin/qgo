@@ -42,22 +42,22 @@ class IGSConnection : public NetworkConnection
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);
 		virtual void sendMsg(unsigned int game_id, QString text);
-		virtual void sendMsg(PlayerListing & player, QString text);
+        virtual void sendMsg(PlayerListing * player, QString text);
 		virtual void sendToggle(const QString & param, bool val);
-		virtual void sendObserve(const GameListing & game);
-		virtual void stopObserving(const GameListing & game);
-		virtual void stopReviewing(const GameListing & game);
-		virtual void sendStatsRequest(const PlayerListing & opponent);
+        virtual void sendObserve(const GameListing * game);
+        virtual void stopObserving(const GameListing * game);
+        virtual void stopReviewing(const GameListing * game);
+        virtual void sendStatsRequest(const PlayerListing * opponent);
 		virtual void sendPlayersRequest(void);
         virtual void sendGamesRequest(void);
 		void sendRoomListRequest(void);
-		virtual void sendMatchInvite(const PlayerListing & player);
+        virtual void sendMatchInvite(const PlayerListing * player);
 		virtual void sendAddTime(int);
-		virtual void adjournGame(const GameListing & game);
+        virtual void adjournGame(const GameListing * game);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
 		virtual void sendMatchRequest(class MatchRequest * mr);
-		virtual void declineMatchOffer(const PlayerListing & opponent);
-		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr);
+        virtual void declineMatchOffer(const PlayerListing * opponent);
+        virtual void acceptMatchOffer(const PlayerListing * opponent, class MatchRequest * mr);
 		virtual QTime gd_checkMainTime(TimeSystem s, const QTime & t);
 		virtual QTime gd_checkPeriodTime(TimeSystem s, const QTime & t);
 		virtual unsigned int gd_checkPeriods(TimeSystem s, unsigned int p);
@@ -81,22 +81,22 @@ class IGSConnection : public NetworkConnection
 		virtual unsigned int rankToScore(QString rank);
 		/* I thought we didn't start time until after first move
 		 * but I check today and we do, so I'll change it... doublecheck */
-		virtual bool startTimerOnOpen(void) { return true; };
-		virtual bool flipCoords(void) { return false; };
-		virtual bool supportsRequestAdjourn(void) { return true; };
-		virtual bool supportsAddTime(void) { return true; };
-		virtual bool undoResetsScore(void) { return true; };
-		virtual bool supportsSeek(void) { return true; };
-		virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; };
-		virtual bool supportsChannels(void) { return true; };
-		virtual bool supportsRefreshListsButtons(void) { return true; };
-		virtual bool consoleIsChat(void) { return false; };
+        virtual bool startTimerOnOpen(void) { return true; }
+        virtual bool flipCoords(void) { return false; }
+        virtual bool supportsRequestAdjourn(void) { return true; }
+        virtual bool supportsAddTime(void) { return true; }
+        virtual bool undoResetsScore(void) { return true; }
+        virtual bool supportsSeek(void) { return true; }
+        virtual unsigned long getPlayerListColumns(void) { return PL_NOWINSLOSSES; }
+        virtual bool supportsChannels(void) { return true; }
+        virtual bool supportsRefreshListsButtons(void) { return true; }
+        virtual bool consoleIsChat(void) { return false; }
 		virtual unsigned long getGameDialogFlags(void);
-		virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); };
+        virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); }
 			
 	protected:
 		virtual bool readyToWrite(void);
-		virtual void setReadyToWrite(void) { writeReady = true; };
+        virtual void setReadyToWrite(void) { writeReady = true; }
 		virtual void onAuthenticationNegotiated(void);
 		virtual void setKeepAlive(int);
 		void handleLogin(QString msg);
@@ -164,8 +164,8 @@ class IGSConnection : public NetworkConnection
 	private:
 		void init(void);
 		void sendNmatchParameters(void);
-		void setCurrentRoom(const RoomListing & room) { currentRoom = &room; };
-		const RoomListing * getCurrentRoom(void) { return currentRoom; };
+        void setCurrentRoom(const RoomListing & room) { currentRoom = &room; }
+        const RoomListing * getCurrentRoom(void) { return currentRoom; }
 		
 		bool guestAccount;
 		bool needToSendClientToggle;

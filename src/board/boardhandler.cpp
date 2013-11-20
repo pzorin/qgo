@@ -629,13 +629,7 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 {
 	Matrix * m = move->getMatrix();
 	Q_CHECK_PTR(m);
-	
-	//qDebug("BoardHandler::updateAll FIXME"); FIXME FIXME FIXME
-	//tree->updateAll(m);	
-	
-//	m->debug();
 
-//	Stone *stone;
 	bool modified = false;//, fake = false;
 	StoneColor color;
 	bool dead;

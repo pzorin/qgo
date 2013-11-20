@@ -35,6 +35,13 @@ class FilteredView;
 class PlayerListModel;
 class GamesListModel;
 
+/* The main purpose of this class is to manage player and game listings.
+ * Listings must be created and retrieved using get...() methods of this class.
+ * After modification of a listing, the corresponding recv...() method should be called
+ * (this can be done asynchronously using Qt's signal/slot mechanism).
+ * In the current implementation listings are never removed, so other objects may rely
+ * on pointers to listings remaining valid (until the connection is destroyed). */
+
 class Room : public QObject
 {
 	Q_OBJECT
@@ -45,13 +52,19 @@ class Room : public QObject
 		virtual ~Room();
         void onError(void);
 		void recvToggle(int type, bool val);
+
+        // These functions create a listing if it does not exist
 		PlayerListing * getPlayerListing(const QString & name);
-		PlayerListing * getPlayerListing(const unsigned int id);
-		PlayerListing * getPlayerListingByNotNickname(const QString & notnickname);
+        PlayerListing * getPlayerListing(const unsigned int id);
+        PlayerListing * getPlayerListingByNotNickname(const QString & notnickname);
 		GameListing * getGameListing(unsigned int key);
+
 		BoardDispatch * getNewBoardDispatch(unsigned int key);
-		void recvPlayerListing(class PlayerListing * g);
-        void recvGameListing(class GameListing * g);
+public slots:
+        void slot_refreshGames(void);
+        void slot_refreshPlayers(void);
+        void recvPlayerListing(PlayerListing *g);
+        void recvGameListing(GameListing *g);
     protected:
 		unsigned int players;
 		unsigned int games;
@@ -68,9 +81,6 @@ class Room : public QObject
 
         QAction *statsAct, *matchAct, *talkAct, *removeFriendAct, *addFriendAct, *removeWatchAct, *addWatchAct, *blockAct;
         QAction *joinObserveAct, *observeOutsideAct;
-public slots:
-        void slot_refreshGames(void);
-        void slot_refreshPlayers(void);
 	private slots:
         void slot_playerOpenTalk(const QModelIndex &);
         void slot_gamesDoubleClicked(const QModelIndex &);

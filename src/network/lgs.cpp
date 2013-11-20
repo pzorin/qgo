@@ -327,7 +327,7 @@ void LGSConnection::handle_info(QString line)
 			aMatch->nmatch = false;
 		}
 		PlayerListing * p = getPlayerListingNeverFail(aMatch->opponent);
-		PlayerListing * us = room->getPlayerListing(getUsername());
+        const PlayerListing * us = getOurListing();
 		if(us)
 		{	
 			aMatch->our_name = us->name;
@@ -481,10 +481,9 @@ void LGSConnection::handle_info(QString line)
 			// 9 Game 22: frosla vs frosla has adjourned.
 	else if (line.contains("has adjourned"))
 	{
-		GameListing * aGame = new GameListing();
-				// remove game from list
-		aGame->number = element(line, 0, " ", ":").toInt();
-		aGame->running = false;
+        int number = element(line, 0, " ", ":").toInt();
+        GameListing * aGame = room->getGameListing(number);
+        aGame->running = false;
 
 				// for information
 				//aGame->Sz = "has adjourned.";
@@ -496,7 +495,6 @@ void LGSConnection::handle_info(QString line)
 				// No need to get existing listing because
 				// this is just to falsify the listing
 		room->recvGameListing(aGame);
-		delete aGame;
 	}
 			// 9 Removing game 30 from observation list.
 	else if (line.contains("from observation list"))
@@ -601,14 +599,9 @@ void LGSConnection::handle_info(QString line)
 		   line.contains("forfeits on")	||
 		   line.contains("lost by"))
 	{
-		GameResult * aGameResult;
-		GameListing * aGame = new GameListing();
-					// re game from list
+        GameResult * aGameResult;
 		int number = element(line, 0, " ", ":").toInt();
-		GameListing * l = room->getGameListing(number);
-		if(l)
-			*aGame = *l;
-		aGame->number = number;
+        GameListing * aGame = room->getGameListing(number);
 		aGame->running = false;
 					// for information
 		aGame->result = element(line, 4, " ", "}");
@@ -728,7 +721,6 @@ void LGSConnection::handle_info(QString line)
 			boarddispatch->recvKibitz("", line);
 		}
 		room->recvGameListing(aGame);
-		delete aGame;
 		return;
 	}
 			// NNGS: 9 Messages: (after 'message' cmd)

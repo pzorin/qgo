@@ -198,17 +198,7 @@ QByteArray TomConnection::getTygemGameRecordQByteArray(GameData * game)
 	int margin = 0;
 	
 	black = room->getPlayerListing(game->black_name); 
-	if(!black)
-	{
-		qDebug("Can't get player listing for black: \"%s\"", game->black_name.toLatin1().constData());
-		return QByteArray();
-	}
 	white = room->getPlayerListing(game->white_name); 
-	if(!white)
-	{
-		qDebug("Can't get player listing for white: \"%s\"", game->white_name.toLatin1().constData());
-		return QByteArray();
-	}
 	sscanf(black->rank.toLatin1().constData(), "%d%c", &black_ordinal, &black_qualifier);
 	if(black_qualifier == 'k')
 	{

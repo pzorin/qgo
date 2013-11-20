@@ -97,7 +97,6 @@ private:
 	GSName     gsName;
 	class PlayerListing * aPlayer;
 	class PlayerListing * statsPlayer;
-	class GameListing * aGame;
 	class GameResult * aGameResult;
 	class GameRecord * aGameRecord;
 	class TimeRecord * aTime;

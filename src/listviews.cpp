@@ -26,105 +26,6 @@
 #include "gamedata.h"
 #include <QColor>
 
-ObserverListModel::ObserverListModel()
-{
-}
-
-ObserverListModel::~ObserverListModel()
-{
-}
-
-void ObserverListModel::insertListing(PlayerListing * const listing)
-{
-	for(int i = 0; i < items.count(); i++)
-	{
-        if(((PlayerListing *)items[i])->name == listing->name)
-			return;
-	}
-    PlayerListing * item = new PlayerListing(*listing);
-    ListModel::insertListing(item);
-}
-
-void ObserverListModel::removeListing(PlayerListing * const listing)
-{
-	for(int i = 0; i < items.count(); i++)
-	{
-        const PlayerListing * item = static_cast<const PlayerListing *>(items[i]);
-        if(item == listing)
-		{
-            beginRemoveRows(QModelIndex(), i, i);
-			items.removeAt(i);
-            endRemoveRows();
-			delete item;
-			return;
-		}
-	}
-}
-
-int ObserverListModel::columnCount(const QModelIndex &) const
-{
-    return O_TOTALCOLUMNS;
-}
-
-QVariant ObserverListModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        switch(section)
-        {
-        case OC_NAME:
-            return QVariant("Name");
-        case OC_RANK:
-            return QVariant("Rank");
-        }
-    return QVariant();
-}
-
-void ObserverListModel::clearList(void)
-{
-	if(items.count() == 0)
-		return;
-    beginResetModel();
-    for(int i=0; i < items.count(); i++)
-	{
-        const PlayerListing * item = static_cast<const PlayerListing *>(items[i]);
-		delete item;
-	}
-    items.clear();
-    endResetModel();
-}
-
-QVariant ObserverListModel::data(const QModelIndex & index, int role) const
-{
-    if(!index.isValid())
-		return QVariant();
-
-    PlayerListing * item = static_cast<PlayerListing*>(index.internalPointer());
-	if(role == Qt::DisplayRole)
-    {
-        switch(index.column())
-            {
-                case OC_NAME:
-                    return item->name;
-                    break;
-                case OC_RANK:
-                    return item->rank;
-                    break;
-                default:
-                    return QVariant();
-                    break;
-            }
-    }
-	else if(role == Qt::ForegroundRole)
-	{
-        if(item->name == account_name)
-            return QColor(Qt::blue);
-		else
-			return QVariant();
-	}
-	else
-		return QVariant();
-}
-
 PlayerListModel::PlayerListModel()
 {
 }
@@ -162,113 +63,92 @@ QVariant PlayerListModel::headerData(int section, Qt::Orientation orientation, i
         case PC_COUNTRY:
             return QVariant("Country");
         case PC_MATCHPREFS:
-            return QVariant("March prefs");
+            return QVariant("Match prefs");
         }
     return QVariant();
 }
 
-void PlayerListModel::insertListing(PlayerListing * const l)
-{
-    PlayerListing * item = new PlayerListing(*l);
-    ListModel::insertListing(item);
-}
-
 void PlayerListModel::removeListing(PlayerListing * const l)
 {
-	for(int i = 0; i < items.count(); i++)
-	{
-        PlayerListing * item = static_cast<PlayerListing *>(items[i]);
-        if(item == l)
-		{
-            removeRow(i);
-			delete item;
-			return;
-		}
-	}
+    int i = items.indexOf(l);
+    if (i != -1)
+    {
+        beginRemoveRows(QModelIndex(), i, i);
+        items.removeAt(i);
+        endRemoveRows();
+    }
 }
 
 void PlayerListModel::clearList(void)
 {
-    const int listSize = items.size();
-    if(listSize == 0)
-		return;
-    beginRemoveRows(QModelIndex(), 0, listSize - 1);
-    for(int i = 0; i < items.count(); i++)
-    {
-        const PlayerListing * item = static_cast<const PlayerListing *>(items[i]);
-        delete item;
-    }
+    if(items.count() == 0)
+        return;
+    beginResetModel();
     items.clear();
-    endRemoveRows();
+    endResetModel();
 }
 
 QVariant PlayerListModel::data(const QModelIndex & index, int role) const
 {
     if(!index.isValid())
         return QVariant();
-	
+
     PlayerListing * item = static_cast<PlayerListing*>(index.internalPointer());
-	
+
     if (role == Qt::ForegroundRole)
-        {
-            if(item->name == account_name)
-                return QColor(Qt::blue);
-            else
-                return QVariant();
-        }
+    {
+        if(item->name == account_name)
+            return QColor(Qt::blue);
+        else
+            return QVariant();
+    }
     else if ((role == Qt::DisplayRole) || (role == LIST_SORT_ROLE))
     {
         switch(index.column())
-            {
-                case PC_STATUS:
-                    return QVariant(item->info);
-                    break;
-                case PC_NAME:
-                    return QVariant(item->name);
-                    break;
-                case PC_RANK:
+        {
+        case PC_STATUS:
+            return QVariant(item->info);
+            break;
+        case PC_NAME:
+            return QVariant(item->name);
+            break;
+        case PC_RANK:
             if (role == LIST_SORT_ROLE)
                 return QVariant(item->rank_score);
             else
                 return QVariant(item->rank);
-                    break;
-                case PC_PLAYING:
-                    if(item->playing == 0)
-                        return QVariant("-");
-                    return QVariant(item->playing);
-                    break;
-                case PC_OBSERVING:
-                    if(item->observing == 0 ||
-                        item->observing == item->playing)
-                        return QVariant("-");
-                    return QVariant(item->observing);
-                    break;
-                case PC_WINS:
-                    return QVariant(item->wins);
-                    break;
-                case PC_LOSSES:
-                    return QVariant(item->losses);
-                    break;
-                case PC_IDLE:
+        case PC_PLAYING:
+            if(item->playing == 0)
+                return QVariant("-");
+            else
+                return QVariant(item->playing);
+        case PC_OBSERVING:
+            if(item->observing == 0 ||
+                    item->observing == item->playing)
+                return QVariant("-");
+            else
+                return QVariant(item->observing);
+        case PC_WINS:
+            return QVariant(item->wins);
+        case PC_LOSSES:
+            return QVariant(item->losses);
+        case PC_IDLE:
             if (role == LIST_SORT_ROLE)
                 return QVariant(item->seconds_idle);
             else
                 return QVariant(item->idletime);
-                    break;
-                case PC_COUNTRY:
-                    return QVariant(item->country);
-                    break;
-                case PC_MATCHPREFS:
-                    //is this right?  FIXME takes up too much space, should go with simple numbers, abbrev.
-                    return QVariant(item->nmatch_settings);
-                    break;
-                case PC_NOTIFY:		//was used for SimplePlayerListModel
-                    return QVariant(item->notify);
-                    break;
-                default:
-                    return QVariant();
-                    break;
-            }
+        case PC_COUNTRY:
+            return QVariant(item->country);
+        case PC_MATCHPREFS:
+            //is this right?  FIXME takes up too much space, should go with simple numbers, abbrev.
+            return QVariant(item->nmatch_settings);
+        case PC_NOTIFY:		//was used for SimplePlayerListModel
+            return QVariant(item->notify);
+        case PC_ONLINE:
+            return QVariant(item->online);
+        default:
+            return QVariant();
+        }
     }
     return QVariant();
 }
@@ -319,72 +199,91 @@ PlayerListing * PlayerListModel::getPlayerFromNotNickName(const QString & notnic
     return NULL;
 }
 
-PlayerListing * PlayerListModel::updateEntryByName(PlayerListing * listing)
+PlayerListing * PlayerListModel::updateEntry(PlayerListing * listing)
 {
     PlayerListing * result;
     for (int i=0; i < items.count(); i++)
     {
         result = static_cast<PlayerListing*>(items[i]);
-        if (result->name == listing->name)
+        if (result == listing)
         {
-            *result = *listing;
             emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
             return result;
         }
     }
-    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
-    insertListing(result);
-    return result;
+    return NULL;
 }
 
-PlayerListing * PlayerListModel::updateEntryByID(PlayerListing *listing)
+void PlayerListModel::insertListing(PlayerListing *item)
 {
-    PlayerListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = static_cast<PlayerListing*>(items[i]);
-        if (result->id == listing->id)
-        {
-            *result = *listing;
-            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
-            return result;
-        }
-    }
-    result = new PlayerListing(*listing); // Should not create a copy here? FIXME
-    insertListing(result);
-    return result;
+    beginInsertRows(QModelIndex(), items.count(), items.count());
+    items.append(item);
+    endInsertRows();
 }
 
-void PlayerListModel::deleteEntry(const QString & name)
+int PlayerListModel::rowCount(const QModelIndex &) const
 {
-    PlayerListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = static_cast<PlayerListing*>(items[i]);
-        if (result->name == name)
-        {
-            removeRow(i);
-            delete result;
-            return;
-        }
-    }
-    return;
+    return items.count();
 }
 
-void PlayerListModel::deleteEntry(unsigned int id)
+QModelIndex PlayerListModel::index ( int row, int column, const QModelIndex & ) const
 {
-    PlayerListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = static_cast<PlayerListing*>(items[i]);
-        if (result->id == id)
+    return createIndex(row,column,(void*)items[row]);
+}
+
+Qt::ItemFlags PlayerListModel::flags(const QModelIndex & index) const
+{
+    if(!index.isValid())
+        return Qt::ItemIsEnabled;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+int ObserverListModel::columnCount(const QModelIndex &) const
+{
+    return O_TOTALCOLUMNS;
+}
+
+QVariant ObserverListModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
+        switch(section)
         {
-            removeRow(i);
-            delete result;
-            return;
+        case OC_NAME:
+            return QVariant("Name");
+        case OC_RANK:
+            return QVariant("Rank");
+        }
+    return QVariant();
+}
+
+QVariant ObserverListModel::data(const QModelIndex & index, int role) const
+{
+    if(!index.isValid())
+        return QVariant();
+
+    PlayerListing * item = static_cast<PlayerListing*>(index.internalPointer());
+    if(role == Qt::DisplayRole)
+    {
+        switch(index.column())
+        {
+        case OC_NAME:
+            return item->name;
+        case OC_RANK:
+            return item->rank;
+        default:
+            return QVariant();
+            break;
         }
     }
-    return;
+    else if(role == Qt::ForegroundRole)
+    {
+        if(item->name == account_name)
+            return QColor(Qt::blue);
+        else
+            return QVariant();
+    }
+    else
+        return QVariant();
 }
 
 SimplePlayerListModel::SimplePlayerListModel(bool _notify_column)
@@ -416,26 +315,23 @@ QVariant SimplePlayerListModel::headerData(int section, Qt::Orientation orientat
 QVariant SimplePlayerListModel::data(const QModelIndex & index, int role) const
 {
     if(!index.isValid())
-		return QVariant();
+        return QVariant();
 
     PlayerListing * item = static_cast<PlayerListing*>(index.internalPointer());
-	if(role == Qt::DisplayRole)
-	{
-		switch(index.column())
-		{
-			case SPC_NAME:
-                return item->name;
-				break;
-			case SPC_NOTIFY:
-                return item->notify;
-				break;
-			default:
-				return QVariant();
-				break;
-		}
-	}
-	else
-		return QVariant();
+    if(role == Qt::DisplayRole)
+    {
+        switch(index.column())
+        {
+        case SPC_NAME:
+            return item->name;
+        case SPC_NOTIFY:
+            return item->notify;
+        default:
+            return QVariant();
+        }
+    }
+    else
+        return QVariant();
 }
 
 GamesListModel::GamesListModel()
@@ -444,6 +340,7 @@ GamesListModel::GamesListModel()
 
 GamesListModel::~GamesListModel()
 {
+    clearList();
 }
 
 int GamesListModel::columnCount(const QModelIndex &) const
@@ -484,85 +381,26 @@ QVariant GamesListModel::headerData(int section, Qt::Orientation orientation, in
     return QVariant();
 }
 
-void GamesListModel::insertListing(GameListing * const l)
-{
-    GameListing * item = new GameListing(*l);
-    ListModel::insertListing(item);
-}
-
-void GamesListModel::removeListing(GameListing * const l)
-{
-	for(int i = 0; i < items.count(); i++)
-	{
-        const GameListing * item = static_cast<const GameListing *>(items[i]);
-        if(item == l)
-		{
-            removeRow(i);
-            delete item;
-			return;
-		}
-	}
-	/* IGS with updates does get here */
-	qDebug("Couldn't find listing to remove for game id %d", l->number);
-}
-
 GameListing * GamesListModel::getEntry(unsigned int id)
 {
-    GameListing * result;
     for (int i=0; i < items.count(); i++)
     {
-        result = static_cast<GameListing*>(items[i]);
-        if (result->number == id)
-        {
-            return result;
-        }
+        if (items[i]->number == id)
+            return items[i];
     }
     return NULL;
 }
 
-GameListing * GamesListModel::updateListing(const GameListing * listing)
+void GamesListModel::updateListing(GameListing * listing)
 {
-    GameListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = static_cast<GameListing*>(items[i]);
-        if (result->number == listing->number)
-        {
-            *result = *listing;
-            emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
-            return result;
-        }
-    }
-    result = new GameListing(*listing); // Should not create a copy here? FIXME
-    insertListing(result);
-    return result;
-}
-
-void GamesListModel::deleteEntry(unsigned int id)
-{
-    GameListing * result;
-    for (int i=0; i < items.count(); i++)
-    {
-        result = static_cast<GameListing*>(items[i]);
-        if (result->number == id)
-        {
-            removeRow(i);
-            delete result->gameData;		//used by ORO
-            delete result;
-            return;
-        }
-    }
-    return;
+    int i = items.indexOf(listing); // Returns index if found or -1 if not found
+    if (i != -1)
+        emit dataChanged(createIndex(i, 0), createIndex(i, columnCount() - 1));
 }
 
 void GamesListModel::clearList(void)
 {
     beginRemoveRows(QModelIndex(), 0, items.count() - 1);
-    for(int i = 0; i < items.count(); i++)
-	{
-        const GameListing * item = static_cast<const GameListing *>(items[i]);
-		delete item;
-	}
     items.clear();
     endRemoveRows();
 }
@@ -570,64 +408,50 @@ void GamesListModel::clearList(void)
 QVariant GamesListModel::data(const QModelIndex & index, int role) const
 {
     if(!index.isValid())
-		return QVariant();
-	
+        return QVariant();
+
     GameListing * item = static_cast<GameListing*>(index.internalPointer());
     if ((role == Qt::DisplayRole) || (role == LIST_SORT_ROLE))
     {
         switch(index.column())
-            {
-                case GC_ID:
-                    return QVariant(item->number);
-                    break;
-                case GC_WHITENAME:
-                    //qDebug("%s", item->white_name().toLatin1().constData());
-                    return QVariant(item->white_name());
-                    break;
-                case GC_WHITERANK:
-                    //qDebug("%s", item->white_rank().toLatin1().constData());
+        {
+        case GC_ID:
+            return QVariant(item->number);
+        case GC_WHITENAME:
+            return QVariant(item->white_name());
+        case GC_WHITERANK:
             if (role == LIST_SORT_ROLE)
                 return QVariant(item->white_rank_score());
             else
                 return QVariant(item->white_rank());
-                    break;
-                case GC_BLACKNAME:
-                    //qDebug("%s", item->black_name().toLatin1().constData());
-                    return QVariant(item->black_name());
-                    break;
-                case GC_BLACKRANK:
+        case GC_BLACKNAME:
+            return QVariant(item->black_name());
+        case GC_BLACKRANK:
             if (role == LIST_SORT_ROLE)
                 return QVariant(item->black_rank_score());
             else
                 return QVariant(item->black_rank());
-                    break;
-                case GC_MOVES:
-                    if(item->moves == (unsigned)-1)
-                        return QVariant("-");
-                    return QVariant(item->moves);
-                    break;
-                case GC_SIZE:
-                    return QVariant(item->board_size);
-                    break;
-                case GC_HANDICAP:
-                    return QVariant(item->handicap);
-                    break;
-                case GC_KOMI:
-                    return QVariant(item->komi);
-                    break;
-                case GC_BYOMI:
-                    return QVariant(item->By);
-                    break;
-                case GC_FLAGS:
-                    return QVariant(item->FR);
-                    break;
-                case GC_OBSERVERS:
-                    return QVariant(item->observers);
-                    break;
-                default:
-                    return QVariant();
-                    break;
-            }
+        case GC_MOVES:
+            if(item->moves == (unsigned)-1)
+                return QVariant("-");
+            return QVariant(item->moves);
+        case GC_SIZE:
+            return QVariant(item->board_size);
+        case GC_HANDICAP:
+            return QVariant(item->handicap);
+        case GC_KOMI:
+            return QVariant(item->komi);
+        case GC_BYOMI:
+            return QVariant(item->By);
+        case GC_FLAGS:
+            return QVariant(item->FR);
+        case GC_OBSERVERS:
+            return QVariant(item->observers);
+        case GC_RUNNING:
+            return QVariant(item->running);
+        default:
+            return QVariant();
+        }
     }
     return QVariant();
 }
@@ -637,7 +461,7 @@ GameListing * GamesListModel::gameListingFromIndex(const QModelIndex & index)
     return static_cast<GameListing*>(index.internalPointer());
 }
 
-void ListModel::insertListing(void *item)
+void GamesListModel::insertListing(GameListing *item)
 {
     beginInsertRows(QModelIndex(), items.count(), items.count());
     items.append(item);
@@ -645,58 +469,18 @@ void ListModel::insertListing(void *item)
     emit countChanged(items.count());
 }
 
-ListModel::ListModel()
+int GamesListModel::rowCount(const QModelIndex &) const
 {
+    return items.count();
 }
 
-ListModel::~ListModel()
+QModelIndex GamesListModel::index(int row, int column, const QModelIndex &) const
 {
-}
-
-int ListModel::rowCount(const QModelIndex &) const
-{
-	return items.count();
-}
-
-int ListModel::columnCount(const QModelIndex &) const
-{
-    return 0; // Overriden by inheriting classes
-}
-
-QModelIndex ListModel::index ( int row, int column, const QModelIndex & ) const
-{
-    return createIndex(row,column,items[row]);
-}
-
-
-/* This is overridden */
-QVariant ListModel::data(const QModelIndex & index, int role) const
-{
-    return QVariant();
-}
-
-Qt::ItemFlags ListModel::flags(const QModelIndex & index) const
-{
-	if(!index.isValid())
-		return Qt::ItemIsEnabled;
-	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-}
-
-bool ListModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    count--;
-    if (items.size() <= row+count)
-        return false;
-    beginRemoveRows(QModelIndex(), row, row+count);
-    for(; count>=0; count--)
-        items.removeAt(row);
-    endRemoveRows();
-    emit countChanged(items.count());
-    return true;
+    return createIndex(row,column,(void*)items[row]);
 }
 
 PlayerListSortFilterProxyModel::PlayerListSortFilterProxyModel(QObject * parent) :
-    QSortFilterProxyModel(parent), rankMin(0), rankMax(100000), flags(none)
+    QSortFilterProxyModel(parent), rankMin(0), rankMax(100000), open(false), friends(false), fans(false), noblock(false)
 {
     setSortCaseSensitivity(Qt::CaseInsensitive);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -709,72 +493,60 @@ bool PlayerListSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QMode
     if (! QSortFilterProxyModel::filterAcceptsRow(sourceRow,sourceParent))
         return false;
 
-	const PlayerListing * p;
+    const PlayerListing * p;
     p = static_cast<PlayerListing*>(static_cast<PlayerListModel*>(sourceModel())->items[sourceRow]);
-	
-	if(p->hidden)
-		return false;
-	if(!(flags & noblock))
-	{
-		if(p->friendWatchType == PlayerListing::blocked)
-			return false;
-	}
-	if(flags & friends)
-	{
-		if(p->friendWatchType != PlayerListing::friended)
-		{
-			if(flags & fans)
-			{
-				if(p->friendWatchType != PlayerListing::watched)
-					return false;
-			}
-			else
-				return false;
-		}
-	}
-	else if(flags & fans)
-	{
-		if(p->friendWatchType != PlayerListing::watched)
-			return false;	
-	}
-	
-	if(flags & open)
-	{
-		if(p->info.contains("X") ||
-			p->playing != 0)
-			return false;
-	}
-	
-	if(p->rank_score > (unsigned int)rankMax || p->rank_score + 1 < (unsigned int)rankMin)
-		return false;
-	return true;
+
+    if(!(p->online) || p->hidden)
+        return false;
+    if(!(noblock))
+    {
+        if(p->friendWatchType == PlayerListing::blocked)
+            return false;
+    }
+    if(open)
+    {
+        if(p->info.contains("X") || p->playing != 0)
+            return false;
+    }
+    if(p->rank_score > (unsigned int)rankMax || p->rank_score + 1 < (unsigned int)rankMin)
+        return false;
+    if(friends || fans)
+    {
+        if(friends && p->friendWatchType == PlayerListing::friended)
+            return true;
+        if(fans && p->friendWatchType == PlayerListing::watched)
+            return true;
+        return false;
+    }
+
+    return true;
 }
 
 void PlayerListSortFilterProxyModel::setFilterOpen(bool state)
 {
-    if (state)
-        flags |= open;
-    else
-        flags &= (~open);
-    invalidateFilter();
+    if (open != state)
+    {
+        open = state;
+        invalidateFilter();
+    }
 }
 
 void PlayerListSortFilterProxyModel::setFilterFriends(bool state)
 {
-    if (state)
-        flags |= friends;
-    else
-        flags &= (~friends);
-    invalidateFilter();
+    if (friends != state)
+    {
+        friends = state;
+        invalidateFilter();
+    }
 }
 
 void PlayerListSortFilterProxyModel::setFilterFans(bool state)
 {
-    if (state)
-        flags |= fans;
-    else
-        flags &= (~fans);
-    invalidateFilter();
+    if (fans != state)
+    {
+        fans = state;
+        invalidateFilter();
+    }
 }
 
 void PlayerListSortFilterProxyModel::setFilterMinRank(int rank)
@@ -798,20 +570,22 @@ GamesListSortFilterProxyModel::GamesListSortFilterProxyModel(QObject * parent) :
 
 void GamesListSortFilterProxyModel::setFilterWatch(bool state)
 {
-    watches = state;
-    invalidateFilter();
+    if (watches != state)
+    {
+        watches = state;
+        invalidateFilter();
+    }
 }
 
-bool GamesListSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool GamesListSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &) const
 {
-	const GameListing * g;
-    g = static_cast<GameListing *>(static_cast<GamesListModel*>(sourceModel())->items[sourceRow]);
-	if(watches)
-	{
-		if((g->black && g->black->friendWatchType == PlayerListing::watched) ||
-			(g->white && g->white->friendWatchType == PlayerListing::watched))
-			return true;
-		return false;
-	}
-	return true;
+    const GameListing * g = static_cast<GamesListModel*>(sourceModel())->items[sourceRow];
+    if(!(g->running) || (g->isRoomOnly)) // It is very weird that rooms are saved as games, FIXME
+        return false;
+    if(watches)
+    {
+        return ((g->black && g->black->friendWatchType == PlayerListing::watched) ||
+                (g->white && g->white->friendWatchType == PlayerListing::watched));
+    }
+    return true;
 }

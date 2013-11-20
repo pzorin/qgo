@@ -67,11 +67,9 @@ BoardDispatch::BoardDispatch(NetworkConnection * conn, GameListing * l)
 	/* Not sure we can do this. GameListings have to have a
 	 * key.  But to go without a gameListing in the BoardDispatch?*/
 	if(l)
-		gameListing = new GameListing(*l);
+        gameListing = l;
 	else
-		qDebug("Boarddispatch with no gameListing!!!");
-	//else
-	//	gameListing = new GameListing();
+        qDebug("BoardDispatch::BoardDispatch() : NULL GameListing * passed!");
 }
 
 BoardDispatch::~BoardDispatch()
@@ -101,8 +99,6 @@ BoardDispatch::~BoardDispatch()
 		delete resultdialog;
 	if(countdialog)
 		delete countdialog;
-	
-	delete gameListing;
 }
 
 bool BoardDispatch::canClose(void)
@@ -130,10 +126,10 @@ void BoardDispatch::closeBoard(void)
 		{
 			case modeObserve:
 				if(boardwindow->getGamePhase() != phaseEnded)
-					connection->stopObserving(*gameListing); //FIXME	
+                    connection->stopObserving(gameListing); //FIXME
 				break;
 			case modeReview:
-				connection->stopReviewing(*gameListing);	
+                connection->stopReviewing(gameListing);
 				break;
 			case modeMatch:
 				/* FIXME if game is over, we don't need to adjourn
@@ -147,7 +143,7 @@ void BoardDispatch::closeBoard(void)
 				/* This shouldn't be here anymore since we do the canClose which
 				 * prompts for resign.  Or its an IGS only feature FIXME */
 				if(boardwindow->getGamePhase() != phaseEnded)
-					connection->adjournGame(*gameListing);	 //FIXME
+                    connection->adjournGame(gameListing);	 //FIXME
 				if(resultdialog)
 				{
 					delete resultdialog;
@@ -835,8 +831,7 @@ QString BoardDispatch::getUsername(void) { return connection->getUsername(); }
 
 QString BoardDispatch::getOurRank(void)
 {
-	const PlayerListing & p = connection->getOurListing();
-	return p.rank;
+    return connection->getOurListing()->rank;
 }
 
 bool BoardDispatch::getBlackTurn(void)

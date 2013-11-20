@@ -44,14 +44,14 @@ class TygemConnection : public NetworkConnection
 		virtual void sendText(const char * text);
 		virtual void sendDisconnect(void);
 		virtual void sendMsg(unsigned int game_id, QString text);
-		virtual void sendMsg(PlayerListing & player, QString text);
+        virtual void sendMsg(PlayerListing * player, QString text);
 		virtual void sendToggle(const QString & param, bool val);
-		virtual void sendObserve(const GameListing & game);
-		virtual void sendStatsRequest(const PlayerListing &) {};
-		virtual void sendPlayersRequest(void) {};
-		virtual void sendGamesRequest(void) {};
+        virtual void sendObserve(const GameListing * game);
+        virtual void sendStatsRequest(const PlayerListing *) {}
+        virtual void sendPlayersRequest(void) {}
+        virtual void sendGamesRequest(void) {}
 		
-		virtual void sendMatchInvite(const PlayerListing & opponent);
+        virtual void sendMatchInvite(const PlayerListing * opponent);
 		virtual void sendTime(BoardDispatch * boarddispatch);
 		virtual void sendMove(unsigned int game_id, class MoveRecord * move);
 		
@@ -68,9 +68,9 @@ class TygemConnection : public NetworkConnection
 		virtual void sendMatchRequest(class MatchRequest * mr);
 		virtual void sendRematchRequest(void);
 		virtual void sendRematchAccept(void);
-		virtual void declineMatchOffer(const PlayerListing & opponent);
-		virtual void cancelMatchOffer(const PlayerListing & opponent);
-		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr);
+        virtual void declineMatchOffer(const PlayerListing * opponent);
+        virtual void cancelMatchOffer(const PlayerListing * opponent);
+        virtual void acceptMatchOffer(const PlayerListing * opponent, class MatchRequest * mr);
 		virtual void sendRequestCount(unsigned int game_id);
 		virtual void sendAcceptCountRequest(class GameData * data);
 		virtual void sendRefuseCountRequest(class GameData * data);
@@ -86,14 +86,14 @@ class TygemConnection : public NetworkConnection
 		virtual void sendCreateRoom(class RoomCreate * room);
 		virtual void sendJoinRoom(const RoomListing & room, const char * password = 0);
 		
-		virtual void addFriend(PlayerListing & player);
-		virtual void removeFriend(PlayerListing & player);
-		virtual void addBlock(PlayerListing & player);
-		virtual void removeBlock(PlayerListing & player);
+        virtual void addFriend(PlayerListing * player);
+        virtual void removeFriend(PlayerListing * player);
+        virtual void addBlock(PlayerListing * player);
+        virtual void removeBlock(PlayerListing * player);
 
 		//FIXME these are unused right now:
-		virtual void requestLongInfo(PlayerListing & player);
-		virtual void requestShortInfo(PlayerListing & player);
+        virtual void requestLongInfo(PlayerListing * player);
+        virtual void requestShortInfo(PlayerListing * player);
 
 		virtual unsigned short getRoomNumber(void); //FIXME for gamedialog unsure of necessity or reliability here
 		
@@ -107,23 +107,23 @@ class TygemConnection : public NetworkConnection
 		
 		virtual unsigned int rankToScore(QString rank);
 		virtual unsigned long getGameDialogFlags(void);	
-		virtual bool supportsMultipleUndo(void) { return false; };
-		virtual bool supportsObserveOutside(void) { return false; };
-		virtual bool supportsRequestCount(void) { return false; };
-		virtual bool supportsRequestDraw(void) { return true; };
-		virtual bool clientCountsTime(void) { return false; };
-		virtual bool clientSendsTime(void) { return true; };
-		virtual bool unmarkUnmarksAllDeadStones(void) { return true; };
-		virtual bool canMarkStonesDeadinScore(void) { return false; };
-		virtual bool cantMarkOppStonesDead(void) { return true; };
-		virtual bool twoPassesEndsGame(void) { return true; };
-		virtual bool supportsServerChange(void) { return true; };
-		virtual bool supportsRematch(void) { return true; };
-		virtual bool supportsFriendList(void) { return true; };
-		virtual bool supportsBlockList(void) { return true; };
-		virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; };
-		virtual bool supportsCreateRoom(void) { return true; };
-		virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); };
+        virtual bool supportsMultipleUndo(void) { return false; }
+        virtual bool supportsObserveOutside(void) { return false; }
+        virtual bool supportsRequestCount(void) { return false; }
+        virtual bool supportsRequestDraw(void) { return true; }
+        virtual bool clientCountsTime(void) { return false; }
+        virtual bool clientSendsTime(void) { return true; }
+        virtual bool unmarkUnmarksAllDeadStones(void) { return true; }
+        virtual bool canMarkStonesDeadinScore(void) { return false; }
+        virtual bool cantMarkOppStonesDead(void) { return true; }
+        virtual bool twoPassesEndsGame(void) { return true; }
+        virtual bool supportsServerChange(void) { return true; }
+        virtual bool supportsRematch(void) { return true; }
+        virtual bool supportsFriendList(void) { return true; }
+        virtual bool supportsBlockList(void) { return true; }
+        virtual unsigned long getPlayerListColumns(void) { return PL_NOMATCHPREFS; }
+        virtual bool supportsCreateRoom(void) { return true; }
+        virtual unsigned long getRoomStructureFlags(void) { return (RS_NOROOMLIST | RS_ONEROOMATATIME | RS_ONEGAMEPERROOM); }
 		virtual const char * getCodecString(void);
 		virtual QString getPlaceString(void);
 		virtual void timerEvent(QTimerEvent * event);
@@ -153,7 +153,7 @@ class TygemConnection : public NetworkConnection
 		int seconds_until_opp_forfeits;
 	private:
 		void sendJoin(unsigned short game_number);
-		void sendMatchMsg1(const PlayerListing & player, unsigned short game_number);
+        void sendMatchMsg1(const PlayerListing * player, unsigned short game_number);
 		void sendLogin(bool response_bit = false, bool change_server = false);
 		void handleLogin(unsigned char * msg, unsigned int length);
 		void sendRequestGames(void);
@@ -163,19 +163,19 @@ class TygemConnection : public NetworkConnection
 		void sendRequest2(void);
 		void sendFriendsBlocksRequest(void);
 		void promptResumeMatch(void);
-		void sendOpenConversation(PlayerListing & player);
+        void sendOpenConversation(PlayerListing * player);
 		enum MIVersion {offer, accept, decline, decline_all, modify, create, acknowledge, alreadyingame};
-		void sendConversationReply(PlayerListing & player, enum MIVersion version);
-		void sendConversationMsg(PlayerListing & player, const char * text);
-		void sendCloseConversation(PlayerListing & player);
-		void sendPersonalChat(const PlayerListing & player, const char * text);
+        void sendConversationReply(PlayerListing * player, enum MIVersion version);
+        void sendConversationMsg(PlayerListing * player, const char * text);
+        void sendCloseConversation(PlayerListing * player);
+        void sendPersonalChat(const PlayerListing * player, const char * text);
 		void sendServerChat(QString text);
 		void sendResume(unsigned short game_number);
 		void sendFinishObserving(unsigned short game_number);
 		void sendObserversRequest(unsigned short game_number);
 		void sendServerKeepAlive(uint32_t keepaliveIV);
 		uint32_t encodeKeepAliveIV(uint32_t a);
-		void sendMatchInvite(const PlayerListing & player, enum MIVersion version = offer, unsigned short room_number = 0xffff);
+        void sendMatchInvite(const PlayerListing * player, enum MIVersion version = offer, unsigned short room_number = 0xffff);
 		void sendMatchOffer(const MatchRequest & mr, enum MIVersion version = offer);
 		void sendStartGame(const MatchRequest & mr);
 		void sendInvitationSettings(bool invite);
@@ -199,8 +199,8 @@ class TygemConnection : public NetworkConnection
 		int getPhase(unsigned char byte);
 		QString getRoomTag(unsigned char byte);
 
-		void writeNotNicknameAndRank(char * p, const PlayerListing & player);
-		void writeNicknameAndCID(char * p, const PlayerListing & player);
+        void writeNotNicknameAndRank(char * p, const PlayerListing * player);
+        void writeNicknameAndCID(char * p, const PlayerListing * player);
 		PlayerListing * getOrCreatePlayerListingFromRecord(char * r);
 
 		void handleServerAnnouncement(unsigned char * msg, unsigned int size);

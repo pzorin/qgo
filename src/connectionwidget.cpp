@@ -37,6 +37,7 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui(new Ui::ConnectionWidget)
 {
     connection = 0;
+    room = NULL;
     ui->setupUi(this);
     connectionWidget = this; // FIXME: remove this global variable
     gamesListProxyModel = new GamesListSortFilterProxyModel(this);
@@ -93,30 +94,6 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( setLooking(bool) ) );
     connect( ui->editFriendsWatchesButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
 
-    //IGS needs bigger rank column with the "+"s, etc., also whole thing looks sloppy FIXME
-    ui->gamesView->setColumnWidth ( 0, 40 );	//35
-    ui->gamesView->setColumnWidth ( 1, 100 );
-    ui->gamesView->setColumnWidth ( 2, 40 );	//35
-    ui->gamesView->setColumnWidth ( 3, 100 );
-    ui->gamesView->setColumnWidth ( 4, 40 );	//35
-    ui->gamesView->setColumnWidth ( 5, 30 );	//30
-    ui->gamesView->setColumnWidth ( 6, 30 ); //25
-    ui->gamesView->setColumnWidth ( 7, 20 ); //20
-    ui->gamesView->setColumnWidth ( 8, 35 ); //30
-    ui->gamesView->setColumnWidth ( 9, 35 ); //25
-    ui->gamesView->setColumnWidth ( 10, 35 ); //20
-    ui->gamesView->setColumnWidth ( 11, 30 ); //25
-
-    ui->playerView->setColumnWidth ( 0, 40 );
-    ui->playerView->setColumnWidth ( 1, 100 );
-    ui->playerView->setColumnWidth ( 2, 40 );
-    ui->playerView->setColumnWidth ( 3, 40 );
-    ui->playerView->setColumnWidth ( 4, 40);
-    ui->playerView->setColumnWidth ( 5, 40 );
-    ui->playerView->setColumnWidth ( 6, 40 );
-    ui->playerView->setColumnWidth ( 7, 40 );
-    ui->playerView->setColumnWidth ( 8, 80 );
-
     bool ok;
     int sort_column, sort_order_int;
     Qt::SortOrder sort_order;
@@ -139,10 +116,6 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     else
         sort_order = static_cast<Qt::SortOrder>(sort_order_int);
     ui->gamesView->sortByColumn(sort_column,sort_order);
-
-
-    setGameCountStat(0);
-    setPlayerCountStat(0);
 
     QFont monospaceFont("Monospace");
     monospaceFont.setStyleHint(QFont::TypeWriter);
@@ -181,7 +154,7 @@ void ConnectionWidget::slot_cmdactivated(const QString &cmd)
 {
     if(connection->consoleIsChat())
     {
-        connection->sendMsg(0, cmd);
+        connection->sendMsg((unsigned int)0, cmd);
         ui->commandLineComboBox->clearEditText();
         return;
     }
@@ -189,15 +162,16 @@ void ConnectionWidget::slot_cmdactivated(const QString &cmd)
         return;
     if (cmd.mid(0,2).contains("ob"))
     {
-        GameListing g;
         QString cmd2 = cmd;
-        g.number = cmd2.replace(QRegExp("[\\S]+\\s"), "").toInt();
-        if (g.number)
+        int number = cmd2.replace(QRegExp("[\\S]+\\s"), "").toInt();
+        if (room && number)
+        {
+            GameListing * g = room->getGameListing(number);
             connection->sendObserve(g);
+        }
     }
     else if (cmd.mid(0,4).contains("yell") || cmd.mid(0,1) == ";")
     {
-        GameListing g;
         QString cmd2 = cmd;
         cmd2.replace(QRegExp("^[\\S]+\\s"), "");
         connection->getConsoleDispatch()->recvText(cmd2);	 //copy back since otherwise doesn't appear
@@ -223,12 +197,12 @@ void ConnectionWidget::setNetworkConnection(NetworkConnection * conn)
         unsigned long flags = connection->getPlayerListColumns();
         if(flags & PL_NOWINSLOSSES)
         {
-            ui->playerView->hideColumn(5);
-            ui->playerView->hideColumn(6);
+            ui->playerView->hideColumn(PC_WINS);
+            ui->playerView->hideColumn(PC_LOSSES);
         }
         if(flags & PL_NOMATCHPREFS)
         {
-            ui->playerView->hideColumn(9);
+            ui->playerView->hideColumn(PC_MATCHPREFS);
         }
         setRankSpreadView();
     }
@@ -1282,17 +1256,6 @@ void ConnectionWidget::setRankSpreadView(void)
     }
     qDebug( "rank spread : %s - %s" , rkMin.toLatin1().constData() , rkMax.toLatin1().constData());
 }
-
-void ConnectionWidget::setGameCountStat(int count)
-{
-    ui->statusGames->setText(tr(" G: %n","Number of games on server",count));
-}
-
-void ConnectionWidget::setPlayerCountStat(int count)
-{
-    ui->statusUsers->setText(tr(" P: %n","Number of players on server",count));
-}
-
 
 void ConnectionWidget::slot_editFriendsWatchesList(void)
 {

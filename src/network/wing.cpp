@@ -427,13 +427,10 @@ void WingConnection::handle_info(QString line)
 		}
 #endif //FIXME
 		PlayerListing * p = getPlayerListingNeverFail(aMatch->opponent);
-		PlayerListing * us = room->getPlayerListing(getUsername());
-		if(us)
-		{	
-			aMatch->our_name = us->name;
-			aMatch->our_rank = us->rank;
-		}
-		aMatch->their_rank = p->rank;
+        const PlayerListing * us = getOurListing();
+        aMatch->our_name = us->name;
+        aMatch->our_rank = us->rank;
+        aMatch->their_rank = p->rank;
 
         GameDialog * gameDialogDispatch = getGameDialog(p);
 		gameDialogDispatch->recvRequest(aMatch);
@@ -590,10 +587,9 @@ void WingConnection::handle_info(QString line)
 			// 9 Game 22: frosla vs frosla has adjourned.
 	else if (line.contains("has adjourned"))
 	{
-		GameListing * aGame = new GameListing();
-				// remove game from list
-		aGame->number = element(line, 0, " ", ":").toInt();
-		aGame->running = false;
+        int number = element(line, 0, " ", ":").toInt();
+        GameListing * aGame = room->getGameListing(number);
+        aGame->running = false;
 
 				// for information
 				//aGame->Sz = "has adjourned.";
@@ -605,8 +601,7 @@ void WingConnection::handle_info(QString line)
 				// No need to get existing listing because
 				// this is just to falsify the listing
 		room->recvGameListing(aGame);
-		delete aGame;
-	}
+    }
 			// 9 Removing game 30 from observation list.
 	else if (line.contains("from observation list"))
 	{
@@ -722,13 +717,9 @@ void WingConnection::handle_info(QString line)
 		   line.contains("lost by"))
 	{
 		GameResult * aGameResult;
-		GameListing * aGame = new GameListing();
-					// re game from list
-		int number = element(line, 0, " ", ":").toInt();
-		GameListing * l = room->getGameListing(number);
-		if(l)
-			*aGame = *l;
-		aGame->number = number;
+        int number = element(line, 0, " ", ":").toInt();
+        GameListing * aGame = room->getGameListing(number);
+        aGame->number = number;
 		aGame->running = false;
 					// for information
 		aGame->result = element(line, 4, " ", "}");
@@ -1287,13 +1278,7 @@ void WingConnection::handle_kibitz(QString line)
 				point.remove(0,1);
 				aMove->y = element(point, 0, " ").toInt();
 				GameListing * l = getDefaultRoom()->getGameListing(memory);
-				if(!l)
-				{
-					qDebug("Move for unlisted game");
-					delete aMove;
-					return;
-				}	
-				if(l->board_size > 9)
+                if(l->board_size > 9)
 				{
 					if(aMove->x < 9)	//no I on IGS
 						aMove->x++;
