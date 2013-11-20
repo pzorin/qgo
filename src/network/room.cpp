@@ -104,8 +104,7 @@ void Room::setConnection(NetworkConnection * c)
 //stats
 void Room::slot_playerOpenTalk(const QModelIndex & index)
 {
-    QModelIndex sourceIndex = connectionWidget->playerListProxyModel->mapToSource(index);
-    PlayerListing * opponent = playerListModel->playerListingFromIndex(sourceIndex);
+    PlayerListing * opponent = playerListModel->playerListingFromIndex(index);
     Talk * talk;
     /* Whenever a talk window is opened, we want stats.  This
      * means its easier to create the talk window and let it
