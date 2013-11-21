@@ -23,10 +23,45 @@
 #ifndef PLAYERGAMELISTING_H
 #define PLAYERGAMELISTING_H
 
+#include <QString>
+
 class GameData;
+
+/* Private constructors and destructors ensure that only the
+ * friend class Room
+ * can create or destroy instances of these classes */
 
 class PlayerListing
 {
+private:
+    PlayerListing() : id(0),
+    online(false),
+    name(""),
+    notnickname(""),
+    info(""),
+    idletime(""),
+    seconds_idle(0),
+    rank(""),
+    rank_score(0),
+    country(""),
+    wins(0),
+    losses(0),
+    rated_games(0),
+    observing(0),
+    playing(0),
+    extInfo(""),
+    email_address(""),
+    nmatch(0),
+    nmatch_handicapMin(0),
+    specialbyte(0),
+    pro(false),
+    dialog_opened(false),
+    game_dialog_opened(false),
+    friendWatchType(none),
+    notify(false),
+    hidden(false) {}
+    ~PlayerListing() {}
+    friend class Room;
 public:
 	unsigned short id;
 	bool online;
@@ -64,33 +99,7 @@ public:
 	bool game_dialog_opened;
 	enum FriendWatchType { none, friended, watched, blocked } friendWatchType;
 	bool notify;
-	bool hidden;
-	PlayerListing() : id(0), 
-	online(0),
-	name(""),
-	notnickname(""),
-	info(""),
-	idletime(""),
-	seconds_idle(0),
-	rank(""),
-	rank_score(0),
-	country(""),
-	wins(0), 
-	losses(0),
-	rated_games(0),
-	observing(0),
-	playing(0), 
-	extInfo(""),
-	email_address(""),
-	nmatch(0),
-	nmatch_handicapMin(0),
-	specialbyte(0),
-	pro(false),
-	dialog_opened(false),
-	game_dialog_opened(false),
-	friendWatchType(none),
-	notify(false),
-	hidden(false) {};
+    bool hidden;
 };
 
 /* We need to alter copy constructor to have and respect a bit field.
@@ -98,6 +107,33 @@ public:
  * existing listing before change and update.*/
 class GameListing
 {
+private:
+    GameListing() : running(false),
+    moves(0),
+    board_size(19),
+    handicap(0),
+    komi(6.5),
+    white(0),
+    black(0),
+    _white_name("-"),
+    _black_name("-"),
+    _white_rank("-"),
+    _black_rank("-"),
+    _white_rank_score(0),
+    _black_rank_score(0),
+    observers(0),
+    result(""),
+      By(""), FR(""), comment(""),
+    flags(IN_PROGRESS),
+    rated(0),
+    owner_id(0),
+    isRoomOnly(false),
+    isBroadcast(false),
+    isBetting(false),
+    isLocked(false),
+    gameData(NULL) {}
+    ~GameListing() {}
+    friend class Room;
 public:
     bool running;
 	unsigned int number;
@@ -118,44 +154,45 @@ public:
     {
         if(white)
 			return white->name;
-		else
+        else
 			return _white_name;
-	};
+    }
 	const QString & white_rank(void) const
-	{
-		if(white)
+    {
+        if(white)
 			return white->rank;
-		else
+        else
 			return _white_rank;
-	};
+    }
 	unsigned int white_rank_score(void) const		//for sorting
 	{
-		if(white)
+        if(white)
 			return white->rank_score;
-		else
+        else
 			return _white_rank_score;
-	};
+    }
 	const QString & black_name(void) const
 	{
-		if(black)
+        if(black)
 			return black->name;
-		else
+        else
 			return _black_name;
-	};
+    }
 	const QString & black_rank(void) const
 	{
-		if(black)
+        if(black)
 			return black->rank;
-		else
+        else
 			return _black_rank;
-	};
+    }
 	unsigned int black_rank_score(void) const	//for sorting
 	{
 		if(black)
 			return black->rank_score;
 		else
 			return _black_rank_score;
-	};
+    }
+
 	unsigned int observers;
 	QString result;
 	GameMode gameType;		//this needs to be consistent
@@ -175,28 +212,5 @@ public:
 	std::vector <PlayerListing *> observer_list;
 	GameData * gameData;
 	/* Also need byomi time, one color go, running, private, flags, ranked, etc.*/
-	GameListing() : running(0), 
-	moves(0), 
-	board_size(19), 
-	handicap(0), 
-	komi(6.5), 
-	white(0), 
-	black(0), 
-	_white_name("-"), 
-	_black_name("-"), 
-	_white_rank("-"), 
-	_black_rank("-"), 
-	_white_rank_score(0), 
-	_black_rank_score(0), 
-	observers(0), 
-	result(""),
-	flags(IN_PROGRESS),
-	rated(0), 
-	owner_id(0), 
-	isRoomOnly(false),
-	isBroadcast(false),
-	isBetting(false),
-	isLocked(false),
-	gameData(NULL) {};
 };
 #endif //PLAYERGAMELISTINGS_H

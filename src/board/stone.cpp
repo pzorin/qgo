@@ -80,8 +80,6 @@ Stone::~Stone()
  */
 void Stone::setColor(StoneColor c)
 {
-
-
 	if (pixmapList->count() <= 2)
 		setPixmap(pixmapList->at( c == stoneBlack ? 0 : 1));
 	else	

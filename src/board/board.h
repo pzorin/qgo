@@ -58,7 +58,7 @@ public:
 	void updateLastMove(Move * move);
 
 //	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
-    bool updateStone(StoneColor c, int x, int y, bool dead = false);
+    void updateStone(StoneColor c, int x, int y, bool dead = false);
 	void setCursorType(CursorType cur);
 //	void updateDeadMarks(int &black, int &white);
 	unsigned int getSize()	{return board_size;}

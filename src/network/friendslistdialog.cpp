@@ -187,7 +187,7 @@ void FriendsListDialog::slot_addFriend(void)
 	else if(popup_playerlisting->friendWatchType == PlayerListing::blocked)
 		blockedListModel->removeListing(popup_playerlisting);
 	friendsListModel->insertListing(popup_playerlisting);
-	connection->addFriend(*popup_playerlisting);
+    connection->addFriend(popup_playerlisting);
 }
 
 /* This needs to call a resort or something on the list
@@ -196,7 +196,7 @@ void FriendsListDialog::slot_addFriend(void)
 void FriendsListDialog::slot_removeFriend(void)
 {
 	friendsListModel->removeListing(popup_playerlisting);
-	connection->removeFriend(*popup_playerlisting);
+    connection->removeFriend(popup_playerlisting);
 }
 
 void FriendsListDialog::slot_addWatch(void)
@@ -206,13 +206,13 @@ void FriendsListDialog::slot_addWatch(void)
 	else if(popup_playerlisting->friendWatchType == PlayerListing::blocked)
 		blockedListModel->removeListing(popup_playerlisting);
 	watchesListModel->insertListing(popup_playerlisting);
-	connection->addWatch(*popup_playerlisting);
+    connection->addWatch(popup_playerlisting);
 }
 
 void FriendsListDialog::slot_removeWatch(void)
 {
 	watchesListModel->removeListing(popup_playerlisting);
-	connection->removeWatch(*popup_playerlisting);
+    connection->removeWatch(popup_playerlisting);
 }
 
 void FriendsListDialog::slot_addBlock(void)
@@ -222,18 +222,18 @@ void FriendsListDialog::slot_addBlock(void)
 	else if(popup_playerlisting->friendWatchType == PlayerListing::watched)
 		watchesListModel->removeListing(popup_playerlisting);
 	blockedListModel->insertListing(popup_playerlisting);
-	connection->addBlock(*popup_playerlisting);
+    connection->addBlock(popup_playerlisting);
 }
 
 void FriendsListDialog::slot_removeBlock(void)
 {
 	blockedListModel->removeListing(popup_playerlisting);
-	connection->removeBlock(*popup_playerlisting);
+    connection->removeBlock(popup_playerlisting);
 }
 
 void FriendsListDialog::slot_popupMatch(void)
 {
-	connection->sendMatchInvite(*popup_playerlisting);
+    connection->sendMatchInvite(popup_playerlisting);
 }
 
 void FriendsListDialog::slot_popupTalk(void)

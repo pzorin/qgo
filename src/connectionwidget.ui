@@ -700,21 +700,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="statusUsers">
-           <property name="toolTip">
-            <string>Current online players / watched players</string>
-           </property>
-           <property name="whatsThis">
-            <string>Displays the number of current online players
-and the number of online players you are watching.
-A player you are watching has an entry in the 'watch player:' field.</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="refreshPlayersButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -823,19 +808,6 @@ A player you are watching has an entry in the 'watch player:' field.</string>
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="statusGames">
-           <property name="toolTip">
-            <string>Displays the number of games currently played on this server and the number of games you are observing or playing</string>
-           </property>
-           <property name="whatsThis">
-            <string>Current online games / observed games + matches</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="refreshGamesButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -917,9 +889,6 @@ A player you are watching has an entry in the 'watch player:' field.</string>
     </widget>
    </item>
   </layout>
-  <zorder>groupBox_3</zorder>
-  <zorder>talkTabs</zorder>
-  <zorder>tabWidget</zorder>
  </widget>
  <resources>
   <include location="application.qrc"/>

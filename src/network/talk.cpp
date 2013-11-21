@@ -38,11 +38,11 @@
 
 int Talk::counter = 0;
 
-Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connection(conn), opponent(*player)
+Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connection(conn), opponent(player)
 {
-	qDebug("Creating Talk for %s", opponent.name.toLatin1().constData());
+    qDebug("Creating Talk for %s", opponent->name.toLatin1().constData());
 	ui.setupUi(this);
-	opponent.dialog_opened = true;
+    opponent->dialog_opened = true;
 	conversationOpened = false;
     pageActive = false;
 
@@ -80,25 +80,25 @@ Talk::Talk(NetworkConnection * conn, PlayerListing *player) : TalkGui(), connect
 Talk::~Talk()
 {
 	qDebug("Talk destroyed");
-	opponent.dialog_opened = false;
+    opponent->dialog_opened = false;
 }
 
 void Talk::closeEvent(QCloseEvent *)
 {
 	if(connection)
-        connection->closeTalk(&opponent);
+        connection->closeTalk(opponent);
 }
 
 QString Talk::get_name() const
-{ return opponent.name; }
+{ return opponent->name; }
 
-PlayerListing & Talk::get_opponent() const
+PlayerListing * Talk::get_opponent() const
 { return opponent; }
 
 // release current Tab
 void Talk::slot_pbRelTab()
 {
-    connection->closeTalk(&opponent);
+    connection->closeTalk(opponent);
 }
 
 void Talk::slot_returnPressed()
@@ -148,7 +148,7 @@ void Talk::write(const QString &text) const
 //FIXME really same as write?
 void Talk::recvTalk(QString text)
 {
-	write(opponent.name + ": " + text);
+    write(opponent->name + ": " + text);
 }
 
 /* FIXME We apparently don't need the below since
@@ -176,7 +176,7 @@ void Talk::displayData(PlayerListing * p)
 
 void Talk::updatePlayerListing(void)
 {
-    displayData(&opponent);
+    displayData(opponent);
 }
 
 void Talk::setTalkWindowColor(QPalette pal)

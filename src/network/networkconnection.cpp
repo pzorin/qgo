@@ -50,6 +50,8 @@ default_room(0), console_dispatch(0), qsocket(0)
     port = credentials.port;
     username = credentials.userName;
     password = credentials.password;
+
+    ourListing = NULL;
 }
 
 bool NetworkConnection::openConnection(const QString & host, const unsigned short port, bool not_main_connection)
@@ -259,8 +261,7 @@ PlayerListing * NetworkConnection::getPlayerListingFromFriendWatchListing(Friend
 			if(f.id == 0)
 			{
 				PlayerListing * p = default_room->getPlayerListing(f.name);
-				if(p)
-					f.id = p->id;
+                f.id = p->id;
 				return p;
 			}
 			else
@@ -279,79 +280,79 @@ PlayerListing * NetworkConnection::getPlayerListingFromFriendWatchListing(Friend
 /* Note that these can't be called if the listing already has
  * the bit set and server side friends lists will have a
  * separate interface */
-void NetworkConnection::addFriend(PlayerListing & player)
+void NetworkConnection::addFriend(PlayerListing * player)
 {
-	if(player.friendWatchType == PlayerListing::blocked)
+    if(player->friendWatchType == PlayerListing::blocked)
 		removeBlock(player);
-	else if(player.friendWatchType == PlayerListing::watched)
+    else if(player->friendWatchType == PlayerListing::watched)
 		removeWatch(player);
-	player.friendWatchType = PlayerListing::friended;
+    player->friendWatchType = PlayerListing::friended;
 	//FIXME presumably they're not already on the list because
 	//the popup checked that in constructing the popup menu but...
-	friendedList.push_back(new FriendWatchListing(player.name, friendwatch_notify_default));
-    emit playerListingUpdated(&player);
+    friendedList.push_back(new FriendWatchListing(player->name, friendwatch_notify_default));
+    emit playerListingReceived(player);
 }
 
-void NetworkConnection::removeFriend(PlayerListing & player)
+void NetworkConnection::removeFriend(PlayerListing * player)
 {
-	player.friendWatchType = PlayerListing::none;
+    player->friendWatchType = PlayerListing::none;
 	std::vector<FriendWatchListing * >::iterator i;
 	for(i = friendedList.begin(); i != friendedList.end(); i++)
 	{
-		if((*i)->name == player.name)
+        if((*i)->name == player->name)
 		{
 			delete *i;
 			friendedList.erase(i);
 			break;
 		}
 	}
-    emit playerListingUpdated(&player);
+    emit playerListingReceived(player);
 }
 
-void NetworkConnection::addWatch(PlayerListing & player)
+void NetworkConnection::addWatch(PlayerListing * player)
 {
-	if(player.friendWatchType == PlayerListing::friended)
+    if(player->friendWatchType == PlayerListing::friended)
 		removeFriend(player);
-	else if(player.friendWatchType == PlayerListing::blocked)
+    else if(player->friendWatchType == PlayerListing::blocked)
 		removeBlock(player);
-	player.friendWatchType = PlayerListing::watched;
-	watchedList.push_back(new FriendWatchListing(player.name, friendwatch_notify_default));
-    emit playerListingUpdated(&player);
+    player->friendWatchType = PlayerListing::watched;
+    watchedList.push_back(new FriendWatchListing(player->name, friendwatch_notify_default));
+    emit playerListingReceived(player);
 }
 
-void NetworkConnection::removeWatch(PlayerListing & player)
+void NetworkConnection::removeWatch(PlayerListing * player)
 {
-	player.friendWatchType = PlayerListing::none;
+    player->friendWatchType = PlayerListing::none;
 	std::vector<FriendWatchListing * >::iterator i;
 	for(i = watchedList.begin(); i != watchedList.end(); i++)
 	{
-		if((*i)->name == player.name)
+        if((*i)->name == player->name)
 		{
 			delete *i;
 			watchedList.erase(i);
 			break;
 		}
 	}
-    emit playerListingUpdated(&player);
+    emit playerListingReceived(player);
 }
 
-void NetworkConnection::addBlock(PlayerListing & player)
+void NetworkConnection::addBlock(PlayerListing * player)
 {
-	if(player.friendWatchType == PlayerListing::friended)
+    if(player->friendWatchType == PlayerListing::friended)
 		removeFriend(player);
-	else if(player.friendWatchType == PlayerListing::watched)
+    else if(player->friendWatchType == PlayerListing::watched)
 		removeWatch(player);
-	player.friendWatchType = PlayerListing::blocked;
-	blockedList.push_back(new FriendWatchListing(player.name));
+    player->friendWatchType = PlayerListing::blocked;
+    blockedList.push_back(new FriendWatchListing(player->name));
 }
 
-void NetworkConnection::removeBlock(PlayerListing & player)
+void NetworkConnection::removeBlock(PlayerListing * player)
 {
-	player.friendWatchType = PlayerListing::none;
+    player->friendWatchType = PlayerListing::none;
 	std::vector<FriendWatchListing * >::iterator i;
 	for(i = blockedList.begin(); i != blockedList.end(); i++)
 	{
-		if((*i)->name == player.name)
+        if((*i)->name == player->name)
 		{
 			delete *i;
 			blockedList.erase(i);
@@ -372,18 +373,18 @@ void NetworkConnection::removeBlock(PlayerListing & player)
  * that.  So we probably need to have an online flag
  * on the friends listing to see if we've already flagged
  * them FIXME */
-void NetworkConnection::getAndSetFriendWatchType(PlayerListing & player)
+void NetworkConnection::getAndSetFriendWatchType(PlayerListing * player)
 {
 	std::vector<FriendWatchListing * >::iterator i;
 	
 	for(i = friendedList.begin(); i != friendedList.end(); i++)
 	{
-		if((*i)->name == player.name)
+        if((*i)->name == player->name)
 		{
 			if(!(*i)->online)
 			{
 				(*i)->online = true;
-				player.friendWatchType = PlayerListing::friended;
+                player->friendWatchType = PlayerListing::friended;
 				/* We may want to put this somewhere else or have it be dialog
 				 * with options, like talk or match.  We might also want
 			 	 * to block all notifies while one is in a game FIXME 
@@ -396,7 +397,7 @@ void NetworkConnection::getAndSetFriendWatchType(PlayerListing & player)
 					QMessageBox::information(0, tr("Signed on"), tr("%1 has signed on").arg(player.name));
 #endif //FIXME
 			}
-			else if(!player.online)
+            else if(!player->online)
 			{
 				(*i)->online = false;
 				//they are disconnecting
@@ -406,34 +407,34 @@ void NetworkConnection::getAndSetFriendWatchType(PlayerListing & player)
 	}
 	for(i = watchedList.begin(); i != watchedList.end(); i++)
 	{
-		if((*i)->name == player.name)
+        if((*i)->name == player->name)
 		{
-			player.friendWatchType = PlayerListing::watched;
+            player->friendWatchType = PlayerListing::watched;
 			return;
 		}
 	}
 	for(i = blockedList.begin(); i != blockedList.end(); i++)
 	{
-		if((*i)->name == player.name)
+        if((*i)->name == player->name)
 		{
-			player.friendWatchType = PlayerListing::blocked;
+            player->friendWatchType = PlayerListing::blocked;
 			return;
 		}
 	}
-	player.friendWatchType = PlayerListing::none;
+    player->friendWatchType = PlayerListing::none;
 	return;
 }
 
-void NetworkConnection::checkGameWatched(GameListing & game)
+void NetworkConnection::checkGameWatched(const GameListing *game)
 {
 	std::vector<FriendWatchListing * >::iterator i;
 	for(i = watchedList.begin(); i != watchedList.end(); i++)
 	{
-		if((*i)->name == game.white_name() || (*i)->name == game.black_name())
+        if((*i)->name == game->white_name() || (*i)->name == game->black_name())
 		{
 			//notifies too often!!! FIXME
 			if((*i)->notify)
-				QMessageBox::information(0, tr("Match Started!"), tr("Match has started between %1 and %2").arg(game.white_name()).arg(game.black_name()));
+                QMessageBox::information(0, tr("Match Started!"), tr("Match has started between %1 and %2").arg(game->white_name()).arg(game->black_name()));
 			return;
 		}
 	}
@@ -796,16 +797,11 @@ void NetworkConnection::recvSeekPlayer(QString player, QString condition)
         connectionWidget->recvSeekPlayer(player, condition);
 }
 
-/* Kind of ugly here FIXME.
- * Really everything should be returning references
- * or everything pointers, but there's a lot of different
- * stuff out there, so we'd really need to check every instance
- * of usage of PLayerListing and figure out what's best */
-const PlayerListing & NetworkConnection::getOurListing(void)
+const PlayerListing * NetworkConnection::getOurListing(void)
 {
-    PlayerListing * p;
-    p = getDefaultRoom()->getPlayerListing(getUsername());
-    return *p;
+    if (ourListing == NULL)
+        ourListing = getDefaultRoom()->getPlayerListing(getUsername());
+    return ourListing;
 }
 
 /* FIXME These are really more like netdispatch type functions, but the registries
@@ -855,7 +851,7 @@ GameDialog * NetworkConnection::getGameDialog(const PlayerListing * opponent)
     if(i == gameDialogMap.end())
     {
         // Create if it does not exist
-        GameDialog * newDialog = new GameDialog(this, *opponent);
+        GameDialog * newDialog = new GameDialog(this, opponent);
         gameDialogMap.insert(opponent, newDialog);
         return newDialog;
     }

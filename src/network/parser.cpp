@@ -30,8 +30,7 @@ Parser::Parser() //: QObject()//, Misc<QString>()
 	aMove = new MoveRecord();
 	aGameRecord = new GameRecord();
 	aTime = new TimeRecord();
-	aGame = new GameListing();
-	aGameResult = new GameResult();
+    aGameResult = new GameResult();
 	/* Player needs initalization stuff... and more,
 	 * maybe we need to track bit changes ??*/
 	gameListA = new QList <unsigned int>();
@@ -44,8 +43,7 @@ Parser::~Parser()
 	delete aMove;
 	delete aGameRecord;
 	delete aTime;
-	delete aGame;
-	delete aGameResult;
+    delete aGameResult;
 	delete gameListA;
 	delete gameListB;
 }

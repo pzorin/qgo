@@ -31,7 +31,7 @@
 #include "network/playergamelistings.h"
 
 
-GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing & opp)
+GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing * opp)
 	: QDialog(), Ui::GameDialog(), connection(conn), opponent(opp)
 {
 	ui.setupUi(this);
@@ -218,8 +218,8 @@ void GameDialog::ratedCB_changed(bool checked)
 	{
 		if(checked)
 		{
-			PlayerListing us = connection->getOurListing();
-			getProperKomiHandicap(us.rank, opponent.rank, &(current_match_request->komi), &(current_match_request->handicap));
+            const PlayerListing * us = connection->getOurListing();
+            getProperKomiHandicap(us->rank, opponent->rank, &(current_match_request->komi), &(current_match_request->handicap));
 			ui.handicapSpin->setValue(current_match_request->handicap);
 			ui.komiSpin->setValue((int)(current_match_request->komi - 0.5));	//.5 is added by dialog ui
 			ui.komiSpin->setEnabled(false);
@@ -628,7 +628,7 @@ void GameDialog::closeEvent(QCloseEvent *)
 {
 	qDebug("GameDialog::closeEvent");
 	if(connection)
-        connection->closeGameDialog(&opponent);
+        connection->closeGameDialog(opponent);
 }
 
 /*
@@ -865,17 +865,17 @@ void GameDialog::slot_changed()
 void GameDialog::recvRefuseMatch(int motive)
 {
 	if (motive == GD_REFUSE_NOTOPEN)
-		ui.refusedLabel->setText(tr("%1 not open for matches").arg(opponent.name));
+        ui.refusedLabel->setText(tr("%1 not open for matches").arg(opponent->name));
 	else if (motive == GD_REFUSE_DECLINE) 
-		ui.refusedLabel->setText(tr("%1 declined the match request").arg(opponent.name));
+        ui.refusedLabel->setText(tr("%1 declined the match request").arg(opponent->name));
 	else if (motive == GD_REFUSE_CANCEL) 
-		ui.refusedLabel->setText(tr("%1 canceled the match request").arg(opponent.name));
+        ui.refusedLabel->setText(tr("%1 canceled the match request").arg(opponent->name));
 	else if (motive == GD_REFUSE_INGAME) 
-		ui.refusedLabel->setText(tr("%1 already playing a game").arg(opponent.name));		
+        ui.refusedLabel->setText(tr("%1 already playing a game").arg(opponent->name));
 	else if(motive == GD_REFUSE_NODIRECT)
-		ui.refusedLabel->setText(tr("%1 does not accept direct matches").arg(opponent.name));
+        ui.refusedLabel->setText(tr("%1 does not accept direct matches").arg(opponent->name));
 	else if(motive == GD_OPP_NO_NMATCH)
-		ui.refusedLabel->setText(tr("%1's client does not support nmatch").arg(opponent.name));
+        ui.refusedLabel->setText(tr("%1's client does not support nmatch").arg(opponent->name));
 	else if(motive == GD_INVALID_PARAMETERS)
 	{
 		ui.refusedLabel->setText(tr("Invalid Parameters!"));
@@ -891,7 +891,7 @@ void GameDialog::recvRefuseMatch(int motive)
 		return;
 	}
 	qDebug("#### GameDialog::slot_notopen()");
-	if (opponent.name.isEmpty())	//FIXME
+    if (opponent->name.isEmpty())	//FIXME
 	{
 		// IGS: no player named -> check if offering && focus set
 		if (ui.buttonOffer->isChecked())// && QWidget::hasFocus())
@@ -904,7 +904,7 @@ void GameDialog::recvRefuseMatch(int motive)
 			ui.buttonCancel->setEnabled(true);
 		}
 	}
-	else if (ui.playerOpponentEdit->text() == opponent.name)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	         playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
+    else if (ui.playerOpponentEdit->text() == opponent->name)//(playerWhiteEdit->isReadOnly() && playerBlackEdit->text() == opponent ||	         playerBlackEdit->isReadOnly() && playerWhiteEdit->text() == opponent)
 	{
 
 //		ui.buttonOffer->setDown(false);
@@ -969,10 +969,10 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 			ui.ratedCB->setEnabled(false);
 		if((flags & GDF_RATED_NO_HANDICAP) && (!mr || mr->free_rated == RATED))
 		{
-			PlayerListing us = connection->getOurListing();
+            const PlayerListing * us = connection->getOurListing();
 			float k;
 			unsigned int h;
-			getProperKomiHandicap(us.rank, opponent.rank, &k, &h);
+            getProperKomiHandicap(us->rank, opponent->rank, &k, &h);
 			if(h > 1)
 			{
 				//mr->free_rated = FREE;	//necessary?? FIXME
@@ -1071,17 +1071,17 @@ void GameDialog::recvRequest(MatchRequest * mr, unsigned long _flags)
 		//etc...
 		// FIXME
 		mr = new MatchRequest();
-		PlayerListing us = connection->getOurListing();
-		mr->opponent = opponent.name;
-		mr->opponent_id = opponent.id;
-		mr->their_rank = opponent.rank;
-		mr->our_name = us.name;
-		mr->our_rank = us.rank;	//us.rank sounds like bad grammar
+        const PlayerListing * us = connection->getOurListing();
+        mr->opponent = opponent->name;
+        mr->opponent_id = opponent->id;
+        mr->their_rank = opponent->rank;
+        mr->our_name = us->name;
+        mr->our_rank = us->rank;	//us.rank sounds like bad grammar
 		mr->timeSystem = canadian;
 		mr->maintime = 600;
 		mr->periodtime = 600;
 		mr->stones_periods = 25;
-		if(getProperKomiHandicap(us.rank, opponent.rank, &(mr->komi), &(mr->handicap)))
+        if(getProperKomiHandicap(us->rank, opponent->rank, &(mr->komi), &(mr->handicap)))
 		{
 			//challenger is black is a mystery byte
 			//I'm thinking it might be whether the request is

@@ -75,7 +75,7 @@ class NetworkConnection : public QObject
 	public:
         NetworkConnection(ConnectionCredentials credentials);
 		~NetworkConnection();
-        void userCanceled(void) { setState(CANCELED); /* anything else? */};
+        void userCanceled(void) { setState(CANCELED); /* anything else? */}
 		int checkForOpenBoards(void);
 public slots:
         virtual void sendPlayersRequest(void) = 0;
@@ -86,77 +86,77 @@ public:
 		void sendConsoleText(const char * text);
 		virtual void sendDisconnect(void) = 0;
 		virtual void sendMsg(unsigned int game_id, QString text) = 0;
-		virtual void sendMsg(PlayerListing & player, QString text) = 0;
+        virtual void sendMsg(PlayerListing * player, QString text) = 0;
 		virtual void sendToggle(const QString & param, bool val) = 0;
-		virtual void sendObserve(const GameListing & game) = 0;
-		virtual void sendObserveOutside(const GameListing &) {};	//optional
-		virtual void stopObserving(const GameListing &) {};
-		virtual void stopReviewing(const GameListing &) {};
-		virtual void sendStatsRequest(const PlayerListing & opponent) = 0;
+        virtual void sendObserve(const GameListing * game) = 0;
+        virtual void sendObserveOutside(const GameListing *) {}	//optional
+        virtual void stopObserving(const GameListing *) {}
+        virtual void stopReviewing(const GameListing *) {}
+        virtual void sendStatsRequest(const PlayerListing * opponent) = 0;
 		virtual void sendGamesRequest(void) = 0;
-		virtual void sendMatchInvite(const PlayerListing &) = 0;
-		virtual void adjournGame(const GameListing &) {};
-		virtual void sendTime(BoardDispatch *) {};
-		virtual void sendAddTime(int) {};
+        virtual void sendMatchInvite(const PlayerListing *) = 0;
+        virtual void adjournGame(const GameListing *) {}
+        virtual void sendTime(BoardDispatch *) {}
+        virtual void sendAddTime(int) {}
 		virtual void sendMove(unsigned int game_id, class MoveRecord * m) = 0;
-		virtual void sendRequestCount(unsigned int) {};
-		virtual void sendAcceptCountRequest(class GameData *) {};
-		virtual void sendRefuseCountRequest(class GameData *) {};
-		virtual void sendAcceptRequestMatchMode(unsigned int) {};
-		virtual void sendDeclineRequestMatchMode(unsigned int) {};
-		virtual void sendRequestDraw(unsigned int) {};
-		virtual void sendAcceptDrawRequest(class GameData *) {};
-		virtual void sendRefuseDrawRequest(class GameData *) {};
-		virtual void sendRequestMatchMode(unsigned int) {};
-		virtual void sendTimeLoss(unsigned int) {};	//overwrite or not
-		virtual void sendResult(class GameData *, class GameResult *) {};	//optional
+        virtual void sendRequestCount(unsigned int) {}
+        virtual void sendAcceptCountRequest(class GameData *) {}
+        virtual void sendRefuseCountRequest(class GameData *) {}
+        virtual void sendAcceptRequestMatchMode(unsigned int) {}
+        virtual void sendDeclineRequestMatchMode(unsigned int) {}
+        virtual void sendRequestDraw(unsigned int) {}
+        virtual void sendAcceptDrawRequest(class GameData *) {}
+        virtual void sendRefuseDrawRequest(class GameData *) {}
+        virtual void sendRequestMatchMode(unsigned int) {}
+        virtual void sendTimeLoss(unsigned int) {}	//overwrite or not
+        virtual void sendResult(class GameData *, class GameResult *) {}	//optional
 		virtual void sendMatchRequest(class MatchRequest * mr) = 0;
-		virtual void sendRematchRequest(void) {};	//optional
-		virtual void sendRematchAccept(void) {};
-		virtual void declineMatchOffer(const PlayerListing & opponent) = 0;
-		virtual void cancelMatchOffer(const PlayerListing & ) {};
-		virtual void acceptMatchOffer(const PlayerListing & opponent, class MatchRequest * mr) = 0;
+        virtual void sendRematchRequest(void) {}	//optional
+        virtual void sendRematchAccept(void) {}
+        virtual void declineMatchOffer(const PlayerListing * opponent) = 0;
+        virtual void cancelMatchOffer(const PlayerListing * ) {}
+        virtual void acceptMatchOffer(const PlayerListing * opponent, class MatchRequest * mr) = 0;
 		virtual QTime gd_checkMainTime(TimeSystem, const QTime & t);
-		virtual QTime gd_checkPeriodTime(TimeSystem, const QTime & t) { return t; };
-		virtual unsigned int gd_checkPeriods(TimeSystem, unsigned int p) { return p; };
-		virtual void sendRejectCount(class GameData *) {};
-		virtual void sendAcceptCount(class GameData *) {};
-		virtual void sendAdjournRequest(void) {};
-		virtual void sendAdjourn(void) {};
-		virtual void sendRefuseAdjourn(void) {};
+        virtual QTime gd_checkPeriodTime(TimeSystem, const QTime & t) { return t; }
+        virtual unsigned int gd_checkPeriods(TimeSystem, unsigned int p) { return p; }
+        virtual void sendRejectCount(class GameData *) {}
+        virtual void sendAcceptCount(class GameData *) {}
+        virtual void sendAdjournRequest(void) {}
+        virtual void sendAdjourn(void) {}
+        virtual void sendRefuseAdjourn(void) {}
 public:
 		int write(const char * packet, unsigned int size);
 		void setConsoleDispatch(ConsoleDispatch * c);
-		void setDefaultRoom(Room * r) { default_room = r; };
-		ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; };
-		Room * getDefaultRoom(void) { return default_room; };
+        void setDefaultRoom(Room * r) { default_room = r; }
+        ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; }
+        Room * getDefaultRoom(void) { return default_room; }
 		class PlayerListing * getPlayerListingFromFriendWatchListing(class FriendWatchListing & f);
         virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
-		virtual void changeServer(void) {};
-		virtual void createRoom(void) {};
-		virtual void sendCreateRoom(class RoomCreate *) {};
-		virtual void sendJoinRoom(const RoomListing &, const char * = 0) {};
-		virtual void sendJoinChannel(const ChannelListing &) {};
+        virtual void changeServer(void) {}
+        virtual void createRoom(void) {}
+        virtual void sendCreateRoom(class RoomCreate *) {}
+        virtual void sendJoinRoom(const RoomListing &, const char * = 0) {}
+        virtual void sendJoinChannel(const ChannelListing &) {}
 		
 		
-		virtual char * sendRequestAccountInfo(int *, void *) { return NULL;} ;
-		virtual void handleAccountInfoMsg(int, char *) {};
+        virtual char * sendRequestAccountInfo(int *, void *) { return NULL;}
+        virtual void handleAccountInfoMsg(int, char *) {}
 		
-		virtual void addFriend(PlayerListing & player);
-		virtual void removeFriend(PlayerListing & player);
-		virtual void addWatch(PlayerListing & player);
-		virtual void removeWatch(PlayerListing & player);
-		virtual void addBlock(PlayerListing & player);
-		virtual void removeBlock(PlayerListing & player);
-		virtual char * sendAddFriend(int *, void *) { return NULL;};
-		virtual void recvFriendResponse(int, char *) {};
-		virtual char * sendRemoveFriend(int *, void *) { return NULL;};
-		virtual char * sendAddBlock(int *, void *) { return NULL; };
-		virtual char * sendRemoveBlock(int *, void *) { return NULL; };
+        virtual void addFriend(PlayerListing * player);
+        virtual void removeFriend(PlayerListing * player);
+        virtual void addWatch(PlayerListing * player);
+        virtual void removeWatch(PlayerListing * player);
+        virtual void addBlock(PlayerListing * player);
+        virtual void removeBlock(PlayerListing * player);
+        virtual char * sendAddFriend(int *, void *) { return NULL;}
+        virtual void recvFriendResponse(int, char *) {}
+        virtual char * sendRemoveFriend(int *, void *) { return NULL;}
+        virtual char * sendAddBlock(int *, void *) { return NULL; }
+        virtual char * sendRemoveBlock(int *, void *) { return NULL; }
 		
-		std::vector<class FriendWatchListing *> & getFriendsList(void) { return friendedList; };
-		std::vector<class FriendWatchListing *> & getWatchesList(void) { return watchedList; };
-		std::vector<class FriendWatchListing *> & getBlockedList(void) { return blockedList; };
+        std::vector<class FriendWatchListing *> & getFriendsList(void) { return friendedList; }
+        std::vector<class FriendWatchListing *> & getWatchesList(void) { return watchedList; }
+        std::vector<class FriendWatchListing *> & getBlockedList(void) { return blockedList; }
 		
 		// FIXME Not certain but maybe this chunk below should be protected:??
 		BoardDispatch * getBoardDispatch(unsigned int game_id);
@@ -171,59 +171,59 @@ public:
         Talk * getIfTalk(PlayerListing *opponent);
         virtual void closeTalk(const PlayerListing *opponent);
 		
-		const QString & getUsername(void) { return username; };
-        virtual const PlayerListing & getOurListing(void);
-		virtual unsigned short getRoomNumber(void) { return 0; };
-		virtual void requestGameInfo(unsigned int) {};		//for IGS on board open
-		virtual void requestGameStats(unsigned int) {};		//same
+        const QString & getUsername(void) { return username; }
+        virtual const PlayerListing * getOurListing(void);
+        virtual unsigned short getRoomNumber(void) { return 0; }
+        virtual void requestGameInfo(unsigned int) {}		//for IGS on board open
+        virtual void requestGameStats(unsigned int) {}		//same
 		virtual unsigned int rankToScore(QString rank) = 0;
-		virtual unsigned long getGameDialogFlags(void) { return 0; };
-		virtual void getAndSetFriendWatchType(PlayerListing & player);
-		virtual void checkGameWatched(GameListing & game);
+        virtual unsigned long getGameDialogFlags(void) { return 0; }
+        virtual void getAndSetFriendWatchType(PlayerListing * player);
+        virtual void checkGameWatched(const GameListing *game);
 		
-		virtual int gd_verifyBoardSize(int v) { return v; };
+        virtual int gd_verifyBoardSize(int v) { return v; }
 		
-		virtual bool playerTrackingByID(void) { return false; };
-		virtual bool flipCoords(void) { return true; };
-		virtual bool supportsMultipleUndo(void) { return false; };
-		virtual bool supportsRequestMatchMode(void) { return false; };
-		virtual bool supportsRequestAdjourn(void) { return false; };
-		virtual bool supportsRequestDraw(void) { return false; };
-		virtual bool supportsRequestCount(void) { return false; };
-		virtual bool supportsAddTime(void) { return false; };
-		virtual bool supportsObserveOutside(void) { return false; };
-		virtual bool supportsServerChange(void) { return false; };
-		virtual bool supportsRefreshListsButtons(void) { return false; };
-		virtual bool consoleIsChat(void) { return true; };
-		virtual bool supportsRematch(void) { return false; };
-		virtual bool startTimerOnOpen(void) { return false; };	//name?? no "supports"?
-		virtual bool clientCountsTime(void) { return true; };
-		virtual bool clientSendsTime(void) { return false; };
-		virtual bool undoResetsScore(void) { return false; };
-		virtual bool netWillEnterScoreMode(void) { return false; };
-		virtual bool canMarkStonesDeadinScore(void) { return true; };
-		virtual bool unmarkUnmarksAllDeadStones(void) { return false; };
-		virtual bool cantMarkOppStonesDead(void) { return false; };
-		virtual bool twoPassesEndsGame(void) { return false; };		//used?? FIXME
-		virtual bool supportsFriendList(void) { return false; };
-		virtual bool supportsWatchList(void) { return false; };
-		virtual bool supportsBlockList(void) { return false; };
-		virtual bool supportsSeek(void) { return false; };
-		virtual const char * getCodecString(void) { return ""; };
-		virtual QString getPlaceString(void) { return ""; };
-		virtual void saveIfDoesntSave(GameData *) {};
-		virtual unsigned long getPlayerListColumns(void) { return 0; };
+        virtual bool playerTrackingByID(void) { return false; }
+        virtual bool flipCoords(void) { return true; }
+        virtual bool supportsMultipleUndo(void) { return false; }
+        virtual bool supportsRequestMatchMode(void) { return false; }
+        virtual bool supportsRequestAdjourn(void) { return false; }
+        virtual bool supportsRequestDraw(void) { return false; }
+        virtual bool supportsRequestCount(void) { return false; }
+        virtual bool supportsAddTime(void) { return false; }
+        virtual bool supportsObserveOutside(void) { return false; }
+        virtual bool supportsServerChange(void) { return false; }
+        virtual bool supportsRefreshListsButtons(void) { return false; }
+        virtual bool consoleIsChat(void) { return true; }
+        virtual bool supportsRematch(void) { return false; }
+        virtual bool startTimerOnOpen(void) { return false; }	//name?? no "supports"?
+        virtual bool clientCountsTime(void) { return true; }
+        virtual bool clientSendsTime(void) { return false; }
+        virtual bool undoResetsScore(void) { return false; }
+        virtual bool netWillEnterScoreMode(void) { return false; }
+        virtual bool canMarkStonesDeadinScore(void) { return true; }
+        virtual bool unmarkUnmarksAllDeadStones(void) { return false; }
+        virtual bool cantMarkOppStonesDead(void) { return false; }
+        virtual bool twoPassesEndsGame(void) { return false; }		//used?? FIXME
+        virtual bool supportsFriendList(void) { return false; }
+        virtual bool supportsWatchList(void) { return false; }
+        virtual bool supportsBlockList(void) { return false; }
+        virtual bool supportsSeek(void) { return false; }
+        virtual const char * getCodecString(void) { return ""; }
+        virtual QString getPlaceString(void) { return ""; }
+        virtual void saveIfDoesntSave(GameData *) {}
+        virtual unsigned long getPlayerListColumns(void) { return 0; }
 		#define PL_NOWINSLOSSES		0x01
 		#define PL_NOMATCHPREFS		0x02
-		virtual bool supportsChannels(void) { return false; };
-		virtual bool supportsCreateRoom(void) { return false; };
+        virtual bool supportsChannels(void) { return false; }
+        virtual bool supportsCreateRoom(void) { return false; }
 		virtual unsigned long getRoomStructureFlags(void) = 0;
 		#define RS_NOROOMLIST	 	0x01
 		#define RS_SHORTROOMLIST	0x02
 		#define RS_LONGROOMLIST		0x04
 		#define RS_ONEROOMATATIME	0x08
 		#define RS_ONEGAMEPERROOM	0x10
-		std::vector<class RoomListing *> * getRoomList(void) { return 0; };
+        std::vector<class RoomListing *> * getRoomList(void) { return 0; }
 		void recvRoomListing(class RoomListing * r);
 		void recvChannelListing(class ChannelListing * r);
 		/* again, recvRoom is solely for igs handlers which aren't
@@ -232,21 +232,22 @@ public:
 		void recvSeekCondition(class SeekCondition * s);
 		void recvSeekCancel(void);
 		void recvSeekPlayer(QString player, QString condition);
-		virtual void sendSeek(class SeekCondition *) {};
-		virtual void sendSeekCancel(void) {};
+        virtual void sendSeek(class SeekCondition *) {}
+        virtual void sendSeekCancel(void) {}
 
     signals:
         void ready(void);
-        void playerListingUpdated(PlayerListing *);
+        void playerListingReceived(PlayerListing *);
+        void gameListingReceived(GameListing *);
         void stateChanged(ConnectionState);
 		
 	protected:
 		void closeConnection(bool send_disconnect = true);
-		virtual bool readyToWrite(void) { return true; };
-		virtual void setReadyToWrite(void) {};
+        virtual bool readyToWrite(void) { return true; }
+        virtual void setReadyToWrite(void) {}
         virtual void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
-		QTcpSocket * getQSocket(void) { return qsocket; };
+        QTcpSocket * getQSocket(void) { return qsocket; }
 		void writeFromBuffer(void);
         void writeZeroPaddedString(char * dst, const QString & src, int size);
         bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
@@ -301,6 +302,7 @@ public:
 protected:
         QMap <unsigned int, BoardDispatch *> boardDispatchMap;
         // Accessed by IGS connection class
+        PlayerListing * ourListing;
 private:
         QMap <const PlayerListing *, GameDialog *> gameDialogMap;
         QMap <const PlayerListing *, Talk *> talkMap;
@@ -321,8 +323,8 @@ private:
 class FriendWatchListing
 {
 public:
-	FriendWatchListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {};
-	FriendWatchListing(QString n) : name(n), id(0), notify(false), online(false) {};		//blocked has no notify
+    FriendWatchListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {}
+    FriendWatchListing(QString n) : name(n), id(0), notify(false), online(false) {}		//blocked has no notify
 	QString name;
 	unsigned short id;		//if necessary
 	bool notify;
