@@ -81,9 +81,7 @@ Room::Room(NetworkConnection * c)
 
     connect(connection,SIGNAL(playerListingReceived(PlayerListing*)),this,SLOT(recvPlayerListing(PlayerListing*)));
     connect(connection,SIGNAL(gameListingReceived(GameListing*)),this,SLOT(recvGameListing(GameListing*)));
-    connect(playerListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setPlayerCountStat(int)));
-    connect(gamesListModel,SIGNAL(countChanged(int)),connectionWidget,SLOT(setGameCountStat(int)));
-	
+
 	players = 0;
 	games = 0;
 

@@ -269,15 +269,6 @@ public:
 		last_game_code(0), undoAllowed(false), rematch(false), first_offer(false) {};
 };
 
-class RoomStats
-{
-public:
-	int players;
-	int games;
-	RoomStats() {};
-	RoomStats(int p, int g) : players(p), games(g) {};
-};
-
 /* Confusing name since we use games as rooms with ORO, maybe not an issue */
 class RoomListing
 {

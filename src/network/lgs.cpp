@@ -807,73 +807,8 @@ void LGSConnection::handle_info(QString line)
 		memory_str = QString();
 	}
 	else if (line.contains("****") && line.contains("Players"))
-	{
-		RoomStats * rs = new RoomStats();
-		rs->players = element(line, 1, " ").toInt();
-		rs->games = element(line, 3, " ").toInt();
-#ifdef OLD
-		room->recvRoomStats(rs);
-#endif //OLD
-		delete rs;
-				// maybe last line of a 'user' cmd
-#ifdef FIXME
-		/* I think we can ignore this now. */
-		aPlayer->extInfo = "";
-		aPlayer->won = "";
-		aPlayer->lost = "";
-		aPlayer->country = "";
-		aPlayer->nmatch_settings = "";
-#endif //FIXME
-#ifdef FIXME
-				/* We might be able to remove old
-		* games here.  But if this is slow
-		* then we shouldn't be using lists like
-		* this.  I know there's faster ways
-				* to do this. FIXME*/
-				/* You know what's particularly bad about
-		* this is that it means you have to refresh
-		* the players to really refresh the games
-		* plus, I'm not really sure its necessary,
-		* I just now that there are some bugs in
-		* the updates.  We need to experiment/think
-		* through it.  Also, I think there's
-		* still some issues, listings getting
-				* temporarily corrupted FIXME FIXME */
-		for(int i = 0; i < gameListB->count(); i++)
-		{
-			for(int j = 0; j < gameListA->count(); j++)
-			{
-				if(gameListB->at(i) == gameListA->at(j))
-				{
-					gameListA->removeAt(j);
-					break;
-				}
-			}
-		}
-		// This is currently really unreliable in addition to being really ugly, all of this here
-		for(int i = 0; i < gameListA->count(); i++)
-		{
-			aGame->number = gameListA->at(i);	
-			qDebug("Game id down: %d", aGame->number);
-			aGame->running = false;
-			room->recvGameListing(aGame);
-		}
+        return;
 
-				/* Swap the lists so that the B filled
-		* with existing games becomes the A
-		* to empty and then delete the next
-				* refresh */
-		gameListA->clear();
-		QList <unsigned int> * list = gameListB;
-		gameListB = gameListA;
-		gameListA = list;
-#endif //FIXME
-				// remove cmd nr
-				//line = line.trimmed();
-				//line = line.remove(0, 2);
-				////emit signal_message(line);
-		return;
-	}
 			// 9 qGoDev has resigned the game.
 	else if (line.contains("has resigned the game"))
 	{

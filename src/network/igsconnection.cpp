@@ -1003,7 +1003,7 @@ void IGSConnection::handleMessage(QString msg)
 			handle_error(msg);
 			break;
 		case IGS_GAMES:
-			handle_games(msg);
+            handle_games(msg);
 			break;
 		case IGS_FILE:
 			handle_file(msg);
@@ -1509,50 +1509,38 @@ void IGSConnection::handle_games(QString line)
 	if (line.contains("##"))
 				// skip first line
         return;
-	line = line.remove(0, 2).trimmed();
-    QString buffer;
-	Room * room = getDefaultRoom();		
-	// get info line
-	buffer = element(line, 0, "(", ")");
-	int s = buffer.left(3).toInt();
-	buffer.remove(0, 4);
-	int number = element(line, 0, "[", "]", true).rightJustified(3).toInt();
-			
-    GameListing * aGame = room->getGameListing(number);
-    aGame->moves = s;
-	aGame->handicap = element(buffer, 1, " ").toInt();
-	aGame->komi = element(buffer, 2, " ").toFloat();
-	aGame->board_size = element(buffer, 0, " ").toInt();
-    aGame->By = QString();//element(buffer, 3, " ").rightJustified(3);
-	aGame->FR = element(buffer, 4, " ");
+    line.remove(QRegularExpression("[\\[\\]\\(\\)]"));
+    QStringList words = line.split(QChar(' '),QString::SkipEmptyParts);
+    bool ok;
+    int number = words.at(1).toInt(&ok);
+    if (!ok)
+        return;
+    GameListing * aGame = getDefaultRoom()->getGameListing(number);
 
-			// parameter "true" -> kill blanks
-			
-#ifdef FIXME
-	gameListB->append(aGame->number);
-#endif //FIXME
-	QString name = element(line, 0, "]", "[", true);
-    aGame->white = getPlayerListingNeverFail(name);
-    aGame->_white_name = name;
-	aGame->_white_rank = element(line, 1, "[", "]", true);
-	fixRankString(&(aGame->_white_rank));
-	aGame->_white_rank_score = rankToScore(aGame->_white_rank);
-			// skip 'vs.'
-	buffer = element(line, 1, "]", "[", true);
-	name = buffer.remove(0, 3);
-	aGame->black = getPlayerListingNeverFail(name);
-    aGame->_black_name = name;
-	aGame->_black_rank = element(line, 2, "[", "]", true);
-	fixRankString(&(aGame->_black_rank));
-	aGame->_black_rank_score = rankToScore(aGame->_black_rank);
-	aGame->observers = element(line, 1, "(", ")", true).toInt();
-			// indicate game to be running
+    aGame->_white_name = words.at(2);
+    aGame->_white_rank = words.at(3);
+    fixRankString(&(aGame->_white_rank));
+    // skip "vs."
+    aGame->_black_name = words.at(5);
+    aGame->_black_rank = words.at(6);
+    fixRankString(&(aGame->_black_rank));
+    aGame->moves = words.at(7).toInt();
+    aGame->board_size = words.at(8).toInt();
+    aGame->handicap = words.at(9).toInt();
+    aGame->komi = words.at(10).toFloat();
+    aGame->By = words.at(11);
+    aGame->FR = words.at(12);
+    aGame->observers = words.at(13).toInt();
+
+    aGame->white = getPlayerListingNeverFail(aGame->_white_name);
+    aGame->black = getPlayerListingNeverFail(aGame->_black_name);
+
 	aGame->running = true;
 #ifdef FIXME
 	aGame->oneColorGo = false ;
 #endif //FIXME
 
-	room->recvGameListing(aGame);
+    emit gameListingReceived(aGame);
 	if(protocol_save_string == "restoring")
 	{
 		BoardDispatch * boarddispatch = getBoardDispatch(number);
@@ -2493,73 +2481,7 @@ void IGSConnection::handle_info(QString line)
 	}
 	else if (line.contains("****") && line.contains("Players"))
 	{
-		
-		RoomStats * rs = new RoomStats();
-		rs->players = element(line, 1, " ").toInt();
-		rs->games = element(line, 3, " ").toInt();
-#ifdef OLD
-		room->recvRoomStats(rs);
-#endif //OLD
-		qDebug("Room stats: %d %d", rs->players, rs->games);
-		delete rs;
-				// maybe last line of a 'user' cmd
-#ifdef FIXME
-		/* I think we can ignore this now. */
-		aPlayer->extInfo = "";
-		aPlayer->won = "";
-		aPlayer->lost = "";
-		aPlayer->country = "";
-		aPlayer->nmatch_settings = "";
-#endif //FIXME
-#ifdef FIXME
-				/* We might be able to re old
-		* games here.  But if this is slow
-		* then we shouldn't be using lists like
-		* this.  I know there's faster ways
-				* to do this. FIXME*/
-				/* You know what's particularly bad about
-		* this is that it means you have to refresh
-		* the players to really refresh the games
-		* plus, I'm not really sure its necessary,
-		* I just now that there are some bugs in
-		* the updates.  We need to experiment/think
-		* through it.  Also, I think there's
-		* still some issues, listings getting
-				* temporarily corrupted FIXME FIXME */
-		for(int i = 0; i < gameListB->count(); i++)
-		{
-			for(int j = 0; j < gameListA->count(); j++)
-			{
-				if(gameListB->at(i) == gameListA->at(j))
-				{
-					gameListA->reAt(j);
-					break;
-				}
-			}
-		}
-		// This is currently really unreliable in addition to being really ugly, all of this here
-		for(int i = 0; i < gameListA->count(); i++)
-		{
-			aGame->number = gameListA->at(i);	
-			qDebug("Game id down: %d", aGame->number);
-			aGame->running = false;
-			room->recvGameListing(aGame);
-		}
-
-				/* Swap the lists so that the B filled
-		* with existing games becomes the A
-		* to empty and then delete the next
-				* refresh */
-		gameListA->clear();
-		QList <unsigned int> * list = gameListB;
-		gameListB = gameListA;
-		gameListA = list;
-#endif //FIXME
-				// re cmd nr
-				//line = line.trimmed();
-				//line = line.re(0, 2);
-				////emit signal_message(line);
-		return;
+        return;
 	}
 			// 9 qGoDev has resigned the game.
 	else if (line.contains("has resigned the game"))
@@ -2866,7 +2788,7 @@ void IGSConnection::handle_move(QString line)
 {
 	BoardDispatch * boarddispatch;
 		//case 15:
-	qDebug("%s", line.toLatin1().constData());
+    qDebug("%s", line.toLatin1().constData());
 	line = line.remove(0, 2).trimmed();	
 	static bool need_time = false;	
 	int number;
@@ -3855,27 +3777,11 @@ void IGSConnection::handle_who(QString line)
     PlayerListing * aPlayer = NULL;
 	Room * room = getDefaultRoom();
 	int pos;
-	//line = line.remove(0, 2).trimmed();
-			// search for first line
-	if (line.contains("Idle") && (line.indexOf("Info")) != -1)
-	{
-				// skip
-		//return PLAYER27_START;
-	}
-	else if (line.contains("****") && line.contains("Players"))
-	{
-		
-		RoomStats * rs = new RoomStats();
-		rs->players = element(line, 2, " ").toInt();
-		rs->games = element(line, 4, " ").toInt();
-#ifdef OLD
-		room->recvRoomStats(rs);
-#endif //OLD
-		qDebug("Room stats: %d %d", rs->players, rs->games);
-		delete rs;
+    if (line.contains("****") && line.contains("Players"))
 		return;
-	}
-			
+    if (line.contains("Info") && line.contains("Idle"))
+        return;
+
 		if (line[15] != ' ')
 		{
 //27   X --   -- truetest    7m     1d* |   X --   -- aajjoo      6s      9k
