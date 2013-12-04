@@ -23,6 +23,7 @@
 #include "tree.h"
 #include "move.h"
 #include "matrix.h"
+#include "group.h"
 
 #include <iostream>
 #include <vector>

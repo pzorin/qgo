@@ -28,45 +28,32 @@
 
 class NetworkConnection;
 class PlayerListing;
+class Room;
 
 class Talk : public QDialog, public Ui::TalkGui
 {
 Q_OBJECT
 
 public:
-    Talk(NetworkConnection * conn, PlayerListing *player);
-	virtual ~Talk();
-	QTextEdit      *get_mle() const { return ui.MultiLineEdit1; } 
-	QWidget        *get_tabWidget()  { return this; }
-	QString        get_name() const;
-    PlayerListing * get_opponent() const;
-    bool	 	getConversationOpened(void) const { return conversationOpened; }
-    void		setConversationOpened(bool c) { conversationOpened = c; }
-	//void           set_name(QString &n) { name = n; }
-	void           write(const QString &text = QString()) const;
-	void recvTalk(QString text);
-    void	       displayData(PlayerListing * p);
-    bool           pageActive;
-	void           setTalkWindowColor(QPalette pal);
+    Talk(NetworkConnection * conn, PlayerListing *player, Room * r);
+    virtual ~Talk();
+    QString get_name() const;
+    bool getConversationOpened(void) const { return conversationOpened; }
+    void setConversationOpened(bool c) { conversationOpened = c; }
+    void recvTalk(QString text);
 public slots:
 	void slot_returnPressed();
 	void slot_pbRelTab();
 	void slot_match();
     void updatePlayerListing();
 
-signals:
-	void signal_talkTo(QString&, QString&);
-	void signal_matchRequest(const QString&);
-
-
 private:
 	void closeEvent(QCloseEvent *e);
-	Ui::TalkGui ui;
-	static int     counter;
+    Ui::TalkGui ui;
 	NetworkConnection * connection;
     PlayerListing * opponent;
 	bool conversationOpened;
-
+    Room * room;
 };
 
 #endif

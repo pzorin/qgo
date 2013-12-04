@@ -21,11 +21,11 @@
 
 #include <QDebug>
 #include "room.h"
-#include "../listviews.h"
+#include "listviews.h"
 #include "talk.h"
 #include "gamedialog.h"
-#include "../defines.h"
-#include "../connectionwidget.h"
+#include "defines.h"
+#include "connectionwidget.h"
 #include "playergamelistings.h"
 #include "boarddispatch.h"	//so we can remove observers
 #include "networkconnection.h"
@@ -113,6 +113,7 @@ Room::~Room()
         delete gamesListModel->items.takeLast();
 	delete playerListModel;
 	delete gamesListModel;
+    talkMap.clear();
 }
 
 void Room::onError(void)
@@ -132,14 +133,13 @@ void Room::setConnection(NetworkConnection * c)
 void Room::slot_playerOpenTalk(const QModelIndex & index)
 {
     PlayerListing * opponent = playerListModel->playerListingFromIndex(index);
-    Talk * talk;
     /* Whenever a talk window is opened, we want stats.  This
      * means its easier to create the talk window and let it
      * always create stats, then send out stats messages
      * that generate talk windows */
     /* This is a little weird now...almost like we're just asking
      * for an update on the references */
-    talk = connection->getTalk(opponent);
+    Talk * talk = getTalk(opponent);
     //connection->sendStatsRequest(opponent);
     /* This is really only for ORO, and let's see if it works but... */
     if(talk)
@@ -372,7 +372,7 @@ void Room::recvPlayerListing(PlayerListing *player)
 				b->recvObserver(player, false);
 			}
 			if(player->dialog_opened)
-                connection->closeTalk(player);
+                closeTalk(player);
 		}
 		std::vector<unsigned short>::iterator room_listit = player->room_list.begin();
 		while(room_listit != player->room_list.end())
@@ -393,7 +393,7 @@ void Room::recvPlayerListing(PlayerListing *player)
 	
     if(player->online && player->dialog_opened)
     {
-        Talk * t = connection->getIfTalk(player);
+        Talk * t = getIfTalk(player);
         if(t)
             t->updatePlayerListing();
         else
@@ -420,4 +420,41 @@ void Room::recvGameListing(GameListing * game)
     {
         connection->checkGameWatched(game);
 	}
+}
+
+Talk * Room::getTalk(PlayerListing * opponent)
+{
+    Talk * result = getIfTalk(opponent);
+    if (result == NULL)
+    {
+        // Create if it does not exist
+        result = new Talk(connection, opponent, this);
+        /* Here's how the talk stuff works for future reference. FIXME.
+         * double clicking on a name or typing a console command (maybe) opens
+         * a talk dialog through the room which also, at that time, might request
+         * stats from the network connection.  We also notify
+         * the mainwindow to add the new dialog to the list of talk dialogs */
+        connectionWidget->talkOpened(result);
+        talkMap.insert(opponent, result);
+    }
+    return result;
+}
+
+Talk * Room::getIfTalk(const PlayerListing * opponent)
+{
+    QMap <const PlayerListing *, Talk *>::const_iterator i = talkMap.find(opponent);
+    if(i == talkMap.end())
+        return NULL;
+    else
+        return i.value();
+}
+
+void Room::closeTalk(const PlayerListing * opponent)
+{
+    QMap <const PlayerListing *, Talk *>::iterator i = talkMap.find(opponent);
+    if(i == talkMap.end())
+        return;
+
+    i.value()->deleteLater();
+    talkMap.erase(i);
 }

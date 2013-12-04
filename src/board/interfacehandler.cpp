@@ -93,7 +93,7 @@ void InterfaceHandler::clearData()
 //	editPaste->setEnabled(false);
 //	editPasteBrother->setEnabled(false);
 	boardwindow->slider->setValue(0);
-	boardwindow->slider->setMaximum(SLIDER_INIT);
+    boardwindow->slider->setMaximum(0);
 	scored_flag = false;
 }
 

@@ -21,7 +21,8 @@
 
 
 #include "group.h"
-#include "../defines.h"
+#include "matrix.h"
+#include "defines.h"
 
 Group::Group()
 {
@@ -31,11 +32,17 @@ Group::Group()
 Group::~Group()
 {
 	while (!isEmpty())
-		delete takeFirst();
+        delete takeFirst();
+}
+
+void Group::append(MatrixStone *m, Group ***groupMatrix)
+{
+     QList<MatrixStone *>::append(m);
+     groupMatrix[m->x - 1][m->y - 1] = this;
 }
 
 
-int Group::compareItems(MatrixStone *s1, MatrixStone *s2)
+bool Group::areEqual(MatrixStone *s1, MatrixStone *s2)
 {
 	//MatrixStone *s1 = static_cast<MatrixStone*>(d1);
 	//MatrixStone *s2 = static_cast<MatrixStone*>(d2);
@@ -43,12 +50,9 @@ int Group::compareItems(MatrixStone *s1, MatrixStone *s2)
 	Q_CHECK_PTR(s1);
 	Q_CHECK_PTR(s2);
 
-	if (s1->x == s2->x &&
+    return (s1->x == s2->x &&
 	    s1->y == s2->y &&
-	    s1->c == s2->c)
-		return 0;
-
-	return 1;
+        s1->c == s2->c);
 }
 
 void Group::remove(MatrixStone * m)
@@ -67,18 +71,18 @@ bool Group::isAttachedTo(MatrixStone *s)
 {
     Q_CHECK_PTR(s);
 
+    if (isEmpty())
+        return false;
+
     int stoneX = s->x,
 	stoneY = s->y,
 	      x, y;
     StoneColor col = s->c, c;
-    MatrixStone *tmp;
-
-    if (isEmpty())
-		return false;
+    MatrixStone * tmp;
     
     for (int i=0; i<count(); i++)
     {
-		tmp = at(i);
+        tmp = at(i);
 		x = tmp->x;
 		y = tmp->y;
 		c = tmp->c;
@@ -86,7 +90,7 @@ bool Group::isAttachedTo(MatrixStone *s)
 			 (stoneY == y && (stoneX == x-1 || stoneX == x+1))) &&
 			 c == col)
 			return true;
-    }    
+    }
     
     return false;
 }

@@ -230,7 +230,7 @@ void TygemConnection::sendText(QString text)
 
 void TygemConnection::sendMsg(PlayerListing * player, QString text)
 {
-    Talk * t = getIfTalk(player);
+    Talk * t = getDefaultRoom()->getIfTalk(player);
 	if(!t)
 	{
 		qDebug("sendMsg called with no talk dialog");
@@ -347,7 +347,7 @@ void TygemConnection::sendResume(unsigned short game_number)
 
 void TygemConnection::closeTalk(PlayerListing * opponent)
 {
-    Talk * t = getIfTalk(opponent);
+    Talk * t = getDefaultRoom()->getIfTalk(opponent);
 	if(!t)
 	{
 		qDebug("closing talk but no talk registered!!");
@@ -355,7 +355,7 @@ void TygemConnection::closeTalk(PlayerListing * opponent)
 	}
 	if(t->getConversationOpened())
         sendCloseConversation(opponent);
-	NetworkConnection::closeTalk(opponent);
+    getDefaultRoom()->closeTalk(opponent);
 }
 
 void TygemConnection::closeBoardDispatch(unsigned int game_id)
@@ -5308,9 +5308,7 @@ void TygemConnection::handleOpenConversation(unsigned char * msg, unsigned int s
 	
 	player = getDefaultRoom()->getPlayerListing(encoded_name2);
     sendConversationReply(player, accept);
-    Talk * t = getIfTalk(player);
-	if(!t)
-        t = getTalk(player);
+    Talk * t = getDefaultRoom()->getTalk(player);
 	t->setConversationOpened(true);
 	t->updatePlayerListing();
 }
@@ -5340,7 +5338,7 @@ void TygemConnection::handleConversationReply(unsigned char * msg, unsigned int 
 	encoded_name2 = serverCodec->toUnicode((char *)name, strlen((char *)name));
 	
 	player = getDefaultRoom()->getPlayerListing(encoded_name2);
-    Talk * t = getIfTalk(player);
+    Talk * t = getDefaultRoom()->getIfTalk(player);
 	if(!t)
 	{
 		qDebug("No talk for: %s", encoded_name2.toLatin1().constData());
@@ -5421,7 +5419,7 @@ void TygemConnection::handleConversationMsg(unsigned char * msg, unsigned int si
 	}
 	
 	player = getDefaultRoom()->getPlayerListing(encoded_name2);
-    Talk * t = getIfTalk(player);
+    Talk * t = getDefaultRoom()->getIfTalk(player);
 	if(!t)
 	{
 		qDebug("Unknown player replies to conversation: %s", encoded_name2.toLatin1().constData());
@@ -5533,7 +5531,7 @@ void TygemConnection::handlePersonalChat(unsigned char * msg, unsigned int size)
 #endif //RE_DEBUG
     QString u;
     u = serverCodec->toUnicode((const char *)text, strlen((char *)text));
-    Talk * talk = getTalk(player);
+    Talk * talk = getDefaultRoom()->getTalk(player);
     if(talk)
     {
         talk->recvTalk(u);

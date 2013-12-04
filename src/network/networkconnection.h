@@ -27,7 +27,6 @@
 #include <QtNetwork>
 #include "messages.h"
 #include "newline_pipe.h"
-#include "defines.h"
 
 class GameListing;
 class PlayerListing;
@@ -36,7 +35,6 @@ class ConsoleDispatch;
 class BoardDispatch;
 
 class GameDialog;
-class Talk;
 
 class NetworkConnection;
 
@@ -65,6 +63,28 @@ enum ConnectionState {
 };
 
 #define NOT_MAIN_CONNECTION		true
+
+class ConnectionCredentials
+{
+public:
+    ConnectionCredentials(ConnectionType t, QString h, qint16 p, QString u, QString pass) :
+        type(t), hostName(h), port(p), userName(u), password(pass) {}
+    ConnectionType type;
+    QString hostName;
+    qint16 port;
+    QString userName;
+    QString password;
+};
+
+/* Game refusal motives... like we need a reason.  */
+#define	GD_REFUSE_NOTOPEN		0
+#define GD_REFUSE_DECLINE		1
+#define GD_REFUSE_CANCEL		2
+#define GD_REFUSE_INGAME		3
+#define GD_REFUSE_NODIRECT		4
+#define GD_INVALID_PARAMETERS		5
+#define GD_OPP_NO_NMATCH		6
+#define GD_RESET			7
 
 /* Some of these methods should be converted to slots.
  * Also, NetworkConnection should emit signals for many events */
@@ -167,11 +187,8 @@ public:
         GameDialog * getIfGameDialog(const PlayerListing * opponent);
         void closeGameDialog(const PlayerListing *opponent);
         class MatchRequest * getAndCloseGameDialog(const PlayerListing *opponent);
-        Talk * getTalk(PlayerListing *opponent);
-        Talk * getIfTalk(PlayerListing *opponent);
-        virtual void closeTalk(const PlayerListing *opponent);
 		
-        const QString & getUsername(void) { return username; }
+        const QString & getUsername(void) const { return username; }
         virtual const PlayerListing * getOurListing(void);
         virtual unsigned short getRoomNumber(void) { return 0; }
         virtual void requestGameInfo(unsigned int) {}		//for IGS on board open
@@ -305,7 +322,6 @@ protected:
         PlayerListing * ourListing;
 private:
         QMap <const PlayerListing *, GameDialog *> gameDialogMap;
-        QMap <const PlayerListing *, Talk *> talkMap;
 
 	protected slots:
 		virtual void OnConnected();
@@ -323,8 +339,7 @@ private:
 class FriendWatchListing
 {
 public:
-    FriendWatchListing(QString n, bool b) : name(n), id(0), notify(b), online(false) {}
-    FriendWatchListing(QString n) : name(n), id(0), notify(false), online(false) {}		//blocked has no notify
+    FriendWatchListing(QString n, bool b = false) : name(n), id(0), notify(b), online(false) {}
 	QString name;
 	unsigned short id;		//if necessary
 	bool notify;

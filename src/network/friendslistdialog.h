@@ -27,17 +27,19 @@
 #include <QtWidgets>
 
 class NetworkConnection;
+class Room;
 
 class FriendsListDialog : public QDialog, Ui::FriendsListDialog
 {
 	Q_OBJECT
 	public:
-		FriendsListDialog(NetworkConnection * c);
+        FriendsListDialog(NetworkConnection * c, Room * r);
 		~FriendsListDialog();
 	private:
 		void populateLists(void);
 		Ui::FriendsListDialog ui;
 		NetworkConnection * connection;
+        Room * room;
 		
 		QModelIndex popup_item;
 		class PlayerListing * popup_playerlisting;

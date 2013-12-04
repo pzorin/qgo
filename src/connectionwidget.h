@@ -91,9 +91,7 @@ public slots:
     void slot_channelListClicked(const QString &);
     void slot_seek(bool);
     void slot_seek(QAction *);
-    void slot_talk(const QString& , const QString &, bool );
     void talkOpened(Talk * d);
-    void talkRecv(Talk * d);
     void setLooking(bool val);
     void slot_cbopen();
     void slot_cbquiet();
@@ -101,8 +99,6 @@ public slots:
 
     void slot_msgBox(const QString&);
     void slot_connexionClosed();
-
-    void slot_statsPlayer(PlayerListing*);
 
 private slots:
     void setRankSpreadView(void);
@@ -126,7 +122,6 @@ private:
     bool	tn_wait_for_tn_ready;
     NetworkConnection * connection;
     QMenu 		*seekMenu;
-    QList<Talk*>	talkList;
     QList<GameDialog*> matchList;
     QList<const RoomListing *> roomList;
     QList<const ChannelListing *> channelList;

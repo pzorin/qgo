@@ -26,12 +26,13 @@
 #include "move.h"
 #include "defines.h"
 #include "audio.h"
-#include "network/boarddispatch.h"
-#include "network/messages.h"
+#include "boarddispatch.h"
+#include "messages.h"
 #include "resultdialog.h"
 #include "boardhandler.h"
 #include "clockdisplay.h"
 #include "gamedata.h"
+#include "matrix.h"
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {

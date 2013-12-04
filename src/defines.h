@@ -38,8 +38,6 @@
 
 #define WHITE_STONES_NB 8
 
-#define SLIDER_INIT 0
-
 #define CONSOLECMDPREFIX "--->"
 
 //3 looked a little small
@@ -51,15 +49,6 @@
 #define DEFAULT_COMPUTER_PATH "/usr/games/gnugo"
 #define GNUGO_LEVEL 10
 
-/* Game refusal motives... like we need a reason.  */
-#define	GD_REFUSE_NOTOPEN		0
-#define GD_REFUSE_DECLINE		1
-#define GD_REFUSE_CANCEL		2
-#define GD_REFUSE_INGAME		3
-#define GD_REFUSE_NODIRECT		4
-#define GD_INVALID_PARAMETERS		5
-#define GD_OPP_NO_NMATCH		6
-#define GD_RESET			7
 
 /*
 * Enum definitions
@@ -88,33 +77,6 @@ enum TimeSystem { none, absolute, byoyomi, canadian, tvasia };
 enum ConnectionType { TypeIGS, TypeWING, TypeLGS, TypeORO, TypeTYGEM, TypeEWEIQI, TypeTOM,
                       TypeDEFAULT, TypeNone, TypeUNKNOWN,
                       TypeNNGS, TypeCTN, TypeCWS}; // These are not implemented
-class ConnectionCredentials
-{
-public:
-    ConnectionCredentials(ConnectionType t, QString h, qint16 p, QString u, QString pass) :
-        type(t), hostName(h), port(p), userName(u), password(pass) {};
-    ConnectionType type;
-    QString hostName;
-    qint16 port;
-    QString userName;
-    QString password;
-};
-
-/*
-* Global structs
-*/
-struct ASCII_Import
-{
-	char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
-};
-
-struct MatrixStone
-{
-	int x, y;
-	StoneColor c;
-	MatrixStone() {};
-	MatrixStone(int _x, int _y, StoneColor _c) : x(_x), y(_y), c(_c) {};
-};
 
 /* This should really probably have access functions or
  * something and then friend the mainwindow settings code so
@@ -256,7 +218,5 @@ extern QString applicationPath;
 	#define SOUND_PATH_PREFIX			"sounds/"
     #define TRANSLATIONS_PATH		"translations/"
 #endif
-
-void startqGo(void);
 
 #endif

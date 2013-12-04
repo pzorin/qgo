@@ -21,6 +21,8 @@
 
 #include "mainwindow.h"
 
+void startqGo(void);
+
 /*
  * a cancel button has been pressed on the preference pages  
  */

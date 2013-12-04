@@ -30,6 +30,7 @@
 #include "clockdisplay.h"
 #include "gamedata.h"
 #include "boardwindow.h"
+#include "matrix.h"
 
 qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw, t, gd)
 {

@@ -24,7 +24,6 @@
 #define MATRIX_H
 
 #include "defines.h"
-#include "group.h"
 
 /*
 * Marks used in editing a game
@@ -45,6 +44,21 @@
 #define MX_STONEEDIT	0x4000
 
 #define MX_STONEDIRTY	0x2000
+
+class Group;
+
+struct ASCII_Import
+{
+    char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
+};
+
+struct MatrixStone
+{
+    int x, y;
+    StoneColor c;
+    MatrixStone() {};
+    MatrixStone(int _x, int _y, StoneColor _c) : x(_x), y(_y), c(_c) {};
+};
 
 class Matrix
 {

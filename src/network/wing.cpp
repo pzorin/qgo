@@ -391,8 +391,7 @@ void WingConnection::handle_info(QString line)
 			// 9 Use <nmatch yfh2test B 3 19 60 600 25 0 0 0> or <decline yfh2test> to respond.
 	else if (line.contains("<decline") && line.contains("match"))
 	{
-				// false -> not my request: used in mainwin.cpp
-				////emit signal_matchRequest(element(line, 0, "<", ">"), false);
+                // false -> not my request: used in mainwin.cpp
 		line = element(line, 0, "<", ">");
 		MatchRequest * aMatch = new MatchRequest();
 		aMatch->opponent = line.section(" ", 1, 1);
@@ -1117,7 +1116,7 @@ void WingConnection::handle_info(QString line)
 		if(statsPlayer)
 		{
 			qDebug("talk name: %s", statsPlayer->name.toLatin1().constData());
-            Talk * talk = getTalk(statsPlayer);
+            Talk * talk = getDefaultRoom()->getTalk(statsPlayer);
 			if(talk)
 				talk->updatePlayerListing();
 			statsPlayer = 0;

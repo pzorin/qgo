@@ -25,10 +25,12 @@
 #include "network/playergamelistings.h"
 #include "listviews.h"
 #include "talk.h"
+#include "room.h"
 
-FriendsListDialog::FriendsListDialog(NetworkConnection * c) : QDialog(), Ui::FriendsListDialog()
+FriendsListDialog::FriendsListDialog(NetworkConnection * c, Room * r) : QDialog(), Ui::FriendsListDialog()
 {
 	connection = c;
+    room = r;
 	ui.setupUi(this);
 	
 	friendsView = ui.friendsView;
@@ -238,8 +240,7 @@ void FriendsListDialog::slot_popupMatch(void)
 
 void FriendsListDialog::slot_popupTalk(void)
 {
-	Talk * talk;
-    talk = connection->getTalk(popup_playerlisting);
+    Talk * talk = room->getTalk(popup_playerlisting);
 	if(talk)
 		talk->updatePlayerListing();
 }
@@ -249,8 +250,7 @@ void FriendsListDialog::slot_playersDoubleClickedFriends(const QModelIndex & ind
 {
 	//QModelIndex translated = playerSortProxy->mapToSource(index);
 	PlayerListing * opponent = friendsListModel->playerListingFromIndex(index);
-	Talk * talk;
-    talk = connection->getTalk(opponent);
+    Talk * talk = room->getTalk(opponent);
 	if(talk)
 		talk->updatePlayerListing();
 }
@@ -259,8 +259,7 @@ void FriendsListDialog::slot_playersDoubleClickedWatches(const QModelIndex & ind
 {
 	//QModelIndex translated = playerSortProxy->mapToSource(index);
 	PlayerListing * opponent = watchesListModel->playerListingFromIndex(index);
-	Talk * talk;
-    talk = connection->getTalk(opponent);
+    Talk * talk = room->getTalk(opponent);
 	if(talk)
 		talk->updatePlayerListing();
 }

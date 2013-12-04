@@ -34,6 +34,7 @@ class GameListing;
 class FilteredView;
 class PlayerListModel;
 class GamesListModel;
+class Talk;
 
 /* The main purpose of this class is to manage player and game listings.
  * Listings must be created and retrieved using get...() methods of this class.
@@ -60,6 +61,12 @@ class Room : public QObject
 		GameListing * getGameListing(unsigned int key);
 
 		BoardDispatch * getNewBoardDispatch(unsigned int key);
+
+        // This function creates a Talk if it does not exist
+        Talk * getTalk(PlayerListing *opponent);
+        // This function returns NULL if no Talk exists
+        Talk * getIfTalk(const PlayerListing *opponent);
+        void closeTalk(const PlayerListing *opponent);
 public slots:
         void slot_refreshGames(void);
         void slot_refreshPlayers(void);
@@ -81,6 +88,8 @@ public slots:
 
         QAction *statsAct, *matchAct, *talkAct, *removeFriendAct, *addFriendAct, *removeWatchAct, *addWatchAct, *blockAct;
         QAction *joinObserveAct, *observeOutsideAct;
+
+        QMap <const PlayerListing *, Talk *> talkMap;
 	private slots:
         void slot_playerOpenTalk(const QModelIndex &);
         void slot_gamesDoubleClicked(const QModelIndex &);

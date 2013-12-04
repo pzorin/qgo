@@ -23,6 +23,7 @@
 #ifdef LATENCY
 #include <sys/time.h>
 #endif //LATENCY
+#include "defines.h"
 #include "networkconnection.h"
 #include "consoledispatch.h"
 #include "boarddispatch.h"
@@ -609,7 +610,6 @@ void NetworkConnection::tearDownRoomAndConsole(void)
         (i.value())->setConnection(NULL);
     }
     boardDispatchMap.clear();
-    talkMap.clear();
     gameDialogMap.clear(); // FIXME probably unnecessary
 	
 	if(mainwindowroom)
@@ -891,37 +891,4 @@ MatchRequest * NetworkConnection::getAndCloseGameDialog(const PlayerListing * op
 	else
         qDebug("Couldn't find gamedialog for opponent: %s", opponent->name.toLatin1().constData());
 	return new_mr;
-}
-
-Talk * NetworkConnection::getTalk(PlayerListing * opponent)
-{
-    QMap <const PlayerListing *, Talk *>::const_iterator i = talkMap.find(opponent);
-    if(i == talkMap.end())
-    {
-        // Create if it does not exist
-        Talk * newTalk = new Talk(this, opponent);
-        talkMap.insert(opponent, newTalk);
-        return newTalk;
-    }
-    else
-        return i.value();
-}
-
-Talk * NetworkConnection::getIfTalk(PlayerListing * opponent)
-{
-    QMap <const PlayerListing *, Talk *>::const_iterator i = talkMap.find(opponent);
-    if(i == talkMap.end())
-        return NULL;
-    else
-        return i.value();
-}
-
-void NetworkConnection::closeTalk(const PlayerListing * opponent)
-{
-    QMap <const PlayerListing *, Talk *>::iterator i = talkMap.find(opponent);
-    if(i == talkMap.end())
-        return;
-
-    i.value()->deleteLater();
-    talkMap.erase(i);
 }

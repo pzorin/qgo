@@ -24,11 +24,13 @@
 #define TREE_H
 
 #include "defines.h"
-#include "matrix.h"
 
 #include <QtCore>
 
 class Move;
+class Group;
+class Matrix;
+class MatrixStone;
 
 class Tree
 {

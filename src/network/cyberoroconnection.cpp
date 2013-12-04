@@ -4433,7 +4433,7 @@ void CyberOroConnection::handlePersonalChat(unsigned char * msg, unsigned int si
 			printf("%02x", text[i]);
 		printf("\n");
 #endif //RE_DEBUG
-        Talk * talk = getTalk(player);
+        Talk * talk = getDefaultRoom()->getTalk(player);
 		if(talk)
 		{
 			talk->recvTalk(QString((char *)text));

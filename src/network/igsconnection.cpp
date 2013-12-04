@@ -1905,8 +1905,7 @@ void IGSConnection::handle_info(QString line)
 			// 9 Use <nmatch yfh2test B 3 19 60 600 25 0 0 0> or <decline yfh2test> to respond.
 	else if (line.contains("<decline") && line.contains("match"))
 	{
-				// false -> not my request: used in mainwin.cpp
-				////emit signal_matchRequest(element(line, 0, "<", ">"), false);
+                // false -> not my request: used in mainwin.cpp
 		line = element(line, 0, "<", ">");
 		MatchRequest * aMatch = new MatchRequest();
 		unsigned long flags = 0;
@@ -2627,7 +2626,7 @@ void IGSConnection::handle_info(QString line)
 	else if (line.contains("Defaults"))    //IGS
 	{
 		statsPlayer->extInfo = element(line, 2, " ","EOL");
-        Talk * talk = getTalk(statsPlayer);
+        Talk * talk = getDefaultRoom()->getTalk(statsPlayer);
 		if(talk)
 			talk->updatePlayerListing();
 		statsPlayer = 0;
@@ -2697,8 +2696,7 @@ void IGSConnection::handle_info(QString line)
 		if(talk)
 		talk->recvPlayerListing(statsPlayer);
 					//talk->recvTalk(e2);
-					
-                //connectionWidget->slot_statsPlayer(statsPlayer);
+
 		delete statsPlayer;
 		statsPlayer = 0;*/
 	}
@@ -3715,11 +3713,11 @@ void IGSConnection::handle_tell(QString line)
 			// //emit player + message + true (=player)
 			////emit signal_talk(e1, e2, true);
 	PlayerListing * p = getPlayerListingNeverFail(e1);
-    Talk * talk = getIfTalk(p);
+    Talk * talk = getDefaultRoom()->getIfTalk(p);
 	if(!talk)
 	{
         sendStatsRequest(p);
-        talk = getTalk(p);
+        talk = getDefaultRoom()->getTalk(p);
 	}
 	if(talk)
 		talk->recvTalk(e2);

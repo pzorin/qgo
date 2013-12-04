@@ -21,7 +21,7 @@
 
 
 #include "matrix.h"
-//#include <stdlib.h>
+#include "group.h"
 //#ifndef NO_DEBUG
 #include <iostream>
 //#endif
@@ -735,16 +735,13 @@ Group* Matrix::checkNeighbour(int x, int y, StoneColor color, Group *group, Grou
 	while ( mark < group->count() && !found )
 	{
 		//Do we find the same stone in the group ?
-		if (! group->compareItems(tmp, group->at(mark)))
-			found = true ;
-
+        found = group->areEqual(tmp, group->at(mark));
 		mark ++;
 	}
 	
 	// if not, we add it to the group
 	if (!found)
 	{
-		
 		if(groupMatrix)
 			group->append(tmp, groupMatrix);
 		else

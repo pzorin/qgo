@@ -309,8 +309,7 @@ void ConnectionWidget::setupButtons(void)
             // check for messages
     if (youhavemsg)
         sendcommand("message", false);
-    // init shouts
-    //TODO		slot_talk("Shouts*", 0, true);
+    // init shouts (TODO)
 
             // show current Server name in status bar
     statusServer->setText(" " + myAccount->svname + " ");
@@ -829,169 +828,14 @@ void ConnectionWidget::changeChannel(const QString & s)
     }
 }
 
-/* FIXME If nothing uses this, we should remove it */
- // handle chat boxes in a list
-void ConnectionWidget::slot_talk(const QString &name, const QString &text, bool /*isplayer*/)
-{
-    static Talk *dlg;
-    QString txt;
-    qDebug("slot_talk\n");
-    return;
-//	bool bonus = false;
-//	bool autoAnswer = true;
-
-//	if (text && text != "@@@")
-        // text given or player logged in
-        txt = text;
-//	else if (text == "@@@" && isplayer)
-//	{
-        // player logged out -> iplayer == false
-//		txt = tr("USER NOT LOGGED IN.");
-//		autoAnswer = false;
-//	}
-//	else
-//	{
-//		txt = "";
-//		autoAnswer = false;
-//	}
-
-    // dialog recently used?
-    if (dlg && dlg->get_name() == name)
-        dlg->write(txt);
-    else if (!name.isEmpty() && name != tr("msg*"))
-    {
-        // seek dialog
-        dlg = 0;
-//		dlg = talkList.first();
-//		while (dlg != NULL && dlg->get_name() != name)
-//			dlg = talkList.next();
-        for (int i=0; i<talkList.count(); i++)
-        {
-//			dlg = talkList.at(i);
-            if (talkList.at(i)->get_name() == name)
-                dlg = talkList.at(i);
-//				break;
-        }
-        // not found -> create new dialog
-        if (!dlg)
-        {
-            //dlg = new Talk(name, 0, isplayer);
-            talkList.insert(0, dlg);
-//			dlg = talkList.current();
-            connect(dlg, SIGNAL(signal_talkTo(QString&, QString&)), this, SLOT(slot_talkTo(QString&, QString&)));
-            //connect(dlg, SIGNAL(signal_matchRequest(const QString&)), this, SLOT(slot_matchRequest(const QString&)));
-
-            // make new multiline field
-            ui->talkTabs->addTab(dlg->get_tabWidget(), dlg->get_name());
-
-            if (name != tr("Shouts*"))
-                ui->talkTabs->setCurrentWidget(dlg->get_tabWidget());
-
-            dlg->pageActive = true;
-
-
-#ifdef FIXME
-            if (!name.isEmpty() && isplayer)
-                slot_sendCommand("stats " + name, false);    // automatically request stats
-#endif //FIXME
-        }
-
-        Q_CHECK_PTR(dlg);
-        dlg->write(txt);
-
-        // play sound on new created dialog
-//		bonus = true;
-    }
-/*
-    // check if it was a channel message
-    if (autoAnswer &= (isplayer && autoAwayMessage && !name.contains('*') && text[0] == '>'))
-    {
-        // send when qGo is NOT the active application - TO DO
-        sendcommand("tell " + name + " [I'm away right now]");
-    }
-*/
-    if (!dlg->pageActive)
-    {
-        ui->talkTabs->addTab(dlg->get_tabWidget(), dlg->get_name());
-        dlg->pageActive = true;
-        ui->talkTabs->setCurrentWidget(dlg->get_tabWidget());
-    }
-/*
-    // play a sound - not for shouts
-    if ((text[0] == '>' && bonus || !dlg->get_le()->hasFocus()) && !name.contains('*'))
-    {
-        qgoif->get_qgo()->playTalkSound();
-
-        // set cursor to last line
-        //dlg->get_mle()->setCursorPosition(dlg->get_mle()->lines(), 999); //eb16
-        dlg->get_mle()->append("");                                        //eb16
-        //dlg->get_mle()->removeParagraph(dlg->get_mle()->paragraphs()-2);   //eb16
-
-        // write time stamp
-        MultiLineEdit3->append(statusOnlineTime->text() + " " + name + (autoAnswer ? " (A)" : ""));
-    }
-    else if (name == tr("msg*"))
-    {
-        qgoif->get_qgo()->playTalkSound();
-
-        // set cursor to last line
-//		dlg->get_mle()->setCursorPosition(dlg->get_mle()->numLines(), 999); //eb16
-        dlg->get_mle()->append(""); //eb16
-//		dlg->get_mle()->removeParagraph(dlg->get_mle()->paragraphs()-2);   //eb16
-
-        // write time stamp
-        MultiLineEdit3->append(tr("Message") + ": " + text);
-    }
-*/
-}
-
 /* I think we still use this, it needs to move moved to somewhere
  * or kept here but... reconciled with new code or something FIXME */
 void ConnectionWidget::talkOpened(Talk * d)
 {
-    talkList.insert(0, d);
-    if (!d->pageActive)
-    {
-        ui->talkTabs->addTab(d->get_tabWidget(), d->get_name());
-        d->pageActive = true;
-        ui->talkTabs->setCurrentWidget(d->get_tabWidget());
-    }
-}
-
-void ConnectionWidget::talkRecv(Talk * d)
-{
-    /* FIXME This needs to set this dialog as active
-     * or have its name blink or turn red or something */
-    qDebug("MW::talkRecv");
-    if (!d->pageActive)
-    {
-        ui->talkTabs->addTab(d->get_tabWidget(), d->get_name());
-        d->pageActive = true;
-        ui->talkTabs->setCurrentWidget(d->get_tabWidget());
-    }
-}
-
-/*
- * 'stats' information has been received by the parser
- */
-void ConnectionWidget::slot_statsPlayer(PlayerListing *p)
-{
-    Talk *dlg = 0;
-    QString txt = "";
-    /* FIXME !!! */
-    slot_talk( p->name, txt, true);
-    if (!p->name.isEmpty())
-    {
-        // seek dialog
-        for (int i=0; i<talkList.count(); i++)
-        {
-            if (talkList.at(i)->get_name() == p->name)
-                dlg = talkList.at(i);
-        }
-        //  found
-        if (dlg)
-            dlg->displayData(p);
-    }
+    int index = ui->talkTabs->indexOf(d);
+    if (index == -1)
+        index = ui->talkTabs->addTab(d, d->get_name());
+    ui->talkTabs->setCurrentIndex(index);
 }
 
 /*
@@ -1262,7 +1106,7 @@ void ConnectionWidget::slot_editFriendsWatchesList(void)
     //does this crash if we do it too soon?
     if (connection == NULL)
         return;
-    FriendsListDialog * fld = new FriendsListDialog(connection);
+    FriendsListDialog * fld = new FriendsListDialog(connection,room);
     fld->exec();
     fld->deleteLater();
 }

@@ -23,7 +23,7 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include "../defines.h"
+#include "defines.h"
 
 #include <QtCore>
 
