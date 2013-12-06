@@ -24,26 +24,17 @@
 #define GROUP_H
 
 #include <QList>
+#include "defines.h"
 
-class MatrixStone;
-class Group;
-
-class Group : public QList<MatrixStone *>
+class Group : public QList<int>
 {
 public:
-	Group();
-	~Group();
-	
-    /*virtual*/ void append(MatrixStone * m) { QList<MatrixStone *>::append(m); }
-    /*virtual*/ void append(MatrixStone * m, Group *** groupMatrix);
-    /*virtual*/ bool areEqual(MatrixStone *d1, MatrixStone *d2);
-	void remove(MatrixStone * m);
-	bool isAttachedTo(MatrixStone *s);
-	int liberties;
+    Group(StoneColor _c) : QList<int>(), c(_c), liberties(0) {}
+    ~Group() {}
+    const StoneColor c;
 
-#ifndef NO_DEBUG
-	void debug();
-#endif
+    void remove(int key);
+    int liberties;
 };
 
 #endif

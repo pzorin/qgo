@@ -52,22 +52,13 @@ struct ASCII_Import
     char blackStone, whiteStone, starPoint, emptyPoint, hBorder, vBorder;
 };
 
-struct MatrixStone
-{
-    int x, y;
-    StoneColor c;
-    MatrixStone() {};
-    MatrixStone(int _x, int _y, StoneColor _c) : x(_x), y(_y), c(_c) {};
-};
-
 class Matrix
 {
 public:
 	Matrix(int s=DEFAULT_BOARD_SIZE);
 	Matrix(const Matrix &m);
 	Matrix(const Matrix &m, bool cleanup);
-	Matrix & operator=(const Matrix &m);
-	~Matrix();
+    ~Matrix();
 	int getSize() const { return size; }
 	void clear();
 	void insertStone(int x, int y, StoneColor c, bool fEdit = false);
@@ -77,7 +68,7 @@ public:
 	void stoneUpdated(int x, int y);
 	void invalidateStone(int x, int y);
 	void markChangesDirty(Matrix & m);
-	MarkType getMarkAt(int x, int y);
+    MarkType getMarkAt(int x, int y);
 	QString getFirstTextAvailable(MarkType t);
 
 	void insertMark(int x, int y, MarkType t);
@@ -93,21 +84,13 @@ public:
 	const QString saveEditedMoves(Matrix *parent=0);
 	const QString printMe(ASCII_Import *charset);
 
-	void checkNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties);
-	Group* checkNeighbour(int x, int y, StoneColor color, Group *group, Group *** groupMatrix = NULL);
-	int countLiberties(Group *group);
-	int countScoredLiberties(Group *group);
-	void traverseTerritory( int x, int y, StoneColor &col);
-	bool checkNeighbourTerritory( const int &x, const int &y, StoneColor &col);
-	void checkScoredNeighbourLiberty(int x, int y, QList<int> &libCounted, int &liberties);
-	Group* assembleGroup(MatrixStone *stone, Group *** groupMatrix = NULL);
-	Group* assembleAreaGroups(MatrixStone *stone);
-	Group* checkStoneWithGroups(MatrixStone * stone, Group *** groupMatrix, Group * joins[4], Group * enemyGroups[4]);
-	void removeGroup(Group * g, Group *** groupMatrix, Group * killer);
-	void removeStoneFromGroups(MatrixStone * stone, Group *** groupMatrix);
-	void invalidateChangedGroups(Matrix & m, Group *** gm);
-	void invalidateAdjacentGroups(MatrixStone m, Group *** gm);
-	void invalidateAllGroups(Group *** gm);
+    void traverseTerritory( int x, int y, StoneColor &col);
+    int checkStoneCaptures(StoneColor ourColor, int x, int y, Group ** gm, std::vector<Group *> &visited) const;
+    void removeGroup(Group * g, Group ** gm, Group * killer);
+    void removeStoneFromGroups(int x, int y, StoneColor ourColor, Group ** gm);
+    void invalidateChangedGroups(Matrix & m, Group ** gm);
+    void invalidateAdjacentGroups(int x, int y, Group ** gm);
+    void invalidateAllGroups(Group ** gm);
 
 	bool checkfalseEye( int x, int y, StoneColor col);
 	void toggleGroupAt( int x, int y );
@@ -120,34 +103,42 @@ public:
 	void markAreaAlive(int x, int y);
 	void updateDeadMarks(int &black, int &white);
 
-	static long coordsToKey(int x, int y)
-	{ return x * 100 + y; }
-	static void keyToCoords(long key, int &x, int &y)
-	{ x = key / 100; y = key - x*100; }
-	static const QString coordsToString(int x, int y)
-	{ return (QString(QChar(static_cast<const char>('a' + x))) +
-	QString(QChar(static_cast<const char>('a' + y)))); }
+    static const QString coordsToString(int x, int y)
+    { return QString(QChar(static_cast<const char>('a' + x))).append(QChar(static_cast<const char>('a' + y))); }
 
-	
-
-#ifndef NO_DEBUG
-	void debug() const;
-#endif
-	
-	
+    int makeMoveIfNotSuicide(int x, int y, StoneColor c, Group **gm);
 protected:
-	void init();
-	void initMarkTexts();
-	QStringList::Iterator getMarkTextIterator(int x, int y);
-	
-private:
-	void findInvalidAdjacentGroups(Group * g, Group *** gm, std::vector<Group*> & groupList);
-	int sharedLibertyWithGroup(int x, int y, Group * g, Group *** gm);
+    friend class Group;
 
-	unsigned short **matrix;
-	int size;
-	QStringList *markTexts;
-	std::vector<unsigned short>tempLibertyList;
+    // This function returns a list of keys of points adjacent to the point "key".
+    std::vector<int> getNeighbors(int key) const;
+
+private:
+    int internalCoordsToKey(int i, int j) const { return i*size + j; }
+    int coordsToKey(int x, int y) const { return internalCoordsToKey(x-1,y-1); }
+    void keyToCoords(int key, int &x, int &y) const
+    { x = key / size; y = key - (x++)*size + 1; }
+
+    unsigned short at(int key) const;
+    void set(int key, int n);
+    StoneColor getStoneAt(int key) const;
+    MarkType getMarkAt(int key) const;
+    void insertStone(int key, StoneColor c, bool fEdit = false);
+    Group* assembleGroup(int key, StoneColor c, Group ** gm = NULL) const;
+    void toggleStoneAt(int key);
+    void traverseTerritory( int key, StoneColor &col);
+    bool checkfalseEye( int key, StoneColor col);
+
+    void findInvalidAdjacentGroups(Group * g, Group ** gm, std::vector<Group*> & groupList);
+    int sharedLibertyWithGroup(int x, int y, Group * g, Group ** gm);
+    Group* checkNeighbour(int key, StoneColor color, Group *group, Group ** gm = NULL, std::vector<int> * libertyList = NULL) const;
+    int countLiberties(Group *group);
+    int countScoredLiberties(Group *group);
+    Group* assembleAreaGroups(int key, StoneColor c);
+
+    unsigned short * matrix;
+    const int size;
+    QHash<int,QString> markTexts;
 };
 
 #endif

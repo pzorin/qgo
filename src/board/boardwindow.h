@@ -46,7 +46,7 @@ public:
 	bool doSave(QString fileName, bool force);
 	QString getCandidateFileName();
 
-	int getBoardSize() 			{return boardSize;}
+    int getBoardSize() const {return boardSize;}
 	Board *getBoard() 			{return ui.board;}
 	Tree *getTree() 			{return tree;}
 	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
@@ -59,8 +59,7 @@ public:
 	GameData *getGameData() 		{return gameData;}
 	int getId()				{return gameData->number;}
 	MarkType getEditMark()			{return editMark;}
-	void setBoardSize(int sz)		{boardSize=sz;}
-	void setGamePhase(GamePhase gp);
+    void setGamePhase(GamePhase gp);
 	void setTree(Tree *t)			{tree=t;}
 	void checkHideToolbar(int h);
 	void gameDataChanged(void);	
@@ -77,7 +76,7 @@ public:
 	/* boarddispatch should be stored in the interface, NOT here
 	 * in boardwindow, but we'll move it once we see where its
 	 * going to be everywhere */
-	class BoardDispatch * getBoardDispatch(void) { return dispatch; };
+    class BoardDispatch * getBoardDispatch(void) { return dispatch; }
 	void setBoardDispatch(BoardDispatch * d);
     QLabel *moveNumLabel,*komiLabel,*buyoyomiLabel,*handicapLabel,*freeratedLabel;
 
@@ -112,7 +111,7 @@ private:
 	Ui::BoardWindow ui;
 	QMenu * addtime_menu;
 	Tree *tree;
-    int boardSize;		//the true boardsize
+    const int boardSize;		//the true boardsize
 	BoardHandler *boardHandler;
 	InterfaceHandler *interfaceHandler;
 	class BoardDispatch * dispatch;		//may not be the best place!!!

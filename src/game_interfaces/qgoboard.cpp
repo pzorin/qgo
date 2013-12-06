@@ -460,10 +460,8 @@ bool qGoBoard::doMove(StoneColor c, int x, int y, bool dontplayyet)
 			dontCheckValidity = false;
 			validMove = true;
 		}
-		else if(!tree->checkMoveIsValid(c, x, y))
-			validMove = false;
-		else
-			validMove = true;
+        else
+            validMove = tree->checkMoveIsValid(c, x, y);
 		if(validMove)
 		{
 			tree->addStoneOrLastValidMove();

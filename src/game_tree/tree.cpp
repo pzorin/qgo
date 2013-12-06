@@ -30,83 +30,59 @@
 
 #include <QtCore>
 
-Tree::Tree(int * board_size)
+Tree::Tree(int board_size)
+    : boardSize(board_size), root(NULL)
 {
-	root = NULL;
 	checkPositionTags = NULL;
 	groupMatrixView = NULL;
 	groupMatrixCurrent = NULL;
-	init(board_size);
+    init();
 	lastValidMoveChecked = NULL;
 	loadingSGF = false;
 	koStoneX = 0;
 	koStoneY = 0;
 	lastCaptures = 0;
 	insertStoneFlag = false;
-	
-/* 
- * This initialisation is from stonehandler
- * It might not be needed
- */
-	stones = new QHash<int,MatrixStone *>();//::QHash();
 }
 
-void Tree::init(int * board_size)
+void Tree::init()
 {
 	if(root)
 		clear();
-	boardSize = board_size;
-	root = new Move(*boardSize);
+    root = new Move(boardSize);
 	// node index used for IGS review
 	root->setNodeIndex(1);
 	lastMoveInMainBranch = current = root;
 	
 	if(checkPositionTags)
 		delete checkPositionTags;
-	checkPositionTags = new Matrix(*boardSize);
+    checkPositionTags = new Matrix(boardSize);
 
 	deleteGroupMatrices();		//just in case
 
-	int i, j;
-	groupMatrixView = new Group** [*boardSize];
-	for(i = 0; i < *boardSize; i++)
+    groupMatrixView = new Group* [boardSize*boardSize];
+    groupMatrixCurrent = new Group* [boardSize*boardSize];
+    for(int i = 0; i < boardSize*boardSize; ++i)
 	{
-		groupMatrixView[i] = new Group* [*boardSize];
-		for(j = 0; j < *boardSize; j++)
-			groupMatrixView[i][j] = NULL;
-	}
-	groupMatrixCurrent = new Group** [*boardSize];
-	for(i = 0; i < *boardSize; i++)
-	{
-		groupMatrixCurrent[i] = new Group* [*boardSize];
-		for(j = 0; j < *boardSize; j++)
-			groupMatrixCurrent[i][j] = NULL;
+        groupMatrixView[i] = NULL;
+        groupMatrixCurrent[i] = NULL;
 	}
 }
 
 Tree::~Tree()
 {
-	
 	delete checkPositionTags;
 	deleteGroupMatrices();
 	
-	qDeleteAll(*stones);
-	stones->clear();
-
-	clear();
+    clear();
 }
 
 void Tree::deleteGroupMatrices(void)
 {
-	if(!groupMatrixView)
-		return;
-	for(int i = 0; i < *boardSize; i++)
-	{
-		delete[] groupMatrixView[i];
-		delete[] groupMatrixCurrent[i];
-	}
-	delete[] groupMatrixView;
-	delete[] groupMatrixCurrent;
+    if(groupMatrixView)
+        delete[] groupMatrixView;
+    if(groupMatrixCurrent)
+        delete[] groupMatrixCurrent;
 }
 
 /*
@@ -214,21 +190,6 @@ bool Tree::addSon(Move *node)
 			return true;
 		}
 	}
-}
-
-int Tree::getNumBrothers()
-{
-	if (current == NULL)// || current->parent == NULL)
-		return 0;
-	else
-		return current->getNumBrothers();
-//	Move *tmp = current->parent->son;
-//	int counter = 0;
-//	
-//	while ((tmp = tmp->brother) != NULL)
-//		counter ++;
-//	
-//	return counter;
 }
 
 bool Tree::hasNextBrother()
@@ -576,7 +537,7 @@ void Tree::setCurrent(Move *m)
 	else
 	{
 		assignCurrent(current, m);
-		invalidateCheckPositionGroups();
+        invalidateCheckPositionGroups();
 	}
 }
 
@@ -682,6 +643,7 @@ Move * Tree::assignCurrent(Move * & o, Move * & n)
 		qDebug("old move -1 -1");*/
 	if(n != root)  //not an issue anymore
 	{
+        Group ** gm = (n == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
 		if(n == o->son)
 		{
 			/* This may or may not be silly.  We call it from addSon which is ridiculous because we just ran
@@ -689,55 +651,28 @@ Move * Tree::assignCurrent(Move * & o, Move * & n)
 			 * with the other two, or we need to have some kind of flag or check or maybe see if this new stone
 			 * has sons, etc. FIXME */
 			/* Also note that the way its currently done, lastMoveInMainBranch isn't set to n until AFTER
-			 * its checked for here FIXME */
-			if(n == findLastMoveInMainBranch())
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixCurrent);
-			else
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixView);
-		}
-		else if(o == n->son)
-		{
-			if(n == findLastMoveInMainBranch())
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixCurrent);
-			else
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixView);
-			lastCaptures = getLastCaptures(n);
-		}
-		else if(o->parent == n->parent)
-		{
-			if(n == findLastMoveInMainBranch())
-			{
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixCurrent);
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixCurrent);
-			}
-			else
-			{
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(o->getX(), o->getY(), o->getColor()), groupMatrixView);
-				n->getMatrix()->invalidateAdjacentGroups(MatrixStone(n->getX(), n->getY(), n->getColor()), groupMatrixView);
-			}
-		}
-		else
-		{
-			if(n == findLastMoveInMainBranch())
-				n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), groupMatrixCurrent);
-			else
-				n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), groupMatrixView);
-		}
-	}
+             * its checked for here FIXME */
+            n->getMatrix()->invalidateAdjacentGroups(n->getX(), n->getY(), gm);
+        }
+        else if(o == n->son)
+        {
+            n->getMatrix()->invalidateAdjacentGroups(o->getX(), o->getY(), gm);
+            lastCaptures = getLastCaptures(n);
+        }
+        else if(o->parent == n->parent)
+        {
+            n->getMatrix()->invalidateAdjacentGroups(o->getX(), o->getY(), gm);
+            n->getMatrix()->invalidateAdjacentGroups(n->getX(), n->getY(), gm);
+        }
+        else
+        {
+            n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), gm);
+        }
+    }
 	
 	n->getMatrix()->markChangesDirty(*o->getMatrix());
 	o = n;
 	return o;
-}
-
-void Tree::invalidateAdjacentCheckPositionGroups(MatrixStone m)
-{
-	if(current == root)
-		return;
-	if(current == findLastMoveInMainBranch())
-		current->getMatrix()->invalidateAdjacentGroups(m, groupMatrixCurrent);
-	else
-		current->getMatrix()->invalidateAdjacentGroups(m, groupMatrixView);
 }
 
 void Tree::invalidateCheckPositionGroups(void)
@@ -758,7 +693,7 @@ void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
 	if (x == 20 && y == 20)
 		return;
 	
-	if ((x < 1) || (x > *boardSize) || (y < 1) || (y > *boardSize))
+    if ((x < 1) || (x > boardSize) || (y < 1) || (y > boardSize))
 	{
 		qWarning("   *** Tree::updateCurrentMatrix() - Invalid move given: %d/%d at move %d ***",
 			x, y, current->getMoveNumber());
@@ -803,32 +738,13 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 		current->parent->getCapturesWhite());
 }
 
-void Tree::editMove(StoneColor c, int x, int y)
-{
-	// qDebug("BoardHandler::editMove");
-	
-	if ((x < 1 || x > *boardSize || y < 1 || y > *boardSize) && x != 20 && y != 20)
-		return;
-	
-	//Move *m = tree->getCurrent();
-	//Q_CHECK_PTR(m);
-	
-	current->setX(x);
-	current->setY(y);
-	current->setColor(c);
-	
-	if (current->getMatrix() == NULL)
-		qFatal("   *** Tree::editMove() - Current matrix is NULL! ***");
-
-}
-
 bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 {
-	MatrixStone *s = new MatrixStone(x, y, c);
 	lastCaptures = 0;
 	lastValidMoveChecked = NULL;
+    Group ** gm = (current == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
 
-	if ((x < 1 || x > *boardSize || y < 1 || y > *boardSize) && x != 20 && y != 20)		//because 20,20 is pass, but ugly/unnecessary here FIXME
+    if ((x < 1 || x > boardSize || y < 1 || y > boardSize) && (x != 20 || y != 20))		//because 20,20 is pass, but ugly/unnecessary here FIXME
 	{
 		qWarning("Invalid position: %d/%d", x, y);
 		return false;
@@ -849,34 +765,24 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 		 * useless since we have to do something special with the tree anyway, i.e., no addSon, but maybe we go backwards and
 		 * delete some marker */
 		lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
-		checkPosition(s, lastValidMoveChecked->getMatrix());
-		return true;
+        lastValidMoveChecked->getMatrix()->removeStoneFromGroups(x, y, c, gm);
+        return true;
 	}
 
-	/* I'm not sure what "stoneErase" is for.  If we find nothing uses it, we should remove it FIXME */
-	if (current->getMatrix()->getStoneAt(x,y) != stoneNone &&
-		current->getMatrix()->getStoneAt(x,y) != stoneErase)
-	{
-		if(current->getMatrix()->getStoneAt(x, y) == stoneBlack)
-			qDebug("black stone");
-		else if(current->getMatrix()->getStoneAt(x, y) == stoneWhite)
-			qDebug("white stone");
-		else
-			qDebug("question");
-		qDebug ("We seem to have already a stone at this place : %d %d", x, y);
-		return false;
-	}
+    // If there is already a stone at (x,y) do nothing
+    if ((current->getMatrix()->getStoneAt(x, y) == stoneBlack) ||
+        (current->getMatrix()->getStoneAt(x, y) == stoneWhite))
+        return false;
 
-	bool koStone = 0;
-	if (current->getMoveNumber() > 1)
-		koStone = (current->parent->getMatrix()->at(x-1, y-1) == c);
+    bool koStone = ((current->getMoveNumber() > 1) && (current->parent->getMatrix()->at(x-1, y-1) == c));
 
 	//check for ko
 	if(koStone && x == koStoneX && y == koStoneY)
 		return false;
 
 	lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
-	if((lastCaptures = checkPosition(s, lastValidMoveChecked->getMatrix())) < 0)
+    lastCaptures = lastValidMoveChecked->getMatrix()->makeMoveIfNotSuicide(x, y, c, gm);
+    if(lastCaptures < 0)
 	{
 		delete lastValidMoveChecked;
 		lastValidMoveChecked = NULL;
@@ -909,11 +815,6 @@ void Tree::addMove(StoneColor c, int x, int y)
 
 	if(checkMoveIsValid(c, x, y))
 		addStoneOrLastValidMove();
-}
-
-void Tree::addStone(StoneColor c, int x, int y)
-{
-	addStoneOrLastValidMove(c, x, y);
 }
 
 void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
@@ -1141,7 +1042,7 @@ void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
 		Matrix * trix = m->getMatrix();
 		StoneColor testcolor;
 		int sides = 3;
-		if(x < trix->getSize())
+        if(x < boardSize)
 		{
 			testcolor = trix->getStoneAt(x + 1, y);
 			if(testcolor == opp)
@@ -1168,7 +1069,7 @@ void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
 		}
 		else
 			sides--;
-		if(y < trix->getSize())
+        if(y < boardSize)
 		{
 			testcolor = trix->getStoneAt(x, y + 1);
 			if(testcolor == opp)
@@ -1220,138 +1121,6 @@ int Tree::getLastCaptures(Move * m)
 		return m->getCapturesBlack() - m->parent->getCapturesBlack();
 	else
 		return 0;
-}
-
-int Tree::checkPosition(MatrixStone * stone, Matrix * m)
-{
-	Group *** gm;
-	Group * joins[4];
-	Group * enemyGroups[4];
-	Group * newgroup;
-	int capturedStones;
-	int i, j;
-
-	if(current == findLastMoveInMainBranch())
-		gm = groupMatrixCurrent;
-	else
-		gm = groupMatrixView;
-#ifdef CHECKPOSITION_DEBUG
-	qDebug("Checking position on %p", gm);
-#endif //CHECKPOSITION_DEBUG
-	if(stone->c == stoneErase)
-	{
-		m->removeStoneFromGroups(stone, gm);
-		return 0;
-	}
-	newgroup = m->checkStoneWithGroups(stone, gm, joins, enemyGroups);
-	if(newgroup->liberties == 0 && 
-		(!enemyGroups[0] || enemyGroups[0]->liberties != 1) && 
-		(!enemyGroups[1] || enemyGroups[1]->liberties != 1) && 
-		(!enemyGroups[2] || enemyGroups[2]->liberties != 1) && 
-		(!enemyGroups[3] || enemyGroups[3]->liberties != 1))
-	{
-		//reset joined groups
-		for(i = 0; i < 4; i++)
-		{
-			if(!joins[i])
-				continue;
-			for(j = 0; j < joins[i]->count(); j++)
-				gm[joins[i]->at(j)->x - 1][joins[i]->at(j)->y - 1] = joins[i];
-		}
-		gm[stone->x-1][stone->y-1] = NULL;
-		m->insertStone(stone->x, stone->y, stoneNone);
-		delete newgroup;
-		return -1;	//suicide
-	}
-	else
-	{
-		for(i = 0; i < 4; i++)
-		{
-			if(!joins[i])
-				continue;
-			for(j = 0; j < joins[i]->count(); j++)
-				gm[joins[i]->at(j)->x - 1][joins[i]->at(j)->y - 1] = newgroup;
-			delete joins[i];
-		}
-		capturedStones = 0;
-		for(i = 0; i < 4; i++)
-		{
-			if(enemyGroups[i])
-			{
-				if(enemyGroups[i]->liberties == 1)
-				{
-					capturedStones += enemyGroups[i]->count();
-					for(j = i + 1; j < 4; j++)
-					{
-						if(enemyGroups[j] == enemyGroups[i])
-							enemyGroups[j] = NULL;
-					}
-					m->removeGroup(enemyGroups[i], gm, newgroup);
-				}
-				else
-				{
-					for(j = i + 1; j < 4; j++)
-					{
-						if(enemyGroups[j] == enemyGroups[i])
-							enemyGroups[j] = NULL;
-					}
-					enemyGroups[i]->liberties--;
-				}
-			}
-		}
-		return capturedStones;
-	}
-}
-
-bool Tree::removeStone(int x, int y, bool hide)
-{
- 	if (!hasMatrixStone(x, y))
-		return false;
-	
-	if (!hide)
-	{
-    // We delete the killed stones only if we want to update the board (i.e. : not if we are browsing the game)
-//	if (boardHandler->getDisplay_incoming_move())
-		if (!stones->remove(Matrix::coordsToKey(x, y)))
-		{
-			   qWarning("   ***   Key for stone %d, %d not found!   ***", x, y);
-			   return false;
-		}
-
-	}
-	else
-	{
-		MatrixStone * s = NULL;
-		if (stones->find(Matrix::coordsToKey(x, y)) == stones->end()) 
-		{
-			qWarning("   ***   Key for stone %d, %d not found!   ***", x, y);
-			return false;
-		}
-		s = stones->find(Matrix::coordsToKey(x, y)).value();
-		s->c = stoneNone;
-	}
-	
-	return true;
-}
-
-/* Below is only used by removeStone and is similar to other code within removeStone FIXME */
-/*
- *  0 : no stone
- * -1 : hidden
- *  1 : shown
- */
-int Tree::hasMatrixStone(int x, int y)
-{
-	MatrixStone *s;
-	
-	if (stones->find(Matrix::coordsToKey(x, y)) == stones->end())
-		return 0;
-	
-	s = stones->find(Matrix::coordsToKey(x, y)).value();
-	if (s->c != stoneNone)
-		return 1;
-	
-	return -1;
 }
 
 /*
@@ -1417,7 +1186,7 @@ void Tree::deleteNode()
 	else
 	{
 		// Oops, first and only move. We delete everything
-		init(boardSize);
+        init();
 //		board->hideAllStones();
 //		board->hideAllMarks();
 //		board->updateCanvas();

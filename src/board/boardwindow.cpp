@@ -36,7 +36,7 @@
 class BoardHandler;
 
 BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
-	: QMainWindow(0, 0), addtime_menu(0)
+    : QMainWindow(0, 0), addtime_menu(0), boardSize(gd->board_size)
 {
     if(gd != NULL)
     {
@@ -73,10 +73,9 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	}
 	
 	gamePhase = phaseInit;
-	boardSize = gd->board_size;
-	
+
 	//Creates the game tree
-	tree = new Tree(&boardSize);
+    tree = new Tree(boardSize);
 
 	setupUI();
 	
@@ -280,7 +279,7 @@ void BoardWindow::setupUI(void)
     interfaceHandler->updateCaption(gameData);
 
 	// creates the board handler for navigating in the tree
-	boardHandler = new BoardHandler(this, tree, &boardSize);
+    boardHandler = new BoardHandler(this, tree, boardSize);
 
 	int window_x, window_y;
 	QVariant board_window_size_x = settings.value("BOARD_WINDOW_SIZE_X");

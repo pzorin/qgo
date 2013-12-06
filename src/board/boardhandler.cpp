@@ -44,7 +44,7 @@
 
 #include <iostream>
 
-BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int * board_size)
+BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int board_size)
 	:QObject(bw)
 {
 	boardSize = board_size;
@@ -82,7 +82,7 @@ BoardHandler::~BoardHandler()
 
 void BoardHandler::clearData()
 {
-	tree->init(boardSize);
+    tree->init();
 	lastValidMove = NULL;
 //	currentMove = 0;
 //	gameMode = modeNormal;
@@ -638,9 +638,9 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 	* update the canvas.
 	* This is usually called when navigating through the tree.
 	*/
-	for (int y=1; y<=*boardSize; y++)
+    for (int y=1; y<=boardSize; y++)
 	{
-		for (int x=1; x<=*boardSize; x++)
+        for (int x=1; x<=boardSize; x++)
 		{
 			/* FIXME apparently matrix uses negative values for
 			 * both dead and edited stones.  I think the
@@ -901,8 +901,8 @@ void BoardHandler::countScore(void)
 					m->set(i, j, m->at(i, j) * MARK_SEKI);
 */				
 
-	for (i=0; i< *boardSize; i++)
-		for (j=0; j< *boardSize; j++)
+    for (i=0; i< boardSize; i++)
+        for (j=0; j< boardSize; j++)
 		{
 			// we increase the temporary counter for dead stones removed at score phase
 			if (m->isStoneDead(i + 1, j + 1))
@@ -921,11 +921,11 @@ void BoardHandler::countScore(void)
 	{
 		bool found = false;
 			
-		for (i=0; i< *boardSize; i++)
+        for (i=0; i< boardSize; i++)
 		{	
-			for (j=0; j< *boardSize; j++)
+            for (j=0; j< boardSize; j++)
 			{
-				if (m->at(i, j) == 0 || (m->at(i, j) & MX_STONEDEAD))
+                if (m->at(i, j) == stoneNone || (m->at(i, j) & MX_STONEDEAD))
 				{
 					found = true;
 					break;
@@ -943,9 +943,9 @@ void BoardHandler::countScore(void)
 		m->traverseTerritory( i, j, col);
 		
 		// Now turn the result into real territory or dame points
-		for (i=0; i<*boardSize; i++)
+        for (i=0; i<boardSize; i++)
 		{
-			for (j=0; j<*boardSize; j++)
+            for (j=0; j<boardSize; j++)
 			{
 				if (m->at(i, j) == MARK_TERRITORY_VISITED)
 				{
@@ -975,9 +975,9 @@ void BoardHandler::countScore(void)
 	
 	// Finally, remove all false eyes that have been marked as territory. This
 	// has to be here, as in the above loop we did not find all dame points yet.
-	for (i = 0; i < *boardSize; i++) 
+    for (i = 0; i < boardSize; i++)
 	{
-		for (j = 0; j < *boardSize; j++) 
+        for (j = 0; j < boardSize; j++)
 		{
 			if (	m->at(i, j) == MARK_TERRITORY_DONE_BLACK ||
 				m->at(i, j) == MARK_TERRITORY_DONE_WHITE) 
@@ -1022,8 +1022,8 @@ void BoardHandler::countMarked(void)
 	terrWhite = 0;
 	terrBlack = 0;
 	
-	for (i=0; i< *boardSize; i++)
-		for (j=0; j< *boardSize; j++)
+    for (i=0; i< boardSize; i++)
+        for (j=0; j< boardSize; j++)
 		{
 			
 			/* When called from network code, we're just using
