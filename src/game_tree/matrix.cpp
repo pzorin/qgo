@@ -708,9 +708,11 @@ int Matrix::checkStoneCaptures(StoneColor ourColor, int x, int y, Group ** gm, s
     for (it_visited = visited.begin(); it_visited < visited.end(); ++it_visited)
     {
         if ((*it_visited)->c == ourColor)
+        {
             captures -= (*it_visited)->size();
-        if ((*it_visited)->liberties > 1)
-            emptyNeighbor = true;
+            if ((*it_visited)->liberties > 1)
+                emptyNeighbor = true;
+        }
     }
     // If some group has >1 liberty, this is not a suicide
     if (emptyNeighbor)

@@ -780,6 +780,10 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 	if(koStone && x == koStoneX && y == koStoneY)
 		return false;
 
+    std::vector<Group *> visited;
+    if (current->getMatrix()->checkStoneCaptures(c,x,y,gm,visited) < 0)
+        return false;
+
 	lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
     lastCaptures = lastValidMoveChecked->getMatrix()->makeMoveIfNotSuicide(x, y, c, gm);
     if(lastCaptures < 0)
