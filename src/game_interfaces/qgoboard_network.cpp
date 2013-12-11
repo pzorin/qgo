@@ -118,8 +118,10 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 	else
 	{
 		/* Check validity of move before sending */
-		if(!doMove(c, x, y, true))
-		{
+        if(tree->checkMoveIsValid(c, x, y))
+            dontCheckValidity = true;
+        else
+        {
 			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("Move %1 %2 is invalid").arg(QString::number(x), QString::number(y)));
 			dontsend = false;	//okay to send again
 			return;

@@ -69,7 +69,7 @@ public:
  */
 	bool checkMoveIsValid(StoneColor c, int x, int y);
     void addMove(StoneColor c, int x, int y);
-	void addStoneOrLastValidMove(StoneColor c = stoneNone, int x = -1, int y = -1);
+    void addLastValidMove();
 	void undoMove(void);
 
 	bool insertStone(Move *node);

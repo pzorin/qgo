@@ -818,17 +818,20 @@ void Tree::addMove(StoneColor c, int x, int y)
 	}
 
 	if(checkMoveIsValid(c, x, y))
-		addStoneOrLastValidMove();
+        addLastValidMove();
 }
 
-void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
+void Tree::addLastValidMove()
 {
-	if (insertStoneFlag)
-	{
-		c = lastValidMoveChecked->getColor();
-		x = lastValidMoveChecked->getX();
-		y = lastValidMoveChecked->getY();
+    if(lastValidMoveChecked == NULL)
+        return;
 
+    StoneColor c = lastValidMoveChecked->getColor();
+    int x = lastValidMoveChecked->getX();
+    int y = lastValidMoveChecked->getY();
+
+    if (insertStoneFlag)
+	{
 		Matrix *mat = current->getMatrix();
 		Q_CHECK_PTR(mat);
 		//do insert if game mode is OK
@@ -841,50 +844,20 @@ void Tree::addStoneOrLastValidMove(StoneColor c, int x, int y)
 
 	koStoneX = 0;
 	koStoneY = 0;
-	if(lastValidMoveChecked)
-	{
-		c = lastValidMoveChecked->getColor();
-		x = lastValidMoveChecked->getX();
-		y = lastValidMoveChecked->getY();
-	
-		if (hasSon(lastValidMoveChecked))
-		{
-			/* This happens a lot if we add a move that's already there
-			 * when really we're just playing along with the tree. 
-			 * This would be the place to add any kind of tesuji testing
-			 * code */
-			delete lastValidMoveChecked;
-		}
-		else
-		{
-			addSon(lastValidMoveChecked);
-			checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
-		}
-	}
-	else if(c != stoneNone)
-	{
-		Matrix *mat = current->getMatrix();
-		Q_CHECK_PTR(mat);
-	 
-		Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
-		Q_CHECK_PTR(m);
-		if (hasSon(m))
-		{
-			// qDebug("*** HAVE THIS SON ALREADY! ***");
-			delete m;
-		}
-		else
-		{
-			addSon(m);
-			checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
-			/* FIXME updateMatrix calls should be concealed within new Move.  updateCurrentMatrix should also not be called from
-			 * qgoboard. Except, now we call "insertStone" in the middle of checkStoneWithGroups. I think right now I'll just
- 			 * try to simplify the tree code and then later worry about making it cleaner and clearer. */
-			updateCurrentMatrix(c, x, y);
-		}
-	}
-	else
-		return;
+
+    if (hasSon(lastValidMoveChecked))
+    {
+        /* This happens a lot if we add a move that's already there
+             * when really we're just playing along with the tree.
+             * This would be the place to add any kind of tesuji testing
+             * code */
+        delete lastValidMoveChecked;
+    }
+    else
+    {
+        addSon(lastValidMoveChecked);
+        checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
+    }
 
 	lastValidMoveChecked = NULL;
 

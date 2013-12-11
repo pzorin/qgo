@@ -53,7 +53,7 @@ class qGoBoard : public QObject //, public Misc<QString>
 public:
 	qGoBoard(BoardWindow *bw, Tree * t, GameData *gd);
 //	qGoBoard(qGoBoard &qgoboard );
-	virtual ~qGoBoard() {}; 
+    virtual ~qGoBoard() {}
 	virtual void setHandicap(int handicap);
 	virtual void addStone(StoneColor c, int x, int y);
 
@@ -62,11 +62,11 @@ public:
 
 //	virtual void localMoveRequest(int x, int y)=0;
 	virtual bool getBlackTurn(bool time = false);
-	virtual void startGame() {};
-	virtual void stopTime() {};
-	virtual void set_move(StoneColor , QString , QString ) {};
-	virtual void handleMove(class MoveRecord *) {};
-	virtual void moveControl(QString &) {};
+    virtual void startGame() {}
+    virtual void stopTime() {}
+    virtual void set_move(StoneColor , QString , QString ) {}
+    virtual void handleMove(class MoveRecord *) {}
+    virtual void moveControl(QString &) {}
 	int getMoveNumber(void);
 	//virtual void set_havegd(bool b) 		{ have_gameData = b; }
 	virtual void setModified(bool b= true)		{ isModified = b;}
@@ -89,15 +89,15 @@ public:
 	virtual void markLiveArea(int x, int y);
 
 	virtual void setNode(int , StoneColor , int , int ) {}
-	virtual void requestAdjournDialog(void) {};
-	virtual void requestCountDialog(void) {};
-	virtual void requestMatchModeDialog(void) {};
-	virtual void requestDrawDialog(void) {};
-	virtual void adjournGame(void) {};
-	virtual void recvRefuseAdjourn(void) {};
-	virtual void recvRefuseCount(void) {};
-	virtual void recvRefuseMatchMode(void) {};
-	virtual void recvRefuseDraw(void) {};
+    virtual void requestAdjournDialog(void) {}
+    virtual void requestCountDialog(void) {}
+    virtual void requestMatchModeDialog(void) {}
+    virtual void requestDrawDialog(void) {}
+    virtual void adjournGame(void) {}
+    virtual void recvRefuseAdjourn(void) {}
+    virtual void recvRefuseCount(void) {}
+    virtual void recvRefuseMatchMode(void) {}
+    virtual void recvRefuseDraw(void) {}
 //	int get_id() const { return id; }
 //	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
 //	GameData get_gameData() { return gd; }
@@ -169,13 +169,13 @@ public slots:
 	virtual void slotPassPressed();
 	virtual void slotDonePressed();
 	virtual void slotResignPressed();
-	virtual void slotReviewPressed() {};
-	virtual void slotDrawPressed() {};
-	virtual void slotCountPressed() {};
+    virtual void slotReviewPressed() {}
+    virtual void slotDrawPressed() {}
+    virtual void slotCountPressed() {}
 	virtual void slotUndoPressed();
 	virtual void slotScoreToggled(bool);
 	virtual void slotUpdateComment();
-	virtual void slotSendComment() {};
+    virtual void slotSendComment() {}
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 protected:
 	BoardWindow *boardwindow;
@@ -218,12 +218,13 @@ protected:
 
 	virtual void localMoveRequest(StoneColor c, int x, int y);
 	virtual void localMarkDeadRequest(int x, int y);
-	virtual void sendMoveToInterface(StoneColor ,int, int) {};
-	virtual void sendPassToInterface(StoneColor ) { doPass(); };
-	virtual bool doMove(StoneColor c, int x, int y, bool dontplayyet = false);
+    virtual void sendMoveToInterface(StoneColor ,int, int) {}
+    virtual void sendPassToInterface(StoneColor ) { doPass(); }
+    virtual bool doMove(StoneColor c, int x, int y);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
-private:
+protected:
 	bool dontCheckValidity;
+private:
 	QTime lastSound;
 };
 
@@ -277,24 +278,24 @@ class qGoBoardNetworkInterface : public qGoBoard
 {
 	Q_OBJECT
 public:
-	virtual ~qGoBoardNetworkInterface() {};
+    virtual ~qGoBoardNetworkInterface() {}
 public slots:
 	virtual void slotSendComment();	
 	virtual void slotUndoPressed();
 	virtual void slotDonePressed();
 	virtual void slotResignPressed();
-	virtual void slotReviewPressed() {};		//should FIXME these two
-	virtual void slotAdjournPressed() {};
+    virtual void slotReviewPressed() {}		//should FIXME these two
+    virtual void slotAdjournPressed() {}
 protected:
 	qGoBoardNetworkInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	virtual void sendMoveToInterface(StoneColor c,int x, int y);
 	virtual void sendPassToInterface(StoneColor c);
 	virtual void handleMove(MoveRecord * m);
-	virtual void moveControl(QString & player) { controlling_player = player; };
+    virtual void moveControl(QString & player) { controlling_player = player; }
 	virtual void adjournGame(void);
-	virtual void startGame(void) {};
+    virtual void startGame(void) {}
 	virtual void stopTime(void);
-	virtual void onFirstMove(void) {};
+    virtual void onFirstMove(void) {}
 	
 	QString game_Id;
 	bool dontsend;
@@ -314,10 +315,10 @@ public:
 	
 public slots:
 	void slotUpdateComment() {}		//what is this ?!?!?
-	virtual void slotUndoPressed(void){};
-	virtual void slotDonePressed(void){};
-	virtual void slotResignPressed(void){};
-	virtual void slotAdjournPressed(void){};
+    virtual void slotUndoPressed(void){}
+    virtual void slotDonePressed(void){}
+    virtual void slotResignPressed(void){}
+    virtual void slotAdjournPressed(void){}
 
 signals:
 	void signal_sendCommandFromBoard(const QString&, bool);
