@@ -35,18 +35,6 @@ Matrix::Matrix(int s)
         matrix[i] = stoneNone;
 }
 
-Matrix::Matrix(const Matrix &m)
-    : size (m.size)
-{
-	Q_ASSERT(size > 0 && size <= 36);
-	
-    matrix = new unsigned short[size*size];
-	Q_CHECK_PTR(matrix);
-	
-    for (int i=0; i<size*size; i++)
-        matrix[i] = (m.matrix[i] & ~MX_STONEDIRTY);
-}
-
 Matrix::Matrix(const Matrix &m, bool cleanup)
     : size(m.size)
 {
@@ -55,14 +43,9 @@ Matrix::Matrix(const Matrix &m, bool cleanup)
     matrix = new unsigned short[size*size];
 	Q_CHECK_PTR(matrix);
 
+    unsigned short mask = (cleanup ? 0x000f | MX_STONEDEAD : 0x2fff); //clearAllMarks : absMatrix
     for (int i=0; i<size*size; ++i)
-    {
-        if(cleanup)
-            matrix[i] = (m.matrix[i] & ~MX_STONEDIRTY) & (0x000f | MX_STONEDEAD);	//clearAllMarks
-        else
-            matrix[i] = (m.matrix[i] & ~MX_STONEDIRTY) & 0x2fff;			//absMatrix
-        matrix[i] |= MX_STONEDIRTY;
-    }
+        matrix[i] = m.matrix[i] & mask;
 }
 
 Matrix::~Matrix()
@@ -79,8 +62,7 @@ void Matrix::clear()
 void Matrix::insertStone(int key, StoneColor c, bool fEdit)
 {
     matrix[key] = (matrix[key] & 0xfff0) | c;
-    matrix[key] |= MX_STONEDIRTY;
-	if(fEdit)
+    if(fEdit)
         matrix[key] |= MX_STONEEDIT;
 }
 
@@ -94,7 +76,7 @@ void Matrix::insertStone(int x, int y, StoneColor c, bool fEdit)
 
 unsigned short Matrix::at(int key) const
 {
-    return (matrix[key] & ~MX_STONEDIRTY);
+    return matrix[key];
 }
 
 unsigned short Matrix::at(int x, int y) const
@@ -128,36 +110,6 @@ bool Matrix::isStoneDead(int x, int y)
     return (matrix[coordsToKey(x,y)] & MX_STONEDEAD);
 }
 
-bool Matrix::isStoneDirty(int x, int y)
-{
-    Q_ASSERT(x > 0 && x <= size &&
-            y > 0 && y <= size);
-    return (matrix[coordsToKey(x,y)] & MX_STONEDIRTY);
-}
-
-void Matrix::stoneUpdated(int x, int y)
-{
-    Q_ASSERT(x > 0 && x <= size &&
-            y > 0 && y <= size);
-    matrix[coordsToKey(x,y)] &= ~MX_STONEDIRTY;
-}
-
-void Matrix::invalidateStone(int x, int y)
-{
-    Q_ASSERT(x > 0 && x <= size &&
-            y > 0 && y <= size);
-    matrix[coordsToKey(x,y)] |= MX_STONEDIRTY;
-}
-
-void Matrix::markChangesDirty(Matrix & m)
-{
-    for (int i=0; i<size*size; ++i)
-    {
-        if((matrix[i] & 0x00ff) != (m.matrix[i] & 0x00ff))
-            matrix[i] |= MX_STONEDIRTY;
-    }
-}
-
 MarkType Matrix::getMarkAt(int key) const
 {
     return  (MarkType) ((matrix[key] >> 4) & 0x000f);
@@ -173,7 +125,6 @@ MarkType Matrix::getMarkAt(int x, int y)
 void Matrix::set(int key, int n)
 {
     matrix[key] = n;
-    matrix[key] |= MX_STONEDIRTY;
 }
 
 void Matrix::set(int x, int y, int n)
@@ -189,7 +140,6 @@ void Matrix::insertMark(int x, int y, MarkType t)
 	Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
 
     matrix[coordsToKey(x,y)] |= (t << 4);
-    matrix[coordsToKey(x,y)] |= MX_STONEDIRTY;
 }
 
 void Matrix::removeMark(int x, int y)
@@ -198,7 +148,6 @@ void Matrix::removeMark(int x, int y)
 		y > 0 && y <= size);
 	
     matrix[coordsToKey(x,y)] &= 0xff0f;
-    matrix[coordsToKey(x,y)] |= MX_STONEDIRTY;
 
     markTexts.remove(coordsToKey(x,y));
 }
@@ -210,7 +159,6 @@ void Matrix::clearAllMarks()
     for (int i=0; i<size*size; ++i)
     {
         matrix[i] &= (0x000f | MX_STONEDEAD);
-        matrix[i] |= MX_STONEDIRTY;
     }
     markTexts.clear();
 }
@@ -226,7 +174,6 @@ void Matrix::clearTerritoryMarks()
 				data == markTerrWhite)
 			{
                 matrix[i] &= (0x000f | MX_STONEDEAD);
-                matrix[i] |= MX_STONEDIRTY;
 			}
 }
 
@@ -240,7 +187,6 @@ void Matrix::absMatrix()
         matrix[i] &= 0x2fff;		//remove dead and edit?
         if (getStoneAt(i) == stoneErase)
             insertStone(i, stoneNone);
-        matrix[i] |= MX_STONEDIRTY;
 	}
 }
 
@@ -1005,7 +951,6 @@ void Matrix::toggleGroupAt( int x, int y)
 void Matrix::toggleStoneAt(int key)
 {
     matrix[key] ^= MX_STONEDEAD;
-    matrix[key] |= MX_STONEDIRTY;
 }
 
 void Matrix::toggleStoneAt(int x, int y)
@@ -1061,7 +1006,25 @@ void Matrix::markAreaAlive(int x, int y)
 {
 	if(!isStoneDead(x, y))
 		return;
-	toggleAreaAt(x, y);
+    toggleAreaAt(x, y);
+}
+
+int Matrix::countDeadWhite()
+{
+    int result = 0;
+    for (int i=0; i<size*size; ++i)
+        if ((matrix[i] & MX_STONEDEAD) && (getStoneAt(i) == stoneWhite))
+            ++result;
+    return result;
+}
+
+int Matrix::countDeadBlack()
+{
+    int result = 0;
+    for (int i=0; i<size*size; ++i)
+        if ((matrix[i] & MX_STONEDEAD) && (getStoneAt(i) == stoneBlack))
+            ++result;
+    return result;
 }
 
 /*

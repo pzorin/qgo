@@ -70,13 +70,14 @@ public:
 	bool checkMoveIsValid(StoneColor c, int x, int y);
     void addMove(StoneColor c, int x, int y);
     void addLastValidMove();
-	void undoMove(void);
+    void undoMove(void);
 
 	bool insertStone(Move *node);
-    void setInsertStone (bool val) { insertStoneFlag = val; }
-    bool getInsertStone () { return insertStoneFlag; }
     void setLoadingSGF(bool b) { loadingSGF = b; }
-	
+
+    // true - insert stone directly to position, false - insert stone as new variation (default)
+    bool insertStoneFlag;
+
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
@@ -112,8 +113,6 @@ private:
 	int koStoneY;
 	int lastCaptures;
 	Move * lastValidMoveChecked;
- // true - insert stone directly to position, false - insert stone as new variation (default)
-	bool insertStoneFlag;
 	bool loadingSGF;
 };
 

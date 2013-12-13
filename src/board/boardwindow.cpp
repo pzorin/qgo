@@ -1011,5 +1011,5 @@ void BoardWindow::slot_addtime_menu(QAction * a)
  */
 void BoardWindow::slotToggleInsertStones(bool val)
 {
-	tree->setInsertStone(val);
+    tree->insertStoneFlag = val;
 }

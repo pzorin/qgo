@@ -101,13 +101,10 @@ bool Move::equals(Move *m)
 	if (m == NULL)
 		return false;
 	
-	if (x == m->getX() && y == m->getY() &&
+    return (x == m->getX() && y == m->getY() &&
 		stoneColor == m->getColor() &&
 		moveNum == m->getMoveNumber() &&
-		gamePhase == m->getGamePhase())
-		return true;
-	
-	return false;
+        gamePhase == m->getGamePhase());
 }
 
 /*

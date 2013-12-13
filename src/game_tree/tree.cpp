@@ -31,7 +31,7 @@
 #include <QtCore>
 
 Tree::Tree(int board_size)
-    : boardSize(board_size), root(NULL)
+    : boardSize(board_size), root(NULL), insertStoneFlag(false)
 {
 	checkPositionTags = NULL;
 	groupMatrixView = NULL;
@@ -41,8 +41,7 @@ Tree::Tree(int board_size)
 	loadingSGF = false;
 	koStoneX = 0;
 	koStoneY = 0;
-	lastCaptures = 0;
-	insertStoneFlag = false;
+    lastCaptures = 0;
 }
 
 void Tree::init()
@@ -122,74 +121,72 @@ bool Tree::addSon(Move *node)
 		qFatal("Error: No root!");
 		return false;
 	}
-	else
-	{
-		if (current == NULL)
-		{
-			qFatal("Error: No current node!");
-			return false;
-		}
-		
-		// current node has no son?
-		if (current->son == NULL)
-		{
-			if(current == node)
-			{
-				qDebug("Attempting to add move as its own son!");
-				return false;
-			}
-			current->son = node;
-			
-			node->parent = current;
-			node->setTimeinfo(false);
-			assignCurrent(current, node);
-			if(isInMainBranch(current->parent))
-				lastMoveInMainBranch = current;
+    if (current == NULL)
+    {
+        qFatal("Error: No current node!");
+        return false;
+    }
+
+    // current node has no son?
+    if (current->son == NULL)
+    {
+        if(current == node)
+        {
+            qDebug("Attempting to add move as its own son!");
+            return false;
+        }
+        current->son = node;
+
+        node->parent = current;
+        node->setTimeinfo(false);
+        assignCurrent(current, node);
+        if(isInMainBranch(current->parent))
+            lastMoveInMainBranch = current;
 #ifdef NOTWORKING
-			// This is from an undo, but its awkward here
-			// presumably son would not have been null with a marker
-			// if this wasn't from undos or online review or the like
-			// we'll understand this better if we look into online
-			// review code FIXME
-			if(current->parent->marker)
-			{	
-				if(!addBrother(current->parent->marker))
-				{
-					qFatal("Failed to add undo brother.");
-					return false;
-				}
-				else
-				{
-					Move * m = current->parent->marker;
-					current->parent->marker = NULL;
-					//check for multiple undos in a row
-					while(m->marker && m->son == NULL)	//is son check right?
-					{
-						m->son = m->marker;
-						m->marker = NULL;
-						m = m->son;
-					}
-				}
-			}
+        // This is from an undo, but its awkward here
+        // presumably son would not have been null with a marker
+        // if this wasn't from undos or online review or the like
+        // we'll understand this better if we look into online
+        // review code FIXME
+        if(current->parent->marker)
+        {
+            if(!addBrother(current->parent->marker))
+            {
+                qFatal("Failed to add undo brother.");
+                return false;
+            }
+            else
+            {
+                Move * m = current->parent->marker;
+                current->parent->marker = NULL;
+                //check for multiple undos in a row
+                while(m->marker && m->son == NULL)	//is son check right?
+                {
+                    m->son = m->marker;
+                    m->marker = NULL;
+                    m = m->son;
+                }
+            }
+        }
 #endif //NOTWORKING
-			return false;
-		}
-		// A son found. Add the new node as farest right brother of that son
-		else
-		{
-			current = current->son;
-			if (!addBrother(node))
-			{
-				qFatal("Failed to add a brother.");
-				return false;
-			}
-			if(!loadingSGF)		//since this would put every branch on the last brother
-				current->parent->marker = node;
-			
-			assignCurrent(current, node);
-			return true;
-		}
-	}
+        return false;
+    }
+    // A son found. Add the new node as farest right brother of that son
+    else
+    {
+        current = current->son;
+        if (!addBrother(node))
+        {
+            qFatal("Failed to add a brother.");
+            return false;
+        }
+        if(!loadingSGF)		//since this would put every branch on the last brother
+            current->parent->marker = node;
+
+        assignCurrent(current, node);
+        return true;
+    }
+
 }
 
 bool Tree::hasNextBrother()
@@ -670,7 +667,6 @@ Move * Tree::assignCurrent(Move * & o, Move * & n)
         }
     }
 	
-	n->getMatrix()->markChangesDirty(*o->getMatrix());
 	o = n;
 	return o;
 }
@@ -740,8 +736,7 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 
 bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 {
-	lastCaptures = 0;
-	lastValidMoveChecked = NULL;
+    lastCaptures = 0;
     Group ** gm = (current == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
 
     if ((x < 1 || x > boardSize || y < 1 || y > boardSize) && (x != 20 || y != 20))		//because 20,20 is pass, but ugly/unnecessary here FIXME
@@ -753,21 +748,8 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 	/* special case, we're erasing a stone */
 	if(c == stoneErase)
 	{
-		if(current->getMatrix()->getStoneAt(x,y) == stoneNone)
-		{
-			qDebug("Trying to erase a stone that doesn't exist: %d %d", x, y);
-			return false;
-		}
-		/* FIXME I don't think this is right.  First of all, it needs to be fixed in deleteNode() as well which is called as an undo
-		 * as well as as a tree edit.  But here, I don't think we want a new move added as a son to erase a move, I think we just
-		 * want to erase it... or maybe not because it makes sense to add it as a tree when its an undo in a game.
-		 * another point is that its not like a move in order, its like a separate tree, so addMove(stoneErase seems singularly
-		 * useless since we have to do something special with the tree anyway, i.e., no addSon, but maybe we go backwards and
-		 * delete some marker */
-		lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
-        lastValidMoveChecked->getMatrix()->removeStoneFromGroups(x, y, c, gm);
-        return true;
-	}
+        return (current->getMatrix()->getStoneAt(x,y) != stoneNone);
+    }
 
     // If there is already a stone at (x,y) do nothing
     if ((current->getMatrix()->getStoneAt(x, y) == stoneBlack) ||
@@ -781,69 +763,49 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 		return false;
 
     std::vector<Group *> visited;
-    if (current->getMatrix()->checkStoneCaptures(c,x,y,gm,visited) < 0)
+    lastCaptures = current->getMatrix()->checkStoneCaptures(c,x,y,gm,visited);
+    if (lastCaptures < 0)
         return false;
-
-	lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
-    lastCaptures = lastValidMoveChecked->getMatrix()->makeMoveIfNotSuicide(x, y, c, gm);
-    if(lastCaptures < 0)
-	{
-		delete lastValidMoveChecked;
-		lastValidMoveChecked = NULL;
-		return false;
-	}
 
 	return true;
 }
 
 void Tree::addMove(StoneColor c, int x, int y)
 {
+    lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
+    koStoneX = 0;
+    koStoneY = 0;
+
 	/* special case: pass */
 	if(x == 20 && y == 20)
 	{
-		Matrix *mat = current->getMatrix();
-		Q_CHECK_PTR(mat);
-	 
-		Move *m = new Move(c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
-		Q_CHECK_PTR(m);
-	
-		if (hasSon(m))
-		{
-			// qDebug("*** HAVE THIS SON ALREADY! ***");
-			delete m;
-			return;
-		}
-		addSon(m);
+        if (hasSon(lastValidMoveChecked))
+            delete lastValidMoveChecked;
+        else
+            addSon(lastValidMoveChecked);
+        lastValidMoveChecked = NULL;
 		return;
 	}
-
-	if(checkMoveIsValid(c, x, y))
-        addLastValidMove();
-}
-
-void Tree::addLastValidMove()
-{
-    if(lastValidMoveChecked == NULL)
-        return;
-
-    StoneColor c = lastValidMoveChecked->getColor();
-    int x = lastValidMoveChecked->getX();
-    int y = lastValidMoveChecked->getY();
 
     if (insertStoneFlag)
-	{
-		Matrix *mat = current->getMatrix();
-		Q_CHECK_PTR(mat);
-		//do insert if game mode is OK
-		Move *m = new Move (c, x, y, current->getMoveNumber() +1 , phaseOngoing, *mat, true);
-		Q_CHECK_PTR(m);
-		insertStone(m);
-		lastValidMoveChecked = NULL;
-		return;
-	}
+    {
+        insertStone(lastValidMoveChecked);
+        lastValidMoveChecked = NULL;
+        return;
+    }
 
-	koStoneX = 0;
-	koStoneY = 0;
+    Group ** gm = (current == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
+
+    if (c == stoneErase)
+    {
+        /* FIXME I don't think this is right.  First of all, it needs to be fixed in deleteNode() as well which is called as an undo
+         * as well as as a tree edit.  But here, I don't think we want a new move added as a son to erase a move, I think we just
+         * want to erase it... or maybe not because it makes sense to add it as a tree when its an undo in a game.
+         * another point is that its not like a move in order, its like a separate tree, so addMove(stoneErase seems singularly
+         * useless since we have to do something special with the tree anyway, i.e., no addSon, but maybe we go backwards and
+         * delete some marker */
+        lastValidMoveChecked->getMatrix()->removeStoneFromGroups(x, y, c, gm);
+    }
 
     if (hasSon(lastValidMoveChecked))
     {
@@ -852,12 +814,11 @@ void Tree::addLastValidMove()
              * This would be the place to add any kind of tesuji testing
              * code */
         delete lastValidMoveChecked;
+        return;
     }
-    else
-    {
-        addSon(lastValidMoveChecked);
-        checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
-    }
+    lastCaptures = lastValidMoveChecked->getMatrix()->makeMoveIfNotSuicide(x, y, c, gm);
+    addSon(lastValidMoveChecked);
+    checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
 
 	lastValidMoveChecked = NULL;
 

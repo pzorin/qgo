@@ -45,24 +45,17 @@
 #include <iostream>
 
 BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int board_size)
-	:QObject(bw)
+    :QObject(bw), tree(t), boardSize(board_size), boardwindow(bw)
 {
-	boardSize = board_size;
-	boardwindow = bw;
-
-	board = bw->getBoard();
+    board = bw->getBoard();
 	Q_CHECK_PTR(board);
-	
-	tree = t;
-	Q_CHECK_PTR(tree);
 	
 //	currentMove = 0;
 	lastValidMove = NULL;
 
 	capturesBlack = capturesWhite = 0;
 	markedDead = false;
-	updateAll_updateAll = false;
-	// initialises the timer
+    // initialises the timer
 	wheelTime = QTime::currentTime();
 
 	
@@ -99,9 +92,7 @@ void BoardHandler::slotNavForward()
 {
 //	if (gameMode == modeScore)
 //		return false;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	Move *m = tree->nextMove();
 	if (m != NULL)
 		updateMove(m);
@@ -111,9 +102,7 @@ void BoardHandler::slotNavBackward()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	Move *m = tree->previousMove();
 	if (m != NULL)
 		updateMove(m);
@@ -123,9 +112,7 @@ void BoardHandler::slotNavFirst()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	// We need to set the markers. So go the tree upwards
 //	Move *m = tree->getCurrent();
 //	CHECK_PTR(m);
@@ -138,8 +125,7 @@ void BoardHandler::slotNavFirst()
 	Move *m = tree->getCurrent();
 	if (m != NULL)
 	{
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 	}
 }
 
@@ -147,9 +133,7 @@ void BoardHandler::slotNavLast()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	Move *m = tree->getCurrent();
 	Q_CHECK_PTR(m);
 	
@@ -159,8 +143,7 @@ void BoardHandler::slotNavLast()
 	
 	if (m != NULL)
 	{
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 	}
 }
 
@@ -168,8 +151,6 @@ void BoardHandler::slotNavPrevComment()
 {
 //	 if (gameMode == modeScore)
 //		return;
-
-	Q_CHECK_PTR(tree);
 
 	Move  *m = tree->getCurrent()->parent;
 
@@ -185,8 +166,7 @@ void BoardHandler::slotNavPrevComment()
 	if (m != NULL)
 	{
 		tree->setCurrent(m);
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 	}
 }
 
@@ -194,8 +174,6 @@ void BoardHandler::slotNavNextComment()
 {
 //	if (gameMode == modeScore)
 //		return;
-
-	Q_CHECK_PTR(tree);
 
 	Move  *m = tree->getCurrent()->son;
 
@@ -211,8 +189,7 @@ void BoardHandler::slotNavNextComment()
 	if (m != NULL)
 	{
 		tree->setCurrent(m);
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 	}
 }
 
@@ -250,8 +227,7 @@ void BoardHandler::findMoveByPos(int x, int y)
 	if (m != NULL)
 	{
 		tree->setCurrent(m);
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 	}
 	else
 		QApplication::beep();
@@ -262,9 +238,7 @@ void BoardHandler::slotNavNextVar()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	Move *m = tree->nextVariation();
 	if (m == NULL)
 		return;
@@ -276,9 +250,7 @@ void BoardHandler::slotNavPrevVar()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	Move *m = tree->previousVariation();
 	if (m == NULL)
 		return;
@@ -290,9 +262,7 @@ void BoardHandler::slotNavStartVar()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	if (tree->getCurrent()->parent == NULL)
 		return;
 	
@@ -320,17 +290,14 @@ void BoardHandler::slotNavStartVar()
 	// If found, set current to the first move inside the variation
 	Q_CHECK_PTR(tmp);
 	tree->setCurrent(tmp);
-	updateAll_updateAll = true;
-	updateMove(tmp);
+    updateMove(tmp);
 }
 
 void BoardHandler::slotNavNextBranch()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	Move *m = tree->getCurrent(),
 		*remember = m;  // Remember current in case we dont find a branch
 	Q_CHECK_PTR(m);
@@ -339,8 +306,7 @@ void BoardHandler::slotNavNextBranch()
 	if (tree->getNumSons() > 1)
 	{
 		m = tree->nextMove();
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 		return;
 	}
 	
@@ -352,8 +318,7 @@ void BoardHandler::slotNavNextBranch()
 	{
 		if (m->son != NULL)
 			m = tree->nextMove();
-		updateAll_updateAll = true;
-		updateMove(m);
+        updateMove(m);
 	}
 	else
 		tree->setCurrent(remember);
@@ -366,9 +331,7 @@ void BoardHandler::slotNavMainBranch()
 {
 //	if (gameMode == modeScore)
 //		return;
-	
-	Q_CHECK_PTR(tree);
-	
+
 	if (tree->getCurrent()->parent == NULL)
 		return;
 	
@@ -398,8 +361,7 @@ void BoardHandler::slotNavMainBranch()
 	lastOddNode->marker = NULL;  
 
 	tree->setCurrent(lastOddNode);
-	updateAll_updateAll = true;
-	updateMove(lastOddNode);
+    updateMove(lastOddNode);
 }
 
 
@@ -408,12 +370,10 @@ void BoardHandler::slotNthMove(int n)
 //	if (gameMode == modeScore)
 //		return;
 	
-	Q_ASSERT(n >= 0);
-	Q_CHECK_PTR(tree);
+    Q_ASSERT(n >= 0);
 	
 	Move *m = tree->getCurrent(),
-		*old = m;
-	Q_CHECK_PTR(m);
+        *old = m;
 	
 	int currentMove = m->getMoveNumber();
 
@@ -448,8 +408,7 @@ void BoardHandler::gotoMove(Move *m)
 {
 	Q_CHECK_PTR(m);
 	tree->setCurrent(m);
-	updateAll_updateAll = true;
-	updateMove(m);
+    updateMove(m);
 }
 
 /*
@@ -458,60 +417,13 @@ void BoardHandler::gotoMove(Move *m)
  * This involves calling and update for the board stones, and 
  * an update of the interface
  */
-void BoardHandler::updateMove(Move *m, bool /*ignore_update*/)
+void BoardHandler::updateMove(Move *m)
 {
 	if (m == NULL)
 	{
 		m = tree->getCurrent();
 	}
-	//qDebug("BoardHandler::updateMove(Move *m)");
-/*	
-	// Fastloading. Create matrix for current move and insert marks
-	if (!m->checked)
-	{
-		qDebug("NOT CHECKED");
-		if (m->parent != NULL)
-		{
-#ifndef NO_DEBUG
-			if (tree->getCurrent()->getMatrix() != NULL)
-			{
-				qFatal("MOVE HAS A MATRIX BUT SHOULD NOT!");
-			}
-#endif
-			Matrix *dad = m->parent->getMatrix();
-			Matrix *neu = new Matrix(*dad);
-			m->setMatrix(neu);
-		}
-		addStoneSGF(m->getColor(), m->getX(), m->getY());
-		
-		QIntDict<FastLoadMark> *d = m->fastLoadMarkDict;
-		if (d != NULL && !d->isEmpty())
-		{
-			QIntDictIterator<FastLoadMark> it(*d);
-			while (it.current())
-			{
-				m->getMatrix()->insertMark(it.current()->x,
-					it.current()->y,
-					it.current()->t);
-				if (it.current()->t == markText && !(it.current()->txt).isNull())
-					m->getMatrix()->setMarkText(it.current()->x,
-					it.current()->y,
-					it.current()->txt);
-				++it;
-			}
-			delete d;
-			m->fastLoadMarkDict = NULL;
-		}
-		
-		m->checked = true;
-	}
-	*//* FIXME We can set the color from the SGFParser to black and that
-	 * will fix the cursor color but it doesn't fix the move that's played
-	 * which means its a deeper issue.  This had to do with getBlackTurn()
-	 * in qgoboard.cpp which thought that the root had something to
-	 * do with who's turn it is.  But move color and cursor color
-	 * should be linked somehow, encapsulated, etc.. */
-/**/	
+
 	Q_CHECK_PTR(m);
 //	int currentMove = m->getMoveNumber();
 //	int brothers = getNumBrothers();
@@ -654,15 +566,12 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 			 * We could say that the handicap stones aren't
 			 * edits, but this is what they've been set up
 			 * as so that's more tricky. */
-			if(!updateAll_updateAll && !m->isStoneDirty(x,y))
-				continue;
-			dead = (m->isStoneDead(x, y)) & (move->getMoveNumber() != 0);
+            dead = (m->isStoneDead(x, y)) & (move->getMoveNumber() != 0);
 			color = m->getStoneAt(x, y);
 			
 			if (boardwindow->getGameData()->oneColorGo && color == stoneBlack)
 				color = stoneWhite;
 			board->updateStone(color,x,y, dead);
-			m->stoneUpdated(x,y);
 			// Skip mark drawing when reading sgf
 //			if (!toDraw)
 //				continue;
@@ -703,15 +612,11 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 			case markTerrBlack:
 				modified = true;
 				board->setMark(x, y, markTerrBlack, false);
-				if(m->getStoneAt(x,y) == stoneWhite)	//awkward but may have been ghosted
-					m->invalidateStone(x, y);
 				break;
 				
 			case markTerrWhite:
 				modified = true;
 				board->setMark(x, y, markTerrWhite, false);
-				if(m->getStoneAt(x,y) == stoneBlack)	//awkward but may have been ghosted
-					m->invalidateStone(x, y);
 				break;
 				
 			case markNone:
@@ -725,8 +630,7 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 
 		}
 	}
-	updateAll_updateAll = false;
-	return modified;
+    return modified;
 }
 
 /*
@@ -875,48 +779,20 @@ void BoardHandler::countScore(void)
 	//awkward here: FIXME, do we need two sets of these variables?
 	boardwindow->getGameData()->white_prisoners = capturesWhite;
 	boardwindow->getGameData()->black_prisoners = capturesBlack;
-	caps_black = 0;
-	caps_white = 0;
 	
 	tree->getCurrent()->setScored(true);
 
-	// Copy the current matrix
-	Matrix *m = new Matrix(*current_matrix);
+    // Copy the current matrix clearing all marks
+    Matrix *m = new Matrix(*current_matrix, true);
 	Q_CHECK_PTR(m);
 
-//	m->debug();
-	// Do some cleanups, we only need stones
-	//m->absMatrix();
-	
-	m->clearAllMarks();		//why different from exit score and absMatrix?? FIXME
-	
-	// Mark all dead stones in the matrix with negative number
-	int i=0, j=0;
-/*	for (i=0; i<board->getBoardSize(); i++)
-		for (j=0; j<board->getBoardSize(); j++)
-			if (stoneHandler->hasStone(i+1, j+1) == 1)
-				if (stoneHandler->getStoneAt(i+1, j+1)->isDead())
-					m->set(i, j, m->at(i, j) * -1);
-				else if (stoneHandler->getStoneAt(i+1, j+1)->isSeki())
-					m->set(i, j, m->at(i, j) * MARK_SEKI);
-*/				
+    caps_white = m->countDeadBlack();
+    caps_black = m->countDeadWhite();
 
-    for (i=0; i< boardSize; i++)
-        for (j=0; j< boardSize; j++)
-		{
-			// we increase the temporary counter for dead stones removed at score phase
-			if (m->isStoneDead(i + 1, j + 1))
-			{
-				if (m->getStoneAt(i +1,j+1) == stoneBlack)
-					caps_white++;
-				else if (m->getStoneAt(i+1,j+1) == stoneWhite)
-					caps_black++;
-			}
-		}
-	
 	terrWhite = 0;
 	terrBlack = 0;
 	
+    int i,j;
 	while (m != NULL)
 	{
 		bool found = false;
@@ -998,8 +874,7 @@ void BoardHandler::countScore(void)
 	tree->getCurrent()->setTerritoryMarked(true);
 	// Paint the territory on the board
 	updateAll(tree->getCurrent());
-	updateAll_updateAll = true;			//double update, find out why this is necessary to show stone removals in network games FIXME
-	
+
 	// Update Interface
 	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack  + caps_black,
 		terrWhite, capturesWhite + caps_white ,

@@ -454,7 +454,7 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 
     if(validMove)
     {
-        tree->addLastValidMove();
+        tree->addMove(c,x,y);
         setModified(true);
         /* Not a great place for this, but maybe okay: */
         TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());

@@ -44,7 +44,7 @@ public:
 	void countMarked(void);
 	class GameResult retrieveScore(void);
 	void exitScore();
-    void updateMove(Move *m=0, bool ignore_update = false);
+    void updateMove(Move *m=0);
     bool updateAll(Move *move, bool toDraw=true);
 	void updateCursor(StoneColor c=stoneNone);
 	void updateButtons(StoneColor c=stoneNone);
@@ -71,16 +71,15 @@ public slots:
 	void slotWheelEvent(QWheelEvent *e);
 
 private:
-	Board *board;
-	Tree *tree;
-	BoardWindow * boardwindow;
+    Board * board;
+    Tree * const tree;
+    BoardWindow * const boardwindow;
+    const int boardSize;
 
-	bool updateAll_updateAll;
-	int capturesBlack, capturesWhite, caps_black, caps_white;
+    int capturesBlack, capturesWhite, caps_black, caps_white;
 	int terrBlack, terrWhite;
 	Move *lastValidMove;
 //	GameMode gameMode;
-    int boardSize;
 	
 	void updateVariationGhosts(Move *m);
 	bool navIntersectionStatus;

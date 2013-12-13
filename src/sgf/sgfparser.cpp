@@ -905,7 +905,10 @@ bool SGFParser::doParse(const QString &toParseStr)
 										tree->addStoneToCurrentMove(black ? stoneBlack : stoneWhite, i, j);
 									}
 									else
-										tree->addMove(black ? stoneBlack : stoneWhite, i, j);
+                                    {
+                                        if (tree->checkMoveIsValid(black ? stoneBlack : stoneWhite, i, j))
+                                            tree->addMove(black ? stoneBlack : stoneWhite, i, j);
+                                    }
 									//tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, setup ? false : new_node);
 									
 									/*else	//fastload

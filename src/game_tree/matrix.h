@@ -43,7 +43,7 @@
 #define MX_STONEDEAD	0x8000
 #define MX_STONEEDIT	0x4000
 
-#define MX_STONEDIRTY	0x2000
+// #define MX_STONEDIRTY	0x2000 // free
 
 class Group;
 
@@ -55,19 +55,15 @@ struct ASCII_Import
 class Matrix
 {
 public:
-	Matrix(int s=DEFAULT_BOARD_SIZE);
-	Matrix(const Matrix &m);
-	Matrix(const Matrix &m, bool cleanup);
+    Matrix(int s=DEFAULT_BOARD_SIZE);
+    Matrix(const Matrix &m, bool cleanup = false);
     ~Matrix();
 	int getSize() const { return size; }
 	void clear();
 	void insertStone(int x, int y, StoneColor c, bool fEdit = false);
 	StoneColor getStoneAt(int x, int y);
-	bool isStoneDead(int x, int y);
-	bool isStoneDirty(int x, int y);
-	void stoneUpdated(int x, int y);
-	void invalidateStone(int x, int y);
-	void markChangesDirty(Matrix & m);
+    bool isStoneDead(int x, int y);
+    void stoneUpdated(int x, int y);
     MarkType getMarkAt(int x, int y);
 	QString getFirstTextAvailable(MarkType t);
 
@@ -102,6 +98,8 @@ public:
 	void markAreaDead(int x, int y);
 	void markAreaAlive(int x, int y);
 	void updateDeadMarks(int &black, int &white);
+    int countDeadWhite();
+    int countDeadBlack();
 
     static const QString coordsToString(int x, int y)
     { return QString(QChar(static_cast<const char>('a' + x))).append(QChar(static_cast<const char>('a' + y))); }

@@ -523,13 +523,8 @@ bool Board::hasVarGhost(StoneColor c, int x, int y)
  */
 void Board::updateStone(StoneColor c, int x, int y, bool dead)
 {
-	Stone *stone;
-    QHash<int,Stone *>::iterator si;
-
-	if ((si = stones->find(coordsToKey(x, y))) == stones->end())
-		stone = NULL;
-	else 
-		stone = si.value();	
+    Stone *stone = stones->value(coordsToKey(x, y),NULL);
+    //if ((stone == NULL) & ((c == stoneBlack) || (c == stoneWhite)))
 
 	switch (c)
 	{
@@ -537,21 +532,15 @@ void Board::updateStone(StoneColor c, int x, int y, bool dead)
 	case stoneWhite:
 		if (stone == NULL)
 		{
-			stone = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,true);
+            stone = new Stone(imageHandler->getStonePixmaps(), canvas, c, x, y,true);
             stone->setPos(offsetX + square_size * (x - 1) - stone->pixmap().width()/2,
                 offsetY + square_size * (y - 1) - stone->pixmap().height()/2 );
             stones->insert(coordsToKey(x,y) , stone);
-			break;
-		}
-		else if (!stone->isVisible())
-		{
-            stone->show();
-		}
-		
-		if (stone->getColor() != c)
-		{
+            break;
+        }
+
+        if (stone->getColor() != c)
             stone->setColor(c);
-		}
 		
 		// We need to check wether the stones have been toggled dead or seki before (scoring mode)
 		if ((stone->isDead() || stone->isSeki()) && !dead)
@@ -566,6 +555,8 @@ void Board::updateStone(StoneColor c, int x, int y, bool dead)
 			stone->setDead();
 		}
 
+        if (!stone->isVisible())
+            stone->show();
 
 		break;
 		
