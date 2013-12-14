@@ -54,8 +54,7 @@ public:
     void setMark(int x, int y, MarkType t, bool update=true, QString txt=QString::null, bool overlay=true);
 	Mark* hasMark(int x, int y);
     void removeMark(int x, int y, bool update = false);
-	void removeDeadMarks();
-	void updateLastMove(Move * move);
+    void updateLastMove(Move * move);
 
 //	Stone* addStoneSprite(StoneColor c, int x, int y, bool shown=true);//TODO shown ?
     void updateStone(StoneColor c, int x, int y, bool dead = false);

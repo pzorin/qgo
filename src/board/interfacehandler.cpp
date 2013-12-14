@@ -336,8 +336,11 @@ void InterfaceHandler::setSliderMax(int n)
 	if (n < 0)
 		n = 0;
 
+    if (n == boardwindow->getUi()->slider->maximum())
+        return;
+
 	boardwindow->getUi()->slider->setMaximum(n);
-    	boardwindow->getUi()->sliderRightLabel->setText(QString::number(n));
+    boardwindow->getUi()->sliderRightLabel->setText(QString::number(n));
 }
 
 /*

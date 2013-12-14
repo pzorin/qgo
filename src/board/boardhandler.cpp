@@ -454,23 +454,7 @@ void BoardHandler::updateMove(Move *m)
 	// Get rid of the varation ghosts
 //	if (setting->readIntEntry("VAR_GHOSTS"))//TODO
 		board->removeGhosts();
-	
-	// Get rid of all marks except the last-move-mark
-//	board->hideAllMarks();
-	
-	// Remove territory marks
-//	if (tree->getCurrent()->isTerritoryMarked())
-//	{
-//		tree->getCurrent()->getMatrix()->clearTerritoryMarks();
-//		tree->getCurrent()->setTerritoryMarked(false);
-//	}
-	
-	// Unshade dead stones
-//	if (markedDead)
-//	{
-		board->removeDeadMarks();
-//		markedDead = false;
-//	}
+
 	updateAll(m);
 //	if (m->getGameMode() == modeNormal || m->getGameMode() == modeObserve )  //SL add eb 8
 		// If the node is in normal mode, show the circle to mark the last move

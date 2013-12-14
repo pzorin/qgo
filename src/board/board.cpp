@@ -419,8 +419,6 @@ void Board::resizeBoard()
 
   // Redraw the mark on the last played stone                             
 //  updateLastMove(m_save->getColor(), m_save->getX(), m_save->getY()); 
-  
-	//canvas->update();
 }
 
 /*
@@ -764,42 +762,6 @@ void Board::setMark(int x, int y, MarkType t, bool /*update*/, QString txt, bool
 }
 
 /*
- * restores the stones that were marked dead or seki
- */
-void Board::removeDeadMarks()
-{
-/*	QIntDictIterator<Stone> it(*stones);
-	Stone *s;
-	
-	while (it.current())
-	{
-		s = it.current();
-		CHECK_PTR(s);
-		if (s->isDead() || s->isSeki())
-		{
-			s->setDead(false);
-			s->setSeki(false);
-			s->setSequence(boardHandler->board->getImageHandler()->getStonePixmaps());
-			s->shadow->show();
-		}
-		++it;
-	}
-*/
-	QHashIterator<int, Stone*> i(*stones);
-	while (i.hasNext()) 
-	{
-		i.next();
-		if (i.value()->isDead() || i.value()->isSeki())
-		{
-			i.value()->setDead(false);
-			i.value()->setSeki(false);
-			i.value()->togglePixmap(imageHandler->getStonePixmaps(), true);
-		}
-	}
-
-}
-
-/*
  * Sets a text in 'text' mark at positon 'x,y'.
  */
 void Board::setMarkText(int x, int y, const QString &txt)
@@ -940,7 +902,6 @@ int Board::convertCoordsToPoint(int c, int o)
 void Board::leaveEvent(QEvent*)
 {
 	curStone->hide();
-	canvas->update();
 }
 
 /*
@@ -958,16 +919,14 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 	/* FIXME, maybe don't draw cursor if x/y changes from downX downY?? */
 	if(downX > 0 && (downX != x || downY != y))
 	{
-		curStone->hide();
-		canvas->update();
+        curStone->hide();
 		curX = curY = -1;
 		return;
 	}
 	// Outside the valid board?
 	if ((x < 1) || x > board_size || y < 1 || y > board_size)
 	{
-		curStone->hide();
-		canvas->update();
+        curStone->hide();
 		curX = curY = -1;
 		return;
 	}
@@ -1010,8 +969,6 @@ void Board::mouseMoveEvent ( QMouseEvent * e )
 	else
 */
 	curStone->show();
-    
-	//canvas->update();
 }
 
 /*
