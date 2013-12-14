@@ -54,9 +54,9 @@
 * Enum definitions
 */
 enum StoneColor { stoneNone = 0x0, stoneWhite = 0x1, stoneBlack = 0x2, stoneErase = 0x3 };
-enum MarkType { markNone = 0x00, markTerrBlack = 0x10, markTerrWhite = 0x20, markTerrDame = 0x30,
-                markSquare = 0x40, markCircle = 0x50, markTriangle = 0x60, markCross = 0x70,
-                markText = 0x80, markNumber = 0x90, markKoMarker = 0xa0, markAll = 0xf0 };
+enum MarkType { markNone = 0x00, markTerrBlack = 0x04, markTerrWhite = 0x08, markTerrDame = 0x0c,
+                markSquare = 0x10, markCircle = 0x20, markTriangle = 0x30, markCross = 0x40,
+                markText = 0x50, markNumber = 0x60, markKoMarker = 0x70, markAll = 0x7c };
 
 enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, modeReview, modeUndefined };
 enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseNavTo, phaseScore, phaseEnded};
