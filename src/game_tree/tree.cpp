@@ -37,8 +37,7 @@ Tree::Tree(int board_size)
     init();
     loadingSGF = false;
 	koStoneX = 0;
-	koStoneY = 0;
-    lastCaptures = 0;
+    koStoneY = 0;
 }
 
 void Tree::init()
@@ -609,8 +608,7 @@ void Tree::addEmptyMove( bool /*brother*/)
 /* Really conflicting with setCurrent name, this is like a joke FIXME */
 Move * Tree::assignCurrent(Move * & o, Move * & n) 
 {
-    lastCaptures = getLastCaptures(n);
-	o = n;
+    o = n;
 	return o;
 }
 
@@ -669,8 +667,6 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 
 bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 {
-    lastCaptures = 0;
-
     if ((x < 1 || x > boardSize || y < 1 || y > boardSize) && (x != 20 || y != 20))		//because 20,20 is pass, but ugly/unnecessary here FIXME
 	{
 		qWarning("Invalid position: %d/%d", x, y);
@@ -696,7 +692,7 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 
     std::vector<Group *> visited;
     std::vector<Group *>::iterator it_visited;
-    lastCaptures = current->getMatrix()->checkStoneCaptures(c,x,y,visited);
+    int lastCaptures = current->getMatrix()->checkStoneCaptures(c,x,y,visited);
     // FIXME should not have to delete these groups here
     for (it_visited = visited.begin(); it_visited < visited.end(); ++it_visited)
     {
@@ -752,9 +748,10 @@ void Tree::addMove(StoneColor c, int x, int y)
         delete lastValidMoveChecked;
         return;
     }
-    lastCaptures = lastValidMoveChecked->getMatrix()->makeMove(x, y, c);
+    int lastCaptures = lastValidMoveChecked->getMatrix()->makeMove(x, y, c);
     addSon(lastValidMoveChecked);
-    checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
+    if (lastCaptures == 1)
+        checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
 
 	int capturesBlack, capturesWhite;
 	if (current->parent != NULL)
@@ -768,9 +765,8 @@ void Tree::addMove(StoneColor c, int x, int y)
 	if (c == stoneBlack)
 		capturesBlack += lastCaptures;
 	else if (c == stoneWhite)
-		capturesWhite += lastCaptures;
-	lastCaptures = 0;
-	current->setCaptures(capturesBlack, capturesWhite);
+        capturesWhite += lastCaptures;
+    current->setCaptures(capturesBlack, capturesWhite);
 }
 
 void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
@@ -907,8 +903,8 @@ void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
 		return;
 	}
 	if(!m)
-		m = current;
-	if(lastCaptures == 1)
+        m = current;
+
 	{
 		StoneColor opp = (c == stoneBlack ? stoneWhite : stoneBlack);
 		Matrix * trix = m->getMatrix();

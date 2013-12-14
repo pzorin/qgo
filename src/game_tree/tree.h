@@ -106,7 +106,6 @@ private:
 
 	int koStoneX;
 	int koStoneY;
-	int lastCaptures;
     bool loadingSGF;
 };
 
