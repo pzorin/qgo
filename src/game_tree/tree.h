@@ -96,7 +96,6 @@ private:
 
     void checkAddKoMark(StoneColor c, int x, int y, Move * m = NULL);
 	int getLastCaptures(Move * m);
-	Move * assignCurrent(Move * & o, Move * & n);
     void updateCurrentMatrix(StoneColor c, int x, int y);
 
     const int boardSize;

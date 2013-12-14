@@ -115,7 +115,7 @@ bool Tree::addSon(Move *node)
 
         node->parent = current;
         node->setTimeinfo(false);
-        assignCurrent(current, node);
+        current = node;
         if(isInMainBranch(current->parent))
             lastMoveInMainBranch = current;
 #ifdef NOTWORKING
@@ -159,7 +159,7 @@ bool Tree::addSon(Move *node)
         if(!loadingSGF)		//since this would put every branch on the last brother
             current->parent->marker = node;
 
-        assignCurrent(current, node);
+        current = node;
         return true;
     }
 
@@ -248,14 +248,12 @@ Move* Tree::nextMove()
 		return NULL;
 	
 	if (current->marker == NULL)  // No marker, simply take the main son
-		assignCurrent(current, current->son);
+        current = current->son;
 	else
-		assignCurrent(current, current->marker);  // Marker set, use this to go the remembered path in the tree
+        current = current->marker;  // Marker set, use this to go the remembered path in the tree
 	
 	current->parent->marker = current;  // Parents remembers this move we went to
-	//current->getMatrix()->invalidateAdjacentGroups(, groupMatrixView);
-	//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
-	return current;
+    return current;
 }
 
 Move* Tree::previousMove()
@@ -264,11 +262,8 @@ Move* Tree::previousMove()
 		return NULL;
 	
 	current->parent->marker = current;  // Remember the son we came from
-	assignCurrent(current, current->parent);
-	//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
-	//current->getMatrix()->invalidateAllGroups(groupMatrixView);
-	//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
-	return current;
+    current = current->parent;
+    return current;
 }
 
 Move* Tree::nextVariation()
@@ -276,11 +271,8 @@ Move* Tree::nextVariation()
 	if (root == NULL || current == NULL || current->brother == NULL)
 		return NULL;
 	
-	assignCurrent(current, current->brother);
-	//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
-	//current->getMatrix()->invalidateAllGroups(groupMatrixView);
-	//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
-	return current;
+    current = current->brother;
+    return current;
 }
 
 Move* Tree::previousVariation()
@@ -306,10 +298,8 @@ Move* Tree::previousVariation()
 	{
 		if (tmp == current)
 		{
-			//current->getMatrix()->invalidateAdjacentGroups(MatrixStone(current->getX(), current->getY(), current->getColor()), groupMatrixView);
-			//current->getMatrix()->invalidateAllGroups(groupMatrixView);
-			//invalidateAdjacentCheckPositionGroups(MatrixStone(current->getX(), current->getY(), current->getColor()));
-			return assignCurrent(current, old);
+            current = old;
+            return current;
 		}
 		old = tmp;
 	}
@@ -327,7 +317,7 @@ bool Tree::hasSon(Move *m)
 	do {
 		if (m->equals(tmp))
 		{
-			assignCurrent(current, tmp);
+            current = tmp;
 			return true;
 		}
 	} while ((tmp = tmp->brother) != NULL);
@@ -505,19 +495,14 @@ int Tree::count()
 
 void Tree::setCurrent(Move *m)
 {
-	if(m == lastMoveInMainBranch)
-		current = m;
-	else
-	{
-		assignCurrent(current, m);
-    }
+    current = m;
 }
 
 void Tree::setToFirstMove()
 {
 	if (root == NULL)
 		qFatal("Error: No root!");
-	assignCurrent(current, root);
+    current = root;
 }
 
 int Tree::mainBranchSize()
@@ -603,13 +588,6 @@ void Tree::addEmptyMove( bool /*brother*/)
 	//else
 	//	addBrother(m);
 
-}
-
-/* Really conflicting with setCurrent name, this is like a joke FIXME */
-Move * Tree::assignCurrent(Move * & o, Move * & n) 
-{
-    o = n;
-	return o;
 }
 
 /* These two functions are a little awkward here, just done to minimize
@@ -825,7 +803,7 @@ bool Tree::insertStone(Move *node)
 			current->son = node;
 			node->parent = current;
 			node->setTimeinfo(false);
-			assignCurrent(current, node);
+            current = node;
 			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
 			
 			return false;
@@ -851,7 +829,7 @@ bool Tree::insertStone(Move *node)
 			node->marker = NULL;
 
 			node->setTimeinfo(false);
-			assignCurrent(current, node);
+            current = node;
 			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
 
 			//update son - it is exclude from traverse search because we cannot update brothers of node->son
@@ -994,11 +972,6 @@ int Tree::getLastCaptures(Move * m)
 /*
  * this deletes the current node an all its sons
  */
-/* FIXME this should certainly invalidate something to move us to the previous matrix or the like.
- * and its called straight out of the network code so... basically we need to think through
- * how we want to do the two different views and how to transition between them, almost shouldn't
- * be an issue, like its the current view matrix that changes, and then we switch to the current
- * as we scroll... but I want to write the invalidate that works locally... */
 void Tree::deleteNode()
 {
 	Move *m = getCurrent(),
@@ -1067,16 +1040,12 @@ void Tree::deleteNode()
 		lastMoveInMainBranch = remember;
 	if (m->son != NULL)
 		traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
-	assignCurrent(current, remember);
+    current = remember;
 	delete m;                         // Delete our move
 	//setCurrent(remember);       // Set current move to previous move
 	remember->son = remSon;           // Reset son pointer, NULL
 	remember->marker = NULL;          // Forget marker
-	
-	/*if(current == findLastMoveInMainBranch())
-		current->getMatrix()->invalidateAllGroups(groupMatrixCurrent);
-	else
-		current->getMatrix()->invalidateAllGroups(groupMatrixView);*/
+
 //	updateMove(tree->getCurrent(), !display_incoming_move);
 	
 //	board->setModified();
