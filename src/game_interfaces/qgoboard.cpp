@@ -57,129 +57,22 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 void qGoBoard::setHandicap(int handicap)
 {
 	GamePhase store = boardwindow->getGamePhase();
-	//qDebug("set Handicap " + QString::number(handicap) + ", stored mode == " + QString::number(store));
-	boardwindow->setGamePhase(phaseEdit);
 	qDebug("setHandicap called\n");
-	int size = gameData->board_size;
-	int edge_dist = (size > 12 ? 4 : 3);
-	int low = edge_dist;
-	int middle = (size + 1) / 2;
-	int high = size + 1 - edge_dist;
 	
-	if (size > 25 || size < 7)
-	{
-		qWarning("*** BoardHandler::setHandicap() - can't set handicap for this board size");
-//		setMode(store);
-		return;
-	}
-	
-	// change: handicap is first move
-//	if (handicap > 1)
-//	{
-		/* Commented out because handi should be root move */
-		//tree->createMoveSGF();
-		//createNode(*tree->getCurrent()->getMatrix(), false, false);
-		/* Move should already be set to 0 by board handler and the placement
-		 * of handicap stones won't change that */
-		//currentMove++;
-		tree->getCurrent()->setMoveNumber(0);
-		tree->getCurrent()->setHandicapMove(true);
-//	}
-	if(tree->getCurrent()->getNumBrothers())
-		qDebug("handi has brother??");
+    /* Move should already be set to 0 by board handler and the placement
+     * of handicap stones won't change that */
+    boardwindow->setGamePhase(phaseEdit);
+    tree->getCurrent()->setMoveNumber(0);
+    if (tree->getCurrent()->getMatrix()->addHandicapStones(handicap))
+    {
+        tree->getCurrent()->setHandicapMove(true);
+        tree->getCurrent()->setX(-1);//-1
+        tree->getCurrent()->setY(-1);//-1
+        tree->getCurrent()->setColor(stoneBlack);
+        gameData->handicap = handicap;
+    }
 
-	// extra:
-	if (size == 19 && handicap > 9)
-		switch (handicap)
-		{
-		case 13:  // Hehe, this is nuts... :)
-			tree->addStoneToCurrentMove(stoneBlack, 17, 17);
-		case 12:
-			tree->addStoneToCurrentMove(stoneBlack, 3, 3);
-		case 11:
-			tree->addStoneToCurrentMove(stoneBlack, 3, 17);
-		case 10:
-			tree->addStoneToCurrentMove(stoneBlack, 17, 3);
-			
-		default:
-			handicap = 9;
-			break;
-		}
-	
-	switch (size % 2)
-	{
-	// odd board size
-	case 1:
-		switch (handicap)
-		{
-		case 9:
-			tree->addStoneToCurrentMove(stoneBlack, middle, middle);
-		case 8:
-		case 7:
-			if (handicap >= 8)
-			{
-				tree->addStoneToCurrentMove(stoneBlack, middle, low);
-				tree->addStoneToCurrentMove(stoneBlack, middle, high);
-			}
-			else
-				tree->addStoneToCurrentMove(stoneBlack, middle, middle);
-		case 6:
-		case 5:
-			if (handicap >= 6)
-			{
-				tree->addStoneToCurrentMove(stoneBlack, low, middle);
-				tree->addStoneToCurrentMove(stoneBlack, high, middle);
-			}
-			else
-				tree->addStoneToCurrentMove(stoneBlack, middle, middle);
-		case 4:
-			tree->addStoneToCurrentMove(stoneBlack, high, high);
-		case 3:
-			tree->addStoneToCurrentMove(stoneBlack, low, low);
-		case 2:
-			tree->addStoneToCurrentMove(stoneBlack, high, low);
-			tree->addStoneToCurrentMove(stoneBlack, low, high);
-		case 1:
-//			if (store != modeObserve && store != modeMatch &&  store != modeTeach)
-//				gameData->komi = 0.5;
-			break;
-			
-		default:
-			qWarning("*** BoardHandler::setHandicap() - Invalid handicap given: %d", handicap);
-		}
-		break;
-		
-	// even board size
-	case 0:
-		switch (handicap)
-		{
-		case 4:
-			tree->addStoneToCurrentMove(stoneBlack, high, high);
-		case 3:
-			tree->addStoneToCurrentMove(stoneBlack, low, low);
-		case 2:
-			tree->addStoneToCurrentMove(stoneBlack, high, low);
-			tree->addStoneToCurrentMove(stoneBlack, low, high);
-		case 1:
-//			if (store != modeObserve && store != modeMatch &&  store != modeTeach)
-//				gameData->komi = 0.5;
-			break;
-			
-		default:
-			qWarning("*** BoardHandler::setHandicap() - Invalid handicap given: %d", handicap);
-		}
-		break;
-		
-	default:
-		qWarning("*** BoardHandler::setHandicap() - can't set handicap for this board size");
-				
-	}
-	
-	// Change cursor stone color
-	//board->setCurStoneColor();
-	gameData->handicap = handicap;
-	boardwindow->setGamePhase(store);
-	//board->getInterfaceHandler()->disableToolbarButtons();
+    boardwindow->setGamePhase(store);
 }
 
 /*

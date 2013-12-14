@@ -32,6 +32,7 @@
 #include "sgf/sgfparser.h"
 #include "../network/boarddispatch.h"
 #include "gameinfo.h"
+#include "matrix.h"
 
 class BoardHandler;
 
@@ -499,6 +500,16 @@ void BoardWindow::saveRecordToGameData(void)
  */
 bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
 {
+    // FIXME this is not the right place to add handicap stones
+    if ((gameData->handicap > 0) &&
+            tree->getCurrent()->getMatrix()->addHandicapStones(gameData->handicap))
+    {
+        tree->getCurrent()->setHandicapMove(true);
+        tree->getCurrent()->setX(-1);//-1
+        tree->getCurrent()->setY(-1);//-1
+        tree->getCurrent()->setColor(stoneBlack);
+    }
+
 	SGFParser *sgfParser = new SGFParser(tree);
 	
 	QString SGFLoaded;

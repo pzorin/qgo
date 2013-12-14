@@ -493,7 +493,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 	
 	// qDebug("File length = %d", strLength);
 	
-	tree->setLoadingSGF(true);
+    tree->setLoadingSGF(true);
 	
 	progress.setValue(0);
 	QString sss="";

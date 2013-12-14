@@ -90,6 +90,7 @@ public:
     { return QString(QChar(static_cast<const char>('a' + x))).append(QChar(static_cast<const char>('a' + y))); }
 
     int makeMove(int x, int y, StoneColor c);
+    bool addHandicapStones(int handicap);
 
 private:
     int internalCoordsToKey(int i, int j) const { return i*size + j; }

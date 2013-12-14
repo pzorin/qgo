@@ -601,6 +601,100 @@ int Matrix::makeMove(int x, int y, StoneColor c)
     return capturedStones;
 }
 
+bool Matrix::addHandicapStones(int handicap)
+{
+    if (size > 25 || size < 7)
+    {
+        qWarning("Matrix::addHandicapStones() : Can't set handicap for this board size");
+        return false;
+    }
+    const int edge_dist = (size > 12 ? 4 : 3);
+    const int low = edge_dist;
+    const int middle = (size + 1) / 2;
+    const int high = size + 1 - edge_dist;
+    // extra:
+    if (size == 19 && handicap > 9)
+        switch (handicap)
+        {
+        case 13:  // Hehe, this is nuts... :)
+            insertStone(17, 17, stoneBlack);
+        case 12:
+            insertStone(3, 3, stoneBlack);
+        case 11:
+            insertStone(3, 17, stoneBlack);
+        case 10:
+            insertStone(17, 3, stoneBlack);
+
+        default:
+            handicap = 9;
+            break;
+        }
+
+    switch (size % 2)
+    {
+    // odd board size
+    case 1:
+        switch (handicap)
+        {
+        case 9:
+            insertStone(middle, middle, stoneBlack);
+        case 8:
+        case 7:
+            if (handicap >= 8)
+            {
+                insertStone(middle, low, stoneBlack);
+                insertStone(middle, high, stoneBlack);
+            }
+            else
+                insertStone(middle, middle, stoneBlack);
+        case 6:
+        case 5:
+            if (handicap >= 6)
+            {
+                insertStone(low, middle, stoneBlack);
+                insertStone(high, middle, stoneBlack);
+            }
+            else
+                insertStone(middle, middle, stoneBlack);
+        case 4:
+            insertStone(high, high, stoneBlack);
+        case 3:
+            insertStone(low, low, stoneBlack);
+        case 2:
+            insertStone(high, low, stoneBlack);
+        case 1: // Handicap 1? Whatever floats your boat.
+            insertStone(low, high, stoneBlack);
+            break;
+
+        default:
+            qWarning("*** BoardHandler::setHandicap() - Invalid handicap given: %d", handicap);
+        }
+        break;
+
+    // even board size
+    case 0:
+        switch (handicap)
+        {
+        case 4:
+            insertStone(high, high, stoneBlack);
+        case 3:
+            insertStone(low, low, stoneBlack);
+        case 2:
+            insertStone(high, low, stoneBlack);
+        case 1: // Handicap 1? Whatever floats your boat.
+            insertStone(low, high, stoneBlack);
+            break;
+
+        default:
+            qWarning("*** Matrix::addHandicapStones() - Invalid handicap given: %d", handicap);
+        }
+        break;
+
+    default:
+        qWarning("*** Matrix::addHandicapStones() - can't set handicap for this board size");
+    }
+}
+
 /* Note that checkStoneWithGroups would be called before this meaning that
  * their could be no adjacent stones not in groups */
 void Matrix::removeGroup(Group * g)
