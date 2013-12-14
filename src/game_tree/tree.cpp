@@ -34,11 +34,8 @@ Tree::Tree(int board_size)
     : boardSize(board_size), root(NULL), insertStoneFlag(false)
 {
 	checkPositionTags = NULL;
-	groupMatrixView = NULL;
-	groupMatrixCurrent = NULL;
     init();
-	lastValidMoveChecked = NULL;
-	loadingSGF = false;
+    loadingSGF = false;
 	koStoneX = 0;
 	koStoneY = 0;
     lastCaptures = 0;
@@ -56,32 +53,12 @@ void Tree::init()
 	if(checkPositionTags)
 		delete checkPositionTags;
     checkPositionTags = new Matrix(boardSize);
-
-	deleteGroupMatrices();		//just in case
-
-    groupMatrixView = new Group* [boardSize*boardSize];
-    groupMatrixCurrent = new Group* [boardSize*boardSize];
-    for(int i = 0; i < boardSize*boardSize; ++i)
-	{
-        groupMatrixView[i] = NULL;
-        groupMatrixCurrent[i] = NULL;
-	}
 }
 
 Tree::~Tree()
 {
 	delete checkPositionTags;
-	deleteGroupMatrices();
-	
     clear();
-}
-
-void Tree::deleteGroupMatrices(void)
-{
-    if(groupMatrixView)
-        delete[] groupMatrixView;
-    if(groupMatrixCurrent)
-        delete[] groupMatrixCurrent;
 }
 
 /*
@@ -534,8 +511,7 @@ void Tree::setCurrent(Move *m)
 	else
 	{
 		assignCurrent(current, m);
-        invalidateCheckPositionGroups();
-	}
+    }
 }
 
 void Tree::setToFirstMove()
@@ -543,7 +519,6 @@ void Tree::setToFirstMove()
 	if (root == NULL)
 		qFatal("Error: No root!");
 	assignCurrent(current, root);
-	invalidateCheckPositionGroups();
 }
 
 int Tree::mainBranchSize()
@@ -634,51 +609,9 @@ void Tree::addEmptyMove( bool /*brother*/)
 /* Really conflicting with setCurrent name, this is like a joke FIXME */
 Move * Tree::assignCurrent(Move * & o, Move * & n) 
 {
-	/*if(n->getX() == -1 || n->getY() == -1)		//root at least is -1 -1 so who cares? but this is probably from empty nodes FIXME cleanup somehow
-		qDebug("new move -1 -1");
-	if(o->getX() == -1 || o->getY() == -1)
-		qDebug("old move -1 -1");*/
-	if(n != root)  //not an issue anymore
-	{
-        Group ** gm = (n == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
-		if(n == o->son)
-		{
-			/* This may or may not be silly.  We call it from addSon which is ridiculous because we just ran
-			 * checkPosition.  So either we shouldn't call assignCurrent from addSon but then we have an issue
-			 * with the other two, or we need to have some kind of flag or check or maybe see if this new stone
-			 * has sons, etc. FIXME */
-			/* Also note that the way its currently done, lastMoveInMainBranch isn't set to n until AFTER
-             * its checked for here FIXME */
-            n->getMatrix()->invalidateAdjacentGroups(n->getX(), n->getY(), gm);
-        }
-        else if(o == n->son)
-        {
-            n->getMatrix()->invalidateAdjacentGroups(o->getX(), o->getY(), gm);
-            lastCaptures = getLastCaptures(n);
-        }
-        else if(o->parent == n->parent)
-        {
-            n->getMatrix()->invalidateAdjacentGroups(o->getX(), o->getY(), gm);
-            n->getMatrix()->invalidateAdjacentGroups(n->getX(), n->getY(), gm);
-        }
-        else
-        {
-            n->getMatrix()->invalidateChangedGroups(*o->getMatrix(), gm);
-        }
-    }
-	
+    lastCaptures = getLastCaptures(n);
 	o = n;
 	return o;
-}
-
-void Tree::invalidateCheckPositionGroups(void)
-{
-	if(current == root)
-		return;
-	if(current == findLastMoveInMainBranch())
-		current->getMatrix()->invalidateAllGroups(groupMatrixCurrent);
-	else
-		current->getMatrix()->invalidateAllGroups(groupMatrixView);
 }
 
 /* These two functions are a little awkward here, just done to minimize
@@ -737,7 +670,6 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 {
     lastCaptures = 0;
-    Group ** gm = (current == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
 
     if ((x < 1 || x > boardSize || y < 1 || y > boardSize) && (x != 20 || y != 20))		//because 20,20 is pass, but ugly/unnecessary here FIXME
 	{
@@ -763,7 +695,14 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 		return false;
 
     std::vector<Group *> visited;
-    lastCaptures = current->getMatrix()->checkStoneCaptures(c,x,y,gm,visited);
+    std::vector<Group *>::iterator it_visited;
+    lastCaptures = current->getMatrix()->checkStoneCaptures(c,x,y,visited);
+    // FIXME should not have to delete these groups here
+    for (it_visited = visited.begin(); it_visited < visited.end(); ++it_visited)
+    {
+        delete (*it_visited);
+    }
+
     if (lastCaptures < 0)
         return false;
 
@@ -772,7 +711,8 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
 
 void Tree::addMove(StoneColor c, int x, int y)
 {
-    lastValidMoveChecked = new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
+    Move * lastValidMoveChecked =
+            new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
     koStoneX = 0;
     koStoneY = 0;
 
@@ -783,18 +723,14 @@ void Tree::addMove(StoneColor c, int x, int y)
             delete lastValidMoveChecked;
         else
             addSon(lastValidMoveChecked);
-        lastValidMoveChecked = NULL;
-		return;
+        return;
 	}
 
     if (insertStoneFlag)
     {
         insertStone(lastValidMoveChecked);
-        lastValidMoveChecked = NULL;
         return;
     }
-
-    Group ** gm = (current == findLastMoveInMainBranch() ? groupMatrixCurrent : groupMatrixView);
 
     if (c == stoneErase)
     {
@@ -804,7 +740,7 @@ void Tree::addMove(StoneColor c, int x, int y)
          * another point is that its not like a move in order, its like a separate tree, so addMove(stoneErase seems singularly
          * useless since we have to do something special with the tree anyway, i.e., no addSon, but maybe we go backwards and
          * delete some marker */
-        lastValidMoveChecked->getMatrix()->removeStoneFromGroups(x, y, c, gm);
+        lastValidMoveChecked->getMatrix()->insertStone(x, y, stoneErase);
     }
 
     if (hasSon(lastValidMoveChecked))
@@ -816,11 +752,9 @@ void Tree::addMove(StoneColor c, int x, int y)
         delete lastValidMoveChecked;
         return;
     }
-    lastCaptures = lastValidMoveChecked->getMatrix()->makeMoveIfNotSuicide(x, y, c, gm);
+    lastCaptures = lastValidMoveChecked->getMatrix()->makeMove(x, y, c);
     addSon(lastValidMoveChecked);
     checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
-
-	lastValidMoveChecked = NULL;
 
 	int capturesBlack, capturesWhite;
 	if (current->parent != NULL)

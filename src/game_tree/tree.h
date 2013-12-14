@@ -97,23 +97,17 @@ private:
     void checkAddKoMark(StoneColor c, int x, int y, Move * m = NULL);
 	int getLastCaptures(Move * m);
 	Move * assignCurrent(Move * & o, Move * & n);
-    void invalidateCheckPositionGroups(void);
-	void updateCurrentMatrix(StoneColor c, int x, int y);
-	void deleteGroupMatrices(void);
+    void updateCurrentMatrix(StoneColor c, int x, int y);
 
     const int boardSize;
 
 	Move *root, *current, *lastMoveInMainBranch;
 	Matrix * checkPositionTags;
 
-    Group ** groupMatrixView;
-    Group ** groupMatrixCurrent;
-
 	int koStoneX;
 	int koStoneY;
 	int lastCaptures;
-	Move * lastValidMoveChecked;
-	bool loadingSGF;
+    bool loadingSGF;
 };
 
 #endif
