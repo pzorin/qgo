@@ -620,14 +620,13 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 				break;
 				
 			case markNone:
+            case markTerrDame:
 				if (board->hasMark(x, y))
 				{
 					modified = true;
 					board->removeMark(x, y, false);
 				}
 			}
-
-
 		}
 	}
     return modified;
@@ -782,94 +781,10 @@ void BoardHandler::countScore(void)
 	
 	tree->getCurrent()->setScored(true);
 
-    // Copy the current matrix clearing all marks
-    Matrix *m = new Matrix(*current_matrix, true);
-	Q_CHECK_PTR(m);
+    caps_white = current_matrix->countDeadBlack();
+    caps_black = current_matrix->countDeadWhite();
 
-    caps_white = m->countDeadBlack();
-    caps_black = m->countDeadWhite();
-
-	terrWhite = 0;
-	terrBlack = 0;
-	
-    int i,j;
-	while (m != NULL)
-	{
-		bool found = false;
-			
-        for (i=0; i< boardSize; i++)
-		{	
-            for (j=0; j< boardSize; j++)
-			{
-                if (m->at(i, j) == stoneNone || (m->at(i, j) & MX_STONEDEAD))
-				{
-					found = true;
-					break;
-				}
-			}
-			if (found)
-				break;
-		}
-		
-		if (!found)
-			break;
-		
-		// Traverse the enclosed territory. Resulting color is in col afterwards
-		StoneColor col = stoneNone;
-		m->traverseTerritory( i, j, col);
-		
-		// Now turn the result into real territory or dame points
-        for (i=0; i<boardSize; i++)
-		{
-            for (j=0; j<boardSize; j++)
-			{
-				if (m->at(i, j) == MARK_TERRITORY_VISITED)
-				{
-					// Black territory
-					if (col == stoneBlack)
-					{
-						current_matrix->removeMark(i+1, j+1);
-						current_matrix->insertMark(i+1, j+1, markTerrBlack);
-						terrBlack ++;
-						m->set(i, j, MARK_TERRITORY_DONE_BLACK);
-					}
-					// White territory
-					else if (col == stoneWhite)
-					{
-						current_matrix->removeMark(i+1, j+1);
-						current_matrix->insertMark(i+1, j+1, markTerrWhite);
-						terrWhite ++;
-						m->set(i, j, MARK_TERRITORY_DONE_WHITE);
-					}
-					// Dame
-					else
-						m->set(i, j, MARK_TERRITORY_DAME);
-				}
-			}
-		}
-	}
-	
-	// Finally, remove all false eyes that have been marked as territory. This
-	// has to be here, as in the above loop we did not find all dame points yet.
-    for (i = 0; i < boardSize; i++)
-	{
-        for (j = 0; j < boardSize; j++)
-		{
-			if (	m->at(i, j) == MARK_TERRITORY_DONE_BLACK ||
-				m->at(i, j) == MARK_TERRITORY_DONE_WHITE) 
-			{
-				StoneColor col = (m->at(i, j) == MARK_TERRITORY_DONE_BLACK ? stoneBlack : stoneWhite);
-				if (m->checkfalseEye(i, j, col)) 
-				{
-					current_matrix->removeMark(i + 1, j + 1);
-					if (col == stoneBlack)
-						terrBlack--;
-					else
-						terrWhite--;
-				}
-			}
-		}
-	}
+    current_matrix->markTerritory(terrBlack,terrWhite);
 	// Mark the move having territory marks
 	tree->getCurrent()->setTerritoryMarked(true);
 	// Paint the territory on the board
@@ -879,8 +794,6 @@ void BoardHandler::countScore(void)
 	boardwindow->getInterfaceHandler()->setScore(terrBlack, capturesBlack  + caps_black,
 		terrWhite, capturesWhite + caps_white ,
 		boardwindow->getGameData()->komi);
-	
-	delete m;
 }
 
 void BoardHandler::countMarked(void)

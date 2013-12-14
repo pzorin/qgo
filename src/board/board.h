@@ -45,7 +45,7 @@ public:
 	~Board();
 	void clearData();
     void init(int size);
-	void setCoordType(CoordType c) { coordType = c; };
+    void setCoordType(CoordType c) { coordType = c; }
 	void setShowCoords(bool b);
     void resizeBoard();
 

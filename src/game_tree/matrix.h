@@ -28,22 +28,13 @@
 /*
 * Marks used in editing a game
 */
-/* FIXME, I multiplied these by 10 because they prevented the use of countLiberties
- * by checkfalseEye by corrupting the stone.  It seems to me rather silly to
- * have defines like these in addition to the marking system, but they are sort
- * of internal marks.  At any rate, things still seem to work so I guess
- * this fixed things.  But its still ugly and there could still be more problems */
-#define MARK_TERRITORY_VISITED    0x0800
-#define MARK_TERRITORY_DAME       0x0400
-#define MARK_SEKI                 0x1000
-#define MARK_TERRITORY_DONE_BLACK 0x0200
-#define MARK_TERRITORY_DONE_WHITE 0x0100
+#define MARK_TERRITORY_VISITED    0x1000
 
 //first nibble is for stone color/erase
 #define MX_STONEDEAD	0x8000
 #define MX_STONEEDIT	0x4000
 
-// #define MX_STONEDIRTY	0x2000 // free
+#define MX_VISITED	0x2000
 
 class Group;
 
@@ -71,16 +62,13 @@ public:
 	void removeMark(int x, int y);
 	void setMarkText(int x, int y, const QString &txt);
 	const QString getMarkText(int x, int y);
-	unsigned short at(int x, int y) const;
-	void set(int x, int y, int n);
-	void clearAllMarks();
+    void clearAllMarks();
 	void clearTerritoryMarks();
 	void absMatrix();
 	const QString saveMarks();
 	const QString saveEditedMoves(Matrix *parent=0);
 	const QString printMe(ASCII_Import *charset);
 
-    void traverseTerritory( int x, int y, StoneColor &col);
     int checkStoneCaptures(StoneColor ourColor, int x, int y, Group ** gm, std::vector<Group *> &visited) const;
     void removeGroup(Group * g, Group ** gm, Group * killer);
     void removeStoneFromGroups(int x, int y, StoneColor ourColor, Group ** gm);
@@ -88,8 +76,7 @@ public:
     void invalidateAdjacentGroups(int x, int y, Group ** gm);
     void invalidateAllGroups(Group ** gm);
 
-	bool checkfalseEye( int x, int y, StoneColor col);
-	void toggleGroupAt( int x, int y );
+    void toggleGroupAt( int x, int y );
 	void toggleStoneAt(int x, int y);
 	void markStoneDead(int x, int y);
 	void markGroupDead(int x, int y);
@@ -100,16 +87,12 @@ public:
 	void updateDeadMarks(int &black, int &white);
     int countDeadWhite();
     int countDeadBlack();
+    void markTerritory(int &terrBlack, int &terrWhite);
 
     static const QString coordsToString(int x, int y)
     { return QString(QChar(static_cast<const char>('a' + x))).append(QChar(static_cast<const char>('a' + y))); }
 
     int makeMoveIfNotSuicide(int x, int y, StoneColor c, Group **gm);
-protected:
-    friend class Group;
-
-    // This function returns a list of keys of points adjacent to the point "key".
-    std::vector<int> getNeighbors(int key) const;
 
 private:
     int internalCoordsToKey(int i, int j) const { return i*size + j; }
@@ -117,8 +100,6 @@ private:
     void keyToCoords(int key, int &x, int &y) const
     { x = key / size; y = key - (x++)*size + 1; }
 
-    unsigned short at(int key) const;
-    void set(int key, int n);
     StoneColor getStoneAt(int key) const;
     MarkType getMarkAt(int key) const;
     void insertStone(int key, StoneColor c, bool fEdit = false);
@@ -130,9 +111,10 @@ private:
     void findInvalidAdjacentGroups(Group * g, Group ** gm, std::vector<Group*> & groupList);
     int sharedLibertyWithGroup(int x, int y, Group * g, Group ** gm);
     Group* checkNeighbour(int key, StoneColor color, Group *group, Group ** gm = NULL, std::vector<int> * libertyList = NULL) const;
-    int countLiberties(Group *group);
-    int countScoredLiberties(Group *group);
+    int countLiberties(Group *group, unsigned short mask = stoneBlack|stoneWhite);
     Group* assembleAreaGroups(int key, StoneColor c);
+    // This function returns a list of keys of points adjacent to the point "key".
+    std::vector<int> getNeighbors(int key) const;
 
     unsigned short * matrix;
     const int size;

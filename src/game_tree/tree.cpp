@@ -756,7 +756,7 @@ bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
         (current->getMatrix()->getStoneAt(x, y) == stoneWhite))
         return false;
 
-    bool koStone = ((current->getMoveNumber() > 1) && (current->parent->getMatrix()->at(x-1, y-1) == c));
+    bool koStone = ((current->getMoveNumber() > 1) && (current->parent->getMatrix()->getStoneAt(x, y) == c));
 
 	//check for ko
 	if(koStone && x == koStoneX && y == koStoneY)

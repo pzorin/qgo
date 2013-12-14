@@ -21,7 +21,6 @@
 
 
 #include "group.h"
-#include "matrix.h"
 
 void Group::remove(int key)
 {

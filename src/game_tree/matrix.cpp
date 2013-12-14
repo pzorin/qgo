@@ -43,7 +43,7 @@ Matrix::Matrix(const Matrix &m, bool cleanup)
     matrix = new unsigned short[size*size];
 	Q_CHECK_PTR(matrix);
 
-    unsigned short mask = (cleanup ? 0x000f | MX_STONEDEAD : 0x2fff); //clearAllMarks : absMatrix
+    unsigned short mask = (cleanup ? 0x000f | MX_STONEDEAD : 0x0fff);
     for (int i=0; i<size*size; ++i)
         matrix[i] = m.matrix[i] & mask;
 }
@@ -74,23 +74,9 @@ void Matrix::insertStone(int x, int y, StoneColor c, bool fEdit)
     insertStone(coordsToKey(x,y),c,fEdit);
 }
 
-unsigned short Matrix::at(int key) const
-{
-    return matrix[key];
-}
-
-unsigned short Matrix::at(int x, int y) const
-{
-    //qDebug("assert line %d: %d %d < %d", __LINE__, x, y, size);
-    Q_ASSERT(x >= 0 && x < size &&
-        y >= 0 && y < size);
-
-    return at(internalCoordsToKey(x,y));
-}
-
 StoneColor Matrix::getStoneAt(int key) const
 {
-    return  (StoneColor) (matrix[key] & 0x000f);
+    return  (StoneColor) (matrix[key] & 0x3);
 }
 
 StoneColor Matrix::getStoneAt(int x, int y)
@@ -112,7 +98,7 @@ bool Matrix::isStoneDead(int x, int y)
 
 MarkType Matrix::getMarkAt(int key) const
 {
-    return  (MarkType) ((matrix[key] >> 4) & 0x000f);
+    return  (MarkType) (matrix[key] & markAll);
 }
 
 MarkType Matrix::getMarkAt(int x, int y)
@@ -122,24 +108,12 @@ MarkType Matrix::getMarkAt(int x, int y)
     return  getMarkAt(coordsToKey(x,y));
 }
 
-void Matrix::set(int key, int n)
-{
-    matrix[key] = n;
-}
-
-void Matrix::set(int x, int y, int n)
-{
-    Q_ASSERT(x >= 0 && x < size &&
-        y >= 0 && y < size);
-
-    set(internalCoordsToKey(x,y), n);
-}
-
 void Matrix::insertMark(int x, int y, MarkType t)
 {
 	Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
 
-    matrix[coordsToKey(x,y)] |= (t << 4);
+    matrix[coordsToKey(x,y)] &= (~markAll);
+    matrix[coordsToKey(x,y)] |= t;
 }
 
 void Matrix::removeMark(int x, int y)
@@ -147,8 +121,7 @@ void Matrix::removeMark(int x, int y)
 	Q_ASSERT(x > 0 && x <= size &&
 		y > 0 && y <= size);
 	
-    matrix[coordsToKey(x,y)] &= 0xff0f;
-
+    matrix[coordsToKey(x,y)] &= (~markAll);
     markTexts.remove(coordsToKey(x,y));
 }
 
@@ -158,23 +131,15 @@ void Matrix::clearAllMarks()
 	
     for (int i=0; i<size*size; ++i)
     {
-        matrix[i] &= (0x000f | MX_STONEDEAD);
+        matrix[i] &= (~markAll);
     }
     markTexts.clear();
 }
 
 void Matrix::clearTerritoryMarks()
 {
-	Q_ASSERT(size > 0 && size <= 36);
-	
-	int data;
-	
     for (int i=0; i<size*size; ++i)
-            if ((data = getMarkAt(i)) == markTerrBlack ||
-				data == markTerrWhite)
-			{
-                matrix[i] &= (0x000f | MX_STONEDEAD);
-			}
+        matrix[i] &= (~markTerrDame);
 }
 
 // Called when leaving score mode
@@ -434,20 +399,18 @@ const QString Matrix::printMe(ASCII_Import *charset)
 Group* Matrix::checkNeighbour(int key, StoneColor color, Group *group, Group **gm, std::vector<int> *libertyList) const
 {
     StoneColor c = getStoneAt(key);
-    if(gm && c == stoneNone)
+    if(c != color)
     {
-        if((libertyList) && (std::find(libertyList->begin(), libertyList->end(), key) == libertyList->end()))
+        if((libertyList) && (c == stoneNone)
+                && (std::find(libertyList->begin(), libertyList->end(), key) == libertyList->end()))
 		{
             libertyList->push_back(key);
 			group->liberties++;
 		}
 		return group;
-	}
-	else if(c != color)
-		return group;
+    }
 
-    int pos = group->indexOf(key);
-    if ((pos == -1) || (color != group->c))
+    if (!(group->contains(key)))
 	{
         group->append(key);
         if(gm)
@@ -456,14 +419,15 @@ Group* Matrix::checkNeighbour(int key, StoneColor color, Group *group, Group **g
 	return group;
 }
 
-/*
- * Counts and returns the number of liberties of a group of adjacetn stones
- * Since we replaced checkPosition, this might only be called by checkfalseEye
- * if anything.  */
-int Matrix::countLiberties(Group *group) 
+/* Counts and returns the number of liberties of a group.
+ * What does not count as a liberty is determined by "mask".
+ * By default "mask" is set to black and white stones,
+ * so any unoocupied point counts as a liberty.
+ * One can put opponent's territory into mask to exclude dame points
+ * from liberties. This is useful for detecting false eyes. */
+int Matrix::countLiberties(Group *group, unsigned short mask)
 {
-	int liberties = 0;
-	QList<int> libCounted;
+    QVector<int> libCounted;
 	
 	// Walk through the horizontal and vertial directions, counting the
 	// liberties of this group.
@@ -473,89 +437,43 @@ int Matrix::countLiberties(Group *group)
         std::vector<int>::iterator it_neighbor;
         for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
         {
-            if ( (getStoneAt(*it_neighbor) == stoneNone ) &&
+            if ( !(matrix[*it_neighbor] & mask) &&
                  !libCounted.contains(*it_neighbor))
             {
                   libCounted.append(*it_neighbor);
-                  liberties ++;
             }
 
         }
     }
-	return liberties;
-}
-
-/*
- * Same as above, but used for the scoring phase
- */
-int Matrix::countScoredLiberties(Group *group)
-{
-	int liberties = 0;
-	QList<int> libCounted;
-	
-	// Walk through the horizontal and vertial directions, counting the
-	// liberties of this group.
-	for ( int i=0; i<group->count(); i++)
-    {
-        std::vector<int> neighbors = getNeighbors(group->at(i));
-        std::vector<int>::iterator it_neighbor;
-        for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
-        {
-            if ( ((at(*it_neighbor) & MARK_TERRITORY_DONE_BLACK) ||
-                (at(*it_neighbor) & MARK_TERRITORY_DONE_WHITE)) &&
-                 !libCounted.contains(*it_neighbor))
-            {
-                libCounted.append(*it_neighbor);
-                liberties ++;
-            }
-        }
-    }
-	return liberties;
+    return libCounted.size();
 }
 
 /*
  * Explores a territorry for marking all of its enclosure
  */
-void Matrix::traverseTerritory( int x, int y, StoneColor &col)
-{
-    Q_ASSERT(x >= 0 && x < size && y >= 0 && y < size);
-    traverseTerritory(internalCoordsToKey(x,y),col);
-}
-
 void Matrix::traverseTerritory( int key, StoneColor &col)
 {
     // Mark visited
-    set(key, MARK_TERRITORY_VISITED);
+    matrix[key] |= MARK_TERRITORY_VISITED;
 
     std::vector<int> neighbors = getNeighbors(key);
     std::vector<int>::iterator it_neighbor;
-    bool flag;
     for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
     {
-        // Default: a stone, correct color, or already visited, or seki. Dont continue
-        flag = false;
-        // No stone ? Continue
-        if (at(*it_neighbor) == 0 || (at(*it_neighbor) & MX_STONEDEAD))
-            flag = true;
-        // A stone, but no color found yet? Then set this color and dont continue
-        // The stone must not be marked as alive in seki.
-        else if (col == stoneNone && at(*it_neighbor) < MARK_SEKI)
+        // Disregard visited points
+        if (matrix[*it_neighbor] & MARK_TERRITORY_VISITED)
+            continue;
+
+        // If we find a stone that is not dead, we put its color into "col"
+        // TODO: handle seki properly
+        if ((getStoneAt(*it_neighbor) != stoneNone) && !(matrix[*it_neighbor] & MX_STONEDEAD))
         {
-            col = getStoneAt(*it_neighbor);
-            flag = false;
+            col = (StoneColor)(col | getStoneAt(*it_neighbor));
+            continue;
         }
-        // A stone, but wrong color? Set abort flag but continue to mark the rest of the dame points
-        else
-        {
-            if ( ((col == stoneBlack) && (at(*it_neighbor) == stoneWhite)) ||
-                 ((col == stoneWhite) && (at(*it_neighbor) == stoneBlack)) )
-            {
-                col = stoneErase;
-                flag = false;
-            }
-        }
-        if (flag)
-            traverseTerritory(*it_neighbor,col);
+
+        // The remaining possibilities are dead stones or emty territory: go there
+        traverseTerritory(*it_neighbor,col);
     }
 }
 
@@ -894,31 +812,17 @@ Group* Matrix::assembleAreaGroups(int key, StoneColor c)
 	return group;
 }
 
-/*
- * Returns true if the stone at x,y belongs to a groups with only 1 liberty
- * Previously checkfalseEye worked on the scored liberties.  The problem
- * was that it missed certain eyes on disconnected groups that could be
- * connected.  I don't know why it would only look at scored liberties.
- * If group is dead that's another matter, but I don't think that's an
- * issue. 
-*/
-/* Irritatingly, and unlike other functions, the valid range of arguments is
- * 0<= x,y < size */
-bool Matrix::checkfalseEye( int x, int y, StoneColor col)
-{
-    Q_ASSERT(x >= 0 && x < size && y >= 0 && y < size);
-    return checkfalseEye(internalCoordsToKey(x,y),col);
-}
-
 bool Matrix::checkfalseEye( int key, StoneColor col)
 {
+    unsigned short mask = stoneBlack | stoneWhite;
+    mask |= (col == stoneBlack ? markTerrWhite : markTerrBlack);
     std::vector<int> neighbors = getNeighbors(key);
     std::vector<int>::iterator it_neighbor;
     for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
     {
         if (getStoneAt(*it_neighbor) == col)
         {
-            if (countLiberties(assembleGroup(*it_neighbor,col)) == 1)
+            if (countLiberties(assembleGroup(*it_neighbor,col), mask) == 1)
                 return true;
         }
     }
@@ -1025,6 +929,71 @@ int Matrix::countDeadBlack()
         if ((matrix[i] & MX_STONEDEAD) && (getStoneAt(i) == stoneBlack))
             ++result;
     return result;
+}
+
+void Matrix::markTerritory(int & terrBlack, int & terrWhite)
+{
+    terrWhite = 0;
+    terrBlack = 0;
+    int i,j;
+
+    for (i=0; i<size*size; ++i)
+        matrix[i] &= (~MX_VISITED); // Mark all points as not visited
+
+    StoneColor col;
+    for (i=0; i<size*size; ++i)
+    {
+        if ((!(matrix[i] & MX_VISITED)) && (getStoneAt(i) == stoneNone))
+        {
+            // Only count territory starting from empty points
+            col = stoneNone;
+            traverseTerritory( i, col);
+            unsigned short mark = 0;
+            if (col & stoneWhite)
+                mark |= markTerrWhite;
+            if (col & stoneBlack)
+                mark |= markTerrBlack;
+            int terr = 0;
+            for (j=0; j<size*size; ++j)
+            {
+                if (matrix[j] & MARK_TERRITORY_VISITED)
+                {
+                    matrix[j] &= (~MARK_TERRITORY_VISITED);
+                    matrix[j] |= mark;
+                    matrix[j] |= MX_VISITED;
+                    ++terr;
+                }
+            }
+            if (col == stoneWhite)
+                terrWhite += terr;
+            if (col == stoneBlack)
+                terrBlack += terr;
+        }
+    }
+
+    // Finally, remove all false eyes that have been marked as territory. This
+    // has to be here, as in the above loop we did not find all dame points yet.
+    // FIXME: handle false eyes and seki properly.
+    /*for (i=0; i<size*size; ++i)
+    {
+        MarkType mark = getMarkAt(i);
+        if (mark == markTerrBlack)
+        {
+            if (checkfalseEye(i,stoneBlack))
+            {
+                matrix[i] &= 0xff0f;
+                --terrBlack;
+            }
+        }
+        if (mark == markTerrWhite)
+        {
+            if (checkfalseEye(i,stoneWhite))
+            {
+                matrix[i] &= 0xff0f;
+                --terrWhite;
+            }
+        }
+    }*/
 }
 
 /*
