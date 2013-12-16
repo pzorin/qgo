@@ -55,6 +55,9 @@
         <property name="text">
          <string>Disconnect</string>
         </property>
+        <property name="icon">
+         <iconset theme="network-disconnect"/>
+        </property>
         <property name="checkable">
          <bool>true</bool>
         </property>

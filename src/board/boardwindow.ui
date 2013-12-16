@@ -3095,7 +3095,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-first" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/2leftarrow.png</normaloff>:/boardicons/resources/pics/2leftarrow.png</iconset>
               </property>
               <property name="flat">
@@ -3118,7 +3118,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-previous" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/previous.png</normaloff>:/boardicons/resources/pics/previous.png</iconset>
               </property>
               <property name="flat">
@@ -3141,7 +3141,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-next" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/next.png</normaloff>:/boardicons/resources/pics/next.png</iconset>
               </property>
               <property name="flat">
@@ -3164,7 +3164,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-last" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/2rightarrow.png</normaloff>:/boardicons/resources/pics/2rightarrow.png</iconset>
               </property>
               <property name="flat">
@@ -3301,7 +3301,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-top" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/top.png</normaloff>:/boardicons/resources/pics/top.png</iconset>
               </property>
               <property name="flat">
@@ -3324,7 +3324,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-up" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/up.png</normaloff>:/boardicons/resources/pics/up.png</iconset>
               </property>
               <property name="flat">
@@ -3370,7 +3370,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-down" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/down.png</normaloff>:/boardicons/resources/pics/down.png</iconset>
               </property>
               <property name="flat">
@@ -3393,7 +3393,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="board.qrc">
+               <iconset theme="go-bottom" resource="board.qrc">
                 <normaloff>:/boardicons/resources/pics/bottom.png</normaloff>:/boardicons/resources/pics/bottom.png</iconset>
               </property>
               <property name="flat">
@@ -4246,7 +4246,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="board.qrc">
+                 <iconset theme="edit-cut" resource="board.qrc">
                   <normaloff>:/boardicons/resources/pics/editcut.png</normaloff>:/boardicons/resources/pics/editcut.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -5405,7 +5405,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="window-close" resource="board.qrc">
      <normaloff>:/boardicons/resources/pics/exit2.png</normaloff>:/boardicons/resources/pics/exit2.png</iconset>
    </property>
    <property name="text">
@@ -5441,7 +5441,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="document-import" resource="board.qrc">
      <normaloff>:/boardicons/resources/pics/import2.png</normaloff>:/boardicons/resources/pics/import2.png</iconset>
    </property>
    <property name="text">
@@ -5474,7 +5474,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionWhatsThis">
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="help-contextual" resource="board.qrc">
      <normaloff>:/boardicons/resources/pics/contexthelp.png</normaloff>:/boardicons/resources/pics/contexthelp.png</iconset>
    </property>
    <property name="text">
@@ -5483,7 +5483,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   </action>
   <action name="actionDuplicate">
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="window-duplicate" resource="board.qrc">
      <normaloff>:/boardicons/resources/pics/duplicate.png</normaloff>:/boardicons/resources/pics/duplicate.png</iconset>
    </property>
    <property name="text">
@@ -5513,7 +5513,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="board.qrc">
+    <iconset theme="media-playback-start" resource="board.qrc">
      <normaloff>:/boardicons/resources/pics/player_play.png</normaloff>:/boardicons/resources/pics/player_play.png</iconset>
    </property>
    <property name="text">

@@ -101,7 +101,7 @@
         <string>Go server</string>
        </property>
        <property name="icon">
-        <iconset resource="application.qrc">
+        <iconset theme="applications-internet" resource="application.qrc">
          <normaloff>:/resources/pics/toolbar_1.png</normaloff>:/resources/pics/toolbar_1.png</iconset>
        </property>
       </item>
@@ -1522,7 +1522,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
   </action>
   <action name="actionConnect">
    <property name="icon">
-    <iconset theme="network-transmit-receive" resource="application.qrc">
+    <iconset theme="network-connect" resource="application.qrc">
      <normaloff>:/resources/pics/connect_no2.png</normaloff>:/resources/pics/connect_no2.png</iconset>
    </property>
    <property name="text">
