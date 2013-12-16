@@ -72,9 +72,7 @@ void LGSConnection::onReady(void)
 		//dispatch->recvRoomListing(new RoomListing(0, "Lobby"));
 		//sendRoomListRequest();
 		//qDebug("Ready!\n");
-	}
-	writeReady = true;
-	writeFromBuffer();
+    }
 }
 
 void LGSConnection::handle_info(QString line)

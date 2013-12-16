@@ -50,8 +50,7 @@ IGSConnection::IGSConnection(const ConnectionCredentials credentials)
 
 void IGSConnection::init(void)
 {
-	writeReady = false;
-	keepAliveTimer = 0;
+    keepAliveTimer = 0;
 	playersListRefreshTimer = 0;
 	gamesListRefreshTimer = 0;
 	textCodec = QTextCodec::codecForLocale();
@@ -87,15 +86,8 @@ void IGSConnection::sendText(QString text)
 	//text += "\r\n";
 	qDebug("sendText: %s", text.toLatin1().constData());
 	QByteArray raw = textCodec->fromUnicode(text);
-    bool wr=writeReady;
 	if(write(raw.data(), raw.size()) < 0)
 		qWarning("*** failed sending to host: %s", raw.data());
-	else
-	{
-		if(wr)
-			writeReady = true;
-		//write("\r\n", 2);
-	}
 }
 
 /* This is kind of ugly, but we can't add sending return-newline to
@@ -108,8 +100,7 @@ void IGSConnection::sendText(QString text)
  * and also write an additional newline...*/
 void IGSConnection::sendText(const char * text)
 {
-	if(write(text, strlen(text)) < 0)
-		qWarning("*** failed sending to host: %s", text);
+    sendText(QString(text));
 }
 
 void IGSConnection::sendDisconnect(void)
@@ -599,8 +590,7 @@ void IGSConnection::handleLogin(QString msg)
 	if(msg.contains("Login:") > 0)
 	{
 		qDebug("Login found\n");
-		writeReady = true;
-		QString u = username + "\r\n";
+        QString u = username + "\r\n";
 		sendText(u.toLatin1().constData());	
         setState(PASSWORD);
 	}
@@ -622,8 +612,7 @@ void IGSConnection::handlePassword(QString msg)
 	if(msg.contains("Password:") > 0 || msg.contains("1 1") > 0)
 	{
 		qDebug("Password prompt or 1 1 found");
-		writeReady = true;
-		if(password == QString())
+        if(password == QString())
 		{
 			onAuthenticationNegotiated();
 		}
@@ -636,8 +625,7 @@ void IGSConnection::handlePassword(QString msg)
 	}
 	else if(msg.contains("guest"))
 	{
-		qDebug("Guest account");
-		writeReady = true;
+        qDebug("Guest account");
         setState(PASSWORD_SENT);
 		guestAccount = true;
 	}
@@ -647,12 +635,8 @@ void IGSConnection::onAuthenticationNegotiated(void)
 {
 	needToSendClientToggle = false;
 	sendToggleClientOn();
-	writeReady = true;		//are both necessary?
-	writeFromBuffer();
-	NetworkConnection::onAuthenticationNegotiated();
+    NetworkConnection::onAuthenticationNegotiated();
 	NetworkConnection::onReady();
-	writeReady = true;
-	writeFromBuffer();
 }
 
 void IGSConnection::onReady(void)
@@ -714,9 +698,7 @@ void IGSConnection::onReady(void)
 		sendListChannels();
 
 		qDebug("Ready!\n");
-	}
-	writeReady = true;
-	writeFromBuffer();
+    }
 }
 
 /* In case we want to add updates every so often */
@@ -880,12 +862,6 @@ void IGSConnection::sendNmatchParameters(void)
 
 bool IGSConnection::readyToWrite(void)
 {
-	if(writeReady)
-	{
-		writeReady = false;
-		return true;
-	}
-	return false;
 }
 
 #define IGS_LOGINMSG		0

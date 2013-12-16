@@ -25,7 +25,6 @@
 #include <QtNetwork>
 #include "networkconnection.h"
 #include "messages.h"
-#include "newline_pipe.h"
 #include <vector>
 #include <stdint.h>
 

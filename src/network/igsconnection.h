@@ -25,7 +25,6 @@
 #include <QtNetwork>
 #include "networkconnection.h"
 #include "messages.h"
-#include "newline_pipe.h"
 #include "gamedata.h"
 
 class BoardDispatch;
@@ -95,8 +94,7 @@ class IGSConnection : public NetworkConnection
         virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); }
 			
 	protected:
-		virtual bool readyToWrite(void);
-        virtual void setReadyToWrite(void) { writeReady = true; }
+        virtual bool readyToWrite(void);
 		virtual void onAuthenticationNegotiated(void);
 		virtual void setKeepAlive(int);
 		void handleLogin(QString msg);
@@ -142,8 +140,7 @@ class IGSConnection : public NetworkConnection
 		unsigned int idleTimeToSeconds(QString time);
 		void fixRankString(QString * rank);
 		PlayerListing * getPlayerListingNeverFail(QString & name);
-		
-		bool writeReady;
+
 		int keepAliveTimer;
 		int playersListRefreshTimer;
 		int gamesListRefreshTimer;

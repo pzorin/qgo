@@ -26,7 +26,6 @@
 #include <QtCore>
 #include <QtNetwork>
 #include "messages.h"
-#include "newline_pipe.h"
 
 class GameListing;
 class PlayerListing;
@@ -261,11 +260,9 @@ public:
 	protected:
 		void closeConnection(bool send_disconnect = true);
         virtual bool readyToWrite(void) { return true; }
-        virtual void setReadyToWrite(void) {}
         virtual void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
         QTcpSocket * getQSocket(void) { return qsocket; }
-		void writeFromBuffer(void);
         void writeZeroPaddedString(char * dst, const QString & src, int size);
         bool openConnection(const QString & host, const unsigned short port, bool not_main_connection = false);
 		void latencyOnSend(void);
@@ -277,8 +274,6 @@ public:
 		Room * default_room;
 		ConsoleDispatch * console_dispatch;
 		
-		newline_pipe <unsigned char> send_buffer;	//not always used
-
         ConnectionType connectionType;
         QString hostname;
         qint16 port;

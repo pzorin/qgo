@@ -97,43 +97,7 @@ bool NetworkConnection::openConnection(const QString & host, const unsigned shor
 
 int NetworkConnection::write(const char * packet, unsigned int size)
 {
-	if(readyToWrite())
-	{
-		int len;	
-		
-       		if ((len = qsocket->write(packet, size)) < 0)
-			return len;
-	}
-	else
-		send_buffer.write((unsigned char *)packet, size);
-	return 0;
-}
-
-/* This is only called by network connection subclasses that
- * want to do things this way. *cough* IGS */
-void NetworkConnection::writeFromBuffer(void)
-{
-	int len, size;
-	unsigned char packet[256];	//no commands are more than 255, right now
-	while(readyToWrite())
-	{
-		size = send_buffer.canReadLine();
-		if(size > 255)
-		{
-			//FIXME qWarning, better error?
-			qDebug("send buffer line too large !!!!");
-			exit(0);
-		}
-		else if(size == 0)
-		{
-			setReadyToWrite();
-			return;
-		}
-		send_buffer.readLine(static_cast<unsigned char *>(packet), 255);	
-		//size presumably == return value... 
-		if ((len = qsocket->write(reinterpret_cast<const char *>(packet), size)) < 0)
-			qDebug("Write error!!");	//qWarning FIXME
-	}
+    return qsocket->write(packet, size);
 }
 
 void NetworkConnection::writeZeroPaddedString(char * dst, const QString & src, int size)

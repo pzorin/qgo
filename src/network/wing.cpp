@@ -166,8 +166,6 @@ void WingConnection::onReady(void)
 		sendGamesRequest();
 		qDebug("Ready!");
 	}
-	writeReady = true;
-	writeFromBuffer();
 }
 
 void WingConnection::handle_info(QString line)

@@ -43,7 +43,6 @@ displayboard.h \
 gamedata.h \
 listviews.h \
 mainwindow.h \
-newline_pipe.h \
 audio/audio.h \
 game_tree/group.h \
 game_tree/matrix.h \
