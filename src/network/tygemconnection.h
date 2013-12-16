@@ -79,7 +79,7 @@ class TygemConnection : public NetworkConnection
 		virtual void sendRefuseDrawRequest(class GameData * data);
 		virtual void sendRejectCount(class GameData * data);
 		virtual void sendAcceptCount(class GameData * data);
-		virtual void handlePendingData(newline_pipe <unsigned char> * p);
+		virtual void handlePendingData();
         virtual void onReady(void);
 		virtual void changeServer(void);
 		virtual void createRoom(void);
@@ -238,6 +238,7 @@ class TygemConnection : public NetworkConnection
 		int time_to_seconds(const QString & time);
 		
 		unsigned int http_connect_content_length;
+        bool http_response_checked;
 		/* We should really just have the player listing for ourself FIXME */
 		unsigned short our_player_id;
 		bool opponent_is_challenger;

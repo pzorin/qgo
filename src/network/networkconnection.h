@@ -151,7 +151,7 @@ public:
         ConsoleDispatch * getConsoleDispatch(void) { return console_dispatch; }
         Room * getDefaultRoom(void) { return default_room; }
 		class PlayerListing * getPlayerListingFromFriendWatchListing(class FriendWatchListing & f);
-        virtual void handlePendingData(newline_pipe <unsigned char> * p) = 0;
+        virtual void handlePendingData() = 0;
         virtual void changeServer(void) {}
         virtual void createRoom(void) {}
         virtual void sendCreateRoom(class RoomCreate *) {}
@@ -277,8 +277,6 @@ public:
 		Room * default_room;
 		ConsoleDispatch * console_dispatch;
 		
-		
-		newline_pipe <unsigned char> pending;
 		newline_pipe <unsigned char> send_buffer;	//not always used
 
         ConnectionType connectionType;
@@ -298,6 +296,8 @@ public:
 		MatchNegotiationState * match_negotiation_state;
 		int lastMainTimeChecked, lastPeriodTimeChecked, lastPeriodsChecked;
 
+        QTcpSocket * qsocket;
+
 	private:
 		void setupRoomAndConsole(void);
 		void tearDownRoomAndConsole(void);
@@ -305,8 +305,6 @@ public:
 		void savefriendswatches(void);
 
 		void drawPleaseWait(void);
-		
-		QTcpSocket * qsocket;	//unnecessary?
 		
 		Room * mainwindowroom;
 

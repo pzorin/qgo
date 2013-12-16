@@ -548,62 +548,50 @@ void IGSConnection::sendListChannels(void)
 	sendText("channels\r\n");
 }
 
-void IGSConnection::handlePendingData(newline_pipe <unsigned char> * p)
+void IGSConnection::handlePendingData()
 {
-	char * c;
 	int bytes;
 
 	switch(connectionState)
-	{
-		case LOGIN:
-			bytes = p->canRead();
-			if(bytes)
-			{
-				c = new char[bytes + 1];
-				c[bytes] = '\0';
-				p->read((unsigned char *)c, bytes);
-				handleLogin(QString(c));
-				delete[] c;
-			}
-			break;
-		case PASSWORD:
-			bytes = p->canRead();
-			if(bytes)
-			{
-				c = new char[bytes + 1];
-				c[bytes] = '\0';
-				p->read((unsigned char *)c, bytes);
-				handlePassword(QString(c));
-				delete[] c;
-			}
-			break;
-		case PASSWORD_SENT:
-		case CONNECTED:
-			while((bytes = p->canReadLine()))
-			{
-				c = new char[bytes + 1];
-				c[bytes] = '\0';
-				bytes = p->readLine((unsigned char *)c, bytes);
-				QString unicodeLine = textCodec->toUnicode(c);
-				//unicodeLine.truncate(unicodeLine.length() - 1);
-				handleMessage(unicodeLine);
-				delete[] c;
-			}
-			break;
-		case AUTH_FAILED:
-			qDebug("Auth failed\n");
-			break;
-		case PASS_FAILED:
-			qDebug("Pass failed\n");
-			break;
-		case PROTOCOL_ERROR:
-			//wait for someone to destroy the connection
-			//can't imagine why we're even here
-			break;
-		default:
-			qDebug("Connection State not related to IGS protocol!!!");
-			break;
-	}
+    {
+    case LOGIN:
+        bytes = qsocket->bytesAvailable();
+        if(bytes)
+        {
+            QByteArray data = qsocket->readAll();
+            handleLogin(QString(data));
+        }
+        break;
+    case PASSWORD:
+        bytes = qsocket->bytesAvailable();
+        if(bytes)
+        {
+            QByteArray data = qsocket->readAll();
+            handlePassword(QString(data));
+        }
+        break;
+    case PASSWORD_SENT:
+    case CONNECTED:
+        while(qsocket->canReadLine())
+        {
+            QByteArray data = qsocket->readLine();
+            handleMessage(QString(data));
+        }
+        break;
+    case AUTH_FAILED:
+        qDebug("Auth failed\n");
+        break;
+    case PASS_FAILED:
+        qDebug("Pass failed\n");
+        break;
+    case PROTOCOL_ERROR:
+        //wait for someone to destroy the connection
+        //can't imagine why we're even here
+        break;
+    default:
+        qDebug("Connection State not related to IGS protocol!!!");
+        break;
+    }
 }
 
 void IGSConnection::handleLogin(QString msg)

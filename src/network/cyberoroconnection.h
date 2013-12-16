@@ -66,7 +66,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual void sendAdjournRequest(void);
 		virtual void sendAdjourn(void);
 		virtual void sendRefuseAdjourn(void);
-		virtual void handlePendingData(newline_pipe <unsigned char> * p);
+		virtual void handlePendingData();
         virtual void onReady(void);
 		virtual void changeServer(void);
 		virtual void createRoom(void);
@@ -117,7 +117,7 @@ class CyberOroConnection : public NetworkConnection
 		virtual QString getPlaceString(void);
 		virtual void timerEvent(QTimerEvent * event);
 	private:
-		void handleServerList(unsigned char * msg);
+		void handleServerList(unsigned char *msg);
 		int reconnectToServer(void);
         void sendPersonalChat(const PlayerListing * player, const char * text);
 		void sendRoomChat(const char * text);

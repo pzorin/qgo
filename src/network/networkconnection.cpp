@@ -68,7 +68,7 @@ bool NetworkConnection::openConnection(const QString & host, const unsigned shor
 	connect(qsocket, SIGNAL(disconnected ()), SLOT(OnConnectionClosed()));
 //	connect(qsocket, SIGNAL(delayedCloseFinished()), SLOT(OnDelayedCloseFinish()));
 //	connect(qsocket, SIGNAL(bytesWritten(qint64)), SLOT(OnBytesWritten(qint64)));
-	connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
+    connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
 
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
@@ -480,16 +480,7 @@ void NetworkConnection::onReady(void)
 
 void NetworkConnection::OnReadyRead()
 {
-	int bytes = qsocket->bytesAvailable();
-	if(bytes > 1)
-	{
-		unsigned char * packet = new unsigned char[bytes];
-		/* If that last byte is a newline... */
-		qsocket->read((char *)packet, bytes);
-		pending.write(packet, bytes);
-		delete[] packet;
-		handlePendingData(&pending);
-	}
+    handlePendingData();
 }
 
 void NetworkConnection::OnConnectionClosed() 
@@ -576,8 +567,7 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
         connectingDialog = 0;
     }
     //sendTextToApp("ERROR - Connection closed.\n"+ qsocket->errorString() );
-	qDebug("Socket Error\n");
-	//OnReadyRead();
+    //OnReadyRead();
 	/* We need to toggle the connection flag, close things up, etc.. */
 	
 	/* FIXME, we need to also notify the board dispatches, etc., not just ignore it, it should close everything and prevent

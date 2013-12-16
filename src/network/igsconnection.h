@@ -64,7 +64,7 @@ class IGSConnection : public NetworkConnection
 		virtual void sendAdjournRequest(void);
 		virtual void sendAdjourn(void);
 		virtual void sendRefuseAdjourn(void);
-		virtual void handlePendingData(newline_pipe <unsigned char> * p);
+		virtual void handlePendingData();
         virtual void onReady(void);
 
 		virtual void sendJoinRoom(const RoomListing & room, const char * password = 0);

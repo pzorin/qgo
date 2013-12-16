@@ -251,72 +251,69 @@ void CyberOroConnection::acceptMatchOffer(const PlayerListing * /*opponent*/, Ma
 	sendMatchOffer(*mr);
 }
 
-void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
+void CyberOroConnection::handlePendingData()
 {
-	unsigned char * c;
-	unsigned char header[4];
+    unsigned char * c;
+    unsigned char header[4];
 	unsigned int packet_size;
 	int bytes;
 
 	/* We need better connection states, but we'll use the old
 	 * for now */
-	
-	switch(connectionState)
-	{
-		case LOGIN:
-			bytes = p->canRead();
-			if(bytes)
-			{
-				c = new unsigned char[bytes];
-				p->read(c, bytes);
-				//0004064d
+
+    switch(connectionState)
+    {
+    case LOGIN:
+        bytes = qsocket->bytesAvailable();
+        if(bytes)
+        {
+            QByteArray data = qsocket->readAll();
+            //0004064d
 
 #ifdef RE_DEBUG
-				for(int i = 0; i < bytes; i++)
-					printf("%02x", c[i]);
-				printf("\n");
+            for(int i = 0; i < bytes; i++)
+                printf("%02x", c[i]);
+            printf("\n");
 #endif //RE_DEBUG
-				//1f27080015270000
-				if(c[0] == 0x1f)
-				{
-                    qDebug("CyberOroConnection::handlePendingData : Bad password or login");
-                    setState(PASS_FAILED);
-					delete[] c;
-					//closeConnection();
-					return;
-				}
-				/* First packet is list of servers and ips */
-				else if(c[0] == 0x24)			   
-					handleServerList(c);
-				delete[] c;
-			}
-			break;
-		case CONNECTED:
-			while((bytes = p->canRead()))
-			{
-				p->peek(header, 4);
+            //1f27080015270000
+            if(data.constData()[0] == 0x1f)
+            {
+                qDebug("CyberOroConnection::handlePendingData() : Bad password or login");
+                setState(PASS_FAILED);
+                //closeConnection();
+                return;
+            }
+            /* First packet is list of servers and ips */
+            else if(data.constData()[0] == 0x24)
+                handleServerList((unsigned char *)data.data());
+        }
+        break;
+    case CONNECTED:
+        while((bytes = qsocket->bytesAvailable()) > 0)
+        {
+            qsocket->peek((char *)header, 4);
 #ifdef RE_DEBUG
-				printf("%02x%02x%02x%02x\n", header[0], header[1], header[2], header[3]);
+            printf("%02x%02x%02x%02x\n", header[0], header[1], header[2], header[3]);
 #endif //RE_DEBUG
-				packet_size = header[2] + (header[3] << 8);
-				if((unsigned)bytes < packet_size)
-					break;
-				c = new unsigned char[packet_size];
-				p->read(c, packet_size);
-				handleMessage(c, packet_size);
-				delete[] c;
-			}
-			break;
-		case CANCELED:
-		case RECONNECTING:
-			break;
-		/*case AUTH_FAILED:
-			qDebug("Auth failed\n");
-			break;*/
-		default:
-			qDebug("connection state not handled by ORO");
-			break;
-	}
+            packet_size = header[2] + (header[3] << 8);
+            if((unsigned)bytes < packet_size)
+                break;
+            c = new unsigned char[packet_size];
+            qsocket->read((char*)c, packet_size);
+            handleMessage(c, packet_size);
+            delete[] c;
+        }
+        break;
+    case CANCELED:
+    case RECONNECTING:
+        break;
+    /*case AUTH_FAILED:
+        qDebug("Auth failed\n");
+        break;*/
+    default:
+        qDebug("connection state not handled by ORO");
+        break;
+    }
 }
 
 /* FIXME, these need to be const msg refs I think */
@@ -324,7 +321,8 @@ void CyberOroConnection::handlePendingData(newline_pipe <unsigned char> * p)
  * after we get the IGS cruft out */
 void CyberOroConnection::handleServerList(unsigned char * msg)
 {
-	unsigned char * p = msg, * s;
+    unsigned char * p = msg;
+    unsigned char * s;
 	int servers, i;
 	int ip_string_length, server_name_length;
 	ServerItem * si;
@@ -534,8 +532,7 @@ int CyberOroConnection::reconnectToServer(void)
 // Because player tracking is by ID, not name, for CyberOro
 const PlayerListing * CyberOroConnection::getOurListing(void)
 {
-    if (ourListing == NULL)
-        ourListing = getDefaultRoom()->getPlayerListing(our_player_id);
+    ourListing = getDefaultRoom()->getPlayerListing(our_player_id);
     return ourListing;
 }
 

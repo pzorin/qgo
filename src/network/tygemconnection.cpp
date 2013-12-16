@@ -128,7 +128,7 @@ TygemConnection::TygemConnection(const ConnectionCredentials credentials)
 	//ORO_setup_setphrases();
 	
 	http_connect_content_length = 0;
-	current_server_index = -1;
+    current_server_index = -1;
 	encode_offset = 0;
 	
 	matchKeepAliveTimerID = 0;
@@ -609,7 +609,7 @@ void TygemConnection::acceptMatchOffer(const PlayerListing * opponent, MatchRequ
 		sendMatchOffer(*mr, accept);
 }
 
-void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
+void TygemConnection::handlePendingData()
 {
 	unsigned char * c;
 	unsigned char header[4];
@@ -621,53 +621,31 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 	
 	switch(connectionState)
 	{
-		case INFO:
-			if(http_connect_content_length)
-			{
-				bytes = p->canRead();
-				if(bytes == (int)http_connect_content_length)
-				{
-					c = new unsigned char[bytes + 1];
-					p->read(c, bytes);
-					handleServerInfo(c, bytes);
-					delete[] c;
-				}
-				break;
-			}
-			bytes = p->canReadHTTPLine();
-			if(bytes)
-			{
-				c = new unsigned char[bytes + 1];
-				p->read(c, bytes);
-				int i;
-				
-				if(strncmp((const char *)c, "HTTP/1.1 200 OK\r\n", 17) != 0)
-				{
-					qDebug("Server info response not OK!");
-                    setState(PROTOCOL_ERROR);
-					//closeConnection();
-				}
-				else
-				{
-					i = 0;
-					while(i < bytes - 18 && (c[i] != '\r' || c[i + 1] != '\n'))
-					{
-				 		if(sscanf((const char *)&(c[i]), "Content-Length: %d", &http_connect_content_length) == 1)
-							break;
-						while(i < bytes - 1 && (c[i] != '\r' || c[i + 1] != '\n'))
-							i++;
-						i += 2;
-					}
-				}
-				delete[] c;
-			}
-			break;
+    case INFO:
+        bytes = qsocket->bytesAvailable();
+        if(http_connect_content_length > 0)
+        {
+            if(bytes >= (int)http_connect_content_length) // There might be some unwanted trailing characters
+            {
+                c = new unsigned char[http_connect_content_length + 1];
+                qsocket->read((char *)c, http_connect_content_length);
+                handleServerInfo(c, http_connect_content_length);
+                delete[] c;
+            }
+            break;
+        }
+        if(qsocket->canReadLine())
+        {
+            QByteArray data = qsocket->readLine();
+            sscanf(data.constData(), "Content-Length: %d", &http_connect_content_length);
+        }
+        break;
 		case LOGIN:
-			bytes = p->canRead();
+            bytes = qsocket->bytesAvailable();
 			if(bytes)
 			{
 				c = new unsigned char[bytes];
-				p->read(c, bytes);
+                qsocket->read((char *)c, bytes);
 #ifdef RE_DEBUG
 				for(int i = 0; i < bytes; i++)
 					printf("%02x", c[i]);
@@ -768,9 +746,9 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 			break;
 		case SETUP:
 		case CONNECTED:
-			while((bytes = p->canRead()))
+            while((bytes = qsocket->bytesAvailable()))
 			{
-				p->peek(header, 4);
+                qsocket->peek((char *)header, 4);
 #ifdef RE_DEBUG
 #ifdef NOISY_DEBUG
 				printf("%02x%02x%02x%02x\n", header[0], header[1], header[2], header[3]);
@@ -780,7 +758,7 @@ void TygemConnection::handlePendingData(newline_pipe <unsigned char> * p)
 				if((unsigned)bytes < packet_size)
 					break;
 				c = new unsigned char[packet_size + 1];
-				p->read(c, packet_size);
+                qsocket->read((char *)c, packet_size);
 				handleMessage(c, packet_size);
 				delete[] c;
 			}
