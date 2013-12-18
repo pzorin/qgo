@@ -693,6 +693,7 @@ bool Matrix::addHandicapStones(int handicap)
     default:
         qWarning("*** Matrix::addHandicapStones() - can't set handicap for this board size");
     }
+    return true;
 }
 
 /* Note that checkStoneWithGroups would be called before this meaning that

@@ -65,13 +65,11 @@ lc_no_close:
 void MainWindow::slot_currentChanged(int i)
 {
 	static int former=-1;
-	QSettings settings;
-    bool resend = false;
-
 	if ((former == 3) || (former == 4))
 	{
 		//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
-		resend=((settings.value("NMATCH_BLACK").toBool() != ui.checkBox_Nmatch_Black->isChecked()) || 
+        /* QSettings settings;
+         * bool resend=((settings.value("NMATCH_BLACK").toBool() != ui.checkBox_Nmatch_Black->isChecked()) ||
 			(settings.value("NMATCH_WHITE").toBool() != ui.checkBox_Nmatch_White->isChecked()) ||
 			(settings.value("NMATCH_NIGIRI").toBool() != ui.checkBox_Nmatch_Nigiri->isChecked()) ||
 			(settings.value("NMATCH_MAIN_TIME").toInt() != ui.timeSpin_Nmatch->value()) ||
@@ -79,7 +77,7 @@ void MainWindow::slot_currentChanged(int i)
 			(settings.value("NMATCH_HANDICAP").toInt() != ui.HandicapSpin_Nmatch->value()) ||
 			(settings.value("DEFAULT_SIZE").toInt() != ui.boardSizeSpin->value()) ||
 			(settings.value("DEFAULT_TIME").toInt() != ui.timeSpin->value()) ||
-			(settings.value("DEFAULT_BY").toInt() != ui.BYSpin->value()) );
+            (settings.value("DEFAULT_BY").toInt() != ui.BYSpin->value()) );*/
 
 		saveSettings();
 #ifdef FIXME

@@ -53,7 +53,7 @@ Board::Board(QWidget *parent, QGraphicsScene *c)
     QSettings settings;
 
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     isDisplayBoard = false;
     lockResize =  false;
     showCoords = true;//TODO setting->readBoolEntry("BOARD_COORDS");
@@ -1050,12 +1050,7 @@ void Board::mouseReleaseEvent(QMouseEvent* e)
 void Board::exportPicture(const QString &fileName,  QString *filter, bool toClipboard)
 {
 
-	QPixmap pix = QPixmap::grabWidget(this, 
-		offsetX - offset + 2,
-		offsetY - offset + 2 ,
-		board_pixel_size + offset*2,
-		board_pixel_size + offset*2);
-
+    QPixmap pix = this->grab(table->boundingRect().toAlignedRect());
 
 	if (toClipboard)
 	{

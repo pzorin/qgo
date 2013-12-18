@@ -31,8 +31,9 @@
 #include <QtCore>
 
 Tree::Tree(int board_size)
-    : boardSize(board_size), root(NULL), insertStoneFlag(false)
+    : boardSize(board_size), root(NULL)
 {
+    insertStoneFlag = false;
 	checkPositionTags = NULL;
     init();
     loadingSGF = false;

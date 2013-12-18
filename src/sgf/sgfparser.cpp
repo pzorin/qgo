@@ -461,8 +461,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 		strLength = toParse->length();
 	bool black = true,
 		setup = false,
-		old_label = false,
-		new_node = false;
+        old_label = false;
 	isRoot = true;
 	bool remember_root;
 	QString unknownProperty;
@@ -632,10 +631,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 			}
 			else
 				isRoot = false;
-			
-			
-			new_node = true;
-			
+						
 			Property prop;
 			pos ++;
 
@@ -929,9 +925,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 								toRemove.push(position);
 								moves ++;
 							}
-						
-						new_node = false;
-						
+												
 						if (compressed_list)
 							// Advance pos by 7
 							pos += 7;

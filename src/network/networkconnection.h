@@ -259,7 +259,6 @@ public:
 		
 	protected:
 		void closeConnection(bool send_disconnect = true);
-        virtual bool readyToWrite(void) { return true; }
         virtual void onAuthenticationNegotiated(void);
 		virtual void onReady(void);
         QTcpSocket * getQSocket(void) { return qsocket; }

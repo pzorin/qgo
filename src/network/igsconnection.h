@@ -94,8 +94,7 @@ class IGSConnection : public NetworkConnection
         virtual unsigned long getRoomStructureFlags(void) { return (RS_SHORTROOMLIST | RS_ONEROOMATATIME); }
 			
 	protected:
-        virtual bool readyToWrite(void);
-		virtual void onAuthenticationNegotiated(void);
+        virtual void onAuthenticationNegotiated(void);
 		virtual void setKeepAlive(int);
 		void handleLogin(QString msg);
 		void handlePassword(QString msg);

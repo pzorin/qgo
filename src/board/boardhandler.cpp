@@ -45,7 +45,7 @@
 #include <iostream>
 
 BoardHandler::BoardHandler(BoardWindow *bw, Tree *t, int board_size)
-    :QObject(bw), tree(t), boardSize(board_size), boardwindow(bw)
+    :QObject(bw), boardSize(board_size), tree(t), boardwindow(bw)
 {
     board = bw->getBoard();
 	Q_CHECK_PTR(board);
@@ -610,7 +610,9 @@ bool BoardHandler::updateAll(Move * move, bool /* toDraw*/)
 					modified = true;
 					board->removeMark(x, y, false);
 				}
-			}
+            default:
+                break;
+            }
 		}
 	}
     return modified;

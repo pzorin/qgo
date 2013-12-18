@@ -934,7 +934,6 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
 {
     // some variables for forcing send buffer and keep line established
     static int counter = 899;
-    static int holdTheLine = true;
     static int tnwait = 0;
     static int imagecounter = 0;
 
@@ -960,7 +959,6 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
         tnwait++;
         // something was sent, so reset counter
         counter = 899;//resetCounter();
-        holdTheLine = true;
         autoAwayMessage = false;
     }
 
@@ -1003,21 +1001,6 @@ void ConnectionWidget::timerEvent(QTimerEvent* e)
     }
 
     counter--;
-
-    // display online time. FIXME: maybe update every minute
-    /*
-    QTime tempTime(0,0,0,0);
-    tempTime.addSecs(connectionEstablished.secsTo(QDateTime::currentDateTime()));
-    tempTime.toString("HH:mm"); */
-    //statusOnlineTime->setText(pre + min_ + ":" + sec_ + " ");
-
-    // some statistics
-//	QToolTip::remove(statusServer);
-//	QToolTip::add(statusServer, tr("Current server") + "\n" +
-//		tr("Bytes in:") + " " + QString::number(bytesIn) + "\n" +
-//		tr("Bytes out:") + " " + QString::number(bytesOut));
-//	LineEdit_bytesIn->setText(QString::number(bytesIn));
-//	LineEdit_bytesOut->setText(QString::number(bytesOut));
 }
 
 /*

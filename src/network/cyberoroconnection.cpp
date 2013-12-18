@@ -521,8 +521,8 @@ int CyberOroConnection::reconnectToServer(void)
 	}
 	
 	// this is the initial packet
-	char packet[8] = { 0x0a, 0xfa, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
-	if(write((const char *)packet, 8) < 0)
+    const char packet[8] = { 0x0a, 0xfa, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    if(write(packet, 8) < 0)
 		qWarning("*** failed sending init packet to reconnected host");
 	return 0;
 }
@@ -1476,7 +1476,6 @@ void CyberOroConnection::sendRequestKeepAlive(const GameListing *game)
         delete[] packet;
 		return;
 	}
-	TimeRecord tr = boarddispatch->getOurTimeRecord();
 	GameData * gr = boarddispatch->getGameData();
 	packet[0] = 0x5c;
 	packet[1] = 0x4e;
@@ -3401,34 +3400,20 @@ label_playerlist_nogame:
 void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
-	unsigned char name[11];
-#ifdef PLAYERLIST_DEBUG
-	unsigned int i;
-#endif //PLAYERLIST_DEBUG
-	int players;
-	unsigned char rankbyte, invitebyte;
+    unsigned char name[11];
+    unsigned char rankbyte, invitebyte;
 	unsigned short id;
 	Room * room = getDefaultRoom();
     PlayerListing * aPlayer;
 
-	players = p[2];
+    int players = p[2];
 
-#ifdef PLAYERLIST_DEBUG
-	printf("%02x%02x\n", p[0], p[1]);	
-#endif //PLAYERLIST_DEBUG	
 	p += 2;
 	//676c696c696e6e000000 770a 16a4 02c3 0000 9b72 e607 e407 0000 0056
 	while(p < (msg + size))
-	{
-#ifdef PLAYERLIST_DEBUG
-		for(i = 0; i < 28; i++)
-			printf("%02x", p[i]);
-		printf("\n");
-#endif //PLAYERLIST_DEBUG
-		strncpy((char *)name, (char *)p, 10); name[10] = 0x00;
-#ifdef PLAYERLIST_DEBUG
-		printf("%s ", name);
-#endif //PLAYERLIST_DEBUG
+    {
+        strncpy((char *)name, (char *)p, 10);
+        name[10] = 0x00;
 		p += 10;
 		id = p[0] + (p[1] << 8);
 		aPlayer = room->getPlayerListing(id);
@@ -3436,18 +3421,12 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 			aPlayer->hidden = true;
 		else
 			aPlayer->hidden = false;
-		//aPlayer->name = QString((char*)name);
-		aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
+        aPlayer->name = serverCodec->toUnicode((const char *)name, strlen((const char *)name));
 		
 		p += 2;
 		//a byte here seems to be a send msg byte, or something
 		aPlayer->specialbyte = p[0];
-		//p++;
-#ifdef PLAYERLIST_DEBUG
-		for(i = 0; i < 8; i++)
-			printf("%02x", p[i]);
-#endif //PLAYERLIST_DEBUG
-		// That's right, its the pro bit 
+        // That's right, its the pro bit
 		rankbyte = p[1];
         aPlayer->pro = bool(rankbyte & 0x40);
 		
@@ -3471,12 +3450,6 @@ void CyberOroConnection::handlePlayerList(unsigned char * msg, unsigned int size
 		aPlayer->wins = p[2] + (p[3] << 8);
 		aPlayer->losses = p[4] + (p[5] << 8);
 		p += 6;
-#ifdef PLAYERLIST_DEBUG
-		printf(" RP: %d W/L: %d/%d ", aPlayer->rank_score, aPlayer->wins, aPlayer->losses);
-		for(i = 0; i < 4; i++)
-			printf("%02x", p[i]);
-		printf("\n");
-#endif //PLAYERLIST_DEBUG
 		p += 3;
 		p++;
         emit playerListingReceived(aPlayer);
@@ -4192,16 +4165,14 @@ void CyberOroConnection::handleSetPhraseChatMsg(unsigned char * msg, unsigned in
 	unsigned char * p = msg;
 	//2a02ffff 0000 0000 63ea000083cedc9
 	unsigned short id = p[0] + (p[1] << 8);
-	unsigned short directed_id;
-	unsigned short setphrase_code;
+    unsigned short setphrase_code;
 	PlayerListing * player = getDefaultRoom()->getPlayerListing(id);
 	/* Our chat appears back in all the rooms were in???
 	 * why?? 
 	 * FIXME room_were_in must not be the whole picture */
 	//if(player->name == getUsername())
 	//	return;		//to prevent duplicate chats from us
-	directed_id = p[0] + (p[1] << 8);
-	p += 4;
+    p += 4;
 	bool in_room = p[0];	//doublecheck, could potentially mean its from us
 	p += 4;
 	
@@ -4616,19 +4587,16 @@ void CyberOroConnection::handlePlayerDisconnect2(unsigned char * msg, unsigned i
 // they could also be player updates I guess, but that's doubtful
 void CyberOroConnection::handleNewGame(unsigned char * msg, unsigned int size)
 {
-	Room * room = getDefaultRoom();
 	unsigned char * p = msg;
-	PlayerListing * player;
 	unsigned short player_id = p[0] + (p[1] << 8);
 	
 	if(size != 28)
 		qDebug("85bb new game of size %d", size);
 #ifdef RE_DEBUG
-	printf("Game result msg?: ");
-#endif //RE_DEBUG
-	player = room->getPlayerListing(player_id);
-#ifdef RE_DEBUG
-	if(player)
+    Room * room = getDefaultRoom();
+    PlayerListing * player;
+    player = room->getPlayerListing(player_id);
+    if(player)
 		printf("%s ", player->name.toLatin1().constData());
 	// 4th byte here is 01 for winner and 02 for loser
 	// separate msg for each player result
@@ -4657,10 +4625,7 @@ void CyberOroConnection::handleNewGame(unsigned char * msg, unsigned int size)
 void CyberOroConnection::handleObserverList(unsigned char * msg, unsigned int size)
 {
 	unsigned char * p = msg;
-	unsigned short game_code;
-	unsigned short id;
-	unsigned short observer_list_index;
-	BoardDispatch * boarddispatch;
+    BoardDispatch * boarddispatch;
 	
 	if(!room_were_in)
 	{
@@ -4680,9 +4645,9 @@ void CyberOroConnection::handleObserverList(unsigned char * msg, unsigned int si
 		printf("%02x", msg[i]);
 	printf("\n");
 #endif //RE_DEBUG
-	game_code = p[0] + (p[1] << 8);
+    // unsigned short game_code = p[0] + (p[1] << 8);
 	p += 2;
-	observer_list_index = p[0] + (p[1] << 8);
+    //unsigned short observer_list_index = p[0] + (p[1] << 8);
 	p += 2;
 	/*if(size != 10)
 	{
@@ -4693,7 +4658,7 @@ void CyberOroConnection::handleObserverList(unsigned char * msg, unsigned int si
 	while(p < (msg + size - 20))
 	{
 		p += 8;
-		id = p[0] + (p[1] << 8);
+        // unsigned short id = p[0] + (p[1] << 8);
 		/*aPlayer = room->getPlayerListing(id);
 		if(aPlayer)
 			boarddispatch->recvObserver(aPlayer, true);

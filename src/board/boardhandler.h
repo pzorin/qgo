@@ -71,10 +71,10 @@ public slots:
 	void slotWheelEvent(QWheelEvent *e);
 
 private:
+    const int boardSize;
     Board * board;
     Tree * const tree;
     BoardWindow * const boardwindow;
-    const int boardSize;
 
     int capturesBlack, capturesWhite, caps_black, caps_white;
 	int terrBlack, terrWhite;

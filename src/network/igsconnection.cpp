@@ -860,10 +860,6 @@ void IGSConnection::sendNmatchParameters(void)
 	sendText(c);
 }
 
-bool IGSConnection::readyToWrite(void)
-{
-}
-
 #define IGS_LOGINMSG		0
 #define IGS_PROMPT		1
 #define IGS_BEEP		2
