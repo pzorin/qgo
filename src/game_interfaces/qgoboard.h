@@ -253,10 +253,12 @@ class qGoBoardComputerInterface : public qGoBoard
 public:
 	qGoBoardComputerInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
 	~qGoBoardComputerInterface();
-	void set_move(StoneColor sc, QString pt, QString mv_nr);
+    void set_move(StoneColor sc, int x, int y);
 
 public slots:
-	void slot_playComputer(bool ok, const QString &computer_answer);
+    void slot_playComputer(bool ok, int x, int y);
+    void slot_passComputer();
+    void slot_resignComputer();
 	virtual void slotDonePressed();
 	virtual void slotUndoPressed();
 

@@ -33,7 +33,9 @@ class QGtp : public QObject{
 	Q_OBJECT
 
 signals:
-	void signal_computerPlayed( bool , const QString& );
+    void signal_computerPlayed( bool, int, int );
+    void computerResigned();
+    void computerPassed();
 
 public slots:
 	void slot_readFromStdout();
@@ -49,7 +51,7 @@ public:
 	QString getLastMessage();
 	int openGtpSession(QString filename, int size, float komi, int handicap, int level);
 	QProcess  * programProcess ;
-	void fflush(char * s);
+    void fflush(QByteArray s);
 
 	/****************************
  	* Administrative commands. *
@@ -83,9 +85,9 @@ public:
 	/******************
  	* Playing moves. *
  	******************/
-	int playblack (char c, int j);
+    int playblack (int x, int y);
 	int playblackPass ();
-	int playwhite (char c, int j);
+    int playwhite (int x, int y);
 	int playwhitePass ();
 	int fixedHandicap (int handicap);
 	int loadsgf (QString filename,int movNumber=0,char c='A',int i=0);
@@ -190,6 +192,8 @@ public:
 	int knownCommand(QString s);
 
 	private :
+    QByteArray encodeCoors(int x, int y);
+    QByteArray intToQByteArray(int i);
 
 	int  _cpt;	/* Number of the request */
 	char *_outFile;
@@ -197,8 +201,7 @@ public:
 	FILE *_inFile;
 	QString buff, _response, answer;
 
-	int waitResponse();
-//	int waitResponseOld();
+    int waitResponse();
 
 	bool responseReceived,issueCmdNb ;
 	

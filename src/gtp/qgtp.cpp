@@ -65,6 +65,7 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	_cpt = 1000;
 	
 	programProcess = new QProcess();
+    programProcess->setReadChannel(QProcess::StandardOutput);
 	QStringList arguments;
 	issueCmdNb = false;
 	
@@ -92,7 +93,7 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 	connect(programProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
 		this, SLOT(slot_processExited(int , QProcess::ExitStatus )) );
 	
-	qDebug("starting Go engine : %s %s", filename.toLatin1().constData(), arguments.join(" ").toLatin1().constData());
+    qDebug("starting Go engine : %s %s", filename.toLatin1().constData(), arguments.join(" ").toLatin1().constData());
 
 	programProcess->start(filename, arguments);
 
@@ -171,28 +172,19 @@ void QGtp::slot_readFromStdout()
 	int number;
 	int pos;
 
-	QString s;
-	do 
-	{
-		s = programProcess->readAllStandardOutput();
-		answer.append(s); 
-	} while (!s.isEmpty());
-	if(answer[answer.length() - 1] != '\n')
-		return;
-	responseReceived = true;
-		
-	answer=answer.trimmed();
-	if (answer.length() != 0)
-		_response = answer;
-	answer = "";
+    while (programProcess->canReadLine())
+    {
+        answer = programProcess->readLine();
+        answer.chop(1); // remove the trailing '\n'
+        responseReceived = ((! answer.isEmpty()) &&
+                            ((answer.at(0) == '=') || (answer.at(0) != '?')));
+        if (responseReceived)
+            break;
+    }
+    if (!responseReceived)
+        return;
 
-	buff = _response[0];
-	
-	if(buff != "=" && buff != "?")
-	{
-		responseReceived = false;
-		return;
-	}
+    _response = answer;
 
 	// do we have any answer after the command number ?
 	pos = _response.indexOf(" ");
@@ -204,27 +196,14 @@ void QGtp::slot_readFromStdout()
 		_response = _response.right(_response.length() - pos - 1);
 
 
-	qDebug("** QGtp::slot_read():  \'%s\'" , _response.toLatin1().constData());
-
-/*
-	switch (number)
-	{
-		case GENMOVE:
-			emit signal_computerPlayed( (buff != "?") , _response );
-			responseReceived = false;
-		default:
-			;
-	}
-*/
+    qDebug("** QGtp::slot_read():  \'%s\'" , _response.toLatin1().constData());
 }
 
 // exit
 void QGtp::slot_processExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	qDebug("Process Exited with exit code %i and status  %d", exitCode, exitStatus);
-//	sprintf (outFile, "%d quit\n", _cpt);
-//	sprintf (outFile, "quit\n");
-//	fflush(outFile);
+    qDebug("Process Exited with exit code %i and status  %d", exitCode, exitStatus);
+//	fflush ("quit");
     //	return waitResponse();
 }
 
@@ -245,14 +224,7 @@ QGtp::waitResponse()
 	qDebug("** QGtp::waitResponse():  \'%s\'" , _response.toLatin1().constData());
 	responseReceived = false;
 
-	if (buff == "?") //symbole=='?')
-	{
-		return FAIL;
-	}
-	else
-	{
-		return OK;
-	}
+    return (buff == "?" ? FAIL : OK);
 }
 
 /****************************
@@ -267,9 +239,7 @@ QGtp::waitResponse()
 int
 QGtp::name ()
 {
-	qDebug("%d name",_cpt);
-	sprintf (outFile, "%d name\n", _cpt);
-	fflush(outFile);
+    fflush("name");
 	return waitResponse();
 }
 
@@ -281,38 +251,22 @@ QGtp::name ()
 int
 QGtp::protocolVersion ()
 {
-	qDebug("%d protocol_version",_cpt);
-	if (issueCmdNb)
-		sprintf (outFile, "%d protocol_version\n", /*_cpt*/ PROTOCOL);
-	else
-		sprintf (outFile, "protocol_version\n");
-		
-	fflush(outFile);
+    fflush("protocol_version");
 	return waitResponse();
 }
 
-void QGtp::fflush(char * s)
+void QGtp::fflush(QByteArray s)
 {
-/*
-int msglen = strlen(s);
+    if (issueCmdNb)
+    {
+        s = QString().setNum(_cpt++).toLatin1() + " " + s;
+    }
+    qDebug("flush -> %s",s.constData());
+    s += '\n';
+    int i= programProcess->write(s);
 
-  QByteArray dat(msglen);
-  for (int j = 0; j < msglen; j++) {
-  dat[j] = s[j];
-  }
-  programProcess->writeToStdin(dat);
-	*/
-	_cpt++;
-
-	qDebug("flush -> %s",s);
-	uint i= programProcess->write(QByteArray(s));
-
-//	int j= programProcess->waitForBytesWritten ( 100 );
-
-	if ( i != strlen(s)) 
-		qDebug("Error writing %s",s);
-	
-	
+    if ( i != s.size())
+        qDebug("Error writing %s",s.constData());
 }
 
 /****************************
@@ -327,9 +281,7 @@ int msglen = strlen(s);
 int
 QGtp::quit ()
 {
-//	sprintf (outFile, "%d quit\n", _cpt);
-	sprintf (outFile, "quit\n");
-	fflush(outFile);
+    fflush("quit");
 	return waitResponse();
 }
 
@@ -341,9 +293,7 @@ QGtp::quit ()
 int
 QGtp::version ()
 {
-//	sprintf (outFile, "%d version\n", _cpt);
-	sprintf (outFile,"version\n");
-	fflush(outFile);
+    fflush("version");
 	return waitResponse();
 }
 
@@ -360,11 +310,7 @@ QGtp::version ()
 int
 QGtp::setBoardsize (int size)
 {
-	if (issueCmdNb)
-		sprintf (outFile, "%d boardsize %d\n", BOARDSIZE /*_cpt*/, size);
-	else
-		sprintf (outFile, "boardsize %d\n", size);
-	fflush(outFile);
+    fflush("boardsize "+intToQByteArray(size));
 	return waitResponse();
 }
 
@@ -377,8 +323,7 @@ QGtp::setBoardsize (int size)
 int
 QGtp::queryBoardsize()
 {
-	sprintf (outFile, "%d query_boardsize\n", _cpt);
-	fflush(outFile);
+    fflush ("query_boardsize");
 	return waitResponse();
 }
 
@@ -395,11 +340,7 @@ QGtp::queryBoardsize()
 int
 QGtp::clearBoard ()
 {
-//	if (issueCmdNb)
-//		sprintf (outFile, "%d clear_board\n", _cpt);
-//	else
-		sprintf (outFile,"clear_board\n");
-	fflush(outFile);
+    fflush ("clear_board");
 	return waitResponse();
 }
 
@@ -415,12 +356,8 @@ QGtp::clearBoard ()
 int
 QGtp::setKomi(float f)
 {
-	if (issueCmdNb)
-		sprintf (outFile, "%d komi %.2f\n", KOMI /*_cpt*/,f);
-	else
-		sprintf (outFile, "komi %.2f\n", f);
-	fflush(outFile);
-	return waitResponse();
+    fflush (QString("komi %1").arg(f,0,'f',2).toLatin1());
+    return waitResponse();
 }
 
 /* Function:  Set the playing level.
@@ -431,8 +368,7 @@ QGtp::setKomi(float f)
 int
 QGtp::setLevel (int level)
 {
-	sprintf (outFile, "%d level %d\n", _cpt,level);
-	fflush(outFile);
+    fflush ("level "+intToQByteArray(level));
 	return waitResponse();
 }
 /******************
@@ -445,14 +381,9 @@ QGtp::setLevel (int level)
 * Returns:   nothing
 */
 int
-QGtp::playblack (char c , int i)
+QGtp::playblack (int x, int y)
 {
-	//  sprintf (outFile, "%d play black %c%d\n", _cpt,c,i);
-	if (issueCmdNb)
-		sprintf (outFile, "%d play black %c%d\n", PLAY_BLACK/*_cpt*/,c,i);
-	else
-		sprintf (outFile, "play black %c%d\n", c,i);
-	fflush(outFile);
+    fflush (QByteArray("play black ")+encodeCoors(x,y));
 	return waitResponse();
 }
 
@@ -464,13 +395,8 @@ QGtp::playblack (char c , int i)
 int
 QGtp::playblackPass ()
 {
-	//  sprintf (outFile, "%d play black pass\n", _cpt);
-	if (issueCmdNb)
-		sprintf (outFile, "%d play black pass\n", PLAY_BLACK /*_cpt*/);
-	else
-		sprintf (outFile, "play black pass\n");
-	fflush(outFile);
-	return waitResponse();
+    fflush ("play black pass");
+    return waitResponse();
 }
 
 /* Function:  Play a white stone at the given vertex.
@@ -479,15 +405,10 @@ QGtp::playblackPass ()
 * Returns:   nothing
 */
 int
-QGtp::playwhite (char c, int i)
+QGtp::playwhite (int x, int y)
 {
-	//  sprintf (outFile, "%d play white %c%d\n", _cpt,c,i);
-	if (issueCmdNb)
-		sprintf (outFile, "%d play white %c%d\n", PLAY_WHITE /*_cpt*/,c,i);
-	else
-		sprintf (outFile, "play white %c%d\n", c,i);
-	fflush(outFile);
-	return waitResponse();
+    fflush ("play white "+encodeCoors(x,y));
+    return waitResponse();
 }
 
 /* Function:  White pass.
@@ -498,13 +419,8 @@ QGtp::playwhite (char c, int i)
 int
 QGtp::playwhitePass ()
 {
-	//  sprintf (outFile, "%d play white pass\n", _cpt);
-	if (issueCmdNb)
-		sprintf (outFile, "%d play white pass\n",PLAY_WHITE /*_cpt*/);
-	else
-		sprintf (outFile, "play white pass\n");
-	fflush(outFile);
-	return waitResponse();
+    fflush ("play white pass");
+    return waitResponse();
 }
 
 /* Function:  Set up fixed placement handicap stones.
@@ -518,13 +434,8 @@ QGtp::fixedHandicap (int handicap)
 	if (handicap < 2) 
 		return OK;
 
-	if (issueCmdNb)
-		sprintf (outFile, "%d fixed_handicap %d\n", _cpt,handicap);
-	else
-		sprintf (outFile, "fixed_handicap %d\n",handicap);
-
-	fflush(outFile);
-	return waitResponse();
+    fflush ("fixed_handicap "+intToQByteArray(handicap));
+    return waitResponse();
 }
 
 /* Function:  Load an sgf file, possibly up to a move number or the first
@@ -535,10 +446,7 @@ QGtp::fixedHandicap (int handicap)
 */
 int QGtp::loadsgf (QString filename,int /*movNumber*/,char /*c*/,int /*i*/)
 {
-	//sprintf (outFile, "%d loadsgf %s %d %c%d\n", _cpt,(const char *) filename,movNumber,c,i);
-	qDebug("**QGtp::loadsgf : loading file %s", filename.toLatin1().constData());
-	sprintf (outFile, "%d loadsgf %s\n", _cpt,filename.toLatin1().constData());
-	fflush(outFile);
+    fflush (QString("loadsgf %1").arg(filename).toLatin1());
 	return waitResponse();
 }
 
@@ -554,8 +462,7 @@ int QGtp::loadsgf (QString filename,int /*movNumber*/,char /*c*/,int /*i*/)
 int
 QGtp::whatColor (char c, int i)
 {
-	sprintf (outFile, "%d color %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush ("color "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -567,8 +474,7 @@ QGtp::whatColor (char c, int i)
 int
 QGtp::countlib (char c, int i)
 {
-	sprintf (outFile, "%d countlib %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush ("countlib "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -580,8 +486,7 @@ QGtp::countlib (char c, int i)
 int
 QGtp::findlib (char c, int i)
 {
-	sprintf (outFile, "%d findlib %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush ("findlib "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -593,8 +498,7 @@ QGtp::findlib (char c, int i)
 int
 QGtp::isLegal (QString color, char c, int i)
 {
-	sprintf (outFile, "%d is_legal %s %c%d\n", _cpt,color.toLatin1().constData(),c,i);
-	fflush(outFile);
+    fflush (QString("is_legal %1 ").arg(color).toLatin1()+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -606,8 +510,7 @@ QGtp::isLegal (QString color, char c, int i)
 int
 QGtp::allLegal (QString color)
 {
-	sprintf (outFile, "%d all_legal %s\n", _cpt,color.toLatin1().constData());
-	fflush(outFile);
+    fflush (QByteArray("all_legal ")+color.toLatin1());
 	return waitResponse();
 }
 
@@ -619,8 +522,7 @@ QGtp::allLegal (QString color)
 int
 QGtp::captures (QString color)
 {
-	sprintf (outFile, "%d captures %s\n", _cpt,color.toLatin1().constData());
-	fflush(outFile);
+    fflush (QByteArray("captures")+color.toLatin1());
 	return waitResponse();
 }
 
@@ -636,8 +538,7 @@ QGtp::captures (QString color)
 int
 QGtp::trymove (QString color, char c, int i)
 {
-	sprintf (outFile, "%d trymove %s %c%d\n", _cpt,color.toLatin1().constData(),c,i);
-	fflush(outFile);
+    fflush (QByteArray("trymove ")+color.toLatin1()+" "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -649,8 +550,7 @@ QGtp::trymove (QString color, char c, int i)
 int
 QGtp::popgo ()
 {
-	sprintf (outFile, "%d popgo\n", _cpt);
-	fflush(outFile);
+    fflush ("popgo");
 	return waitResponse();
 }
 
@@ -666,8 +566,7 @@ QGtp::popgo ()
 int
 QGtp::attack (char c, int i)
 {
-	sprintf (outFile, "%d attack %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush ("attack "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -679,8 +578,7 @@ QGtp::attack (char c, int i)
 int
 QGtp::defend (char c, int i)
 {
-	sprintf (outFile, "%d defend %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush ("defend "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -692,8 +590,7 @@ QGtp::defend (char c, int i)
 int
 QGtp::increaseDepths ()
 {
-	sprintf (outFile, "%d increase_depths\n", _cpt);
-	fflush(outFile);
+    fflush("increase_depths");
 	return waitResponse();
 }
 
@@ -705,8 +602,7 @@ QGtp::increaseDepths ()
 int
 QGtp::decreaseDepths ()
 {
-	sprintf (outFile, "%d decrease_depths\n", _cpt);
-	fflush(outFile);
+    fflush("decrease_depths");
 	return waitResponse();
 }
 
@@ -722,8 +618,7 @@ QGtp::decreaseDepths ()
 int
 QGtp::owlAttack (char c, int i)
 {
-	sprintf (outFile, "%d owl_attack %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush("owl_attack "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -735,8 +630,7 @@ QGtp::owlAttack (char c, int i)
 int
 QGtp::owlDefend (char c, int i)
 {
-	sprintf (outFile, "%d owl_defend %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush("owl_defend "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -756,8 +650,7 @@ QGtp::owlDefend (char c, int i)
 int
 QGtp::evalEye (char c, int i)
 {
-	sprintf (outFile, "%d eval_eye %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush("eval_eye "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -780,8 +673,7 @@ QGtp::evalEye (char c, int i)
 int
 QGtp::dragonStatus (char c, int i)
 {
-	sprintf (outFile, "%d dragon_status %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush(QString("dragon_status %1%2").arg(c).arg(i).toLatin1());
 	return waitResponse();
 }
 
@@ -794,8 +686,7 @@ QGtp::dragonStatus (char c, int i)
 int
 QGtp::sameDragon (char c1, int i1, char c2, int i2)
 {
-	sprintf (outFile, "%d same_dragon %c%d %c%d\n", _cpt,c1,i1,c2,i2);
-	fflush(outFile);
+    fflush(QString("same_dragon %1%2 %3%4").arg(c1).arg(i1).arg(c2).arg(i2).toLatin1());
 	return waitResponse();
 }
 
@@ -807,8 +698,7 @@ QGtp::sameDragon (char c1, int i1, char c2, int i2)
 int
 QGtp::dragonData ()
 {
-	sprintf (outFile, "%d dragon_data \n", _cpt);
-	fflush(outFile);
+    fflush("dragon_data");
 	return waitResponse();
 }
 
@@ -820,8 +710,7 @@ QGtp::dragonData ()
 int
 QGtp::dragonData (char c,int i)
 {
-	sprintf (outFile, "%d dragon_data %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush("dragon_data "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -839,8 +728,7 @@ QGtp::dragonData (char c,int i)
 int
 QGtp::combinationAttack (QString color)
 {
-	sprintf (outFile, "%d combination_attack %s\n", _cpt,color.toLatin1().constData());
-	fflush(outFile);
+    fflush(QByteArray("combination_attack ")+color.toLatin1());
 	return waitResponse();
 }
 
@@ -856,15 +744,33 @@ QGtp::combinationAttack (QString color)
 int
 QGtp::genmoveBlack ()
 {
-	if (issueCmdNb)
-		sprintf (outFile, "%d genmove black\n", GENMOVE);
-	else
-		sprintf (outFile, "genmove black\n");
-	fflush(outFile);
+    fflush("genmove black");
 	waitResponse();
 
-	emit signal_computerPlayed( (buff != "?") , _response );
-//	responseReceived = false;
+    if (_response == "resign")
+    {
+        emit computerResigned();
+        return OK;
+    }
+
+    if (_response.contains("Pass",Qt::CaseInsensitive))
+    {
+        emit computerPassed();
+        return OK;
+    }
+
+    int x = _response[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
+    // skip 'J'
+    if (x > 8)
+        x--;
+
+    int y;
+    if (_response[2] >= '0' && _response[2] <= '9')
+        y = _response.mid(1,2).toInt();
+    else
+        y = _response[1].digitValue();
+
+    emit signal_computerPlayed( (buff != "?") , x, y );
 
 	return OK;
 }
@@ -877,15 +783,32 @@ QGtp::genmoveBlack ()
 int
 QGtp::genmoveWhite ()
 {
-	if (issueCmdNb)
-		sprintf (outFile, "%d genmove white\n", GENMOVE);
-	else
-		sprintf (outFile, "genmove white\n");
-	fflush(outFile);
+    fflush("genmove white");
 	waitResponse();
 
-	emit signal_computerPlayed( (buff != "?") , _response );
-//	responseReceived = false;
+    if (_response == "resign")
+    {
+        emit computerResigned();
+        return OK;
+    }
+
+    if (_response.contains("Pass",Qt::CaseInsensitive))
+    {
+        emit computerPassed();
+        return OK;
+    }
+
+    int x = _response[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
+    // skip 'J'
+    if (x > 8)
+        x--;
+
+    int y;
+    if (_response[2] >= '0' && _response[2] <= '9')
+        y = _response.mid(1,2).toInt();
+    else
+        y = _response[1].digitValue();
+    emit signal_computerPlayed( (buff != "?") , x, y );
 
 	return OK;
 }
@@ -898,8 +821,7 @@ QGtp::genmoveWhite ()
 int
 QGtp::genmove (QString color,int seed)
 {
-	sprintf (outFile, "%d gg_genmove %s %d\n", _cpt,color.toLatin1().constData(),seed);
-	fflush(outFile);
+    fflush(QByteArray("gg_genmove ") +color.toLatin1()+" "+intToQByteArray(seed));
 	return waitResponse();
 }
 
@@ -912,8 +834,7 @@ QGtp::genmove (QString color,int seed)
 int
 QGtp::topMovesWhite ()
 {
-	sprintf (outFile, "%d top_moves_white\n", _cpt);
-	fflush(outFile);
+    fflush("top_moves_white");
 	return waitResponse();
 }
 
@@ -926,8 +847,7 @@ QGtp::topMovesWhite ()
 int
 QGtp::topMovesBlack ()
 {
-	sprintf (outFile, "%d top_moves_black\n", _cpt);
-	fflush(outFile);
+    fflush("top_moves_black");
 	return waitResponse();
 }
 
@@ -939,8 +859,7 @@ QGtp::topMovesBlack ()
 int
 QGtp::undo (int i)
 {
-	sprintf (outFile, "%d undo %d\n", _cpt,i);
-	fflush(outFile);
+    fflush("undo "+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -951,10 +870,9 @@ QGtp::undo (int i)
 *            "seki", "white_territory", "black_territory", or "dame".
 */
 int
-QGtp::finalStatus (char c, int i, int seed)	
+QGtp::finalStatus (char c, int i, int seed)
 {
-	sprintf (outFile, "%d final_status %c%d %d\n", _cpt,c,i,seed);
-	fflush(outFile);
+    fflush("final_status "+c+intToQByteArray(i)+" "+intToQByteArray(seed));
 	return waitResponse();
 }
 
@@ -970,8 +888,7 @@ QGtp::finalStatus (char c, int i, int seed)
 int
 QGtp::finalStatusList (QString status, int seed)
 {
-	sprintf (outFile, "%d final_status_list %s %d\n", _cpt,status.toLatin1().constData(),seed);
-	fflush(outFile);
+    fflush(QByteArray("final_status_list ")+status.toLatin1()+" "+intToQByteArray(seed));
 	return waitResponse();
 }
 
@@ -987,24 +904,21 @@ QGtp::finalStatusList (QString status, int seed)
 int
 QGtp::finalScore (int seed)
 {
-	sprintf (outFile, "%d final_score %d\n", _cpt,seed);
-	fflush(outFile);
+    fflush("final_score "+intToQByteArray(seed));
 	return waitResponse();
 }
 
 int
 QGtp::estimateScore ()
 {
-	sprintf (outFile, "%d estimate_score\n", _cpt);
-	fflush(outFile);
+    fflush("estimate_score");
 	return waitResponse();
 }
 
 int
 QGtp::newScore ()
 {
-	sprintf (outFile, "%d new_score \n", _cpt);
-	fflush(outFile);
+    fflush("new_score");
 	return waitResponse();
 }
 
@@ -1020,8 +934,7 @@ QGtp::newScore ()
 int
 QGtp::resetLifeNodeCounter ()
 {
-	sprintf (outFile, "%d reset_life_node_counter\n", _cpt);
-	fflush(outFile);
+    fflush("reset_life_node_counter");
 	return waitResponse();
 }
 
@@ -1033,8 +946,7 @@ QGtp::resetLifeNodeCounter ()
 int
 QGtp::getLifeNodeCounter ()
 {
-	sprintf (outFile, "%d get_life_node_counter\n", _cpt);
-	fflush(outFile);
+    fflush("get_life_node_counter");
 	return waitResponse();
 }
 
@@ -1046,8 +958,7 @@ QGtp::getLifeNodeCounter ()
 int
 QGtp::resetOwlNodeCounter ()
 {
-	sprintf (outFile, "%d reset_owl_node_counter\n", _cpt);
-	fflush(outFile);
+    fflush("reset_owl_node_counter");
 	return waitResponse();
 }
 
@@ -1059,8 +970,7 @@ QGtp::resetOwlNodeCounter ()
 int
 QGtp::getOwlNodeCounter ()
 {
-	sprintf (outFile, "%d get_owl_node_counter\n", _cpt);
-	fflush(outFile);
+    fflush("get_owl_node_counter");
 	return waitResponse();
 }
 
@@ -1072,8 +982,7 @@ QGtp::getOwlNodeCounter ()
 int
 QGtp::resetReadingNodeCounter ()
 {
-	sprintf (outFile, "%d reset_reading_node_counter\n", _cpt);
-	fflush(outFile);
+    fflush("reset_reading_node_counter");
 	return waitResponse();
 }
 
@@ -1085,8 +994,7 @@ QGtp::resetReadingNodeCounter ()
 int
 QGtp::getReadingNodeCounter ()
 {
-	sprintf (outFile, "%d get_reading_node_counter\n", _cpt);
-	fflush(outFile);
+    fflush("get_reading_node_counter");
 	return waitResponse();
 }
 
@@ -1098,8 +1006,7 @@ QGtp::getReadingNodeCounter ()
 int
 QGtp::resetTrymoveCounter ()
 {
-	sprintf (outFile, "%d reset_trymove_counter\n", _cpt);
-	fflush(outFile);
+    fflush("reset_trymove_counter");
 	return waitResponse();
 }
 
@@ -1111,8 +1018,7 @@ QGtp::resetTrymoveCounter ()
 int
 QGtp::getTrymoveCounter ()
 {
-	sprintf (outFile, "%d get_trymove_counter\n", _cpt);
-	fflush(outFile);
+    fflush("get_trymove_counter");
 	return waitResponse();
 }
 
@@ -1128,8 +1034,7 @@ QGtp::getTrymoveCounter ()
 int
 QGtp::showboard ()
 {
-	sprintf (outFile, "%d showboard\n", _cpt);
-	fflush(outFile);
+    fflush("showboard");
 	return waitResponse();
 }
 
@@ -1141,8 +1046,7 @@ QGtp::showboard ()
 int
 QGtp::dumpStack ()
 {
-	sprintf (outFile, "%d dump_stack\n", _cpt);
-	fflush(outFile);
+    fflush("dump_stack");
 	return waitResponse();
 }
 
@@ -1154,8 +1058,7 @@ QGtp::dumpStack ()
 int
 QGtp::debugInfluence (QString color,QString list)
 {
-	sprintf (outFile, "%d debug_influence %s %s\n", _cpt,color.toLatin1().constData(),list.toLatin1().constData());
-	fflush(outFile);
+    fflush(QByteArray("debug_influence ")+color.toLatin1()+" "+list.toLatin1());
 	return waitResponse();
 }
 
@@ -1168,8 +1071,8 @@ QGtp::debugInfluence (QString color,QString list)
 int
 QGtp::debugMoveInfluence (QString color, char c, int i,QString list)
 {
-	sprintf (outFile, "%d debug_move_influence %s %c%d %s\n", _cpt,color.toLatin1().constData(),c,i,list.toLatin1().constData());
-	fflush(outFile);
+    fflush(QByteArray("debug_move_influence ")+color.toLatin1()+
+           " "+c+intToQByteArray(i)+" "+list.toLatin1());
 	return waitResponse();
 }
 
@@ -1181,8 +1084,7 @@ QGtp::debugMoveInfluence (QString color, char c, int i,QString list)
 int
 QGtp::influence (QString color)
 {
-	sprintf (outFile, "%d influence %s\n", _cpt,color.toLatin1().constData());
-	fflush(outFile);
+    fflush(QByteArray("influence ")+color.toLatin1());
 	return waitResponse();
 }
 
@@ -1194,8 +1096,7 @@ QGtp::influence (QString color)
 int
 QGtp::moveInfluence (QString color, char c, int i)
 {
-	sprintf (outFile, "%d move_influence %s %c%d\n", _cpt,color.toLatin1().constData(),c,i);
-	fflush(outFile);
+    fflush(QByteArray("move_influence ")+color.toLatin1()+" "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -1207,8 +1108,7 @@ QGtp::moveInfluence (QString color, char c, int i)
 int
 QGtp::wormData ()
 {
-	sprintf (outFile, "%d worm_data\n", _cpt);
-	fflush(outFile);
+    fflush("worm_data");
 	return waitResponse();
 }
 
@@ -1220,8 +1120,7 @@ QGtp::wormData ()
 int
 QGtp::wormData (char c, int i)
 {
-	sprintf (outFile, "%d worm_data %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush("worm_data "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -1233,8 +1132,7 @@ QGtp::wormData (char c, int i)
 int
 QGtp::wormCutstone (char c, int i)
 {
-	sprintf (outFile, "%d worm_cutstone %c%d\n", _cpt,c,i);
-	fflush(outFile);
+    fflush("worm_cutstone "+c+intToQByteArray(i));
 	return waitResponse();
 }
 
@@ -1247,8 +1145,7 @@ QGtp::wormCutstone (char c, int i)
 int
 QGtp::tuneMoveOrdering (int MOVE_ORDERING_PARAMETERS)
 {
-	sprintf (outFile, "%d tune_move_ordering %d\n", _cpt,MOVE_ORDERING_PARAMETERS);
-	fflush(outFile);
+    fflush("tune_move_ordering "+intToQByteArray(MOVE_ORDERING_PARAMETERS));
 	return waitResponse();
 }
 
@@ -1260,8 +1157,7 @@ QGtp::tuneMoveOrdering (int MOVE_ORDERING_PARAMETERS)
 int
 QGtp::echo (QString param)
 {
-	sprintf (outFile, "%d echo %s\n", _cpt,param.toLatin1().constData());
-	fflush(outFile);
+    fflush(QByteArray("echo ")+param.toLatin1());
 	return waitResponse();
 }
 
@@ -1273,8 +1169,7 @@ QGtp::echo (QString param)
 int
 QGtp::help ()
 {
-	sprintf (outFile, "%d help\n", _cpt);
-	fflush(outFile);
+    fflush("help");
 	return waitResponse();
 }
 
@@ -1286,9 +1181,24 @@ QGtp::help ()
 int
 QGtp::knownCommand (QString s)
 {
-	sprintf (outFile, "%d known_command %s\n", _cpt,s.toLatin1().constData());
-	fflush(outFile);
-	return waitResponse();
+    fflush(QByteArray("known_command ")+s.toLatin1());
+    return waitResponse();
+}
+
+QByteArray QGtp::encodeCoors(int x, int y)
+{
+    if (x > 8)
+        x++;
+    QByteArray result;
+    char c1 = x - 1 + 'A';
+    result.append(c1);
+    result.append(QString().setNum(y).toLatin1());
+    return result;
+}
+
+QByteArray QGtp::intToQByteArray(int i)
+{
+    return QString().setNum(i).toLatin1();
 }
 
 /* Function:  Turn uncertainty reports from owl_attack
@@ -1300,8 +1210,7 @@ QGtp::knownCommand (QString s)
 int
 QGtp::reportUncertainty (QString s)
 {
-	sprintf (outFile, "%d report_uncertainty %s\n", _cpt,s.toLatin1().constData());
-	fflush(outFile);
+    fflush(QByteArray("report_uncertainty ")+s.toLatin1());
 	return waitResponse();
 }
 
@@ -1313,16 +1222,14 @@ QGtp::reportUncertainty (QString s)
 int
 QGtp::wormStones()
 {
-	sprintf (outFile, "%d worm_stones\n", _cpt);
-	fflush(outFile);
+    fflush("worm_stones");
 	return waitResponse();
 }
 
 int
 QGtp::shell(QString s)
 {
-	sprintf (outFile, "%d %s\n", _cpt, s.toLatin1().constData());
-	fflush(outFile);
+    fflush(s.toLatin1());
 	return waitResponse();
 }
 

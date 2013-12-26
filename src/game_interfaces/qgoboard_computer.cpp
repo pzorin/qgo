@@ -38,7 +38,9 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 
 	gtp = new QGtp() ;
 
-	connect (gtp, SIGNAL(signal_computerPlayed(bool, const QString&)), SLOT(slot_playComputer(bool, const QString&)));
+    connect (gtp, SIGNAL(signal_computerPlayed(bool, int, int)), SLOT(slot_playComputer(bool, int, int)));
+    connect (gtp, SIGNAL(computerPassed()), SLOT(slot_passComputer()));
+    connect (gtp, SIGNAL(computerResigned()), SLOT(slot_resignComputer()));
 
 	if (gtp->openGtpSession(settings.value("COMPUTER_PATH").toString(),
 				gameData->board_size,
@@ -149,44 +151,25 @@ void qGoBoardComputerInterface::slotUndoPressed()
  */
 void qGoBoardComputerInterface::sendMoveToInterface(StoneColor c,int x, int y)
 {
-//was void qGoBoard::slot_stoneComputer(StoneColor c, int x, int y) in qGo1
-
-//	if (id < 0)
-//		return;
-
-	if (x > 8)
-		x++;
-	char c1 = x - 1 + 'A';
-	//int c2 = gd.size + 1 - y;
-	int c2 = boardwindow->getBoardSize()  + 1 - y;
-	
-	
 	boardwindow->getUi()->resignButton->setEnabled(false);
-//	mv_counter++;
   
 	switch (c)
 	{
 		case stoneWhite :
-		if (gtp->playwhite(c1 ,c2))
+        if (gtp->playwhite(x ,y))
         	{
 			QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to play the stone within program \n") + 	gtp->getLastMessage());
 			return;
         	}
-//		if (!getMyColorIsBlack() && (gtp->getLastMessage() != "illegal move") )
-//			playComputer(c);  
-
 		break;
 
 		case stoneBlack :
-		if (gtp->playblack(c1 ,c2))
+        if (gtp->playblack(x ,y))
 		{
 			QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to play the stone within program \n") + gtp->getLastMessage());
 			return;
-		}
-
-//		if (!getMyColorIsWhite() && (gtp->getLastMessage() != "illegal move"))
-//			playComputer(c);   
-		break;  
+        }
+        break;
 
 		default :
 		; 
@@ -235,32 +218,16 @@ void qGoBoardComputerInterface::playComputer(StoneColor c)
 /*
  * This slot is triggeres by the signal emitted by 'gtp' when getting a move
  */
-void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &computer_answer)
+void qGoBoardComputerInterface::slot_playComputer(bool ok, int x, int y)
 {
 	if (!ok)
 	{
 		QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to have the program play its stone\n") + gtp->getLastMessage());
 		return;
-	}
-//	qDebug("Computer interface - computer answer = %s",  computer_answer.toLatin1().constData());
+    }
 
-//	win->getBoard()->unsetCursor();
-//	get_win()->getInterfaceHandler()->passButton->setEnabled(true);
-//	get_win()->getInterfaceHandler()->undoButton->setEnabled(true);
-	bool b = getBlackTurn();
-
-	if (computer_answer == "resign")
-   	{
-		GameResult g((!b ? stoneBlack : stoneWhite), GameResult::RESIGN);
-		setResult(g);
-		//boardwindow->getInterfaceHandler()->displayComment((!b ? "White resigned" : "Black resigned"));
-		//boardwindow->getGameData()->result = (!b ? "B+R" : "W+R");
-//		slot_DoneComputer();
-		return ;
-	}	
-
-	qDebug("computer answers: %s", computer_answer.toLatin1().constData());
-	set_move(b ? stoneBlack : stoneWhite , computer_answer, "" /*mv_nr*/);
+    bool b = getBlackTurn();
+    set_move(b ? stoneBlack : stoneWhite , x, y);
 
 	//qDebug ("computer move played");
 
@@ -281,7 +248,19 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, const QString &comput
 	 * way to check who the current player is since the computer
 	 * moves are done with a function call rather than based on
 	 * some check of who's turn it is */
-	boardwindow->getUi()->resignButton->setEnabled(true);
+    boardwindow->getUi()->resignButton->setEnabled(true);
+}
+
+void qGoBoardComputerInterface::slot_passComputer()
+{
+
+}
+
+void qGoBoardComputerInterface::slot_resignComputer()
+{
+    bool b = getBlackTurn();
+    GameResult g((!b ? stoneBlack : stoneWhite), GameResult::RESIGN);
+    setResult(g);
 }
 
 /*
@@ -349,31 +328,9 @@ void qGoBoardComputerInterface::sendPassToInterface(StoneColor c)
 /*
  * A move string is incoming from the interface (computer)
  */
-void qGoBoardComputerInterface::set_move(StoneColor sc, QString pt, QString/* mv_nr*/)
+void qGoBoardComputerInterface::set_move(StoneColor sc, int x, int y)
 {
-
-	if (pt.contains("Pass",Qt::CaseInsensitive))
-		doPass();
-	
-	else
-	{
-        int i = pt[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
-		// skip j
-		if (i > 8)
-			i--;
-
-		int j;
-
-		if (pt[2] >= '0' && pt[2] <= '9')
-			j = boardwindow->getGameData()->board_size + 1 - pt.mid(1,2).toInt();
-		else
-			j = boardwindow->getGameData()->board_size + 1 - pt[1].digitValue();
-
-
-		if (!doMove(sc, i, j))
-			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 seems to be invalid").arg(pt.toLatin1().constData()));
-	}
-
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
-
+    if (!doMove(sc, x, y))
+        QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 seems to be invalid"));
+    boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 }
