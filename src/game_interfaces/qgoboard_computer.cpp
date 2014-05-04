@@ -39,7 +39,6 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 	gtp = new QGtp() ;
 
     connect (gtp, SIGNAL(signal_computerPlayed(bool, int, int)), SLOT(slot_playComputer(bool, int, int)));
-    connect (gtp, SIGNAL(computerPassed()), SLOT(slot_passComputer()));
     connect (gtp, SIGNAL(computerResigned()), SLOT(slot_resignComputer()));
 
 	if (gtp->openGtpSession(settings.value("COMPUTER_PATH").toString(),
@@ -51,20 +50,6 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 		throw QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage());
 	}
 
-
-	if (!(gameData->fileName.isNull() || gameData->fileName.isEmpty()))
-	{
-//		QTemporaryFile tempFile("GNUgo_file") ;
-//		tempFile.createLocalFile(gameData->fileName);//= QTemporaryFile::createLocalFile(gameData->fileName);
-//		QFileInfo fi(tempFile);
-//		gtp->loadsgf(fi.absoluteFilePath());
-		if (gtp->loadsgf(gameData->fileName))
-		{
-			throw QString(QObject::tr("Error GNUgo loading file %1 : %2")).arg(gameData->fileName).arg(gtp->getLastMessage());
-		}	
-	}
-	//FIXME : GNU go will not want whitespaces in the name. Either feed it with the moves, or get through a temporary file.
-	
 //	prepareComputerBoard();  
 	if (gameData->handicap && gameData->fileName.isEmpty())
 	//if(gameData->handicap)
@@ -74,29 +59,41 @@ qGoBoardComputerInterface::qGoBoardComputerInterface(BoardWindow *bw, Tree * t, 
 	/* What is playSound for??*/
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
+
+    /*
+     * Check if the computer has to move first.
+     * This is the best place to feed the moves to gnugo.
+     */
+
+    tree->setToFirstMove();
+    // The root node of the tree either holds the handicap or is an empty move
+    Move *m = tree->getCurrent();
+    while (tree->getNumSons() > 0)
+    {
+        tree->nextMove();
+        m = tree->getCurrent();
+        if (m->isPassMove())
+            continue;
+
+        if (m->getColor() == stoneWhite)
+            gtp->playwhite(m->getX(), m->getY());
+        else if (m->getColor() == stoneBlack)
+            gtp->playblack(m->getX(), m->getY());
+    }
+    tree->setCurrent(m);
+    boardwindow->getBoardHandler()->updateMove(m);
+
+    bool blackToPlay = getBlackTurn();
+    if (blackToPlay && !(boardwindow->getMyColorIsBlack()))
+        playComputer(stoneBlack);
+    else if (!blackToPlay && !(boardwindow->getMyColorIsWhite()))
+        playComputer(stoneWhite);
 }
 
 qGoBoardComputerInterface::~qGoBoardComputerInterface()
 {
 	qDebug("Deconstructing computer interface");
 	delete gtp;
-}
-
-/*
- * This is called just after intialisation, when the computer is playing the firt move
- */
-void qGoBoardComputerInterface::startGame() 
-{
-	bool blackToPlay = getBlackTurn();
-	
-	Move *m = tree->findLastMoveInMainBranch();
-	tree->setCurrent(m);
-	boardwindow->getBoardHandler()->updateMove(m);
-
-	if ((boardwindow->getMyColorIsBlack() && blackToPlay) || (boardwindow->getMyColorIsWhite() && !blackToPlay))
-		return;
-
-	playComputer( blackToPlay ? stoneBlack : stoneWhite );
 }
 
 /*
@@ -249,11 +246,6 @@ void qGoBoardComputerInterface::slot_playComputer(bool ok, int x, int y)
 	 * moves are done with a function call rather than based on
 	 * some check of who's turn it is */
     boardwindow->getUi()->resignButton->setEnabled(true);
-}
-
-void qGoBoardComputerInterface::slot_passComputer()
-{
-
 }
 
 void qGoBoardComputerInterface::slot_resignComputer()

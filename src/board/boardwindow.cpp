@@ -54,19 +54,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 		myColorIsBlack = false;
 		myColorIsWhite = false;
 	}
-	else if(gameData->gameMode == modeComputer)
-	{
-			if(gameData->white_name == "Human")		//is this reliable?
-			{
-				myColorIsWhite = true;
-				myColorIsBlack = false;
-			}
-			else
-			{
-				myColorIsWhite = false;
-				myColorIsBlack = true;
-			}
-	}
 	else
 	{
 		myColorIsBlack = iAmBlack;

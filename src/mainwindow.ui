@@ -1475,6 +1475,7 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpen"/>
+   <addaction name="actionOpenComputer"/>
    <addaction name="actionConnect"/>
    <addaction name="actionQuit"/>
   </widget>
@@ -1542,10 +1543,24 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
     <string>Open...</string>
    </property>
    <property name="toolTip">
-    <string>Open SGF File</string>
+    <string>Open SGF file for editing</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionOpenComputer">
+   <property name="icon">
+    <iconset theme="document-open"/>
+   </property>
+   <property name="text">
+    <string>Open computer game...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open saved game against computer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
    </property>
   </action>
  </widget>

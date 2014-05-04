@@ -655,6 +655,7 @@ void BoardDispatch::sendAddTime(int minutes)
 /* So far just to trigger timer */
 void BoardDispatch::startGame(void)
 {
+    // Only used by Tygem connection, so assume that this is qGoBoardNetworkInterface::startGame();
 	boardwindow->qgoboard->startGame();	
 }
 

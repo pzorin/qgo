@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 
 	// connecting the new game button
     connect( ui.actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpenBoard()) );
+    connect( ui.actionOpenComputer, SIGNAL(triggered()), SLOT(slot_fileOpenComputerBoard()) );
 
 	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
 
@@ -150,7 +151,36 @@ void MainWindow::openSGF(QString path)
         return;
 
     GameLoaded->gameMode = modeNormal;
-    this->addBoardWindow(new BoardWindow(new GameData(GameLoaded), true, true));
+    this->addBoardWindow(new BoardWindow(GameLoaded, true, true));
+}
+
+void MainWindow::slot_fileOpenComputerBoard()
+{
+    QFileDialog *dialog = new QFileDialog(this);
+    dialog->setOption(QFileDialog::DontUseNativeDialog, true);
+    SGFPreview *previewWidget = new SGFPreview(dialog);
+    QGridLayout *layout = (QGridLayout*)dialog->layout();
+    layout->addWidget(previewWidget, 1, 3);
+    connect(dialog,SIGNAL(currentChanged(QString)),previewWidget,SLOT(setPath(QString)));
+    connect(dialog,SIGNAL(fileSelected(QString)),this,SLOT(openComputerSGF(QString)));
+    dialog->setNameFilter("Smart Game Format (*.sgf *.SGF)");
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->show(); // Maybe exec()
+}
+
+void MainWindow::openComputerSGF(QString path)
+{
+    SGFParser * MW_SGFparser = new SGFParser(NULL);
+    QString SGFloaded = MW_SGFparser->loadFile(path);
+    if (SGFloaded == NULL)
+        return;
+
+    GameData * GameLoaded = MW_SGFparser->initGame(SGFloaded, path);
+    if (GameLoaded == NULL)
+        return;
+
+    GameLoaded->gameMode = modeComputer;
+    this->addBoardWindow(new BoardWindow(GameLoaded, !(GameLoaded->black_name == "Computer"), !(GameLoaded->white_name == "Computer")));
 }
 
 /*

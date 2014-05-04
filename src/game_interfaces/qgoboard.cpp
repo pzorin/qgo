@@ -379,7 +379,7 @@ bool qGoBoard::doMove(StoneColor c, int x, int y)
 }
 
 /*
- * Returns true wether it's black to play
+ * Returns true if black is to play
  * FIXME shouldn't this be in board.cpp or some place?
  * maybe not...
  */

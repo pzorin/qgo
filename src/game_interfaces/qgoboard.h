@@ -257,7 +257,6 @@ public:
 
 public slots:
     void slot_playComputer(bool ok, int x, int y);
-    void slot_passComputer();
     void slot_resignComputer();
 	virtual void slotDonePressed();
 	virtual void slotUndoPressed();
@@ -269,7 +268,7 @@ private:
 
 	void playComputer(StoneColor c);
 	void localPassRequest();
-	void startGame();
+    void startGame() {}
 //	void enterScoreMode() {}
 	void leaveScoreMode() {}
 

@@ -54,6 +54,7 @@ public slots:
 	// sfg slots
 	void slot_fileNewBoard();
 	void slot_fileOpenBoard();
+    void slot_fileOpenComputerBoard();
 
 	// go engine slots
 	void slot_computerNewBoard();
@@ -72,6 +73,7 @@ public slots:
     void openConnectDialog(void);
 
     void openSGF(QString path);
+    void openComputerSGF(QString path);
 
 protected:
 	void closeEvent(QCloseEvent *e);
