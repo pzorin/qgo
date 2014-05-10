@@ -39,7 +39,7 @@ GameInfo::GameInfo(BoardWindow * bw) : GameinfoDialog(), boardwindow(bw)
 	ui.playedAt->setText( boardwindow->getGameData()->place );
 	ui.copyright->setText( boardwindow->getGameData()->copyright );
 	
-	if(boardwindow->getGameData()->gameMode != modeNormal)
+    if(boardwindow->getGameData()->gameMode != modeEdit)
 	{
 		ui.whiteName->setReadOnly( 1 );
 		ui.blackName->setReadOnly( 1 );

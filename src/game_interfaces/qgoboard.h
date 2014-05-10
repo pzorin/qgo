@@ -64,7 +64,6 @@ public:
 	virtual bool getBlackTurn(bool time = false);
     virtual void startGame() {}
     virtual void stopTime() {}
-    virtual void set_move(StoneColor , QString , QString ) {}
     virtual void handleMove(class MoveRecord *) {}
     virtual void moveControl(QString &) {}
 	int getMoveNumber(void);
@@ -230,50 +229,6 @@ private:
 
 /* We can override the virtuals above with nulls below if the option
  * isn't supported or needs to be drastically changed */
-
-
-class qGoBoardNormalInterface : public qGoBoard 
-{
-
-public:
-	qGoBoardNormalInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
-	virtual ~qGoBoardNormalInterface() {}
-
-
-private:
-	void sendMoveToInterface(StoneColor /*c*/,int /*x*/, int /*y*/ ) {}
-//	bool doMove(StoneColor c, int x, int y);
-//	void enterScoreMode();
-};
-
-class qGoBoardComputerInterface : public qGoBoard 
-{
-	Q_OBJECT
-
-public:
-	qGoBoardComputerInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
-	~qGoBoardComputerInterface();
-    void set_move(StoneColor sc, int x, int y);
-
-public slots:
-    void slot_playComputer(bool ok, int x, int y);
-    void slot_resignComputer();
-	virtual void slotDonePressed();
-	virtual void slotUndoPressed();
-
-private:
-//	bool doMove(StoneColor c, int x, int y);
-	virtual void sendMoveToInterface(StoneColor c,int x, int y);
-	virtual void sendPassToInterface(StoneColor c);
-
-	void playComputer(StoneColor c);
-	void localPassRequest();
-    void startGame() {}
-//	void enterScoreMode() {}
-	void leaveScoreMode() {}
-
-	QGtp *gtp;
-};
 
 class qGoBoardNetworkInterface : public qGoBoard
 {

@@ -27,6 +27,7 @@
 #include "clockdisplay.h"
 #include "interfacehandler.h"
 #include "qgoboard.h"
+#include "qgoboardlocalinterface.h"
 #include "move.h"
 #include "tree.h"
 #include "sgf/sgfparser.h"
@@ -44,7 +45,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
         gameData = gd;
     } else {
 		gameData = new GameData();
-		gameData->gameMode = modeNormal;
+        gameData->gameMode = modeEdit;
 	}
 	
 	dispatch = _dispatch;
@@ -74,13 +75,11 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameData->gameMode)
 	{
-		case modeNormal :
-			qgoboard = new 	qGoBoardNormalInterface(this, tree,gameData);
-			break;
-		case modeComputer :
+        case modeEdit :
+        case modeLocal :
 			try
 			{
-				qgoboard = new 	qGoBoardComputerInterface(this, tree,gameData);
+                qgoboard = new 	qGoBoardLocalInterface(this, tree,gameData);
 			}
 			catch(QString err)
 			{
@@ -126,11 +125,6 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	show();
 	checkHideToolbar(height());
 	setFocus();
-
-
-	// Computer may have to make the first move
-	if(gameData->gameMode == modeComputer)
-		qgoboard->startGame();
 	
 	//update();
 	//gridLayout->update();
@@ -319,6 +313,14 @@ void BoardWindow::setupUI(void)
 	connect(ui.actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
 
 	/* Set column widths ?? */
+    if ((gameData->gameMode == modeEdit) || (gameData->gameMode == modeLocal))
+    {
+        connect(ui.buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
+        connect(ui.buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
+    } else {
+        ui.buttonModeEdit->hide();
+        ui.buttonModeLocal->hide();
+    }
 }
 
 void BoardWindow::setupBoardUI(void)
@@ -337,35 +339,34 @@ void BoardWindow::setupBoardUI(void)
 	
 	
 	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
-	connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));	
+    connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));
 	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
-	if (gameData->gameMode == modeMatch || gameData->gameMode == modeComputer)
+
+    // Why is this conditional? FIXME
+    if (gameData->gameMode == modeMatch || gameData->gameMode == modeLocal || gameData->gameMode == modeEdit)
 		connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
+
+
 	if(gameData->gameMode == modeMatch)
 	{
 		connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
 		connect(ui.countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
 		connect(ui.drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
-	}
-	if(gameData->gameMode != modeMatch)
-	{
-		ui.adjournButton->setVisible(false);
-		ui.countButton->setVisible(false);
-		ui.drawButton->setVisible(false);
+    } else {
+        ui.adjournButton->hide();
+        ui.countButton->hide();
+        ui.drawButton->hide();
 	}
 	if(dispatch && !dispatch->supportsRequestAdjourn())
-		ui.adjournButton->setVisible(false);
+        ui.adjournButton->hide();
 	if(dispatch && !dispatch->supportsRequestCount())
-		ui.countButton->setVisible(false);
+        ui.countButton->hide();
 	if(dispatch && !dispatch->supportsRequestDraw())
-		ui.drawButton->setVisible(false);
+        ui.drawButton->hide();
 
 	ui.insertMoveButton->setChecked(false);
-	if(gameData->gameMode == modeNormal)
-		ui.insertMoveButton->setEnabled(true);
-	else
-		ui.insertMoveButton->setEnabled(false);
-	if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
+    ui.insertMoveButton->setEnabled(gameData->gameMode == modeEdit);
+    if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
 	{
 		addtime_menu = new QMenu();
 		QAction * act = addtime_menu->addAction(tr("Add 1 min"));
@@ -416,8 +417,20 @@ void BoardWindow::setupBoardUI(void)
 
 	//connects the comments and edit line to the slots
 	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
-	if (gameData->gameMode != modeNormal && gameData->gameMode != modeComputer )
-		connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
+    connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
+
+    connect(ui.computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
+    connect(ui.computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
+    connect(ui.computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
+    ui.computerControls->setEnabled(gameData->gameMode == modeLocal);
+
+    if ((gameData->gameMode == modeLocal) || (gameData->gameMode == modeEdit))
+    {
+        connect(ui.blackName,SIGNAL(textChanged(QString)),SLOT(setBlackName(QString)));
+        connect(ui.whiteName,SIGNAL(textChanged(QString)),SLOT(setWhiteName(QString)));
+        ui.blackName->setReadOnly(false);
+        ui.whiteName->setReadOnly(false);
+    }
 }
 
 void BoardWindow::resizeEvent(QResizeEvent * e)
@@ -677,7 +690,7 @@ void BoardWindow::slotDuplicate()
 {
 	saveRecordToGameData();
 	GameData * gd = new GameData(gameData);
-	gd->gameMode = modeNormal;
+    gd->gameMode = modeEdit;
 	gd->fileName = "";
 	BoardWindow *b = new BoardWindow(gd, true, true);
 	
@@ -807,7 +820,7 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * sloppy */
 			if(ui.passButton)
 				ui.passButton->setEnabled(true);
-			if(gameData->undoAllowed || gameData->gameMode == modeComputer)
+            if(gameData->undoAllowed || gameData->gameMode == modeLocal)
 				ui.undoButton->setEnabled(true);
 			else
 				ui.undoButton->setEnabled(false);
@@ -1001,7 +1014,88 @@ void BoardWindow::slot_addtime_menu(QAction * a)
 		case 60:
 			dispatch->sendAddTime(60);
 			break;
-	}
+    }
+}
+
+void BoardWindow::setComputerBlack(bool val)
+{
+    myColorIsBlack = !val;
+
+    // dynamic_cast downcasts the pointer and returns null if this is not safe
+    // This requires Run-Time Type Information to be enabled at compile time
+    qGoBoardLocalInterface* qgoboard_temp = dynamic_cast<qGoBoardLocalInterface*>(qgoboard);
+    if (qgoboard_temp != NULL)
+    {
+        qgoboard_temp->checkComputersTurn();
+    }
+}
+
+void BoardWindow::setComputerWhite(bool val)
+{
+    myColorIsWhite = !val;
+
+    // dynamic_cast downcasts the pointer and returns null if this is not safe
+    // This requires Run-Time Type Information to be enabled at compile time
+    qGoBoardLocalInterface* qgoboard_temp = dynamic_cast<qGoBoardLocalInterface*>(qgoboard);
+    if (qgoboard_temp != NULL)
+    {
+        qgoboard_temp->checkComputersTurn();
+    }
+}
+
+void BoardWindow::requestComputerMove()
+{
+    // dynamic_cast downcasts the pointer and returns null if this is not safe
+    // This requires Run-Time Type Information to be enabled at compile time
+    qGoBoardLocalInterface* qgoboard_temp = dynamic_cast<qGoBoardLocalInterface*>(qgoboard);
+    if (qgoboard_temp != NULL)
+    {
+        qgoboard_temp->playComputer();
+    }
+}
+
+void BoardWindow::setBlackName(QString name)
+{
+    gameData->black_name = name;
+    ui.blackName->blockSignals(true);
+    ui.blackName->setText(name);
+    ui.blackName->blockSignals(false);
+}
+
+void BoardWindow::setWhiteName(QString name)
+{
+    gameData->white_name = name;
+    ui.whiteName->blockSignals(true);
+    ui.whiteName->setText(name);
+    ui.whiteName->blockSignals(false);
+}
+
+void BoardWindow::switchToEditMode()
+{
+    gameData->gameMode = modeEdit;
+    interfaceHandler->toggleMode(modeEdit);
+    ui.computerControls->setEnabled(gameData->gameMode == modeLocal);
+    myColorIsBlack = true;
+    myColorIsWhite = true;
+}
+
+void BoardWindow::switchToLocalMode()
+{
+    gameData->gameMode = modeLocal;
+    interfaceHandler->toggleMode(modeLocal);
+    ui.computerControls->setEnabled(gameData->gameMode == modeLocal);
+    myColorIsBlack = !(ui.computerBlack->isChecked());
+    myColorIsWhite = !(ui.computerWhite->isChecked());
+
+    // dynamic_cast downcasts the pointer and returns null if this is not safe
+    // This requires Run-Time Type Information to be enabled at compile time
+    qGoBoardLocalInterface* qgoboard_temp = dynamic_cast<qGoBoardLocalInterface*>(qgoboard);
+    if (qgoboard_temp != NULL)
+    {
+        tree->setCurrent(tree->findLastMoveInCurrentBranch());
+        getBoardHandler()->updateMove(tree->getCurrent());
+        qgoboard_temp->feedPositionThroughGtp();
+    }
 }
 
 /*

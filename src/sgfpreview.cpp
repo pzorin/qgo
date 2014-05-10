@@ -66,7 +66,7 @@ void SGFPreview::setPath(QString path)
         return;
     }
 
-    GameLoaded->gameMode = modeNormal;
+    GameLoaded->gameMode = modeEdit;
 
         QString komi, hcp, sz;
         komi.setNum(GameLoaded->komi);

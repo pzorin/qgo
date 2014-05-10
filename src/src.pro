@@ -36,7 +36,8 @@ FORMS += mainwindow.ui \
 	 network/login.ui \
 	 network/talk_gui.ui \
     connectionwidget.ui \
-    sgfpreview.ui
+    sgfpreview.ui \
+    newgamedialog.ui
 
 HEADERS += defines.h \
 displayboard.h \
@@ -95,7 +96,9 @@ network/wing.h \
 sgf/sgfparser.h \
     connectionwidget.h \
     host.h \
-    sgfpreview.h
+    sgfpreview.h \
+    game_interfaces/qgoboardlocalinterface.h \
+    newgamedialog.h
 
 SOURCES += displayboard.cpp \
            listviews.cpp \
@@ -115,7 +118,6 @@ SOURCES += displayboard.cpp \
            board/stone.cpp \
 	   game_interfaces/countdialog.cpp \
 	   game_interfaces/qgoboard.cpp \
-           game_interfaces/qgoboard_computer.cpp \
            game_interfaces/qgoboard_match.cpp \
 	   game_interfaces/qgoboard_network.cpp \
            game_interfaces/qgoboard_observe.cpp \
@@ -153,7 +155,9 @@ SOURCES += displayboard.cpp \
 	   sgf/sgfparser.cpp \
     connectionwidget.cpp \
     host.cpp \
-    sgfpreview.cpp
+    sgfpreview.cpp \
+    game_interfaces/qgoboardlocalinterface.cpp \
+    newgamedialog.cpp
 
 QT -= qt3support
 DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""

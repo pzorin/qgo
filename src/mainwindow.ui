@@ -107,24 +107,6 @@
       </item>
       <item>
        <property name="text">
-        <string>SGF editor</string>
-       </property>
-       <property name="icon">
-        <iconset resource="application.qrc">
-         <normaloff>:/resources/pics/toolbar_2.png</normaloff>:/resources/pics/toolbar_2.png</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Go engine</string>
-       </property>
-       <property name="icon">
-        <iconset resource="application.qrc">
-         <normaloff>:/resources/pics/toolbar_3.png</normaloff>:/resources/pics/toolbar_3.png</iconset>
-       </property>
-      </item>
-      <item>
-       <property name="text">
         <string>Preferences</string>
        </property>
        <property name="icon">
@@ -146,842 +128,500 @@
     <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="ConnectionWidget" name="connectionWidget"/>
-      <widget class="QWidget" name="SGFEditor">
-       <layout class="QVBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="leftMargin">
-         <number>9</number>
-        </property>
-        <property name="topMargin">
-         <number>9</number>
-        </property>
-        <property name="rightMargin">
-         <number>9</number>
-        </property>
-        <property name="bottomMargin">
-         <number>9</number>
-        </property>
+      <widget class="QWidget" name="Preferences">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="title">
-           <string>New file</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <layout class="QFormLayout" name="formLayout_13">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QGroupBox" name="groupBox_7">
+            <property name="title">
+             <string>Computer engine</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_12">
              <property name="fieldGrowthPolicy">
               <enum>QFormLayout::ExpandingFieldsGrow</enum>
              </property>
+             <property name="horizontalSpacing">
+              <number>6</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>6</number>
+             </property>
+             <property name="leftMargin">
+              <number>9</number>
+             </property>
+             <property name="topMargin">
+              <number>9</number>
+             </property>
+             <property name="rightMargin">
+              <number>9</number>
+             </property>
+             <property name="bottomMargin">
+              <number>9</number>
+             </property>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_13">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>15</height>
-                </size>
-               </property>
+              <widget class="QLabel" name="label_23">
                <property name="text">
-                <string>White player</string>
+                <string>Level</string>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="newFile_WhitePlayer">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>20</height>
-                </size>
+              <widget class="QSpinBox" name="spinBox_8">
+               <property name="minimum">
+                <number>1</number>
                </property>
-               <property name="text">
-                <string>White</string>
+               <property name="maximum">
+                <number>20</number>
+               </property>
+               <property name="value">
+                <number>10</number>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_11">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>15</height>
-                </size>
-               </property>
+              <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>Black player</string>
+                <string>Path</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="newFile_BlackPlayer">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>20</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Black</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_9">
-               <property name="text">
-                <string>Size</string>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="LineEdit_computer"/>
              </item>
              <item row="3" column="1">
-              <widget class="QSpinBox" name="newFile_Size">
-               <property name="minimumSize">
-                <size>
-                 <width>60</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>2</number>
-               </property>
-               <property name="maximum">
-                <number>36</number>
-               </property>
-               <property name="value">
-                <number>19</number>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_10">
+              <widget class="QPushButton" name="computerPathButton">
                <property name="text">
-                <string>Handicap</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>Komi</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QSpinBox" name="newFile_Handicap">
-               <property name="minimumSize">
-                <size>
-                 <width>60</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>false</bool>
-               </property>
-               <property name="specialValueText">
-                <string/>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>9</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QLineEdit" name="newFile_Komi">
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>30</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>6.5</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="1">
-              <widget class="QPushButton" name="button_newGame">
-               <property name="text">
-                <string>New game</string>
-               </property>
-               <property name="icon">
-                <iconset theme="document-new">
-                 <normaloff/>
-                </iconset>
+                <string>Get</string>
                </property>
               </widget>
              </item>
             </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="Go_engine">
-       <layout class="QVBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="leftMargin">
-         <number>9</number>
-        </property>
-        <property name="topMargin">
-         <number>9</number>
-        </property>
-        <property name="rightMargin">
-         <number>9</number>
-        </property>
-        <property name="bottomMargin">
-         <number>9</number>
-        </property>
-        <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>New game</string>
-          </property>
-          <layout class="QGridLayout" name="_10">
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="topMargin">
-            <number>9</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-           <property name="bottomMargin">
-            <number>9</number>
-           </property>
-           <property name="spacing">
-            <number>6</number>
-           </property>
-           <item row="0" column="0" rowspan="2">
-            <layout class="QFormLayout" name="formLayout_11">
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_9">
+            <property name="title">
+             <string>Sound</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QRadioButton" name="radioButton_noSound">
+               <property name="text">
+                <string>Sound off</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_myGamesSound">
+               <property name="text">
+                <string>My games</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_allGameSound">
+               <property name="text">
+                <string>All games</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_13">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>International</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout">
              <property name="fieldGrowthPolicy">
               <enum>QFormLayout::ExpandingFieldsGrow</enum>
              </property>
              <property name="leftMargin">
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="topMargin">
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="rightMargin">
-              <number>0</number>
+              <number>9</number>
              </property>
              <property name="bottomMargin">
-              <number>0</number>
+              <number>9</number>
              </property>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Size</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="newComputer_Size">
-               <property name="minimum">
-                <number>2</number>
-               </property>
-               <property name="value">
-                <number>19</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Handicap</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="newComputer_Handicap">
-               <property name="specialValueText">
-                <string/>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>9</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_6">
+              <widget class="QLabel" name="label_26">
                <property name="text">
-                <string>Komi</string>
+                <string>Language</string>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="newComputer_Komi">
-               <property name="maximumSize">
-                <size>
-                 <width>30</width>
-                 <height>16777215</height>
-                </size>
-               </property>
+              <widget class="QComboBox" name="comboBox_language">
+               <item>
+                <property name="text">
+                 <string>System default</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>German</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>French</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Italian</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Danish</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Dutch</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Czech</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Chinese</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Portugese</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Polish</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Russian</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Turkish</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_27">
                <property name="text">
-                <string>6.5</string>
+                <string>Text encoding</string>
                </property>
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QCheckBox" name="OneColorGoCheckBox">
+              <widget class="QComboBox" name="comboBox_15">
+               <item>
+                <property name="text">
+                 <string>None</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_18">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Misc</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_9">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::ExpandingFieldsGrow</enum>
+             </property>
+             <item row="6" column="0">
+              <widget class="QLabel" name="TextLabel2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
-                <string>One color Go</string>
+                <string>Autoplay interval</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QComboBox" name="timerComboBox">
+               <property name="focusPolicy">
+                <enum>Qt::TabFocus</enum>
+               </property>
+               <property name="toolTip">
+                <string>Time interval for autoplay</string>
+               </property>
+               <property name="whatsThis">
+                <string>Time interval for autoplay n
+Delay between the moves in autoplay mode in seconds.</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>0.1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>0.5</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>2.5</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>5</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>7.5</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>10</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Appearance</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QGroupBox" name="groupBox_12">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Stones</string>
+               </property>
+               <layout class="QFormLayout" name="formLayout_8">
+                <property name="fieldGrowthPolicy">
+                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>5</number>
+                </property>
+                <property name="rightMargin">
+                 <number>5</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>5</number>
+                </property>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radioButtonStones_2D">
+                  <property name="text">
+                   <string>Solid 2D</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radioButtonStones_3D">
+                  <property name="text">
+                   <string>Plain 3D</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QRadioButton" name="radioButtonStones_real">
+                  <property name="text">
+                   <string>Realistic</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_11">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Goban and table</string>
+               </property>
+               <layout class="QGridLayout" name="_12">
+                <property name="leftMargin">
+                 <number>9</number>
+                </property>
+                <property name="topMargin">
+                 <number>9</number>
+                </property>
+                <property name="rightMargin">
+                 <number>9</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>9</number>
+                </property>
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="LineEdit_goban"/>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Goban picture</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLineEdit" name="LineEdit_table"/>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QPushButton" name="tablePathButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QPushButton" name="gobanPathButton">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>Table picture</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="terrCrossRB">
+               <property name="text">
+                <string>Territory Cross</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="terrStoneRB">
+               <property name="text">
+                <string>Territory Stone</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="komarkerCB">
+               <property name="text">
+                <string>Ko marker</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="numberCurrentMoveCB">
+               <property name="text">
+                <string>Number Current Move</string>
                </property>
               </widget>
              </item>
             </layout>
-           </item>
-           <item row="0" column="1" rowspan="2">
-            <widget class="QGroupBox" name="groupBox_7">
-             <property name="title">
-              <string>Computer engine</string>
-             </property>
-             <layout class="QFormLayout" name="formLayout_12">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::ExpandingFieldsGrow</enum>
-              </property>
-              <property name="horizontalSpacing">
-               <number>6</number>
-              </property>
-              <property name="verticalSpacing">
-               <number>6</number>
-              </property>
-              <property name="leftMargin">
-               <number>9</number>
-              </property>
-              <property name="topMargin">
-               <number>9</number>
-              </property>
-              <property name="rightMargin">
-               <number>9</number>
-              </property>
-              <property name="bottomMargin">
-               <number>9</number>
-              </property>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_23">
-                <property name="text">
-                 <string>Level</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="spinBox_8">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>20</number>
-                </property>
-                <property name="value">
-                 <number>10</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QRadioButton" name="computerPlaysBlack">
-                <property name="text">
-                 <string>Black</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QRadioButton" name="computerPlaysWhite">
-                <property name="text">
-                 <string>White</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLineEdit" name="LineEdit_computer"/>
-              </item>
-              <item row="5" column="1">
-               <widget class="QPushButton" name="computerPathButton">
-                <property name="text">
-                 <string>Get</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Path</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QPushButton" name="pushButton_5">
-             <property name="text">
-              <string>Set defaults</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="button_newComputerGame">
-             <property name="text">
-              <string>Start game</string>
-             </property>
-             <property name="icon">
-              <iconset theme="document-new">
-               <normaloff/>
-              </iconset>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="Preferences">
-       <layout class="QGridLayout" name="_3">
-        <item row="2" column="1">
-         <widget class="QGroupBox" name="groupBox_12">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Stones</string>
-          </property>
-          <layout class="QFormLayout" name="formLayout_8">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::ExpandingFieldsGrow</enum>
-           </property>
-           <property name="leftMargin">
-            <number>5</number>
-           </property>
-           <property name="topMargin">
-            <number>5</number>
-           </property>
-           <property name="rightMargin">
-            <number>5</number>
-           </property>
-           <property name="bottomMargin">
-            <number>5</number>
-           </property>
-           <item row="0" column="1">
-            <widget class="QRadioButton" name="radioButtonStones_2D">
-             <property name="text">
-              <string>Solid 2D</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QRadioButton" name="radioButtonStones_3D">
-             <property name="text">
-              <string>Plain 3D</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QRadioButton" name="radioButtonStones_real">
-             <property name="text">
-              <string>Realistic</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QGroupBox" name="groupBox_18">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Misc</string>
-          </property>
-          <layout class="QFormLayout" name="formLayout_9">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::ExpandingFieldsGrow</enum>
-           </property>
-           <item row="2" column="1">
-            <widget class="QRadioButton" name="terrCrossRB">
-             <property name="text">
-              <string>Territory Cross</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QRadioButton" name="terrStoneRB">
-             <property name="text">
-              <string>Territory Stone</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QCheckBox" name="komarkerCB">
-             <property name="text">
-              <string>Ko marker</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QCheckBox" name="numberCurrentMoveCB">
-             <property name="text">
-              <string>Number Current Move</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="TextLabel2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Autoplay interval</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QComboBox" name="timerComboBox">
-             <property name="focusPolicy">
-              <enum>Qt::TabFocus</enum>
-             </property>
-             <property name="toolTip">
-              <string>Time interval for autoplay</string>
-             </property>
-             <property name="whatsThis">
-              <string>Time interval for autoplay n
-Delay between the moves in autoplay mode in seconds.</string>
-             </property>
-             <item>
-              <property name="text">
-               <string>0.1</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>0.5</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>1</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>2.5</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>5</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>7.5</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>10</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QGroupBox" name="groupBox_11">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Goban and table</string>
-          </property>
-          <layout class="QGridLayout" name="_12">
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="topMargin">
-            <number>9</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-           <property name="bottomMargin">
-            <number>9</number>
-           </property>
-           <property name="spacing">
-            <number>6</number>
-           </property>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="LineEdit_goban"/>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Goban picture</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="LineEdit_table"/>
-           </item>
-           <item row="3" column="2">
-            <widget class="QPushButton" name="tablePathButton">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="gobanPathButton">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Table picture</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QPushButton" name="cancelButtonPrefs">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Cancel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox_13">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>International</string>
-          </property>
-          <layout class="QFormLayout" name="formLayout">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::ExpandingFieldsGrow</enum>
-           </property>
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="topMargin">
-            <number>9</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-           <property name="bottomMargin">
-            <number>9</number>
-           </property>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_26">
-             <property name="text">
-              <string>Language</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QComboBox" name="comboBox_language">
-             <item>
-              <property name="text">
-               <string>System default</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>German</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>French</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Italian</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Danish</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dutch</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Czech</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Chinese</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Portugese</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Polish</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Russian</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Turkish</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_27">
-             <property name="text">
-              <string>Text encoding</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QComboBox" name="comboBox_15">
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox_9">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title">
-           <string>Sound</string>
-          </property>
-          <layout class="QFormLayout" name="formLayout_7">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::ExpandingFieldsGrow</enum>
-           </property>
-           <property name="leftMargin">
-            <number>5</number>
-           </property>
-           <property name="topMargin">
-            <number>5</number>
-           </property>
-           <property name="rightMargin">
-            <number>5</number>
-           </property>
-           <property name="bottomMargin">
-            <number>5</number>
-           </property>
-           <item row="0" column="1">
-            <widget class="QRadioButton" name="radioButton_noSound">
-             <property name="text">
-              <string>Sound off</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QRadioButton" name="radioButton_myGamesSound">
-             <property name="text">
-              <string>My games</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QRadioButton" name="radioButton_allGameSound">
-             <property name="text">
-              <string>All games</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="cancelButtonPrefs">
+            <property name="text">
+             <string>Cancel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -1474,8 +1114,8 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew"/>
    <addaction name="actionOpen"/>
-   <addaction name="actionOpenComputer"/>
    <addaction name="actionConnect"/>
    <addaction name="actionQuit"/>
   </widget>
@@ -1543,24 +1183,23 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
     <string>Open...</string>
    </property>
    <property name="toolTip">
-    <string>Open SGF file for editing</string>
+    <string>Open SGF...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionOpenComputer">
+  <action name="actionNew">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-new">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
-    <string>Open computer game...</string>
-   </property>
-   <property name="toolTip">
-    <string>Open saved game against computer</string>
+    <string>New game...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+O</string>
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

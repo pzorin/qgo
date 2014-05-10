@@ -28,6 +28,7 @@
 #include "sgfpreview.h"
 #include "audio.h"
 #include "sgfparser.h"
+#include "newgamedialog.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	: QMainWindow( parent,  flags )
@@ -45,19 +46,13 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// connecting the Go server tab buttons and signals
 
 	// connecting the new game button
-    connect( ui.actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpenBoard()) );
-    connect( ui.actionOpenComputer, SIGNAL(triggered()), SLOT(slot_fileOpenComputerBoard()) );
-
-	connect(ui.button_newGame,SIGNAL(pressed()),SLOT(slot_fileNewBoard()));
-
-	connect(ui.button_newComputerGame,SIGNAL(pressed()),SLOT(slot_computerNewBoard()));
+    connect( ui.actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpen()) );
+    connect(ui.actionNew,SIGNAL(triggered()),SLOT(slot_fileNew()));
 
 
 	connect( ui.computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
 	connect(ui.LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
 	
-	connect(ui.newFile_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newFile_HandicapChange(int)));
-	connect(ui.newComputer_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newComputer_HandicapChange(int)));
 	connect(ui.cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
 	connect(ui.cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
 	connect(ui.stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
@@ -95,37 +90,8 @@ void MainWindow::closeEvent(QCloseEvent * e)
 	saveSettings();
 }
 
-/*
- * The 'New Game' button in 'sgf editor' tab has been pressed.
- */
-void MainWindow::slot_fileNewBoard()
-{
-	
-	GameData *gd = new GameData();
-	gd->gameMode = modeNormal;
 
-	gd->board_size = ui.newFile_Size->value();
-	gd->handicap = ui.newFile_Handicap->value();
-	gd->black_name = ui.newFile_BlackPlayer->text();
-	gd->white_name = ui.newFile_WhitePlayer->text();
-	gd->komi = ui.newFile_Komi->text().toFloat();
-    addBoardWindow(new BoardWindow(gd, true, true));
-}
-
-
-void MainWindow::slot_newFile_HandicapChange(int a)
-{
-	if(a == 1)
-		ui.newFile_Handicap->setValue(0);
-}
-
-void MainWindow::slot_newComputer_HandicapChange(int a)
-{
-	if(a == 1)
-		ui.newComputer_Handicap->setValue(0);
-}
-
-void MainWindow::slot_fileOpenBoard()
+void MainWindow::slot_fileOpen()
 {
     QFileDialog *dialog = new QFileDialog(this);
     dialog->setOption(QFileDialog::DontUseNativeDialog, true);
@@ -136,7 +102,8 @@ void MainWindow::slot_fileOpenBoard()
     connect(dialog,SIGNAL(fileSelected(QString)),this,SLOT(openSGF(QString)));
     dialog->setNameFilter("Smart Game Format (*.sgf *.SGF)");
     dialog->setFileMode(QFileDialog::ExistingFile);
-    dialog->show(); // Maybe exec()
+    dialog->exec();
+    delete dialog;
 }
 
 void MainWindow::openSGF(QString path)
@@ -150,71 +117,18 @@ void MainWindow::openSGF(QString path)
     if (GameLoaded == NULL)
         return;
 
-    GameLoaded->gameMode = modeNormal;
+    GameLoaded->gameMode = modeLocal;
     this->addBoardWindow(new BoardWindow(GameLoaded, true, true));
-}
-
-void MainWindow::slot_fileOpenComputerBoard()
-{
-    QFileDialog *dialog = new QFileDialog(this);
-    dialog->setOption(QFileDialog::DontUseNativeDialog, true);
-    SGFPreview *previewWidget = new SGFPreview(dialog);
-    QGridLayout *layout = (QGridLayout*)dialog->layout();
-    layout->addWidget(previewWidget, 1, 3);
-    connect(dialog,SIGNAL(currentChanged(QString)),previewWidget,SLOT(setPath(QString)));
-    connect(dialog,SIGNAL(fileSelected(QString)),this,SLOT(openComputerSGF(QString)));
-    dialog->setNameFilter("Smart Game Format (*.sgf *.SGF)");
-    dialog->setFileMode(QFileDialog::ExistingFile);
-    dialog->show(); // Maybe exec()
-}
-
-void MainWindow::openComputerSGF(QString path)
-{
-    SGFParser * MW_SGFparser = new SGFParser(NULL);
-    QString SGFloaded = MW_SGFparser->loadFile(path);
-    if (SGFloaded == NULL)
-        return;
-
-    GameData * GameLoaded = MW_SGFparser->initGame(SGFloaded, path);
-    if (GameLoaded == NULL)
-        return;
-
-    GameLoaded->gameMode = modeComputer;
-    this->addBoardWindow(new BoardWindow(GameLoaded, !(GameLoaded->black_name == "Computer"), !(GameLoaded->white_name == "Computer")));
 }
 
 /*
  * The 'New Game' button in 'Go Engine' tab has been pressed.
  */
-void MainWindow::slot_computerNewBoard()
+void MainWindow::slot_fileNew()
 {
-	
-	GameData *gd = new GameData();
-	
-	gd->gameMode = modeComputer;
-	gd->board_size = ui.newComputer_Size->text().toInt();
-	gd->handicap = ui.newComputer_Handicap->text().toInt();
-	gd->komi = ui.newComputer_Komi->text().toFloat();
-	gd->oneColorGo = ui.OneColorGoCheckBox->isChecked();
-	
-	bool imBlack = (ui.computerPlaysWhite->isChecked());
-	bool imWhite = (ui.computerPlaysBlack->isChecked());
-	gd->black_name = (imBlack ? "Human" : "Computer");
-	gd->white_name = (imWhite ? "Human" : "Computer");
-
-	if (imBlack == imWhite)
-	{
-		QMessageBox::warning(this, PACKAGE, tr("*** Both players are the same ! ***"));
-		delete gd; gd = NULL;
-		return;
-	}
-    BoardWindow * bw = new BoardWindow(gd , imBlack, imWhite );
-    if(bw)
-    {
-        addBoardWindow(bw);
-    } else {
-		delete gd; gd = NULL;
-	}
+    NewGameDialog * newGameDialog = new NewGameDialog(this);
+    newGameDialog->exec();
+    delete newGameDialog;
 }
 
 void MainWindow::addBoardWindow(BoardWindow * bw)

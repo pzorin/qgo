@@ -199,8 +199,8 @@ void BoardHandler::slotNavNextComment()
 void BoardHandler::slotNavIntersection()
 {
 	//should not happen
-	if (boardwindow->getGameMode() != modeNormal &&
-	    boardwindow->getGameMode() != modeObserve)
+    if (boardwindow->getGameMode() != modeEdit &&
+        boardwindow->getGameMode() != modeObserve)
 		return;
 	/* Double check the above, seems like we should be able to use
 	 * the nav button in any mode except maybe the scorephase of
@@ -446,10 +446,8 @@ void BoardHandler::updateMove(Move *m)
 //		hasParent(), hasPrevBrother(), hasNextBrother());
 //	if (board->get_isLocalGame())
 	// Update comment if normal game (if observe or match, the comment zone is kept as is)
-	if (boardwindow->getGameMode() == modeNormal)
+    if (boardwindow->getGameMode() == modeEdit)
 		boardwindow->getInterfaceHandler()->displayComment(m->getComment());
-
-
   
 	// Get rid of the varation ghosts
 //	if (setting->readIntEntry("VAR_GHOSTS"))//TODO
@@ -489,7 +487,7 @@ void BoardHandler::updateMove(Move *m)
 		boardwindow->getInterfaceHandler()->setCaptures(m->getCapturesBlack(), m->getCapturesWhite());
 
 	// Display times
-	if(boardwindow->getGameMode() == modeNormal)
+    if(boardwindow->getGameMode() == modeEdit)
 	{
 		if(m->getMoveNumber() == 0)
 		{
@@ -627,7 +625,7 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 	
 	switch (boardwindow->getGameMode())
 	{
-	case modeNormal :
+    case modeEdit :
 	case modeTeach :
 	case modeUndefined:
 		if (boardwindow->getGamePhase() == phaseScore || boardwindow->getGamePhase() == phaseEdit )
@@ -651,7 +649,7 @@ void BoardHandler::updateCursor(StoneColor currentMoveColor)
 		}
 		//else	//FIXME
 		break;
-	case modeComputer :
+    case modeLocal :
 		if (boardwindow->getGamePhase() == phaseScore ||boardwindow->getGamePhase() == phaseEdit )
 			cur = cursorIdle;
 		else
@@ -672,7 +670,7 @@ void BoardHandler::updateButtons(StoneColor currentMoveColor)
 	switch (boardwindow->getGameMode())
 	{
 		case modeMatch:
-		case modeComputer:
+        case modeLocal:
 			//qgoboard_computer enables and disables the resign button, might want to move that here, maybe
 			//but only applies to modeComputer
 			if(boardwindow->getGamePhase() == phaseOngoing)
@@ -715,7 +713,7 @@ void BoardHandler::updateVariationGhosts(Move *move)
 void BoardHandler::slotWheelEvent(QWheelEvent *e)
 {
 	// leave if not editing
-	if (boardwindow->getGameMode() != modeNormal &&
+    if (boardwindow->getGameMode() != modeEdit &&
 		boardwindow->getGameMode() != modeObserve)	//or observing
 		return;
 

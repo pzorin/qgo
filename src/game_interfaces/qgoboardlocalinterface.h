@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2009 by The qGo Project                                 *
+ *   Copyright (C) 2009-2014 by The qGo Project                            *
  *                                                                         *
  *   This file is part of qGo.   					   *
  *                                                                         *
@@ -19,67 +19,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef QGOBOARDLOCALINTERFACE_H
+#define QGOBOARDLOCALINTERFACE_H
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include "ui_mainwindow.h"
 #include "defines.h"
+#include "qgoboard.h"
 
-#include <QtWidgets>
-
-class RoomListing;
-class LoginDialog;
-class NetworkConnection;
-class GameDialog;
-class SGFParser;
 class BoardWindow;
+class Tree;
 class GameData;
+class Move;
+class QGtp;
 class Sound;
 
-class MainWindow : public QMainWindow
+class qGoBoardLocalInterface : public qGoBoard
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	MainWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 );
-	~MainWindow();
+    qGoBoardLocalInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
+    ~qGoBoardLocalInterface();
 
-	void addBoardWindow(BoardWindow *);
-	int checkForOpenBoards(void);
+    void checkComputersTurn();
+    void playComputer();
+    void feedPositionThroughGtp();
+
+signals:
 
 public slots:
-    void removeBoardWindow(QObject *);
-
-    void slot_fileNew();
-    void slot_fileOpen();
-    void openSGF(QString path);
-
-    void slot_getComputerPath();
-	void slot_computerPathChanged(const QString &);
-
-	//preferences tabs slots
-	void slot_cancelPressed();
-	void slot_currentChanged(int );
-	void slot_getGobanPath();
-    void slot_getTablePath();
-    void slot_languageChanged(int);
-
-    void openConnectDialog(void);
-
-protected:
-	void closeEvent(QCloseEvent *e);
-	void loadSettings();
-	void saveSettings();
+    void slot_playComputer(bool ok, int x, int y);
+    void slot_resignComputer();
+    void slot_passComputer();
+    virtual void slotDonePressed();
+    virtual void slotUndoPressed();
 
 private:
-    Ui::MainWindow ui;
-	Sound *connectSound, *gameSound;
+    virtual void sendMoveToInterface(StoneColor c,int x, int y);
+    virtual void sendPassToInterface(StoneColor c);
 
-    QList<BoardWindow *> boardWindowList;
-	QString currentWorkingDir;
+    void startGame() {}
+//	void enterScoreMode() {}
+    void leaveScoreMode() {}
 
-    LoginDialog * logindialog;
+    QGtp *gtp;
 };
 
-#endif
+#endif // QGOBOARDLOCALINTERFACE_H

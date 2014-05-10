@@ -38,6 +38,7 @@ QGtp::QGtp()
 	programProcess = NULL; // This to permit proper ending
 	responseReceived = false;
 	answer = "";
+    busy = false;
 }
 
 QGtp::~QGtp()
@@ -163,6 +164,7 @@ int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, i
 		return FAIL;
 	}
 
+    busy = false;
 	return OK;
 }
 
@@ -185,6 +187,7 @@ void QGtp::slot_readFromStdout()
         return;
 
     _response = answer;
+    qDebug("** QGtp::slot_readFromStdout():  %s" , _response.toLatin1().constData());
 
 	// do we have any answer after the command number ?
 	pos = _response.indexOf(" ");
@@ -194,9 +197,6 @@ void QGtp::slot_readFromStdout()
 		_response = "";
 	else
 		_response = _response.right(_response.length() - pos - 1);
-
-
-    qDebug("** QGtp::slot_read():  \'%s\'" , _response.toLatin1().constData());
 }
 
 // exit
@@ -215,6 +215,7 @@ void QGtp::slot_processExited(int exitCode, QProcess::ExitStatus exitStatus)
 int
 QGtp::waitResponse()
 {
+    busy=true;
     do //FIXME : use the readyRead signal of the process
 	{
         programProcess->waitForReadyRead(10);
@@ -223,6 +224,7 @@ QGtp::waitResponse()
 
 	qDebug("** QGtp::waitResponse():  \'%s\'" , _response.toLatin1().constData());
 	responseReceived = false;
+    busy=false;
 
     return (buff == "?" ? FAIL : OK);
 }
@@ -744,6 +746,9 @@ QGtp::combinationAttack (QString color)
 int
 QGtp::genmoveBlack ()
 {
+    if (busy)
+        return FAIL; // Ignore multiple requests while the engine is busy
+
     fflush("genmove black");
 	waitResponse();
 
@@ -783,6 +788,9 @@ QGtp::genmoveBlack ()
 int
 QGtp::genmoveWhite ()
 {
+    if (busy)
+        return FAIL;
+
     fflush("genmove white");
 	waitResponse();
 

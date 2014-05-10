@@ -631,31 +631,3 @@ TimeRecord qGoBoard::getTheirTimeRecord(void)
 {
 	return boardwindow->getClockDisplay()->getTimeRecord(!boardwindow->getMyColorIsBlack());
 }
-
-
-/***************************************************************************
- *
- * Normal Interface
- *
- ****************************************************************************/
-
-
-qGoBoardNormalInterface::qGoBoardNormalInterface(BoardWindow *bw, Tree * t, GameData *gd) 
-	: qGoBoard(bw, t, gd)
-{
-	boardwindow->getUi()->board->clearData();
-
-	// If we have handicap, but not from a loaded file, we have to set the handicap move
-	if (gameData->handicap && gameData->fileName.isEmpty())
-	{
-		setHandicap(gameData->handicap);
-		boardwindow->getBoardHandler()->slotNavLast();
-	}
-	else 
-//	tree->setToFirstMove();	
-		boardwindow->getBoardHandler()->slotNavFirst();
-
-	QSettings settings;
-	// value 1 = no sound, 0 all games, 2 my games
-	playSound = (settings.value("SOUND") != 1);
-}

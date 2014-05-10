@@ -58,7 +58,7 @@ enum MarkType { markNone = 0x00, markTerrBlack = 0x04, markTerrWhite = 0x08, mar
                 markSquare = 0x10, markCircle = 0x20, markTriangle = 0x30, markCross = 0x40,
                 markText = 0x50, markNumber = 0x60, markKoMarker = 0x70, markAll = 0x7c };
 
-enum GameMode { modeNormal, modeObserve, modeMatch, modeTeach, modeComputer, modeReview, modeUndefined };
+enum GameMode { modeLocal, modeObserve, modeMatch, modeTeach, modeEdit, modeReview, modeUndefined };
 enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseNavTo, phaseScore, phaseEnded};
 enum Codec { codecNone, codecBig5, codecEucJP, codecJIS, codecSJIS, codecEucKr, codecGBK, codecTscii };
 enum Language { None, German, French, Italian, Danish, Dutch, Czech, Chinese, Portugese, Polish, Russian, Turkish };

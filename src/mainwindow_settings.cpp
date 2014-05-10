@@ -103,9 +103,6 @@ void MainWindow::saveSettings()
 	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
 	settings.setValue("LAST_PATH", currentWorkingDir);
 //	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
-	settings.setValue("COMPUTER_PLAYS_WHITE", ui.computerPlaysWhite->isChecked());
-	settings.setValue("COMPUTER_HANDICAP", ui.newComputer_Handicap->text().toInt());
-	settings.setValue("COMPUTER_KOMI", ui.newComputer_Komi->text().toInt());
 	settings.setValue("SKIN", ui.LineEdit_goban->text()); 
 	settings.setValue("SKIN_TABLE", ui.LineEdit_table->text()); 
 
@@ -193,11 +190,6 @@ void MainWindow::saveSettings()
 	settings.setValue("BYO_SOUND_WARNING", ui.ByoSoundWarning->isChecked());
 	settings.setValue("BYO_SEC_WARNING",ui.ByoSecWarning->value());
 
-	//SGF edition tab default values
-	settings.setValue("EDIT_SIZE",ui.newFile_Size->value());
-	settings.setValue("EDIT_HANDICAP",ui.newFile_Handicap->value());
-	settings.setValue("EDIT_KOMI",ui.newFile_Komi->text());
-
 	//qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());	
 
 	preferences.fill();
@@ -220,20 +212,10 @@ void MainWindow::loadSettings()
         settings.setValue("COMPUTER_PATH", computer_path);
     }
     ui.LineEdit_computer->setText(computer_path);
-	if(settings.value("COMPUTER_PLAYS_WHITE").toBool())
-		ui.computerPlaysWhite->setChecked(true);
-	else
-		ui.computerPlaysBlack->setChecked(true);
-	ui.newComputer_Handicap->setValue(settings.value("COMPUTER_HANDICAP").toInt());
 	if((var = settings.value("LAST_PATH")) == QVariant())
 		currentWorkingDir = QString();
 	else
 		currentWorkingDir = var.toString();
-	/* Why is this komi text and other default komi is value?  FIXME,
-	 * Spin versus LineEdit, but inconsistent */
-	if((var = settings.value("COMPUTER_KOMI")) == QVariant())
-		var = 5.5;
-	ui.newComputer_Komi->setText(var.toString());
 	
 	ui.radioButtonStones_real->setChecked(true);
 	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
@@ -290,16 +272,6 @@ void MainWindow::loadSettings()
 	//server byo yomi warning
 	ui.ByoSoundWarning->setChecked(settings.value("BYO_SOUND_WARNING").toBool());
 	ui.ByoSecWarning->setValue(settings.value("BYO_SEC_WARNING").toInt());
-	
-	
-	//SGF edition tab default values
-	if((var = settings.value("EDIT_SIZE")) == QVariant())
-		var = 19;
-	ui.newFile_Size->setValue(var.toInt());
-	ui.newFile_Handicap->setValue(settings.value("EDIT_HANDICAP").toInt());
-	if((var = settings.value("EDIT_KOMI")) == QVariant())
-		var = 5.5;
-	ui.newFile_Komi->setText(var.toString());
 
 	preferences.fill();
 }

@@ -45,6 +45,8 @@ public:
 	QGtp();
 	~QGtp();
 
+    bool isBusy() { return busy; }
+
 	/****************************
  	*                          *
  	****************************/
@@ -205,6 +207,7 @@ public:
 
 	bool responseReceived,issueCmdNb ;
 	
+    bool busy;
 };
 
 

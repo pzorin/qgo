@@ -49,13 +49,13 @@ InterfaceHandler::InterfaceHandler(BoardWindow *bw)
 //    buttonState = new ButtonState;
 	scored_flag = false;
 
-	tabPlay  = boardwindow->getUi()->tabTools->widget(0); 
-	tabEdit = boardwindow->getUi()->tabTools->widget(1) ;
+    tabPlay  = boardwindow->getUi()->tabPlay;
+    tabEdit = boardwindow->getUi()->tabEdit;
 
 	GameMode mode = boardwindow->getGameMode();
 
 
-	if (mode == modeNormal || mode == modeComputer)
+    if (mode == modeEdit || mode == modeLocal)
 		boardwindow->getUi()->commentEdit2->setDisabled(true);
 
 }
@@ -117,44 +117,37 @@ void InterfaceHandler::updateCaption(GameData *gd)
 				+ (!gd->black_rank.isEmpty() ?
 					" " + gd->black_rank : 
 					QString()) :
-				gd->gameName) +	"   " + QString(PACKAGE));
+                gd->gameName) +	" - " + QString(PACKAGE));
 
 
 	bool simple = gd->white_rank.length() == 0 && gd->black_rank.length() == 0;
-	QGroupBox *gb = boardwindow->getUi()->whiteFrame;
 	/* This name stuff is super redundant with below FIXME */
 	QString player = gd->white_name;
 	if (simple && player == QObject::tr("White"))
-		gb->setTitle(QObject::tr("White"));	
+        boardwindow->getUi()->whiteName->setText(QObject::tr("White"));
 	else if(!gd->nigiriToBeSettled)
 	{
 		// truncate to 13 characters max
 		player.truncate(13);
 
 		if (gd->white_rank.length() != 0)
-			player = QObject::tr("W") + ": " + player + " " + gd->white_rank;
-		else
-			player = QObject::tr("W") + ": " + player;
+            player = player + " " + gd->white_rank;
 		
-		gb->setTitle(player);
+        boardwindow->getUi()->whiteName->setText(player);
 	}
-
-	gb = boardwindow->getUi()->blackFrame;
 
 	player = gd->black_name;
 	if (simple && player == QObject::tr("Black"))
-		gb->setTitle(QObject::tr("Black"));	
+        boardwindow->getUi()->blackName->setText(QObject::tr("Black"));
 	else if(!gd->nigiriToBeSettled)
 	{
 		// truncate to 13 characters max
 		player.truncate(13);
 
 		if (gd->black_rank.length() != 0)
-			player = QObject::tr("B") + ": " + player + " " + gd->black_rank;
-		else
-			player = QObject::tr("B") + ": " + player;
-		
-		gb->setTitle(player);
+            player = player + " " + gd->black_rank;
+
+        boardwindow->getUi()->blackName->setText(player);
 	}
 	
 	//TODO set  clock
@@ -242,7 +235,7 @@ void InterfaceHandler::setMoveData(int n, bool black, int brothers, int sons, bo
 		
 		boardwindow->getUi()->slider->setEnabled(false);
 	}
-	else if (boardwindow->getGameMode() == modeNormal || boardwindow->getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
+    else if (boardwindow->getGameMode() == modeEdit || boardwindow->getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
 	{
 		// Update the toolbar buttons
 		boardwindow->getUi()->navPrevVar->setEnabled(hasPrev);
@@ -363,7 +356,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 	switch (mode)
 	{
 		
-	case modeNormal:
+    case modeEdit:
 //		modeButton->setEnabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabEnable);
 		boardwindow->getUi()->actionPlay->setEnabled(true);
@@ -449,7 +442,7 @@ void InterfaceHandler::toggleMode(GameMode mode)
 //		statusMark->setText(getStatusMarkText(board->getMarkType()));
 		return ;
 
-	case   modeComputer :
+    case   modeLocal :
 //		modeButton->setDisabled(true);
 //		mainWidget->setToolsTabWidget(tabEdit, tabDisable);
 		boardwindow->getUi()->actionPlay->setDisabled(true);

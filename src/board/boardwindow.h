@@ -103,6 +103,13 @@ public slots:
 	void keyPressEvent(QKeyEvent *e);
 	void slotToggleInsertStones(bool val);
 	void slot_addtime_menu(QAction *);
+    void setComputerBlack(bool val);
+    void setComputerWhite(bool val);
+    void requestComputerMove();
+    void setBlackName(QString name);
+    void setWhiteName(QString name);
+    void switchToEditMode();
+    void switchToLocalMode();
 
 private:
 	void setupUI(void);
