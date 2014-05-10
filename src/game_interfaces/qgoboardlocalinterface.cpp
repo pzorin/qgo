@@ -49,7 +49,7 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
     // Set up computer interface.
     gtp = new QGtp() ;
 
-    connect (gtp, SIGNAL(signal_computerPlayed(bool, int, int)), SLOT(slot_playComputer(bool, int, int)));
+    connect (gtp, SIGNAL(signal_computerPlayed(int, int)), SLOT(slot_playComputer(int, int)));
     connect (gtp, SIGNAL(computerResigned()), SLOT(slot_resignComputer()));
     connect (gtp, SIGNAL(computerPassed()), SLOT(slot_passComputer()));
 
@@ -151,14 +151,8 @@ void qGoBoardLocalInterface::playComputer()
 /*
  * This slot is triggered by the signal emitted by 'gtp' when getting a move
  */
-void qGoBoardLocalInterface::slot_playComputer(bool ok, int x, int y)
+void qGoBoardLocalInterface::slot_playComputer(int x, int y)
 {
-    if (!ok)
-    {
-        QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to have the program play its stone\n") + gtp->getLastMessage());
-        return;
-    }
-
     bool b = getBlackTurn();
     if (!doMove(b ? stoneBlack : stoneWhite, x, y))
         QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move (%1, %2) seems to be invalid").arg(x).arg(y));

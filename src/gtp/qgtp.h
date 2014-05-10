@@ -19,6 +19,7 @@
 #define QGTP_H
 
 #include <QProcess>
+#include <QList>
 
 #define IGTP_BUFSIZE 2048    /* Size of the response buffer */
 #define OK 0
@@ -33,7 +34,7 @@ class QGtp : public QObject{
 	Q_OBJECT
 
 signals:
-    void signal_computerPlayed( bool, int, int );
+    void signal_computerPlayed( int, int );
     void computerResigned();
     void computerPassed();
 
@@ -201,7 +202,8 @@ public:
 	char *_outFile;
 	char *outFile;
 	FILE *_inFile;
-	QString buff, _response, answer;
+    QString _response, answer;
+    QList<int> moveRequests;
 
     int waitResponse();
 

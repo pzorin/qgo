@@ -46,7 +46,7 @@ public:
 signals:
 
 public slots:
-    void slot_playComputer(bool ok, int x, int y);
+    void slot_playComputer(int x, int y);
     void slot_resignComputer();
     void slot_passComputer();
     virtual void slotDonePressed();

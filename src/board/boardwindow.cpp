@@ -91,6 +91,8 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 				msg.exec();
 				return;
 			}
+        ui.computerBlack->setChecked(!iAmBlack);
+        ui.computerWhite->setChecked(!iAmWhite);
 			break;	
 		case modeObserve :
 			qgoboard = new 	qGoBoardObserveInterface(this, tree,gameData);
@@ -1059,6 +1061,7 @@ void BoardWindow::setBlackName(QString name)
     gameData->black_name = name;
     ui.blackName->blockSignals(true);
     ui.blackName->setText(name);
+    interfaceHandler->updateCaption(gameData);
     ui.blackName->blockSignals(false);
 }
 
@@ -1067,6 +1070,7 @@ void BoardWindow::setWhiteName(QString name)
     gameData->white_name = name;
     ui.whiteName->blockSignals(true);
     ui.whiteName->setText(name);
+    interfaceHandler->updateCaption(gameData);
     ui.whiteName->blockSignals(false);
 }
 

@@ -197,6 +197,36 @@ void QGtp::slot_readFromStdout()
 		_response = "";
 	else
 		_response = _response.right(_response.length() - pos - 1);
+
+    int i = moveRequests.indexOf(number);
+    if (i == -1)
+        return;
+    // Otherwise we have an answer to a move request.
+    // This is the one case in which we currently do not busy-wait.
+    busy=false;
+    moveRequests.removeAt(i);
+
+    if (_response == "resign")
+    {
+        emit computerResigned();
+        return;
+    } else if (_response.contains("Pass",Qt::CaseInsensitive))
+    {
+        emit computerPassed();
+        return;
+    }
+
+    int x = _response[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
+    // skip 'J'
+    if (x > 8)
+        x--;
+
+    int y;
+    if (_response[2] >= '0' && _response[2] <= '9')
+        y = _response.mid(1,2).toInt();
+    else
+        y = _response[1].digitValue();
+    emit signal_computerPlayed( x, y );
 }
 
 // exit
@@ -226,7 +256,7 @@ QGtp::waitResponse()
 	responseReceived = false;
     busy=false;
 
-    return (buff == "?" ? FAIL : OK);
+    return OK;
 }
 
 /****************************
@@ -749,35 +779,10 @@ QGtp::genmoveBlack ()
     if (busy)
         return FAIL; // Ignore multiple requests while the engine is busy
 
+    moveRequests.append(_cpt);
+    busy=true;
     fflush("genmove black");
-	waitResponse();
-
-    if (_response == "resign")
-    {
-        emit computerResigned();
-        return OK;
-    }
-
-    if (_response.contains("Pass",Qt::CaseInsensitive))
-    {
-        emit computerPassed();
-        return OK;
-    }
-
-    int x = _response[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
-    // skip 'J'
-    if (x > 8)
-        x--;
-
-    int y;
-    if (_response[2] >= '0' && _response[2] <= '9')
-        y = _response.mid(1,2).toInt();
-    else
-        y = _response[1].digitValue();
-
-    emit signal_computerPlayed( (buff != "?") , x, y );
-
-	return OK;
+    return OK;
 }
 
 /* Function:  Generate and play the supposedly best white move.
@@ -791,34 +796,10 @@ QGtp::genmoveWhite ()
     if (busy)
         return FAIL;
 
+    moveRequests.append(_cpt);
+    busy=true;
     fflush("genmove white");
-	waitResponse();
-
-    if (_response == "resign")
-    {
-        emit computerResigned();
-        return OK;
-    }
-
-    if (_response.contains("Pass",Qt::CaseInsensitive))
-    {
-        emit computerPassed();
-        return OK;
-    }
-
-    int x = _response[0].unicode() - QChar::fromLatin1('A').unicode() + 1;
-    // skip 'J'
-    if (x > 8)
-        x--;
-
-    int y;
-    if (_response[2] >= '0' && _response[2] <= '9')
-        y = _response.mid(1,2).toInt();
-    else
-        y = _response[1].digitValue();
-    emit signal_computerPlayed( (buff != "?") , x, y );
-
-	return OK;
+    return OK;
 }
 
 /* Function:  Generate the supposedly best move for either color.
