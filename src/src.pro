@@ -15,6 +15,15 @@ win32 {
     RC_FILE = qgo.rc
 }
 TEMPLATE = app
+
+INCLUDEPATH += . network \
+audio \
+gtp \
+game_interfaces \
+game_tree \
+board \
+sgf
+
 TRANSLATIONS = translations/qgo_cz.ts \
 	    	translations/qgo_de.ts \
 		translations/qgo_dk.ts \
@@ -159,9 +168,6 @@ SOURCES += displayboard.cpp \
     game_interfaces/qgoboardlocalinterface.cpp \
     newgamedialog.cpp
 
-QT -= qt3support
-DEPENDPATH += """"""board sgf game_tree game_interfaces gtp network""""""
-
 linux-* {
     QGO_INSTALL_PATH = /usr/share/qgo
     QGO_INSTALL_BIN_PATH = /usr/bin
@@ -182,13 +188,6 @@ linux-* {
     mimetype.files = x-sgf.xml
     INSTALLS += filetype mimetype
 }
-INCLUDEPATH += . network \
-audio \
-gtp \
-game_interfaces \
-game_tree \
-board \
-sgf
 
 isEmpty(QMAKE_LRELEASE) {
     win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
