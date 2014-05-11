@@ -33,6 +33,7 @@
 #include "clockdisplay.h"
 #include "gamedata.h"
 #include "matrix.h"
+#include "ui_boardwindow.h"
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {

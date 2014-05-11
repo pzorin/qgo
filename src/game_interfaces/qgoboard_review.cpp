@@ -25,6 +25,7 @@
 #include "boardhandler.h"
 #include "gamedata.h"
 #include "boardwindow.h"
+#include "ui_boardwindow.h"
 
 #include <QMessageBox>
 

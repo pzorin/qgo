@@ -33,6 +33,7 @@
 #include "qgoboard.h"
 #include "boardhandler.h"
 #include "clockdisplay.h"
+#include "ui_boardwindow.h"
 
 /* It would be difficult to create a board without a connection,
  * but we need to either be certain and not test at all, or assign

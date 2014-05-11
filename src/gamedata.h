@@ -23,6 +23,8 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
 
+#include <QString>
+#include "defines.h"
 class GameResult;
 
 class GameData

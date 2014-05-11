@@ -41,6 +41,7 @@
 #include "matrix.h"
 #include "tree.h"
 #include "../network/messages.h"
+#include "ui_boardwindow.h"
 
 #include <iostream>
 

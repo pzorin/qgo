@@ -29,6 +29,7 @@
 #include "gamedata.h"
 #include "boardwindow.h"
 #include "qgtp.h"
+#include "ui_boardwindow.h"
 
 #include <QMessageBox>
 

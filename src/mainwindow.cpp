@@ -29,16 +29,17 @@
 #include "audio.h"
 #include "sgfparser.h"
 #include "newgamedialog.h"
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
-	: QMainWindow( parent,  flags )
+    : QMainWindow( parent,  flags ), ui(new Ui::MainWindow)
 {
 	qDebug( "Home Path : %s" ,QDir::homePath().toLatin1().constData());	
 	qDebug( "Current Path : %s" ,QDir::currentPath ().toLatin1().constData());
 
+    ui->setupUi(this);
     this->setAttribute( Qt::WA_DeleteOnClose );
-	ui.setupUi(this);
-	//hide by default
+    //hide by default
 	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));
 
 	// loads the settings
@@ -46,28 +47,28 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// connecting the Go server tab buttons and signals
 
 	// connecting the new game button
-    connect( ui.actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpen()) );
-    connect(ui.actionNew,SIGNAL(triggered()),SLOT(slot_fileNew()));
+    connect( ui->actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpen()) );
+    connect(ui->actionNew,SIGNAL(triggered()),SLOT(slot_fileNew()));
 
 
-	connect( ui.computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
-	connect(ui.LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
+    connect( ui->computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
+    connect(ui->LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
 	
-	connect(ui.cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
-	connect(ui.cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
-	connect(ui.stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
+    connect(ui->cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
+    connect(ui->cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
+    connect(ui->stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
 
 	//coneects the preference buttons
-	connect( ui.gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
-	connect( ui.tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
-	connect(ui.comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
+    connect( ui->gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
+    connect( ui->tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
+    connect(ui->comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
 
 	//sound
     connectSound = 	new Sound("static.wav");
 
     logindialog = new LoginDialog(this);
 
-    connect( ui.actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
+    connect( ui->actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
 }
 
 MainWindow::~MainWindow()
@@ -77,7 +78,7 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent * e)
 {
 	/* Close connection if open */
-    if(ui.connectionWidget->closeConnection() < 0)
+    if(ui->connectionWidget->closeConnection() < 0)
 	{
 		e->ignore();
 		return;

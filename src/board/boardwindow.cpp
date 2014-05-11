@@ -19,8 +19,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-#include "stdio.h"
 #include "boardwindow.h"
 #include "boardhandler.h"
 #include "board.h"
@@ -34,12 +32,15 @@
 #include "../network/boarddispatch.h"
 #include "gameinfo.h"
 #include "matrix.h"
+#include "ui_boardwindow.h"
 
 class BoardHandler;
 
 BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class BoardDispatch * _dispatch)
-    : QMainWindow(0, 0), addtime_menu(0), boardSize(gd->board_size)
+    : QMainWindow(0, 0), ui(new Ui::BoardWindow), addtime_menu(0), boardSize(gd->board_size)
 {
+    ui->setupUi(this);
+
     if(gd != NULL)
     {
         gameData = gd;
@@ -91,8 +92,8 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 				msg.exec();
 				return;
 			}
-        ui.computerBlack->setChecked(!iAmBlack);
-        ui.computerWhite->setChecked(!iAmWhite);
+        ui->computerBlack->setChecked(!iAmBlack);
+        ui->computerWhite->setChecked(!iAmWhite);
 			break;	
 		case modeObserve :
 			qgoboard = new 	qGoBoardObserveInterface(this, tree,gameData);
@@ -142,7 +143,7 @@ BoardWindow::~BoardWindow()
 	
 	settings.setValue("BOARD_WINDOW_SIZE_X", width());
 	settings.setValue("BOARD_WINDOW_SIZE_Y", height());
-//	settings.setValue("BOARD_SIZES", ui.boardSplitter->saveState());
+//	settings.setValue("BOARD_SIZES", ui->boardSplitter->saveState());
 	
 	delete tree;	//okay?
 	
@@ -207,56 +208,55 @@ void BoardWindow::closeEvent(QCloseEvent *e)
 
 void BoardWindow::setupUI(void)
 {
-	QSettings settings;
-	ui.setupUi(this);
-	ui.actionWhatsThis = QWhatsThis::createAction ();
+    QSettings settings;
+    ui->actionWhatsThis = QWhatsThis::createAction ();
 
 
-    moveNumLabel = new QLabel(ui.statusbar);
-    komiLabel = new QLabel(ui.statusbar);
-    buyoyomiLabel = new QLabel(ui.statusbar);
-    handicapLabel = new QLabel(ui.statusbar);
-    freeratedLabel = new QLabel(ui.statusbar);
-    ui.statusbar->addPermanentWidget(moveNumLabel);
-    ui.statusbar->addPermanentWidget(handicapLabel);
-    ui.statusbar->addPermanentWidget(komiLabel);
-    ui.statusbar->addPermanentWidget(buyoyomiLabel);
-    ui.statusbar->addPermanentWidget(freeratedLabel);
+    moveNumLabel = new QLabel(ui->statusbar);
+    komiLabel = new QLabel(ui->statusbar);
+    buyoyomiLabel = new QLabel(ui->statusbar);
+    handicapLabel = new QLabel(ui->statusbar);
+    freeratedLabel = new QLabel(ui->statusbar);
+    ui->statusbar->addPermanentWidget(moveNumLabel);
+    ui->statusbar->addPermanentWidget(handicapLabel);
+    ui->statusbar->addPermanentWidget(komiLabel);
+    ui->statusbar->addPermanentWidget(buyoyomiLabel);
+    ui->statusbar->addPermanentWidget(freeratedLabel);
 
 	// Initialises the buttons and else
 	editButtons = new QButtonGroup(this);
-	editButtons->addButton(ui.stoneButton, 0);
-	editButtons->addButton(ui.squareButton, 1);
-	editButtons->addButton(ui.circleButton, 2);
-	editButtons->addButton(ui.triangleButton, 3);
-	editButtons->addButton(ui.crossButton, 4);
-	editButtons->addButton(ui.labelLetterButton, 5);
-	editButtons->addButton(ui.labelNumberButton, 6);
-	editButtons->addButton(ui.colorButton, 7);
+    editButtons->addButton(ui->stoneButton, 0);
+    editButtons->addButton(ui->squareButton, 1);
+    editButtons->addButton(ui->circleButton, 2);
+    editButtons->addButton(ui->triangleButton, 3);
+    editButtons->addButton(ui->crossButton, 4);
+    editButtons->addButton(ui->labelLetterButton, 5);
+    editButtons->addButton(ui->labelNumberButton, 6);
+    editButtons->addButton(ui->colorButton, 7);
 	editButtons->setExclusive(false);
 
 
 	QMenu *menu = new QMenu();
-//	menu->insertAction(0,ui.fileExportASCII);
-	menu->insertAction(0,ui.actionExportSgfClipB);
-	menu->insertAction(0,ui.actionExportPic);
-	menu->insertAction(0,ui.actionExportPicClipB);
+//	menu->insertAction(0,ui->fileExportASCII);
+    menu->insertAction(0,ui->actionExportSgfClipB);
+    menu->insertAction(0,ui->actionExportPic);
+    menu->insertAction(0,ui->actionExportPicClipB);
 
-	ui.actionExport->setMenu(menu);
+    ui->actionExport->setMenu(menu);
 
 	QToolButton *exportButton = new QToolButton();
-	exportButton->setDefaultAction(ui.actionExport);
+    exportButton->setDefaultAction(ui->actionExport);
 	
 	exportButton->setPopupMode( QToolButton::InstantPopup);
-	ui.toolBar->insertWidget ( ui.actionImport, exportButton );
+    ui->toolBar->insertWidget ( ui->actionImport, exportButton );
 
 	clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
 	
 	if(dispatch && dispatch->flipCoords())
-		ui.board->setCoordType(numberbottomi);
+        ui->board->setCoordType(numberbottomi);
 	else
-		ui.board->setCoordType(numbertopnoi);
-	ui.board->init(boardSize);
+        ui->board->setCoordType(numbertopnoi);
+    ui->board->init(boardSize);
 	
 	interfaceHandler = new InterfaceHandler( this);
     interfaceHandler->toggleMode(gameData->gameMode);
@@ -275,99 +275,99 @@ void BoardWindow::setupUI(void)
 	}
 	QVariant board_sizes_for_splitter = settings.value("BOARD_SIZES");
 //	if(board_sizes_for_splitter != QVariant())
-//		ui.boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
+//		ui->boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
 	
 	// Connects the nav buttons to the slots
-	connect(ui.navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
-	connect(ui.navBackward,SIGNAL(pressed()), boardHandler, SLOT(slotNavBackward()));
-	connect(ui.navNextVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextVar()));
-	connect(ui.navPrevVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevVar()));
-	connect(ui.navFirst, SIGNAL(pressed()), boardHandler, SLOT(slotNavFirst()));
-	connect(ui.navLast, SIGNAL(pressed()), boardHandler, SLOT(slotNavLast()));
-	connect(ui.navMainBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavMainBranch()));
-	connect(ui.navStartVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavStartVar()));
-	connect(ui.navNextBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextBranch()));
-	connect(ui.navIntersection, SIGNAL(pressed()), boardHandler, SLOT(slotNavIntersection()));
-	connect(ui.navPrevComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevComment()));
-	connect(ui.navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
-	connect(ui.slider, SIGNAL(sliderMoved ( int)), boardHandler , SLOT(slotNthMove(int)));
+    connect(ui->navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
+    connect(ui->navBackward,SIGNAL(pressed()), boardHandler, SLOT(slotNavBackward()));
+    connect(ui->navNextVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextVar()));
+    connect(ui->navPrevVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevVar()));
+    connect(ui->navFirst, SIGNAL(pressed()), boardHandler, SLOT(slotNavFirst()));
+    connect(ui->navLast, SIGNAL(pressed()), boardHandler, SLOT(slotNavLast()));
+    connect(ui->navMainBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavMainBranch()));
+    connect(ui->navStartVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavStartVar()));
+    connect(ui->navNextBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextBranch()));
+    connect(ui->navIntersection, SIGNAL(pressed()), boardHandler, SLOT(slotNavIntersection()));
+    connect(ui->navPrevComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevComment()));
+    connect(ui->navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
+    connect(ui->slider, SIGNAL(sliderMoved ( int)), boardHandler , SLOT(slotNthMove(int)));
 
 
-	connect(ui.board, SIGNAL(signalWheelEvent(QWheelEvent*)),
+    connect(ui->board, SIGNAL(signalWheelEvent(QWheelEvent*)),
 		boardHandler, SLOT(slotWheelEvent(QWheelEvent*)));
 
 
 	//Connects the 'edit' buttons to the slots
 	connect(editButtons, SIGNAL(buttonPressed ( int )), 
 		this, SLOT(slotEditButtonPressed( int )));
-	connect(ui.insertMoveButton, SIGNAL(toggled(bool)), SLOT(slotToggleInsertStones(bool)));
-	connect(ui.deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
+    connect(ui->insertMoveButton, SIGNAL(toggled(bool)), SLOT(slotToggleInsertStones(bool)));
+    connect(ui->deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
 
 
-    connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotShowCoords(bool)));
-	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
-	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
-	connect(ui.actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
-	connect(ui.actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
-	connect(ui.actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
-	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
-	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
-	connect(ui.actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
+    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotShowCoords(bool)));
+    connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
+    connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
+    connect(ui->actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
+    connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
+    connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
+    connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
+    connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
+    connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
 
 	/* Set column widths ?? */
     if ((gameData->gameMode == modeEdit) || (gameData->gameMode == modeLocal))
     {
-        connect(ui.buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
-        connect(ui.buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
+        connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
+        connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
     } else {
-        ui.buttonModeEdit->hide();
-        ui.buttonModeLocal->hide();
+        ui->buttonModeEdit->hide();
+        ui->buttonModeLocal->hide();
     }
 }
 
 void BoardWindow::setupBoardUI(void)
 {
 	//make sure to set the sound button to the proper state before anything
-    ui.actionSound->setChecked(qgoboard->getPlaySound());
+    ui->actionSound->setChecked(qgoboard->getPlaySound());
 	
 	//Connects the board to the interface and boardhandler
-	connect(ui.board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) , 
+    connect(ui->board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) ,
 		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
 
 	//Connects the game buttons to the slots
-	connect(ui.passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-	connect(ui.passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-	connect(ui.scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+    connect(ui->passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+    connect(ui->passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+    connect(ui->scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
 	
 	
-	connect(ui.doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
-    connect(ui.reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));
-	connect(ui.undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
+    connect(ui->doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
+    connect(ui->reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));
+    connect(ui->undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
 
     // Why is this conditional? FIXME
     if (gameData->gameMode == modeMatch || gameData->gameMode == modeLocal || gameData->gameMode == modeEdit)
-		connect(ui.resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
+        connect(ui->resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
 
 
 	if(gameData->gameMode == modeMatch)
 	{
-		connect(ui.adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
-		connect(ui.countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
-		connect(ui.drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
+        connect(ui->adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
+        connect(ui->countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
+        connect(ui->drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
     } else {
-        ui.adjournButton->hide();
-        ui.countButton->hide();
-        ui.drawButton->hide();
+        ui->adjournButton->hide();
+        ui->countButton->hide();
+        ui->drawButton->hide();
 	}
 	if(dispatch && !dispatch->supportsRequestAdjourn())
-        ui.adjournButton->hide();
+        ui->adjournButton->hide();
 	if(dispatch && !dispatch->supportsRequestCount())
-        ui.countButton->hide();
+        ui->countButton->hide();
 	if(dispatch && !dispatch->supportsRequestDraw())
-        ui.drawButton->hide();
+        ui->drawButton->hide();
 
-	ui.insertMoveButton->setChecked(false);
-    ui.insertMoveButton->setEnabled(gameData->gameMode == modeEdit);
+    ui->insertMoveButton->setChecked(false);
+    ui->insertMoveButton->setEnabled(gameData->gameMode == modeEdit);
     if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
 	{
 		addtime_menu = new QMenu();
@@ -388,11 +388,11 @@ void BoardWindow::setupBoardUI(void)
 		{
 			if(myColorIsBlack)
 			{
-				ui.pb_timeWhite->setMenu(addtime_menu);
+                ui->pb_timeWhite->setMenu(addtime_menu);
 			}
 			else if(myColorIsWhite)
 			{
-				ui.pb_timeBlack->setMenu(addtime_menu);
+                ui->pb_timeBlack->setMenu(addtime_menu);
 			}
 			else
 				qDebug("Warning: Nigiri settled in match mode but player has no color");
@@ -404,34 +404,34 @@ void BoardWindow::setupBoardUI(void)
 	 * its more part of the UI than the board.  But maybe its better
 	 * or different here.  FIXME */
 	/*
-	connect(ui.actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
-	connect(ui.actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
-	connect(ui.actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
-	connect(ui.actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
-	connect(ui.actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
-	connect(ui.actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
-	connect(ui.actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
-	connect(ui.actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
-	connect(ui.actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
+    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
+    connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
+    connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
+    connect(ui->actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
+    connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
+    connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
+    connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
+    connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
+    connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
 	*/
 
 	// Needs Adjourn button ????
 
 	//connects the comments and edit line to the slots
-	connect(ui.commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
-    connect(ui.commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
+    connect(ui->commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
+    connect(ui->commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 
-    connect(ui.computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
-    connect(ui.computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
-    connect(ui.computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
-    ui.computerControls->setEnabled(gameData->gameMode == modeLocal);
+    connect(ui->computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
+    connect(ui->computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
+    connect(ui->computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
+    ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
 
     if ((gameData->gameMode == modeLocal) || (gameData->gameMode == modeEdit))
     {
-        connect(ui.blackName,SIGNAL(textChanged(QString)),SLOT(setBlackName(QString)));
-        connect(ui.whiteName,SIGNAL(textChanged(QString)),SLOT(setWhiteName(QString)));
-        ui.blackName->setReadOnly(false);
-        ui.whiteName->setReadOnly(false);
+        connect(ui->blackName,SIGNAL(textChanged(QString)),SLOT(setBlackName(QString)));
+        connect(ui->whiteName,SIGNAL(textChanged(QString)),SLOT(setWhiteName(QString)));
+        ui->blackName->setReadOnly(false);
+        ui->whiteName->setReadOnly(false);
     }
 }
 
@@ -442,7 +442,7 @@ void BoardWindow::resizeEvent(QResizeEvent * e)
 
 void BoardWindow::checkHideToolbar(int h)
 {
-    ui.varLabel->setVisible(h > 700);
+    ui->varLabel->setVisible(h > 700);
 }
 
 void BoardWindow::gameDataChanged(void)
@@ -595,7 +595,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
 //#else
-			ui.colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_white.png"));
+            ui->colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_white.png"));
 			boardHandler->updateCursor(stoneBlack);
 //#endif
 		}
@@ -605,7 +605,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //#ifndef USE_XPM
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
 //#else
-			ui.colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_black.png"));
+            ui->colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_black.png"));
 			boardHandler->updateCursor(stoneWhite);
 //#endif
 		}
@@ -673,7 +673,7 @@ void BoardWindow::slotExportPic()
 	if (!fileName.endsWith(ext))
 		fileName.append(ext);
 
-	ui.board->exportPicture(fileName, new QString(filter->section(" ",0,0)), false);//->left(3));
+    ui->board->exportPicture(fileName, new QString(filter->section(" ",0,0)), false);//->left(3));
 }
 
 /*
@@ -682,7 +682,7 @@ void BoardWindow::slotExportPic()
 void BoardWindow::slotExportPicClipB()
 {
 	QString null = "";
-	ui.board->exportPicture(0, 0 , true);	
+    ui->board->exportPicture(0, 0 , true);
 }
 
 /*
@@ -697,7 +697,7 @@ void BoardWindow::slotDuplicate()
 	BoardWindow *b = new BoardWindow(gd, true, true);
 	
 	//doublecheck FIXME
-	/* Note also that this does not duplicate any ui.board->marks
+    /* Note also that this does not duplicate any ui->board->marks
 	 * that are on the original board.  I think score marks qualify
 	 * but come up some other way as well */
 	/* Note also that this thing below is broken for duplicating edit
@@ -716,7 +716,7 @@ void BoardWindow::slotDuplicate()
 	if(this->getGamePhase() == phaseScore)
 	{
 		b->qgoboard->enterScoreMode();
-		b->ui.scoreButton->setDown(true);
+        b->ui->scoreButton->setDown(true);
 	}*/
 }
 
@@ -725,7 +725,7 @@ void BoardWindow::slotDuplicate()
  */
 void BoardWindow::slotShowCoords(bool toggle)
 {
-    ui.board->setShowCoords(toggle);
+    ui->board->setShowCoords(toggle);
 }
 
 void BoardWindow::slotGameInfo(bool /*toggle*/)
@@ -796,52 +796,52 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			//more defaults FIXME, and doublecheck
 			//also consider vanishing buttons instead of making
 			//them disabled, especially with like computer go, etc.
-			ui.adjournButton->setEnabled(false);
-			ui.drawButton->setEnabled(false);
+            ui->adjournButton->setEnabled(false);
+            ui->drawButton->setEnabled(false);
 			break;
 		case phaseEnded:
-			if(ui.undoButton)
-				ui.undoButton->setDisabled(true);
-			if(ui.resignButton)
-				ui.resignButton->setDisabled(true);
-			if(ui.adjournButton)
-				ui.adjournButton->setDisabled(true);
-			if(ui.passButton)
-				ui.passButton->setDisabled(true);
-			if(ui.countButton)
-				ui.countButton->setDisabled(true);
-			if(ui.drawButton)
-				ui.drawButton->setDisabled(true);
+            if(ui->undoButton)
+                ui->undoButton->setDisabled(true);
+            if(ui->resignButton)
+                ui->resignButton->setDisabled(true);
+            if(ui->adjournButton)
+                ui->adjournButton->setDisabled(true);
+            if(ui->passButton)
+                ui->passButton->setDisabled(true);
+            if(ui->countButton)
+                ui->countButton->setDisabled(true);
+            if(ui->drawButton)
+                ui->drawButton->setDisabled(true);
 			/* Done button only for scoring, otherwise close
 			 * window */
-			if(ui.doneButton)
-				ui.doneButton->setDisabled(true);
+            if(ui->doneButton)
+                ui->doneButton->setDisabled(true);
 			break;
 		case phaseOngoing:
 			/* among many other things: FIXME, adding as we go, for now,
 			 * sloppy */
-			if(ui.passButton)
-				ui.passButton->setEnabled(true);
+            if(ui->passButton)
+                ui->passButton->setEnabled(true);
             if(gameData->undoAllowed || gameData->gameMode == modeLocal)
-				ui.undoButton->setEnabled(true);
+                ui->undoButton->setEnabled(true);
 			else
-				ui.undoButton->setEnabled(false);
+                ui->undoButton->setEnabled(false);
 			if(gameData->gameMode == modeMatch)
 			{
 				if(gamePhase == phaseScore)	//was phaseScore
-					ui.undoButton->setText(tr("Undo"));
+                    ui->undoButton->setText(tr("Undo"));
 				if(getBoardDispatch() && getBoardDispatch()->supportsRequestCount())
-					ui.countButton->setEnabled(true);
+                    ui->countButton->setEnabled(true);
 				else
-					ui.countButton->setEnabled(false);
+                    ui->countButton->setEnabled(false);
 				if(getBoardDispatch() && getBoardDispatch()->supportsRequestDraw())
-					ui.drawButton->setEnabled(true);
+                    ui->drawButton->setEnabled(true);
 				else
-					ui.drawButton->setEnabled(false);
+                    ui->drawButton->setEnabled(false);
 				if(getBoardDispatch() && getBoardDispatch()->supportsRequestAdjourn())
-					ui.adjournButton->setEnabled(true);
+                    ui->adjournButton->setEnabled(true);
 				else
-					ui.adjournButton->setEnabled(false);
+                    ui->adjournButton->setEnabled(false);
 			}
 			break;
 		case phaseScore:
@@ -852,27 +852,27 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * our turn.. also, should the button's being
 			 * disabled prevent sending the message instead
 			 * of the button checking state?  Probably. FIXME */
-			if(ui.countButton)
-				ui.countButton->setDisabled(true);
-			if(ui.undoButton && gameData->gameMode == modeMatch && getBoardDispatch())
+            if(ui->countButton)
+                ui->countButton->setDisabled(true);
+            if(ui->undoButton && gameData->gameMode == modeMatch && getBoardDispatch())
 			{
 				if(getBoardDispatch()->supportsRequestMatchMode())
 				{
-					ui.undoButton->setText(tr("Match Mode"));
-					ui.undoButton->setEnabled(true);	//even in rated
+                    ui->undoButton->setText(tr("Match Mode"));
+                    ui->undoButton->setEnabled(true);	//even in rated
 				}
 				else if(getBoardDispatch()->undoResetsScore())
 				{
-					ui.undoButton->setEnabled(true);	//even in rated
+                    ui->undoButton->setEnabled(true);	//even in rated
 				}
 			}
-			if(ui.passButton)
-				ui.passButton->setDisabled(true);
+            if(ui->passButton)
+                ui->passButton->setDisabled(true);
 			//Disable the draw button? 
 			/* FIXME doublecheck, what is doneButton connected to
 			 * in observing a game ?? */
 			if(getBoardDispatch() && getBoardDispatch()->canMarkStonesDeadinScore())	//FIXME or maybe as for tygem, it accepts the score as is
-				ui.doneButton->setEnabled(true);
+                ui->doneButton->setEnabled(true);
 			break;
 		default:
 			break;
@@ -899,7 +899,12 @@ QString BoardWindow::getCandidateFileName()
 		result = base + "-"+ QString::number(i++);
 		//fileName = fileName + ".sgf";
 	} 
-	return dir + result + ".sgf";
+    return dir + result + ".sgf";
+}
+
+Board *BoardWindow::getBoard()
+{
+    return ui->board;
 }
 
 /*
@@ -1059,26 +1064,26 @@ void BoardWindow::requestComputerMove()
 void BoardWindow::setBlackName(QString name)
 {
     gameData->black_name = name;
-    ui.blackName->blockSignals(true);
-    ui.blackName->setText(name);
+    ui->blackName->blockSignals(true);
+    ui->blackName->setText(name);
     interfaceHandler->updateCaption(gameData);
-    ui.blackName->blockSignals(false);
+    ui->blackName->blockSignals(false);
 }
 
 void BoardWindow::setWhiteName(QString name)
 {
     gameData->white_name = name;
-    ui.whiteName->blockSignals(true);
-    ui.whiteName->setText(name);
+    ui->whiteName->blockSignals(true);
+    ui->whiteName->setText(name);
     interfaceHandler->updateCaption(gameData);
-    ui.whiteName->blockSignals(false);
+    ui->whiteName->blockSignals(false);
 }
 
 void BoardWindow::switchToEditMode()
 {
     gameData->gameMode = modeEdit;
     interfaceHandler->toggleMode(modeEdit);
-    ui.computerControls->setEnabled(gameData->gameMode == modeLocal);
+    ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
     myColorIsBlack = true;
     myColorIsWhite = true;
 }
@@ -1087,9 +1092,9 @@ void BoardWindow::switchToLocalMode()
 {
     gameData->gameMode = modeLocal;
     interfaceHandler->toggleMode(modeLocal);
-    ui.computerControls->setEnabled(gameData->gameMode == modeLocal);
-    myColorIsBlack = !(ui.computerBlack->isChecked());
-    myColorIsWhite = !(ui.computerWhite->isChecked());
+    ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
+    myColorIsBlack = !(ui->computerBlack->isChecked());
+    myColorIsWhite = !(ui->computerWhite->isChecked());
 
     // dynamic_cast downcasts the pointer and returns null if this is not safe
     // This requires Run-Time Type Information to be enabled at compile time

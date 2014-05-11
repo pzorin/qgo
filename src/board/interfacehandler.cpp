@@ -34,6 +34,7 @@
 #include "interfacehandler.h"
 #include "boardwindow.h"
 #include "gamedata.h"
+#include "ui_boardwindow.h"
 
 /*
 struct ButtonState
@@ -78,22 +79,22 @@ void InterfaceHandler::clearData()
 //	  mainWidget->setToolsTabWidget(tabNormalScore);
 //    mainWidget->editButtonGroup->setButton(0);
 //    editTools->hide();
-	boardwindow->capturesBlack->setText("0");
-	boardwindow->capturesWhite->setText("0");
+    boardwindow->getUi()->capturesBlack->setText("0");
+    boardwindow->getUi()->capturesWhite->setText("0");
 	
 //	if (board->getGameMode() != modeObserve && 
 //		board->getGameMode() != modeMatch &&
 //		board->getGameMode() != modeTeach)
 //	{
-		boardwindow->pb_timeBlack->setText("00:00");
-		boardwindow->pb_timeWhite->setText("00:00");
+        boardwindow->getUi()->pb_timeBlack->setText("00:00");
+        boardwindow->getUi()->pb_timeWhite->setText("00:00");
 //	}
 //    normalTools->show();
-	boardwindow->scoreButton->setDown(false);
+    boardwindow->getUi()->scoreButton->setDown(false);
 //	editPaste->setEnabled(false);
 //	editPasteBrother->setEnabled(false);
-	boardwindow->slider->setValue(0);
-    boardwindow->slider->setMaximum(0);
+    boardwindow->getUi()->slider->setValue(0);
+    boardwindow->getUi()->slider->setMaximum(0);
 	scored_flag = false;
 }
 
@@ -317,7 +318,7 @@ void InterfaceHandler::displayComment(const QString &c)
  */
 void InterfaceHandler::clearComment()
 {
-	boardwindow->commentEdit->clear();
+    boardwindow->getUi()->commentEdit->clear();
 }
 
 

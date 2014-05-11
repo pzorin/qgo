@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 void startqGo(void);
 
@@ -42,7 +43,7 @@ void MainWindow::slot_languageChanged(int)
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-        if(ui.connectionWidget->closeConnection() < 0)
+        if(ui->connectionWidget->closeConnection() < 0)
 			goto lc_no_close;
 		if(checkForOpenBoards() < 0)
 			goto lc_no_close;
@@ -53,9 +54,9 @@ void MainWindow::slot_languageChanged(int)
 	{
 lc_no_close:
 		QSettings settings;
-		ui.comboBox_language->blockSignals(true);
-		ui.comboBox_language->setCurrentIndex(settings.value("LANGUAGE").toInt());
-		ui.comboBox_language->blockSignals(false);
+        ui->comboBox_language->blockSignals(true);
+        ui->comboBox_language->setCurrentIndex(settings.value("LANGUAGE").toInt());
+        ui->comboBox_language->blockSignals(false);
 	}
 }
 
@@ -69,15 +70,15 @@ void MainWindow::slot_currentChanged(int i)
 	{
 		//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
         /* QSettings settings;
-         * bool resend=((settings.value("NMATCH_BLACK").toBool() != ui.checkBox_Nmatch_Black->isChecked()) ||
-			(settings.value("NMATCH_WHITE").toBool() != ui.checkBox_Nmatch_White->isChecked()) ||
-			(settings.value("NMATCH_NIGIRI").toBool() != ui.checkBox_Nmatch_Nigiri->isChecked()) ||
-			(settings.value("NMATCH_MAIN_TIME").toInt() != ui.timeSpin_Nmatch->value()) ||
-			(settings.value("NMATCH_BYO_TIME").toInt() != ui.BYSpin_Nmatch->value()) ||
-			(settings.value("NMATCH_HANDICAP").toInt() != ui.HandicapSpin_Nmatch->value()) ||
-			(settings.value("DEFAULT_SIZE").toInt() != ui.boardSizeSpin->value()) ||
-			(settings.value("DEFAULT_TIME").toInt() != ui.timeSpin->value()) ||
-            (settings.value("DEFAULT_BY").toInt() != ui.BYSpin->value()) );*/
+         * bool resend=((settings.value("NMATCH_BLACK").toBool() != ui->checkBox_Nmatch_Black->isChecked()) ||
+            (settings.value("NMATCH_WHITE").toBool() != ui->checkBox_Nmatch_White->isChecked()) ||
+            (settings.value("NMATCH_NIGIRI").toBool() != ui->checkBox_Nmatch_Nigiri->isChecked()) ||
+            (settings.value("NMATCH_MAIN_TIME").toInt() != ui->timeSpin_Nmatch->value()) ||
+            (settings.value("NMATCH_BYO_TIME").toInt() != ui->BYSpin_Nmatch->value()) ||
+            (settings.value("NMATCH_HANDICAP").toInt() != ui->HandicapSpin_Nmatch->value()) ||
+            (settings.value("DEFAULT_SIZE").toInt() != ui->boardSizeSpin->value()) ||
+            (settings.value("DEFAULT_TIME").toInt() != ui->timeSpin->value()) ||
+            (settings.value("DEFAULT_BY").toInt() != ui->BYSpin->value()) );*/
 
 		saveSettings();
 #ifdef FIXME
@@ -100,95 +101,95 @@ void MainWindow::saveSettings()
 	settings.setValue("MAIN_WINDOW_POS_X", pos().x());
 	settings.setValue("MAIN_WINDOW_POS_Y", pos().y());
 
-	settings.setValue("LANGUAGE",ui.comboBox_language->currentIndex ());
+    settings.setValue("LANGUAGE",ui->comboBox_language->currentIndex ());
 	settings.setValue("LAST_PATH", currentWorkingDir);
-//	settings.setValue("COMPUTER_PATH", ui.LineEdit_computer->text());
-	settings.setValue("SKIN", ui.LineEdit_goban->text()); 
-	settings.setValue("SKIN_TABLE", ui.LineEdit_table->text()); 
+//	settings.setValue("COMPUTER_PATH", ui->LineEdit_computer->text());
+    settings.setValue("SKIN", ui->LineEdit_goban->text());
+    settings.setValue("SKIN_TABLE", ui->LineEdit_table->text());
 
-	settings.setValue("TIMER_INTERVAL", ui.timerComboBox->currentIndex());
+    settings.setValue("TIMER_INTERVAL", ui->timerComboBox->currentIndex());
 
 	int i = 0;
-	if ( ui.radioButtonStones_2D->isChecked())
+    if ( ui->radioButtonStones_2D->isChecked())
 		i=1;
-	else if ( ui.radioButtonStones_3D->isChecked())
+    else if ( ui->radioButtonStones_3D->isChecked())
 		i=2;
 	settings.setValue("STONES_LOOK", i);
 	
-	if ( ui.terrCrossRB->isChecked())
+    if ( ui->terrCrossRB->isChecked())
 		i=0;
 	else
 		i=1;
 	settings.setValue("TERR_STONE_MARK", i);
 	
 	i = 0;
-	if ( ui.radioButton_noSound->isChecked())
+    if ( ui->radioButton_noSound->isChecked())
 		i=1;
-	else if ( ui.radioButton_myGamesSound->isChecked())
+    else if ( ui->radioButton_myGamesSound->isChecked())
 		i=2;
 	settings.setValue("SOUND", i);
 	
-	if ( ui.komarkerCB->isChecked())
+    if ( ui->komarkerCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("KOMARKER", i);
-	if ( ui.numberCurrentMoveCB->isChecked())
+    if ( ui->numberCurrentMoveCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("NUMBER_CURRENT_MOVE", i);
 #ifdef UNNECESSARY
-	if ( ui.warnOnCloseEditedCB->isChecked())
+    if ( ui->warnOnCloseEditedCB->isChecked())
 		i=1;
 	else
 		i=0;
 
 	settings.setValue("WARNONCLOSEEDITED", i);
-	if ( ui.warnOnCloseEngineCB->isChecked())
+    if ( ui->warnOnCloseEngineCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("WARNONCLOSEENGINE", i);
 #endif //UNNECESSARY
-	if ( ui.simplePlayerNamesCB->isChecked())
+    if ( ui->simplePlayerNamesCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("SIMPLEPLAYERNAMES", i);
-	if ( ui.observeOutsideCB->isChecked())
+    if ( ui->observeOutsideCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("OBSERVEOUTSIDE", i);
-	if ( ui.alternateListColorsCB->isChecked())
+    if ( ui->alternateListColorsCB->isChecked())
 		i=1;
 	else
 		i=0;
 	settings.setValue("ALTERNATELISTCOLORS", i);
 
-    //settings.setValue("ACCOUNT", ui.connectionWidget->ui->serverComboBox->currentIndex());
+    //settings.setValue("ACCOUNT", ui->connectionWidget->ui->serverComboBox->currentIndex());
 
 	//server games default values
-	settings.setValue("DEFAULT_KOMI",ui.komiSpinDefault->value() );
-	settings.setValue("DEFAULT_SIZE",ui.boardSizeSpin->value() );
-	settings.setValue("DEFAULT_TIME",ui.timeSpin->value() );
-	settings.setValue("DEFAULT_BY",ui.BYSpin->value() );
+    settings.setValue("DEFAULT_KOMI",ui->komiSpinDefault->value() );
+    settings.setValue("DEFAULT_SIZE",ui->boardSizeSpin->value() );
+    settings.setValue("DEFAULT_TIME",ui->timeSpin->value() );
+    settings.setValue("DEFAULT_BY",ui->BYSpin->value() );
 
-	settings.setValue("NMATCH_BLACK", ui.checkBox_Nmatch_Black->isChecked());
-	settings.setValue("NMATCH_WHITE", ui.checkBox_Nmatch_White->isChecked());
-	settings.setValue("NMATCH_NIGIRI",ui.checkBox_Nmatch_Nigiri->isChecked());
-	settings.setValue("NMATCH_MAIN_TIME", ui.timeSpin_Nmatch->value());
-	settings.setValue("NMATCH_BYO_TIME", ui.BYSpin_Nmatch->value());
-	settings.setValue("NMATCH_HANDICAP", ui.HandicapSpin_Nmatch->value());
+    settings.setValue("NMATCH_BLACK", ui->checkBox_Nmatch_Black->isChecked());
+    settings.setValue("NMATCH_WHITE", ui->checkBox_Nmatch_White->isChecked());
+    settings.setValue("NMATCH_NIGIRI",ui->checkBox_Nmatch_Nigiri->isChecked());
+    settings.setValue("NMATCH_MAIN_TIME", ui->timeSpin_Nmatch->value());
+    settings.setValue("NMATCH_BYO_TIME", ui->BYSpin_Nmatch->value());
+    settings.setValue("NMATCH_HANDICAP", ui->HandicapSpin_Nmatch->value());
 
-	settings.setValue("AUTOSAVE", ui.CheckBox_autoSave->isChecked());
-	settings.setValue("AUTOSAVE_PLAYED", ui.CheckBox_autoSave_Played->isChecked());
+    settings.setValue("AUTOSAVE", ui->CheckBox_autoSave->isChecked());
+    settings.setValue("AUTOSAVE_PLAYED", ui->CheckBox_autoSave_Played->isChecked());
 
 
 	//server byo yomi warning
-	settings.setValue("BYO_SOUND_WARNING", ui.ByoSoundWarning->isChecked());
-	settings.setValue("BYO_SEC_WARNING",ui.ByoSecWarning->value());
+    settings.setValue("BYO_SOUND_WARNING", ui->ByoSoundWarning->isChecked());
+    settings.setValue("BYO_SEC_WARNING",ui->ByoSecWarning->value());
 
 	//qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());	
 
@@ -204,74 +205,74 @@ void MainWindow::loadSettings()
 	QSettings settings;
 	QVariant var;
 	
-	ui.comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
+    ui->comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
     QString computer_path = settings.value("COMPUTER_PATH").toString();
     if (computer_path.isEmpty())
     {
         computer_path = QString(DEFAULT_COMPUTER_PATH);
         settings.setValue("COMPUTER_PATH", computer_path);
     }
-    ui.LineEdit_computer->setText(computer_path);
+    ui->LineEdit_computer->setText(computer_path);
 	if((var = settings.value("LAST_PATH")) == QVariant())
 		currentWorkingDir = QString();
 	else
 		currentWorkingDir = var.toString();
 	
-	ui.radioButtonStones_real->setChecked(true);
-	ui.radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
-	ui.radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
+    ui->radioButtonStones_real->setChecked(true);
+    ui->radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
+    ui->radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
 
-	ui.radioButton_allGameSound->setChecked(true);
-	ui.radioButton_noSound->setChecked((settings.value("SOUND")==1));
-	ui.radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
+    ui->radioButton_allGameSound->setChecked(true);
+    ui->radioButton_noSound->setChecked((settings.value("SOUND")==1));
+    ui->radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
 
-	ui.LineEdit_goban->setText(settings.value("SKIN").toString());
-	ui.LineEdit_table->setText(settings.value("SKIN_TABLE").toString());
+    ui->LineEdit_goban->setText(settings.value("SKIN").toString());
+    ui->LineEdit_table->setText(settings.value("SKIN_TABLE").toString());
 
-	ui.timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
-	ui.komarkerCB->setChecked((settings.value("KOMARKER") == 1));
-	ui.numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
+    ui->timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
+    ui->komarkerCB->setChecked((settings.value("KOMARKER") == 1));
+    ui->numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
 #ifdef UNNECESSARY
-	ui.warnOnCloseEditedCB->setChecked((settings.value("WARNONCLOSEEDITED") == 1));
-	ui.warnOnCloseEngineCB->setChecked((settings.value("WARNONCLOSENGINE") == 1));
+    ui->warnOnCloseEditedCB->setChecked((settings.value("WARNONCLOSEEDITED") == 1));
+    ui->warnOnCloseEngineCB->setChecked((settings.value("WARNONCLOSENGINE") == 1));
 #endif //UNNECESSARY
 	if(settings.value("TERR_STONE_MARK").toBool())
-		ui.terrStoneRB->setChecked(true);
+        ui->terrStoneRB->setChecked(true);
 	else
-		ui.terrCrossRB->setChecked(true);
+        ui->terrCrossRB->setChecked(true);
 
-	ui.simplePlayerNamesCB->setChecked((settings.value("SIMPLEPLAYERNAMES") == 1));
-	ui.observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
+    ui->simplePlayerNamesCB->setChecked((settings.value("SIMPLEPLAYERNAMES") == 1));
+    ui->observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
 	bool b = (settings.value("ALTERNATELISTCOLORS") == 1);
-	ui.alternateListColorsCB->setChecked(b);
-    ui.connectionWidget->slot_alternateListColorsCB(b);
+    ui->alternateListColorsCB->setChecked(b);
+    ui->connectionWidget->slot_alternateListColorsCB(b);
 	
-    //ui.connectionWidget->ui->serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
+    //ui->connectionWidget->ui->serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
 
 
 	//server games default values
 	if((var = settings.value("DEFAULT_KOMI")) == QVariant())
 		var = 5.5;
-	ui.komiSpinDefault->setValue(var.toInt());
+    ui->komiSpinDefault->setValue(var.toInt());
 	if((var = settings.value("DEFAULT_SIZE")) == QVariant())
 		var = 19;
-	ui.boardSizeSpin->setValue(var.toInt());
-	ui.timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
-	ui.BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
+    ui->boardSizeSpin->setValue(var.toInt());
+    ui->timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
+    ui->BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
 
-	ui.checkBox_Nmatch_Black->setChecked(settings.value("NMATCH_BLACK", QVariant(true)).toBool());
-	ui.checkBox_Nmatch_White->setChecked(settings.value("NMATCH_WHITE", QVariant(true)).toBool());
-	ui.checkBox_Nmatch_Nigiri->setChecked(settings.value("NMATCH_NIGIRI", QVariant(true)).toBool());
-	ui.HandicapSpin_Nmatch->setValue(settings.value("NMATCH_HANDICAP", QVariant(8)).toInt());	
-	ui.timeSpin_Nmatch->setValue(settings.value("NMATCH_MAIN_TIME", QVariant(99)).toInt());
-	ui.BYSpin_Nmatch->setValue(settings.value("NMATCH_BYO_TIME", QVariant(60)).toInt());
+    ui->checkBox_Nmatch_Black->setChecked(settings.value("NMATCH_BLACK", QVariant(true)).toBool());
+    ui->checkBox_Nmatch_White->setChecked(settings.value("NMATCH_WHITE", QVariant(true)).toBool());
+    ui->checkBox_Nmatch_Nigiri->setChecked(settings.value("NMATCH_NIGIRI", QVariant(true)).toBool());
+    ui->HandicapSpin_Nmatch->setValue(settings.value("NMATCH_HANDICAP", QVariant(8)).toInt());
+    ui->timeSpin_Nmatch->setValue(settings.value("NMATCH_MAIN_TIME", QVariant(99)).toInt());
+    ui->BYSpin_Nmatch->setValue(settings.value("NMATCH_BYO_TIME", QVariant(60)).toInt());
 
-	ui.CheckBox_autoSave->setChecked(settings.value("AUTOSAVE").toBool());
-	ui.CheckBox_autoSave_Played->setChecked(settings.value("AUTOSAVE_PLAYED").toBool());
+    ui->CheckBox_autoSave->setChecked(settings.value("AUTOSAVE").toBool());
+    ui->CheckBox_autoSave_Played->setChecked(settings.value("AUTOSAVE_PLAYED").toBool());
 
 	//server byo yomi warning
-	ui.ByoSoundWarning->setChecked(settings.value("BYO_SOUND_WARNING").toBool());
-	ui.ByoSecWarning->setValue(settings.value("BYO_SEC_WARNING").toInt());
+    ui->ByoSoundWarning->setChecked(settings.value("BYO_SOUND_WARNING").toBool());
+    ui->ByoSecWarning->setValue(settings.value("BYO_SEC_WARNING").toInt());
 
 	preferences.fill();
 }
@@ -286,7 +287,7 @@ void MainWindow::slot_getComputerPath()
 	if (fileName.isEmpty())
 		return;
 
-  	ui.LineEdit_computer->setText(fileName);
+    ui->LineEdit_computer->setText(fileName);
 }
 
 /*
@@ -299,7 +300,7 @@ void MainWindow::slot_getGobanPath()
 	if (fileName.isEmpty())
 		return;
 
-  	ui.LineEdit_goban->setText(fileName);
+    ui->LineEdit_goban->setText(fileName);
 }
 
 /*
@@ -312,7 +313,7 @@ void MainWindow::slot_getTablePath()
 	if (fileName.isEmpty())
 		return;
 
-  	ui.LineEdit_table->setText(fileName);
+    ui->LineEdit_table->setText(fileName);
 }
 
 /*

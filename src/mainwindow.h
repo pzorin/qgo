@@ -23,7 +23,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_mainwindow.h"
 #include "defines.h"
 
 #include <QtWidgets>
@@ -36,6 +35,9 @@ class SGFParser;
 class BoardWindow;
 class GameData;
 class Sound;
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
@@ -73,7 +75,7 @@ protected:
 	void saveSettings();
 
 private:
-    Ui::MainWindow ui;
+    Ui::MainWindow * ui;
 	Sound *connectSound, *gameSound;
 
     QList<BoardWindow *> boardWindowList;

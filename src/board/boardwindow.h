@@ -23,16 +23,22 @@
 #ifndef BOARDWINDOW_H
 #define BOARDWINDOW_H
 
-#include "ui_boardwindow.h"
 #include "gamedata.h"
+#include <QMainWindow>
 
 class BoardHandler;
 class qGoBoard;
 class ClockDisplay;
 class Tree;
 class InterfaceHandler;
+class QLabel;
+class QButtonGroup;
+class Board;
+namespace Ui {
+class BoardWindow;
+}
 
-class BoardWindow : public QMainWindow, public Ui::BoardWindow
+class BoardWindow : public QMainWindow
 {
 	Q_OBJECT
 
@@ -47,11 +53,11 @@ public:
 	QString getCandidateFileName();
 
     int getBoardSize() const {return boardSize;}
-	Board *getBoard() 			{return ui.board;}
+    Board *getBoard();
 	Tree *getTree() 			{return tree;}
 	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
 	BoardHandler *getBoardHandler() 	{return boardHandler;}
-	Ui::BoardWindow * getUi() 		{return &ui;}
+    Ui::BoardWindow * getUi() 		{return ui;}
 	GameMode getGameMode() 			{return gameData->gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
@@ -115,7 +121,7 @@ private:
 	void setupUI(void);
 	void setupBoardUI(void);
 
-	Ui::BoardWindow ui;
+    Ui::BoardWindow * ui;
 	QMenu * addtime_menu;
 	Tree *tree;
     const int boardSize;		//the true boardsize

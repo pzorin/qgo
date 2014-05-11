@@ -23,6 +23,7 @@
 #include "consoledispatch.h"
 #include "../mainwindow.h"
 #include "networkconnection.h"
+#include "connectionwidget.h"
 /* Probably want to just remove this file FIXME*/
 
 /* All consoles need somewhere to write to... so... MainWindow */

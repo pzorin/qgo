@@ -32,6 +32,7 @@
 #include "boardwindow.h"
 #include "audio.h"
 #include "network/messages.h" 		//for the TimeRecord FIXME
+#include "ui_boardwindow.h"
 
 ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _periods, int _periodtime) : QObject(bw)
 {

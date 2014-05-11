@@ -22,6 +22,7 @@
 
 #include "gameinfo.h"
 #include "boardwindow.h"
+#include <QPushButton>
 
 GameInfo::GameInfo(BoardWindow * bw) : GameinfoDialog(), boardwindow(bw)
 {
