@@ -23,6 +23,7 @@ public slots:
 private:
     Ui::NewGameDialog *ui;
     MainWindow *mw;
+    int handicap;
 };
 
 #endif // NEWGAMEDIALOG_H

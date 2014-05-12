@@ -18,7 +18,8 @@ NewGameDialog::NewGameDialog(MainWindow *parent) :
     if((var = settings.value("EDIT_SIZE")) == QVariant())
         var = 19;
     ui->newFile_Size->setValue(var.toInt());
-    ui->newFile_Handicap->setValue(settings.value("EDIT_HANDICAP").toInt());
+    handicap = settings.value("EDIT_HANDICAP").toInt();
+    ui->newFile_Handicap->setValue(handicap);
     if((var = settings.value("EDIT_KOMI")) == QVariant())
         var = 5.5;
     ui->newFile_Komi->setValue(var.toDouble());
@@ -45,7 +46,11 @@ NewGameDialog::~NewGameDialog()
 void NewGameDialog::slot_newFile_HandicapChange(int a)
 {
     if(a == 1)
-        ui->newFile_Handicap->setValue(0);
+    {
+        handicap = (handicap < 1 ? 2 : 0);
+        ui->newFile_Handicap->setValue(handicap);
+    } else
+        handicap = a;
 }
 
 void NewGameDialog::accept()
