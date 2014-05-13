@@ -30,11 +30,13 @@
 class Move;
 class Group;
 class Matrix;
+class GameResult;
 
-class Tree
+class Tree : public QObject
 {
+    Q_OBJECT
 public:
-    Tree(int board_size);
+    Tree(int board_size, float komi);
 	~Tree();
     void init();
     int getNumSons(Move *m=0);
@@ -78,6 +80,33 @@ public:
     // true - insert stone directly to position, false - insert stone as new variation (default)
     bool insertStoneFlag;
 
+    void gotoMove(Move *m);
+    void findMoveByPos(int x,int  y);
+
+    // Do these functiones belong here? FIXME
+    void countScore();
+    void countMarked(void);
+    class GameResult retrieveScore(void);
+    void exitScore();
+
+public slots:
+    void slotNavBackward();
+    void slotNavForward();
+    void slotNavFirst();
+    void slotNavLast();
+    void slotNavPrevComment();
+    void slotNavNextComment();
+    void slotNavPrevVar();
+    void slotNavNextVar();
+    void slotNavStartVar();
+    void slotNavMainBranch();
+    void slotNavNextBranch();
+    void slotNthMove(int n);
+
+signals:
+    void currentMoveChanged(Move*);
+    void scoreChanged(int,int,int,int,int,int);
+
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
@@ -106,6 +135,10 @@ private:
 	int koStoneX;
 	int koStoneY;
     bool loadingSGF;
+    int deadWhite, deadBlack;
+    int terrWhite, terrBlack;
+    int capturesBlack, capturesWhite;
+    float komi;
 };
 
 #endif

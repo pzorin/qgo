@@ -29,7 +29,6 @@
 #include "boarddispatch.h"
 #include "messages.h"
 #include "resultdialog.h"
-#include "boardhandler.h"
 #include "clockdisplay.h"
 #include "gamedata.h"
 #include "matrix.h"
@@ -105,7 +104,7 @@ void qGoBoard::addMark( int x, int y, MarkType t )
 	else if(t == markTerrWhite && mat->getStoneAt(x,y) == stoneBlack)
 		mat->markStoneDead(x,y);
 	
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+    boardwindow->updateMove(tree->getCurrent());
 	setModified();
 }
 
@@ -118,7 +117,7 @@ void qGoBoard::removeMark( int x, int y)
 	if (tree->getCurrent()->getMatrix()->getMarkAt(x,y) != markNone)
 		tree->getCurrent()->getMatrix()->removeMark(x,y);
 		
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+    boardwindow->updateMove(tree->getCurrent());
 	setModified();
 }
 
@@ -129,7 +128,7 @@ void qGoBoard::removeMark( int x, int y)
 void qGoBoard::addStone(StoneColor c, int x, int y)
 {
 	tree->addStoneToCurrentMove(c, x, y);
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+    boardwindow->updateMove(tree->getCurrent());
 	setModified();
 }
 
@@ -245,7 +244,8 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 		
 		case phaseNavTo:
 		{
-			boardwindow->getBoardHandler()->findMoveByPos(x, y); 
+            tree->findMoveByPos(x, y);
+            boardwindow->setGamePhase ( phaseOngoing );
 			return;
 		}
 
@@ -308,7 +308,7 @@ void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
 {
 	if (doMove(c,x,y))
 	{
-		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+        boardwindow->updateMove(tree->getCurrent());
 		sendMoveToInterface(c,x,y);
 	}
 }
@@ -329,10 +329,7 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
  */
 void qGoBoard::doPass()
 {
-//	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
-
-	tree->doPass(false);
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+    tree->doPass(false);
 
 	setModified();
 
@@ -439,10 +436,7 @@ void qGoBoard::enterScoreMode()
 		return;
 	qDebug("qgb::enterScoreMode()");
 	boardwindow->setGamePhase (phaseScore);
-	boardwindow->getUi()->tabDisplay->setCurrentIndex(1);
-	if(boardwindow->getGameMode() != modeObserve)
-		boardwindow->getBoardHandler()->updateCursor();
-	boardwindow->getBoardHandler()->countScore();
+    tree->countScore();
 }
 
 /*
@@ -453,9 +447,8 @@ void qGoBoard::leaveScoreMode()
 	if(boardwindow->getGamePhase() != phaseScore)
 		return;
 	qDebug("leaving score mode");
-	boardwindow->getUi()->tabDisplay->setCurrentIndex(0);
-	boardwindow->setGamePhase ( phaseOngoing );
-	boardwindow->getBoardHandler()->exitScore();
+    boardwindow->setGamePhase ( phaseOngoing );
+    tree->exitScore();
 }
 
 void qGoBoard::toggleGroupAt(int x, int y)
@@ -465,7 +458,7 @@ void qGoBoard::toggleGroupAt(int x, int y)
 		return;
 	
 	tree->getCurrent()->getMatrix()->toggleGroupAt(x, y);
-	boardwindow->getBoardHandler()->countScore();
+    tree->countScore();
 }
 
 /*
@@ -478,7 +471,7 @@ void qGoBoard::markDeadStone(int x, int y)
 		return;
 	
 	tree->getCurrent()->getMatrix()->markGroupDead(x, y);
-	boardwindow->getBoardHandler()->countScore();
+    tree->countScore();
 }
 
 void qGoBoard::markLiveStone(int x, int y)
@@ -488,7 +481,7 @@ void qGoBoard::markLiveStone(int x, int y)
 		return;
 
 	tree->getCurrent()->getMatrix()->markGroupAlive(x, y);
-	boardwindow->getBoardHandler()->countScore();
+    tree->countScore();
 }
 
 void qGoBoard::markDeadArea(int x, int y)
@@ -498,7 +491,7 @@ void qGoBoard::markDeadArea(int x, int y)
 		return;
 	
 	tree->getCurrent()->getMatrix()->markAreaDead(x, y);
-	boardwindow->getBoardHandler()->countScore();
+    tree->countScore();
 }
 
 void qGoBoard::markLiveArea(int x, int y)
@@ -508,15 +501,13 @@ void qGoBoard::markLiveArea(int x, int y)
 		return;
 	
 	tree->getCurrent()->getMatrix()->markAreaAlive(x, y);
-	boardwindow->getBoardHandler()->countScore();
+    tree->countScore();
 }
 
 void qGoBoard::slotUndoPressed(void)
 {
 	/* Are we supposed to make a brother node or something ??? FIXME */
-	tree->deleteNode();
-	/* Why doesn't the move get updated when we delete a node automatically FIXME? */
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+    tree->deleteNode();
 }
 
 void qGoBoard::slotResignPressed(void)
@@ -527,24 +518,8 @@ void qGoBoard::slotResignPressed(void)
 
 void qGoBoard::slotDonePressed(void)
 {
-	GameResult g = boardwindow->getBoardHandler()->retrieveScore();
+    GameResult g = tree->retrieveScore();
 	setResult(g);
-}
-
-/*
- * The text in the comment zone has been changed
- */
-void qGoBoard::slotUpdateComment()
-{
-	QString s = boardwindow->getUi()->commentEdit->toPlainText();
-
-	// case where the text has 'really' been altered, versus text changed
-	// because we traverse moves
-	if (tree->getCurrent()->getComment() != s)
-	{
-		tree->getCurrent()->setComment(s);
-		setModified();
-	}
 }
 
 /*
@@ -572,7 +547,7 @@ void qGoBoard::kibitzReceived(const QString& text)
 //		boardwindow->getUi()->commentEdit->append("\n");
 
 	
-	boardwindow->getUi()->commentEdit->append(k);
+    boardwindow->getUi()->commentEdit->append(k);
 	//qDebug("kibitzReceived: %s\n", text.toLatin1().constData());
 }
 

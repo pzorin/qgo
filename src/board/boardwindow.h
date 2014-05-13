@@ -30,10 +30,10 @@ class BoardHandler;
 class qGoBoard;
 class ClockDisplay;
 class Tree;
-class InterfaceHandler;
 class QLabel;
 class QButtonGroup;
 class Board;
+class Move;
 namespace Ui {
 class BoardWindow;
 }
@@ -41,6 +41,9 @@ class BoardWindow;
 class BoardWindow : public QMainWindow
 {
 	Q_OBJECT
+
+    friend class BoardDispatch;
+    friend class CountDialog;
 
 public:
     //BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = true, bool iAmWhite = true, class BoardDispatch * _dispatch = 0);
@@ -53,10 +56,7 @@ public:
 	QString getCandidateFileName();
 
     int getBoardSize() const {return boardSize;}
-    Board *getBoard();
-	Tree *getTree() 			{return tree;}
-	InterfaceHandler *getInterfaceHandler() {return interfaceHandler;}
-	BoardHandler *getBoardHandler() 	{return boardHandler;}
+    Tree *getTree() 			{return tree;}
     Ui::BoardWindow * getUi() 		{return ui;}
 	GameMode getGameMode() 			{return gameData->gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
@@ -66,8 +66,7 @@ public:
 	int getId()				{return gameData->number;}
 	MarkType getEditMark()			{return editMark;}
     void setGamePhase(GamePhase gp);
-	void setTree(Tree *t)			{tree=t;}
-	void checkHideToolbar(int h);
+    void checkHideToolbar(int h);
 	void gameDataChanged(void);	
 	QString get_wplayer()			{return gameData->white_name;}
 	QString get_bplayer()			{return gameData->black_name;}
@@ -75,16 +74,16 @@ public:
     void swapColors(bool noswap = false);
 	void saveRecordToGameData(void);
 	
-	bool okayToQuit(void);	
+    bool okayToQuit(void);
+    void updateButtons(StoneColor lastMoveColor=stoneNone);
+    void updateCursor(StoneColor c=stoneNone);
 
-	qGoBoard *qgoboard;
-	//virtual QSize sizeHint() const;
-	/* boarddispatch should be stored in the interface, NOT here
-	 * in boardwindow, but we'll move it once we see where its
-	 * going to be everywhere */
     class BoardDispatch * getBoardDispatch(void) { return dispatch; }
 	void setBoardDispatch(BoardDispatch * d);
-    QLabel *moveNumLabel,*komiLabel,*buyoyomiLabel,*handicapLabel,*freeratedLabel;
+
+    void clearData();
+    void setMoveData(int n, bool black, int brothers, int sons, bool hasParent,
+        bool hasPrev, bool hasNext, int lastX=-1, int lastY=-1);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -116,18 +115,27 @@ public slots:
     void setWhiteName(QString name);
     void switchToEditMode();
     void switchToLocalMode();
+    void slotUpdateComment();
+    void slotNavIntersection();
+    void slotWheelEvent(QWheelEvent *e);
+    void slotGetScore(int terrBlack, int captBlack, int deadWhite, int terrWhite, int captWhite, int deadBlack);
+    void updateMove(Move *m);
 
 private:
 	void setupUI(void);
 	void setupBoardUI(void);
+    void updateCaption();
+    void setMode(GameMode gameMode);
+    void setSliderMax(int n);
+
+    qGoBoard *qgoboard;
+    QLabel *moveNumLabel,*komiLabel,*buyoyomiLabel,*handicapLabel,*freeratedLabel;
 
     Ui::BoardWindow * ui;
 	QMenu * addtime_menu;
 	Tree *tree;
     const int boardSize;		//the true boardsize
-	BoardHandler *boardHandler;
-	InterfaceHandler *interfaceHandler;
-	class BoardDispatch * dispatch;		//may not be the best place!!!
+    class BoardDispatch * dispatch;		//may not be the best place!!!
 
 	GameData *gameData;
 	GamePhase gamePhase;
@@ -137,6 +145,7 @@ private:
 	QButtonGroup *editButtons;
 	MarkType editMark;
 	ClockDisplay *clockDisplay;
+    QTime wheelTime;
 };
 
 #endif

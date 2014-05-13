@@ -25,11 +25,10 @@
 #include "tree.h"
 #include "move.h"
 #include "../network/messages.h"
-#include "boardhandler.h"
 #include "gamedata.h"
 #include "boardwindow.h"
 #include "qgtp.h"
-#include "ui_boardwindow.h"
+#include "board.h"
 
 #include <QMessageBox>
 
@@ -37,7 +36,7 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
     : qGoBoard(bw, t, gd)
 {
     this->setObjectName("qGoBoardLocalInterface");
-    boardwindow->getUi()->board->clearData();
+    boardwindow->clearData();
 
     // If we have handicap, but not from a loaded file, we have to set the handicap move
     if (gameData->handicap && gameData->fileName.isEmpty())
@@ -64,7 +63,6 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
     }
 
     tree->setCurrent(tree->findLastMoveInMainBranch());
-    boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
     feedPositionThroughGtp();
 }
@@ -105,8 +103,6 @@ void qGoBoardLocalInterface::slotUndoPressed()
  */
 void qGoBoardLocalInterface::sendMoveToInterface(StoneColor c,int x, int y)
 {
-    boardwindow->getUi()->resignButton->setEnabled(false);
-
     switch (c)
     {
         case stoneWhite :
@@ -157,18 +153,9 @@ void qGoBoardLocalInterface::slot_playComputer(int x, int y)
     bool b = getBlackTurn();
     if (!doMove(b ? stoneBlack : stoneWhite, x, y))
         QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move (%1, %2) seems to be invalid").arg(x).arg(y));
-    boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
     // We can also let computer play against itself.
     checkComputersTurn();
-
-    /* We shouldn't be able to resign during computers turn
-     * but this is a little awkward to put it in the comp
-     * interface here.  But otherwise there's no real
-     * way to check who the current player is since the computer
-     * moves are done with a function call rather than based on
-     * some check of who's turn it is */
-    boardwindow->getUi()->resignButton->setEnabled(true);
 }
 
 void qGoBoardLocalInterface::slot_resignComputer()
@@ -181,7 +168,6 @@ void qGoBoardLocalInterface::slot_resignComputer()
 void qGoBoardLocalInterface::slot_passComputer()
 {
     doPass();
-    boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
     if (tree->getCurrent()->parent->isPassMove())
         enterScoreMode();
     else
@@ -194,7 +180,6 @@ void qGoBoardLocalInterface::slot_passComputer()
 void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
 {
     doPass();
-    boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 
     // if simple pass, tell computer and move on
     switch (c)

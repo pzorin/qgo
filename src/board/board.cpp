@@ -35,6 +35,7 @@
 #include "imagehandler.h"
 #include "move.h"		//for updateLastMove, cleaner and yet not FIXME
 #include "graphicsitemstypes.h"
+#include "matrix.h"
 
 #include <QMouseEvent>
 #include <QApplication>
@@ -48,7 +49,7 @@ class ImageHandler;
  * This initialises everything on the board : background, gatter, cursor, etc ....
  */
 Board::Board(QWidget *parent, QGraphicsScene *c)
-: QGraphicsView(c,parent)
+: QGraphicsView(c,parent), oneColorGo(false)
 {
     QSettings settings;
 
@@ -1061,4 +1062,113 @@ void Board::exportPicture(const QString &fileName,  QString *filter, bool toClip
 
     if (!pix.save(fileName, filter->toLatin1()))
 		QMessageBox::warning(this, PACKAGE, tr("Failed to save image!"));
+}
+
+bool Board::updateAll(Move * move)
+{
+    Matrix * m = move->getMatrix();
+    Q_CHECK_PTR(m);
+
+    bool modified = false;//, fake = false;
+    StoneColor color;
+    bool dead;
+    /*
+    * Synchronize the matrix with the stonehandler data and
+    * update the canvas.
+    * This is usually called when navigating through the tree.
+    */
+    for (int y=1; y<=board_size; y++)
+    {
+        for (int x=1; x<=board_size; x++)
+        {
+            /* FIXME apparently matrix uses negative values for
+             * both dead and edited stones.  I think the
+             * assumption is that we won't be editing during
+             * a score phase which is the only time things will
+             * be marked dead whereas other ghosts are used
+             * for variations.
+             * I'm not sure what the consequences on editing
+             * will be for this, but for now, I just want to
+             * make sure the handicap stones can't be ghosted.
+             * We could say that the handicap stones aren't
+             * edits, but this is what they've been set up
+             * as so that's more tricky. */
+            dead = (m->isStoneDead(x, y)) & (move->getMoveNumber() != 0);
+            color = m->getStoneAt(x, y);
+
+            if (oneColorGo && color == stoneBlack)
+                color = stoneWhite;
+            updateStone(color,x,y, dead);
+
+            switch (m->getMarkAt(x, y))
+            {
+            case markKoMarker:
+            case markSquare:
+                modified = true;
+                setMark(x, y, markSquare, false);
+                break;
+
+            case markCircle:
+                modified = true;
+                setMark(x, y, markCircle, false);
+                break;
+
+            case markTriangle:
+                modified = true;
+                setMark(x, y, markTriangle, false);
+                break;
+
+            case markCross:
+                modified = true;
+                setMark(x, y, markCross, false);
+                break;
+
+            case markText:
+                modified = true;
+                setMark(x, y, markText, false, m->getMarkText(x, y));
+                break;
+
+            case markNumber:
+                modified = true;
+                setMark(x, y, markNumber, false, m->getMarkText(x, y));
+                break;
+
+            case markTerrBlack:
+                modified = true;
+                setMark(x, y, markTerrBlack, false);
+                break;
+
+            case markTerrWhite:
+                modified = true;
+                setMark(x, y, markTerrWhite, false);
+                break;
+
+            case markNone:
+            case markTerrDame:
+                if (hasMark(x, y))
+                {
+                    modified = true;
+                    removeMark(x, y, false);
+                }
+            default:
+                break;
+            }
+        }
+    }
+    return modified;
+}
+
+/*
+ * Update the variation marks on the board if any
+ */
+void Board::updateVariationGhosts(Move *move)
+{
+    // qDebug("BoardHandler::updateVariationGhosts()");
+    Move *m = move->parent->son;
+    Q_CHECK_PTR(m);
+
+    do
+    {
+        setVarGhost(m->getColor(), m->getX(), m->getY());
+    } while ((m = m->brother) != NULL);
 }

@@ -26,7 +26,6 @@
 #include "../network/boarddispatch.h"
 #include "../network/messages.h"
 #include "undoprompt.h"
-#include "boardhandler.h"
 #include "clockdisplay.h"
 #include "gamedata.h"
 #include "boardwindow.h"
@@ -37,7 +36,7 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 {
 	game_Id = QString::number(gd->number);
 
-	bw->getUi()->board->clearData();
+    bw->clearData();
 
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
@@ -46,7 +45,7 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	if (gd->handicap)
 	{
 		setHandicap(gd->handicap);
-		bw->getBoardHandler()->slotNavLast();
+        tree->slotNavLast();
 	}
 	dontsend = false;
 	boardTimerId = 0;
@@ -215,9 +214,9 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	{
 		case MoveRecord::TERRITORY:
 			if(m->color == stoneBlack)
-				boardwindow->qgoboard->addMark(m->x, m->y, markTerrBlack);
+                addMark(m->x, m->y, markTerrBlack);
 			else
-				boardwindow->qgoboard->addMark(m->x, m->y, markTerrWhite);
+                addMark(m->x, m->y, markTerrWhite);
 			break;
 		case MoveRecord::UNDO_TERRITORY:
 		{
@@ -227,7 +226,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				for(int j = 1; j < boardsize + 1; j++)
 				{
 					if(tree->getCurrent()->getMatrix()->isStoneDead(i, j))
-						boardwindow->qgoboard->markLiveStone(i, j);
+                        markLiveStone(i, j);
 				}
 			}
 			break;
@@ -263,10 +262,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				while(move_counter > move_number + 1)	//move_numbe r+ 1 if our turn?
 				{
 					tree->undoMove();
-					move_counter--;
-					// FIXME This shouldn't be necessary just to force a redraw with multiple undos:
-					if(move_counter > move_number + 1)
-						boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+                    move_counter--;
 				}
 			}
 			else
@@ -274,8 +270,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				tree->undoMove();
 				if ((getBlackTurn() && m->color == stoneBlack) ||
 					((!getBlackTurn()) && m->color == stoneWhite))
-				{
-					boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+                {
 					tree->undoMove();
 				}
 			}
@@ -333,7 +328,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				}
 			}
 			//FIXME potentially white/black here should come from color from network which is unreliable now
-			boardwindow->qgoboard->kibitzReceived(QString(getBlackTurn() ? "Black" : "White") + " passes.");
+            kibitzReceived(QString(getBlackTurn() ? "Black" : "White") + " passes.");
 			doPass();
 			break;
 		case MoveRecord::HANDICAP:
@@ -346,13 +341,13 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			break;
 		case MoveRecord::REMOVE:
 			//qDebug("md!! toggling life of %d %d", m->x, m->y);
-			boardwindow->qgoboard->markDeadStone(m->x, m->y);
+            markDeadStone(m->x, m->y);
 			//tree->getCurrent()->getMatrix()->toggleGroupAt(m->x, m->y);
 			//boardwindow->qgoboard->kibitzReceived("removing @ " + pt);
 			break;
 		case MoveRecord::REMOVE_AREA:
 			//FIXME
-			boardwindow->qgoboard->markDeadArea(m->x, m->y);
+            markDeadArea(m->x, m->y);
 			break;
 		case MoveRecord::UNREMOVE_AREA:
 			//FIXME
@@ -380,7 +375,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 						{
 							if(tree->getCurrent()->getMatrix()->getStoneAt(i, j) == m->color)
 							{
-								boardwindow->qgoboard->markLiveArea(i, j);
+                                markLiveArea(i, j);
 							}
 						}
 					}
@@ -388,7 +383,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				
 			}
 			else
-				boardwindow->qgoboard->markLiveArea(m->x, m->y);
+                markLiveArea(m->x, m->y);
 			break;
 		case MoveRecord::DONE_SCORING:
 			/* Not sure we can really use this.  terrBlack and terrWhite
@@ -412,7 +407,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			/* Can we countScore here anyway?  Just for fun? 
 			 * I don't think so, I think if we do, it voids dead stone
 			 * removals.*/
-			boardwindow->getBoardHandler()->countMarked();
+            tree->countMarked();
 			/*if(boardwindow->getGamePhase() != phaseEnded)
 			{
 				GameResult res = boardwindow->getBoardHandler()->retrieveScore();
@@ -436,7 +431,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 					boardwindow->getBoardHandler()->gotoMove(inVariationBranch);
 				}
 				else*/
-					boardwindow->getBoardHandler()->slotNavForward();
+                    tree->slotNavForward();
 			}
 			break;
 		case MoveRecord::BACKWARD:
@@ -444,7 +439,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			{
 				if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->getCurrent() && tree->isInMainBranch(tree->getCurrent()))
 					break;
-				boardwindow->getBoardHandler()->slotNavBackward();
+                tree->slotNavBackward();
 			}
 			break;
 		case MoveRecord::RESETBRANCH:
@@ -457,20 +452,20 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				while(!tree->isInMainBranch(goto_move))
 					goto_move = goto_move->parent;
 			}
-			boardwindow->getBoardHandler()->gotoMove(goto_move);
+            tree->gotoMove(goto_move);
 			if(m->flags == MoveRecord::DELETEBRANCH) {}
 				
 			break;
 		case MoveRecord::RESETGAME:
 			goto_move = tree->getRoot();
-			boardwindow->getBoardHandler()->gotoMove(goto_move);
+            tree->gotoMove(goto_move);
 			break;
 		case MoveRecord::TOEND:
 			if(boardwindow->getBoardDispatch()->getReviewInVariation())
 				goto_move = tree->findLastMoveInCurrentBranch();
 			else
 				goto_move = lastMoveInGame;
-			boardwindow->getBoardHandler()->gotoMove(goto_move);
+            tree->gotoMove(goto_move);
 			break;
 		case MoveRecord::SETMOVE:
 			/* Might later want to record this
@@ -478,7 +473,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			goto_move = tree->findNode(tree->getRoot(), m->number);
 
 			if (goto_move)
-				boardwindow->getBoardHandler()->gotoMove(goto_move);
+                tree->gotoMove(goto_move);
 			else
 			{
 				QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("Cannot set move to move number %1").arg(m->number));
@@ -526,11 +521,11 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	{
 		if (remember != last)
 		{
-			tree->setCurrent(remember);
-			boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+            tree->setCurrent(remember);
 		}
 	}
-	boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
+    // FIXME: it should not be necessary to update manually
+    boardwindow->updateMove(tree->getCurrent());
 }
 
 void qGoBoardNetworkInterface::sendPassToInterface(StoneColor /*c*/)

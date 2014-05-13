@@ -173,7 +173,6 @@ public slots:
     virtual void slotCountPressed() {}
 	virtual void slotUndoPressed();
 	virtual void slotScoreToggled(bool);
-	virtual void slotUpdateComment();
     virtual void slotSendComment() {}
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 protected:

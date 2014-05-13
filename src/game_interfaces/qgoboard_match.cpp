@@ -25,7 +25,6 @@
 #include "move.h"
 #include "network/boarddispatch.h"
 #include "network/messages.h"
-#include "boardhandler.h"
 #include "clockdisplay.h"
 #include "boardwindow.h"
 
@@ -38,7 +37,7 @@ qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameDa
 		  (bw->getBoardDispatch()->clientCountsTime() || bw->getBoardDispatch()->clientSendsTime()))
 		boardTimerId = startTimer(1000);
 	
-	boardwindow->getBoardHandler()->slotNavLast();
+    tree->slotNavLast();
 }
 
 /* This timer stuff is awkward looking. FIXME */

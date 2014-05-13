@@ -24,14 +24,14 @@
 #include "move.h"
 #include "matrix.h"
 #include "group.h"
+#include "messages.h"
 
-#include <iostream>
 #include <vector>
 
 #include <QtCore>
 
-Tree::Tree(int board_size)
-    : boardSize(board_size), root(NULL)
+Tree::Tree(int board_size, float komi)
+    : boardSize(board_size), root(NULL), komi(komi)
 {
     insertStoneFlag = false;
 	checkPositionTags = NULL;
@@ -497,6 +497,7 @@ int Tree::count()
 void Tree::setCurrent(Move *m)
 {
     current = m;
+    emit currentMoveChanged(current);
 }
 
 void Tree::setToFirstMove()
@@ -616,11 +617,6 @@ void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
 /* FIXME double check and remove editMove, unnecessary */
 void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 {
-//	if (lastValidMove == NULL)
-//	{
-//		stoneHandler->checkAllPositions();
-//	}
-
 /////////////////FIXME We may have a problem at first move with handicap games ...
 	StoneColor c = (current->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
 	
@@ -642,6 +638,7 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 	if (current->parent != NULL)
 		current->setCaptures(current->parent->getCapturesBlack(),
 		current->parent->getCapturesWhite());
+    emit currentMoveChanged(current);
 }
 
 bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
@@ -746,6 +743,7 @@ void Tree::addMove(StoneColor c, int x, int y)
 	else if (c == stoneWhite)
         capturesWhite += lastCaptures;
     current->setCaptures(capturesBlack, capturesWhite);
+    emit currentMoveChanged(current);
 }
 
 void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
@@ -1029,12 +1027,6 @@ void Tree::deleteNode()
 	{
 		// Oops, first and only move. We delete everything
         init();
-//		board->hideAllStones();
-//		board->hideAllMarks();
-//		board->updateCanvas();
-//		lastValidMove = NULL;
-//		stoneHandler->clearData();
-//		updateMove(tree->getCurrent());
 		return;
 	}
 	if(isInMainBranch(m))
@@ -1047,7 +1039,343 @@ void Tree::deleteNode()
 	remember->son = remSon;           // Reset son pointer, NULL
 	remember->marker = NULL;          // Forget marker
 
-//	updateMove(tree->getCurrent(), !display_incoming_move);
-	
-//	board->setModified();
+    emit currentMoveChanged(current);
+}
+
+
+/*
+ * Former BoardHandler slots
+ */
+void Tree::slotNavForward()
+{
+    nextMove();
+    emit currentMoveChanged(current);
+}
+
+void Tree::slotNavBackward()
+{
+    previousMove();
+    emit currentMoveChanged(current);
+}
+
+void Tree::slotNavFirst()
+{
+    setToFirstMove();  // Set move to root
+    emit currentMoveChanged(current);
+}
+
+void Tree::slotNavLast()
+{
+    setCurrent(findLastMoveInCurrentBranch());
+    emit currentMoveChanged(current);
+}
+
+void Tree::slotNavPrevComment()
+{
+    Move  *m = current->parent;
+
+    while (m != NULL)
+    {
+        if (m->getComment() != "")
+            break;
+        if (m->parent == NULL)
+            break;
+        m = m->parent;
+    }
+
+    if (m != NULL)
+    {
+        setCurrent(m);
+        emit currentMoveChanged(current);
+    }
+}
+
+void Tree::slotNavNextComment()
+{
+    Move  *m = current->son;
+
+    while (m != NULL)
+    {
+        if (m->getComment() != "")
+            break;
+        if (m->son == NULL)
+            break;
+        m = m->son;
+    }
+
+    if (m != NULL)
+    {
+        setCurrent(m);
+        emit currentMoveChanged(current);
+    }
+}
+
+void Tree::slotNthMove(int n)
+{
+    if (n < 0)
+        return;
+
+    Move *m = current,
+        *old = m;
+
+    int currentMove = m->getMoveNumber();
+
+    while (m != NULL)
+    {
+        if (m->getMoveNumber() == n)
+            break;
+        if ((n >= currentMove && m->son == NULL && m->marker == NULL) ||
+            (n < currentMove && m->parent == NULL))
+            break;
+        if (n > currentMove)
+        {
+            if (m->marker == NULL)
+                m = m->son;
+            else
+                m = m->marker;
+            m->parent->marker = m;
+        }
+        else
+        {
+            m->parent->marker = m;
+            m = m->parent;
+        }
+    }
+
+    if (m != NULL && m != old)
+        gotoMove(m);
+}
+
+void Tree::slotNavNextVar()
+{
+    Move *m = nextVariation();
+    if (m != NULL)
+        emit currentMoveChanged(current);
+}
+
+void Tree::slotNavPrevVar()
+{
+    Move *m = previousVariation();
+    if (m != NULL)
+        emit currentMoveChanged(current);
+}
+
+void Tree::slotNavStartVar()
+{
+    if (current->parent == NULL)
+        return;
+
+    Move *tmp = previousMove(),
+        *m = NULL;
+
+    if (tmp == NULL)
+        return;
+
+    // Go up tree until we find a node that has > 1 sons
+    while ((m = previousMove()) != NULL && getNumSons() <= 1)
+    // Remember move+1, as we set current to the
+    // first move after the start of the variation
+        tmp = m;
+
+
+    if (m == NULL)  // No such node found, so we reached root.
+    {
+        tmp = getRoot();
+        // For convinience, if we have Move 1, go there. Looks better.
+        if (tmp->son != NULL)
+            tmp = nextMove();
+    }
+
+    // If found, set current to the first move inside the variation
+    setCurrent(tmp);
+    emit currentMoveChanged(current);
+}
+
+void Tree::slotNavNextBranch()
+{
+    Move *m = getCurrent(),
+        *remember = m;  // Remember current in case we dont find a branch
+    Q_CHECK_PTR(m);
+
+    // We are already on a node with 2 or more sons?
+    if (getNumSons() > 1)
+    {
+        m = nextMove();
+        emit currentMoveChanged(current);
+        return;
+    }
+
+    // Descent tree to last son of main variation
+    while (m->son != NULL && getNumSons() <= 1)
+        m = nextMove();
+
+    if (m != NULL && m != remember)
+    {
+        if (m->son != NULL)
+            m = nextMove();
+        emit currentMoveChanged(current);
+    }
+    else
+        setCurrent(remember);
+}
+
+/*
+ * This function resumes back to the first move in the main branch
+ */
+void Tree::slotNavMainBranch()
+{
+    if (current->parent == NULL)
+        return;
+
+    Move *m = current,
+        *old = m,
+        *lastOddNode = NULL;
+
+    if (m == NULL)
+        return;
+
+    while ((m = m->parent) != NULL)
+    {
+        if (getNumSons(m) > 1 && old != m->son)
+            // Remember a node when we came from a branch
+            lastOddNode = m;
+
+        m->marker = old;
+        old = m;
+    }
+
+    if (lastOddNode == NULL)
+        return;
+
+    Q_CHECK_PTR(lastOddNode);
+
+    // Clear the marker, so we can proceed in the main branch
+    lastOddNode->marker = NULL;
+
+    setCurrent(lastOddNode);
+    emit currentMoveChanged(current);
+}
+
+void Tree::gotoMove(Move *m)
+{
+    setCurrent(m);
+    emit currentMoveChanged(current);
+}
+
+/*
+ * Called after the preceding (slot nav Intersection)
+ * When the intersection 'x/y' has been clicked on
+ */
+void Tree::findMoveByPos(int x, int y)
+{
+    Move *m = findMoveInMainBranch(x, y);
+    if(!m)
+        findMoveInCurrentBranch(x, y);
+
+    if (m != NULL)
+    {
+        setCurrent(m);
+    }
+}
+
+/*
+ * Called by qgoboard when score button is pressed up, leaving score mode
+ */
+void Tree::exitScore()
+{
+    // Remove territory marks
+    if (current->isTerritoryMarked())
+    {
+        current->getMatrix()->clearTerritoryMarks();
+        current->setTerritoryMarked(false);
+        current->setScored(false);
+    }
+
+    current->getMatrix()->absMatrix();
+    emit currentMoveChanged(current);
+}
+
+/*
+ * Performs all operations on the matrix of current move to display score marks
+ * and score informaton on the uI
+ */
+void Tree::countScore(void)
+{
+    Matrix * current_matrix = current->getMatrix();
+    current_matrix->clearTerritoryMarks();
+
+    deadBlack = current_matrix->countDeadBlack();
+    deadWhite = current_matrix->countDeadWhite();
+    capturesBlack = current->getCapturesBlack();
+    capturesWhite = current->getCapturesWhite();
+    current_matrix->markTerritory(terrBlack,terrWhite);
+    current->setTerritoryMarked(true);
+    current->setScored(true);
+
+    emit currentMoveChanged(current); // Toggles window refresh
+    emit scoreChanged(terrBlack, capturesBlack, deadWhite,
+                      terrWhite, capturesWhite, deadBlack);
+}
+
+void Tree::countMarked(void)
+{
+    Matrix * current_matrix = current->getMatrix();
+
+    deadWhite = 0;
+    deadBlack = 0;
+    terrWhite = 0;
+    terrBlack = 0;
+    capturesBlack = current->getCapturesBlack();
+    capturesWhite = current->getCapturesWhite();
+
+    for (int i=0; i< boardSize; i++)
+        for (int j=0; j< boardSize; j++)
+        {
+
+            /* When called from network code, we're just using
+             * the board as server has reported it.  No stones
+             * are marked as dead, but apparently ones marked as
+             * territory get ghosted out */
+            if(current_matrix->getMarkAt(i + 1, j + 1) == markTerrBlack)
+            {
+                terrBlack++;
+                if (current_matrix->getStoneAt(i+1,j+1) == stoneWhite)
+                    deadWhite++;
+            }
+            else if(current_matrix->getMarkAt(i + 1, j + 1) == markTerrWhite)
+            {
+                terrWhite++;
+                if (current_matrix->getStoneAt(i +1,j+1) == stoneBlack)
+                    deadBlack++;
+            }
+        }
+    emit scoreChanged(terrBlack, capturesBlack, deadWhite,
+                      terrWhite, capturesWhite, deadBlack);
+}
+
+/* Not totally confident that this belongs here, but
+ * the score is counted here */
+GameResult Tree::retrieveScore(void)
+{
+    GameResult g;
+    g.result = GameResult::SCORE;
+    /* What about different scoring types? (chinese versus japanese)
+     * FIXME This basically confirms for me that this does not
+     * belong here */
+
+    float blackScore = terrBlack + capturesBlack + deadWhite;
+    float whiteScore = terrWhite + capturesWhite + deadBlack + komi;
+    if(whiteScore > blackScore)
+    {
+        g.winner_color = stoneWhite;
+        g.winner_score = whiteScore;
+        g.loser_score = blackScore;
+    }
+    else
+    {
+        g.winner_color = stoneBlack;
+        g.winner_score = blackScore;
+        g.loser_score = whiteScore;
+    }
+    return g;
 }

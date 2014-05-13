@@ -62,6 +62,8 @@ public:
 //	void updateDeadMarks(int &black, int &white);
 	unsigned int getSize()	{return board_size;}
 	void exportPicture(const QString &fileName,  QString *filter, bool toClipboard);
+    bool updateAll(Move *move);
+    void updateVariationGhosts(Move *m);
 		
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
@@ -100,6 +102,7 @@ private:
 	bool antiClicko;
 	bool lockResize ;
 	bool localSound;
+    bool oneColorGo;
 
 	Mark *lastMoveMark;
 	bool numberPool[400];

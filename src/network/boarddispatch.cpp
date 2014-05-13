@@ -31,9 +31,9 @@
 #include "playergamelistings.h"
 #include "networkconnection.h"
 #include "qgoboard.h"
-#include "boardhandler.h"
 #include "clockdisplay.h"
 #include "ui_boardwindow.h"
+#include "tree.h"
 
 /* It would be difficult to create a board without a connection,
  * but we need to either be certain and not test at all, or assign
@@ -311,7 +311,7 @@ void BoardDispatch::openBoard(void)
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 		boardwindow->gameDataChanged();	//necessary at least for cursor
 		if(gameData->record_sgf != QString())	//for ORO
-			boardwindow->getBoardHandler()->slotNavLast();
+            boardwindow->getTree()->slotNavLast();
 }
 
 void BoardDispatch::recvTime(const TimeRecord & wt, const TimeRecord & bt)
@@ -354,7 +354,7 @@ void BoardDispatch::recvResult(GameResult * r)
 		return;
 	if(!r)
 	{
-		GameResult res = boardwindow->getBoardHandler()->retrieveScore();
+        GameResult res = boardwindow->getTree()->retrieveScore();
 		r = &res;
 	}
 	// also set on GameData of boardwindow ???

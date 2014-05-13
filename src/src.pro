@@ -59,13 +59,11 @@ game_tree/matrix.h \
 game_tree/move.h \
 game_tree/tree.h \
 board/board.h \
-board/boardhandler.h \
 board/boardwindow.h \
 board/clockdisplay.h \
 board/gameinfo.h \
 board/gatter.h \
 board/imagehandler.h \
-board/interfacehandler.h \
 board/mark.h \
 board/stone.h \
 game_interfaces/countdialog.h \
@@ -116,13 +114,11 @@ SOURCES += displayboard.cpp \
            mainwindow_settings.cpp \
            audio/audio.cpp \
            board/board.cpp \
-           board/boardhandler.cpp \
            board/boardwindow.cpp \
            board/clockdisplay.cpp \
            board/gameinfo.cpp \
            board/gatter.cpp \
            board/imagehandler.cpp \
-           board/interfacehandler.cpp \
            board/mark.cpp \
            board/stone.cpp \
 	   game_interfaces/countdialog.cpp \

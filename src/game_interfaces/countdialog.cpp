@@ -25,8 +25,7 @@
 #include "countdialog.h"
 #include "board/boardwindow.h"
 #include "../network/boarddispatch.h"
-#include "interfacehandler.h"
-#include "boardhandler.h"
+#include "tree.h"
 #include "qgoboard.h"
 
 CountDialog::CountDialog(BoardWindow * parent, BoardDispatch * dis, unsigned int game_id) 
@@ -47,7 +46,7 @@ CountDialog::CountDialog(BoardWindow * parent, BoardDispatch * dis, unsigned int
 		deleteLater();
 		return;
 	}
-	result = new GameResult(board->getBoardHandler()->retrieveScore());
+    result = new GameResult(board->getTree()->retrieveScore());
 	GameData * gamedata = board->getGameData();
 	if(result->winner_color == stoneWhite)
 	{

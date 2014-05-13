@@ -22,10 +22,9 @@
 #include "qgoboard.h"
 #include "tree.h"
 #include "move.h"
-#include "boardhandler.h"
 #include "gamedata.h"
 #include "boardwindow.h"
-#include "ui_boardwindow.h"
+#include "board.h"
 
 #include <QMessageBox>
 
@@ -33,13 +32,13 @@ qGoBoardReviewInterface::qGoBoardReviewInterface(BoardWindow *bw, Tree * t, Game
 {
 	game_Id = QString::number(gd->number);
 
-	boardwindow->getUi()->board->clearData();
+    boardwindow->clearData();
 
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
 	playSound = (settings.value("SOUND") != 1);
 	
-	boardwindow->getBoardHandler()->slotNavFirst();
+    tree->slotNavFirst();
 }
 
 
@@ -67,7 +66,7 @@ void qGoBoardReviewInterface::setNode(int node_nr, StoneColor sc, int x, int y)
 
 	if (m)
 	//node found, we go there
-		boardwindow->getBoardHandler()->gotoMove(m);
+        tree->gotoMove(m);
 	else
 	// no node found, we create one from the current move
 	{
@@ -75,11 +74,7 @@ void qGoBoardReviewInterface::setNode(int node_nr, StoneColor sc, int x, int y)
 			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1,%2 seems to be invalid").arg(x).arg(y));
 		else
 			tree->getCurrent()->setNodeIndex(node_nr);
-
-		boardwindow->getBoardHandler()->updateMove(tree->getCurrent());
 	}
-
-	
 }
 
 

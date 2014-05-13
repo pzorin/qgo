@@ -20,10 +20,8 @@
  ***************************************************************************/
 
 #include "boardwindow.h"
-#include "boardhandler.h"
 #include "board.h"
 #include "clockdisplay.h"
-#include "interfacehandler.h"
 #include "qgoboard.h"
 #include "qgoboardlocalinterface.h"
 #include "move.h"
@@ -65,7 +63,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	gamePhase = phaseInit;
 
 	//Creates the game tree
-    tree = new Tree(boardSize);
+    tree = new Tree(boardSize, gameData->komi);
 
 	setupUI();
 	
@@ -258,12 +256,8 @@ void BoardWindow::setupUI(void)
         ui->board->setCoordType(numbertopnoi);
     ui->board->init(boardSize);
 	
-	interfaceHandler = new InterfaceHandler( this);
-    interfaceHandler->toggleMode(gameData->gameMode);
-    interfaceHandler->updateCaption(gameData);
-
-	// creates the board handler for navigating in the tree
-    boardHandler = new BoardHandler(this, tree, boardSize);
+    setMode(gameData->gameMode);
+    updateCaption();
 
 	int window_x, window_y;
 	QVariant board_window_size_x = settings.value("BOARD_WINDOW_SIZE_X");
@@ -278,23 +272,22 @@ void BoardWindow::setupUI(void)
 //		ui->boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
 	
 	// Connects the nav buttons to the slots
-    connect(ui->navForward,SIGNAL(pressed()), boardHandler, SLOT(slotNavForward()));
-    connect(ui->navBackward,SIGNAL(pressed()), boardHandler, SLOT(slotNavBackward()));
-    connect(ui->navNextVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextVar()));
-    connect(ui->navPrevVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevVar()));
-    connect(ui->navFirst, SIGNAL(pressed()), boardHandler, SLOT(slotNavFirst()));
-    connect(ui->navLast, SIGNAL(pressed()), boardHandler, SLOT(slotNavLast()));
-    connect(ui->navMainBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavMainBranch()));
-    connect(ui->navStartVar, SIGNAL(pressed()), boardHandler, SLOT(slotNavStartVar()));
-    connect(ui->navNextBranch, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextBranch()));
-    connect(ui->navIntersection, SIGNAL(pressed()), boardHandler, SLOT(slotNavIntersection()));
-    connect(ui->navPrevComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavPrevComment()));
-    connect(ui->navNextComment, SIGNAL(pressed()), boardHandler, SLOT(slotNavNextComment()));
-    connect(ui->slider, SIGNAL(sliderMoved ( int)), boardHandler , SLOT(slotNthMove(int)));
+    connect(ui->navForward,SIGNAL(pressed()), tree, SLOT(slotNavForward()));
+    connect(ui->navBackward,SIGNAL(pressed()), tree, SLOT(slotNavBackward()));
+    connect(ui->navNextVar, SIGNAL(pressed()), tree, SLOT(slotNavNextVar()));
+    connect(ui->navPrevVar, SIGNAL(pressed()), tree, SLOT(slotNavPrevVar()));
+    connect(ui->navFirst, SIGNAL(pressed()), tree, SLOT(slotNavFirst()));
+    connect(ui->navLast, SIGNAL(pressed()), tree, SLOT(slotNavLast()));
+    connect(ui->navMainBranch, SIGNAL(pressed()), tree, SLOT(slotNavMainBranch()));
+    connect(ui->navStartVar, SIGNAL(pressed()), tree, SLOT(slotNavStartVar()));
+    connect(ui->navNextBranch, SIGNAL(pressed()), tree, SLOT(slotNavNextBranch()));
+    connect(ui->navIntersection, SIGNAL(pressed()), this, SLOT(slotNavIntersection()));
+    connect(ui->navPrevComment, SIGNAL(pressed()), tree, SLOT(slotNavPrevComment()));
+    connect(ui->navNextComment, SIGNAL(pressed()), tree, SLOT(slotNavNextComment()));
+    connect(ui->slider, SIGNAL(sliderMoved ( int)), tree , SLOT(slotNthMove(int)));
 
-
-    connect(ui->board, SIGNAL(signalWheelEvent(QWheelEvent*)),
-		boardHandler, SLOT(slotWheelEvent(QWheelEvent*)));
+    wheelTime = QTime::currentTime();
+    connect(ui->board, SIGNAL(signalWheelEvent(QWheelEvent*)), this, SLOT(slotWheelEvent(QWheelEvent*)));
 
 
 	//Connects the 'edit' buttons to the slots
@@ -319,10 +312,14 @@ void BoardWindow::setupUI(void)
     {
         connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
         connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
+        ui->commentEdit2->setDisabled(true);
     } else {
         ui->buttonModeEdit->hide();
         ui->buttonModeLocal->hide();
     }
+
+    connect(tree, SIGNAL(currentMoveChanged(Move*)), this, SLOT(updateMove(Move*)));
+    connect(tree, SIGNAL(scoreChanged(int,int,int,int,int,int)), this, SLOT(slotGetScore(int,int,int,int,int,int)));
 }
 
 void BoardWindow::setupBoardUI(void)
@@ -418,7 +415,7 @@ void BoardWindow::setupBoardUI(void)
 	// Needs Adjourn button ????
 
 	//connects the comments and edit line to the slots
-    connect(ui->commentEdit, SIGNAL(textChanged()), qgoboard, SLOT(slotUpdateComment()));
+    connect(ui->commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
     connect(ui->commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
 
     connect(ui->computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
@@ -447,7 +444,7 @@ void BoardWindow::checkHideToolbar(int h)
 
 void BoardWindow::gameDataChanged(void)
 {
-	interfaceHandler->updateCaption(gameData);
+    updateCaption();
 	clockDisplay->setTimeSettings(gameData->timeSystem, gameData->maintime, gameData->periodtime, gameData->stones_periods);
 }
 
@@ -475,9 +472,9 @@ void BoardWindow::swapColors(bool noswap)
 		myColorIsBlack = false;
 		myColorIsWhite = true;
 	}
-	interfaceHandler->updateCaption(gameData);
+    updateCaption();
 	//getBoardHandler()->updateCursor();	//appropriate?
-	boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
+    updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
 	//also need to start any timers if necessary
 	//also network timers in addition to game timers
 }
@@ -539,13 +536,13 @@ void BoardWindow::slotEditButtonPressed( int m )
 		{
 //			editButtons->button (m)->setChecked( false);
 			gamePhase = phaseOngoing;
-			boardHandler->updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
+            updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
 			editButtons->button (7)->setDisabled( false);
 		}
 		else
 		{
 			gamePhase = phaseEdit;
-			boardHandler->updateCursor( );		//this still has turn change FIXME
+            updateCursor( );		//this still has turn change FIXME
 			editButtons->button (7)->setDisabled( true);
 
 			for (int i= 0;i<7;i++)
@@ -596,7 +593,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_WHITE));
 //#else
             ui->colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_white.png"));
-			boardHandler->updateCursor(stoneBlack);
+            updateCursor(stoneBlack);
 //#endif
 		}
 		else
@@ -606,7 +603,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 //			mainWidget->colorButton->setPixmap(QPixmap(ICON_NODE_BLACK));
 //#else
             ui->colorButton->setIcon(QIcon(":/boardicons/resources/pics/stone_black.png"));
-			boardHandler->updateCursor(stoneWhite);
+            updateCursor(stoneWhite);
 //#endif
 		}
 		// check if set color is natural color:
@@ -709,7 +706,7 @@ void BoardWindow::slotDuplicate()
 	/* Removing, may not be broken at all */
 	//if(mn > 0)
 	//	mn--;
-	b->getBoardHandler()->slotNthMove(mn);
+    tree->slotNthMove(mn);
 
 	/* Doesn't seem to matter where the below is */
 	/*b->setGamePhase(this->getGamePhase());				//maybe?
@@ -820,6 +817,7 @@ void BoardWindow::setGamePhase(GamePhase gp)
 		case phaseOngoing:
 			/* among many other things: FIXME, adding as we go, for now,
 			 * sloppy */
+        ui->tabDisplay->setCurrentIndex(0);
             if(ui->passButton)
                 ui->passButton->setEnabled(true);
             if(gameData->undoAllowed || gameData->gameMode == modeLocal)
@@ -873,6 +871,9 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * in observing a game ?? */
 			if(getBoardDispatch() && getBoardDispatch()->canMarkStonesDeadinScore())	//FIXME or maybe as for tygem, it accepts the score as is
                 ui->doneButton->setEnabled(true);
+            ui->tabDisplay->setCurrentIndex(1);
+
+            updateCursor();
 			break;
 		default:
 			break;
@@ -900,11 +901,6 @@ QString BoardWindow::getCandidateFileName()
 		//fileName = fileName + ".sgf";
 	} 
     return dir + result + ".sgf";
-}
-
-Board *BoardWindow::getBoard()
-{
-    return ui->board;
 }
 
 /*
@@ -938,8 +934,7 @@ bool BoardWindow::slotFileSaveAs()
  */
 void BoardWindow::slotEditDelete()
 {
-	tree->deleteNode();
-	boardHandler->updateMove(tree->getCurrent());
+    tree->deleteNode();
 }
 
 /* FIXME this comes up with unrelated keys, which is okay I guess, little
@@ -967,27 +962,27 @@ break;
 */
 
 		case Qt::Key_Left:
-			boardHandler->slotNavBackward();
+            tree->slotNavBackward();
 			break;
 
 		case Qt::Key_Right:
-			boardHandler->slotNavForward();
+            tree->slotNavForward();
 			break;
 
 		case Qt::Key_Up:
-			boardHandler->slotNavPrevVar();
+            tree->slotNavPrevVar();
 			break;
 
 		case Qt::Key_Down:
-			boardHandler->slotNavNextVar();
+            tree->slotNavNextVar();
 			break;
 
 		case Qt::Key_Home:
-			boardHandler->slotNavFirst();
+            tree->slotNavFirst();
 			break;
 
 		case Qt::Key_End:
-			boardHandler->slotNavLast();
+            tree->slotNavLast();
 			break;
 
 		default:
@@ -1066,7 +1061,7 @@ void BoardWindow::setBlackName(QString name)
     gameData->black_name = name;
     ui->blackName->blockSignals(true);
     ui->blackName->setText(name);
-    interfaceHandler->updateCaption(gameData);
+    updateCaption();
     ui->blackName->blockSignals(false);
 }
 
@@ -1075,14 +1070,14 @@ void BoardWindow::setWhiteName(QString name)
     gameData->white_name = name;
     ui->whiteName->blockSignals(true);
     ui->whiteName->setText(name);
-    interfaceHandler->updateCaption(gameData);
+    updateCaption();
     ui->whiteName->blockSignals(false);
 }
 
 void BoardWindow::switchToEditMode()
 {
     gameData->gameMode = modeEdit;
-    interfaceHandler->toggleMode(modeEdit);
+    setMode(modeEdit);
     ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
     myColorIsBlack = true;
     myColorIsWhite = true;
@@ -1091,7 +1086,7 @@ void BoardWindow::switchToEditMode()
 void BoardWindow::switchToLocalMode()
 {
     gameData->gameMode = modeLocal;
-    interfaceHandler->toggleMode(modeLocal);
+    setMode(modeLocal);
     ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
     myColorIsBlack = !(ui->computerBlack->isChecked());
     myColorIsWhite = !(ui->computerWhite->isChecked());
@@ -1102,9 +1097,16 @@ void BoardWindow::switchToLocalMode()
     if (qgoboard_temp != NULL)
     {
         tree->setCurrent(tree->findLastMoveInCurrentBranch());
-        getBoardHandler()->updateMove(tree->getCurrent());
         qgoboard_temp->feedPositionThroughGtp();
     }
+}
+
+/*
+ * The text in the comment zone has been changed
+ */
+void BoardWindow::slotUpdateComment()
+{
+    tree->getCurrent()->setComment(ui->commentEdit->toPlainText());
 }
 
 /*
@@ -1113,4 +1115,523 @@ void BoardWindow::switchToLocalMode()
 void BoardWindow::slotToggleInsertStones(bool val)
 {
     tree->insertStoneFlag = val;
+}
+
+void BoardWindow::updateButtons(StoneColor lastMoveColor)
+{
+    switch (getGameMode())
+    {
+        case modeMatch:
+        case modeLocal:
+            if(getGamePhase() == phaseOngoing)
+            {
+                bool onMove = (lastMoveColor == stoneBlack && getMyColorIsWhite()) ||
+                        (lastMoveColor == stoneWhite && getMyColorIsBlack());
+                ui->passButton->setEnabled(onMove);
+                ui->resignButton->setEnabled(onMove);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void BoardWindow::updateCursor(StoneColor currentMoveColor)
+{
+    CursorType cur = cursorIdle;
+
+    switch (getGameMode())
+    {
+    case modeEdit :
+    case modeTeach :
+    case modeUndefined:
+        if (getGamePhase() == phaseScore || getGamePhase() == phaseEdit )
+            cur = cursorIdle;
+        else
+            cur = (currentMoveColor == stoneBlack ? cursorGhostWhite : cursorGhostBlack);
+        break;
+    case modeReview:
+        break;
+    case modeObserve :
+        break;
+    case modeMatch :
+        if(getGamePhase() == phaseOngoing)
+        {
+            if  (currentMoveColor == stoneBlack )
+                cur =  ( getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
+            else
+                cur = ( getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
+        }
+        //else	//FIXME
+        break;
+    case modeLocal :
+        if(getGamePhase() == phaseOngoing)
+        {
+            if  (currentMoveColor == stoneBlack )
+                cur = ( getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
+            else
+                cur = ( getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
+        }
+        break;
+    }
+
+    ui->board->setCursorType(cur);
+}
+
+/*
+ * This deals with updating the 'board' and the 'interface handler' with the data
+ * stored in the tree at the move place.
+ * This involves calling and update for the board stones, and
+ * an update of the interface
+ */
+void BoardWindow::updateMove(Move *m)
+{
+    if (m == NULL)
+    {
+        m = tree->getCurrent();
+    }
+
+    // Update slider branch length
+    setSliderMax(m->getMoveNumber() + tree->getBranchLength());
+    setMoveData(
+            m->getMoveNumber(),
+            (m->getColor() != stoneBlack),
+            m->getNumBrothers(),
+            m->getNumSons(),
+            m->hasParent(),
+            m->hasPrevBrother(),
+            m->hasNextBrother(),
+            m->getX(),
+            m->getY());
+
+    // Update comment if normal game (if observe or match, the comment zone is kept as is)
+    if (getGameMode() == modeEdit)
+        ui->commentEdit->setPlainText(m->getComment());
+
+    // Isn't updateAll() sufficient? FIXME
+    ui->board->removeGhosts();
+    ui->board->updateAll(m);
+    ui->board->updateLastMove(m);
+
+    updateButtons(m->getColor());
+    updateCursor(m->getColor());
+
+    // Update the ghosts indicating variations
+    if (m->getNumBrothers())// && setting->readIntEntry("VAR_GHOSTS")) TODO
+        ui->board->updateVariationGhosts(m);
+
+    // Oops, something serious went wrong
+    if (m->getMatrix() == NULL)
+        qFatal("   *** Move returns NULL pointer for matrix! ***");
+
+    ui->capturesBlack->setText(QString::number(m->getCapturesBlack()));
+    ui->capturesWhite->setText(QString::number(m->getCapturesWhite()));
+
+    // Display times
+    if(getGameMode() == modeEdit)
+    {
+        if(m->getMoveNumber() == 0)
+        {
+            if (gameData->timelimit == 0)
+                getClockDisplay()->setTimeInfo(0, -1, 0, -1);
+            else
+                getClockDisplay()->setTimeInfo(gameData->timelimit, -1, gameData->timelimit, -1);
+        }
+        else if(m->getTimeinfo())
+        {
+            int other_time, other_stones_periods;
+            if(m->parent && m->parent->getMoveNumber() != 0 && m->parent->getTimeinfo())
+            {
+                other_time = (int)m->parent->getTimeLeft();
+                other_stones_periods = (m->parent->getOpenMoves() == 0 ? -1 : m->parent->getOpenMoves());
+            }
+            else
+            {
+                other_time = 0;
+                other_stones_periods = -1;
+            }
+            if(!qgoboard->getBlackTurn())
+                getClockDisplay()->setTimeInfo((int)m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves(), other_time, other_stones_periods);
+            else
+                getClockDisplay()->setTimeInfo(other_time, other_stones_periods, (int)m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves());
+        }
+    }
+}
+
+/*
+ * Called when the 'nav to' button is pressed
+ */
+void BoardWindow::slotNavIntersection()
+{
+    //should not happen
+    if (getGameMode() != modeEdit &&
+        getGameMode() != modeObserve)
+        return;
+    /* Double check the above, seems like we should be able to use
+     * the nav button in any mode except maybe the scorephase of
+     * a game.. but I mean why can't we look back over moves whenever?
+     * FIXME */
+
+    setGamePhase ( phaseNavTo );
+    ui->board->setCursorType(cursorNavTo);
+}
+
+void BoardWindow::slotWheelEvent(QWheelEvent *e)
+{
+    // leave if not editing
+    if (getGameMode() != modeEdit &&
+        getGameMode() != modeObserve)	//or observing
+        return;
+
+    if (getGamePhase() != phaseOngoing)
+        return;
+
+    // Check delay
+    if (QTime::currentTime() < wheelTime)
+        return;
+
+    // Needs an extra check on variable mouseState as state() does not work on Windows.
+    if (e->delta() > 0)
+    {
+        if (e->buttons() == Qt::RightButton || e-> modifiers() ==  Qt::ShiftModifier)
+            tree->slotNavNextVar();
+        else
+            tree->slotNavForward();
+    }
+    else
+    {
+        if (e->buttons() == Qt::RightButton || e-> modifiers() ==  Qt::ShiftModifier)//|| mouseState == RightButton)
+            tree->slotNavPrevVar();
+        else
+            tree->slotNavBackward();
+    }
+
+    // Delay of 100 msecs to avoid too fast scrolling
+    wheelTime = QTime::currentTime();
+    wheelTime = wheelTime.addMSecs(50);
+
+    e->accept();
+}
+
+void BoardWindow::slotGetScore(int terrBlack, int captBlack, int deadWhite, int terrWhite, int captWhite, int deadBlack)
+{
+    ui->komiScore->setText(QString::number(gameData->komi));
+    ui->terrWhite->setText(QString::number(terrWhite));
+    ui->capturesWhiteScore->setText(QString::number(captWhite+deadBlack));
+    ui->totalWhite->setText(QString::number((float)(terrWhite+captWhite+deadBlack) + gameData->komi));
+    ui->terrBlack->setText(QString::number(terrBlack));
+    ui->capturesBlackScore->setText(QString::number(captBlack+deadWhite));
+    ui->totalBlack->setText(QString::number(terrBlack+captBlack+deadWhite));
+
+    gameData->black_prisoners = captBlack;
+    gameData->white_prisoners = captWhite;
+}
+
+/*
+ * displays the informations relative to a game on the board window
+ */
+void BoardWindow::updateCaption()
+{
+    // Print caption
+    // example: qGo 0.0.5 - Zotan 8k vs. tgmouse 10k
+    // or if game name is given: qGo 0.0.5 - Kogo's Joseki Dictionary
+    setWindowTitle( /* QString(isModified ? "* " : "") + */
+        ( (gameData->number != 0 && gameData->number < 10000) ?
+            "(" + QString::number(gameData->number) + ") " :
+            QString()) + (gameData->gameName.isEmpty() ?
+                gameData->white_name
+                + (!gameData->white_rank.isEmpty() ?
+                    " " + gameData->white_rank :
+                    QString())
+                + " " + QObject::tr("vs.") + " " + gameData->black_name
+                + (!gameData->black_rank.isEmpty() ?
+                    " " + gameData->black_rank :
+                    QString()) :
+                gameData->gameName) +	" - " + QString(PACKAGE));
+
+
+    bool simple = gameData->white_rank.length() == 0 && gameData->black_rank.length() == 0;
+    /* This name stuff is super redundant with below FIXME */
+    QString player = gameData->white_name;
+    if (simple && player == QObject::tr("White"))
+    {
+        ui->whiteName->setText(QObject::tr("White"));
+        ui->whiteFrame_score->setTitle(QObject::tr("White"));
+    }
+    else if(!gameData->nigiriToBeSettled)
+    {
+        // truncate to 13 characters max
+        player.truncate(13);
+
+        if (gameData->white_rank.length() != 0)
+            player = player + " " + gameData->white_rank;
+
+        ui->whiteName->setText(player);
+        ui->whiteFrame_score->setTitle(QObject::tr("W") + ": " + player);
+    }
+
+    player = gameData->black_name;
+    if (simple && player == QObject::tr("Black"))
+    {
+        ui->blackName->setText(QObject::tr("Black"));
+        ui->blackFrame_score->setTitle(QObject::tr("Black"));
+    }
+    else if(!gameData->nigiriToBeSettled)
+    {
+        // truncate to 13 characters max
+        player.truncate(13);
+
+        if (gameData->black_rank.length() != 0)
+            player = player + " " + gameData->black_rank;
+
+        ui->blackName->setText(player);
+        ui->blackFrame_score->setTitle(QObject::tr("B") + ": " + player);
+    }
+
+    //TODO set  clock
+
+    if(gameData->free_rated == RATED)
+        freeratedLabel->setText("Rated");
+    else if(gameData->free_rated == FREE)
+        freeratedLabel->setText("Free");
+    else if(gameData->free_rated == TEACHING)
+        freeratedLabel->setText("Teaching");
+
+    komiLabel->setText(QString("Komi: ").append(QString().setNum(gameData->komi)));
+    handicapLabel->setText(QString("H: ").append(QString().setNum(gameData->handicap)));
+}
+
+/*
+ * This updates the UI with the correct layout depending on the game mode
+ */
+void BoardWindow::setMode(GameMode mode)
+{
+
+    switch (mode)
+    {
+
+    case modeEdit:
+        ui->actionPlay->setEnabled(true);
+        ui->tabTools->setCurrentIndex(0) ;//setVisible(false);
+        ui->scoreButton->setEnabled(true);
+        ui->passButton_2->setEnabled(true);
+        ui->commentEdit->setReadOnly(false);
+        ui->commentEdit2->setDisabled(true);
+        return;
+
+    case modeObserve:
+        ui->actionPlay->setDisabled(true);
+        ui->tabTools->setVisible(false) ;
+        ui->passButton_2->setDisabled(true);
+        ui->commentEdit->setReadOnly(true);
+        ui->commentEdit2->setReadOnly(false);
+        ui->commentEdit2->setEnabled(true);
+        return ;
+
+    case modeMatch :
+        ui->actionPlay->setDisabled(true);
+        ui->tabTools->setCurrentIndex(1) ;
+        ui->scoreButton->setDisabled(true);
+        ui->passButton->setEnabled(true);
+        ui->undoButton->setEnabled(true);
+        ui->resignButton->setEnabled(true);
+        ui->reviewButton->setDisabled(true);
+        ui->reviewButton->setVisible(true);
+        ui->adjournButton->setEnabled(true);
+        /* FIXME we could have the refreshButton refresh the observers on
+         * IGS.  This requires a "supports" protocol function, etc., to
+         * send the refresh.  Or we could just periodically refresh the
+         * observers.
+         * But note that its currently not "connect"ed to anything. */
+        //ui->refreshButton->setEnabled(true);
+        ui->refreshButton->setEnabled(false);
+
+        ui->doneButton->setEnabled(false);
+        ui->commentEdit->setReadOnly(true);
+        ui->commentEdit2->setEnabled(true);
+        ui->commentEdit2->setReadOnly(false);
+        ui->navButtonsFrame->setEnabled(false);
+        return ;
+
+    case   modeLocal :
+        ui->actionPlay->setDisabled(true);
+        ui->tabTools->setCurrentIndex(1) ;
+        ui->scoreButton->setDisabled(true);
+        ui->passButton->setEnabled(true);
+        ui->undoButton->setEnabled(true);
+        ui->resignButton->setEnabled(true);
+        ui->adjournButton->setEnabled(false);
+        ui->doneButton->setEnabled(false);
+        ui->commentEdit->setReadOnly(true);
+        ui->navButtonsFrame->setEnabled(false);
+        ui->commentEdit2->setDisabled(true);
+        ui->reviewButton->setDisabled(true);
+        return ;
+
+    case modeTeach:
+        ui->actionPlay->setDisabled(true);
+        ui->tabTools->setCurrentIndex(1) ;
+        ui->scoreButton->setDisabled(true);
+        ui->passButton->setEnabled(true);
+        ui->undoButton->setEnabled(true);
+        ui->resignButton->setEnabled(true);
+        ui->adjournButton->setEnabled(true);
+        ui->doneButton->setEnabled(false);
+        ui->commentEdit->setReadOnly(true);
+        ui->navButtonsFrame->setEnabled(false);
+        ui->commentEdit2->setReadOnly(false);
+        ui->commentEdit2->setEnabled(true);
+        return ;
+
+    case modeReview :
+        ui->actionPlay->setDisabled(true);
+        ui->tabTools->setCurrentIndex(1) ;
+        ui->scoreButton->setDisabled(true);
+        ui->passButton->setEnabled(true);
+        ui->undoButton->setEnabled(true);
+        ui->resignButton->setEnabled(true);
+        ui->adjournButton->setEnabled(true);
+        ui->doneButton->setEnabled(false);
+        ui->commentEdit->setReadOnly(true);
+        ui->commentEdit2->setReadOnly(false);
+        ui->commentEdit2->setEnabled(true);
+        return ;
+    case modeUndefined:
+        return;
+    }
+}
+
+/*
+ * Resets all displays on the board window
+ */
+void BoardWindow::clearData()
+{
+    ui->board->clearData();
+
+    ui->commentEdit->clear();
+
+    ui->capturesBlack->setText("0");
+    ui->capturesWhite->setText("0");
+
+    ui->pb_timeBlack->setText("00:00");
+    ui->pb_timeWhite->setText("00:00");
+
+    ui->scoreButton->setDown(false);
+
+    ui->slider->setValue(0);
+    ui->slider->setMaximum(0);
+}
+
+/*
+ * displays the informations relative to a move on the board window
+ */
+void BoardWindow::setMoveData(int n, bool black, int brothers, int sons, bool hasParent, bool hasPrev, bool hasNext, int lastX, int lastY)
+{
+    // move number
+    QString s(QObject::tr("Move") + " ");
+    s.append(QString::number(n));
+
+    // color and coordinates
+    if (lastX >= 1 && lastX <= getBoardSize() && lastY >= 1 && lastY <= getBoardSize())
+    {
+        s.append(" (");
+        s.append(black ? QObject::tr("W")+" " : QObject::tr("B")+" ");
+        s.append(QString(QChar(static_cast<const char>('A' + (lastX<9?lastX:lastX+1) - 1))) +
+            QString::number(getBoardSize()-lastY+1) + ")");
+    }
+
+    //pass move
+    else if (lastX == 20 && lastY == 20)
+    {
+        s.append(" (");
+        s.append(black ? QObject::tr("W")+" " : QObject::tr("B")+" ");
+        s.append(" " + QObject::tr("Pass") + ")");
+    }
+
+    moveNumLabel->setText(s);
+
+    // set turn information (and color on the edit button)
+    s = black ? QObject::tr("Black to play") : QObject::tr("White to play");
+    ui->turnLabel->setText(s);
+
+    ui->colorButton->setIcon(black ? QIcon(":/boardicons/resources/pics/stone_black.png") : QIcon(":/boardicons/resources/pics/stone_white.png") );
+
+    // sons and variatons display
+    s = "";
+    s.append(QString::number(brothers));
+    if (brothers == 1)
+        s.append(" " + QObject::tr("brother") + "\n");
+    else
+        s.append(" " + QObject::tr("brothers") + "\n");
+
+    s.append(QString::number(sons));
+    if (sons == 1)
+        s.append(" " + QObject::tr("son"));
+    else
+        s.append(" " + QObject::tr("sons"));
+    ui->varLabel->setText(s);
+
+    if(getGameMode() == modeReview)
+    {
+        /* For now, just disable navigation if its in the review mode, they can always duplicate
+         * the board and a lot more is necessary for qgo to do reviews. */
+        ui->navPrevVar->setEnabled(false);
+        ui->navNextVar->setEnabled(false);
+        ui->navBackward->setEnabled(false);
+        ui->navForward->setEnabled(false);
+        ui->navFirst->setEnabled(false);
+        ui->navStartVar->setEnabled(false);
+        ui->navMainBranch->setEnabled(false);
+        ui->navLast->setEnabled(false);
+        ui->navNextBranch->setEnabled(false);
+        ui->swapVarButton->setEnabled(false);
+        ui->navPrevComment->setEnabled(false);
+        ui->navNextComment->setEnabled(false);
+        ui->navIntersection->setEnabled(false);
+
+        ui->slider->setEnabled(false);
+    }
+    else if (getGameMode() == modeEdit || getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
+    {
+        // Update the toolbar buttons
+        ui->navPrevVar->setEnabled(hasPrev);
+        ui->navNextVar->setEnabled(hasNext);
+        ui->navBackward->setEnabled(hasParent);
+        ui->navForward->setEnabled(sons);
+        ui->navFirst->setEnabled(hasParent);
+        ui->navStartVar->setEnabled(hasParent);
+        ui->navMainBranch->setEnabled(hasParent);
+        ui->navLast->setEnabled(sons);
+        ui->navNextBranch->setEnabled(sons);
+        ui->swapVarButton->setEnabled(hasPrev);
+        ui->navPrevComment->setEnabled(hasParent);
+        ui->navNextComment->setEnabled(sons);
+        ui->navIntersection->setEnabled(true);
+
+        ui->slider->setEnabled(true);
+    }
+
+    // Update slider
+    ui->slider->blockSignals(true);
+    if (ui->slider->maximum() < n)
+          setSliderMax(n);
+    ui->slider->setValue(n);
+    ui->slider->blockSignals(false);
+}
+
+/*
+ * modifies the maximum value of the slider (used when a move is added)
+ */
+void BoardWindow::setSliderMax(int n)
+{
+    if (n < 0)
+        n = 0;
+
+    if (n == ui->slider->maximum())
+        return;
+
+    ui->slider->blockSignals (true);
+    ui->slider->setMaximum(n);
+    ui->slider->blockSignals (false);
+    ui->sliderRightLabel->setText(QString::number(n));
 }
