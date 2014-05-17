@@ -179,7 +179,7 @@ void QGtp::slot_readFromStdout()
         answer = programProcess->readLine();
         answer.chop(1); // remove the trailing '\n'
         responseReceived = ((! answer.isEmpty()) &&
-                            ((answer.at(0) == '=') || (answer.at(0) != '?')));
+                            ((answer.at(0) == '=') || (answer.at(0) == '?')));
         if (responseReceived)
             break;
     }
@@ -256,7 +256,7 @@ QGtp::waitResponse()
 	responseReceived = false;
     busy=false;
 
-    return OK;
+    return ((answer.at(0) == '=') ? OK : FAIL );
 }
 
 /****************************

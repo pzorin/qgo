@@ -76,20 +76,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	{
         case modeEdit :
         case modeLocal :
-			try
-			{
-                qgoboard = new 	qGoBoardLocalInterface(this, tree,gameData);
-			}
-			catch(QString err)
-			{
-				QMessageBox msg(QObject::tr("Error"),
-						err,
-						QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
-				//msg.setActiveWindow();
-				msg.raise();
-				msg.exec();
-				return;
-			}
+        qgoboard = new qGoBoardLocalInterface(this, tree,gameData);
         ui->computerBlack->setChecked(!iAmBlack);
         ui->computerWhite->setChecked(!iAmWhite);
 			break;	

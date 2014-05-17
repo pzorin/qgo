@@ -59,7 +59,13 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
                 gameData->handicap,
                 GNUGO_LEVEL)==FAIL)
     {
-        throw QString(QObject::tr("Error opening program: %1")).arg(gtp->getLastMessage());
+        QMessageBox msg(QMessageBox::Warning,
+                        QObject::tr("Error"),
+                        QObject::tr("Error opening program: %1").arg(gtp->getLastMessage()),
+                        QMessageBox::Ok);
+        msg.exec();
+        delete gtp;
+        gtp = NULL;
     }
 
     tree->setCurrent(tree->findLastMoveInMainBranch());
@@ -93,7 +99,8 @@ void qGoBoardLocalInterface::slotUndoPressed()
         leaveScoreMode();
     else
     {
-        gtp->undo(0);
+        if (gtp)
+            gtp->undo(0);
         qGoBoard::slotUndoPressed();
     }
 }
@@ -103,6 +110,8 @@ void qGoBoardLocalInterface::slotUndoPressed()
  */
 void qGoBoardLocalInterface::sendMoveToInterface(StoneColor c,int x, int y)
 {
+    if (!gtp)
+        return;
     switch (c)
     {
         case stoneWhite :
@@ -134,6 +143,8 @@ void qGoBoardLocalInterface::sendMoveToInterface(StoneColor c,int x, int y)
  */
 void qGoBoardLocalInterface::playComputer()
 {
+    if (!gtp)
+        return;
     if (gtp->isBusy())
         return;
     int result;
@@ -181,6 +192,8 @@ void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
 {
     doPass();
 
+    if (gtp)
+    {
     // if simple pass, tell computer and move on
     switch (c)
     {
@@ -192,9 +205,6 @@ void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
         }
         else
             qDebug("comp notified of white pass");
-    //	if (win->blackPlayerType==COMPUTER)
-    //		playComputer(c);
-
         break;
 
         case stoneBlack :
@@ -203,13 +213,11 @@ void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
             QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to pass within program \n") + gtp->getLastMessage());
             return;
         }
-
-//		if (win->whitePlayerType==COMPUTER)
-//			playComputer(c);
         break;
 
         default :
         ;
+    }
     }
     if (tree->getCurrent()->parent->isPassMove())
         enterScoreMode();
@@ -219,6 +227,8 @@ void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
 
 void qGoBoardLocalInterface::feedPositionThroughGtp()
 {
+    if (!gtp)
+        return;
     QStack<Move*> stack;
     Move *m = tree->getCurrent();
     while (m->parent != NULL)
