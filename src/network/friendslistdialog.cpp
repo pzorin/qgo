@@ -124,9 +124,7 @@ void FriendsListDialog::slot_showPopupFriends(const QPoint & iPoint)
 {
 	popup_item = friendsView->indexAt(iPoint);
 	if (popup_item != QModelIndex())
-	{
-		//QModelIndex translated = playerSortProxy->mapToSource(popup_item);
-		//popup_playerlisting = friendsListModel->playerListingFromIndex(translated);
+    {
 		popup_playerlisting = friendsListModel->playerListingFromIndex(popup_item);
 		if(popup_playerlisting->name == connection->getUsername())
 			return;
@@ -146,9 +144,7 @@ void FriendsListDialog::slot_showPopupWatches(const QPoint & iPoint)
 {
 	popup_item = watchesView->indexAt(iPoint);
 	if (popup_item != QModelIndex())
-	{
-		//QModelIndex translated = playerSortProxy->mapToSource(popup_item);
-		//popup_playerlisting = playerListModel->playerListingFromIndex(translated);
+    {
 		popup_playerlisting = watchesListModel->playerListingFromIndex(popup_item);
 		if(popup_playerlisting->name == connection->getUsername())
 			return;
@@ -169,9 +165,7 @@ void FriendsListDialog::slot_showPopupBlocked(const QPoint & iPoint)
 {
 	popup_item = blockedView->indexAt(iPoint);
 	if (popup_item != QModelIndex())
-	{
-		//QModelIndex translated = playerSortProxy->mapToSource(popup_item);
-		//popup_playerlisting = playerListModel->playerListingFromIndex(translated);
+    {
 		popup_playerlisting = blockedListModel->playerListingFromIndex(popup_item);
 		if(popup_playerlisting->name == connection->getUsername())
 			return;
@@ -248,7 +242,6 @@ void FriendsListDialog::slot_popupTalk(void)
 /* See the room code this was copied from.  Its weird how we do all this... */
 void FriendsListDialog::slot_playersDoubleClickedFriends(const QModelIndex & index)
 {
-	//QModelIndex translated = playerSortProxy->mapToSource(index);
 	PlayerListing * opponent = friendsListModel->playerListingFromIndex(index);
     Talk * talk = room->getTalk(opponent);
 	if(talk)
@@ -257,7 +250,6 @@ void FriendsListDialog::slot_playersDoubleClickedFriends(const QModelIndex & ind
 
 void FriendsListDialog::slot_playersDoubleClickedWatches(const QModelIndex & index)
 {
-	//QModelIndex translated = playerSortProxy->mapToSource(index);
 	PlayerListing * opponent = watchesListModel->playerListingFromIndex(index);
     Talk * talk = room->getTalk(opponent);
 	if(talk)
