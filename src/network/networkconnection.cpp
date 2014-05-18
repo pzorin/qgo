@@ -496,31 +496,24 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	/* FIXME These should pop up information boxes as
 	 * well as somehow prevent the even attempted sending
 	 * of other msgs? perhaps? like disconnect msgs?*/
+    qDebug() << "NetworkConnection::OnError() : TCP socket error: " << qsocket->errorString();
+    if(console_dispatch)
+        console_dispatch->recvText("TCP socket error: " + qsocket->errorString());
 	switch (i)
 	{
-        case QTcpSocket::ConnectionRefusedError: qDebug("NetworkConnection::OnError : connection refused");
-			if(console_dispatch)
-				console_dispatch->recvText("Error: Connection refused!");
+        case QTcpSocket::ConnectionRefusedError:
             setState(CONN_REFUSED);
 			break;
-        case QTcpSocket::HostNotFoundError: qDebug("NetworkConnection::OnError : host not found");
-			if(console_dispatch)
-				console_dispatch->recvText("Error: Host not found!");
+        case QTcpSocket::HostNotFoundError:
             setState(HOST_NOT_FOUND);
 			break;
-        case QTcpSocket::SocketTimeoutError: qDebug("NetworkConnection::OnError : socket time out");
-			if(console_dispatch)
-				console_dispatch->recvText("Error: Socket time out!");
+        case QTcpSocket::SocketTimeoutError:
             setState(SOCK_TIMEOUT);
 			break;
-        case QTcpSocket::RemoteHostClosedError: qDebug("NetworkConnection::OnError : connection closed by host");
-			if(console_dispatch)
-				console_dispatch->recvText("Error: Connection closed by host!");
+        case QTcpSocket::RemoteHostClosedError:
             setState(PROTOCOL_ERROR);
 			break;
-        default: qDebug("NetworkConnection::OnError : unknown error");
-			if(console_dispatch)
-				console_dispatch->recvText("Error: Unknown socket error!");
+        default:
             setState(UNKNOWN_ERROR);
 			break;
 	}
