@@ -30,7 +30,7 @@
 */
 
 #define PACKAGE "qGo"
-#define VERSION "2.0.0"
+#define VERSION "2.1.0"
 
 #define DEFAULT_BOARD_SIZE 19
 #define BOARD_X 500
