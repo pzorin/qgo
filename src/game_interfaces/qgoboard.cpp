@@ -32,7 +32,6 @@
 #include "clockdisplay.h"
 #include "gamedata.h"
 #include "matrix.h"
-#include "ui_boardwindow.h"
 
 qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 {
@@ -535,20 +534,8 @@ void qGoBoard::kibitzReceived(const QString& text)
 		stated_mv_count = tree->findLastMoveInMainBranch()->getMoveNumber();
 		k.prepend( "(" + QString::number(stated_mv_count) + ") ");
 	}
-	QString txt = tree->getCurrent()->getComment();
 
-	if (!txt.isEmpty())
-		txt.append('\n');
-
-	txt.append(k);
-	tree->getCurrent()->setComment(txt);
-
-//	if (!boardwindow->getUi()->commentEdit->toPlainText().isEmpty())
-//		boardwindow->getUi()->commentEdit->append("\n");
-
-	
-    boardwindow->getUi()->commentEdit->append(k);
-	//qDebug("kibitzReceived: %s\n", text.toLatin1().constData());
+    boardwindow->displayComment(k);
 }
 
 // send regular time Info

@@ -30,7 +30,6 @@
 #include "networkconnection.h"
 #include "qgoboard.h"
 #include "clockdisplay.h"
-#include "ui_boardwindow.h"
 #include "tree.h"
 
 /* It would be difficult to create a board without a connection,
@@ -78,7 +77,7 @@ BoardDispatch::~BoardDispatch()
 	if(boardwindow)
 	{
 		//clearObservers();
-		boardwindow->getUi()->observerView->setModel(0);		//crashhere maybe
+        boardwindow->setObserverModel(NULL);		//crashhere maybe
 		boardwindow->setGamePhase(phaseEnded);		//disables all buttons
 		if(observerListModel)
 			delete observerListModel;
@@ -227,7 +226,7 @@ void BoardDispatch::sendRequestCount(void)
 	if(connection)
 	{
 		stopTime();	//protocol specific or not?		FIXME, huge issue if protocol does this to!!! see cyberoro killActiveMatchTimers, figure out who should do this when
-		boardwindow->getUi()->countButton->setEnabled(false);
+        boardwindow->setCountEnabled(false);
 		connection->sendRequestCount(gameData->number);
 	}
 }
@@ -237,7 +236,7 @@ void BoardDispatch::sendRequestDraw(void)
 	if(connection)
 	{
 		stopTime();	//protocol specific or not?
-		boardwindow->getUi()->drawButton->setEnabled(false);
+        boardwindow->setDrawEnabled(false);
 		connection->sendRequestDraw(gameData->number);
 	}
 }
@@ -247,7 +246,7 @@ void BoardDispatch::sendRequestMatchMode(void)
 	if(connection)
 	{
 		stopTime();		//maybe??
-		boardwindow->getUi()->undoButton->setEnabled(false);
+        boardwindow->setUndoEnabled(false);
 		connection->sendRequestMatchMode(gameData->number);
 	}
 }
@@ -304,7 +303,7 @@ void BoardDispatch::openBoard(void)
 			observerListModel = new ObserverListModel();
 			observerListModel->setAccountName(myName);
 		}
-		boardwindow->getUi()->observerView->setModel(observerListModel);
+        boardwindow->setObserverModel(observerListModel);
 		// do we need the below?
 		//boardwindow->qgoboard->set_statedMoveCount(gameData->moves);
 		boardwindow->gameDataChanged();	//necessary at least for cursor
@@ -486,7 +485,7 @@ void BoardDispatch::recvRejectCountRequest(void)
 	//so we can nag them endlessly:
 	//no, seriously, FIXME server protocol may have some limit
 	//on this
-	boardwindow->getUi()->countButton->setEnabled(true);	
+    boardwindow->setCountEnabled(true);
 	if(boardwindow)
 		boardwindow->qgoboard->recvRefuseCount();
 }
@@ -531,7 +530,7 @@ void BoardDispatch::sendRefuseMatchModeRequest(void)
 
 void BoardDispatch::recvRejectMatchModeRequest(void)
 {
-	boardwindow->getUi()->undoButton->setEnabled(true);
+    boardwindow->setUndoEnabled(true);
 	if(boardwindow)
 		boardwindow->qgoboard->recvRefuseMatchMode();
 }

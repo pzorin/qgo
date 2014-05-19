@@ -30,7 +30,7 @@
 #include "gamedata.h"
 #include "boardwindow.h"
 #include "matrix.h"
-#include "ui_boardwindow.h"
+#include <QMessageBox>
 
 qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw, t, gd)
 {
@@ -541,41 +541,6 @@ void qGoBoardNetworkInterface::sendPassToInterface(StoneColor /*c*/)
 	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::PASS));
 }
 
-void qGoBoardNetworkInterface::slotSendComment()
-{
-	QString our_name = boardwindow->getBoardDispatch()->getUsername();
-	boardwindow->getBoardDispatch()->sendKibitz(boardwindow->getUi()->commentEdit2->text());
-	
-	// why isn't this added to SGF files?? FIXME
-	// qGoBoard::kibitzReceived has the code for adding this
-	// to the tree and thus to the file, but we shouldn't
-	// be calling same code from two different places, so the whole
-	// thing should be fixed up.
-	/* Its also ugly adding this to the sgf comments both here and in kibitzRecieved FIXME */
-	QString ourcomment;
-	QString txt = tree->getCurrent()->getComment();
-	bool prepend_with_movenumber = false;
-	if(stated_mv_count != tree->findLastMoveInMainBranch()->getMoveNumber())
-	{
-		stated_mv_count = tree->findLastMoveInMainBranch()->getMoveNumber();
-		prepend_with_movenumber = true;
-	}
-		
-	ourcomment = our_name + "[" + boardwindow->getBoardDispatch()->getOurRank() + "]: " +
-		boardwindow->getUi()->commentEdit2->text();
-	if (boardwindow->getUi()->commentEdit2->text().isEmpty())
-		ourcomment.append('\n');
-	if(boardwindow->getGamePhase() != phaseEnded)
-		txt.append(ourcomment);
-	tree->getCurrent()->setComment(txt);
-
-	/* Kibitz echoes from self are blocked in network code */
-	if(prepend_with_movenumber)
-		ourcomment.prepend( "(" + QString::number(getMoveNumber()) + ") ");
-	boardwindow->getUi()->commentEdit->append(ourcomment);
-	boardwindow->getUi()->commentEdit2->clear();
-}
-
 void qGoBoardNetworkInterface::slotUndoPressed()
 {
 	if(boardwindow->getGamePhase() == phaseScore)
@@ -627,7 +592,7 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 void qGoBoardNetworkInterface::slotDonePressed()
 {
 	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(MoveRecord::DONE_SCORING));
-	boardwindow->getUi()->doneButton->setEnabled(false);		//FIXME okay? don't want to send done twice
+    boardwindow->setDoneEnabled(false);		//FIXME okay? don't want to send done twice
 }
 
 void qGoBoardNetworkInterface::slotResignPressed()
@@ -649,7 +614,7 @@ void qGoBoardNetworkInterface::slotResignPressed()
 	if (mb.exec() == QMessageBox::Yes)
 	{
 		boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
-		boardwindow->getUi()->resignButton->setEnabled(false);		//FIXME okay? don't want to send resign twice
+        boardwindow->setResignEnabled(false);		//FIXME okay? don't want to send resign twice
 	}
 }
 
@@ -670,7 +635,7 @@ void qGoBoardNetworkInterface::adjournGame(void)
 	else
 		QMessageBox::information(boardwindow , tr("Game Adjourned"), tr("Game with %1 has been adjourned.").arg(opp_name));
 	boardwindow->getGameData()->fullresult = new GameResult(stoneNone, GameResult::ADJOURNED);
-	boardwindow->getUi()->adjournButton->setEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
+    boardwindow->setAdjournEnabled(false);		//FIXME okay? don't want to send adjourn after adjourn
 }
 
 /* Might look nicer if we just set the game phase to ended or

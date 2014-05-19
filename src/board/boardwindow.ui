@@ -4390,47 +4390,49 @@ Send adjournment request to your opponent. If he accept it, the game will be adj
            <item>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
-              <layout class="QVBoxLayout" name="computerControls">
-               <item>
-                <widget class="QCheckBox" name="computerBlack">
-                 <property name="text">
-                  <string>computer</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="board.qrc">
-                   <normaloff>:/boardicons/resources/pics/stone_black.png</normaloff>:/boardicons/resources/pics/stone_black.png</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="computerWhite">
-                 <property name="text">
-                  <string>computer</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="board.qrc">
-                   <normaloff>:/boardicons/resources/pics/stone_white.png</normaloff>:/boardicons/resources/pics/stone_white.png</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="computerMakeMove">
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Make move</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../application.qrc">
-                   <normaloff>:/resources/pics/toolbar_3.png</normaloff>:/resources/pics/toolbar_3.png</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="QWidget" name="computerControlsWidget" native="true">
+               <layout class="QVBoxLayout" name="computerControls">
+                <item>
+                 <widget class="QCheckBox" name="computerBlack">
+                  <property name="text">
+                   <string>computer</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="board.qrc">
+                    <normaloff>:/boardicons/resources/pics/stone_black.png</normaloff>:/boardicons/resources/pics/stone_black.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="computerWhite">
+                  <property name="text">
+                   <string>computer</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="board.qrc">
+                    <normaloff>:/boardicons/resources/pics/stone_white.png</normaloff>:/boardicons/resources/pics/stone_white.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="computerMakeMove">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Make move</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../application.qrc">
+                    <normaloff>:/resources/pics/toolbar_3.png</normaloff>:/resources/pics/toolbar_3.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </item>
              <item>
               <spacer>

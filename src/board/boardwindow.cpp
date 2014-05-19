@@ -31,6 +31,7 @@
 #include "gameinfo.h"
 #include "matrix.h"
 #include "ui_boardwindow.h"
+#include <QtWidgets>
 
 class BoardHandler;
 
@@ -403,12 +404,12 @@ void BoardWindow::setupBoardUI(void)
 
 	//connects the comments and edit line to the slots
     connect(ui->commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
-    connect(ui->commentEdit2, SIGNAL(returnPressed()), qgoboard, SLOT(slotSendComment()));
+    connect(ui->commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotSendComment()));
 
     connect(ui->computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
     connect(ui->computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
     connect(ui->computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
-    ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
+    ui->computerControlsWidget->setVisible(gameData->gameMode == modeLocal);
 
     if ((gameData->gameMode == modeLocal) || (gameData->gameMode == modeEdit))
     {
@@ -1065,7 +1066,7 @@ void BoardWindow::switchToEditMode()
 {
     gameData->gameMode = modeEdit;
     setMode(modeEdit);
-    ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
+    ui->computerControlsWidget->setVisible(gameData->gameMode == modeLocal);
     myColorIsBlack = true;
     myColorIsWhite = true;
 }
@@ -1074,7 +1075,7 @@ void BoardWindow::switchToLocalMode()
 {
     gameData->gameMode = modeLocal;
     setMode(modeLocal);
-    ui->computerControls->setEnabled(gameData->gameMode == modeLocal);
+    ui->computerControlsWidget->setVisible(gameData->gameMode == modeLocal);
     myColorIsBlack = !(ui->computerBlack->isChecked());
     myColorIsWhite = !(ui->computerWhite->isChecked());
 
@@ -1243,6 +1244,22 @@ void BoardWindow::updateMove(Move *m)
                 getClockDisplay()->setTimeInfo(other_time, other_stones_periods, (int)m->getTimeLeft(), m->getOpenMoves() == 0 ? -1 : m->getOpenMoves());
         }
     }
+}
+
+void BoardWindow::slotSendComment()
+{
+    QString ourcomment = ui->commentEdit2->text();
+    ui->commentEdit2->clear();
+
+    if (dispatch)
+    {
+        dispatch->sendKibitz(ourcomment);
+        // User name only prepended for local display
+        ourcomment.prepend(dispatch->getUsername() + "[" + dispatch->getOurRank() + "]: ");
+    }
+    ourcomment.prepend( "(" + QString::number(tree->getCurrent()->getMoveNumber()) + ") ");
+
+    displayComment(ourcomment);
 }
 
 /*
@@ -1604,6 +1621,103 @@ void BoardWindow::setMoveData(int n, bool black, int brothers, int sons, bool ha
           setSliderMax(n);
     ui->slider->setValue(n);
     ui->slider->blockSignals(false);
+}
+
+void BoardWindow::setUndoEnabled(bool state)
+{
+    ui->undoButton->setEnabled(state);
+}
+
+void BoardWindow::setDrawEnabled(bool state)
+{
+    ui->drawButton->setEnabled(state);
+}
+
+void BoardWindow::setCountEnabled(bool state)
+{
+    ui->countButton->setEnabled(state);
+}
+
+void BoardWindow::setDoneEnabled(bool state)
+{
+    ui->doneButton->setEnabled(state);
+}
+
+void BoardWindow::setAdjournEnabled(bool state)
+{
+    ui->adjournButton->setEnabled(state);
+}
+
+void BoardWindow::setResignEnabled(bool state)
+{
+    ui->resignButton->setEnabled(state);
+}
+
+void BoardWindow::setObserverModel(QAbstractItemModel *model)
+{
+    ui->observerView->setModel(model);
+}
+
+void BoardWindow::setTimeBlack(QString time)
+{
+    ui->pb_timeBlack->setText(time);
+}
+
+void BoardWindow::setTimeWhite(QString time)
+{
+    ui->pb_timeWhite->setText(time);
+}
+
+void BoardWindow::warnTimeBlack(TimeWarnState state)
+{
+    switch (state)
+    {
+    case TimeOK:
+        if(ui->pb_timeBlack->palette().color(QPalette::Background) != Qt::black)
+            ui->pb_timeBlack->setPalette(QPalette(Qt::black));
+        return;
+    case TimeLow:
+        if(ui->pb_timeBlack->palette().color(QPalette::Background) == Qt::black)
+            ui->pb_timeBlack->setPalette(QPalette(Qt::yellow));
+        else
+            ui->pb_timeBlack->setPalette(QPalette(Qt::black));
+        return;
+    case TimeExpired:
+        ui->pb_timeBlack->setPalette(QPalette(Qt::red));
+    }
+}
+
+void BoardWindow::warnTimeWhite(TimeWarnState state)
+{
+    switch (state)
+    {
+    case TimeOK:
+        if(ui->pb_timeWhite->palette().color(QPalette::Background) != Qt::black)
+            ui->pb_timeWhite->setPalette(QPalette(Qt::black));
+        return;
+    case TimeLow:
+        if(ui->pb_timeWhite->palette().color(QPalette::Background) == Qt::black)
+            ui->pb_timeWhite->setPalette(QPalette(Qt::yellow));
+        else
+            ui->pb_timeWhite->setPalette(QPalette(Qt::black));
+        return;
+    case TimeExpired:
+        ui->pb_timeWhite->setPalette(QPalette(Qt::red));
+    }
+}
+
+void BoardWindow::displayComment(QString comment)
+{
+    // add comments to SGF/tree FIXME
+    QString txt = tree->getCurrent()->getComment();
+    if(getGamePhase() != phaseEnded)
+        txt.append(comment);
+    tree->getCurrent()->setComment(txt);
+
+    ui->commentEdit->append(comment);
+    /* Should probably update the history in a central location
+     * and update display automatically,
+     * but this is not implemented yet */
 }
 
 /*

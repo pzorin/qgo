@@ -32,16 +32,13 @@
 #include "boardwindow.h"
 #include "audio.h"
 #include "network/messages.h" 		//for the TimeRecord FIXME
-#include "ui_boardwindow.h"
 
 ClockDisplay::ClockDisplay(BoardWindow *bw, TimeSystem s, int _maintime, int _periods, int _periodtime) : QObject(bw)
 {
 	boardwindow = bw;
 	setTimeSettings(s, _maintime, _periodtime, _periods);
 	//outOfMainTime = false;
-	
-	pb_timeBlack = boardwindow->getUi()->pb_timeBlack;
-	pb_timeWhite = boardwindow->getUi()->pb_timeWhite;
+
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
 	/* Otherwise windows XP style makes time buttons ugly white on white.
 	 * Same issue on mac.  and it could interfere
@@ -285,42 +282,26 @@ void ClockDisplay::updateTimers()
 	}
 	
 	switch(timeSystem)
-	{
-		case canadian:
-		{
-
+    {
+    case canadian:
 		if (b_stones_periods > -1)	//instead of != -1, safer for WING
-			pb_timeBlack->setText(bt + " / " + QString::number(b_stones_periods));
-		else
-			pb_timeBlack->setText(bt);
-
+            bt.append(" / ").append(QString::number(b_stones_periods));
 
 		if (w_stones_periods > -1)
-			pb_timeWhite->setText(wt + " / " + QString::number(w_stones_periods));
-		else
-			pb_timeWhite->setText(wt);
-		}
-			break;
-		default:
-		case byoyomi:
-		case tvasia:
-		{
-
+            wt.append(" / ").append(QString::number(w_stones_periods));
+        break;
+    default:
+    case byoyomi:
+    case tvasia:
 			if (b_stones_periods > -1)	//instead of != -1, safer for WING
-				pb_timeBlack->setText(bt + " / " + QString::number(b_stones_periods));
-			else
-				pb_timeBlack->setText(bt);
-
+                bt.append(" / ").append(QString::number(b_stones_periods));
 
 			if (w_stones_periods > -1)
-				pb_timeWhite->setText(wt + " / " + QString::number(w_stones_periods));
-			else
-				pb_timeWhite->setText(wt);
-		}
-			break;
+                wt.append(" / ").append(QString::number(w_stones_periods));
+        break;
 	}
-
-
+    boardwindow->setTimeBlack(bt);
+    boardwindow->setTimeWhite(wt);
 }
 
 /*
@@ -328,47 +309,37 @@ void ClockDisplay::updateTimers()
  */
 bool ClockDisplay::warning(bool black)
 {
-	static bool colorToggle = false;
-	/* FIXME are premature reddenings of time an issue?  Do we even want
-	 * the time turning red ?!? */
-	if (black)
+    if (black)
 	{
 		if ((b_time > 0) &&  (b_time < warningSecs))
 		{
-			colorToggle = !colorToggle;
-			pb_timeBlack->setPalette( ( colorToggle ? QPalette(Qt::red) : QPalette(Qt::black) ));
-			if (playWarningSound)
-				warningSound->play();
-		}
-		else if ((colorToggle)&& (pb_timeBlack->palette().color(QPalette::Background) != Qt::black))
-			pb_timeBlack->setPalette(QPalette(Qt::black));
+            boardwindow->warnTimeBlack(TimeLow);
+            if (playWarningSound)
+                warningSound->play();
+        }
 		else if(b_time == 0 && b_stones_periods == 0)	//FIXME for tvasia
 		{
-			pb_timeBlack->setPalette(QPalette(Qt::red));
+            boardwindow->warnTimeBlack(TimeExpired);
 			return false;	//out of time
 		}
-		else if(pb_timeBlack->palette().color(QPalette::Background) != Qt::black)
-			pb_timeBlack->setPalette(QPalette(Qt::black));	//in case premature time reddening
+        else
+            boardwindow->warnTimeBlack(TimeOK);
 	}
 	else
 	{
 		if ((w_time > 0) &&  (w_time < warningSecs))
 		{
-			colorToggle = !colorToggle;
-			pb_timeWhite->setPalette( ( colorToggle ? QPalette(Qt::red) : QPalette(Qt::black) ));
+            boardwindow->warnTimeWhite(TimeLow);
 			if (playWarningSound)
 				warningSound->play();
-		}
-		else if ((colorToggle)&& (pb_timeWhite->palette().color(QPalette::Background) != Qt::black))
-			pb_timeWhite->setPalette(QPalette(Qt::black));	
+        }
 		else if(w_time == 0 && w_stones_periods == 0)
 		{
-			pb_timeWhite->setPalette(QPalette(Qt::red));
+            boardwindow->warnTimeWhite(TimeExpired);
 			return false;	//out of time
 		}
-		else if(pb_timeWhite->palette().color(QPalette::Background) != Qt::black)
-			pb_timeWhite->setPalette(QPalette(Qt::black));	//in case premature time reddening
-	
+        else
+            boardwindow->warnTimeWhite(TimeOK);
 	}
 	return true;	//still good
 }

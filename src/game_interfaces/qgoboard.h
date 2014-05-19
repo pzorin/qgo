@@ -172,8 +172,7 @@ public slots:
     virtual void slotDrawPressed() {}
     virtual void slotCountPressed() {}
 	virtual void slotUndoPressed();
-	virtual void slotScoreToggled(bool);
-    virtual void slotSendComment() {}
+    virtual void slotScoreToggled(bool);
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
 protected:
 	BoardWindow *boardwindow;
@@ -235,7 +234,6 @@ class qGoBoardNetworkInterface : public qGoBoard
 public:
     virtual ~qGoBoardNetworkInterface() {}
 public slots:
-	virtual void slotSendComment();	
 	virtual void slotUndoPressed();
 	virtual void slotDonePressed();
 	virtual void slotResignPressed();

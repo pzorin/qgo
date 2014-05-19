@@ -38,6 +38,8 @@ namespace Ui {
 class BoardWindow;
 }
 
+enum TimeWarnState { TimeOK, TimeLow, TimeExpired };
+
 class BoardWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -57,7 +59,6 @@ public:
 
     int getBoardSize() const {return boardSize;}
     Tree *getTree() 			{return tree;}
-    Ui::BoardWindow * getUi() 		{return ui;}
 	GameMode getGameMode() 			{return gameData->gameMode; } 
 	GamePhase getGamePhase() 		{return gamePhase;}
 	bool getMyColorIsBlack()		{return myColorIsBlack;}
@@ -84,6 +85,20 @@ public:
     void clearData();
     void setMoveData(int n, bool black, int brothers, int sons, bool hasParent,
         bool hasPrev, bool hasNext, int lastX=-1, int lastY=-1);
+
+    void setUndoEnabled(bool state);
+    void setDrawEnabled(bool state);
+    void setCountEnabled(bool state);
+    void setDoneEnabled(bool state);
+    void setAdjournEnabled(bool state);
+    void setResignEnabled(bool state);
+    void setObserverModel(QAbstractItemModel * model);
+
+    void setTimeBlack(QString time);
+    void setTimeWhite(QString time);
+    void warnTimeBlack(TimeWarnState state);
+    void warnTimeWhite(TimeWarnState state);
+    void displayComment(QString comment);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -120,6 +135,9 @@ public slots:
     void slotWheelEvent(QWheelEvent *e);
     void slotGetScore(int terrBlack, int captBlack, int deadWhite, int terrWhite, int captWhite, int deadBlack);
     void updateMove(Move *m);
+
+private slots:
+    void slotSendComment(void);
 
 private:
 	void setupUI(void);

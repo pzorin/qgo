@@ -24,7 +24,7 @@
 #define CLOCK_H
 
 #include "defines.h"
-#include <QtWidgets>
+#include <QObject>
 
 class BoardWindow;
 class Sound;
@@ -51,8 +51,7 @@ private :
 	int w_time, b_time;
 	int w_stones_periods, b_stones_periods;
 	int maintime, periods, periodtime;
-	QPushButton *pb_timeBlack, * pb_timeWhite;
-	Sound *warningSound;
+    Sound *warningSound;
 	int warningSecs;
 	bool playWarningSound;
 	bool outOfMainTime;
