@@ -25,6 +25,8 @@
 #include "matrix.h"
 #include "group.h"
 #include "messages.h"
+#include "sgfparser.h"
+#include "gamedata.h"
 
 #include <vector>
 
@@ -1293,6 +1295,48 @@ void Tree::exitScore()
 
     current->getMatrix()->absMatrix();
     emit currentMoveChanged(current);
+}
+
+bool Tree::importSGFFile(QString filename, int handicap)
+{
+    // FIXME this is not the right place to add handicap stones
+    if ((handicap > 0) &&
+            current->getMatrix()->addHandicapStones(handicap))
+    {
+        current->setHandicapMove(true);
+        current->setX(-1);//-1
+        current->setY(-1);//-1
+        current->setColor(stoneBlack);
+    }
+
+    SGFParser *sgfParser = new SGFParser(this);
+    QString SGFLoaded = sgfParser->loadFile(filename);
+    return sgfParser->doParse(SGFLoaded);
+}
+
+bool Tree::importSGFString(QString SGF, int handicap)
+{
+    // FIXME this is not the right place to add handicap stones
+    if ((handicap > 0) &&
+            current->getMatrix()->addHandicapStones(handicap))
+    {
+        current->setHandicapMove(true);
+        current->setX(-1);//-1
+        current->setY(-1);//-1
+        current->setColor(stoneBlack);
+    }
+
+    SGFParser *sgfParser = new SGFParser(this);
+    return sgfParser->doParse(SGF);
+}
+
+QString Tree::exportSGFString(GameData *gameData)
+{
+    QString sgf = "";
+    SGFParser *p = new SGFParser(this);
+    p->exportSGFtoClipB(&sgf, this, gameData);
+    delete p;
+    return sgf;
 }
 
 /*

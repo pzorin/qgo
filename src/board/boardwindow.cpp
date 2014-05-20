@@ -26,7 +26,6 @@
 #include "qgoboardlocalinterface.h"
 #include "move.h"
 #include "tree.h"
-#include "sgf/sgfparser.h"
 #include "../network/boarddispatch.h"
 #include "gameinfo.h"
 #include "matrix.h"
@@ -70,7 +69,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
-		loadSGF(gameData->fileName);
+        tree->importSGFFile(gameData->fileName,gameData->handicap);
 
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameData->gameMode)
@@ -119,7 +118,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//gridLayout->update();
 
 	if(gameData->record_sgf != QString())
-		loadSGF(0, gameData->record_sgf);
+        tree->importSGFString(gameData->record_sgf, gameData->handicap);
 }
 
 BoardWindow::~BoardWindow()
@@ -197,7 +196,6 @@ void BoardWindow::setupUI(void)
     QSettings settings;
     ui->actionWhatsThis = QWhatsThis::createAction ();
 
-
     moveNumLabel = new QLabel(ui->statusbar);
     komiLabel = new QLabel(ui->statusbar);
     buyoyomiLabel = new QLabel(ui->statusbar);
@@ -255,9 +253,6 @@ void BoardWindow::setupUI(void)
 		window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
 		resize(window_x, window_y);
 	}
-	QVariant board_sizes_for_splitter = settings.value("BOARD_SIZES");
-//	if(board_sizes_for_splitter != QVariant())
-//		ui->boardSplitter->restoreState(board_sizes_for_splitter.toByteArray());
 	
 	// Connects the nav buttons to the slots
     connect(ui->navForward,SIGNAL(pressed()), tree, SLOT(slotNavForward()));
@@ -295,19 +290,11 @@ void BoardWindow::setupUI(void)
     connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
     connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
 
-	/* Set column widths ?? */
-    if ((gameData->gameMode == modeEdit) || (gameData->gameMode == modeLocal))
-    {
-        connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
-        connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
-        ui->commentEdit2->setDisabled(true);
-    } else {
-        ui->buttonModeEdit->hide();
-        ui->buttonModeLocal->hide();
-    }
-
     connect(tree, SIGNAL(currentMoveChanged(Move*)), this, SLOT(updateMove(Move*)));
     connect(tree, SIGNAL(scoreChanged(int,int,int,int,int,int)), this, SLOT(slotGetScore(int,int,int,int,int,int)));
+
+    connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
+    connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
 }
 
 void BoardWindow::setupBoardUI(void)
@@ -384,23 +371,6 @@ void BoardWindow::setupBoardUI(void)
 			connect(addtime_menu, SIGNAL(triggered(QAction*)), SLOT(slot_addtime_menu(QAction*)));	
 		}
 	}
-	
-	/* eb added this but I've had it in the setupUI function since
-	 * its more part of the UI than the board.  But maybe its better
-	 * or different here.  FIXME */
-	/*
-    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotViewCoords(bool)));
-    connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
-    connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
-    connect(ui->actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
-    connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
-    connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
-    connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
-    connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
-    connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
-	*/
-
-	// Needs Adjourn button ????
 
 	//connects the comments and edit line to the slots
     connect(ui->commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
@@ -450,18 +420,11 @@ void BoardWindow::swapColors(bool noswap)
 		gameData->white_rank = rank;
 	}
 	gameData->nigiriToBeSettled = false;
-	if(gameData->black_name == dispatch->getUsername())
-	{
-		myColorIsBlack = true;
-		myColorIsWhite = false;
-	}
-	else
-	{
-		myColorIsBlack = false;
-		myColorIsWhite = true;
-	}
+
+    myColorIsBlack = (gameData->black_name == dispatch->getUsername());
+    myColorIsWhite = !myColorIsBlack;
+
     updateCaption();
-	//getBoardHandler()->updateCursor();	//appropriate?
     updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
 	//also need to start any timers if necessary
 	//also network timers in addition to game timers
@@ -469,44 +432,7 @@ void BoardWindow::swapColors(bool noswap)
 
 void BoardWindow::saveRecordToGameData(void)
 {
-	QString sgf = "";
-	SGFParser *p = new SGFParser( tree);
-
-	/* FIXME potentially there's never a reason to not save the record to the gameData or the like
-	 * etc., we'll see how this works out, but we might want to change some of this */
-	if (!p->exportSGFtoClipB(&sgf, tree, gameData))
-	{
-		QMessageBox::warning(this, tr("Export"), tr("Could not duplicate the game"));
-		return ;
-	}
-	gameData->record_sgf = sgf;
-}
-
-/*
- * Loads the SGF string. returns true if the file was sucessfully parsed
- */
-bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
-{
-    // FIXME this is not the right place to add handicap stones
-    if ((gameData->handicap > 0) &&
-            tree->getCurrent()->getMatrix()->addHandicapStones(gameData->handicap))
-    {
-        tree->getCurrent()->setHandicapMove(true);
-        tree->getCurrent()->setX(-1);//-1
-        tree->getCurrent()->setY(-1);//-1
-        tree->getCurrent()->setColor(stoneBlack);
-    }
-
-	SGFParser *sgfParser = new SGFParser(tree);
-	
-	QString SGFLoaded;
-	if (SGF.isEmpty())
-		// Load the sgf file
-		SGFLoaded = sgfParser->loadFile(fileName);
-	else 
-		SGFLoaded = SGF;
-
-    return sgfParser->doParse(SGFLoaded);
+    gameData->record_sgf = tree->exportSGFString(gameData);
 }
 
 /*
@@ -514,8 +440,7 @@ bool BoardWindow::loadSGF(const QString fileName, const QString SGF)
  */
 void BoardWindow::slotEditButtonPressed( int m )
 {
-	QString txt;
-	Move *current = tree->getCurrent();
+    Move *current = tree->getCurrent();
 	
 	//we have to emulate exclusive buttons, while raise the button if it was down
 	if (m >= 0 && m < 7 )
@@ -615,19 +540,8 @@ void BoardWindow::slotEditButtonPressed( int m )
  */
 void BoardWindow::slotExportSGFtoClipB()
 {
-	QString str = "";
-
-	SGFParser *p = new SGFParser( tree);
-
-	if (!p->exportSGFtoClipB(&str, tree, gameData))
-	{
-		QMessageBox::warning(this, tr("Export"), tr("Could not export  the game to clipboard"));
-//		qDebug ("QGoboard:setMove - move %d %d done",i,j);
-		return ;
-	}
-
+    QString str = tree->exportSGFString(gameData);
 	QApplication::clipboard()->setText(str);
-
 }
 
 /*
@@ -760,14 +674,18 @@ bool BoardWindow::doSave(QString fileName, bool force)
 //	if (setting->readBoolEntry("REM_DIR"))
 //		rememberLastDir(fileName);
 
-	SGFParser *p = new SGFParser( tree); //FIXME : we may need to have a class SGFParser
-	if (!p->doWrite(fileName, tree, gameData))
-	{
-		QMessageBox::warning(this, PACKAGE, tr("Cannot save SGF file."));
-		return false;
-	}
-		
-//	statusBar()->message(fileName + " " + tr("saved."));
+    QString SGF = tree->exportSGFString(gameData);
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::warning(0, PACKAGE, QObject::tr("Could not open file:") + " " + fileName);
+        return false;
+    }
+    file.write(SGF.toLatin1());
+    file.flush();
+    file.close();
+
 	qgoboard->setModified(false);
 	return true;
 }
@@ -1410,6 +1328,14 @@ void BoardWindow::updateCaption()
  */
 void BoardWindow::setMode(GameMode mode)
 {
+    if ((mode == modeEdit) || (mode == modeLocal))
+    {
+        ui->commentEdit2->setDisabled(true);
+    } else {
+        ui->buttonModeEdit->hide();
+        ui->buttonModeLocal->hide();
+    }
+
 
     switch (mode)
     {

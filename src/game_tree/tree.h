@@ -31,6 +31,7 @@ class Move;
 class Group;
 class Matrix;
 class GameResult;
+class GameData;
 
 class Tree : public QObject
 {
@@ -88,6 +89,12 @@ public:
     void countMarked(void);
     class GameResult retrieveScore(void);
     void exitScore();
+
+    // Import SGF (from file or string)
+    // FIXME: read handicap from SGF
+    bool importSGFFile(QString filename, int handicap = 0);
+    bool importSGFString(QString SGF, int handicap = 0);
+    QString exportSGFString(GameData * gameData);
 
 public slots:
     void slotNavBackward();

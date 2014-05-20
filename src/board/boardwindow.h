@@ -26,7 +26,7 @@
 #include "gamedata.h"
 #include <QMainWindow>
 
-class BoardHandler;
+class BoardDispatch;
 class qGoBoard;
 class ClockDisplay;
 class Tree;
@@ -48,13 +48,11 @@ class BoardWindow : public QMainWindow
     friend class CountDialog;
 
 public:
-    //BoardWindow( QWidget *parent = 0 , Qt::WindowFlags flags = 0 ,  GameData *gamedata = 0 , GameMode gamemode = modeNormal , bool iAmBlack = true, bool iAmWhite = true, class BoardDispatch * _dispatch = 0);
     BoardWindow(GameData *gamedata = 0 , bool iAmBlack = true, bool iAmWhite = true, class BoardDispatch * _dispatch = 0);
 	~BoardWindow();
 	
 	void init();
-	bool loadSGF(const QString fileName, const QString SGFLoaded=QString::null);
-	bool doSave(QString fileName, bool force);
+    bool doSave(QString fileName, bool force);
 	QString getCandidateFileName();
 
     int getBoardSize() const {return boardSize;}
@@ -67,19 +65,14 @@ public:
 	int getId()				{return gameData->number;}
 	MarkType getEditMark()			{return editMark;}
     void setGamePhase(GamePhase gp);
-    void checkHideToolbar(int h);
 	void gameDataChanged(void);	
-	QString get_wplayer()			{return gameData->white_name;}
-	QString get_bplayer()			{return gameData->black_name;}
-	ClockDisplay *getClockDisplay()		{return clockDisplay;}
+    ClockDisplay *getClockDisplay()		{return clockDisplay;}
     void swapColors(bool noswap = false);
 	void saveRecordToGameData(void);
 	
     bool okayToQuit(void);
-    void updateButtons(StoneColor lastMoveColor=stoneNone);
-    void updateCursor(StoneColor c=stoneNone);
 
-    class BoardDispatch * getBoardDispatch(void) { return dispatch; }
+    BoardDispatch * getBoardDispatch(void) { return dispatch; }
 	void setBoardDispatch(BoardDispatch * d);
 
     void clearData();
@@ -103,6 +96,7 @@ public:
 protected:
 	void closeEvent(QCloseEvent *e);
 	void resizeEvent(QResizeEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 
 signals:
 	void signal_boardClosed(int);
@@ -120,7 +114,6 @@ public slots:
 	void slotExportPicClipB();
 	void slotExportPic();
 	void slotDuplicate();
-	void keyPressEvent(QKeyEvent *e);
 	void slotToggleInsertStones(bool val);
 	void slot_addtime_menu(QAction *);
     void setComputerBlack(bool val);
@@ -135,8 +128,6 @@ public slots:
     void slotWheelEvent(QWheelEvent *e);
     void slotGetScore(int terrBlack, int captBlack, int deadWhite, int terrWhite, int captWhite, int deadBlack);
     void updateMove(Move *m);
-
-private slots:
     void slotSendComment(void);
 
 private:
@@ -145,6 +136,9 @@ private:
     void updateCaption();
     void setMode(GameMode gameMode);
     void setSliderMax(int n);
+    void checkHideToolbar(int h);
+    void updateButtons(StoneColor lastMoveColor=stoneNone);
+    void updateCursor(StoneColor c=stoneNone);
 
     qGoBoard *qgoboard;
     QLabel *moveNumLabel,*komiLabel,*buyoyomiLabel,*handicapLabel,*freeratedLabel;
