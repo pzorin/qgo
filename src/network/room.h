@@ -91,10 +91,13 @@ public slots:
 
         QMap <const PlayerListing *, Talk *> talkMap;
 	private slots:
+        // These slots expect QModelIndex from the proxy models
         void slot_playerOpenTalk(const QModelIndex &);
         void slot_gamesDoubleClicked(const QModelIndex &);
 		void slot_showPopup(const QPoint & iPoint);
 		void slot_showGamesPopup(const QPoint & iPoint);
+private:
+        void openTalk(PlayerListing * listing);
 };
 
 #endif //ROOM_H

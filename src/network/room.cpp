@@ -129,22 +129,11 @@ void Room::setConnection(NetworkConnection * c)
 	playerListModel->setAccountName(connection->getUsername());
 }
 
-//stats
 void Room::slot_playerOpenTalk(const QModelIndex & index)
 {
     QModelIndex sourceIndex = connectionWidget->playerListProxyModel->mapToSource(index);
     PlayerListing * opponent = playerListModel->playerListingFromIndex(sourceIndex);
-    /* Whenever a talk window is opened, we want stats.  This
-     * means its easier to create the talk window and let it
-     * always create stats, then send out stats messages
-     * that generate talk windows */
-    /* This is a little weird now...almost like we're just asking
-     * for an update on the references */
-    Talk * talk = getTalk(opponent);
-    //connection->sendStatsRequest(opponent);
-    /* This is really only for ORO, and let's see if it works but... */
-    if(talk)
-        talk->updatePlayerListing();
+    openTalk(opponent);
 }
 
 void Room::slot_showPopup(const QPoint & iPoint)
@@ -183,7 +172,7 @@ void Room::slot_showPopup(const QPoint & iPoint)
     if (result == matchAct)
         connection->sendMatchInvite(popup_playerlisting);
     if (result == talkAct)
-        slot_playerOpenTalk(popup_item);
+        openTalk(popup_playerlisting);
     if (result == removeFriendAct)
         connection->removeFriend(popup_playerlisting);
     if (result == addFriendAct)
@@ -224,6 +213,15 @@ void Room::slot_showGamesPopup(const QPoint & iPoint)
     menu->deleteLater();
     menu = NULL;
     return;
+}
+
+void Room::openTalk(PlayerListing *listing)
+{
+    Talk * talk = getTalk(listing);
+    //connection->sendStatsRequest(opponent);
+    /* This is really only for ORO, and let's see if it works but... */
+    if(talk)
+        talk->updatePlayerListing();
 }
 
 //observe
