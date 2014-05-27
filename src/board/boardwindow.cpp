@@ -1600,7 +1600,14 @@ void BoardWindow::warnTimeBlack(TimeWarnState state)
     {
     case TimeOK:
         if(ui->pb_timeBlack->palette().color(QPalette::Background) != Qt::black)
+        {
             ui->pb_timeBlack->setPalette(QPalette(Qt::black));
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+    /* Otherwise windows XP/Mac style makes time buttons ugly white on white.
+     * This could interfere with blinking warning. */
+    ui->pb_timeBlack->setStyleSheet("background-color: black; color: white");
+#endif //Q_OS_WIN
+        }
         return;
     case TimeLow:
         if(ui->pb_timeBlack->palette().color(QPalette::Background) == Qt::black)
@@ -1619,7 +1626,14 @@ void BoardWindow::warnTimeWhite(TimeWarnState state)
     {
     case TimeOK:
         if(ui->pb_timeWhite->palette().color(QPalette::Background) != Qt::black)
+        {
             ui->pb_timeWhite->setPalette(QPalette(Qt::black));
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+    /* Otherwise windows XP/Mac style makes time buttons ugly white on white.
+     * This could interfere with blinking warning. */
+    ui->pb_timeWhite->setStyleSheet("background-color: black; color: white");
+#endif //Q_OS_WIN
+        }
         return;
     case TimeLow:
         if(ui->pb_timeWhite->palette().color(QPalette::Background) == Qt::black)
