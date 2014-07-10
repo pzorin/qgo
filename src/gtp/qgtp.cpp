@@ -470,6 +470,18 @@ QGtp::fixedHandicap (int handicap)
     return waitResponse();
 }
 
+int QGtp::set_free_handicap(QList<Point> handicap_stones)
+{
+    QByteArray message("set_free_handicap");
+    for ( int i=0; i<handicap_stones.length(); ++i )
+    {
+        message.append(" ").append(encodeCoors(handicap_stones[i].x,handicap_stones[i].y));
+    }
+
+    fflush (message);
+    return waitResponse();
+}
+
 /* Function:  Load an sgf file, possibly up to a move number or the first
 *            occurence of a move.
 * Arguments: filename + move number, vertex, or nothing

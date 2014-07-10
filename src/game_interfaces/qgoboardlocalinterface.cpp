@@ -29,6 +29,7 @@
 #include "boardwindow.h"
 #include "qgtp.h"
 #include "board.h"
+#include "matrix.h"
 
 #include <QMessageBox>
 
@@ -229,6 +230,8 @@ void qGoBoardLocalInterface::feedPositionThroughGtp()
 {
     if (!gtp)
         return;
+    gtp->clearBoard();
+
     QStack<Move*> stack;
     Move *m = tree->getCurrent();
     while (m->parent != NULL)
@@ -238,9 +241,20 @@ void qGoBoardLocalInterface::feedPositionThroughGtp()
     }
     // Do not push the root move.
     // It only holds the handicap (if any).
+    if (tree->getRoot()->isHandicapMove())
+    {
+        Matrix * m = tree->getRoot()->getMatrix();
+        int size = m->getSize();
+        QList<Point> handicap_stones;
+        for (int x=1; x<=size; x++)
+            for (int y=1; y<=size; y++)
+            {
+                if (m->getStoneAt(x,y) == stoneBlack)
+                    handicap_stones.append(Point(x,y));
+            }
+        gtp->set_free_handicap(handicap_stones);
+    }
 
-    gtp->clearBoard();
-    gtp->fixedHandicap(gameData->handicap);
     while (!stack.isEmpty())
     {
         m = stack.pop();

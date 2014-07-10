@@ -30,6 +30,12 @@
   *@author PALM Thomas , DINTILHAC Florian, HIVERT Anthony, PIOC Sebastien
   */
 
+struct Point
+{
+    Point(char _x, char _y) : x(_x), y(_y) {}
+    char x,y;
+};
+
 class QGtp : public QObject{
 	Q_OBJECT
 
@@ -93,6 +99,7 @@ public:
     int playwhite (int x, int y);
 	int playwhitePass ();
 	int fixedHandicap (int handicap);
+    int set_free_handicap (QList<Point> handicap_stones);
 	int loadsgf (QString filename,int movNumber=0,char c='A',int i=0);
 
 	/*****************
