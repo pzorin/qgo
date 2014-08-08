@@ -110,17 +110,19 @@ int main(int argc, char *argv[])
     app->setOrganizationName("qGo");
     app->setApplicationName("qGo");
 
+    QCommandLineParser parser;
+    parser.process(*app);
+    const QStringList args = parser.positionalArguments();
     translatorPtr = &translator;
 	
 	startqGo();
+    mainwindow->show();
 
-	if ( argc > 1 )
+    QStringList::const_iterator filename;
+    for ( filename = args.begin(); filename != args.end(); ++filename )
 	{
-        // FIXME
-        qDebug("Opening files from command line not supported at the moment.");
-	} else {
-		mainwindow->show();
-	}
+        mainwindow->openSGF(*filename);
+    }
 
 	srand(time(NULL));
 
