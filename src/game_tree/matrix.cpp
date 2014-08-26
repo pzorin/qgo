@@ -617,13 +617,13 @@ bool Matrix::addHandicapStones(int handicap)
         switch (handicap)
         {
         case 13:  // Hehe, this is nuts... :)
-            insertStone(17, 17, stoneBlack);
+            insertStone(17, 17, stoneBlack, true);
         case 12:
-            insertStone(3, 3, stoneBlack);
+            insertStone(3, 3, stoneBlack, true);
         case 11:
-            insertStone(3, 17, stoneBlack);
+            insertStone(3, 17, stoneBlack, true);
         case 10:
-            insertStone(17, 3, stoneBlack);
+            insertStone(17, 3, stoneBlack, true);
 
         default:
             handicap = 9;
@@ -637,33 +637,33 @@ bool Matrix::addHandicapStones(int handicap)
         switch (handicap)
         {
         case 9:
-            insertStone(middle, middle, stoneBlack);
+            insertStone(middle, middle, stoneBlack, true);
         case 8:
         case 7:
             if (handicap >= 8)
             {
-                insertStone(middle, low, stoneBlack);
-                insertStone(middle, high, stoneBlack);
+                insertStone(middle, low, stoneBlack, true);
+                insertStone(middle, high, stoneBlack, true);
             }
             else
-                insertStone(middle, middle, stoneBlack);
+                insertStone(middle, middle, stoneBlack, true);
         case 6:
         case 5:
             if (handicap >= 6)
             {
-                insertStone(low, middle, stoneBlack);
-                insertStone(high, middle, stoneBlack);
+                insertStone(low, middle, stoneBlack, true);
+                insertStone(high, middle, stoneBlack, true);
             }
             else
-                insertStone(middle, middle, stoneBlack);
+                insertStone(middle, middle, stoneBlack, true);
         case 4:
-            insertStone(high, high, stoneBlack);
+            insertStone(high, high, stoneBlack, true);
         case 3:
-            insertStone(low, low, stoneBlack);
+            insertStone(low, low, stoneBlack, true);
         case 2:
-            insertStone(high, low, stoneBlack);
+            insertStone(high, low, stoneBlack, true);
         case 1: // Handicap 1? Whatever floats your boat.
-            insertStone(low, high, stoneBlack);
+            insertStone(low, high, stoneBlack, true);
             break;
 
         default:
