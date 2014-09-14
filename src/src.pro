@@ -180,9 +180,7 @@ linux-* {
     INSTALLS += desktopfile
     filetype.path = /usr/share/mimelnk/text
     filetype.files = sgf.desktop
-    mimetype.path = /usr/share/mime/text
-    mimetype.files = x-sgf.xml
-    INSTALLS += filetype mimetype
+    INSTALLS += filetype
 }
 
 isEmpty(QMAKE_LRELEASE) {
