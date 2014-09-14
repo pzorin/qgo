@@ -211,15 +211,15 @@ extern class ConnectionWidget * connectionWidget;
 extern QString applicationPath;
 #endif
 
-#ifdef Q_OS_LINUX
-    #define SOUND_PATH_PREFIX			"/usr/share/qgo/sounds/"
-    #define TRANSLATIONS_PATH		"/usr/share/qgo/languages"
+#ifdef Q_OS_WIN
+    #define SOUND_PATH_PREFIX		"sounds/"
+    #define TRANSLATIONS_PATH		"translations/"
 #elif defined(Q_OS_MAC)
 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
     #define TRANSLATIONS_PATH		"qGo.app/Contents/Resources/Translations/"
-#else //Q_OS_WIN
-	#define SOUND_PATH_PREFIX			"sounds/"
-    #define TRANSLATIONS_PATH		"translations/"
+#else
+    #define SOUND_PATH_PREFIX		"/usr/share/qgo/sounds/"
+    #define TRANSLATIONS_PATH		"/usr/share/qgo/languages"
 #endif
 
 #endif

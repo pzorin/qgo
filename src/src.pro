@@ -164,7 +164,7 @@ SOURCES += displayboard.cpp \
     game_interfaces/qgoboardlocalinterface.cpp \
     newgamedialog.cpp
 
-linux-* {
+unix*:!macx-* {
     QGO_INSTALL_PATH = /usr/share/qgo
     QGO_INSTALL_BIN_PATH = /usr/bin
 
