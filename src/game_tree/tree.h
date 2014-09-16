@@ -92,8 +92,8 @@ public:
 
     // Import SGF (from file or string)
     // FIXME: read handicap from SGF
-    bool importSGFFile(QString filename, int handicap = 0);
-    bool importSGFString(QString SGF, int handicap = 0);
+    bool importSGFFile(QString filename);
+    bool importSGFString(QString SGF);
     QString exportSGFString(GameData * gameData);
 
 public slots:

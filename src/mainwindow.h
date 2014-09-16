@@ -31,7 +31,6 @@ class RoomListing;
 class LoginDialog;
 class NetworkConnection;
 class GameDialog;
-class SGFParser;
 class BoardWindow;
 class GameData;
 class Sound;

@@ -65,11 +65,11 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//Creates the game tree
     tree = new Tree(boardSize, gameData->komi);
 
-	setupUI();
+    setupUI();
 	
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
-        tree->importSGFFile(gameData->fileName,gameData->handicap);
+        tree->importSGFFile(gameData->fileName);
 
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameData->gameMode)
@@ -109,8 +109,8 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	}
 	setupBoardUI();
 
-	setGamePhase(phaseOngoing);
-	show();
+    setGamePhase(phaseOngoing);
+    show();
 	checkHideToolbar(height());
 	setFocus();
 	
@@ -118,7 +118,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 	//gridLayout->update();
 
 	if(gameData->record_sgf != QString())
-        tree->importSGFString(gameData->record_sgf, gameData->handicap);
+        tree->importSGFString(gameData->record_sgf);
 }
 
 BoardWindow::~BoardWindow()

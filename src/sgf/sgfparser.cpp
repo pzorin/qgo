@@ -497,6 +497,7 @@ bool SGFParser::doParse(const QString &toParseStr)
 	progress.setValue(0);
 	QString sss="";
 	do {
+
 		if (!(++progressCounter%10))
 		{
 			progress.setValue(pointer);
@@ -884,20 +885,11 @@ bool SGFParser::doParse(const QString &toParseStr)
 								}
 								else
 								{
-									
-									/* May not be necessary this remember_root clause FIXME */
-									if(remember_root)
-									{
-										//qDebug("remember root");
-										tree->getCurrent()->setHandicapMove(true);
-										//tree->getCurrent()->setMoveNumber(0);
-										//tree->getCurrent()->setColor(stoneBlack);
-									}
 									if(setup)
 									{
-										//if this is first in branch we need to add an empty move
-										if(stack.top() == tree->getCurrent())
-											tree->addEmptyMove();
+                                        if ((!remember_root) && (stack.top() == tree->getCurrent()))
+                                            tree->addEmptyMove(); //if this is first in branch we need to add an empty move
+
 										tree->addStoneToCurrentMove(black ? stoneBlack : stoneWhite, i, j);
 									}
 									else

@@ -750,14 +750,12 @@ void Tree::addMove(StoneColor c, int x, int y)
 
 void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
 {
-	if (current->parent == root || current == root)
-	{
-		qDebug("setting that first weird move line %d", __LINE__);
-		if(current->parent == root)
-			qDebug("current parent root no new node %d %d", x, y);
+    if (current == root)
+    {
+        current->setHandicapMove(true);
 		current->setMoveNumber(0); //TODO : make sure this is the proper way
-		current->setX(-1);//-1
-		current->setY(-1);//-1
+        current->setX(-1);
+        current->setY(-1);
 		/* SGF submits handicap edit moves as root, they need to be
 		 * given a color so that that color can flip over the cursor
 		 * this is ugly, the cursor should be set by who's turn it
@@ -1297,35 +1295,15 @@ void Tree::exitScore()
     emit currentMoveChanged(current);
 }
 
-bool Tree::importSGFFile(QString filename, int handicap)
+bool Tree::importSGFFile(QString filename)
 {
-    // FIXME this is not the right place to add handicap stones
-    if ((handicap > 0) &&
-            current->getMatrix()->addHandicapStones(handicap))
-    {
-        current->setHandicapMove(true);
-        current->setX(-1);//-1
-        current->setY(-1);//-1
-        current->setColor(stoneBlack);
-    }
-
     SGFParser *sgfParser = new SGFParser(this);
     QString SGFLoaded = sgfParser->loadFile(filename);
     return sgfParser->doParse(SGFLoaded);
 }
 
-bool Tree::importSGFString(QString SGF, int handicap)
+bool Tree::importSGFString(QString SGF)
 {
-    // FIXME this is not the right place to add handicap stones
-    if ((handicap > 0) &&
-            current->getMatrix()->addHandicapStones(handicap))
-    {
-        current->setHandicapMove(true);
-        current->setX(-1);//-1
-        current->setY(-1);//-1
-        current->setColor(stoneBlack);
-    }
-
     SGFParser *sgfParser = new SGFParser(this);
     return sgfParser->doParse(SGF);
 }
