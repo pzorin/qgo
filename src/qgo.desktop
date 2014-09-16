@@ -1,14 +1,12 @@
 [Desktop Entry]
 Type=Application
+Version=1.0
 Name=qGo
 GenericName=Go Client
 Comment=Play Go online and against computer, view and edit SGF files
 Icon=qgo
 Exec=qgo
 Terminal=false
-MimeType=text/sgf;
-Categories=Qt;KDE;Game;BoardGame;
-X-KDE-SubstituteUID=false
-X-DCOP-ServiceType=Multi
-X-KDE-StartupNotify=true
+MimeType=application/x-go-sgf;
+Categories=Qt;Game;BoardGame;
 

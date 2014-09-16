@@ -178,9 +178,6 @@ unix*:!macx-* {
     desktopfile.path = /usr/share/applications
     desktopfile.files = qgo.desktop
     INSTALLS += desktopfile
-    filetype.path = /usr/share/mimelnk/text
-    filetype.files = sgf.desktop
-    INSTALLS += filetype
 }
 
 isEmpty(QMAKE_LRELEASE) {

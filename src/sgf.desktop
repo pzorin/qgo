@@ -1,7 +1,0 @@
-[Desktop Entry]
-Comment=Smart go format
-Hidden=false
-Icon=qgo
-MimeType=text/go-sgf
-Patterns=*.sgf
-Type=MimeType
