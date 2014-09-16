@@ -73,6 +73,8 @@ Stone::Stone(QList<QPixmap> *a, QGraphicsScene *canvas, StoneColor c, int x, int
 
 Stone::~Stone()
 {
+    if (shadow)
+        delete shadow;
 } 
 
 /*
