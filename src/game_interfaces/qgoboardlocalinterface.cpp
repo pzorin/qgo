@@ -48,7 +48,8 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
     playSound = (settings.value("SOUND") != 1);
 
     // Set up computer interface.
-    gtp = new QGtp() ;
+    gtp = new QGtp();
+    currentEngine = NULL;
 
     connect (gtp, SIGNAL(signal_computerPlayed(int, int)), SLOT(slot_playComputer(int, int)));
     connect (gtp, SIGNAL(computerResigned()), SLOT(slot_resignComputer()));
@@ -78,6 +79,19 @@ qGoBoardLocalInterface::~qGoBoardLocalInterface()
 {
     qDebug("Deconstructing computer interface");
     delete gtp;
+}
+
+void qGoBoardLocalInterface::localMoveRequest(StoneColor c, int x, int y)
+{
+    bool engineUpToDate = (tree->getCurrent() == currentEngine);
+    if (doMove(c,x,y))
+    {
+        boardwindow->updateMove(tree->getCurrent());
+        if (engineUpToDate)
+            sendMoveToInterface(c,x,y);
+        else
+            feedPositionThroughGtp();
+    }
 }
 
 
@@ -162,9 +176,18 @@ void qGoBoardLocalInterface::playComputer()
  */
 void qGoBoardLocalInterface::slot_playComputer(int x, int y)
 {
+    // This hack should be removed by making doMove() and related functions relative to a move
+    Move *remember = tree->getCurrent();
+    bool atCurrent = (remember == currentEngine);
+    tree->setCurrent(currentEngine);
+
     bool b = getBlackTurn();
-    if (!doMove(b ? stoneBlack : stoneWhite, x, y))
+    if (doMove(b ? stoneBlack : stoneWhite, x, y) == NULL)
         QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move (%1, %2) seems to be invalid").arg(x).arg(y));
+    currentEngine = tree->getCurrent();
+
+    if (!atCurrent)
+        tree->setCurrent(remember);
 
     // We can also let computer play against itself.
     checkComputersTurn();
@@ -172,18 +195,37 @@ void qGoBoardLocalInterface::slot_playComputer(int x, int y)
 
 void qGoBoardLocalInterface::slot_resignComputer()
 {
+    // This hack should be removed by making doMove() and related functions relative to a move
+    Move *remember = tree->getCurrent();
+    bool atCurrent = (remember == currentEngine);
+    tree->setCurrent(currentEngine);
+
     bool b = getBlackTurn();
     GameResult g((!b ? stoneBlack : stoneWhite), GameResult::RESIGN);
     setResult(g);
+    currentEngine = NULL;
+
+    if (!atCurrent)
+        tree->setCurrent(remember);
 }
 
 void qGoBoardLocalInterface::slot_passComputer()
 {
+    // This hack should be removed by making doMove() and related functions relative to a move
+    Move *remember = tree->getCurrent();
+    bool atCurrent = (remember == currentEngine);
+    tree->setCurrent(currentEngine);
+
     doPass();
+    currentEngine = tree->getCurrent();
     if (tree->getCurrent()->parent->isPassMove())
         enterScoreMode();
     else
+    {
+        if (!atCurrent)
+            tree->setCurrent(remember);
         checkComputersTurn();
+    }
 }
 
 /*
@@ -234,6 +276,7 @@ void qGoBoardLocalInterface::feedPositionThroughGtp()
 
     QStack<Move*> stack;
     Move *m = tree->getCurrent();
+    currentEngine = m;
     while (m->parent != NULL)
     {
         stack.push(m);

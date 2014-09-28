@@ -487,7 +487,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				/* FIXME Can we guess at the color here ? */
 				if(m->color == stoneNone)
 					m->color = (getBlackTurn() ? stoneBlack : stoneWhite);
-				if (!doMove(m->color, m->x, m->y))
+                if (doMove(m->color, m->x, m->y) == NULL)
 					QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1 %2 seems to be invalid").arg(QString::number(m->x), QString::number(m->y)));
 				else if(m->color == stoneWhite && !boardTimerId)  //awkward ?  FIXME for always move 1?
 				{

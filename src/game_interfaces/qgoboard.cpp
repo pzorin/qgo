@@ -294,24 +294,6 @@ void qGoBoard::slotBoardClicked(bool , int x, int y , Qt::MouseButton mouseState
 	}
 }
 
-/* FIXME sendMoveToInterface is awkward.  Should be a virtual function and anyway,
- * its redundant in different places.
- * but come on, doMove, sendMoveToInterface and localMoveRequest?  And that's just
- * one of these. */
-
-/*
- * This functions gets the move request (from a board click)
- * and displays the resulting stone (if valid)
- */
-void qGoBoard::localMoveRequest(StoneColor c, int x, int y)
-{
-	if (doMove(c,x,y))
-	{
-        boardwindow->updateMove(tree->getCurrent());
-		sendMoveToInterface(c,x,y);
-	}
-}
-
 /*
  * This functions gets the request (from a board click)
  * to mark a stone as dead/undead (score mode). All local but 'match'
@@ -335,44 +317,42 @@ void qGoBoard::doPass()
 }
 
 /*
- * This functions adds a move to a game. returns 1 if move was valid, 0 if not)
+ * This functions adds a move to a game. returns the new Move* if move was valid, 0 if not)
  */
-bool qGoBoard::doMove(StoneColor c, int x, int y)
+Move *qGoBoard::doMove(StoneColor c, int x, int y)
 {
     bool validMove = (dontCheckValidity || tree->checkMoveIsValid(c, x, y));
     dontCheckValidity = false;
+    if (!validMove)
+        return NULL;
 
-    if(validMove)
+    tree->addMove(c,x,y);
+    setModified(true);
+    Move *result = tree->getCurrent();
+
+    /* Not a great place for this, but maybe okay: */
+    TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());
+    if(t.time != 0 || t.stones_periods != -1)
     {
-        tree->addMove(c,x,y);
-        setModified(true);
-        /* Not a great place for this, but maybe okay: */
-        TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());
-        if(t.time != 0 || t.stones_periods != -1)
-        {
-            tree->getCurrent()->setTimeinfo(true);
-            tree->getCurrent()->setTimeLeft(t.time);
-            tree->getCurrent()->setOpenMoves(t.stones_periods);
-        }
+        result->setTimeinfo(true);
+        result->setTimeLeft(t.time);
+        result->setOpenMoves(t.stones_periods);
     }
 
 	/* Non trivial here.  We don't want to play a sound as we get all
 	 * the moves from an observed game.  But there's no clean way
 	 * to tell when the board has stopped loading, particularly for IGS.
-	 * so we only play a sound every 500 msecs... 
+     * so we only play a sound every 250 msecs...
 	 * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
-    if(validMove && boardwindow->getGamePhase() == phaseOngoing &&
-		   QTime::currentTime() > lastSound /*&& (boardwindow->getGameMode() != modeObserve ||
-		   tree->getCurrent()->getMoveNumber() == tree->findLastMoveInMainBranch()->getMoveNumber())*/)
-	{
-			if (playSound)
-				clickSound->play();
-			//setModified();
-			lastSound = QTime::currentTime();	
-			lastSound = lastSound.addMSecs(250);	//500 too slow
-	}
+    if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
+    {
+        if (playSound)
+            clickSound->play();
+        lastSound = QTime::currentTime();
+        lastSound = lastSound.addMSecs(250);
+    }
 	
-	return validMove;
+    return result;
 }
 
 /*

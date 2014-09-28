@@ -70,10 +70,10 @@ void qGoBoardReviewInterface::setNode(int node_nr, StoneColor sc, int x, int y)
 	else
 	// no node found, we create one from the current move
 	{
-		if (! doMove(sc, x,y))
+        if (doMove(sc, x,y))
+            tree->getCurrent()->setNodeIndex(node_nr);
+        else
 			QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move %1,%2 seems to be invalid").arg(x).arg(y));
-		else
-			tree->getCurrent()->setNodeIndex(node_nr);
 	}
 }
 

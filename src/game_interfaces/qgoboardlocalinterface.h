@@ -46,6 +46,7 @@ public:
 signals:
 
 public slots:
+    virtual void localMoveRequest(StoneColor c, int x, int y);
     void slot_playComputer(int x, int y);
     void slot_resignComputer();
     void slot_passComputer();
@@ -61,6 +62,7 @@ private:
     void leaveScoreMode() {}
 
     QGtp *gtp;
+    Move *currentEngine;
 };
 
 #endif // QGOBOARDLOCALINTERFACE_H

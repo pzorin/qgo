@@ -213,11 +213,16 @@ protected:
 //	int chk_b, chk_w;
 //#endif
 
-	virtual void localMoveRequest(StoneColor c, int x, int y);
+    /*
+     * This functions gets the move request (from a board click)
+     * and displays the resulting stone (if valid)
+     * The base class implementation is empty because network and local games need completely different hadling.
+     */
+    virtual void localMoveRequest(StoneColor, int, int) {}
 	virtual void localMarkDeadRequest(int x, int y);
     virtual void sendMoveToInterface(StoneColor ,int, int) {}
     virtual void sendPassToInterface(StoneColor ) { doPass(); }
-    virtual bool doMove(StoneColor c, int x, int y);
+    virtual Move *doMove(StoneColor c, int x, int y);
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
 protected:
 	bool dontCheckValidity;
