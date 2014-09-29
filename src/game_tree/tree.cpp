@@ -35,12 +35,9 @@
 Tree::Tree(int board_size, float komi)
     : boardSize(board_size), root(NULL), komi(komi)
 {
-    insertStoneFlag = false;
-	checkPositionTags = NULL;
+    checkPositionTags = NULL;
     init();
     loadingSGF = false;
-	koStoneX = 0;
-    koStoneY = 0;
 }
 
 void Tree::init()
@@ -121,33 +118,6 @@ bool Tree::addSon(Move *node)
         current = node;
         if(isInMainBranch(current->parent))
             lastMoveInMainBranch = current;
-#ifdef NOTWORKING
-        // This is from an undo, but its awkward here
-        // presumably son would not have been null with a marker
-        // if this wasn't from undos or online review or the like
-        // we'll understand this better if we look into online
-        // review code FIXME
-        if(current->parent->marker)
-        {
-            if(!addBrother(current->parent->marker))
-            {
-                qFatal("Failed to add undo brother.");
-                return false;
-            }
-            else
-            {
-                Move * m = current->parent->marker;
-                current->parent->marker = NULL;
-                //check for multiple undos in a row
-                while(m->marker && m->son == NULL)	//is son check right?
-                {
-                    m->son = m->marker;
-                    m->marker = NULL;
-                    m = m->son;
-                }
-            }
-        }
-#endif //NOTWORKING
         return false;
     }
     // A son found. Add the new node as farest right brother of that son
@@ -245,36 +215,12 @@ int Tree::getBranchLength(Move *node)
 	return counter;
 }
 
-Move* Tree::nextMove()
-{
-	if (root == NULL || current == NULL || current->son == NULL)
-		return NULL;
-	
-	if (current->marker == NULL)  // No marker, simply take the main son
-        current = current->son;
-	else
-        current = current->marker;  // Marker set, use this to go the remembered path in the tree
-	
-	current->parent->marker = current;  // Parents remembers this move we went to
-    return current;
-}
-
-Move* Tree::previousMove()
-{
-	if (root == NULL || current == NULL || current->parent == NULL)
-		return NULL;
-	
-	current->parent->marker = current;  // Remember the son we came from
-    current = current->parent;
-    return current;
-}
-
 Move* Tree::nextVariation()
 {
 	if (root == NULL || current == NULL || current->brother == NULL)
 		return NULL;
 	
-    current = current->brother;
+    setCurrent(current->brother);
     return current;
 }
 
@@ -312,20 +258,9 @@ Move* Tree::previousVariation()
 
 bool Tree::hasSon(Move *m)
 {
-	if (root == NULL || m == NULL || current == NULL || current->son == NULL)
+    if (root == NULL || m == NULL || current == NULL)
 		return false;
-	
-	Move *tmp = current->son;
-	
-	do {
-		if (m->equals(tmp))
-		{
-            current = tmp;
-			return true;
-		}
-	} while ((tmp = tmp->brother) != NULL);
-	
-	return false;
+    return (current->hasSon(m->getColor(), m->getX(), m->getY()) != NULL);
 }
 
 void Tree::clear()
@@ -502,13 +437,6 @@ void Tree::setCurrent(Move *m)
     emit currentMoveChanged(current);
 }
 
-void Tree::setToFirstMove()
-{
-	if (root == NULL)
-		qFatal("Error: No root!");
-    current = root;
-}
-
 int Tree::mainBranchSize()
 {
 	if (root == NULL || current == NULL )
@@ -599,7 +527,7 @@ void Tree::addEmptyMove( bool /*brother*/)
 void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
 {
 	// Passing?
-	if (x == 20 && y == 20)
+    if (x == PASS_XY && y == PASS_XY)
 		return;
 	
     if ((x < 1) || (x > boardSize) || (y < 1) || (y > boardSize))
@@ -621,131 +549,9 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 {
 /////////////////FIXME We may have a problem at first move with handicap games ...
 	StoneColor c = (current->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
-	
-//	currentMove++;
-	addMove(c, 20, 20);
-#ifdef OLD
-	if (!sgf)
-		addMove(c, 20, 20);
-	else  // Sgf reading
-	{
-		if (current->parent != NULL)
-			c = current->parent->getColor() == stoneBlack ? stoneWhite : stoneBlack;
-		else
-			c = stoneBlack;
-		if (!fastLoad)
-			editMove(c, 20, 20);
-	}
-#endif //OLD
-	if (current->parent != NULL)
-		current->setCaptures(current->parent->getCapturesBlack(),
-		current->parent->getCapturesWhite());
-    emit currentMoveChanged(current);
-}
-
-bool Tree::checkMoveIsValid(StoneColor c, int x, int y)
-{
-    if ((x < 1 || x > boardSize || y < 1 || y > boardSize) && (x != 20 || y != 20))		//because 20,20 is pass, but ugly/unnecessary here FIXME
-	{
-		qWarning("Invalid position: %d/%d", x, y);
-		return false;
-	}
-
-	/* special case, we're erasing a stone */
-	if(c == stoneErase)
-	{
-        return (current->getMatrix()->getStoneAt(x,y) != stoneNone);
-    }
-
-    // If there is already a stone at (x,y) do nothing
-    if ((current->getMatrix()->getStoneAt(x, y) == stoneBlack) ||
-        (current->getMatrix()->getStoneAt(x, y) == stoneWhite))
-        return false;
-
-    bool koStone = ((current->getMoveNumber() > 1) && (current->parent->getMatrix()->getStoneAt(x, y) == c));
-
-	//check for ko
-	if(koStone && x == koStoneX && y == koStoneY)
-		return false;
-
-    std::vector<Group *> visited;
-    std::vector<Group *>::iterator it_visited;
-    int lastCaptures = current->getMatrix()->checkStoneCaptures(c,x,y,visited);
-    // FIXME should not have to delete these groups here
-    for (it_visited = visited.begin(); it_visited < visited.end(); ++it_visited)
-    {
-        delete (*it_visited);
-    }
-
-    if (lastCaptures < 0)
-        return false;
-
-	return true;
-}
-
-void Tree::addMove(StoneColor c, int x, int y)
-{
-    Move * lastValidMoveChecked =
-            new Move(c, x, y, current->getMoveNumber() + 1, phaseOngoing, *(current->getMatrix()), true);	//clearMarks = true
-    koStoneX = 0;
-    koStoneY = 0;
-
-	/* special case: pass */
-	if(x == 20 && y == 20)
-	{
-        if (hasSon(lastValidMoveChecked))
-            delete lastValidMoveChecked;
-        else
-            addSon(lastValidMoveChecked);
-        return;
-	}
-
-    if (insertStoneFlag)
-    {
-        insertStone(lastValidMoveChecked);
-        return;
-    }
-
-    if (c == stoneErase)
-    {
-        /* FIXME I don't think this is right.  First of all, it needs to be fixed in deleteNode() as well which is called as an undo
-         * as well as as a tree edit.  But here, I don't think we want a new move added as a son to erase a move, I think we just
-         * want to erase it... or maybe not because it makes sense to add it as a tree when its an undo in a game.
-         * another point is that its not like a move in order, its like a separate tree, so addMove(stoneErase seems singularly
-         * useless since we have to do something special with the tree anyway, i.e., no addSon, but maybe we go backwards and
-         * delete some marker */
-        lastValidMoveChecked->getMatrix()->insertStone(x, y, stoneErase);
-    }
-
-    if (hasSon(lastValidMoveChecked))
-    {
-        /* This happens a lot if we add a move that's already there
-             * when really we're just playing along with the tree.
-             * This would be the place to add any kind of tesuji testing
-             * code */
-        delete lastValidMoveChecked;
-        return;
-    }
-    int lastCaptures = lastValidMoveChecked->getMatrix()->makeMove(x, y, c);
-    addSon(lastValidMoveChecked);
-    if (lastCaptures == 1)
-        checkAddKoMark(current->getColor(), current->getX(), current->getY(), current);
-
-	int capturesBlack, capturesWhite;
-	if (current->parent != NULL)
-	{
-		capturesBlack = current->parent->getCapturesBlack();
-		capturesWhite = current->parent->getCapturesWhite();
-	}
-	else
-		capturesBlack = capturesWhite = 0;	
-
-	if (c == stoneBlack)
-		capturesBlack += lastCaptures;
-	else if (c == stoneWhite)
-        capturesWhite += lastCaptures;
-    current->setCaptures(capturesBlack, capturesWhite);
-    emit currentMoveChanged(current);
+    Move *result = current->makeMove(c, PASS_XY, PASS_XY);
+    if (result)
+        setCurrent(result);
 }
 
 void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
@@ -872,90 +678,6 @@ void Tree::undoMove(void)
 	deleteNode();
 }
 
-void Tree::checkAddKoMark(StoneColor c, int x, int y, Move * m)
-{
-	if(x == 20 && y == 20)	//awkward passing check FIXME
-	{
-		koStoneX = 0; koStoneY = 0; 	//necessary?? FIXME
-		return;
-	}
-	if(!m)
-        m = current;
-
-	{
-		StoneColor opp = (c == stoneBlack ? stoneWhite : stoneBlack);
-		Matrix * trix = m->getMatrix();
-		StoneColor testcolor;
-		int sides = 3;
-        if(x < boardSize)
-		{
-			testcolor = trix->getStoneAt(x + 1, y);
-			if(testcolor == opp)
-				sides--;
-			else if(testcolor == stoneNone)
-			{
-				koStoneX = x + 1;
-				koStoneY = y;
-			}
-		}
-		else
-			sides--;
-		
-		if(x > 1)
-		{
-			testcolor = trix->getStoneAt(x - 1, y);
-			if(testcolor == opp)
-				sides--;
-			else if(testcolor == stoneNone)
-			{
-				koStoneX = x - 1;
-				koStoneY = y;
-			}
-		}
-		else
-			sides--;
-        if(y < boardSize)
-		{
-			testcolor = trix->getStoneAt(x, y + 1);
-			if(testcolor == opp)
-				sides--;
-			else if(testcolor == stoneNone)
-			{
-				koStoneX = x;
-				koStoneY = y + 1;
-			}
-		}
-		else
-			sides--;
-		
-		if(y > 1)
-		{
-			testcolor = trix->getStoneAt(x, y - 1);
-			if(testcolor == opp)
-				sides--;
-			else if(testcolor == stoneNone)
-			{
-				koStoneX = x;
-				koStoneY = y - 1;
-			}
-		}
-		else
-			sides--;
-		
-		if(sides != 0)
-		{
-			koStoneX = 0;
-			koStoneY = 0;
-		}
-		else
-		{
-			/* Don't save to file */
-			if(preferences.draw_ko_marker)
-				trix->insertMark(koStoneX, koStoneY, markKoMarker);
-		}
-	}
-}
-
 int Tree::getLastCaptures(Move * m)
 {
 	if(!m->parent)
@@ -1033,13 +755,10 @@ void Tree::deleteNode()
 		lastMoveInMainBranch = remember;
 	if (m->son != NULL)
 		traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
-    current = remember;
 	delete m;                         // Delete our move
-	//setCurrent(remember);       // Set current move to previous move
-	remember->son = remSon;           // Reset son pointer, NULL
+    remember->son = remSon;           // Reset son pointer, NULL
 	remember->marker = NULL;          // Forget marker
-
-    emit currentMoveChanged(current);
+    setCurrent(remember);       // Set current move to previous move
 }
 
 
@@ -1048,26 +767,36 @@ void Tree::deleteNode()
  */
 void Tree::slotNavForward()
 {
-    nextMove();
-    emit currentMoveChanged(current);
+    if (root == NULL || current == NULL || current->son == NULL)
+        return;
+
+    if (current->marker == NULL)  // No marker, simply take the main son
+        setCurrent(current->son);
+    else
+        setCurrent(current->marker);  // Marker set, use this to go the remembered path in the tree
+
+    current->parent->marker = current;  // Parents remembers this move we went to
 }
 
 void Tree::slotNavBackward()
 {
-    previousMove();
-    emit currentMoveChanged(current);
+    if (root == NULL || current == NULL || current->parent == NULL)
+        return;
+
+    current->parent->marker = current;  // Remember the son we came from
+    setCurrent(current->parent);
 }
 
 void Tree::slotNavFirst()
 {
-    setToFirstMove();  // Set move to root
-    emit currentMoveChanged(current);
+    if (root == NULL)
+        qFatal("Error: No root!");
+    setCurrent(root);
 }
 
 void Tree::slotNavLast()
 {
     setCurrent(findLastMoveInCurrentBranch());
-    emit currentMoveChanged(current);
 }
 
 void Tree::slotNavPrevComment()
@@ -1086,7 +815,6 @@ void Tree::slotNavPrevComment()
     if (m != NULL)
     {
         setCurrent(m);
-        emit currentMoveChanged(current);
     }
 }
 
@@ -1106,7 +834,6 @@ void Tree::slotNavNextComment()
     if (m != NULL)
     {
         setCurrent(m);
-        emit currentMoveChanged(current);
     }
 }
 
@@ -1143,80 +870,41 @@ void Tree::slotNthMove(int n)
     }
 
     if (m != NULL && m != old)
-        gotoMove(m);
+        setCurrent(m);
 }
 
 void Tree::slotNavNextVar()
 {
-    Move *m = nextVariation();
-    if (m != NULL)
-        emit currentMoveChanged(current);
+    nextVariation();
 }
 
 void Tree::slotNavPrevVar()
 {
     Move *m = previousVariation();
     if (m != NULL)
-        emit currentMoveChanged(current);
+        setCurrent(m);
 }
 
 void Tree::slotNavStartVar()
 {
-    if (current->parent == NULL)
-        return;
-
-    Move *tmp = previousMove(),
-        *m = NULL;
-
-    if (tmp == NULL)
-        return;
-
-    // Go up tree until we find a node that has > 1 sons
-    while ((m = previousMove()) != NULL && getNumSons() <= 1)
-    // Remember move+1, as we set current to the
-    // first move after the start of the variation
-        tmp = m;
-
-
-    if (m == NULL)  // No such node found, so we reached root.
-    {
-        tmp = getRoot();
-        // For convinience, if we have Move 1, go there. Looks better.
-        if (tmp->son != NULL)
-            tmp = nextMove();
-    }
-
-    // If found, set current to the first move inside the variation
-    setCurrent(tmp);
-    emit currentMoveChanged(current);
+    Move *m = current->parent;
+    while ((m != NULL) && (m->getNumSons() <= 1))
+        m = m->parent;
+    setCurrent(m ? m : root);
 }
 
 void Tree::slotNavNextBranch()
 {
-    Move *m = getCurrent(),
-        *remember = m;  // Remember current in case we dont find a branch
-    Q_CHECK_PTR(m);
-
-    // We are already on a node with 2 or more sons?
-    if (getNumSons() > 1)
-    {
-        m = nextMove();
-        emit currentMoveChanged(current);
+    Move *m = current;
+    if (m == NULL)
         return;
-    }
 
-    // Descent tree to last son of main variation
-    while (m->son != NULL && getNumSons() <= 1)
-        m = nextMove();
+    // Descend to the next branching point
+    while (m->getNumSons() == 1)
+        m = m->son;
 
-    if (m != NULL && m != remember)
-    {
-        if (m->son != NULL)
-            m = nextMove();
-        emit currentMoveChanged(current);
-    }
-    else
-        setCurrent(remember);
+    if (m->son != NULL)
+        setCurrent(m->son);
 }
 
 /*
@@ -1253,13 +941,6 @@ void Tree::slotNavMainBranch()
     lastOddNode->marker = NULL;
 
     setCurrent(lastOddNode);
-    emit currentMoveChanged(current);
-}
-
-void Tree::gotoMove(Move *m)
-{
-    setCurrent(m);
-    emit currentMoveChanged(current);
 }
 
 /*
@@ -1350,24 +1031,24 @@ void Tree::countMarked(void)
     capturesBlack = current->getCapturesBlack();
     capturesWhite = current->getCapturesWhite();
 
-    for (int i=0; i< boardSize; i++)
-        for (int j=0; j< boardSize; j++)
+    for (int i=1; i<=boardSize; i++)
+        for (int j=1; j<=boardSize; j++)
         {
 
             /* When called from network code, we're just using
              * the board as server has reported it.  No stones
              * are marked as dead, but apparently ones marked as
              * territory get ghosted out */
-            if(current_matrix->getMarkAt(i + 1, j + 1) == markTerrBlack)
+            if(current_matrix->getMarkAt(i, j) == markTerrBlack)
             {
                 terrBlack++;
-                if (current_matrix->getStoneAt(i+1,j+1) == stoneWhite)
+                if (current_matrix->getStoneAt(i, j) == stoneWhite)
                     deadWhite++;
             }
-            else if(current_matrix->getMarkAt(i + 1, j + 1) == markTerrWhite)
+            else if(current_matrix->getMarkAt(i, j) == markTerrWhite)
             {
                 terrWhite++;
-                if (current_matrix->getStoneAt(i +1,j+1) == stoneBlack)
+                if (current_matrix->getStoneAt(i, j) == stoneBlack)
                     deadBlack++;
             }
         }

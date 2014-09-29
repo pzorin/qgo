@@ -66,7 +66,7 @@ void qGoBoardReviewInterface::setNode(int node_nr, StoneColor sc, int x, int y)
 
 	if (m)
 	//node found, we go there
-        tree->gotoMove(m);
+        tree->setCurrent(m);
 	else
 	// no node found, we create one from the current move
 	{

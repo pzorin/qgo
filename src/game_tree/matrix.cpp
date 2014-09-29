@@ -43,7 +43,10 @@ Matrix::Matrix(const Matrix &m, bool cleanup)
     matrix = new unsigned short[size*size];
 	Q_CHECK_PTR(matrix);
 
-    unsigned short mask = (cleanup ? 0x000f | MX_STONEDEAD : 0x0fff);
+    unsigned short mask = stoneWhite | stoneBlack;
+    if (!cleanup)
+        mask |= markAll;
+    mask |= (~markKoMarker);
     for (int i=0; i<size*size; ++i)
         matrix[i] = m.matrix[i] & mask;
 }
@@ -61,7 +64,8 @@ void Matrix::clear()
 
 void Matrix::insertStone(int key, StoneColor c, bool fEdit)
 {
-    matrix[key] = (matrix[key] & 0xfff0) | c;
+    matrix[key] &= (~stoneErase);
+    matrix[key] |= c;
     if(fEdit)
         matrix[key] |= MX_STONEEDIT;
 }
@@ -598,6 +602,73 @@ int Matrix::makeMove(int x, int y, StoneColor c)
             delete (*it_visited);
         }
     }
+
+    // Add Ko mark
+    if (capturedStones == 1)
+    {
+        int koStoneX = -1, koStoneY = -1;
+        StoneColor opp = (c == stoneBlack ? stoneWhite : stoneBlack);
+        StoneColor testcolor;
+        int sides = 4;
+        if(x < size)
+        {
+            testcolor = getStoneAt(x + 1, y);
+            if(testcolor == opp)
+                sides--;
+            else if(testcolor == stoneNone)
+            {
+                koStoneX = x + 1;
+                koStoneY = y;
+            }
+        }
+        else
+            sides--;
+
+        if(x > 1)
+        {
+            testcolor = getStoneAt(x - 1, y);
+            if(testcolor == opp)
+                sides--;
+            else if(testcolor == stoneNone)
+            {
+                koStoneX = x - 1;
+                koStoneY = y;
+            }
+        }
+        else
+            sides--;
+        if(y < size)
+        {
+            testcolor = getStoneAt(x, y + 1);
+            if(testcolor == opp)
+                sides--;
+            else if(testcolor == stoneNone)
+            {
+                koStoneX = x;
+                koStoneY = y + 1;
+            }
+        }
+        else
+            sides--;
+
+        if(y > 1)
+        {
+            testcolor = getStoneAt(x, y - 1);
+            if(testcolor == opp)
+                sides--;
+            else if(testcolor == stoneNone)
+            {
+                koStoneX = x;
+                koStoneY = y - 1;
+            }
+        }
+        else
+            sides--;
+
+        if(sides == 1)
+            insertMark(koStoneX, koStoneY, markKoMarker);
+    }
+
     return capturedStones;
 }
 
@@ -906,34 +977,10 @@ void Matrix::markTerritory(int & terrBlack, int & terrWhite)
             }
             if (col == stoneWhite)
                 terrWhite += terr;
-            if (col == stoneBlack)
+            else if (col == stoneBlack)
                 terrBlack += terr;
         }
     }
-
-    // Finally, remove all false eyes that have been marked as territory. This
-    // has to be here, as in the above loop we did not find all dame points yet.
-    // FIXME: handle false eyes and seki properly.
-    /*for (i=0; i<size*size; ++i)
-    {
-        MarkType mark = getMarkAt(i);
-        if (mark == markTerrBlack)
-        {
-            if (checkfalseEye(i,stoneBlack))
-            {
-                matrix[i] &= 0xff0f;
-                --terrBlack;
-            }
-        }
-        if (mark == markTerrWhite)
-        {
-            if (checkfalseEye(i,stoneWhite))
-            {
-                matrix[i] &= 0xff0f;
-                --terrWhite;
-            }
-        }
-    }*/
 }
 
 /*

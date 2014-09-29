@@ -310,25 +310,27 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
  */
 void qGoBoard::doPass()
 {
-    tree->doPass(false);
-
-	setModified();
-
+    StoneColor c = (tree->lastMoveInMainBranch->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
+    tree->lastMoveInMainBranch = tree->getCurrent()->makeMove(c,PASS_XY,PASS_XY,true);
+    tree->setCurrent(tree->lastMoveInMainBranch);
+    setModified(true);
 }
 
 /*
  * This functions adds a move to a game. returns the new Move* if move was valid, 0 if not)
  */
-Move *qGoBoard::doMove(StoneColor c, int x, int y)
+Move *qGoBoardNetworkInterface::doMove(StoneColor c, int x, int y)
 {
-    bool validMove = (dontCheckValidity || tree->checkMoveIsValid(c, x, y));
+    bool validMove = (dontCheckValidity || tree->getCurrent()->checkMoveIsValid(c, x, y));
     dontCheckValidity = false;
     if (!validMove)
         return NULL;
 
-    tree->addMove(c,x,y);
+    Move *result = tree->getCurrent()->makeMove(c,x,y,true);
+    tree->setCurrent(result);
+    tree->lastMoveInMainBranch = result;
     setModified(true);
-    Move *result = tree->getCurrent();
+
 
     /* Not a great place for this, but maybe okay: */
     TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());
@@ -339,11 +341,11 @@ Move *qGoBoard::doMove(StoneColor c, int x, int y)
         result->setOpenMoves(t.stones_periods);
     }
 
-	/* Non trivial here.  We don't want to play a sound as we get all
-	 * the moves from an observed game.  But there's no clean way
-	 * to tell when the board has stopped loading, particularly for IGS.
+    /* Non trivial here.  We don't want to play a sound as we get all
+     * the moves from an observed game.  But there's no clean way
+     * to tell when the board has stopped loading, particularly for IGS.
      * so we only play a sound every 250 msecs...
-	 * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
+     * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
     if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
     {
         if (playSound)
@@ -351,7 +353,7 @@ Move *qGoBoard::doMove(StoneColor c, int x, int y)
         lastSound = QTime::currentTime();
         lastSound = lastSound.addMSecs(250);
     }
-	
+
     return result;
 }
 

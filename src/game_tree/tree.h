@@ -42,14 +42,11 @@ public:
     void init();
     int getNumSons(Move *m=0);
 	int getBranchLength(Move *node=0);
-	Move* nextMove();
-	Move* previousMove();
-	Move* nextVariation();
+    Move* nextVariation();
 	Move* previousVariation();
     Move* getCurrent() const { return current; }
 	void setCurrent(Move *m);
-	void setToFirstMove();
-	Move* getRoot() const { return root; }
+    Move* getRoot() const { return root; }
     Move * findMoveInMainBranch(int x, int y) { return findMove(root, x, y, false); }
 	Move * findMoveInCurrentBranch(int x, int y) { return findMove(root, x, y, true); }
     Move * findLastMoveInMainBranch();
@@ -70,18 +67,11 @@ public:
  * Former Stonehandler functions called by addStoneSGF
  * Those functions are used when adding a stone, and check all Go issues : libertes, death, ...
  */
-	bool checkMoveIsValid(StoneColor c, int x, int y);
-    void addMove(StoneColor c, int x, int y);
-    void addLastValidMove();
     void undoMove(void);
 
 	bool insertStone(Move *node);
     void setLoadingSGF(bool b) { loadingSGF = b; }
 
-    // true - insert stone directly to position, false - insert stone as new variation (default)
-    bool insertStoneFlag;
-
-    void gotoMove(Move *m);
     void findMoveByPos(int x,int  y);
 
     // Do these functiones belong here? FIXME
@@ -117,6 +107,9 @@ signals:
 protected:
 	Move* findMove(Move *start, int x, int y, bool checkmarker);
 	
+public:
+    Move *lastMoveInMainBranch;
+
 private:
     bool addBrother(Move *node);
     bool addSon(Move *node);
@@ -130,17 +123,14 @@ private:
     int mainBranchSize();
     void traverseFind(Move *m, int x, int y, QStack<Move*> &result);
 
-    void checkAddKoMark(StoneColor c, int x, int y, Move * m = NULL);
 	int getLastCaptures(Move * m);
     void updateCurrentMatrix(StoneColor c, int x, int y);
 
     const int boardSize;
 
-	Move *root, *current, *lastMoveInMainBranch;
+    Move *root, *current;
 	Matrix * checkPositionTags;
 
-	int koStoneX;
-	int koStoneY;
     bool loadingSGF;
     int deadWhite, deadBlack;
     int terrWhite, terrBlack;

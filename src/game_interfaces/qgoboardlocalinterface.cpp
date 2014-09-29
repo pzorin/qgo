@@ -30,6 +30,7 @@
 #include "qgtp.h"
 #include "board.h"
 #include "matrix.h"
+#include "audio.h"
 
 #include <QMessageBox>
 
@@ -72,6 +73,7 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
 
     tree->setCurrent(tree->findLastMoveInMainBranch());
 
+    insertStoneFlag = false;
     feedPositionThroughGtp();
 }
 
@@ -83,15 +85,44 @@ qGoBoardLocalInterface::~qGoBoardLocalInterface()
 
 void qGoBoardLocalInterface::localMoveRequest(StoneColor c, int x, int y)
 {
-    bool engineUpToDate = (tree->getCurrent() == currentEngine);
-    if (doMove(c,x,y))
+    if (insertStoneFlag)
     {
-        boardwindow->updateMove(tree->getCurrent());
-        if (engineUpToDate)
-            sendMoveToInterface(c,x,y);
-        else
-            feedPositionThroughGtp();
+        tree->getCurrent()->getMatrix()->insertStone(x,y,c,true);
+        return;
     }
+    bool engineUpToDate = (tree->getCurrent() == currentEngine);
+    Move *result = tree->getCurrent()->hasSon(c,x,y);
+    if (!result)
+        result = tree->getCurrent()->makeMove(c,x,y);
+    if (!result)
+        return;
+
+    tree->setCurrent(result);
+    setModified(true);
+    boardwindow->updateMove(tree->getCurrent());
+
+    /* Non trivial here.  We don't want to play a sound as we get all
+     * the moves from an observed game.  But there's no clean way
+     * to tell when the board has stopped loading, particularly for IGS.
+     * so we only play a sound every 250 msecs...
+     * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
+    if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
+    {
+        if (playSound)
+            clickSound->play();
+        lastSound = QTime::currentTime();
+        lastSound = lastSound.addMSecs(250);
+    }
+
+    if (engineUpToDate)
+    {
+        currentEngine = result;
+        sendMoveToInterface(c,x,y);
+    }
+    else
+        feedPositionThroughGtp();
+
+    return;
 }
 
 
@@ -154,42 +185,21 @@ void qGoBoardLocalInterface::sendMoveToInterface(StoneColor c,int x, int y)
 }
 
 /*
- * This asks the computer to make a move
- */
-void qGoBoardLocalInterface::playComputer()
-{
-    if (!gtp)
-        return;
-    if (gtp->isBusy())
-        return;
-    int result;
-    if (getBlackTurn())
-        result= gtp->genmoveBlack();
-    else
-        result = gtp->genmoveWhite();
-    if (result == FAIL)
-        QMessageBox::warning(boardwindow, PACKAGE, tr("Move request from engine failed\n") + gtp->getLastMessage());
-}
-
-/*
  * This slot is triggered by the signal emitted by 'gtp' when getting a move
  */
 void qGoBoardLocalInterface::slot_playComputer(int x, int y)
 {
-    // This hack should be removed by making doMove() and related functions relative to a move
-    Move *remember = tree->getCurrent();
-    bool atCurrent = (remember == currentEngine);
-    tree->setCurrent(currentEngine);
-
-    bool b = getBlackTurn();
-    if (doMove(b ? stoneBlack : stoneWhite, x, y) == NULL)
+    bool atCurrent = (tree->getCurrent() == currentEngine);
+    Move *result = currentEngine->makeMove(currentEngine->whoIsOnTurn(), x, y);
+    if (!result)
+    {
         QMessageBox::warning(boardwindow, tr("Invalid Move"), tr("The incoming move (%1, %2) seems to be invalid").arg(x).arg(y));
-    currentEngine = tree->getCurrent();
+        return;
+    }
+    currentEngine = result;
 
-    if (!atCurrent)
-        tree->setCurrent(remember);
-
-    // We can also let computer play against itself.
+    if (atCurrent)
+        tree->setCurrent(result);
     checkComputersTurn();
 }
 
@@ -211,19 +221,19 @@ void qGoBoardLocalInterface::slot_resignComputer()
 
 void qGoBoardLocalInterface::slot_passComputer()
 {
-    // This hack should be removed by making doMove() and related functions relative to a move
-    Move *remember = tree->getCurrent();
-    bool atCurrent = (remember == currentEngine);
-    tree->setCurrent(currentEngine);
+    bool atCurrent = (tree->getCurrent() == currentEngine);
+    Move *result = currentEngine->makePass();
+    if (!result)
+        return;
+    currentEngine = result;
 
-    doPass();
-    currentEngine = tree->getCurrent();
-    if (tree->getCurrent()->parent->isPassMove())
-        enterScoreMode();
-    else
+    if (result->parent->isPassMove())
     {
-        if (!atCurrent)
-            tree->setCurrent(remember);
+        tree->setCurrent(result);
+        enterScoreMode();
+    } else {
+        if (atCurrent)
+            tree->setCurrent(result);
         checkComputersTurn();
     }
 }
@@ -318,11 +328,25 @@ void qGoBoardLocalInterface::feedPositionThroughGtp()
     checkComputersTurn();
 }
 
-void qGoBoardLocalInterface::checkComputersTurn()
+void qGoBoardLocalInterface::checkComputersTurn(bool force)
 {
-    bool blackToPlay = getBlackTurn();
-    if (blackToPlay && !(boardwindow->getMyColorIsBlack()))
-        playComputer();
-    else if (!blackToPlay && !(boardwindow->getMyColorIsWhite()))
-        playComputer();
+    if (!gtp)
+        return;
+    if (gtp->isBusy())
+        return;
+
+    StoneColor toPlay = currentEngine->whoIsOnTurn();
+    int result = OK;
+    if ((toPlay == stoneBlack) && (force || !(boardwindow->getMyColorIsBlack())))
+        result= gtp->genmoveBlack();
+    else if ((toPlay == stoneWhite) && (force || !(boardwindow->getMyColorIsWhite())))
+        result = gtp->genmoveWhite();
+
+    if (result == FAIL)
+        QMessageBox::warning(boardwindow, PACKAGE, tr("Move request from engine failed\n") + gtp->getLastMessage());
+}
+
+void qGoBoardLocalInterface::slotToggleInsertStones(bool val)
+{
+    insertStoneFlag = val;
 }

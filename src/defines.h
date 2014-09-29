@@ -35,6 +35,7 @@
 #define DEFAULT_BOARD_SIZE 19
 #define BOARD_X 500
 #define BOARD_Y 500
+#define PASS_XY -1
 
 #define WHITE_STONES_NB 8
 
@@ -56,7 +57,7 @@
 enum StoneColor { stoneNone = 0x0, stoneWhite = 0x1, stoneBlack = 0x2, stoneErase = 0x3 };
 enum MarkType { markNone = 0x00, markTerrBlack = 0x04, markTerrWhite = 0x08, markTerrDame = 0x0c,
                 markSquare = 0x10, markCircle = 0x20, markTriangle = 0x30, markCross = 0x40,
-                markText = 0x50, markNumber = 0x60, markKoMarker = 0x70, markAll = 0x7c };
+                markText = 0x50, markNumber = 0x60, markKoMarker = 0x80, markAll = 0xfc };
 
 enum GameMode { modeLocal, modeObserve, modeMatch, modeTeach, modeEdit, modeReview, modeUndefined };
 enum GamePhase { phaseInit, phaseOngoing, phaseEdit, phaseNavTo, phaseScore, phaseEnded};

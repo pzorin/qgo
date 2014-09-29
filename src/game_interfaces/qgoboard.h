@@ -222,11 +222,10 @@ protected:
 	virtual void localMarkDeadRequest(int x, int y);
     virtual void sendMoveToInterface(StoneColor ,int, int) {}
     virtual void sendPassToInterface(StoneColor ) { doPass(); }
-    virtual Move *doMove(StoneColor c, int x, int y);
+    virtual Move *doMove(StoneColor c, int x, int y) {}
 	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
 protected:
 	bool dontCheckValidity;
-private:
 	QTime lastSound;
 };
 
@@ -258,7 +257,8 @@ protected:
 	QString game_Id;
 	bool dontsend;
 	QString controlling_player;
-	Move * reviewCurrent;
+    Move * reviewCurrent;
+    virtual Move *doMove(StoneColor c, int x, int y);
 };
 
 class qGoBoardObserveInterface : public qGoBoardNetworkInterface

@@ -64,12 +64,160 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 
 	//Creates the game tree
     tree = new Tree(boardSize, gameData->komi);
-
-    setupUI();
 	
 	//Loads the sgf file if any
 	if (! gameData->fileName.isEmpty())
         tree->importSGFFile(gameData->fileName);
+
+    QSettings settings;
+    ui->actionWhatsThis = QWhatsThis::createAction ();
+
+    moveNumLabel = new QLabel(ui->statusbar);
+    komiLabel = new QLabel(ui->statusbar);
+    buyoyomiLabel = new QLabel(ui->statusbar);
+    handicapLabel = new QLabel(ui->statusbar);
+    freeratedLabel = new QLabel(ui->statusbar);
+    ui->statusbar->addPermanentWidget(moveNumLabel);
+    ui->statusbar->addPermanentWidget(handicapLabel);
+    ui->statusbar->addPermanentWidget(komiLabel);
+    ui->statusbar->addPermanentWidget(buyoyomiLabel);
+    ui->statusbar->addPermanentWidget(freeratedLabel);
+
+    // Initialises the buttons and else
+    editButtons = new QButtonGroup(this);
+    editButtons->addButton(ui->stoneButton, 0);
+    editButtons->addButton(ui->squareButton, 1);
+    editButtons->addButton(ui->circleButton, 2);
+    editButtons->addButton(ui->triangleButton, 3);
+    editButtons->addButton(ui->crossButton, 4);
+    editButtons->addButton(ui->labelLetterButton, 5);
+    editButtons->addButton(ui->labelNumberButton, 6);
+    editButtons->addButton(ui->colorButton, 7);
+    editButtons->setExclusive(false);
+
+
+    QMenu *menu = new QMenu();
+//	menu->insertAction(0,ui->fileExportASCII);
+    menu->insertAction(0,ui->actionExportSgfClipB);
+    menu->insertAction(0,ui->actionExportPic);
+    menu->insertAction(0,ui->actionExportPicClipB);
+
+    ui->actionExport->setMenu(menu);
+
+    QToolButton *exportButton = new QToolButton();
+    exportButton->setDefaultAction(ui->actionExport);
+
+    exportButton->setPopupMode( QToolButton::InstantPopup);
+    ui->toolBar->insertWidget ( ui->actionImport, exportButton );
+
+    clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
+
+    if(dispatch && dispatch->flipCoords())
+        ui->board->setCoordType(numberbottomi);
+    else
+        ui->board->setCoordType(numbertopnoi);
+    ui->board->init(boardSize);
+
+    setMode(gameData->gameMode);
+    updateCaption();
+
+    int window_x, window_y;
+    QVariant board_window_size_x = settings.value("BOARD_WINDOW_SIZE_X");
+    if(board_window_size_x != QVariant())
+    {
+        window_x = board_window_size_x.toInt();
+        window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
+        resize(window_x, window_y);
+    }
+
+    // Connects the nav buttons to the slots
+    connect(ui->navForward,SIGNAL(pressed()), tree, SLOT(slotNavForward()));
+    connect(ui->navBackward,SIGNAL(pressed()), tree, SLOT(slotNavBackward()));
+    connect(ui->navNextVar, SIGNAL(pressed()), tree, SLOT(slotNavNextVar()));
+    connect(ui->navPrevVar, SIGNAL(pressed()), tree, SLOT(slotNavPrevVar()));
+    connect(ui->navFirst, SIGNAL(pressed()), tree, SLOT(slotNavFirst()));
+    connect(ui->navLast, SIGNAL(pressed()), tree, SLOT(slotNavLast()));
+    connect(ui->navMainBranch, SIGNAL(pressed()), tree, SLOT(slotNavMainBranch()));
+    connect(ui->navStartVar, SIGNAL(pressed()), tree, SLOT(slotNavStartVar()));
+    connect(ui->navNextBranch, SIGNAL(pressed()), tree, SLOT(slotNavNextBranch()));
+    connect(ui->navIntersection, SIGNAL(pressed()), this, SLOT(slotNavIntersection()));
+    connect(ui->navPrevComment, SIGNAL(pressed()), tree, SLOT(slotNavPrevComment()));
+    connect(ui->navNextComment, SIGNAL(pressed()), tree, SLOT(slotNavNextComment()));
+    connect(ui->slider, SIGNAL(sliderMoved ( int)), tree , SLOT(slotNthMove(int)));
+
+    wheelTime = QTime::currentTime();
+    connect(ui->board, SIGNAL(signalWheelEvent(QWheelEvent*)), this, SLOT(slotWheelEvent(QWheelEvent*)));
+
+
+    //Connects the 'edit' buttons to the slots
+    connect(editButtons, SIGNAL(buttonPressed ( int )), this, SLOT(slotEditButtonPressed( int )));
+    connect(ui->deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
+    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotShowCoords(bool)));
+    connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
+    connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
+    connect(ui->actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
+    connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
+    connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
+    connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
+    connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
+    connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
+
+    connect(tree, SIGNAL(currentMoveChanged(Move*)), this, SLOT(updateMove(Move*)));
+    connect(tree, SIGNAL(scoreChanged(int,int,int,int,int,int)), this, SLOT(slotGetScore(int,int,int,int,int,int)));
+
+    connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
+    connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
+
+    ui->insertMoveButton->setChecked(false);
+    ui->insertMoveButton->setEnabled(gameData->gameMode == modeEdit);
+    if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
+    {
+        addtime_menu = new QMenu();
+        QAction * act = addtime_menu->addAction(tr("Add 1 min"));
+        act->setData(1);
+        act = addtime_menu->addAction(tr("Add 5 min"));
+        act->setData(5);
+        act = addtime_menu->addAction(tr("Add 10 min"));
+        act->setData(10);
+        act = addtime_menu->addAction(tr("Add 60 min"));
+        act->setData(60);
+        act = addtime_menu->addAction(tr("Cancel"));
+        act->setData(-1);
+
+        /* Right now, IGS is the only server with addtime, but if nigiri is done in another order
+         * this will have to be moved elsewhere: */
+        if(!gameData->nigiriToBeSettled)
+        {
+            if(myColorIsBlack)
+            {
+                ui->pb_timeWhite->setMenu(addtime_menu);
+            }
+            else if(myColorIsWhite)
+            {
+                ui->pb_timeBlack->setMenu(addtime_menu);
+            }
+            else
+                qDebug("Warning: Nigiri settled in match mode but player has no color");
+            connect(addtime_menu, SIGNAL(triggered(QAction*)), SLOT(slot_addtime_menu(QAction*)));
+        }
+    }
+
+    //connects the comments and edit line to the slots
+    connect(ui->commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
+    connect(ui->commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotSendComment()));
+
+    connect(ui->computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
+    connect(ui->computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
+    connect(ui->computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
+    ui->computerControlsWidget->setVisible(gameData->gameMode == modeLocal);
+
+    if ((gameData->gameMode == modeLocal) || (gameData->gameMode == modeEdit))
+    {
+        connect(ui->blackName,SIGNAL(textChanged(QString)),SLOT(setBlackName(QString)));
+        connect(ui->whiteName,SIGNAL(textChanged(QString)),SLOT(setWhiteName(QString)));
+        ui->blackName->setReadOnly(false);
+        ui->whiteName->setReadOnly(false);
+    }
 
 	//creates the board interface (or proxy) that will handle the moves an command requests
 	switch (gameData->gameMode)
@@ -107,7 +255,44 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 		default:
 			break;
 	}
-	setupBoardUI();
+    if (gameData->gameMode == modeLocal)
+        connect(ui->insertMoveButton, SIGNAL(toggled(bool)), static_cast<qGoBoardLocalInterface*>(qgoboard), SLOT(slotToggleInsertStones(bool)));
+    //make sure to set the sound button to the proper state before anything
+    ui->actionSound->setChecked(qgoboard->getPlaySound());
+
+    //Connects the board to the interface and boardhandler
+    connect(ui->board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )), qgoboard, SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
+
+    //Connects the game buttons to the slots
+    connect(ui->passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+    connect(ui->passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
+    connect(ui->scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+
+
+    connect(ui->doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
+    connect(ui->reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));
+    connect(ui->undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
+
+    // Why is this conditional? FIXME
+    if (gameData->gameMode == modeMatch || gameData->gameMode == modeLocal || gameData->gameMode == modeEdit)
+        connect(ui->resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
+
+    if(gameData->gameMode == modeMatch)
+    {
+        connect(ui->adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
+        connect(ui->countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
+        connect(ui->drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
+    } else {
+        ui->adjournButton->hide();
+        ui->countButton->hide();
+        ui->drawButton->hide();
+    }
+    if(dispatch && !dispatch->supportsRequestAdjourn())
+        ui->adjournButton->hide();
+    if(dispatch && !dispatch->supportsRequestCount())
+        ui->countButton->hide();
+    if(dispatch && !dispatch->supportsRequestDraw())
+        ui->drawButton->hide();
 
     setGamePhase(phaseOngoing);
     show();
@@ -189,205 +374,6 @@ void BoardWindow::closeEvent(QCloseEvent *e)
 	}
 	else
 		e->ignore();
-}
-
-void BoardWindow::setupUI(void)
-{
-    QSettings settings;
-    ui->actionWhatsThis = QWhatsThis::createAction ();
-
-    moveNumLabel = new QLabel(ui->statusbar);
-    komiLabel = new QLabel(ui->statusbar);
-    buyoyomiLabel = new QLabel(ui->statusbar);
-    handicapLabel = new QLabel(ui->statusbar);
-    freeratedLabel = new QLabel(ui->statusbar);
-    ui->statusbar->addPermanentWidget(moveNumLabel);
-    ui->statusbar->addPermanentWidget(handicapLabel);
-    ui->statusbar->addPermanentWidget(komiLabel);
-    ui->statusbar->addPermanentWidget(buyoyomiLabel);
-    ui->statusbar->addPermanentWidget(freeratedLabel);
-
-	// Initialises the buttons and else
-	editButtons = new QButtonGroup(this);
-    editButtons->addButton(ui->stoneButton, 0);
-    editButtons->addButton(ui->squareButton, 1);
-    editButtons->addButton(ui->circleButton, 2);
-    editButtons->addButton(ui->triangleButton, 3);
-    editButtons->addButton(ui->crossButton, 4);
-    editButtons->addButton(ui->labelLetterButton, 5);
-    editButtons->addButton(ui->labelNumberButton, 6);
-    editButtons->addButton(ui->colorButton, 7);
-	editButtons->setExclusive(false);
-
-
-	QMenu *menu = new QMenu();
-//	menu->insertAction(0,ui->fileExportASCII);
-    menu->insertAction(0,ui->actionExportSgfClipB);
-    menu->insertAction(0,ui->actionExportPic);
-    menu->insertAction(0,ui->actionExportPicClipB);
-
-    ui->actionExport->setMenu(menu);
-
-	QToolButton *exportButton = new QToolButton();
-    exportButton->setDefaultAction(ui->actionExport);
-	
-	exportButton->setPopupMode( QToolButton::InstantPopup);
-    ui->toolBar->insertWidget ( ui->actionImport, exportButton );
-
-	clockDisplay = new ClockDisplay(this, gameData->timeSystem, gameData->maintime, gameData->stones_periods, gameData->periodtime);
-	
-	if(dispatch && dispatch->flipCoords())
-        ui->board->setCoordType(numberbottomi);
-	else
-        ui->board->setCoordType(numbertopnoi);
-    ui->board->init(boardSize);
-	
-    setMode(gameData->gameMode);
-    updateCaption();
-
-	int window_x, window_y;
-	QVariant board_window_size_x = settings.value("BOARD_WINDOW_SIZE_X");
-	if(board_window_size_x != QVariant())
-	{	
-		window_x = board_window_size_x.toInt();
-		window_y = settings.value("BOARD_WINDOW_SIZE_Y").toInt();
-		resize(window_x, window_y);
-	}
-	
-	// Connects the nav buttons to the slots
-    connect(ui->navForward,SIGNAL(pressed()), tree, SLOT(slotNavForward()));
-    connect(ui->navBackward,SIGNAL(pressed()), tree, SLOT(slotNavBackward()));
-    connect(ui->navNextVar, SIGNAL(pressed()), tree, SLOT(slotNavNextVar()));
-    connect(ui->navPrevVar, SIGNAL(pressed()), tree, SLOT(slotNavPrevVar()));
-    connect(ui->navFirst, SIGNAL(pressed()), tree, SLOT(slotNavFirst()));
-    connect(ui->navLast, SIGNAL(pressed()), tree, SLOT(slotNavLast()));
-    connect(ui->navMainBranch, SIGNAL(pressed()), tree, SLOT(slotNavMainBranch()));
-    connect(ui->navStartVar, SIGNAL(pressed()), tree, SLOT(slotNavStartVar()));
-    connect(ui->navNextBranch, SIGNAL(pressed()), tree, SLOT(slotNavNextBranch()));
-    connect(ui->navIntersection, SIGNAL(pressed()), this, SLOT(slotNavIntersection()));
-    connect(ui->navPrevComment, SIGNAL(pressed()), tree, SLOT(slotNavPrevComment()));
-    connect(ui->navNextComment, SIGNAL(pressed()), tree, SLOT(slotNavNextComment()));
-    connect(ui->slider, SIGNAL(sliderMoved ( int)), tree , SLOT(slotNthMove(int)));
-
-    wheelTime = QTime::currentTime();
-    connect(ui->board, SIGNAL(signalWheelEvent(QWheelEvent*)), this, SLOT(slotWheelEvent(QWheelEvent*)));
-
-
-	//Connects the 'edit' buttons to the slots
-	connect(editButtons, SIGNAL(buttonPressed ( int )), 
-		this, SLOT(slotEditButtonPressed( int )));
-    connect(ui->insertMoveButton, SIGNAL(toggled(bool)), SLOT(slotToggleInsertStones(bool)));
-    connect(ui->deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
-
-
-    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotShowCoords(bool)));
-    connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
-    connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
-    connect(ui->actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
-    connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
-    connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
-    connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
-    connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
-    connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
-
-    connect(tree, SIGNAL(currentMoveChanged(Move*)), this, SLOT(updateMove(Move*)));
-    connect(tree, SIGNAL(scoreChanged(int,int,int,int,int,int)), this, SLOT(slotGetScore(int,int,int,int,int,int)));
-
-    connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
-    connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
-}
-
-void BoardWindow::setupBoardUI(void)
-{
-	//make sure to set the sound button to the proper state before anything
-    ui->actionSound->setChecked(qgoboard->getPlaySound());
-	
-	//Connects the board to the interface and boardhandler
-    connect(ui->board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )) ,
-		qgoboard , SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
-
-	//Connects the game buttons to the slots
-    connect(ui->passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-    connect(ui->passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-    connect(ui->scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
-	
-	
-    connect(ui->doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
-    connect(ui->reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));
-    connect(ui->undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
-
-    // Why is this conditional? FIXME
-    if (gameData->gameMode == modeMatch || gameData->gameMode == modeLocal || gameData->gameMode == modeEdit)
-        connect(ui->resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
-
-
-	if(gameData->gameMode == modeMatch)
-	{
-        connect(ui->adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
-        connect(ui->countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
-        connect(ui->drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
-    } else {
-        ui->adjournButton->hide();
-        ui->countButton->hide();
-        ui->drawButton->hide();
-	}
-	if(dispatch && !dispatch->supportsRequestAdjourn())
-        ui->adjournButton->hide();
-	if(dispatch && !dispatch->supportsRequestCount())
-        ui->countButton->hide();
-	if(dispatch && !dispatch->supportsRequestDraw())
-        ui->drawButton->hide();
-
-    ui->insertMoveButton->setChecked(false);
-    ui->insertMoveButton->setEnabled(gameData->gameMode == modeEdit);
-    if(gameData->gameMode == modeMatch /* or teaching? */ && dispatch && dispatch->supportsAddTime())
-	{
-		addtime_menu = new QMenu();
-		QAction * act = addtime_menu->addAction(tr("Add 1 min"));
-		act->setData(1);
-		act = addtime_menu->addAction(tr("Add 5 min"));
-		act->setData(5);
-		act = addtime_menu->addAction(tr("Add 10 min"));
-		act->setData(10);
-		act = addtime_menu->addAction(tr("Add 60 min"));
-		act->setData(60);
-		act = addtime_menu->addAction(tr("Cancel"));
-		act->setData(-1);
-	
-		/* Right now, IGS is the only server with addtime, but if nigiri is done in another order
-		 * this will have to be moved elsewhere: */
-		if(!gameData->nigiriToBeSettled)
-		{
-			if(myColorIsBlack)
-			{
-                ui->pb_timeWhite->setMenu(addtime_menu);
-			}
-			else if(myColorIsWhite)
-			{
-                ui->pb_timeBlack->setMenu(addtime_menu);
-			}
-			else
-				qDebug("Warning: Nigiri settled in match mode but player has no color");
-			connect(addtime_menu, SIGNAL(triggered(QAction*)), SLOT(slot_addtime_menu(QAction*)));	
-		}
-	}
-
-	//connects the comments and edit line to the slots
-    connect(ui->commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
-    connect(ui->commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotSendComment()));
-
-    connect(ui->computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
-    connect(ui->computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
-    connect(ui->computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
-    ui->computerControlsWidget->setVisible(gameData->gameMode == modeLocal);
-
-    if ((gameData->gameMode == modeLocal) || (gameData->gameMode == modeEdit))
-    {
-        connect(ui->blackName,SIGNAL(textChanged(QString)),SLOT(setBlackName(QString)));
-        connect(ui->whiteName,SIGNAL(textChanged(QString)),SLOT(setWhiteName(QString)));
-        ui->blackName->setReadOnly(false);
-        ui->whiteName->setReadOnly(false);
-    }
 }
 
 void BoardWindow::resizeEvent(QResizeEvent * e)
@@ -958,7 +944,7 @@ void BoardWindow::requestComputerMove()
     qGoBoardLocalInterface* qgoboard_temp = dynamic_cast<qGoBoardLocalInterface*>(qgoboard);
     if (qgoboard_temp != NULL)
     {
-        qgoboard_temp->playComputer();
+        qgoboard_temp->checkComputersTurn(true);
     }
 }
 
@@ -1013,14 +999,6 @@ void BoardWindow::switchToLocalMode()
 void BoardWindow::slotUpdateComment()
 {
     tree->getCurrent()->setComment(ui->commentEdit->toPlainText());
-}
-
-/*
- * say to tree to not create variation, insert stones directly
- */
-void BoardWindow::slotToggleInsertStones(bool val)
-{
-    tree->insertStoneFlag = val;
 }
 
 void BoardWindow::updateButtons(StoneColor lastMoveColor)
@@ -1471,7 +1449,7 @@ void BoardWindow::setMoveData(int n, bool black, int brothers, int sons, bool ha
     }
 
     //pass move
-    else if (lastX == 20 && lastY == 20)
+    else if (lastX == PASS_XY && lastY == PASS_XY)
     {
         s.append(" (");
         s.append(black ? QObject::tr("W")+" " : QObject::tr("B")+" ");

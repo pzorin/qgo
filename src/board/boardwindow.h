@@ -114,8 +114,7 @@ public slots:
 	void slotExportPicClipB();
 	void slotExportPic();
 	void slotDuplicate();
-	void slotToggleInsertStones(bool val);
-	void slot_addtime_menu(QAction *);
+    void slot_addtime_menu(QAction *);
     void setComputerBlack(bool val);
     void setComputerWhite(bool val);
     void requestComputerMove();
@@ -131,8 +130,6 @@ public slots:
     void slotSendComment(void);
 
 private:
-	void setupUI(void);
-	void setupBoardUI(void);
     void updateCaption();
     void setMode(GameMode gameMode);
     void setSliderMax(int n);

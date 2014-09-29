@@ -35,9 +35,9 @@ public:
 	Move(int board_size);
 	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const Matrix &mat, bool clearAllMarks=false, const QString &s=NULL);
 	Move(StoneColor c, int mx, int my, int n,  GamePhase phase, const QString &s=NULL);
+    Move(Move *_parent, StoneColor _c, int _x, int _y);
 	~Move();
-	
-	bool equals(Move *m);
+
 	int getX() const 		{ return x; }
 	int getY() const 		{ return y; }
 	void setX(int n)		 { x = n; }
@@ -46,10 +46,8 @@ public:
 	void setColor(StoneColor c) 	{ stoneColor = c; }
 	int getCapturesBlack() const 	{ return capturesBlack; }
 	int getCapturesWhite() const 	{ return capturesWhite; }
-	void setCaptures(int cb, int cw) { capturesBlack = cb; capturesWhite = cw; }
-	Matrix* getMatrix() 		{ return matrix; }
-	void setMatrix(Matrix *m) 	{ matrix = m; }
-	void setMoveNumber(int n) 	{ moveNum = n; }
+    Matrix* getMatrix() 		{ return matrix; }
+    void setMoveNumber(int n) 	{ moveNum = n; }
 	int getMoveNumber() const 	{ return moveNum; }
 	GamePhase getGamePhase() const 	{ return gamePhase; }
 	void setGamePhase(GamePhase p) 	{ gamePhase = p; }
@@ -98,6 +96,13 @@ public:
 	bool hasParent(); 
 	bool hasPrevBrother(); 
 	bool hasNextBrother();
+    bool checkMoveIsValid(StoneColor c, int x, int y);
+
+    Move *hasSon(StoneColor c, int x, int y);
+    Move *makeMove(StoneColor c, int x, int y, bool force = false);
+    Move *makePass();
+
+    StoneColor whoIsOnTurn();
 
 private:
 	StoneColor stoneColor, PLnextMove;

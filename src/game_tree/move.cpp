@@ -22,6 +22,7 @@
 
 #include "move.h"
 #include "matrix.h"
+#include "group.h"
 
 Move::Move(int board_size)
 {
@@ -54,16 +55,13 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &m
 	marker = NULL;
 	capturesBlack = capturesWhite = 0;
 	terrMarked = false;
-	checked = true;
-	//fastLoadMarkDict = NULL;
+    checked = true;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
 	timeinfo = false;
 	handicapMove = false;
-	matrix = new Matrix(mat, clearAllMarks);
-	// Make all matrix values positive
-	//matrix->absMatrix();
+    matrix = new Matrix(mat, clearAllMarks);
 }
 
 Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &s)
@@ -76,35 +74,57 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 	capturesBlack = capturesWhite = 0;
 	terrMarked = false;
 	checked = false;
-	matrix = NULL;
-	//fastLoadMarkDict = NULL;
+    matrix = NULL;
 	scored = false;
 	scoreWhite = scoreBlack = 0;
 	PLinfo = false;
 	timeinfo = false;
-	handicapMove = false;
+    handicapMove = false;
+}
+
+Move::Move(Move *_parent, StoneColor _c, int _x, int _y)
+    : stoneColor(_c), x(_x), y(_y)
+{
+    parent = _parent;
+    moveNum = parent->moveNum+1;
+    gamePhase = parent->gamePhase;
+    son = brother = marker = NULL;
+    capturesBlack = parent->capturesBlack;
+    capturesWhite = parent->capturesWhite;
+    matrix = new Matrix(*(parent->matrix), true);
+    terrMarked = false;
+    checked = false;
+    scored = false;
+    scoreWhite = scoreBlack = 0;
+    PLinfo = false;
+    timeinfo = false;
+    handicapMove = false;
+    // current node has no son?
+    if (parent->son == NULL)
+    {
+        parent->son = this;
+    }
+    // A son found. Add the new node as farest right brother of that son
+    else
+    {
+        parent->son->addBrother(this);
+    }
+
+    // Execute move
+    if (x != PASS_XY || y != PASS_XY)
+    {
+        int lastCaptures = matrix->makeMove(x, y, stoneColor);
+
+        if (stoneColor == stoneBlack)
+            capturesBlack += lastCaptures;
+        else if (stoneColor == stoneWhite)
+            capturesWhite += lastCaptures;
+    }
 }
 
 Move::~Move()
 {
-	delete matrix;
-	/*if (fastLoadMarkDict) //TODO make sure this is the proper way 
-//		qDeleteAll(*fastLoadMarkDict);
-		fastLoadMarkDict->clear();
-	delete fastLoadMarkDict;*/
-}
-
-// We do not overwrite the operator == as well, as this is used to compare the
-// pointers for faster operation.
-bool Move::equals(Move *m)
-{
-	if (m == NULL)
-		return false;
-	
-    return (x == m->getX() && y == m->getY() &&
-		stoneColor == m->getColor() &&
-		moveNum == m->getMoveNumber() &&
-        gamePhase == m->getGamePhase());
+    delete matrix;
 }
 
 /*
@@ -200,26 +220,9 @@ const QString Move::saveMove(bool isRoot)
 	return str;
 }
 
-/*void Move::insertFastLoadMark(int x, int y, MarkType markType, const QString &txt)
-{
-	if (fastLoadMarkDict == NULL)
-	{
-		fastLoadMarkDict = new QMap<int, FastLoadMark>;
-/////TODO		fastLoadMarkDict->setAutoDelete(true);
-	}
-	
-	FastLoadMark *flm = new FastLoadMark;
-	flm->x = x;
-	flm->y = y;
-	flm->t = markType;
-	flm->txt = txt;
-	
-	fastLoadMarkDict->insert(Matrix::coordsToKey(x, y), *flm);
-}*/
-
 bool Move::isPassMove()
 {
-	if ((x==20) && (y==20))
+    if ((x==PASS_XY) && (y==PASS_XY))
 		return true;
 
 	return false;
@@ -282,4 +285,75 @@ void Move::addBrother(Move * b)
 	tmp->brother = b;
 	b->parent = tmp->parent;
 	b->setTimeinfo(false);			//whats this for FIXME?
+}
+
+bool Move::checkMoveIsValid(StoneColor c, int x, int y)
+{
+    if (x == PASS_XY && y == PASS_XY)
+        return true;
+
+    if (x < 1 || x > matrix->getSize() || y < 1 || y > matrix->getSize())
+    {
+        qWarning("Invalid position: %d/%d", x, y);
+        return false;
+    }
+
+    /* special case, we're erasing a stone */
+    if(c == stoneErase)
+    {
+        return (matrix->getStoneAt(x,y) != stoneNone);
+    }
+
+    // If there is already a stone at (x,y) do nothing
+    if ((matrix->getStoneAt(x, y) == stoneBlack) ||
+        (matrix->getStoneAt(x, y) == stoneWhite))
+        return false;
+
+    // Check for ko
+    if (matrix->getMarkAt(x,y) & markKoMarker)
+        return false;
+
+    std::vector<Group *> visited;
+    std::vector<Group *>::iterator it_visited;
+    int lastCaptures = matrix->checkStoneCaptures(c,x,y,visited);
+    // FIXME should not have to delete these groups here
+    for (it_visited = visited.begin(); it_visited < visited.end(); ++it_visited)
+    {
+        delete (*it_visited);
+    }
+
+    return (lastCaptures >= 0);
+}
+
+Move *Move::hasSon(StoneColor c, int x, int y)
+{
+    Move *tmp = son;
+    while (tmp != NULL) {
+        if ((tmp->getColor() == c) && (tmp->getX() == x) && (tmp->getY() == y))
+            break;
+        tmp = tmp->brother;
+    };
+    return tmp;
+}
+
+Move *Move::makeMove(StoneColor c, int x, int y, bool force)
+{
+    if (force || checkMoveIsValid(c, x, y))
+        return new Move(this, c, x, y);
+    else
+        return NULL;
+}
+
+Move *Move::makePass()
+{
+    return makeMove(stoneColor == stoneBlack ? stoneWhite : stoneBlack, PASS_XY, PASS_XY, true);
+}
+
+StoneColor Move::whoIsOnTurn()
+{
+    if (getPLinfo())
+        // color of next stone is same as current
+        return getPLnextMove();
+
+    return (stoneColor == stoneBlack ? stoneWhite : stoneBlack);
 }

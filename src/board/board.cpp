@@ -592,7 +592,7 @@ void Board::setVarGhost(StoneColor c, int x, int y)
 	/* FIXME Variation ghosts on handicap stones for some weird reason */
 	ghosts->append(s);
     
-	if (x == 20 && y == 20)  // Pass
+    if (x == PASS_XY && y == PASS_XY)  // Pass
 	{
 		s->setPos(	offsetX + square_size * (board_size+1),
 			offsetY + square_size * board_size);
@@ -857,7 +857,7 @@ void Board::removeLastMoveMark()
 	delete lastMoveMark;
 	lastMoveMark = NULL;
 
-	if (x == 20 && y == 20)  // Passing	(FIXME don't think we use this anymore)
+    if (x == PASS_XY && y == PASS_XY)  // Passing	(FIXME don't think we use this anymore)
 		removeLastMoveMark();
 	else if(move->isHandicapMove()) {}	// no last move marks on handicaps
 	else if (c != stoneNone && x != -1 && y != -1 && x <= board_size && y <= board_size)

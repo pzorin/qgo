@@ -39,8 +39,7 @@ public:
     qGoBoardLocalInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
     ~qGoBoardLocalInterface();
 
-    void checkComputersTurn();
-    void playComputer();
+    void checkComputersTurn(bool force = false);
     void feedPositionThroughGtp();
 
 signals:
@@ -52,6 +51,7 @@ public slots:
     void slot_passComputer();
     virtual void slotDonePressed();
     virtual void slotUndoPressed();
+    void slotToggleInsertStones(bool val);
 
 private:
     virtual void sendMoveToInterface(StoneColor c,int x, int y);
@@ -63,6 +63,7 @@ private:
 
     QGtp *gtp;
     Move *currentEngine;
+    bool insertStoneFlag;
 };
 
 #endif // QGOBOARDLOCALINTERFACE_H

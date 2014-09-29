@@ -875,11 +875,8 @@ bool SGFParser::doParse(const QString &toParseStr)
 						int i, j;
 						for (i = x; i <= x1; i++)
 							for (j = y; j <= y1; j++)
-							{
-								if (i == 20 && j == 20)
-									tree->doPass(true);
-
-								else if (prop == editErase)
+                            {
+                                if (prop == editErase)
 								{
 									tree->addStoneToCurrentMove(stoneErase, i, j);
 								}
@@ -894,18 +891,10 @@ bool SGFParser::doParse(const QString &toParseStr)
 									}
 									else
                                     {
-                                        if (tree->checkMoveIsValid(black ? stoneBlack : stoneWhite, i, j))
-                                            tree->addMove(black ? stoneBlack : stoneWhite, i, j);
+                                        Move *result = tree->getCurrent()->makeMove(black ? stoneBlack : stoneWhite, i, j);
+                                        if (result)
+                                            tree->setCurrent(result);
                                     }
-									//tree->addStoneSGF(black ? stoneBlack : stoneWhite, i, j, setup ? false : new_node);
-									
-									/*else	//fastload
-									{
-										qDebug("SGF fastLoad");
-										tree->getCurrent()->setX(i);
-										tree->getCurrent()->setY(j);
-										tree->getCurrent()->setColor(black? stoneBlack : stoneWhite);
-									}*/
 								}
 								// tree->getCurrent()->getMatrix()->debug();
 								//qDebug("ADDING MOVE %s %d/%d", black?"B":"W", x, y);

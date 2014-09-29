@@ -71,7 +71,6 @@ private:
 	QTextCodec * readCodec;
 	bool isRoot;
 //	XMLParser *xmlParser;
-	int asciiOffsetX, asciiOffsetY;
 	Tree *tree;
 	bool loadedfromfile;
 };
