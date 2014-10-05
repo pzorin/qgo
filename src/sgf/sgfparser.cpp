@@ -95,6 +95,25 @@ public:
 			i++;
 		return i;
 	}
+
+    virtual uint isProperty(const char *c, unsigned int index) const
+    // Check if a property identified by the C string *c begins at index.
+    // Return poition of '[' (always >0 assuming *c is not empty) if yes, zero if no.
+    {
+        if (index+strlen(c) >= strLength)
+            return 0;
+
+        while (*c != '\0')
+        {
+            if (*(c++) != Str.at(index++))
+                return 0;
+        }
+
+        uint tmppos = next_nonspace(index);
+        if (at(tmppos) == '[')
+            return tmppos;
+        else return 0;
+    }
 	
 	virtual int find(const char *c, unsigned int index) const
 	{
@@ -640,75 +659,75 @@ bool SGFParser::doParse(const QString &toParseStr)
 				uint tmppos=0;
 				pos = toParse->next_nonspace (pos);
 				
-				if (toParse->at(pos) == 'B' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
+                if (tmppos = toParse->isProperty("B",pos))
 				{
 					prop = moveBlack;
 					pos = tmppos;
 					black = true;
 				}
-				else if (toParse->at(pos) == 'W' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
+                else if (tmppos = toParse->isProperty("W",pos))
 				{
 					prop = moveWhite;
 					pos = tmppos;
 					black = false;
 				}
-				else if (toParse->at(pos) == 'N' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
+                else if (tmppos = toParse->isProperty("N",pos))
 				{
 					prop = nodeName;
 					pos = tmppos;
 				}
-				else if (toParse->find("AB", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("AB",pos))
 				{
 					prop = editBlack;
 					pos = tmppos;
 					setup = true;
 					black = true;
 				}
-				else if (toParse->find("AW", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("AW",pos))
 				{
 					prop = editWhite;
 					pos = tmppos;
 					setup = true;
 					black = false;
 				}
-				else if (toParse->find("AE", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("AE",pos))
 				{
 					prop = editErase;
 					pos = tmppos;
 					setup = true;
 				}
-				else if (toParse->find("TR", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("TR",pos))
 				{
 					prop = editMark;
 					markType = markTriangle;
 					pos = tmppos;
 				}
-				else if (toParse->find("CR", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("CR",pos))
 				{
 					prop = editMark;
 					markType = markCircle;
 					pos = tmppos;
 				}
-				else if (toParse->find("SQ", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("SQ",pos))
 				{
 					prop = editMark;
 					markType = markSquare;
 					pos = tmppos;
 				}
-				else if (toParse->find("MA", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("MA",pos))
 				{
 					prop = editMark;
 					markType = markCross;
 					pos = tmppos;
 				}
 				// old definition
-				else if (toParse->find("M", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
+                else if (tmppos = toParse->isProperty("M",pos))
 				{
 					prop = editMark;
 					markType = markCross;
 					pos = tmppos;
 				}
-				else if (toParse->find("LB", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("LB",pos))
 				{
 					prop = editMark;
 					markType = markText;
@@ -716,62 +735,62 @@ bool SGFParser::doParse(const QString &toParseStr)
 					old_label = false;
 				}
 				// Added old L property. This is not SGF4, but many files contain this tag.
-				else if (toParse->at(pos) == 'L' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
+                else if (tmppos = toParse->isProperty("L",pos))
 				{
 					prop = editMark;
 					markType = markText;
 					pos = tmppos;
 					old_label = true;
 				}
-				else if (toParse->at(pos) == 'C' && toParse->at(tmppos = toParse->next_nonspace (pos + 1)) == '[')
+                else if (tmppos = toParse->isProperty("C",pos))
 				{
 					prop = comment;
 					pos = tmppos;
 				}
-				else if (toParse->find("TB", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("TB",pos))
 				{
 					prop = editMark;
 					markType = markTerrBlack;
 					pos = tmppos;
 					black = true;
 				}
-				else if (toParse->find("TW", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("TW",pos))
 				{
 					prop = editMark;
 					markType = markTerrWhite;
 					pos = tmppos;
 					black = false;
 				}
-				else if (toParse->find("BL", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("BL",pos))
 				{
 					prop = timeLeft;
 					pos = tmppos;
 					black = true;
 				}
-				else if (toParse->find("WL", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("WL",pos))
 				{
 					prop = timeLeft;
 					pos = tmppos;
 					black = false;
 				}
-				else if (toParse->find("OB", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("OB",pos))
 				{
 					prop = openMoves;
 					pos = tmppos;
 					black = true;
 				}
-				else if (toParse->find("OW", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("OW",pos))
 				{
 					prop = openMoves;
 					pos = tmppos;
 					black = false;
 				}
-				else if (toParse->find("PL", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                else if (tmppos = toParse->isProperty("PL",pos))
 				{
 					prop = nextMove;
 					pos = tmppos;
 				}
-        			else if (toParse->find("RG", pos) == pos && toParse->at(tmppos = toParse->next_nonspace (pos + 2)) == '[')
+                    else if (tmppos = toParse->isProperty("RG",pos))
 				{
 					prop = unknownProp;
 					pos = tmppos;
