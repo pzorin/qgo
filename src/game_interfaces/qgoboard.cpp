@@ -70,6 +70,7 @@ void qGoBoard::setHandicap(int handicap)
         tree->getCurrent()->setColor(stoneBlack);
         gameData->handicap = handicap;
     }
+    tree->setCurrent(tree->getCurrent()); // Toggles window refresh
 
     boardwindow->setGamePhase(store);
 }
