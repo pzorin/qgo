@@ -330,9 +330,7 @@ void qGoBoardLocalInterface::feedPositionThroughGtp()
 
 void qGoBoardLocalInterface::checkComputersTurn(bool force)
 {
-    if (!gtp)
-        return;
-    if (gtp->isBusy())
+    if ((!gtp) || (gtp->isBusy()) || (!currentEngine))
         return;
 
     StoneColor toPlay = currentEngine->whoIsOnTurn();
