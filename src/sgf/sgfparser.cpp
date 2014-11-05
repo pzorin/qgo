@@ -34,7 +34,7 @@
 #include "matrix.h"
 #include "gamedata.h"
 
-#include <QtWidgets> // FIXME: What's the point of a progress indicator for parsing a few kilobytes?
+#include <QMessageBox>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -56,18 +56,6 @@ struct MoveNum {int n; };
  * no reason why we shouldn't be able to handle them.
  * IGS also has its own format as probably does cyberoro */
 
-// Note: This class is a DIRTY UGLY Hack.
-// It probably does all the stuff books tell you never ever to do.
-// But it speeds up sgf reading of large files (Kogo) significantly.
-
-/* And another note.  I mentioned the use of QChar::unicode() below
- * this whole thing needs to be removed.  No QStrings and no classes
- * in the file loade.  Its just unnecessarily slow.  We can use QStrings
- * for comments and names that might be in foreign languages, but
- * otherwise this whole sgfparser class can be convered to do char *
- * byte by byte and stop allocating all this garbage everywhere.
- * It looks like someone started to do that below with MySimpleString
- * but maybe there were problems because its unused */
 class MyString
 {
 public:
@@ -167,74 +155,6 @@ public:
 	QString Str;
 };
 
-#ifdef UNUSED
-class MySimpleString : public MyString
-{
-public:
-	MySimpleString(const QString &src)
-	{
-		//Str = (char *)malloc(src.length());
-		//strcpy((char*)Str,(char *)src.toLatin1().constData());
-		Str = src.toLatin1().constData();
-		strLength = src.length();
-	}
-	
-	virtual ~MySimpleString()
-	{
-	}
-	
-	const QChar at(uint i) const { return Str[i]; }
-	
-	int find(const char *c, unsigned int index) const
-	{
-		if (index >= strLength)
-			return -1;
-		
-		// Offset. Hope that is enough. TODO Long comments check?
-		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength,
-			cl = strlen(c),
-			i,
-			found;
-		
-		do {
-			found = i = 0;
-			do {
-				if (Str[index+i] != c[i])
-					break;
-				found ++;
-				if (found == cl)
-					return index;
-			} while (i++ < cl);
-		} while (index++ < l);
-		if (index == l)
-			return -1;
-		return index;
-	}
-	
-	int find(char c, unsigned int index) const
-	{
-//		qDebug(Str);
-		if (index >= strLength)
-			return -1;
-		
-		// Offset. Hope that is enough. TODO Long comments check?
-		unsigned int l = index+STR_OFFSET<strLength ? index+STR_OFFSET : strLength;
-		
-		while (Str[index] != c && index++ < l) {};
-		if (index == l)
-			return -1;
-		return index;
-	}
-
-	void printStr() {qDebug(Str);}
-	
-	char * getStr() {return (char *)Str;}
-
-private:
-	const char* Str;    
-};
-#endif //UNUSED
-// End dirty ugly hack. :*)
 
 SGFParser::SGFParser(Tree * _tree)
 //: boardHandler(bh)
@@ -505,44 +425,19 @@ bool SGFParser::doParse(const QString &toParseStr)
 	state = stateVarBegin;
 	
 	bool cancel = false;
-	int progressCounter = 0;
-	QProgressDialog progress(QObject::tr("Reading sgf file..."), QObject::tr("Abort"),0, strLength);
-	//FIXME abort does nothing!!
+    //FIXME abort does nothing!!
 	
 	// qDebug("File length = %d", strLength);
 	
     tree->setLoadingSGF(true);
 	
-	progress.setValue(0);
 	QString sss="";
-	do {
-
-		if (!(++progressCounter%10))
-		{
-			progress.setValue(pointer);
-			if (progress.wasCanceled())
-			{
-				cancel = true;
-				break;
-			}
-			QApplication::processEvents();
-		}
-		
-		
-//		qDebug("POINTER = %d: %c", pointer, toParse->Str[pointer]);
-				
-
-//		qDebug("\n************************\nState before switch = %d at pointer %d", state, pointer);
-//		qDebug(toParse->getStr());		
-
+    do {
 		posVarBegin = toParse->find('(', pointer);
 		posVarEnd = toParse->find(')', pointer);
 		posNode = toParse->find(';', pointer);
 		
 		pos = minPos(posVarBegin, posVarEnd, posNode);
-//		qDebug("VarBegin %d, VarEnd %d, Move %d, MINPOS %d \n********************** ", posVarBegin, posVarEnd, posNode, pos);
-
-		
 
 		// Switch states
 
@@ -659,75 +554,75 @@ bool SGFParser::doParse(const QString &toParseStr)
 				uint tmppos=0;
 				pos = toParse->next_nonspace (pos);
 				
-                if (tmppos = toParse->isProperty("B",pos))
+                if ((tmppos = toParse->isProperty("B",pos)))
 				{
 					prop = moveBlack;
 					pos = tmppos;
 					black = true;
 				}
-                else if (tmppos = toParse->isProperty("W",pos))
+                else if ((tmppos = toParse->isProperty("W",pos)))
 				{
 					prop = moveWhite;
 					pos = tmppos;
 					black = false;
 				}
-                else if (tmppos = toParse->isProperty("N",pos))
+                else if ((tmppos = toParse->isProperty("N",pos)))
 				{
 					prop = nodeName;
 					pos = tmppos;
 				}
-                else if (tmppos = toParse->isProperty("AB",pos))
+                else if ((tmppos = toParse->isProperty("AB",pos)))
 				{
 					prop = editBlack;
 					pos = tmppos;
 					setup = true;
 					black = true;
 				}
-                else if (tmppos = toParse->isProperty("AW",pos))
+                else if ((tmppos = toParse->isProperty("AW",pos)))
 				{
 					prop = editWhite;
 					pos = tmppos;
 					setup = true;
 					black = false;
 				}
-                else if (tmppos = toParse->isProperty("AE",pos))
+                else if ((tmppos = toParse->isProperty("AE",pos)))
 				{
 					prop = editErase;
 					pos = tmppos;
 					setup = true;
 				}
-                else if (tmppos = toParse->isProperty("TR",pos))
+                else if ((tmppos = toParse->isProperty("TR",pos)))
 				{
 					prop = editMark;
 					markType = markTriangle;
 					pos = tmppos;
 				}
-                else if (tmppos = toParse->isProperty("CR",pos))
+                else if ((tmppos = toParse->isProperty("CR",pos)))
 				{
 					prop = editMark;
 					markType = markCircle;
 					pos = tmppos;
 				}
-                else if (tmppos = toParse->isProperty("SQ",pos))
+                else if ((tmppos = toParse->isProperty("SQ",pos)))
 				{
 					prop = editMark;
 					markType = markSquare;
 					pos = tmppos;
 				}
-                else if (tmppos = toParse->isProperty("MA",pos))
+                else if ((tmppos = toParse->isProperty("MA",pos)))
 				{
 					prop = editMark;
 					markType = markCross;
 					pos = tmppos;
 				}
 				// old definition
-                else if (tmppos = toParse->isProperty("M",pos))
+                else if ((tmppos = toParse->isProperty("M",pos)))
 				{
 					prop = editMark;
 					markType = markCross;
 					pos = tmppos;
 				}
-                else if (tmppos = toParse->isProperty("LB",pos))
+                else if ((tmppos = toParse->isProperty("LB",pos)))
 				{
 					prop = editMark;
 					markType = markText;
@@ -735,62 +630,62 @@ bool SGFParser::doParse(const QString &toParseStr)
 					old_label = false;
 				}
 				// Added old L property. This is not SGF4, but many files contain this tag.
-                else if (tmppos = toParse->isProperty("L",pos))
+                else if ((tmppos = toParse->isProperty("L",pos)))
 				{
 					prop = editMark;
 					markType = markText;
 					pos = tmppos;
 					old_label = true;
 				}
-                else if (tmppos = toParse->isProperty("C",pos))
+                else if ((tmppos = toParse->isProperty("C",pos)))
 				{
 					prop = comment;
 					pos = tmppos;
 				}
-                else if (tmppos = toParse->isProperty("TB",pos))
+                else if ((tmppos = toParse->isProperty("TB",pos)))
 				{
 					prop = editMark;
 					markType = markTerrBlack;
 					pos = tmppos;
 					black = true;
 				}
-                else if (tmppos = toParse->isProperty("TW",pos))
+                else if ((tmppos = toParse->isProperty("TW",pos)))
 				{
 					prop = editMark;
 					markType = markTerrWhite;
 					pos = tmppos;
 					black = false;
 				}
-                else if (tmppos = toParse->isProperty("BL",pos))
+                else if ((tmppos = toParse->isProperty("BL",pos)))
 				{
 					prop = timeLeft;
 					pos = tmppos;
 					black = true;
 				}
-                else if (tmppos = toParse->isProperty("WL",pos))
+                else if ((tmppos = toParse->isProperty("WL",pos)))
 				{
 					prop = timeLeft;
 					pos = tmppos;
 					black = false;
 				}
-                else if (tmppos = toParse->isProperty("OB",pos))
+                else if ((tmppos = toParse->isProperty("OB",pos)))
 				{
 					prop = openMoves;
 					pos = tmppos;
 					black = true;
 				}
-                else if (tmppos = toParse->isProperty("OW",pos))
+                else if ((tmppos = toParse->isProperty("OW",pos)))
 				{
 					prop = openMoves;
 					pos = tmppos;
 					black = false;
 				}
-                else if (tmppos = toParse->isProperty("PL",pos))
+                else if ((tmppos = toParse->isProperty("PL",pos)))
 				{
 					prop = nextMove;
 					pos = tmppos;
 				}
-                    else if (tmppos = toParse->isProperty("RG",pos))
+                    else if ((tmppos = toParse->isProperty("RG",pos)))
 				{
 					prop = unknownProp;
 					pos = tmppos;
@@ -1280,7 +1175,6 @@ bool SGFParser::doParse(const QString &toParseStr)
 	
 	} while (pointer < strLength && pos >= 0);
 
-	progress.setValue(strLength);
 	tree->setLoadingSGF(false);
 	
 	delete toParse;
@@ -1733,286 +1627,3 @@ void SGFParser::traverse(Move *t, GameData *gameData)
 	} while ((t = t->son) != NULL);
 	*stream << endl << ")";
 }
-
-/*
-bool SGFParser::parseASCII(const QString &fileName, ASCII_Import *charset, bool isFilename)
-{
-	QTextStream *txt = NULL;
-	bool result = false;
-	asciiOffsetX = asciiOffsetY = 0;
-	
-#if 0
-	qDebug("BLACK STONE CHAR %c\n"
-		"WHITE STONE CHAR %c\n"
-		"STAR POINT  CHAR %c\n"
-		"EMPTY POINT CHAR %c\n"
-		"HOR BORDER CHAR %c\n"
-		"VER BORDER CHAR %c\n",
-		charset->blackStone,
-		charset->whiteStone,
-		charset->starPoint,
-		charset->emptyPoint,
-		charset->hBorder,
-		charset->vBorder);
-#endif
-	
-	if (isFilename)  // Load from file
-	{
-		QFile file;
-		
-		if (fileName.isNull() || fileName.isEmpty())
-		{
-			QMessageBox::warning(0, PACKAGE, Board::tr("No filename given!"));
-			delete txt;
-			return false;
-		}
-		
-		file.setName(fileName);
-		if (!file.exists())
-		{
-			QMessageBox::warning(0, PACKAGE, Board::tr("Could not find file:") + " " + fileName);
-			delete txt;
-			return false;
-		}
-		
-		if (!file.open(IO_ReadOnly))
-		{
-			QMessageBox::warning(0, PACKAGE, Board::tr("Could not open file:") + " " + fileName);
-			delete txt;
-			return false;
-		}
-		
-		txt = new QTextStream(&file);
-		if (!initStream(txt))
-		{
-			QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
-			delete txt;
-			return false;
-		}
-		
-		result = parseASCIIStream(txt, charset);
-		file.close();
-	}
-	else  // a string was passed instead of a filename, copy from clipboard
-	{
-		if (fileName.isNull() || fileName.isEmpty())
-		{
-			QMessageBox::warning(0, PACKAGE, Board::tr("Importing ASCII failed. Clipboard empty?"));
-			delete txt;
-			return false;
-		}
-		
-		QString buf(fileName);
-		txt = new QTextStream(buf, IO_ReadOnly);
-		if (!initStream(txt))
-		{
-			QMessageBox::critical(0, PACKAGE, Board::tr("Invalid text encoding given. Please check preferences!"));
-			delete txt;
-			return false;
-		}
-		
-		result = parseASCIIStream(txt, charset);
-	}
-	
-	delete txt;
-	return result;
-}
-
-bool SGFParser::parseASCIIStream(QTextStream *stream, ASCII_Import *charset)
-{
-	CHECK_PTR(stream);
-	
-	QStrList asciiLines;
-	asciiLines.setAutoDelete(true);
-	
-	int i=0, first=-1, last=-1, y=1;
-	bool flag=false;
-	QString dummy = QString(QChar(charset->vBorder)).append(charset->vBorder).append(charset->vBorder);  // "---"
-	
-	while (!stream->atEnd())
-	{
-		QString tmp = stream->readLine();
-		asciiLines.append(tmp.latin1());
-		
-		if (tmp.indexOf('.') != -1)
-			flag = true;
-		
-		if (tmp.indexOf(dummy) != -1)
-		{
-			if (first == -1 && !flag)
-				first = i;
-			else
-				last = i;
-		}
-		i++;
-	}
-
-	if (!flag)
-	{
-		GameData gd;
-		QString  ascii = asciiLines.getFirst();
-
-		// do some fast checks: one line string?
-qDebug("no standard ASCII file");
-		int nr = ascii.contains("0") + ascii.contains("b") + ascii.contains("w");
-		if (nr == 81)
-		{
-qDebug("found 9x9");
-			gd.size = 9;
-			gd.komi = 3.5;
-		}
-		else if (nr == 169)
-		{
-qDebug("found 13x13");
-			gd.size = 13;
-			gd.komi = 4.5;
-		}
-		else if (nr == 361)
-		{
-qDebug("found 19x19");
-			gd.size = 19;
-			gd.komi = 5.5;
-		}
-		else
-		{
-qDebug(QString("found nr == %1").arg(nr));
-			return false;
-		}
-
-		gd.handicap = 0;
-		if (gd.size != boardHandler->board->getBoardSize())
-			boardHandler->board->initGame(&gd, true);
-
-
-		int i = 0;
-		for (int y = 1; y <= gd.size; y++)
-			for (int x = 1; x <= gd.size; x++)
-			{
-				while (ascii[i] != 'b' && ascii[i] != 'w' && ascii[i] != '0')
-					i++;
-
-				if (ascii[i] == 'b')
-				{
-					boardHandler->addStone(stoneBlack, x, y);
-				}
-				else if (ascii[i] == 'w')
-				{
-					boardHandler->addStone(stoneWhite, x, y);
-				}
-
-				i++;
-			}
-
-		asciiLines.clear();
-		return true;
-	}
-	
-	// qDebug("Y: FIRST = %d, LAST = %d", first, last);   
-	
-	if (first == -1 && last != -1)
-		asciiOffsetY = boardHandler->board->getBoardSize() - last;
-	
-	QStrListIterator it(asciiLines);
-	for (; it.current() && y < boardHandler->board->getBoardSize(); ++it)
-		if (!doASCIIParse(it.current(), y, charset))
-			return false;
-		
-	asciiLines.clear();
-	return true;
-}
-
-bool SGFParser::doASCIIParse(const QString &toParse, int &y, ASCII_Import *charset)
-{
-	int pos, x = 0, length = toParse.length();
-	
-	if (!checkBoardSize(toParse, charset))
-		return false;
-	
-	for (pos=toParse.indexOf(charset->emptyPoint, 0); pos<length; pos++)
-	{
-		// qDebug("READING %d/%d", x, y);
-		if (x >= boardHandler->board->getBoardSize() - asciiOffsetX)  // Abort if right edge of board reached
-			break;
-		
-		// Empty point or star point
-		if (toParse[pos] == charset->emptyPoint ||
-			toParse[pos] == charset->starPoint)
-			x++;
-		
-		// Right border
-		else if (x>0 && toParse[pos] == charset->hBorder)
-			break;
-		
-		// White stone
-		else if (toParse[pos] == charset->whiteStone && x && y)
-		{
-			x++;
-			// qDebug("W %d/%d", x, y);
-			boardHandler->addStone(stoneWhite, asciiOffsetX+x, asciiOffsetY+y);
-		}
-		
-		// Black stone
-		else if (toParse[pos] == charset->blackStone && x && y)
-		{
-			x++;
-			// qDebug("B %d/%d", x, y);
-			boardHandler->addStone(stoneBlack, asciiOffsetX+x, asciiOffsetY+y);
-		}
-		
-		// Text label: a-z
-		else if (toParse[pos] >= 'a' && toParse[pos] <= 'z')
-		{
-			x++;
-			// qDebug("MARK: %d/%d - %c", x, y, toParse[pos].latin1());
-			boardHandler->editMark(asciiOffsetX+x, asciiOffsetY+y, markText, toParse[pos]);
-		}
-		
-		// Number label: 1-9
-		else if (toParse[pos] >= '1' && toParse[pos] <= '9')
-		{
-			x++;
-			// qDebug("NUMBER: %d/%d - %c", x, y, toParse[pos].latin1());
-			boardHandler->editMark(asciiOffsetX+x, asciiOffsetY+y, markNumber, toParse[pos]);
-		}
-	}
-	
-	if (x)
-		y++;
-	
-	return true;
-}
-
-bool SGFParser::checkBoardSize(const QString &toParse, ASCII_Import *charset)
-{
-	// Determine x offset
-	int left = toParse.indexOf(charset->hBorder),
-		right = toParse.indexOf(charset->hBorder, left+1);
-	
-	// qDebug("Left = %d, Right = %d", left, right);
-	
-	if (right == -1)
-	{
-		int first = toParse.indexOf(charset->emptyPoint),
-			tmp = toParse.indexOf(charset->starPoint);
-		first = first > tmp && tmp != -1 ? tmp : first;
-		
-		if (left > first)
-			asciiOffsetX = boardHandler->board->getBoardSize() - (left - first)/2 - ((left-first)%2 ? 1 : 0);
-		else
-			asciiOffsetX = 0;
-		// qDebug("ASSUMING PART OF BOARD ONLY. First = %d, ASCII_OFFSET_X = %d", first, asciiOffsetX);
-	}
-	else if (left > -1 && right > -1)
-	{
-		// ug("ASSUMING FULL BOARD. BOARD SIZE = %d", boardHandler->board->getBoardSize());
-		asciiOffsetX = 0;
-		if ((right - left)/2 != boardHandler->board->getBoardSize())  // TODO: Warning and abort?
-			qWarning("Board size does not fit.");
-	}
-	else
-		asciiOffsetX = 0;
-	
-	return true;
-}
-*/
-
