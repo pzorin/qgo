@@ -309,9 +309,10 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
 /*
  * This function adds a pass move to a game. there is no need to return anything
  */
-void qGoBoard::doPass()
+void qGoBoard::doPass(StoneColor c)
 {
-    StoneColor c = (tree->lastMoveInMainBranch->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
+    if (c == stoneNone)
+        c = (tree->lastMoveInMainBranch->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
     tree->lastMoveInMainBranch = tree->getCurrent()->makeMove(c,PASS_XY,PASS_XY,true);
     tree->setCurrent(tree->lastMoveInMainBranch);
     setModified(true);

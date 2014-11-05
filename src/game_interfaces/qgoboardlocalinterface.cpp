@@ -243,7 +243,7 @@ void qGoBoardLocalInterface::slot_passComputer()
  */
 void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
 {
-    doPass();
+    doPass(c);
 
     if (gtp)
     {

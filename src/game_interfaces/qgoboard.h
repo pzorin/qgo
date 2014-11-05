@@ -223,7 +223,7 @@ protected:
     virtual void sendMoveToInterface(StoneColor ,int, int) {}
     virtual void sendPassToInterface(StoneColor ) { doPass(); }
     virtual Move *doMove(StoneColor c, int x, int y) {}
-	virtual void doPass(); //TODO check wether it's usefull to pass the color as in doMove
+    virtual void doPass(StoneColor c = stoneNone); // By default the player who is on turn will pass
 protected:
 	bool dontCheckValidity;
 	QTime lastSound;
