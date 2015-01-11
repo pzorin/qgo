@@ -1256,7 +1256,7 @@ void BoardWindow::updateCaption()
     if (simple && player == QObject::tr("White"))
     {
         ui->whiteName->setText(QObject::tr("White"));
-        ui->whiteFrame_score->setTitle(QObject::tr("White"));
+        ui->whiteFrame_score_label->setText(QObject::tr("White"));
     }
     else if(!gameData->nigiriToBeSettled)
     {
@@ -1267,14 +1267,14 @@ void BoardWindow::updateCaption()
             player = player + " " + gameData->white_rank;
 
         ui->whiteName->setText(player);
-        ui->whiteFrame_score->setTitle(QObject::tr("W") + ": " + player);
+        ui->whiteFrame_score_label->setText(QObject::tr("W") + ": " + player);
     }
 
     player = gameData->black_name;
     if (simple && player == QObject::tr("Black"))
     {
         ui->blackName->setText(QObject::tr("Black"));
-        ui->blackFrame_score->setTitle(QObject::tr("Black"));
+        ui->blackFrame_score_label->setText(QObject::tr("Black"));
     }
     else if(!gameData->nigiriToBeSettled)
     {
@@ -1285,7 +1285,7 @@ void BoardWindow::updateCaption()
             player = player + " " + gameData->black_rank;
 
         ui->blackName->setText(player);
-        ui->blackFrame_score->setTitle(QObject::tr("B") + ": " + player);
+        ui->blackFrame_score_label->setText(QObject::tr("B") + ": " + player);
     }
 
     //TODO set  clock
