@@ -3529,7 +3529,7 @@ void IGSConnection::handle_status(QString line)
 		MoveRecord * aMove = new MoveRecord();
 		aMove->x = row + 1;		
 		aMove->flags = MoveRecord::TERRITORY;
-		for(unsigned int column = 1; column <= strlen(results.toLatin1().constData()); column++) 
+        for(int column = 1; column <= results.length(); column++)
 		{
 			aMove->y = column;
 			if(results.at(column - 1) == '4')
@@ -3544,7 +3544,7 @@ void IGSConnection::handle_status(QString line)
 		/* FIXME If there's no more moves, and there's no result
 		 * on the game (like an earlier resign at the same time? etc.,
 		 * before it?  Then we need to recvResult here */
-		if(row + 1 == (int)strlen(results.toLatin1().constData()))
+        if(row + 1 == results.length())
 		{
 			/* Since its a square board */
 			aMove->flags = MoveRecord::DONE_SCORING;

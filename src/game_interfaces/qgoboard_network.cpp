@@ -135,6 +135,22 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 
 void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 {
+    // This handles territory marks provided by the server.
+    /* Separate handling is needed because we want to
+     * avoid GUI updates until the full information is available.
+     * The remaining part of the function should in principle also be rewritten in such a way that
+     * GUI updates are only made when needed. */
+    if (m->flags == MoveRecord::TERRITORY)
+    {
+        tree->getCurrent()->getMatrix()->insertMark(m->x,m->y,m->color == stoneBlack ? markTerrBlack : markTerrWhite);
+        return;
+    } else if (m->flags == MoveRecord::DONE_SCORING)
+    {
+        tree->countMarked();
+        tree->setCurrent(tree->getCurrent()); // Updates GUI
+        return;
+    }
+
 	int move_number, move_counter, handicap;
 	Move * remember, * last;
 	Move * goto_move;
@@ -177,13 +193,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	move_counter++;
 		
 	switch(m->flags)
-	{
-		case MoveRecord::TERRITORY:
-			if(m->color == stoneBlack)
-                addMark(m->x, m->y, markTerrBlack);
-			else
-                addMark(m->x, m->y, markTerrWhite);
-			break;
+    {
 		case MoveRecord::UNDO_TERRITORY:
 		{
             int boardsize = last->getMatrix()->getSize();
@@ -351,36 +361,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			else
                 markLiveArea(m->x, m->y);
 			break;
-		case MoveRecord::DONE_SCORING:
-			/* Not sure we can really use this.  terrBlack and terrWhite
-			 * are on the boardHandler and it has its own countScore
-			 * function that's decently accurate.  Stones are marked
-			 * dead fine except for one issue with handicap (edit stones)
-			 * and negative numbers marked as dead.  So basically, 
-			 * seems like we should ignore what the server tells us
-			 * the score is.  The one possible problem with this is that,
-			 * for instance, IGS, WING, etc., mishandle certain edge
-			 * territories... meaning conceiveably one could think that
-			 * one had won by a couple points when in fact one had lost.
-			 * I wanted to do something where marking a space as territory
-			 * automatically altered the count, but this would mean writing
-			 * a wrapper for addMark that checked for adding and removing
-			 * terrMarks before passing the addMark to the matrix code.
-			 * Its possible, but I'm not sure its worth it.  We'd still
-			 * probably need something like countScore so it would be
-			 * changing a lot of stuff and adding a bit of overhead just
-			 * to avoid a single issue with broken servers.  */
-			/* Can we countScore here anyway?  Just for fun? 
-			 * I don't think so, I think if we do, it voids dead stone
-			 * removals.*/
-            tree->countMarked();
-			/*if(boardwindow->getGamePhase() != phaseEnded)
-			{
-				GameResult res = boardwindow->getBoardHandler()->retrieveScore();
-				setResult(res);
-			}*/
-			break;
-		case MoveRecord::REFUSEUNDO:
+        case MoveRecord::REFUSEUNDO:
 			//handled by protocol as a recvKibitz for whatever reason
 			break;
 		case MoveRecord::FORWARD:
