@@ -149,8 +149,8 @@ void Matrix::clearTerritoryMarks()
 // Called when leaving score mode
 void Matrix::absMatrix()
 {
-	Q_ASSERT(size > 0 && size <= 36);
-	
+    Q_ASSERT(size > 0 && size <= 36);
+
     for (int i=0; i<size*size; ++i)
     {
         matrix[i] &= 0x2fff;		//remove dead and edit?
@@ -445,35 +445,6 @@ int Matrix::countLiberties(Group *group, unsigned short mask)
         }
     }
     return libCounted.size();
-}
-
-/*
- * Explores a territorry for marking all of its enclosure
- */
-void Matrix::traverseTerritory( int key, StoneColor &col)
-{
-    // Mark visited
-    matrix[key] |= MARK_TERRITORY_VISITED;
-
-    std::vector<int> neighbors = getNeighbors(key);
-    std::vector<int>::iterator it_neighbor;
-    for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
-    {
-        // Disregard visited points
-        if (matrix[*it_neighbor] & MARK_TERRITORY_VISITED)
-            continue;
-
-        // If we find a stone that is not dead, we put its color into "col"
-        // TODO: handle seki properly
-        if ((getStoneAt(*it_neighbor) != stoneNone) && !(matrix[*it_neighbor] & MX_STONEDEAD))
-        {
-            col = (StoneColor)(col | getStoneAt(*it_neighbor));
-            continue;
-        }
-
-        // The remaining possibilities are dead stones or emty territory: go there
-        traverseTerritory(*it_neighbor,col);
-    }
 }
 
 /*
@@ -924,61 +895,56 @@ void Matrix::markAreaAlive(int x, int y)
     toggleAreaAt(x, y);
 }
 
-int Matrix::countDeadWhite()
+void Matrix::floodTerritory(unsigned short mark, int key)
 {
-    int result = 0;
-    for (int i=0; i<size*size; ++i)
-        if ((matrix[i] & MX_STONEDEAD) && (getStoneAt(i) == stoneWhite))
-            ++result;
-    return result;
+    std::vector<int> neighbors = getNeighbors(key);
+    std::vector<int>::iterator it_neighbor;
+    for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
+    {
+        // If the neighbor point does not hold a live stone and has not been flooded yet
+        if (((getStoneAt(*it_neighbor) == stoneNone) || (matrix[*it_neighbor] & MX_STONEDEAD)) && (!(matrix[*it_neighbor] & mark)))
+        {
+            matrix[*it_neighbor] |= mark;
+            floodTerritory(mark, *it_neighbor);
+        }
+    }
 }
 
-int Matrix::countDeadBlack()
+void Matrix::markTerritory()
 {
-    int result = 0;
+    clearTerritoryMarks();
+
     for (int i=0; i<size*size; ++i)
-        if ((matrix[i] & MX_STONEDEAD) && (getStoneAt(i) == stoneBlack))
-            ++result;
-    return result;
+    {
+        // If there is a live stone at i
+        if ((getStoneAt(i) != stoneNone) && !(matrix[i] & MX_STONEDEAD))
+            // flood surrounding territory with its color
+            floodTerritory(getStoneAt(i) == stoneBlack ? markTerrBlack : markTerrWhite, i);
+    }
 }
 
-void Matrix::markTerritory(int & terrBlack, int & terrWhite)
+void Matrix::count(int &terrBlack, int &terrWhite, int &deadBlack, int &deadWhite)
 {
     terrWhite = 0;
     terrBlack = 0;
-    int i,j;
-
-    for (i=0; i<size*size; ++i)
-        matrix[i] &= (~MX_VISITED); // Mark all points as not visited
-
-    StoneColor col;
-    for (i=0; i<size*size; ++i)
+    deadBlack = 0;
+    deadWhite = 0;
+    // Count territory
+    for (int i=0; i<size*size; ++i)
     {
-        if ((!(matrix[i] & MX_VISITED)) && (getStoneAt(i) == stoneNone))
+        if (matrix[i] & markTerrDame)
         {
-            // Only count territory starting from empty points
-            col = stoneNone;
-            traverseTerritory( i, col);
-            unsigned short mark = 0;
-            if (col & stoneWhite)
-                mark |= markTerrWhite;
-            if (col & stoneBlack)
-                mark |= markTerrBlack;
-            int terr = 0;
-            for (j=0; j<size*size; ++j)
-            {
-                if (matrix[j] & MARK_TERRITORY_VISITED)
-                {
-                    matrix[j] &= (~MARK_TERRITORY_VISITED);
-                    matrix[j] |= mark;
-                    matrix[j] |= MX_VISITED;
-                    ++terr;
-                }
-            }
-            if (col == stoneWhite)
-                terrWhite += terr;
-            else if (col == stoneBlack)
-                terrBlack += terr;
+            if (!(matrix[i] & markTerrBlack))
+                ++terrWhite;
+            else if (!(matrix[i] & markTerrWhite))
+                ++terrBlack;
+        }
+        if (matrix[i] & MX_STONEDEAD)
+        {
+            if (getStoneAt(i) == stoneBlack)
+                ++deadBlack;
+            else if (getStoneAt(i) == stoneWhite)
+                ++deadWhite;
         }
     }
 }

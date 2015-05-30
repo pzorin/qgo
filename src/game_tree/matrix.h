@@ -80,11 +80,9 @@ public:
 	void markGroupAlive(int x, int y);
 	void toggleAreaAt( int x, int y );
 	void markAreaDead(int x, int y);
-	void markAreaAlive(int x, int y);
-    void updateDeadMarks(int &black, int &white);
-    int countDeadWhite();
-    int countDeadBlack();
-    void markTerritory(int &terrBlack, int &terrWhite);
+    void markAreaAlive(int x, int y);
+    void markTerritory();
+    void count(int & terrBlack, int & terrWhite, int & deadBlack, int & deadWhite);
 
     static const QString coordsToString(int x, int y)
     { return QString(QChar(static_cast<const char>('a' + x))).append(QChar(static_cast<const char>('a' + y))); }
@@ -103,7 +101,6 @@ private:
     void insertStone(int key, StoneColor c, bool fEdit = false);
     Group* assembleGroup(int key, StoneColor c) const;
     void toggleStoneAt(int key);
-    void traverseTerritory( int key, StoneColor &col);
     bool checkfalseEye( int key, StoneColor col);
 
     void checkNeighbour(int key, StoneColor color, Group *group, std::vector<int> * libertyList = NULL) const;
@@ -111,6 +108,7 @@ private:
     Group* assembleAreaGroups(int key, StoneColor c);
     // This function returns a list of keys of points adjacent to the point "key".
     std::vector<int> getNeighbors(int key) const;
+    void floodTerritory(unsigned short mark, int key);
 
     unsigned short * matrix;
     const int size;

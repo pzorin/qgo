@@ -1005,13 +1005,11 @@ QString Tree::exportSGFString(GameData *gameData)
 void Tree::countScore(void)
 {
     Matrix * current_matrix = current->getMatrix();
-    current_matrix->clearTerritoryMarks();
 
-    deadBlack = current_matrix->countDeadBlack();
-    deadWhite = current_matrix->countDeadWhite();
     capturesBlack = current->getCapturesBlack();
     capturesWhite = current->getCapturesWhite();
-    current_matrix->markTerritory(terrBlack,terrWhite);
+    current_matrix->markTerritory();
+    current_matrix->count(terrBlack,terrWhite,deadBlack,deadWhite);
     current->setTerritoryMarked(true);
     current->setScored(true);
 
