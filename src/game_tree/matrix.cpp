@@ -56,12 +56,6 @@ Matrix::~Matrix()
     delete[] matrix;
 }
 
-void Matrix::clear()
-{
-    for (int i=0; i<size*size; ++i)
-        matrix[i] = stoneNone;
-}
-
 void Matrix::insertStone(int key, StoneColor c, bool fEdit)
 {
     matrix[key] &= (~stoneErase);
@@ -72,9 +66,6 @@ void Matrix::insertStone(int key, StoneColor c, bool fEdit)
 
 void Matrix::insertStone(int x, int y, StoneColor c, bool fEdit)
 {
-    Q_ASSERT(x > 0 && x <= size &&
-        y > 0 && y <= size);
-
     insertStone(coordsToKey(x,y),c,fEdit);
 }
 
@@ -84,19 +75,12 @@ StoneColor Matrix::getStoneAt(int key) const
 }
 
 StoneColor Matrix::getStoneAt(int x, int y)
-{	
-	Q_ASSERT(x > 0 && x <= size &&
-		y > 0 && y <= size);
-	
+{
     return  getStoneAt(coordsToKey(x,y));
 }
 
 bool Matrix::isStoneDead(int x, int y)
-{	
-	//qDebug("xy: %d %d", x, y);
-	Q_ASSERT(x > 0 && x <= size &&
-			y > 0 && y <= size);
-	
+{
     return (matrix[coordsToKey(x,y)] & MX_STONEDEAD);
 }
 
@@ -107,15 +91,11 @@ MarkType Matrix::getMarkAt(int key) const
 
 MarkType Matrix::getMarkAt(int x, int y)
 {
-    Q_ASSERT(x > 0 && x <= size &&
-        y > 0 && y <= size);
     return  getMarkAt(coordsToKey(x,y));
 }
 
 void Matrix::insertMark(int x, int y, MarkType t)
 {
-	Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
-
     matrix[coordsToKey(x,y)] &= (~markAll);
     matrix[coordsToKey(x,y)] |= t;
 }
@@ -131,8 +111,6 @@ void Matrix::removeMark(int x, int y)
 
 void Matrix::clearAllMarks()
 {
-	Q_ASSERT(size > 0 && size <= 36);
-	
     for (int i=0; i<size*size; ++i)
     {
         matrix[i] &= (~markAll);
@@ -149,11 +127,9 @@ void Matrix::clearTerritoryMarks()
 // Called when leaving score mode
 void Matrix::absMatrix()
 {
-    Q_ASSERT(size > 0 && size <= 36);
-
     for (int i=0; i<size*size; ++i)
     {
-        matrix[i] &= 0x2fff;		//remove dead and edit?
+        matrix[i] &= ~(MX_STONEDEAD | MX_STONEEDIT);
         if (getStoneAt(i) == stoneErase)
             insertStone(i, stoneNone);
 	}
@@ -161,13 +137,11 @@ void Matrix::absMatrix()
 
 void Matrix::setMarkText(int x, int y, const QString &txt)
 {
-    Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
     markTexts.insert(coordsToKey(x,y),txt);
 }
 
 const QString Matrix::getMarkText(int x, int y)
 {
-    Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
     return markTexts.value(coordsToKey(x,y));
 }
 
@@ -176,8 +150,6 @@ const QString Matrix::getMarkText(int x, int y)
  */
 const QString Matrix::saveMarks()
 {
-	Q_ASSERT(size > 0 && size <= 36);
-	
 	QString txt, sSQ = "", sCR = "", sTR = "", sMA = "", sLB = "", sTB = "", sTW = "";
 	int i, j, colw = 0, colb = 0;
 	
@@ -253,8 +225,6 @@ const QString Matrix::saveMarks()
  */
 const QString Matrix::saveEditedMoves(Matrix *parent)
 {
-	Q_ASSERT(size > 0 && size <= 36);
-	
 	QString sAB="", sAW="", sAE="";
 	int i, j;
 	int z;
@@ -308,19 +278,6 @@ const QString Matrix::saveEditedMoves(Matrix *parent)
 
 const QString Matrix::printMe(ASCII_Import *charset)
 {
-	Q_ASSERT(size > 0 && size <= 36);
-	
-#if 0
-	qDebug("BLACK STONE CHAR %c\n"
-		"WHITE STONE CHAR %c\n"
-		"STAR POINT  CHAR %c\n"
-		"EMPTY POINT CHAR %c\n",
-		charset->blackStone,
-		charset->whiteStone,
-		charset->starPoint,
-		charset->emptyPoint);
-#endif
-	
 	int i, j;
 	QString str;
 	
@@ -753,12 +710,6 @@ void Matrix::removeGroup(Group * g)
 	delete g;
 }
 
-void Matrix::removeStoneFromGroups(int x, int y)
-{
-    int key = coordsToKey(x,y);
-    insertStone(key, stoneErase);
-}
-
 /* This is kind of ugly but I'm trying to use the existing matrix
  * code for something weird 
  * Could there be a potential miscalc if called on empty vertex?
@@ -792,30 +743,12 @@ Group* Matrix::assembleAreaGroups(int key, StoneColor c)
 	return group;
 }
 
-bool Matrix::checkfalseEye( int key, StoneColor col)
-{
-    unsigned short mask = stoneBlack | stoneWhite;
-    mask |= (col == stoneBlack ? markTerrWhite : markTerrBlack);
-    std::vector<int> neighbors = getNeighbors(key);
-    std::vector<int>::iterator it_neighbor;
-    for (it_neighbor = neighbors.begin(); it_neighbor < neighbors.end(); ++it_neighbor)
-    {
-        if (getStoneAt(*it_neighbor) == col)
-        {
-            if (countLiberties(assembleGroup(*it_neighbor,col), mask) == 1)
-                return true;
-        }
-    }
-	return false;
-}
-
 /*
  * This function marks all the stones of a group as dead (or alive if they were dead)
  */
 void Matrix::toggleGroupAt( int x, int y)
 {
-    Q_ASSERT(x > 0 && x <= size && y > 0 && y <= size);
-	StoneColor col = getStoneAt(x, y);
+    StoneColor col = getStoneAt(x, y);
 
 	if ( col != stoneWhite && col != stoneBlack )
 		return ;
@@ -980,7 +913,6 @@ QString Matrix::getFirstTextAvailable(MarkType t)
 	}
 
 	return mark;
-	
 }
 
 std::vector<int> Matrix::getNeighbors(int key) const

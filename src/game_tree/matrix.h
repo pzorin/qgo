@@ -50,11 +50,9 @@ public:
     Matrix(const Matrix &m, bool cleanup = false);
     ~Matrix();
 	int getSize() const { return size; }
-	void clear();
-	void insertStone(int x, int y, StoneColor c, bool fEdit = false);
+    void insertStone(int x, int y, StoneColor c, bool fEdit = false);
 	StoneColor getStoneAt(int x, int y);
     bool isStoneDead(int x, int y);
-    void stoneUpdated(int x, int y);
     MarkType getMarkAt(int x, int y);
 	QString getFirstTextAvailable(MarkType t);
 
@@ -71,7 +69,6 @@ public:
 
     int checkStoneCaptures(StoneColor ourColor, int x, int y, std::vector<Group *> &visited) const;
     void removeGroup(Group * g);
-    void removeStoneFromGroups(int x, int y);
 
     void toggleGroupAt( int x, int y );
 	void toggleStoneAt(int x, int y);
@@ -101,7 +98,6 @@ private:
     void insertStone(int key, StoneColor c, bool fEdit = false);
     Group* assembleGroup(int key, StoneColor c) const;
     void toggleStoneAt(int key);
-    bool checkfalseEye( int key, StoneColor col);
 
     void checkNeighbour(int key, StoneColor color, Group *group, std::vector<int> * libertyList = NULL) const;
     int countLiberties(Group *group, unsigned short mask = stoneBlack|stoneWhite);
