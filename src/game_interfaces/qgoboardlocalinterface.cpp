@@ -56,11 +56,16 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
     connect (gtp, SIGNAL(computerResigned()), SLOT(slot_resignComputer()));
     connect (gtp, SIGNAL(computerPassed()), SLOT(slot_passComputer()));
 
-    if (gtp->openGtpSession(settings.value("COMPUTER_PATH").toString(),
+
+    settings.beginReadArray("ENGINES");
+    settings.setArrayIndex(settings.value("DEFAULT_ENGINE").toInt());
+    QString path = settings.value("path").toString();
+    QString args = settings.value("args").toString();
+    settings.endArray();
+    if (gtp->openGtpSession(path,args,
                 gameData->board_size,
                 gameData->komi,
-                gameData->handicap,
-                GNUGO_LEVEL)==FAIL)
+                gameData->handicap)==FAIL)
     {
         QMessageBox msg(QMessageBox::Warning,
                         QObject::tr("Error"),

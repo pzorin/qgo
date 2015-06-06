@@ -58,7 +58,7 @@ public:
  	*                          *
  	****************************/
 	QString getLastMessage();
-	int openGtpSession(QString filename, int size, float komi, int handicap, int level);
+	int openGtpSession(QString path, QString args, int size, float komi, int handicap);
 	QProcess  * programProcess ;
     void fflush(QByteArray s);
 

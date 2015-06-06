@@ -24,6 +24,184 @@
 
 void startqGo(void);
 
+EngineTableModel::EngineTableModel(QObject *parent)
+    : QAbstractTableModel(parent)
+{
+    loadEngines();
+}
+
+EngineTableModel::~EngineTableModel()
+{
+    saveEngines();
+}
+
+int EngineTableModel::rowCount(const QModelIndex &) const
+{
+    return engines.size();
+}
+
+int EngineTableModel::columnCount(const QModelIndex &) const
+{
+    return ENGINE_NUMITEMS;
+}
+
+QModelIndex EngineTableModel::index ( int row, int column, const QModelIndex &) const
+{
+    return createIndex(row,column);
+}
+
+QVariant EngineTableModel::data(const QModelIndex &index, int role) const
+{
+    if(!index.isValid())
+        return QVariant();
+
+    switch (index.column())
+    {
+    case ENGINE_DEFAULT:
+        if (role == Qt::CheckStateRole)
+            return (index.row() == selected_engine ? Qt::Checked : Qt::Unchecked);
+        break;
+    case ENGINE_PATH:
+        if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
+            return engines[index.row()].path;
+        break;
+    case ENGINE_ARGUMENTS:
+        if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
+            return engines[index.row()].arguments;
+        break;
+    }
+    return QVariant();
+}
+
+QVariant EngineTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole)
+        switch(section)
+        {
+        case ENGINE_DEFAULT:
+            return QVariant(tr("Default"));
+        case ENGINE_PATH:
+            return QVariant(tr("Path"));
+        case ENGINE_ARGUMENTS:
+            return QVariant(tr("Arguments"));
+        }
+    return QVariant();
+}
+
+Qt::ItemFlags EngineTableModel::flags(const QModelIndex & index) const
+{
+    if (index.column() == ENGINE_DEFAULT)
+        return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable;
+    else
+        return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
+}
+
+bool EngineTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+    int row = index.row();
+    int column = index.column();
+    if ((row < 0) || (row >= engines.size()) || ((role != Qt::EditRole) && (role != Qt::CheckStateRole)))
+        return false;
+
+    switch (column)
+    {
+    case ENGINE_DEFAULT:
+        if (role == Qt::CheckStateRole)
+        {
+            selected_engine = (value.toBool() ? row : 0);
+            saveEngines();
+            emit dataChanged(QAbstractTableModel::index(0,(int)ENGINE_DEFAULT),
+                             QAbstractTableModel::index(engines.size()-1,(int)ENGINE_DEFAULT));
+            return true;
+        }
+        else
+            return false;
+    case ENGINE_PATH:
+        engines[row].path = value.toString();
+        break;
+    case ENGINE_ARGUMENTS:
+        engines[row].arguments = value.toString();
+        break;
+    default:
+        return false;
+    }
+    saveEngines();
+    emit dataChanged(index,index);
+    return true;
+}
+
+bool EngineTableModel::removeRows(int row, int count, const QModelIndex &)
+{
+    beginRemoveRows(QModelIndex(),row,row+count-1);
+    for(;count>0;count--)
+        engines.removeAt(row);
+    endRemoveRows();
+    if (selected_engine >= engines.size())
+        selected_engine = 0;
+    saveEngines();
+    return true;
+}
+
+
+void EngineTableModel::addEngine(Engine e)
+{
+    int row = engines.size();
+    beginInsertRows(QModelIndex(),row,row);
+    engines.append(e);
+    saveEngines();
+    endInsertRows();
+}
+
+void EngineTableModel::loadEngines(void)
+{
+    QSettings settings;
+    int size = settings.beginReadArray("ENGINES");
+    for (int i = 0; i < size; ++i)
+    {
+        settings.setArrayIndex(i);
+        engines.append(Engine(settings.value("path").toString(),settings.value("args").toString()));
+    }
+    settings.endArray();
+    if (engines.isEmpty())
+        engines.append(Engine(QString(DEFAULT_ENGINE_PATH)+QString(DEFAULT_ENGINE),QString(DEFAULT_ENGINE_OPTIONS)));
+    selected_engine = settings.value("DEFAULT_ENGINE").toInt();
+    if ((selected_engine < 0) || (selected_engine >= engines.size()))
+        selected_engine = 0;
+}
+
+void EngineTableModel::saveEngines(void)
+{
+    QSettings settings;
+    settings.beginWriteArray("ENGINES");
+    for (int i = 0; i < engines.size(); ++i)
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("path", engines.at(i).path);
+        settings.setValue("args", engines.at(i).arguments);
+    }
+    settings.endArray();
+    settings.setValue("DEFAULT_ENGINE", selected_engine);
+}
+
+void MainWindow::addEngine(void)
+{
+    QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"),
+                                                  QString(DEFAULT_ENGINE_PATH)+QString(DEFAULT_ENGINE)));
+    if (fileName.isEmpty())
+        return;
+    if (fileName.contains(QRegExp(QString(DEFAULT_ENGINE)+QString("$"))))
+        engineTableModel->addEngine(Engine(fileName,DEFAULT_ENGINE_OPTIONS));
+    else
+        engineTableModel->addEngine(Engine(fileName,""));
+}
+
+void MainWindow::removeEngine(void)
+{
+    QModelIndex index = ui->engineTableView->selectionModel()->currentIndex();
+    if (index.isValid())
+        engineTableModel->removeRow(index.row());
+}
+
 /*
  * a cancel button has been pressed on the preference pages  
  */
@@ -206,13 +384,7 @@ void MainWindow::loadSettings()
 	QVariant var;
 	
     ui->comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
-    QString computer_path = settings.value("COMPUTER_PATH").toString();
-    if (computer_path.isEmpty())
-    {
-        computer_path = QString(DEFAULT_COMPUTER_PATH);
-        settings.setValue("COMPUTER_PATH", computer_path);
-    }
-    ui->LineEdit_computer->setText(computer_path);
+
 	if((var = settings.value("LAST_PATH")) == QVariant())
 		currentWorkingDir = QString();
 	else
@@ -278,19 +450,6 @@ void MainWindow::loadSettings()
 }
 
 /*
- * The 'get engine' button has been pressed on the Go engine tab
- */
-void MainWindow::slot_getComputerPath()
-{
-	QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"), "",
-        tr("All Files (*)"), new QString(""), QFileDialog::DontUseNativeDialog));
-	if (fileName.isEmpty())
-		return;
-
-    ui->LineEdit_computer->setText(fileName);
-}
-
-/*
  * The 'get goban path' button has been pressed on the preferences tab
  */
 void MainWindow::slot_getGobanPath()
@@ -314,14 +473,4 @@ void MainWindow::slot_getTablePath()
 		return;
 
     ui->LineEdit_table->setText(fileName);
-}
-
-/*
- * The engine path has been modified on the Go engine tab
- */
-void MainWindow::slot_computerPathChanged(const QString & text)
-{
-	QSettings settings;
-
-	settings.setValue("COMPUTER_PATH", text);
 }

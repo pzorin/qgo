@@ -50,10 +50,6 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
     connect( ui->actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpen()) );
     connect(ui->actionNew,SIGNAL(triggered()),SLOT(slot_fileNew()));
 
-
-    connect( ui->computerPathButton, SIGNAL( clicked() ), this, SLOT( slot_getComputerPath() ) );
-    connect(ui->LineEdit_computer, SIGNAL(textChanged (const QString &)), this, SLOT(slot_computerPathChanged(const QString &)));
-	
     connect(ui->cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
     connect(ui->cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
     connect(ui->stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
@@ -69,6 +65,13 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
     logindialog = new LoginDialog(this);
 
     connect( ui->actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
+
+    engineTableModel = new EngineTableModel(this);
+    ui->engineTableView->setModel(engineTableModel);
+    ui->engineTableView->setColumnWidth ( EngineTableModel::ENGINE_DEFAULT, 60 );
+    ui->engineTableView->setColumnWidth ( EngineTableModel::ENGINE_PATH, 300 );
+    connect(ui->engineAddButton, &QPushButton::pressed, this, &MainWindow::addEngine);
+    connect(ui->engineRemoveButton, &QPushButton::pressed, this, &MainWindow::removeEngine);
 }
 
 MainWindow::~MainWindow()

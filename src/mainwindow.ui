@@ -140,16 +140,7 @@
             <property name="title">
              <string>Computer engine</string>
             </property>
-            <layout class="QFormLayout" name="formLayout_12">
-             <property name="fieldGrowthPolicy">
-              <enum>QFormLayout::ExpandingFieldsGrow</enum>
-             </property>
-             <property name="horizontalSpacing">
-              <number>6</number>
-             </property>
-             <property name="verticalSpacing">
-              <number>6</number>
-             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
              <property name="leftMargin">
               <number>9</number>
              </property>
@@ -162,42 +153,52 @@
              <property name="bottomMargin">
               <number>9</number>
              </property>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_23">
-               <property name="text">
-                <string>Level</string>
+             <item>
+              <widget class="QTableView" name="engineTableView">
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
                </property>
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+               <attribute name="horizontalHeaderStretchLastSection">
+                <bool>true</bool>
+               </attribute>
+               <attribute name="verticalHeaderVisible">
+                <bool>false</bool>
+               </attribute>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="spinBox_8">
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>20</number>
-               </property>
-               <property name="value">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Path</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="LineEdit_computer"/>
-             </item>
-             <item row="3" column="1">
-              <widget class="QPushButton" name="computerPathButton">
-               <property name="text">
-                <string>Get</string>
-               </property>
-              </widget>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QPushButton" name="engineAddButton">
+                 <property name="text">
+                  <string>Add</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="engineRemoveButton">
+                 <property name="text">
+                  <string>Remove</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
@@ -218,14 +219,14 @@
              <item>
               <widget class="QRadioButton" name="radioButton_myGamesSound">
                <property name="text">
-                <string>My games</string>
+                <string>&amp;My games</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="radioButton_allGameSound">
                <property name="text">
-                <string>All games</string>
+                <string>All &amp;games</string>
                </property>
               </widget>
              </item>
@@ -482,21 +483,21 @@ Delay between the moves in autoplay mode in seconds.</string>
                 <item row="0" column="1">
                  <widget class="QRadioButton" name="radioButtonStones_2D">
                   <property name="text">
-                   <string>Solid 2D</string>
+                   <string>Solid &amp;2D</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
                  <widget class="QRadioButton" name="radioButtonStones_3D">
                   <property name="text">
-                   <string>Plain 3D</string>
+                   <string>Plain &amp;3D</string>
                   </property>
                  </widget>
                 </item>
                 <item row="2" column="1">
                  <widget class="QRadioButton" name="radioButtonStones_real">
                   <property name="text">
-                   <string>Realistic</string>
+                   <string>Rea&amp;listic</string>
                   </property>
                  </widget>
                 </item>

@@ -20,6 +20,7 @@ email                :
 //#include <unistd.h>
 #include <stdlib.h>
 #include <QApplication>
+#include <QDebug>
 enum CommandType {PROTOCOL, BOARDSIZE, KNOWN_COMMAND, LEVEL, KOMI, PLAY_BLACK, PLAY_WHITE, GENMOVE};
 #include "qgtp.h"
 
@@ -61,48 +62,31 @@ QString QGtp::getLastMessage()
 	return _response;
 }
 
-int QGtp::openGtpSession(QString filename, int size, float komi, int handicap, int /*level*/)
+int QGtp::openGtpSession(QString path, QString args, int size, float komi, int handicap)
 {
 	_cpt = 1000;
 	
 	programProcess = new QProcess();
     programProcess->setReadChannel(QProcess::StandardOutput);
-	QStringList arguments;
-	issueCmdNb = false;
-	
-	if(!filename.count())
-	{
-		_response = "No go engine path set";
-		return FAIL;
-	}
+    QStringList arguments = args.split(' ',QString::SkipEmptyParts);
+    issueCmdNb = false;
 
-	if (filename.toLower().contains("gnugo"))
-	{
-		arguments << "--mode" << "gtp" << "--quiet" ;
-		issueCmdNb = true;
-	}
-
-	if (filename.toLower().contains("mogo"))
-	{
-		arguments << "--19" << "--dontDisplay" << "1" ;
-
-	}
-
+    if (path.contains(QRegExp("gnugo$", Qt::CaseInsensitive)))
+        issueCmdNb = true; // FIXME: are command numbers really gnugo-specific?
 
 	connect(programProcess, SIGNAL(readyRead()),
 		this, SLOT(slot_readFromStdout()) );
 	connect(programProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
 		this, SLOT(slot_processExited(int , QProcess::ExitStatus )) );
 	
-    qDebug("starting Go engine : %s %s", filename.toLatin1().constData(), arguments.join(" ").toLatin1().constData());
+    qDebug() << "QGtp::openGtpSession(" << path << "," << args << ")";
 
-	programProcess->start(filename, arguments);
-
+    programProcess->start(path, arguments);
 	
 
 	if (!programProcess->waitForStarted())
 	{
-		  _response="Could not start "+filename;
+          _response="Could not start "+path;
 		  return FAIL ;
 	}
 	

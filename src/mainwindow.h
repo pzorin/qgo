@@ -38,6 +38,41 @@ namespace Ui {
 class MainWindow;
 }
 
+class Engine
+{
+public:
+    Engine(QString p, QString a) :
+        path(p), arguments(a) {}
+    QString path;
+    QString arguments;
+};
+
+class EngineTableModel : public QAbstractTableModel
+{
+    Q_OBJECT
+
+public:
+    enum EngineTableColumn { ENGINE_DEFAULT, ENGINE_PATH, ENGINE_ARGUMENTS, ENGINE_NUMITEMS };
+
+    EngineTableModel(QObject * parent = 0);
+    ~EngineTableModel();
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    int columnCount(const QModelIndex & parent = QModelIndex()) const;
+    QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    QVariant data(const QModelIndex & index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    Qt::ItemFlags flags(const QModelIndex & index) const;
+    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    bool removeRows(int row, int count, const QModelIndex &parent);
+
+    void addEngine(Engine e);
+    void loadEngines(void);
+    void saveEngines(void);
+public:
+    QList <Engine> engines;
+    int selected_engine;
+};
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -56,10 +91,7 @@ public slots:
     void slot_fileOpen();
     void openSGF(QString path);
 
-    void slot_getComputerPath();
-	void slot_computerPathChanged(const QString &);
-
-	//preferences tabs slots
+    //preferences tabs slots
 	void slot_cancelPressed();
 	void slot_currentChanged(int );
 	void slot_getGobanPath();
@@ -67,6 +99,9 @@ public slots:
     void slot_languageChanged(int);
 
     void openConnectDialog(void);
+
+    void addEngine(void);
+    void removeEngine(void);
 
 protected:
 	void closeEvent(QCloseEvent *e);
@@ -81,6 +116,7 @@ private:
 	QString currentWorkingDir;
 
     LoginDialog * logindialog;
+    EngineTableModel * engineTableModel;
 };
 
 #endif

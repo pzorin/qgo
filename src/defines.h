@@ -47,8 +47,9 @@
 /*
 * GNUgo default level
 */
-#define DEFAULT_COMPUTER_PATH "/usr/games/gnugo"
-#define GNUGO_LEVEL 10
+#define DEFAULT_ENGINE "gnugo"
+#define DEFAULT_ENGINE_PATH "/usr/games/"
+#define DEFAULT_ENGINE_OPTIONS "--mode gtp --quiet --level 10"
 
 
 /*
