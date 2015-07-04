@@ -46,7 +46,7 @@ Matrix::Matrix(const Matrix &m, bool cleanup)
     unsigned short mask = stoneWhite | stoneBlack;
     if (!cleanup)
         mask |= markAll;
-    mask |= (~markKoMarker);
+    mask &= (~markKoMarker);
     for (int i=0; i<size*size; ++i)
         matrix[i] = m.matrix[i] & mask;
 }
