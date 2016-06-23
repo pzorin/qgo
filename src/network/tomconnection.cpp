@@ -313,8 +313,8 @@ QByteArray TomConnection::getTygemGameRecordQByteArray(GameData * game)
 			(minute < 10 ? ":0" : ":") + QByteArray::number(minute) + "\\]\r\n";
 	/* Note that its very likely that one of the above strings contains a PM versus
 	 * AM */
-	const char tom_game_place_array[] = {0x54, 0x6f, 0x6d, 0xb6, 0xd4, 0xde, 0xc4};
-	QByteArray tom_game_place(tom_game_place_array, 7);
+    const unsigned char tom_game_place_array[] = {0x54, 0x6f, 0x6d, 0xb6, 0xd4, 0xde, 0xc4};
+    QByteArray tom_game_place((const char *)tom_game_place_array, 7);
 	string += "\\[GAMEPLACE=" + tom_game_place + "\\]\r\n";
 	string += "\\[GAMELECNAME=\\]\r\n";
 	/* FIXME, note that this is very likely going to be different on the korean

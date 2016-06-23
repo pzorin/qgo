@@ -521,8 +521,8 @@ int CyberOroConnection::reconnectToServer(void)
 	}
 	
 	// this is the initial packet
-    const char packet[8] = { 0x0a, 0xfa, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
-    if(write(packet, 8) < 0)
+    const unsigned char packet[8] = { 0x0a, 0xfa, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    if(write((const char *)packet, 8) < 0)
 		qWarning("*** failed sending init packet to reconnected host");
 	return 0;
 }
