@@ -53,7 +53,7 @@
       <property name="lineWidth">
        <number>0</number>
       </property>
-      <layout class="QGridLayout">
+      <layout class="QGridLayout" name="_7">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -1188,7 +1188,7 @@ Shows the number of sons and brothers within the current node.</string>
           </size>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tabDisplayGame">
           <property name="minimumSize">
@@ -2399,7 +2399,7 @@ Click on
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <layout class="QGridLayout" name="gridLayout">
+             <layout class="QGridLayout" name="_8">
               <item row="0" column="0">
                <widget class="QLabel" name="whiteFrame_score_label">
                 <property name="sizePolicy">
@@ -3001,7 +3001,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
        <item>
         <widget class="QStackedWidget" name="tabTools">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tabEdit">
           <property name="minimumSize">
@@ -3046,7 +3046,7 @@ Use &quot;komi x&quot; to request a komi of x (number).</string>
              <property name="checkable">
               <bool>false</bool>
              </property>
-             <layout class="QGridLayout" name="gridLayout_3">
+             <layout class="QGridLayout" name="_3">
               <property name="topMargin">
                <number>1</number>
               </property>
@@ -3182,7 +3182,7 @@ Set the color of next move. If left untouched, default color is chosen.</string>
                  </layout>
                 </item>
                 <item>
-                 <layout class="QGridLayout" name="gridLayout_2">
+                 <layout class="QGridLayout" name="_4">
                   <item row="0" column="0">
                    <widget class="QPushButton" name="squareButton">
                     <property name="sizePolicy">
@@ -3515,7 +3515,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
                <number>1</number>
               </property>
               <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_">
+               <layout class="QGridLayout" name="_5">
                 <item row="0" column="0">
                  <widget class="QPushButton" name="emptyVarButton">
                   <property name="sizePolicy">
@@ -3776,7 +3776,7 @@ Edit Number marks on the board. Left click sets a mark, right click removes it.<
              <property name="title">
               <string>Clipboard tools</string>
              </property>
-             <layout class="QGridLayout">
+             <layout class="QGridLayout" name="_6">
               <property name="leftMargin">
                <number>2</number>
               </property>
@@ -4927,7 +4927,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
      <x>0</x>
      <y>0</y>
      <width>981</width>
-     <height>38</height>
+     <height>34</height>
     </rect>
    </property>
   </widget>
@@ -5009,8 +5009,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   <action name="actionFileSave">
    <property name="icon">
     <iconset theme="document-save">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Save...</string>
@@ -5022,8 +5021,7 @@ Resign the game immediately. Clicking here is a default loss. Your opponent wins
   <action name="actionFileSaveAs">
    <property name="icon">
     <iconset theme="document-save-as">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Save As...</string>

@@ -71,7 +71,6 @@ public:
 	virtual void setModified(bool b= true)		{ isModified = b;}
 	virtual bool getModified()			{ return isModified; }
 	virtual bool getPlaySound()			{ return playSound;}
-	virtual void setPlaySound(bool b) 		{ playSound = b; }
 	
 	virtual void setResult(class GameResult & );
 	virtual void kibitzReceived(const QString& txt);
@@ -174,6 +173,8 @@ public slots:
 	virtual void slotUndoPressed();
     virtual void slotScoreToggled(bool);
 //	virtual void slot_remoteMove(bool ok, const QString &answer);
+    virtual void setPlaySound(bool b) 		{ playSound = b; }
+
 protected:
 	BoardWindow *boardwindow;
 	Tree *tree;
@@ -222,7 +223,7 @@ protected:
 	virtual void localMarkDeadRequest(int x, int y);
     virtual void sendMoveToInterface(StoneColor ,int, int) {}
     virtual void sendPassToInterface(StoneColor ) { doPass(); }
-    virtual Move *doMove(StoneColor c, int x, int y) {}
+    virtual Move *doMove(StoneColor, int, int) { return NULL; }
     virtual void doPass(StoneColor c = stoneNone); // By default the player who is on turn will pass
 protected:
 	bool dontCheckValidity;

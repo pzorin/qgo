@@ -46,7 +46,6 @@ public:
 	void clearData();
     void init(int size);
     void setCoordType(CoordType c) { coordType = c; }
-	void setShowCoords(bool b);
     void resizeBoard();
 
 	void removeGhosts();
@@ -64,7 +63,10 @@ public:
 	void exportPicture(const QString &fileName,  QString *filter, bool toClipboard);
     bool updateAll(Move *move);
     void updateVariationGhosts(Move *m);
-		
+
+public slots:
+    void setShowCoords(bool b);
+
 signals:
 	void signalClicked(bool , int, int, Qt::MouseButton );
 	void signalWheelEvent(QWheelEvent *);

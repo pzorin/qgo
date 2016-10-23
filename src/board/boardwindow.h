@@ -104,9 +104,7 @@ signals:
 
 public slots:
 	void slotEditButtonPressed( int id );
-	void slotShowCoords(bool toggle);
-	void slotGameInfo(bool toggle);
-	void slotSound(bool toggle);
+    void slotGameInfo(bool toggle);
 	bool slotFileSave();
 	bool slotFileSaveAs();
 	void slotEditDelete();

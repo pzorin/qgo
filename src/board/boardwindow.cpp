@@ -152,10 +152,9 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
     //Connects the 'edit' buttons to the slots
     connect(editButtons, SIGNAL(buttonPressed ( int )), this, SLOT(slotEditButtonPressed( int )));
     connect(ui->deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
-    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), SLOT(slotShowCoords(bool)));
+    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), ui->board, SLOT(setShowCoords(bool)));
     connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
     connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
-    connect(ui->actionSound, SIGNAL(toggled(bool)), SLOT(slotSound(bool)));
     connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
     connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
     connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
@@ -259,6 +258,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
         connect(ui->insertMoveButton, SIGNAL(toggled(bool)), static_cast<qGoBoardLocalInterface*>(qgoboard), SLOT(slotToggleInsertStones(bool)));
     //make sure to set the sound button to the proper state before anything
     ui->actionSound->setChecked(qgoboard->getPlaySound());
+    connect(ui->actionSound, SIGNAL(toggled(bool)), qgoboard, SLOT(setPlaySound(bool)));
 
     //Connects the board to the interface and boardhandler
     connect(ui->board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )), qgoboard, SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
@@ -579,51 +579,12 @@ void BoardWindow::slotDuplicate()
 	GameData * gd = new GameData(gameData);
     gd->gameMode = modeEdit;
 	gd->fileName = "";
-	BoardWindow *b = new BoardWindow(gd, true, true);
-	
-	//doublecheck FIXME
-    /* Note also that this does not duplicate any ui->board->marks
-	 * that are on the original board.  I think score marks qualify
-	 * but come up some other way as well */
-	/* Note also that this thing below is broken for duplicating edit
-	 * boards which should be the default!! */
-	/* Also duplicating edit boards removes score marks, so I'm wondering
-	 * what the network code does to keep the score marks on the duplicated
-	 * board and lose the rest */
-	int mn = tree->getCurrent()->getMoveNumber();
-	/* Removing, may not be broken at all */
-	//if(mn > 0)
-	//	mn--;
-    tree->slotNthMove(mn);
-
-	/* Doesn't seem to matter where the below is */
-	/*b->setGamePhase(this->getGamePhase());				//maybe?
-	if(this->getGamePhase() == phaseScore)
-	{
-		b->qgoboard->enterScoreMode();
-        b->ui->scoreButton->setDown(true);
-	}*/
-}
-
-/*
- * button 'coordinates' has been toggled
- */
-void BoardWindow::slotShowCoords(bool toggle)
-{
-    ui->board->setShowCoords(toggle);
+    new BoardWindow(gd, true, true);
 }
 
 void BoardWindow::slotGameInfo(bool /*toggle*/)
 {
 	new GameInfo(this);
-}
-
-/*
- * button 'sound' has been toggled
- */
-void BoardWindow::slotSound(bool toggle)
-{
-    qgoboard->setPlaySound(toggle);
 }
 
 /* 

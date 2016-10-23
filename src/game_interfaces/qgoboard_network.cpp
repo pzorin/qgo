@@ -151,7 +151,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
         return;
     }
 
-	int move_number, move_counter, handicap;
+    int move_number, move_counter;
 	Move * remember, * last;
 	Move * goto_move;
 	//static bool offset_1 = false;
@@ -183,14 +183,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	
 	//qDebug("MN: %d MC: %d", move_number, move_counter);
 	
-	handicap = boardwindow->getGameData()->handicap;
-
-	/* This is insanely ugly: setHandicap should properly update the
-	 * move counter */
-	//if(handicap)
-	//	move_counter++;
-	//if(offset_1)
-	move_counter++;
+    move_counter++;
 		
 	switch(m->flags)
     {
@@ -308,13 +301,8 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			doPass();
 			break;
 		case MoveRecord::HANDICAP:
-			handicap = boardwindow->getGameData()->handicap;
-			//if(!handicap)
-			//{
-				/* Double usage of x is a little ugly */
-				setHandicap(m->x);
-			//}
-			break;
+            setHandicap(m->x);
+            break;
 		case MoveRecord::REMOVE:
 			//qDebug("md!! toggling life of %d %d", m->x, m->y);
             markDeadStone(m->x, m->y);
