@@ -62,10 +62,10 @@ void LGSConnection::onReady(void)
 {
 	if(firstonReadyCall)
 	{
-		if(connectionState != PASSWORD_SENT)
+		if(connectionState != PasswordSent)
 			return;
 		firstonReadyCall = 0;
-        setState(CONNECTED);
+        setState(Connected);
 		setKeepAlive(600);
 		sendPlayersRequest();
 		sendGamesRequest();

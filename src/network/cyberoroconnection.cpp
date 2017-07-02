@@ -72,7 +72,7 @@ CyberOroConnection::CyberOroConnection(const ConnectionCredentials credentials)
 	//servers that are provided on a list. */
     if(openConnection(hostname, port, NOT_MAIN_CONNECTION))
 	{
-        setState(LOGIN);
+        setState(Login);
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
@@ -117,7 +117,7 @@ CyberOroConnection::~CyberOroConnection()
 void CyberOroConnection::OnConnected()
 {
 	/* Likely client version info */
-	if(connectionState == LOGIN)
+	if(connectionState == Login)
 	{
 		sendLogin();
 	}
@@ -133,7 +133,7 @@ void CyberOroConnection::sendDisconnect(void)
 	/* Yeah, FIXME, we don't want to send this
 	 * when we're reconnecting... which means we
 	 * need a special connection state ... yada yada */
-	if(connectionState == CONNECTED)
+	if(connectionState == Connected)
 		sendDisconnectMsg();
 }
 
@@ -263,7 +263,7 @@ void CyberOroConnection::handlePendingData()
 
     switch(connectionState)
     {
-    case LOGIN:
+    case Login:
         bytes = qsocket->bytesAvailable();
         if(bytes)
         {
@@ -279,7 +279,7 @@ void CyberOroConnection::handlePendingData()
             if(data.constData()[0] == 0x1f)
             {
                 qDebug("CyberOroConnection::handlePendingData() : Bad password or login");
-                setState(PASS_FAILED);
+                setState(PassFailed);
                 //closeConnection();
                 return;
             }
@@ -288,7 +288,7 @@ void CyberOroConnection::handlePendingData()
                 handleServerList((unsigned char *)data.data());
         }
         break;
-    case CONNECTED:
+    case Connected:
         while((bytes = qsocket->bytesAvailable()) > 0)
         {
             qsocket->peek((char *)header, 4);
@@ -304,8 +304,8 @@ void CyberOroConnection::handlePendingData()
             delete[] c;
         }
         break;
-    case CANCELED:
-    case RECONNECTING:
+    case Canceled:
+    case Reconnecting:
         break;
     /*case AUTH_FAILED:
         qDebug("Auth failed\n");
@@ -421,12 +421,12 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 	
 	//requestAccountInfo();		//this will close this connection	
 	closeConnection(false);
-    setState(RECONNECTING);
+    setState(Reconnecting);
 	requestAccountInfo();
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
-        setState(CANCELED);
+        setState(Canceled);
 		return;
 	}
 }
@@ -434,7 +434,7 @@ void CyberOroConnection::handleServerList(unsigned char * msg)
 void CyberOroConnection::changeServer(void)
 {
 	qDebug("changeServer called");
-	if(connectionState != CONNECTED)
+	if(connectionState != Connected)
 		return;
 	if(reconnectToServer() < 0)
 	{
@@ -483,7 +483,7 @@ int CyberOroConnection::reconnectToServer(void)
 	
 	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), serverList[server_i]->ipaddress);
 	
-	if(connectionState == CONNECTED)
+	if(connectionState == Connected)
 		closeConnection(false);
 	/* Though connection isn't really negotiated yet,
 	 * we can get here without a playerListingIDRegistry as soon
@@ -493,7 +493,7 @@ int CyberOroConnection::reconnectToServer(void)
 	if(openConnection(serverList[server_i]->ipaddress, 7002))
 	{
 		qDebug("Reconnected");
-        setState(CONNECTED);
+        setState(Connected);
         game_code_to_number.clear();
 	}
 	else
@@ -3110,7 +3110,7 @@ void CyberOroConnection::handleMessage(unsigned char * msg, unsigned int size)
 			if(reconnectToServer() < 0)
 			{
 				qDebug("User canceled");
-                setState(CANCELED);
+                setState(Canceled);
 				return;
 			}
 #ifdef RE_DEBUG

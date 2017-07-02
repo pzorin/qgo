@@ -79,7 +79,7 @@ int TomConnection::requestServerInfo(void)
 	}
 	delete[] packet;
 	
-    setState(INFO);
+    setState(Info);
 	return 0;
 }
 
@@ -168,14 +168,14 @@ void TomConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	/* We close here because this first time, its going to close
 	* anyway, and if we don't close here, we'll get an error
 	* and lose the object */
-    setState(RECONNECTING);
+    setState(Reconnecting);
 	closeConnection(false);
 	
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
 		closeConnection(false);
-        setState(CANCELED);
+        setState(Canceled);
 		//if(dispatch)
 		//	dispatch->onError();	//not great... FIXME
 		return;

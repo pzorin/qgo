@@ -77,7 +77,7 @@ int EWeiQiConnection::requestServerInfo(void)
 	}
 	delete[] packet;
 	
-    setState(INFO);
+    setState(Info);
 	return 0;
 }
 

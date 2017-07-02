@@ -40,7 +40,7 @@ IGSConnection::IGSConnection(const ConnectionCredentials credentials)
 {
     if(openConnection(hostname,port))
 	{
-        setState(LOGIN);
+        setState(Login);
 	}
 	else
 		qDebug("Can't open Connection\n");	//throw error?
@@ -545,7 +545,7 @@ void IGSConnection::handlePendingData()
 
 	switch(connectionState)
     {
-    case LOGIN:
+    case Login:
         bytes = qsocket->bytesAvailable();
         if(bytes)
         {
@@ -553,7 +553,7 @@ void IGSConnection::handlePendingData()
             handleLogin(QString(data));
         }
         break;
-    case PASSWORD:
+    case Password:
         bytes = qsocket->bytesAvailable();
         if(bytes)
         {
@@ -561,21 +561,21 @@ void IGSConnection::handlePendingData()
             handlePassword(QString(data));
         }
         break;
-    case PASSWORD_SENT:
-    case CONNECTED:
+    case PasswordSent:
+    case Connected:
         while(qsocket->canReadLine())
         {
             QByteArray data = qsocket->readLine();
             handleMessage(QString(data));
         }
         break;
-    case AUTH_FAILED:
+    case AuthFailed:
         qDebug("Auth failed\n");
         break;
-    case PASS_FAILED:
+    case PassFailed:
         qDebug("Pass failed\n");
         break;
-    case PROTOCOL_ERROR:
+    case ProtocolError:
         //wait for someone to destroy the connection
         //can't imagine why we're even here
         break;
@@ -592,11 +592,11 @@ void IGSConnection::handleLogin(QString msg)
 		qDebug("Login found\n");
         QString u = username + "\r\n";
 		sendText(u.toLatin1().constData());	
-        setState(PASSWORD);
+        setState(Password);
 	}
 	else if(msg.contains("sorry") > 0)
 	{
-        setState(AUTH_FAILED);
+        setState(AuthFailed);
 		if(console_dispatch)
 			console_dispatch->recvText("Sorry");
 	}
@@ -621,12 +621,12 @@ void IGSConnection::handlePassword(QString msg)
 			QString p = password + "\r\n";
 			sendText(p.toLatin1().constData());
 		}	
-        setState(PASSWORD_SENT);
+        setState(PasswordSent);
 	}
 	else if(msg.contains("guest"))
 	{
         qDebug("Guest account");
-        setState(PASSWORD_SENT);
+        setState(PasswordSent);
 		guestAccount = true;
 	}
 }
@@ -647,10 +647,10 @@ void IGSConnection::onReady(void)
 		 * msgs might call onReady() and apparently it can happen
 		 * after our password has been refused.  I'll add this to
 		 * WING and LGS as well*/
-		if(connectionState != PASSWORD_SENT)
+        if(connectionState != PasswordSent)
 			return;
 		firstonReadyCall = 0;
-        setState(CONNECTED);
+        setState(Connected);
 		setKeepAlive(600);
 		/* This gets called too much, we need a better
 		 * way to call it */
@@ -918,7 +918,7 @@ void IGSConnection::handleMessage(QString msg)
 	if(msg.contains("You have logged in as a guest"))	//WING, doesn't work, plus ugly
 	{
 		guestAccount = true;
-        setState(PASSWORD_SENT);
+        setState(PasswordSent);
 	}
 	if(!type)
 	{	
@@ -1158,14 +1158,14 @@ void IGSConnection::handle_error(QString line)
 	line = line.remove(0, 2).trimmed();
 	if(line.contains("Invalid password"))
 	{
-        setState(PASS_FAILED);
+        setState(PassFailed);
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 		//closeConnection();
 		return;
 	}
 	else if(line.contains("string you have typed is illegal"))
 	{
-        setState(PROTOCOL_ERROR);
+        setState(ProtocolError);
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
 		//closeConnection();
 		return;

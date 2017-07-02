@@ -483,7 +483,7 @@ void IGSConnection::OnDelayedCloseFinish()
 void NetworkConnection::setState(ConnectionState newState)
 {
     connectionState = newState;
-    if((newState == CONNECTED) && connectingDialog)
+    if((newState == Connected) && connectingDialog)
     {
         connectingDialog->deleteLater();
         connectingDialog = NULL;
@@ -502,19 +502,19 @@ void NetworkConnection::OnError(QAbstractSocket::SocketError i)
 	switch (i)
 	{
         case QTcpSocket::ConnectionRefusedError:
-            setState(CONN_REFUSED);
+            setState(ConnectionRefused);
 			break;
         case QTcpSocket::HostNotFoundError:
-            setState(HOST_NOT_FOUND);
+            setState(HostNotFound);
 			break;
         case QTcpSocket::SocketTimeoutError:
-            setState(SOCK_TIMEOUT);
+            setState(SockTimeout);
 			break;
         case QTcpSocket::RemoteHostClosedError:
-            setState(PROTOCOL_ERROR);
+            setState(ProtocolError);
 			break;
         default:
-            setState(UNKNOWN_ERROR);
+            setState(UnknownError);
 			break;
 	}
 	

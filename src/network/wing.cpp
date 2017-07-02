@@ -155,10 +155,10 @@ void WingConnection::onReady(void)
 {
 	if(firstonReadyCall)
 	{
-		if(connectionState != PASSWORD_SENT)
+		if(connectionState != PasswordSent)
 			return;
 		firstonReadyCall = 0;
-        setState(CONNECTED);
+        setState(Connected);
 		setKeepAlive(600);
 		/* FIXME Note that wing and lgs use "set" instead of
 		 * "toggle" possibly, so that's maybe an issue */

@@ -43,22 +43,22 @@ class Room;
 class QMessageBox;
 
 enum ConnectionState {
-    LOGIN,
-    PASSWORD,
-            PASSWORD_SENT,
-    AUTH_FAILED,
-        PASS_FAILED,
-        INFO,
-    SETUP,
-        CONNECTED,
-        RECONNECTING,
-        CANCELED,
-    PROTOCOL_ERROR,
-    ALREADY_LOGGED_IN,
-        CONN_REFUSED,
-    HOST_NOT_FOUND,
-    SOCK_TIMEOUT,
-    UNKNOWN_ERROR
+    Login,
+    Password,
+    PasswordSent,
+    AuthFailed,
+    PassFailed,
+    Info,
+    Setup,
+    Connected,
+    Reconnecting,
+    Canceled,
+    ProtocolError,
+    AlreadyLoggedIn,
+    ConnectionRefused,
+    HostNotFound,
+    SockTimeout,
+    UnknownError
 };
 
 #define NOT_MAIN_CONNECTION		true
@@ -94,7 +94,7 @@ class NetworkConnection : public QObject
 	public:
         NetworkConnection(ConnectionCredentials credentials);
 		~NetworkConnection();
-        void userCanceled(void) { setState(CANCELED); /* anything else? */}
+        void userCanceled(void) { setState(Canceled); /* anything else? */}
 		int checkForOpenBoards(void);
 public slots:
         virtual void sendPlayersRequest(void) = 0;

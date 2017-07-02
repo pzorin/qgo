@@ -369,32 +369,32 @@ void LoginDialog::slot_receiveConnectionState(ConnectionState newState)
 {
     switch(newState)
     {
-    case CONNECTED:
+    case Connected:
         connectionWidget->setupButtons();
         connectionWidget->setEnabled(true);
         this->setEnabled(true);
         this->accept();
         return;
-    case AUTH_FAILED:
+    case AuthFailed:
         QMessageBox::information(this, tr("Bad Login"), tr("Invalid Login"));
         break;
-    case PASS_FAILED:
+    case PassFailed:
         QMessageBox::information(this, tr("Bad Password"), tr("Invalid Password"));
         break;
-    case PROTOCOL_ERROR:
+    case ProtocolError:
         QMessageBox::information(this, tr("Protocol Error"), tr("This may also result from wrong username or password"));
         break;
-    case CANCELED:
+    case Canceled:
         break;
-    case ALREADY_LOGGED_IN:
+    case AlreadyLoggedIn:
         QMessageBox::information(this, tr("Already Logged In"), tr("Are you logged in somewhere else?"));
         break;
-    case CONN_REFUSED:
+    case ConnectionRefused:
         QMessageBox::information(this, tr("Connection Refused"), tr("Server may be down"));
         break;
-    case HOST_NOT_FOUND:
-    case SOCK_TIMEOUT:
-    case UNKNOWN_ERROR:
+    case HostNotFound:
+    case SockTimeout:
+    case UnknownError:
         QMessageBox::information(this, tr("Can't connect"), tr("Can't connect to host!"));
         break;
     default:

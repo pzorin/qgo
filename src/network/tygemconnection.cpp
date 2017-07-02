@@ -190,7 +190,7 @@ int TygemConnection::requestServerInfo(void)
 	}
 	delete[] packet;
 	
-    setState(INFO);
+    setState(Info);
 	return 0;
 }
 
@@ -213,7 +213,7 @@ void TygemConnection::sendDisconnect(void)
 	/* Yeah, FIXME, we don't want to send this
 	 * when we're reconnecting... which means we
 	 * need a special connection state ... yada yada */
-	if(connectionState == CONNECTED)
+	if(connectionState == Connected)
 		sendDisconnectMsg();
 }
 
@@ -621,7 +621,7 @@ void TygemConnection::handlePendingData()
 	
 	switch(connectionState)
 	{
-    case INFO:
+    case Info:
         bytes = qsocket->bytesAvailable();
         if(http_connect_content_length > 0)
         {
@@ -640,7 +640,7 @@ void TygemConnection::handlePendingData()
             sscanf(data.constData(), "Content-Length: %d", &http_connect_content_length);
         }
         break;
-		case LOGIN:
+		case Login:
             bytes = qsocket->bytesAvailable();
 			if(bytes)
 			{
@@ -678,7 +678,7 @@ void TygemConnection::handlePendingData()
 						}
 						//00080698ff040000 tom returns from already logged in
 						qDebug("Bad password or login");
-                        setState(PASS_FAILED);
+                        setState(PassFailed);
 						delete[] c;
 						//closeConnection();
 						return;
@@ -690,7 +690,7 @@ void TygemConnection::handlePendingData()
 						if(reconnectToServer() < 0)
 						{
 							qDebug("User canceled");
-                            setState(CANCELED);
+                            setState(Canceled);
 							delete[] c;
 							return;
 						}
@@ -744,8 +744,8 @@ void TygemConnection::handlePendingData()
 				delete[] c;
 			}
 			break;
-		case SETUP:
-		case CONNECTED:
+		case Setup:
+		case Connected:
             while((bytes = qsocket->bytesAvailable()))
 			{
                 qsocket->peek((char *)header, 4);
@@ -763,8 +763,8 @@ void TygemConnection::handlePendingData()
 				delete[] c;
 			}
 			break;
-		case CANCELED:
-		case RECONNECTING:
+		case Canceled:
+		case Reconnecting:
 			break;
 		/*case AUTH_FAILED:
 			qDebug("Auth failed\n");
@@ -827,7 +827,7 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 				if(*p != '[')
 				{
 					qDebug("Server info parse error");
-                    setState(PROTOCOL_ERROR);
+                    setState(ProtocolError);
 					closeConnection();
 					return;
 				}
@@ -871,13 +871,13 @@ void TygemConnection::handleServerInfo(unsigned char * msg, unsigned int length)
 	/* We close here because this first time, its going to close
 	* anyway, and if we don't close here, we'll get an error
 	* and lose the object */
-    setState(RECONNECTING);
+    setState(Reconnecting);
 	closeConnection(false);
 	
 	if(reconnectToServer() < 0)
 	{
 		qDebug("User canceled");
-        setState(CANCELED);
+        setState(Canceled);
 		return;
 	}
 }
@@ -973,7 +973,7 @@ void TygemConnection::handleLogin(unsigned char * msg, unsigned int length)
 	
 	sendRequestGames();
 	sendRequest();
-    setState(SETUP);
+    setState(Setup);
 	sendName();
 	/* FIXME currently we have handleFriends doing setConnected which closes the please wait
 	 * getting us out of SETUP.  This means that the players haven't come in yet.
@@ -1208,7 +1208,7 @@ void TygemConnection::sendObserversRequest(unsigned short game_number)
 
 void TygemConnection::changeServer(void)
 {
-	if(connectionState != CONNECTED)
+	if(connectionState != Connected)
 		return;
 	if(reconnectToServer() < 0)
 	{
@@ -1252,13 +1252,13 @@ int TygemConnection::reconnectToServer(void)
 	
 	qDebug("Reconnecting to %s: %s...", serverList[server_i]->name.toLatin1().constData(), serverList[server_i]->ipaddress);
 	
-	if(connectionState == CONNECTED)
+	if(connectionState == Connected)
 	{
 		sendDisconnectMsg();
 		closeConnection(false);
 		reconnecting = true;
 	}
-	else if(connectionState == LOGIN)
+	else if(connectionState == Login)
 	{
 		closeConnection(false);
 		reconnecting = false;
@@ -1268,7 +1268,7 @@ int TygemConnection::reconnectToServer(void)
 	if(openConnection(serverList[server_i]->ipaddress, 12320))
 	{
 		qDebug("Reconnected %d", reconnecting);
-        setState(LOGIN);
+        setState(Login);
 		sendLogin(false, false);
 		//sendLogin(reconnecting, reconnecting);
 		fflush(stdout);
@@ -4380,7 +4380,7 @@ void TygemConnection::handlePlayerList(unsigned char * msg, unsigned int size)
 	//printf("Players %d\n", players);
 	if(!received_players && players < 512)
     {
-        setState(CONNECTED);
+        setState(Connected);
         received_players = true;
 	}
 	//make sure these aren't one off, FIXME,
