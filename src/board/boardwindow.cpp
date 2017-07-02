@@ -412,7 +412,7 @@ void BoardWindow::swapColors(bool noswap)
     myColorIsWhite = !myColorIsBlack;
 
     updateCaption();
-    updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
+    updateCursor();
 	//also need to start any timers if necessary
 	//also network timers in addition to game timers
 }
@@ -436,7 +436,7 @@ void BoardWindow::slotEditButtonPressed( int m )
 		{
 //			editButtons->button (m)->setChecked( false);
 			gamePhase = phaseOngoing;
-            updateCursor(qgoboard->getBlackTurn() ? stoneWhite : stoneBlack);
+            updateCursor();
 			editButtons->button (7)->setDisabled( false);
 		}
 		else
@@ -640,6 +640,7 @@ bool BoardWindow::doSave(QString fileName, bool force)
 
 void BoardWindow::setGamePhase(GamePhase gp)
 {
+    gamePhase = gp;
 	/* FIXME We should set and clear ALL buttons and the like here */
 	switch(gp)
 	{
@@ -721,12 +722,11 @@ void BoardWindow::setGamePhase(GamePhase gp)
                 ui->doneButton->setEnabled(true);
             ui->tabDisplay->setCurrentIndex(1);
 
-            updateCursor();
-			break;
+            break;
 		default:
 			break;
 	}
-	gamePhase = gp;
+    updateCursor();
 }
 
 /*
@@ -995,22 +995,17 @@ void BoardWindow::updateCursor(StoneColor currentMoveColor)
     case modeObserve :
         break;
     case modeMatch :
+    case modeLocal :
         if(getGamePhase() == phaseOngoing)
         {
+            if  (currentMoveColor == stoneNone )
+                currentMoveColor = qgoboard->getBlackTurn() ? stoneWhite : stoneBlack;
             if  (currentMoveColor == stoneBlack )
                 cur =  ( getMyColorIsWhite() ? cursorGhostWhite : cursorIdle );
             else
                 cur = ( getMyColorIsBlack() ? cursorGhostBlack : cursorIdle );
-        }
-        //else	//FIXME
-        break;
-    case modeLocal :
-        if(getGamePhase() == phaseOngoing)
-        {
-            if  (currentMoveColor == stoneBlack )
-                cur = ( getMyColorIsWhite() ? cursorGhostWhite : cursorWait );
-            else
-                cur = ( getMyColorIsBlack() ? cursorGhostBlack : cursorWait );
+            if (getGameMode() == modeLocal && cur == cursorIdle)
+                cur = cursorWait;
         }
         break;
     }
