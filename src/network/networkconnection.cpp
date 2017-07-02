@@ -756,16 +756,13 @@ const PlayerListing * NetworkConnection::getOurListing(void)
  * some point if that does seem to make more sense in terms of the namespace. */
 BoardDispatch * NetworkConnection::getBoardDispatch(unsigned int game_id)
 {
-    QMap <unsigned int, BoardDispatch *>::const_iterator i = boardDispatchMap.find(game_id);
-    if(i == boardDispatchMap.end())
+    BoardDispatch * result = getIfBoardDispatch(game_id);
+    if (result == NULL)
     {
-        // Create if it does not exist
-        BoardDispatch * newBoardDispatch = this->getDefaultRoom()->getNewBoardDispatch(game_id);
-        boardDispatchMap.insert(game_id, newBoardDispatch);
-        return newBoardDispatch;
+        result = this->getDefaultRoom()->getNewBoardDispatch(game_id);
+        boardDispatchMap.insert(game_id, result);
     }
-    else
-        return i.value();
+    return result;
 }
 
 BoardDispatch * NetworkConnection::getIfBoardDispatch(unsigned int game_id)

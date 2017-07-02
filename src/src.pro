@@ -105,7 +105,8 @@ sgf/sgfparser.h \
     host.h \
     sgfpreview.h \
     game_interfaces/qgoboardlocalinterface.h \
-    newgamedialog.h
+    newgamedialog.h \
+    game_interfaces/qgoboard_net.h
 
 SOURCES += displayboard.cpp \
            listviews.cpp \

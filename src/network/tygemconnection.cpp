@@ -7884,7 +7884,7 @@ void TygemConnection::handleMatchOffer(unsigned char * msg, unsigned int size, M
 				tempmr->color_request = MatchRequest::BLACK;
 			else
 				tempmr->color_request = MatchRequest::WHITE;
-				break;
+            break;
 		case 0x01:
 			if(version == modify)
 				tempmr->color_request = MatchRequest::WHITE;

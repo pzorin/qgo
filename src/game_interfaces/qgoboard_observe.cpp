@@ -19,26 +19,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-#include "qgoboard.h"
+#include "qgoboard_net.h"
 #include "qgtp.h"
 #include "tree.h"
 #include "move.h"
 #include "network/boarddispatch.h"
 #include "network/messages.h"
 #include "boardwindow.h"
-
+#include "networkconnection.h"
 
 qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {
-	if(bw->getBoardDispatch()->startTimerOnOpen() && bw->getBoardDispatch()->clientCountsTime())
+    if(connection->startTimerOnOpen() && connection->clientCountsTime())
 		boardTimerId = startTimer(1000);
-	boardwindow->getBoardDispatch()->requestGameInfo();
+    dispatch->requestGameInfo();
 }
 
 void qGoBoardObserveInterface::onFirstMove(void)
 {
 	//we can now start the timer
-	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && boardwindow->getBoardDispatch()->clientCountsTime())
+    if(!connection->startTimerOnOpen() && connection->clientCountsTime())
 		boardTimerId = startTimer(1000);
 }

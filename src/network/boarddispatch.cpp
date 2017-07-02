@@ -231,16 +231,6 @@ void BoardDispatch::sendRequestCount(void)
 	}
 }
 
-void BoardDispatch::sendRequestDraw(void)
-{
-	if(connection)
-	{
-		stopTime();	//protocol specific or not?
-        boardwindow->setDrawEnabled(false);
-		connection->sendRequestDraw(gameData->number);
-	}
-}
-
 void BoardDispatch::sendRequestMatchMode(void)
 {
 	if(connection)
@@ -785,11 +775,6 @@ void BoardDispatch::requestGameInfo(void)
 	connection->requestGameInfo(gameData->number);
 }
 
-int BoardDispatch::getMoveNumber(void)
-{
-	return boardwindow->qgoboard->getMoveNumber();
-}
-
 GameData * BoardDispatch::getGameData(void)
 {
 	return gameData;
@@ -865,18 +850,10 @@ bool BoardDispatch::supportsRematch(void)
 }
 
 bool BoardDispatch::flipCoords(void) { return connection->flipCoords(); }
-bool BoardDispatch::supportsMultipleUndo(void) { return connection->supportsMultipleUndo(); }
 bool BoardDispatch::supportsRequestMatchMode(void) { return connection->supportsRequestMatchMode(); };
 bool BoardDispatch::supportsRequestCount(void) { return connection->supportsRequestCount(); };
 bool BoardDispatch::supportsRequestDraw(void) { return connection->supportsRequestDraw(); };
 bool BoardDispatch::supportsRequestAdjourn(void) { return connection->supportsRequestAdjourn(); };
 bool BoardDispatch::supportsAddTime(void) { return connection->supportsAddTime(); };
-bool BoardDispatch::startTimerOnOpen(void) {return connection->startTimerOnOpen(); }
-bool BoardDispatch::clientCountsTime(void) { return connection->clientCountsTime(); }
-bool BoardDispatch::clientSendsTime(void) { return connection->clientSendsTime(); }
-bool BoardDispatch::twoPassesEndsGame(void) { return connection->twoPassesEndsGame(); }
-bool BoardDispatch::netWillEnterScoreMode(void) { return connection->netWillEnterScoreMode(); }
 bool BoardDispatch::undoResetsScore(void) { return connection->undoResetsScore(); }
 bool BoardDispatch::canMarkStonesDeadinScore(void) { return connection->canMarkStonesDeadinScore(); }
-bool BoardDispatch::unmarkUnmarksAllDeadStones(void) { return connection->unmarkUnmarksAllDeadStones(); }
-bool BoardDispatch::cantMarkOppStonesDead(void) { return connection->cantMarkOppStonesDead(); }

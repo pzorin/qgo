@@ -198,8 +198,7 @@ void qGoBoard::setResult(GameResult & r)
 	 * SGF files is necessary.*/
 	boardwindow->getGameData()->fullresult = new GameResult(r);
 	//just one gamedata now, FIXME delete comment
-	BoardDispatch * boarddispatch = 0;
-	boarddispatch = boardwindow->getBoardDispatch();
+    BoardDispatch * boarddispatch = boardwindow->getBoardDispatch();
 	/*if(!boarddispatch)
 	{
 		qDebug("No board dispatch for game result");
@@ -318,46 +317,6 @@ void qGoBoard::doPass(StoneColor c)
     setModified(true);
 }
 
-/*
- * This functions adds a move to a game. returns the new Move* if move was valid, 0 if not)
- */
-Move *qGoBoardNetworkInterface::doMove(StoneColor c, int x, int y)
-{
-    bool validMove = (dontCheckValidity || tree->getCurrent()->checkMoveIsValid(c, x, y));
-    dontCheckValidity = false;
-    if (!validMove)
-        return NULL;
-
-    Move *result = tree->getCurrent()->makeMove(c,x,y,true);
-    tree->setCurrent(result);
-    tree->lastMoveInMainBranch = result;
-    setModified(true);
-
-
-    /* Not a great place for this, but maybe okay: */
-    TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());
-    if(t.time != 0 || t.stones_periods != -1)
-    {
-        result->setTimeinfo(true);
-        result->setTimeLeft(t.time);
-        result->setOpenMoves(t.stones_periods);
-    }
-
-    /* Non trivial here.  We don't want to play a sound as we get all
-     * the moves from an observed game.  But there's no clean way
-     * to tell when the board has stopped loading, particularly for IGS.
-     * so we only play a sound every 250 msecs...
-     * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
-    if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
-    {
-        if (playSound)
-            clickSound->play();
-        lastSound = QTime::currentTime();
-        lastSound = lastSound.addMSecs(250);
-    }
-
-    return result;
-}
 
 /*
  * Returns true if black is to play

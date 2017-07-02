@@ -23,6 +23,7 @@
 #include "board.h"
 #include "clockdisplay.h"
 #include "qgoboard.h"
+#include "qgoboard_net.h"
 #include "qgoboardlocalinterface.h"
 #include "move.h"
 #include "tree.h"
@@ -681,18 +682,12 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			{
 				if(gamePhase == phaseScore)	//was phaseScore
                     ui->undoButton->setText(tr("Undo"));
-				if(getBoardDispatch() && getBoardDispatch()->supportsRequestCount())
-                    ui->countButton->setEnabled(true);
-				else
-                    ui->countButton->setEnabled(false);
-				if(getBoardDispatch() && getBoardDispatch()->supportsRequestDraw())
-                    ui->drawButton->setEnabled(true);
-				else
-                    ui->drawButton->setEnabled(false);
-				if(getBoardDispatch() && getBoardDispatch()->supportsRequestAdjourn())
-                    ui->adjournButton->setEnabled(true);
-				else
-                    ui->adjournButton->setEnabled(false);
+                if(dispatch)
+                {
+                    ui->countButton->setEnabled(dispatch->supportsRequestCount());
+                    ui->drawButton->setEnabled(dispatch->supportsRequestDraw());
+                    ui->adjournButton->setEnabled(dispatch->supportsRequestAdjourn());
+                }
 			}
 			break;
 		case phaseScore:
@@ -705,14 +700,14 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			 * of the button checking state?  Probably. FIXME */
             if(ui->countButton)
                 ui->countButton->setDisabled(true);
-            if(ui->undoButton && gameData->gameMode == modeMatch && getBoardDispatch())
+            if(ui->undoButton && gameData->gameMode == modeMatch && dispatch)
 			{
-				if(getBoardDispatch()->supportsRequestMatchMode())
+                if(dispatch->supportsRequestMatchMode())
 				{
                     ui->undoButton->setText(tr("Match Mode"));
                     ui->undoButton->setEnabled(true);	//even in rated
 				}
-				else if(getBoardDispatch()->undoResetsScore())
+                else if(dispatch->undoResetsScore())
 				{
                     ui->undoButton->setEnabled(true);	//even in rated
 				}
@@ -722,7 +717,7 @@ void BoardWindow::setGamePhase(GamePhase gp)
 			//Disable the draw button? 
 			/* FIXME doublecheck, what is doneButton connected to
 			 * in observing a game ?? */
-			if(getBoardDispatch() && getBoardDispatch()->canMarkStonesDeadinScore())	//FIXME or maybe as for tygem, it accepts the score as is
+            if(dispatch && dispatch->canMarkStonesDeadinScore())	//FIXME or maybe as for tygem, it accepts the score as is
                 ui->doneButton->setEnabled(true);
             ui->tabDisplay->setCurrentIndex(1);
 

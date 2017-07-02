@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include "qgoboard.h"
+#include "qgoboard_net.h"
 #include "tree.h"
 #include "move.h"
 #include "network/boarddispatch.h"
@@ -28,14 +28,15 @@
 #include "clockdisplay.h"
 #include "boardwindow.h"
 #include <QMessageBox>
+#include "networkconnection.h"
 
 qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoardNetworkInterface(bw,  t, gd) //, QObject(bw)
 {	
 //	warningSound = settings.value("BYO_SOUND_WARNING").toBool();
 //	warningSecs = settings.value("BYO_SEC_WARNING").toInt();
 	
-	if(bw->getBoardDispatch()->startTimerOnOpen() && 
-		  (bw->getBoardDispatch()->clientCountsTime() || bw->getBoardDispatch()->clientSendsTime()))
+    if(connection->startTimerOnOpen() &&
+          (connection->clientCountsTime() || connection->clientSendsTime()))
 		boardTimerId = startTimer(1000);
 	
     tree->slotNavLast();
@@ -44,16 +45,16 @@ qGoBoardMatchInterface::qGoBoardMatchInterface(BoardWindow *bw, Tree * t, GameDa
 /* This timer stuff is awkward looking. FIXME */
 void qGoBoardMatchInterface::startGame(void)
 {
-	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 
-		   (boardwindow->getBoardDispatch()->clientCountsTime() || boardwindow->getBoardDispatch()->clientSendsTime()))
+    if(!connection->startTimerOnOpen() &&
+           (connection->clientCountsTime() || connection->clientSendsTime()))
 		boardTimerId = startTimer(1000);
 }
 
 void qGoBoardMatchInterface::onFirstMove(void)
 {
 	//we can now start the timer
-	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 
-		   (boardwindow->getBoardDispatch()->clientCountsTime() || boardwindow->getBoardDispatch()->clientSendsTime()))
+    if(!connection->startTimerOnOpen() &&
+           (connection->clientCountsTime() || connection->clientSendsTime()))
 		boardTimerId = startTimer(1000);				
 }
 
@@ -80,7 +81,7 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 {
 	if (boardwindow->getGamePhase() != phaseOngoing)
 		return;
-	BoardDispatch * boarddispatch = boardwindow->getBoardDispatch();
+    BoardDispatch * boarddispatch = dispatch;
 	if(!boarddispatch)
 	{
 		qDebug("Match timer event but no board dispatch");
@@ -91,14 +92,14 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 	 * might still somehow be necessary for clientSendsTime()*/
 	if(boarddispatch->isClockStopped())
 		return;
-	if(boarddispatch->clientCountsTime())
+    if(connection->clientCountsTime())
 		boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
 	
 	
 	if ((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
 	   ((!getBlackTurn()) && boardwindow->getMyColorIsWhite()))
 	{
-		if(!boarddispatch->clientCountsTime() && boarddispatch->clientSendsTime())
+        if(!connection->clientCountsTime() && connection->clientSendsTime())
 			boardwindow->getClockDisplay()->setTimeStep(getBlackTurn());
 		
 		/* FIXME, probably don't want to send time and time loss... even if
@@ -106,7 +107,7 @@ void qGoBoardMatchInterface::timerEvent(QTimerEvent*)
 		if(!boardwindow->getClockDisplay()->warning(getBlackTurn()))
 			boarddispatch->sendTimeLoss();
 		
-		if(boarddispatch->clientSendsTime())
+        if(connection->clientSendsTime())
 			boarddispatch->sendTime();
 	}		
 }
@@ -174,8 +175,8 @@ void qGoBoardMatchInterface::leaveScoreMode()
 		return;
 	qGoBoard::leaveScoreMode();
 	/* Make sure this doesn't conflict with game result stuff */
-	if(!boardwindow->getBoardDispatch()->startTimerOnOpen() && 
-		   (boardwindow->getBoardDispatch()->clientCountsTime() || boardwindow->getBoardDispatch()->clientSendsTime()))
+    if(!connection->startTimerOnOpen() &&
+           (connection->clientCountsTime() || connection->clientSendsTime()))
 		boardTimerId = startTimer(1000);
 
 	//boardwindow->getUi().doneButton->setEnabled(true);
@@ -196,7 +197,7 @@ void qGoBoardMatchInterface::slotReviewPressed()
 void qGoBoardMatchInterface::slotDrawPressed()
 {
 	QMessageBox mb(tr("Request Draw?"),
-			QString(tr("Ask %1 to end game in draw?\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+            QString(tr("Ask %1 to end game in draw?\n")).arg(dispatch->getOpponentName()),
 			QMessageBox::Question,
 	  		QMessageBox::Yes | QMessageBox::Default,
    			QMessageBox::No | QMessageBox::Escape,
@@ -205,13 +206,20 @@ void qGoBoardMatchInterface::slotDrawPressed()
 //	qgo->playPassSound();
 
 	if (mb.exec() == QMessageBox::Yes)
-		boardwindow->getBoardDispatch()->sendRequestDraw();
+    {
+        if(connection)
+        {
+            stopTime();	//protocol specific or not?
+            boardwindow->setDrawEnabled(false);
+            connection->sendRequestDraw(gameData->number);
+        }
+    }
 }
 
 void qGoBoardMatchInterface::slotCountPressed()
 {
 	QMessageBox mb(tr("Request Count?"),
-			QString(tr("Ask %1 to end game?\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+            QString(tr("Ask %1 to end game?\n")).arg(dispatch->getOpponentName()),
 			QMessageBox::Question,
 	  		QMessageBox::Yes | QMessageBox::Default,
    			QMessageBox::No | QMessageBox::Escape,
@@ -220,7 +228,7 @@ void qGoBoardMatchInterface::slotCountPressed()
 //	qgo->playPassSound();
 
 	if (mb.exec() == QMessageBox::Yes)
-		boardwindow->getBoardDispatch()->sendRequestCount();
+        dispatch->sendRequestCount();
 }
 
 /*
@@ -235,7 +243,7 @@ void qGoBoardMatchInterface::slotAdjournPressed()
 	 * they can always close the window.*/
 	/* But I have to figure out the IGS command first, at least...*/
 	QMessageBox mb(tr("Adjourn?"),
-		       QString(tr("Ask %1 to adjourn?\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+               QString(tr("Ask %1 to adjourn?\n")).arg(dispatch->getOpponentName()),
 		       QMessageBox::Question,
 		       QMessageBox::Yes | QMessageBox::Default,
 		       QMessageBox::No | QMessageBox::Escape,
@@ -245,19 +253,19 @@ void qGoBoardMatchInterface::slotAdjournPressed()
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendAdjournRequest();
+        dispatch->sendAdjournRequest();
 	}
 }
 
 void qGoBoardMatchInterface::recvRefuseAdjourn(void)
 {
-	QMessageBox::information(boardwindow, tr("Adjourn Declined"), tr("%1 has declined to adjourn the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
+    QMessageBox::information(boardwindow, tr("Adjourn Declined"), tr("%1 has declined to adjourn the game.").arg(dispatch->getOpponentName()));
 }
 
 void qGoBoardMatchInterface::requestAdjournDialog(void)
 {
 	QMessageBox mb(tr("Adjourn?"),
-	       QString(tr("%1 wants to adjourn\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+           QString(tr("%1 wants to adjourn\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
 	       QMessageBox::Question,
 	       QMessageBox::Yes | QMessageBox::Default,
 	       QMessageBox::No | QMessageBox::Escape,
@@ -267,7 +275,7 @@ void qGoBoardMatchInterface::requestAdjournDialog(void)
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendAdjourn();
+        dispatch->sendAdjourn();
 		/* FIXME
 		 * Once we hit adjourn, the window should close, or at the very least
 		 * should change phase and the clocks should stop.  */
@@ -277,14 +285,14 @@ void qGoBoardMatchInterface::requestAdjournDialog(void)
 	}
 	else
 	{
-		boardwindow->getBoardDispatch()->sendRefuseAdjourn();
+        dispatch->sendRefuseAdjourn();
 	}
 }
 
 void qGoBoardMatchInterface::requestCountDialog(void)
 {
 	QMessageBox mb(tr("End game?"),
-			QString(tr("%1 requests count\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+            QString(tr("%1 requests count\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
 			QMessageBox::Question,
    			QMessageBox::Yes | QMessageBox::Default,
    			QMessageBox::No | QMessageBox::Escape,
@@ -294,24 +302,24 @@ void qGoBoardMatchInterface::requestCountDialog(void)
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendAcceptCountRequest();
+        dispatch->sendAcceptCountRequest();
 		enterScoreMode();
 	}
 	else
 	{
-		boardwindow->getBoardDispatch()->sendRefuseCountRequest();
+        dispatch->sendRefuseCountRequest();
 	}
 }
 
 void qGoBoardMatchInterface::recvRefuseCount(void)
 {
-	QMessageBox::information(boardwindow, tr("Count Declined"), tr("%1 has declined to count and end the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
+    QMessageBox::information(boardwindow, tr("Count Declined"), tr("%1 has declined to count and end the game.").arg(dispatch->getOpponentName()));
 }
 
 void qGoBoardMatchInterface::requestMatchModeDialog(void)
 {
 	QMessageBox mb(tr("Return to game?"),
-			QString(tr("%1 requests return to match mode\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+            QString(tr("%1 requests return to match mode\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
 			QMessageBox::Question,
    			QMessageBox::Yes | QMessageBox::Default,
    			QMessageBox::No | QMessageBox::Escape,
@@ -321,24 +329,24 @@ void qGoBoardMatchInterface::requestMatchModeDialog(void)
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendAcceptMatchModeRequest();
+        dispatch->sendAcceptMatchModeRequest();
 		leaveScoreMode();
 	}
 	else
 	{
-		boardwindow->getBoardDispatch()->sendRefuseMatchModeRequest();
+        dispatch->sendRefuseMatchModeRequest();
 	}
 }
 
 void qGoBoardMatchInterface::recvRefuseMatchMode(void)
 {
-	QMessageBox::information(boardwindow, tr("Match mode declined"), tr("%1 has declined to return to the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
+    QMessageBox::information(boardwindow, tr("Match mode declined"), tr("%1 has declined to return to the game.").arg(dispatch->getOpponentName()));
 }
 
 void qGoBoardMatchInterface::requestDrawDialog(void)
 {
 	QMessageBox mb(tr("End game?"),
-		 	QString(tr("%1 requests draw\n\nDo you accept ? \n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+            QString(tr("%1 requests draw\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
 			QMessageBox::Question,
 	  		QMessageBox::Yes | QMessageBox::Default,
    			QMessageBox::No | QMessageBox::Escape,
@@ -348,16 +356,16 @@ void qGoBoardMatchInterface::requestDrawDialog(void)
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendAcceptDrawRequest();
+        dispatch->sendAcceptDrawRequest();
 		//FIXME
 	}
 	else
 	{
-		boardwindow->getBoardDispatch()->sendRefuseDrawRequest();
+        dispatch->sendRefuseDrawRequest();
 	}
 }
 
 void qGoBoardMatchInterface::recvRefuseDraw(void)
 {
-	QMessageBox::information(boardwindow, tr("Draw Declined"), tr("%1 has declined to draw the game.").arg(boardwindow->getBoardDispatch()->getOpponentName()));
+    QMessageBox::information(boardwindow, tr("Draw Declined"), tr("%1 has declined to draw the game.").arg(dispatch->getOpponentName()));
 }

@@ -60,8 +60,7 @@ class BoardDispatch
 		void sendRefuseCountRequest(void);
 		void recvAcceptDrawRequest(void);
 		void recvRefuseDrawRequest(void);
-		void sendRequestDraw(void);
-		void recvRequestDraw(void);
+        void recvRequestDraw(void);
 		void sendAcceptDrawRequest(void);
 		void sendRefuseDrawRequest(void);
 		void recvRequestMatchMode(void);
@@ -93,8 +92,7 @@ class BoardDispatch
 		void swapColors(bool noswap = false);
 		
 		void requestGameInfo(void);
-		int getMoveNumber(void);
-		bool getReviewInVariation(void) { return reviewInVariation; };	//tygem
+        bool getReviewInVariation(void) { return reviewInVariation; };	//tygem
 		void setReviewInVariation(bool b) { reviewInVariation = b; };	//tygem
 		class GameData * getGameData(void);
 		class TimeRecord getOurTimeRecord(void);
@@ -106,26 +104,19 @@ class BoardDispatch
 		class ObserverListModel * getObserverListModelForRematch(void);
 		void setObserverListModel(class ObserverListModel * olm);
 		bool flipCoords(void);
-		bool supportsMultipleUndo(void);
-		bool supportsRequestMatchMode(void);
+        bool supportsRequestMatchMode(void);
 		bool supportsAddTime(void);
 		bool supportsRequestCount(void);
 		bool supportsRequestDraw(void);
 		bool supportsRequestAdjourn(void);
 		bool supportsRematch(void);
-		bool startTimerOnOpen(void);
-		bool clientCountsTime(void);
-		bool clientSendsTime(void);
-		bool twoPassesEndsGame(void);
-		bool netWillEnterScoreMode(void);
-		bool undoResetsScore(void);
+        bool undoResetsScore(void);
 		bool canMarkStonesDeadinScore(void);
-		bool unmarkUnmarksAllDeadStones(void);
-		bool cantMarkOppStonesDead(void);
+public:
+        NetworkConnection * connection;
 	private:
 		void mergeListingIntoRecord(class GameData * r, class GameListing * l);
         class BoardWindow * boardwindow;
-		NetworkConnection * connection;
 		class GameData * gameData;
 		class GameListing * gameListing;
 		class ResultDialog * resultdialog;

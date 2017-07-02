@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 
-#include "qgoboard.h"
+#include "qgoboard_net.h"
 #include "tree.h"
 #include "move.h"
 #include "../network/boarddispatch.h"
@@ -31,12 +31,15 @@
 #include "boardwindow.h"
 #include "matrix.h"
 #include <QMessageBox>
+#include "networkconnection.h"
+#include "audio.h"
 
 qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, GameData *gd) : qGoBoard(bw, t, gd)
 {
 	game_Id = QString::number(gd->number);
-
     bw->clearData();
+    dispatch = boardwindow->getBoardDispatch();
+    connection = dispatch->connection;
 
 	QSettings settings;
 	// value 1 = no sound, 0 all games, 2 my games
@@ -52,19 +55,60 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	controlling_player = QString();
 	reviewCurrent = 0;
 	// what about review games?  games without timers ??
-
 }
+
+/*
+ * This functions adds a move to a game. returns the new Move* if move was valid, 0 if not)
+ */
+Move *qGoBoardNetworkInterface::doMove(StoneColor c, int x, int y)
+{
+    bool validMove = (dontCheckValidity || tree->getCurrent()->checkMoveIsValid(c, x, y));
+    dontCheckValidity = false;
+    if (!validMove)
+        return NULL;
+
+    Move *result = tree->getCurrent()->makeMove(c,x,y,true);
+    tree->setCurrent(result);
+    tree->lastMoveInMainBranch = result;
+    setModified(true);
+
+
+    /* Not a great place for this, but maybe okay: */
+    TimeRecord t = boardwindow->getClockDisplay()->getTimeRecord(!getBlackTurn());
+    if(t.time != 0 || t.stones_periods != -1)
+    {
+        result->setTimeinfo(true);
+        result->setTimeLeft(t.time);
+        result->setOpenMoves(t.stones_periods);
+    }
+
+    /* Non trivial here.  We don't want to play a sound as we get all
+     * the moves from an observed game.  But there's no clean way
+     * to tell when the board has stopped loading, particularly for IGS.
+     * so we only play a sound every 250 msecs...
+     * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
+    if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
+    {
+        if (playSound)
+            clickSound->play();
+        lastSound = QTime::currentTime();
+        lastSound = lastSound.addMSecs(250);
+    }
+
+    return result;
+}
+
 
 void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 {
-	if(controlling_player != QString() && controlling_player != boardwindow->getBoardDispatch()->getUsername())
+    if(controlling_player != QString() && controlling_player != dispatch->getUsername())
 		return;
 	if(boardwindow->getGameData()->nigiriToBeSettled)
 	{
 		qDebug("Nigiri unsettled");
 		//return;
 	}
-	if(boardwindow->getGamePhase() == phaseScore && !boardwindow->getBoardDispatch()->canMarkStonesDeadinScore())
+    if(boardwindow->getGamePhase() == phaseScore && !dispatch->canMarkStonesDeadinScore())
 			return;
 	if(dontsend)
 		return;
@@ -77,7 +121,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 		//also "c" refers most likely to player color, not the stone clicked on
 		if(((tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneBlack && boardwindow->getMyColorIsWhite()) ||
 		   (tree->getCurrent()->getMatrix()->getStoneAt(x, y) == stoneWhite && boardwindow->getMyColorIsBlack()))
-		   && boardwindow->getBoardDispatch()->cantMarkOppStonesDead())
+           && connection->cantMarkOppStonesDead())
 		{
 			dontsend = false;	//ready to send again
 			return;
@@ -85,7 +129,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 		MoveRecord * m = new MoveRecord();
 		if(tree->getCurrent()->getMatrix()->isStoneDead(x, y))
 		{
-			if(boardwindow->getBoardDispatch()->unmarkUnmarksAllDeadStones())
+            if(connection->unmarkUnmarksAllDeadStones())
 			{
 					QMessageBox mb(tr("Unmark All?"),
 		      			QString(tr("Unmark all your dead stones?\n")),
@@ -111,7 +155,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 		m->y = y;
 		//move number shouldn't matter
 		m->color = c;
-		boardwindow->getBoardDispatch()->sendMove(m);
+        dispatch->sendMove(m);
 		delete m;
 		return;
 	}
@@ -128,7 +172,7 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 		}
 		/* Rerack time before sending our move */
 		boardwindow->getClockDisplay()->makeMove(getBlackTurn());
-		boardwindow->getBoardDispatch()->sendMove(new MoveRecord(
+        dispatch->sendMove(new MoveRecord(
 			tree->getCurrent()->getMoveNumber(), x, y, c));
 	}
 }
@@ -203,11 +247,10 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::REQUESTUNDO:
 		{
 			qDebug("Got undo message in network interface!!\n");
-			BoardDispatch * dispatch = boardwindow->getBoardDispatch();
-			//move_number = mv_counter - 1;
+            //move_number = mv_counter - 1;
 			QString opp = dispatch->getOpponentName();
 			UndoPrompt * up = new UndoPrompt(&opp,
-							 dispatch->supportsMultipleUndo(),
+                             connection->supportsMultipleUndo(),
 							 m->number);
 			
 			int up_return = up->exec();
@@ -225,8 +268,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			{
 			/* Are we supposed to make a brother node or something ??? FIXME 
 			* qgoboard.cpp also does this.*/
-			BoardDispatch * dispatch = boardwindow->getBoardDispatch();
-			if(dispatch->supportsMultipleUndo())
+            if(connection->supportsMultipleUndo())
 			{
 				while(move_counter > move_number + 1)	//move_numbe r+ 1 if our turn?
 				{
@@ -280,9 +322,9 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			 * although some servers might have two pass models
 			 * and we need a flag for that */
 			//if(!boardwindow->getMyColorIsBlack())	//if we're white
-			if(!boardwindow->getBoardDispatch()->netWillEnterScoreMode())	//ugly for oro FIXME
+            if(!connection->netWillEnterScoreMode())	//ugly for oro FIXME
 			{
-				if(boardwindow->getBoardDispatch()->twoPassesEndsGame())
+                if(connection->twoPassesEndsGame())
 				{
                     if(last->isPassMove())
 						enterScoreMode();
@@ -315,7 +357,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			break;
 		case MoveRecord::UNREMOVE_AREA:
 			//FIXME
-			if(boardwindow->getBoardDispatch()->unmarkUnmarksAllDeadStones())
+            if(connection->unmarkUnmarksAllDeadStones())
 			{
 				/* Not sure where we get the dead groups from, FIXME 
 				 * okay, really, we should have a list of dead groups
@@ -353,7 +395,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			//handled by protocol as a recvKibitz for whatever reason
 			break;
 		case MoveRecord::FORWARD:
-            if(!boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(last))
+            if(!dispatch->getReviewInVariation() && tree->isInMainBranch(last))
 			{
 				/* In case it was in a variation previously to remove the marker.
 				 * this should be elsewhere like on the setReviewInVariation(); FIXME */
@@ -361,7 +403,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			}
 			for(i = 0; i < move_number; i++)
 			{
-				/*if(boardwindow->getBoardDispatch()->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
+                /*if(dispatch->getReviewInVariation() && tree->isInMainBranch(tree->getCurrent()))
 				{
 					boardwindow->getBoardHandler()->gotoMove(inVariationBranch);
 				}
@@ -372,7 +414,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::BACKWARD:
 			for(i = 0; i < move_number; i++)
 			{
-                if(boardwindow->getBoardDispatch()->getReviewInVariation() && last && tree->isInMainBranch(last))
+                if(dispatch->getReviewInVariation() && last && tree->isInMainBranch(last))
 					break;
                 tree->slotNavBackward();
 			}
@@ -396,7 +438,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
             tree->setCurrent(goto_move);
 			break;
 		case MoveRecord::TOEND:
-			if(boardwindow->getBoardDispatch()->getReviewInVariation())
+            if(dispatch->getReviewInVariation())
 				goto_move = tree->findLastMoveInCurrentBranch();
 			else
 				goto_move = lastMoveInGame;
@@ -471,14 +513,14 @@ void qGoBoardNetworkInterface::sendPassToInterface(StoneColor /*c*/)
 	/* Rerack time before sending our move 
 	 * Is this okay here?  Do we need to rerack for passes or what ? FIXME*/
 	boardwindow->getClockDisplay()->makeMove(getBlackTurn());
-	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::PASS));
+    dispatch->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::PASS));
 }
 
 void qGoBoardNetworkInterface::slotUndoPressed()
 {
 	if(boardwindow->getGamePhase() == phaseScore)
 	{
-		if(boardwindow->getBoardDispatch()->supportsRequestMatchMode())
+        if(connection->supportsRequestMatchMode())
 		{
 			QMessageBox mb(tr("Return to game?"),
 		      		QString(tr("Ask opponent to return to game?\n")),
@@ -490,12 +532,12 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 //			qgo->playPassSound();
 
 			if (mb.exec() == QMessageBox::Yes)
-				boardwindow->getBoardDispatch()->sendRequestMatchMode();
+                dispatch->sendRequestMatchMode();
 			return;
 		}
-		else if(boardwindow->getBoardDispatch()->undoResetsScore())
+        else if(dispatch->undoResetsScore())
 		{
-			boardwindow->getBoardDispatch()->sendMove(new MoveRecord(-1, MoveRecord::UNDO));
+            dispatch->sendMove(new MoveRecord(-1, MoveRecord::UNDO));
 			return;
 		}
 	}
@@ -507,7 +549,7 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 	else
 		moves--;
 	// might want to prompt anyway FIXME ?
-	if(boardwindow->getBoardDispatch()->supportsMultipleUndo())
+    if(connection->supportsMultipleUndo())
 	{
 		UndoPrompt * up = new UndoPrompt(0, true, moves);
 		int up_return = up->exec();
@@ -517,26 +559,26 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 			moves = up_return;
 	}
 	
-	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(moves, MoveRecord::REQUESTUNDO));
+    dispatch->sendMove(new MoveRecord(moves, MoveRecord::REQUESTUNDO));
 }
 /* Note that these all crash if we disconnect from server first, but server should handle that anyway FIXME */
 
 /* Really the ui button disables should be on some gamePhase code FIXME */
 void qGoBoardNetworkInterface::slotDonePressed()
 {
-	boardwindow->getBoardDispatch()->sendMove(new MoveRecord(MoveRecord::DONE_SCORING));
+    dispatch->sendMove(new MoveRecord(MoveRecord::DONE_SCORING));
     boardwindow->setDoneEnabled(false);		//FIXME okay? don't want to send done twice
 }
 
 void qGoBoardNetworkInterface::slotResignPressed()
 {
-	if(boardwindow->getBoardDispatch()->getOpponentName() == QString())
+    if(dispatch->getOpponentName() == QString())
 	{
 		boardwindow->getGameData()->fullresult = new GameResult();		//temporary for bugs FIXME
 		return;
 	}
 	QMessageBox mb(tr("Resign?"),
-		      QString(tr("Resign game with %1\n")).arg(boardwindow->getBoardDispatch()->getOpponentName()),
+              QString(tr("Resign game with %1\n")).arg(dispatch->getOpponentName()),
 		      QMessageBox::Question,
 		      QMessageBox::Yes | QMessageBox::Default,
 		      QMessageBox::No | QMessageBox::Escape,
@@ -546,19 +588,19 @@ void qGoBoardNetworkInterface::slotResignPressed()
 
 	if (mb.exec() == QMessageBox::Yes)
 	{
-		boardwindow->getBoardDispatch()->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
+        dispatch->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
         boardwindow->setResignEnabled(false);		//FIXME okay? don't want to send resign twice
 	}
 }
 
 void qGoBoardNetworkInterface::adjournGame(void)
 {
-	QString opp_name = boardwindow->getBoardDispatch()->getOpponentName();
+    QString opp_name = dispatch->getOpponentName();
 	boardwindow->setGamePhase(phaseEnded);
 	qDebug("qgBNI::adjournGame");
 	if(opp_name == QString())
 	{
-		GameData * r = boardwindow->getBoardDispatch()->getGameData();
+        GameData * r = dispatch->getGameData();
 		if(!r)
 			qDebug("No game record on adjourned game");
 		else
