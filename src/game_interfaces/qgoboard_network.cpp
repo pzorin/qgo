@@ -503,13 +503,16 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
     }
 }
 
-void qGoBoardNetworkInterface::sendPassToInterface(StoneColor /*c*/)
+void qGoBoardNetworkInterface::passRequest()
 {
 	/* doPass is called when we receive the move from the server, 
 	 * as with moves */
 	/* FIXME, we need to make sure the move is valid before we send it!!!!!
 	 * but without playing it since we get that from server. */
-	
+    if((getBlackTurn() && !(boardwindow->getMyColorIsBlack())) ||
+       (!getBlackTurn() && !(boardwindow->getMyColorIsWhite())))
+        return; // It is not our move
+
 	/* Rerack time before sending our move 
 	 * Is this okay here?  Do we need to rerack for passes or what ? FIXME*/
 	boardwindow->getClockDisplay()->makeMove(getBlackTurn());

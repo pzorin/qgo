@@ -246,37 +246,22 @@ void qGoBoardLocalInterface::slot_passComputer()
 /*
  * sends a "pass" move to GTP
  */
-void qGoBoardLocalInterface::sendPassToInterface(StoneColor c)
+void qGoBoardLocalInterface::passRequest()
 {
-    doPass(c);
-
-    if (gtp)
+    if (getBlackTurn() && boardwindow->getMyColorIsBlack())
     {
-    // if simple pass, tell computer and move on
-    switch (c)
+        doPass();
+        if (gtp)
+            gtp->playblackPass();
+    } else if (!getBlackTurn() && boardwindow->getMyColorIsWhite())
     {
-        case stoneWhite :
-        if (gtp->playwhitePass())
-        {
-            QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to pass within program \n") + gtp->getLastMessage());
-            return;
-        }
-        else
-            qDebug("comp notified of white pass");
-        break;
+        doPass();
+        if (gtp)
+            gtp->playwhitePass();
+    } else
+        return; // It is not our move
 
-        case stoneBlack :
-        if (gtp->playblackPass())
-        {
-            QMessageBox::warning(boardwindow, PACKAGE, tr("Failed to pass within program \n") + gtp->getLastMessage());
-            return;
-        }
-        break;
-
-        default :
-        ;
-    }
-    }
+    currentEngine = tree->getCurrent();
     if (tree->getCurrent()->parent->isPassMove())
         enterScoreMode();
     else

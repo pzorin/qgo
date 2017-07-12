@@ -164,7 +164,7 @@ public slots:
 
 	// Board
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
-	virtual void slotPassPressed();
+    virtual void passRequest();
 	virtual void slotDonePressed();
 	virtual void slotResignPressed();
     virtual void slotReviewPressed() {}
@@ -222,7 +222,6 @@ protected:
     virtual void localMoveRequest(StoneColor, int, int) {}
 	virtual void localMarkDeadRequest(int x, int y);
     virtual void sendMoveToInterface(StoneColor ,int, int) {}
-    virtual void sendPassToInterface(StoneColor ) { doPass(); }
     virtual Move *doMove(StoneColor, int, int) { return NULL; }
     virtual void doPass(StoneColor c = stoneNone); // By default the player who is on turn will pass
 protected:

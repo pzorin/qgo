@@ -139,17 +139,14 @@ int qGoBoard::getMoveNumber(void)
 
 /*
  * 'Pass' button pressed
- * FIXME we could just overload the slotPassPressed
- * which would obviate sendPassToInterface
  */
-void qGoBoard::slotPassPressed()
-//was slot_doPass()
+void qGoBoard::passRequest()
 {
 	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
 
 	if((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
-	   (!getBlackTurn() && boardwindow->getMyColorIsWhite()))
-		sendPassToInterface(c);
+       (!getBlackTurn() && boardwindow->getMyColorIsWhite()))
+        doPass();
 }
 
 /*
@@ -311,7 +308,7 @@ void qGoBoard::localMarkDeadRequest(int x, int y)
 void qGoBoard::doPass(StoneColor c)
 {
     if (c == stoneNone)
-        c = (tree->lastMoveInMainBranch->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
+        c = (tree->getCurrent()->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
     tree->lastMoveInMainBranch = tree->getCurrent()->makeMove(c,PASS_XY,PASS_XY,true);
     tree->setCurrent(tree->lastMoveInMainBranch);
     setModified(true);

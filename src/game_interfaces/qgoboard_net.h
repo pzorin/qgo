@@ -18,10 +18,10 @@ public slots:
     virtual void slotResignPressed();
     virtual void slotReviewPressed() {}		//should FIXME these two
     virtual void slotAdjournPressed() {}
+    virtual void passRequest();
 protected:
     qGoBoardNetworkInterface(BoardWindow *boardWindow, Tree * tree, GameData *gameData);
     virtual void sendMoveToInterface(StoneColor c,int x, int y);
-    virtual void sendPassToInterface(StoneColor c);
     virtual void handleMove(MoveRecord * m);
     virtual void moveControl(QString & player) { controlling_player = player; }
     virtual void adjournGame(void);

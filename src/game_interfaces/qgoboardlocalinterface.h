@@ -52,10 +52,10 @@ public slots:
     virtual void slotDonePressed();
     virtual void slotUndoPressed();
     void slotToggleInsertStones(bool val);
+    virtual void passRequest();
 
 private:
     virtual void sendMoveToInterface(StoneColor c,int x, int y);
-    virtual void sendPassToInterface(StoneColor c);
 
     void startGame() {}
 //	void enterScoreMode() {}

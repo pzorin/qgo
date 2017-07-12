@@ -265,9 +265,9 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
     connect(ui->board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )), qgoboard, SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
 
     //Connects the game buttons to the slots
-    connect(ui->passButton,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-    connect(ui->passButton_2,SIGNAL(pressed()), qgoboard, SLOT(slotPassPressed()));
-    connect(ui->scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+    connect(ui->passButton, &QPushButton::pressed, qgoboard, &qGoBoard::passRequest);
+    connect(ui->passButton_2, &QPushButton::pressed, qgoboard, &qGoBoard::passRequest);
+        connect(ui->scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
 
 
     connect(ui->doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
