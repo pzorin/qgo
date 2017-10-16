@@ -865,18 +865,18 @@ void Matrix::count(int &terrBlack, int &terrWhite, int &deadBlack, int &deadWhit
     // Count territory
     for (int i=0; i<size*size; ++i)
     {
-        if (matrix[i] & markTerrDame)
+        if (matrix[i] & markTerrWhite)
         {
             if (!(matrix[i] & markTerrBlack))
                 ++terrWhite;
-            else if (!(matrix[i] & markTerrWhite))
-                ++terrBlack;
-        }
-        if (matrix[i] & MX_STONEDEAD)
-        {
             if (getStoneAt(i) == stoneBlack)
                 ++deadBlack;
-            else if (getStoneAt(i) == stoneWhite)
+        }
+        if (matrix[i] & markTerrBlack)
+        {
+            if (!(matrix[i] & markTerrWhite))
+                ++terrBlack;
+            if (getStoneAt(i) == stoneWhite)
                 ++deadWhite;
         }
     }

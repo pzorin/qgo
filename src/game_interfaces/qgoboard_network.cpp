@@ -179,6 +179,8 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 
 void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 {
+    Move * const remember = tree->getCurrent();
+    Move * last = tree->findLastMoveInMainBranch();
     // This handles territory marks provided by the server.
     /* Separate handling is needed because we want to
      * avoid GUI updates until the full information is available.
@@ -186,17 +188,16 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
      * GUI updates are only made when needed. */
     if (m->flags == MoveRecord::TERRITORY)
     {
-        tree->getCurrent()->getMatrix()->insertMark(m->x,m->y,m->color == stoneBlack ? markTerrBlack : markTerrWhite);
+        last->getMatrix()->insertMark(m->x,m->y,m->color == stoneBlack ? markTerrBlack : markTerrWhite);
         return;
     } else if (m->flags == MoveRecord::DONE_SCORING)
     {
-        tree->countMarked();
+        tree->countMarked(last);
         tree->setCurrent(tree->getCurrent()); // Updates GUI
         return;
     }
 
     int move_number, move_counter;
-	Move * remember, * last;
 	Move * goto_move;
 	//static bool offset_1 = false;
 	int i;
@@ -206,17 +207,12 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 	/* In case we join in score phase */
 	if(m->flags == MoveRecord::NONE && boardwindow->getGamePhase() == phaseScore)
 		m->flags = MoveRecord::REMOVE;
-
-	remember = tree->getCurrent();
 	
 	if(boardwindow->getGameData()->gameMode == modeReview)
 	{
 		if(!reviewCurrent)
-			reviewCurrent = tree->findLastMoveInMainBranch();
-		last = reviewCurrent;
-	}
-	else
-		last = tree->findLastMoveInMainBranch();
+            reviewCurrent = last;
+    }
 	tree->setCurrent(last);
 
 	move_number = m->number;

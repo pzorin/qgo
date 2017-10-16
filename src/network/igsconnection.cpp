@@ -19,9 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-#include <string.h>
-#include <QDebug>
+#include <QtDebug>
 #include "igsconnection.h"
 #include "consoledispatch.h"
 #include "room.h" // Should not depend on room FIXME
@@ -84,7 +82,7 @@ void IGSConnection::sendText(QString text)
 	// FIXME We're getting some nonsense on the end of this sometimes for
 	// some reason
 	//text += "\r\n";
-	qDebug("sendText: %s", text.toLatin1().constData());
+    qDebug() << "IGSConnection::sendText: " << text;
 	QByteArray raw = textCodec->fromUnicode(text);
 	if(write(raw.data(), raw.size()) < 0)
 		qWarning("*** failed sending to host: %s", raw.data());
@@ -114,7 +112,7 @@ void IGSConnection::sendMsg(unsigned int game_id, QString text)
 	BoardDispatch * bd = getIfBoardDispatch(game_id);
 	if(!bd)
 	{
-		qDebug("No board dispatch to send message from");
+        qDebug("IGSConnection::sendMsg(): No board dispatch to send message from");
 		return;
 	}
 	GameData * g = bd->getGameData();
@@ -128,7 +126,7 @@ void IGSConnection::sendMsg(unsigned int game_id, QString text)
 			sendText("kibitz " + QString::number(game_id) + " " + text + "\r\n");
 			break;
 		default:
-			qDebug("no game type");
+            qDebug("IGSConnection::sendMsg(): no game type");
 			break;
 	}
 }
@@ -194,7 +192,7 @@ void IGSConnection::sendRoomListRequest(void)
 void IGSConnection::sendJoinRoom(const RoomListing & room, const char * /*password*/)
 {
 	sendText("join " + QString::number(room.number) + "\r\n");
-	qDebug("Joining %d", room.number);
+    qDebug() << "IGSConnection::sendJoinRoom(): Joining " << room.number;
 	setCurrentRoom(room);	//FIXME unless we get a message after joining?
 							//but then the other send requests should
 							//be there
@@ -301,7 +299,7 @@ void IGSConnection::sendMove(unsigned int game_id, MoveRecord * move)
 			}
 			break;
 		default:
-			qDebug("IGSConnection: unhandled  type\n");
+            qDebug("IGSConnection: unhandled  type");
 			break;
 	}
 }
@@ -570,17 +568,17 @@ void IGSConnection::handlePendingData()
         }
         break;
     case AuthFailed:
-        qDebug("Auth failed\n");
+        qWarning("Auth failed");
         break;
     case PassFailed:
-        qDebug("Pass failed\n");
+        qWarning("Pass failed");
         break;
     case ProtocolError:
         //wait for someone to destroy the connection
         //can't imagine why we're even here
         break;
     default:
-        qDebug("Connection State not related to IGS protocol!!!");
+        qWarning("IGSConnection::handlePendingData(): invalid connection state");
         break;
     }
 }
@@ -589,7 +587,7 @@ void IGSConnection::handleLogin(QString msg)
 {
 	if(msg.contains("Login:") > 0)
 	{
-		qDebug("Login found\n");
+        qDebug("IGSConnection::handleLogin(): Login found");
         QString u = username + "\r\n";
 		sendText(u.toLatin1().constData());	
         setState(Password);
@@ -608,7 +606,7 @@ void IGSConnection::handleLogin(QString msg)
  * be called earlier */
 void IGSConnection::handlePassword(QString msg)
 {
-	qDebug(":%d %s\n", msg.size(), msg.toLatin1().constData());
+    qDebug() << "IGSConnection::handlePassword(): " << msg;
 	if(msg.contains("Password:") > 0 || msg.contains("1 1") > 0)
 	{
 		qDebug("Password prompt or 1 1 found");
@@ -641,6 +639,7 @@ void IGSConnection::onAuthenticationNegotiated(void)
 
 void IGSConnection::onReady(void)
 {
+//    qDebug() << "IGSConnection::onReady()";
 	if(firstonReadyCall)
 	{
 		/* Check here because I've forgotten exactly which kinds of "1"
@@ -696,8 +695,6 @@ void IGSConnection::onReady(void)
 		recvRoomListing(new RoomListing(0, "Lobby"));
 		sendRoomListRequest();
 		sendListChannels();
-
-		qDebug("Ready!\n");
     }
 }
 
@@ -763,7 +760,7 @@ void IGSConnection::requestGameInfo(unsigned int game_id)
 
 void IGSConnection::requestGameStats(unsigned int game_id)
 {
-	qDebug("requestGameStats");
+    qDebug() << "IGSConnection::requestGameStats " << game_id;
 	char string[20];
 	snprintf(string, 20, "game %d\r\n", game_id);
 	sendText(string);
@@ -781,7 +778,7 @@ int IGSConnection::time_to_seconds(const QString & time)
 	}
 	else
 	{
-		qDebug("Bad time string");
+        qDebug("IGSConnection::time_to_seconds(): Bad time string");
 		return 0xffff;
 	}
 	
@@ -856,7 +853,7 @@ void IGSConnection::sendNmatchParameters(void)
 	/* If a line is used like below, match requests won't get to client but will be refused
 	 * by server with a line like "wants Koryotime count 50 - 50 */
 	//c.append(" 5-25 50 30 1-3\r\n");
-	qDebug("nmatch string %s: ", c.toLatin1().constData());
+    qDebug() << "IGSConnection::sendNmatchParameters(): " << c;
 	sendText(c);
 }
 
@@ -894,15 +891,8 @@ void IGSConnection::sendNmatchParameters(void)
 void IGSConnection::handleMessage(QString msg)
 {
 	unsigned int type = 0;
-	//qDebug(msg.toLatin1().constData());
-	
-	/*if(sscanf(msg.toLatin1().constData(), "%d", &type) != 1)
-	{
-		  qDebug("No number");
-		  return;
-	}*/
-	//if(msg[0].toLatin1() == '\n')
-		//return;
+    // qDebug() << msg;
+
 	if(msg[0].toLatin1() >= '0' && msg[0].toLatin1() <= '9')
 	{
 		type = (int)msg[0].toLatin1() - '0';
@@ -937,7 +927,7 @@ void IGSConnection::handleMessage(QString msg)
 		{
 			//additional newline unnecessary  //0a0d
 			if(msg[msg.size() - 1].toLatin1() == 0x0a)
-				msg.remove(msg.size() - 2, msg.size()).trimmed();
+                msg = msg.remove(msg.size() - 2, msg.size()).trimmed();
 		}
 		if(console_dispatch && msg.size() > 2)
 			console_dispatch->recvText(msg.toLatin1().constData());
@@ -1091,7 +1081,7 @@ returnsomekindoflist IGSConnection::tokenize(QString msg)
 void IGSConnection::handle_loginmsg(QString line)
 {
 	/* These seem to have extra newlines on them */
-	line.remove(line.length() - 1, line.length()).trimmed();
+    line = line.remove(line.length() - 1, line.length()).trimmed();
 	if(line.length() > 1)
 	{
 		getConsoleDispatch()->recvText(line.toLatin1().constData());
@@ -1154,7 +1144,7 @@ void IGSConnection::handle_error(QString line)
 	static QString memory_str;
 	
 	Room * room = getDefaultRoom();
-	qDebug("error? %s", line.toLatin1().constData());
+    qDebug() << "IGSConnection::handle_error()" << line;
 	line = line.remove(0, 2).trimmed();
 	if(line.contains("Invalid password"))
 	{
@@ -1525,29 +1515,7 @@ void IGSConnection::handle_games(QString line)
 //	case 8:
 void IGSConnection::handle_file(QString line)
 {
-	qDebug("%s", line.toLatin1().constData());
-#ifdef FIXME
-	if (!memory_str.isEmpty() && memory_str.contains("File"))
-	{
-				// toggle
-		memory_str = QString();
-		memory = 0;
-	}
-	else if (memory != 0 && !memory_str.isEmpty() && memory_str == "CHANNEL")
-	{
-		//emit signal_channelinfo(memory, line);
-		memory_str = QString();
-	}
-
-	else if (line.contains("File"))
-	{
-				// the following lines are help messages
-		memory_str = line;
-				// check if NNGS message cmd is active -> see '9 Messages:'
-		if (memory != 14)
-			memory = 8;
-	}
-#endif //FIXME
+    qDebug() << line;
 }
 		// INFO: stats, channelinfo
 		// NNGS, LGS: (NNGS new: 2nd line w/o number!)
@@ -2717,23 +2685,7 @@ void IGSConnection::handle_kibitz(QString line)
 		// 14 File
 void IGSConnection::handle_messages(QString line)
 {
-	qDebug("%s", line.toLatin1().constData());
-#ifdef FIXME	
-		//case 14:
-	if (!memory_str.isEmpty() && memory_str.contains("File"))
-	{
-				// toggle
-		memory_str = QString();
-		memory = 0;
-	}
-	else if (line.contains("File"))
-	{
-				// the following lines are help messages
-		memory_str = line;
-		memory = 14;
-	}
-#endif //FIXME
-};
+}
 
 		// MOVE
 		// 15 Game 43 I: xxxx (4 223 16) vs yyyy (5 59 13)
@@ -2746,18 +2698,11 @@ void IGSConnection::handle_move(QString line)
 {
 	BoardDispatch * boarddispatch;
 		//case 15:
-    qDebug("%s", line.toLatin1().constData());
+    qDebug() << "IGSConnection::handle_move():" << line;
 	line = line.remove(0, 2).trimmed();	
 	static bool need_time = false;	
 	int number;
-	QString white, black;
-	//console->recvText(line.toLatin1().constData());
-	/* I think we'll need game_number for scores, so I'm going to
-	 * have it on the connection->protocol_saved_int since
-	 * hopefully anything that uses it will use it immediately afterward
-	 * with no other server msg inbetween */
-	//static int game_number = -1;
-			//qDebug("Game_number: %d\n", game_number);
+    QString white, black;
 	if (line.contains("Game"))
 	{		
 		number = element(line, 1, " ").toInt();
@@ -2962,8 +2907,9 @@ void IGSConnection::handle_move(QString line)
 	}
 	else if (line.contains("GAMERPROPS"))
 	{
+        QStringList words = line.split(QRegExp("[ :]"), QString::SkipEmptyParts);
 		GameData * gd;
-		int game_number = element(line, 0, ":",":").toInt();	
+        int game_number = words[2].toInt();
 		
 		BoardDispatch * boarddispatch = getIfBoardDispatch(game_number);
 		if(boarddispatch)
@@ -2972,9 +2918,9 @@ void IGSConnection::handle_move(QString line)
 			/* We need this for komi in our own games sometimes it seems 
 			 * or do we... */
 			//GAMERPROPS:86: 9 0 6.50
-			gd->board_size = element(line, 1, " ").toInt();
-			gd->handicap = element(line, 2, " ").toInt();
-			gd->komi = element(line, 3, " ").toFloat();
+            gd->board_size = words[3].toInt();
+            gd->handicap = words[4].toInt();
+            gd->komi = words[5].toFloat();
 		}
 		return;
 	}
@@ -3195,7 +3141,7 @@ void IGSConnection::handle_shout(QString line)
 			 * and so we might want to set it up here */
 			/* We also get this message at weird times that makes
 			 * boards we're not watching pop up!! FIXME */
-			qDebug("Opening up this game... restoring?");
+            qDebug() << "IGSConnection::handle_shout(" << line << ")";
 			
 			int game_number = element(line, 0, " ", ":").toInt();
 			QString white = element(line, 2, " ");
@@ -3371,7 +3317,6 @@ void IGSConnection::handle_shout(QString line)
 				// {Match 116: xxxx [19k*] vs. yyyy1 [18k*] }
 				// {116:xxxx[19k*]yyyy1[18k*]}
 				// WING: {Match 41: o4641 [10k*] vs. Urashima [11k*] H:2 Komi:3.5}
-        qDebug() << "IGSConnection::handle_shout() " << line;
 		line.replace(QRegExp("vs. "), "");
 		line.replace(QRegExp("Match "), "");
 		line.replace(QRegExp(" "), "");
@@ -3425,7 +3370,7 @@ void IGSConnection::handle_shout(QString line)
 
 void IGSConnection::handle_status(QString line)
 {
-	qDebug("%s", line.toLatin1().constData());
+    qDebug() << "IGSConnection::handle_status " << line;
 	line = line.remove(0, 2).trimmed();
 		// CURRENT GAME STATUS
 		// 22 Pinkie  3d* 21 218 9 T 5.5 0
@@ -3473,26 +3418,6 @@ void IGSConnection::handle_status(QString line)
 			cap = element(line, 2, " ").toInt();
 			komi = element(line, 6, " ").toFloat();
 		}
-#ifdef FIXME
-		else if(protocol_save_int > -1)
-		{
-			MoveRecord * aMove = new MoveRecord();
-					/* This could be a huge problem,
-			* but we're going to assume that
-			* if we get one of these messages
-			* and we're scoring a game, it means
-					* scoring is done */
-			/* FIXME might not be necessary if below attrib handles IF */
-			statusDispatch = getIfBoardDispatch(protocol_save_int);
-			if(statusDispatch)
-			{
-				aMove->flags = MoveRecord::DONE_SCORING;
-				statusDispatch->recvMove(aMove);
-			}
-			player = "";
-			delete aMove;
-		}
-#endif //FIXME
 		else
 		{
 			statusDispatch = getBoardFromAttrib(element(line, 0, " "), element(line, 2, " ").toInt(), element(line, 6, " ").toFloat(), player, cap, komi);
@@ -3517,17 +3442,10 @@ void IGSConnection::handle_status(QString line)
 		if(!statusDispatch)
 			return;
 		int row = element(line, 0, ":").toInt();
-		QString results = element(line, 1, " ");
-		/* This might be slower than it needs to
-		 * be but...  and hardcoding board,
-		 * I'd like to fix this, but it would require... 
-		 * like a MoveRecord->next kind of pointer so that
-		 * we could send whole lists at once.  But is that
-		 * worth it?  Seems like an ultimately useless
-		 * functionality. */
+        QString results = element(line, 1, " ");
 		/* X and Y are swapped below */
 		MoveRecord * aMove = new MoveRecord();
-		aMove->x = row + 1;		
+        aMove->x = row + 1;
 		aMove->flags = MoveRecord::TERRITORY;
         for(int column = 1; column <= results.length(); column++)
 		{

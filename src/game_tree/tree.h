@@ -76,7 +76,7 @@ public:
 
     // Do these functiones belong here? FIXME
     void countScore();
-    void countMarked(void);
+    void countMarked(Move * mv);
     class GameResult retrieveScore(void);
     void exitScore();
 

@@ -1004,52 +1004,25 @@ QString Tree::exportSGFString(GameData *gameData)
  */
 void Tree::countScore(void)
 {
-    Matrix * current_matrix = current->getMatrix();
-
-    capturesBlack = current->getCapturesBlack();
-    capturesWhite = current->getCapturesWhite();
-    current_matrix->markTerritory();
-    current_matrix->count(terrBlack,terrWhite,deadBlack,deadWhite);
+    current->getMatrix()->markTerritory();
     current->setTerritoryMarked(true);
     current->setScored(true);
-
     emit currentMoveChanged(current); // Toggles window refresh
-    emit scoreChanged(terrBlack, capturesBlack, deadWhite,
-                      terrWhite, capturesWhite, deadBlack);
+
+    countMarked(current);
 }
 
-void Tree::countMarked(void)
+void Tree::countMarked(Move * mv)
 {
-    Matrix * current_matrix = current->getMatrix();
-
     deadWhite = 0;
     deadBlack = 0;
     terrWhite = 0;
     terrBlack = 0;
-    capturesBlack = current->getCapturesBlack();
-    capturesWhite = current->getCapturesWhite();
+    capturesBlack = mv->getCapturesBlack();
+    capturesWhite = mv->getCapturesWhite();
 
-    for (int i=1; i<=boardSize; i++)
-        for (int j=1; j<=boardSize; j++)
-        {
-
-            /* When called from network code, we're just using
-             * the board as server has reported it.  No stones
-             * are marked as dead, but apparently ones marked as
-             * territory get ghosted out */
-            if(current_matrix->getMarkAt(i, j) == markTerrBlack)
-            {
-                terrBlack++;
-                if (current_matrix->getStoneAt(i, j) == stoneWhite)
-                    deadWhite++;
-            }
-            else if(current_matrix->getMarkAt(i, j) == markTerrWhite)
-            {
-                terrWhite++;
-                if (current_matrix->getStoneAt(i, j) == stoneBlack)
-                    deadBlack++;
-            }
-        }
+    mv->getMatrix()->count(terrBlack, terrWhite, deadBlack, deadWhite);
+    qDebug() << "Tree::countMarked():" << terrBlack << capturesBlack << deadWhite << terrWhite << capturesWhite << deadBlack;
     emit scoreChanged(terrBlack, capturesBlack, deadWhite,
                       terrWhite, capturesWhite, deadBlack);
 }
