@@ -26,11 +26,8 @@
 
 Move::Move(int board_size)
 {
-	brother = NULL;
-	son = NULL;
-	parent = NULL;
-	marker = NULL;
-	stoneColor = stoneNone;
+    parent = son = brother = marker = NULL;
+    stoneColor = stoneNone;
 	x = y = -1;
 	gamePhase = phaseOngoing;
 	moveNum = 0;
@@ -49,10 +46,7 @@ Move::Move(int board_size)
 Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &mat, bool clearAllMarks, const QString &s)
 : stoneColor(c), x(mx), y(my), moveNum(n), gamePhase(phase), comment(s)
 {
-	brother = NULL;
-	son = NULL;
-	parent = NULL;
-	marker = NULL;
+    parent = son = brother = marker = NULL;
 	capturesBlack = capturesWhite = 0;
 	terrMarked = false;
     checked = true;
@@ -67,10 +61,7 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const Matrix &m
 Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &s)
 : stoneColor(c), x(mx), y(my), moveNum(n), gamePhase(phase), comment(s)
 {
-	brother = NULL;
-	son = NULL;
-	parent = NULL;
-	marker = NULL;
+    parent = son = brother = marker = NULL;
 	capturesBlack = capturesWhite = 0;
 	terrMarked = false;
 	checked = false;
@@ -85,10 +76,10 @@ Move::Move(StoneColor c, int mx, int my, int n, GamePhase phase, const QString &
 Move::Move(Move *_parent, StoneColor _c, int _x, int _y)
     : stoneColor(_c), x(_x), y(_y)
 {
+    son = brother = marker = NULL;
     parent = _parent;
     moveNum = parent->moveNum+1;
     gamePhase = parent->gamePhase;
-    son = brother = marker = NULL;
     capturesBlack = parent->capturesBlack;
     capturesWhite = parent->capturesWhite;
     matrix = new Matrix(*(parent->matrix), true);
@@ -124,7 +115,37 @@ Move::Move(Move *_parent, StoneColor _c, int _x, int _y)
 
 Move::~Move()
 {
+    while (son)
+        delete son;
+    if (parent)
+    {
+        if (parent->marker == this)
+            parent->marker = NULL;
+        Move * tmp = getPrevBrother();
+        if (tmp)
+            tmp->brother = brother;
+        else
+            parent->son = brother;
+    }
     delete matrix;
+}
+
+Move *Move::getPrevBrother()
+{
+    if (parent == NULL || parent->son == this)
+        return NULL;
+    Move * tmp = parent->son;
+    while (tmp->brother != this)
+        tmp = tmp->brother;
+    return tmp;
+}
+
+bool Move::isInMainBranch() const
+{
+    const Move * m = this;
+    while(m->parent && m->parent->son == m)
+        m = m->parent;
+    return (m->parent == NULL);
 }
 
 /*
@@ -245,13 +266,13 @@ int Move::getNumBrothers()
 int Move::getNumSons()
 {
 	Move *tmp = son;
-	
-	if (tmp == NULL)
-		return 0;
-	
-	int counter = 1;
-	while ((tmp = tmp->brother) != NULL)
+    int counter = 0;
+
+    while (tmp)
+    {
+        tmp = tmp->brother;
 		counter ++;
+    }
 	
 	return counter;
 }

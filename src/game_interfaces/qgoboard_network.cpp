@@ -268,17 +268,17 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			{
 				while(move_counter > move_number + 1)	//move_numbe r+ 1 if our turn?
 				{
-					tree->undoMove();
+                    tree->deleteNode();
                     move_counter--;
 				}
 			}
 			else
 			{
-				tree->undoMove();
+                tree->deleteNode();
 				if ((getBlackTurn() && m->color == stoneBlack) ||
 					((!getBlackTurn()) && m->color == stoneWhite))
                 {
-					tree->undoMove();
+                    tree->deleteNode();
 				}
 			}
 			/* I've turned off multiple undo for tygem, just for now... 
@@ -304,7 +304,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				 * glGo client we've been using to test this
 				 * doesn't handle undo from score very well.  I've
 				 * seen some bugs in it before. */
-				tree->undoMove();
+                tree->deleteNode();
 				leaveScoreMode();
 			}
 			}
@@ -391,7 +391,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 			//handled by protocol as a recvKibitz for whatever reason
 			break;
 		case MoveRecord::FORWARD:
-            if(!dispatch->getReviewInVariation() && tree->isInMainBranch(last))
+            if(!dispatch->getReviewInVariation() && last->isInMainBranch())
 			{
 				/* In case it was in a variation previously to remove the marker.
 				 * this should be elsewhere like on the setReviewInVariation(); FIXME */
@@ -410,7 +410,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 		case MoveRecord::BACKWARD:
 			for(i = 0; i < move_number; i++)
 			{
-                if(dispatch->getReviewInVariation() && last && tree->isInMainBranch(last))
+                if(dispatch->getReviewInVariation() && last && last->isInMainBranch())
 					break;
                 tree->slotNavBackward();
 			}
@@ -422,7 +422,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
 				goto_move = lastMoveInGame;
 			else
 			{
-				while(!tree->isInMainBranch(goto_move))
+                while(!(goto_move->isInMainBranch()))
 					goto_move = goto_move->parent;
 			}
             tree->setCurrent(goto_move);

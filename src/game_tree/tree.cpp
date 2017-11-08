@@ -43,11 +43,10 @@ Tree::Tree(int board_size, float komi)
 void Tree::init()
 {
 	if(root)
-		clear();
-    root = new Move(boardSize);
+        delete root;
+    lastMoveInMainBranch = current = root = new Move(boardSize);
 	// node index used for IGS review
 	root->setNodeIndex(1);
-	lastMoveInMainBranch = current = root;
 	
 	if(checkPositionTags)
 		delete checkPositionTags;
@@ -57,7 +56,8 @@ void Tree::init()
 Tree::~Tree()
 {
 	delete checkPositionTags;
-    clear();
+    if (root)
+        delete root;
 }
 
 /*
@@ -116,7 +116,7 @@ bool Tree::addSon(Move *node)
         node->parent = current;
         node->setTimeinfo(false);
         current = node;
-        if(isInMainBranch(current->parent))
+        if(current->isInMainBranch())
             lastMoveInMainBranch = current;
         return false;
     }
@@ -169,29 +169,6 @@ bool Tree::hasPrevBrother(Move *m)
 	return tmp != m;
 }
 
-int Tree::getNumSons(Move *m)
-{
-	if (m == NULL)
-	{
-		if (current == NULL)
-			return 0;
-		
-		m = current;
-	}
-	
-	return m->getNumSons();
-//	Move *tmp = m->son;
-	
-//	if (tmp == NULL)
-//		return 0;
-	
-//	int counter = 1;
-//	while ((tmp = tmp->brother) != NULL)
-//		counter ++;
-	
-//	return counter;
-}
-
 int Tree::getBranchLength(Move *node)
 {
 	Move *tmp;
@@ -215,47 +192,6 @@ int Tree::getBranchLength(Move *node)
 	return counter;
 }
 
-Move* Tree::nextVariation()
-{
-	if (root == NULL || current == NULL || current->brother == NULL)
-		return NULL;
-	
-    setCurrent(current->brother);
-    return current;
-}
-
-Move* Tree::previousVariation()
-{
-	if (root == NULL || current == NULL)
-		return NULL;
-	
-	Move *tmp, *old;
-	
-	if (current->parent == NULL)
-	{
-		if (current == root)
-			return NULL;
-		else
-			tmp = root;
-	}
-	else
-		tmp = current->parent->son;
-	
-	old = tmp;
-	
-	while ((tmp = tmp->brother) != NULL)
-	{
-		if (tmp == current)
-		{
-            current = old;
-            return current;
-		}
-		old = tmp;
-	}
-	
-	return NULL;
-}
-
 bool Tree::hasSon(Move *m)
 {
     if (root == NULL || m == NULL || current == NULL)
@@ -263,114 +199,17 @@ bool Tree::hasSon(Move *m)
     return (current->hasSon(m->getColor(), m->getX(), m->getY()) != NULL);
 }
 
-void Tree::clear()
-{
-#ifndef NO_DEBUG
-	qDebug("Tree had %d nodes.", count());
-#endif
-	
-	if (root == NULL)
-		return;
-	
-	traverseClear(root);
-	
-	root = NULL;
-	current = NULL;
-}
-
-/*
- * Traverse the tree and deletes all moves after the given move (including the move)
- */
-void Tree::traverseClear(Move *m)
-{
-	Q_CHECK_PTR(m);
-	QStack<Move*> stack;
-	QStack<Move*> trash;
-
-	Move *t = NULL;
-
-	if(isInMainBranch(m))
-		lastMoveInMainBranch = m->parent;
-	//drop every node into stack trash	
-	stack.push(m);
-	
-	while (!stack.isEmpty())
-	{
-		t = stack.pop();
-		if (t != NULL)
-		{
-			trash.push(t);
-			stack.push(t->brother);
-			stack.push(t->son);
-		}
-	}
-	
-	// Clearing this stack deletes all moves. Smart, eh?
-	//trash.clear();
-	// QT doc advises this code instead of the above
-	while (!trash.isEmpty())
-		delete trash.pop();
-}
-
-/* This is slower than it could be, but traverseClear I think is seldom called
- * we also use this in addSon though... */
-bool Tree::isInMainBranch(Move * m) const
-{
-	while(m->parent && m->parent->son == m)
-		m = m->parent;
-	if(m == root)
-		return true;
-	else
-		return false;
-}
-
-/*
- * Find a move starting from the given in the argument in the 
- * all following branches.
- * Results are saved into the reference variable result.
- */
-void Tree::traverseFind(Move *m, int x, int y, QStack<Move*> &result)
-{
-	Q_CHECK_PTR(m);
-	QStack<Move*> stack;
-	Move *t = NULL;
-	
-	// Traverse the tree and drop every node into stack result
-	stack.push(m);
-	
-	while (!stack.isEmpty())
-	{
-		t = stack.pop();
-		if (t != NULL)
-		{
-			if (t->getX() == x && t->getY() == y)
-				result.push(t);
-			stack.push(t->brother);
-			stack.push(t->son);
-		}
-	}
-}
-
 /*
  * Find a move starting from the given in the argument in the main branch, or at marked move.
  */
 Move* Tree::findMove(Move *start, int x, int y, bool checkmarker)
 {
-	if (start == NULL)
-		return NULL;
-	
-	Move *t = start;
-	
-	do {
-		if (t->getX() == x && t->getY() == y)
-			return t;
-		if (checkmarker && t->marker != NULL)
-			t = t->marker;
-		else
-			t = t->son;
-	} while (t != NULL);
-	
-	return NULL;
+    Move *t = start;
+    while (t && (t->getX() != x || t->getY() != y))
+    {
+        t = (checkmarker && t->marker ? t->marker : t->son);
+    }
+    return t;
 }
 
 /*
@@ -402,53 +241,10 @@ Move* Tree::findNode(Move *m, int node)
 	return NULL;
 }
 
-/*
- * count all moves in the tree.
- */
-int Tree::count()
-{
-	if (root == NULL)
-		return 0;
-	
-	QStack<Move*> stack;
-	int counter = 0;
-	Move *t = NULL;
-	
-	// Traverse the tree and count all moves
-	stack.push(root);
-	
-	while (!stack.isEmpty())
-	{
-		t = stack.pop();
-		if (t != NULL)
-		{
-			counter ++;
-			stack.push(t->brother);
-			stack.push(t->son);
-		}
-	}
-	
-	return counter;
-}
-
 void Tree::setCurrent(Move *m)
 {
     current = m;
     emit currentMoveChanged(current);
-}
-
-int Tree::mainBranchSize()
-{
-	if (root == NULL || current == NULL )
-		return 0;
-	
-	Move *tmp = root;
-	
-	int counter = 1;
-	while ((tmp = tmp->son) != NULL)
-		counter ++;
-	
-	return counter;    
 }
 
 Move *Tree::findLastMoveInMainBranch()
@@ -522,28 +318,6 @@ void Tree::addEmptyMove( bool /*brother*/)
 
 }
 
-/* These two functions are a little awkward here, just done to minimize
- * issues with qgoboard edit FIXME */
-void Tree::updateCurrentMatrix(StoneColor c, int x, int y)
-{
-	// Passing?
-    if (x == PASS_XY && y == PASS_XY)
-		return;
-	
-    if ((x < 1) || (x > boardSize) || (y < 1) || (y > boardSize))
-	{
-		qWarning("   *** Tree::updateCurrentMatrix() - Invalid move given: %d/%d at move %d ***",
-			x, y, current->getMoveNumber());
-		return;
-	}
-	
-	Q_CHECK_PTR(current->getMatrix());
-	if(current->getGamePhase() == phaseEdit)
-		current->getMatrix()->insertStone(x, y, c, true);
-	else
-		current->getMatrix()->insertStone(x, y, c);
-}
-
 /* FIXME double check and remove editMove, unnecessary */
 void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 {
@@ -556,138 +330,25 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 
 void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
 {
+    if (x == PASS_XY && y == PASS_XY)
+        return;
+
+    if ((x < 1) || (x > boardSize) || (y < 1) || (y > boardSize))
+        return;
+
     if (current == root)
     {
         current->setHandicapMove(true);
 		current->setMoveNumber(0); //TODO : make sure this is the proper way
         current->setX(-1);
         current->setY(-1);
-		/* SGF submits handicap edit moves as root, they need to be
-		 * given a color so that that color can flip over the cursor
-		 * this is ugly, the cursor should be set by who's turn it
-		 * is, by whatever means that's found, NOT by the color
-		 * of the last move, to unify it.  Regardless, here's our
-		 * solution.  Took me a while to find it because I assumed
-		 * that the cursor and the move color we're linked when they're
-		 * not.  Note also that this color is different from the
-		 * individual colors of the matrix positions for this move */
-		current->setColor(stoneBlack);
+        current->setColor(stoneBlack); // So that it is white's turn
 	}
-	updateCurrentMatrix(c, x, y);
-	//editMove(c, x, y);
-}
 
-/*
- *	Returns: true  - son of current move was found
- *           false - 
- */
-bool Tree::insertStone(Move *node)
-{
-	if (root == NULL)
-	{
-		qFatal("Error: No root!");
-		return false;
-	}
-	else
-	{
-		if (current == NULL)
-		{
-			qFatal("Error: No current node!");
-			return false;
-		}
-
-		// current node has no son?
-		if (current->son == NULL)
-		{
-			if(current == node)
-			{
-				qDebug("Attempting to add move as its own son!");
-				return false;
-			}
-
-			current->son = node;
-			node->parent = current;
-			node->setTimeinfo(false);
-            current = node;
-			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
-			
-			return false;
-		}
-		// A son found
-		else
-		{
-			
-			//we insert node between current and current->son
-			node->parent = current;
-			node->son = current->son;
-			current->son->parent = node;
-			current->son = node;
-
-			//update all brothers to enable switching between them
-			Move *t = node->son->brother;
-			while (t != NULL) 
-			{
-				t->parent = node;
-				t = t->brother;
-			}
-			current->parent->marker = current;
-			node->marker = NULL;
-
-			node->setTimeinfo(false);
-            current = node;
-			node->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
-
-			//update son - it is exclude from traverse search because we cannot update brothers of node->son
-			node->son->setMoveNumber(node->son->getMoveNumber()+1);
-			node->son->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
-
-			if (node->son->son != NULL)
-			{
-				// Traverse the tree and update every node (matrix and moveNum)
-				QStack<Move*> stack;
-				Move *t = NULL;
-				stack.push(node->son->son);
-
-				while (!stack.isEmpty())
-				{
-					t = stack.pop();
-					if (t != NULL)
-					{
-						if (t->brother != NULL)
-							stack.push(t->brother);
-						if (t->son != NULL)
-							stack.push(t->son);
-						t->setMoveNumber(t->getMoveNumber()+1);
-						t->getMatrix()->insertStone(node->getX(), node->getY(), node->getColor());
-					}
-				}
-			}
-			return true;
-		}
-	}
-}
-
-void Tree::undoMove(void)
-{
-#ifdef NOTWORKING
-	previousMove();
-	
-	current->marker = current->son;
-	current->son = NULL;
-#endif //NOTWORKING
-	deleteNode();
-}
-
-int Tree::getLastCaptures(Move * m)
-{
-	if(!m->parent)
-		return 0;
-	if(m->getColor() == stoneWhite)
-		return m->getCapturesWhite() - m->parent->getCapturesWhite();
-	else if(m->getColor() == stoneBlack)
-		return m->getCapturesBlack() - m->parent->getCapturesBlack();
-	else
-		return 0;
+    if(current->getGamePhase() == phaseEdit)
+        current->getMatrix()->insertStone(x, y, c, true);
+    else
+        current->getMatrix()->insertStone(x, y, c);
 }
 
 /*
@@ -695,70 +356,17 @@ int Tree::getLastCaptures(Move * m)
  */
 void Tree::deleteNode()
 {
-	Move *m = getCurrent(),
-		*remember = NULL,
-		*remSon = NULL;
-	Q_CHECK_PTR(m);
-	
-	if (m->parent != NULL)
-	{
-		remember = m->parent;
-		
-		// Remember son of parent if its not the move to be deleted.
-		// Then check for the brothers and fix the pointer connections, if we
-		// delete a node with brothers. (It gets ugly now...)
-		// YUCK! I hope this works.
-		if (remember->son == m)                  // This son is our move to be deleted?
-		{
-			if (remember->son->brother != NULL)  // This son has a brother?
-				remSon = remember->son->brother; // Reset pointer
-		}
-		else                                     // No, the son is not our move
-		{
-			remSon = remember->son;
-			Move *tmp = remSon, *oldTmp = tmp;
-			
-			do {   // Loop through all brothers until we find our move
-				if (tmp == m)
-				{
-					if (m->brother != NULL)            // Our move has a brother?
-						oldTmp->brother = m->brother;  // Then set the previous move brother
-					else                               // to brother of our move
-						oldTmp->brother = NULL;        // No brother found.
-					break;
-				}
-				oldTmp = tmp;
-			} while ((tmp = tmp->brother) != NULL);
-		}
-	}
-	else if (hasPrevBrother())
-	{
-		remember = previousVariation();
-		if (m->brother != NULL)
-			remember->brother = m->brother;
-		else
-			remember->brother = NULL;
-	}
-	else if (hasNextBrother())
-	{
-		remember = nextVariation();
-		// Urgs, remember is now root.
-		setRoot(remember);
-	}
-	else
-	{
-		// Oops, first and only move. We delete everything
+    if (current == root)
+    {
         init();
-		return;
-	}
-	if(isInMainBranch(m))
-		lastMoveInMainBranch = remember;
-	if (m->son != NULL)
-		traverseClear(m->son);  // Traverse the tree after our move (to avoid brothers)
-	delete m;                         // Delete our move
-    remember->son = remSon;           // Reset son pointer, NULL
-	remember->marker = NULL;          // Forget marker
-    setCurrent(remember);       // Set current move to previous move
+        return;
+    }
+
+    Move *remember = current->parent;
+    delete current;
+    setCurrent(remember);
+    if(remember->isInMainBranch())
+        lastMoveInMainBranch = remember;
 }
 
 
@@ -789,9 +397,8 @@ void Tree::slotNavBackward()
 
 void Tree::slotNavFirst()
 {
-    if (root == NULL)
-        qFatal("Error: No root!");
-    setCurrent(root);
+    if (root)
+        setCurrent(root);
 }
 
 void Tree::slotNavLast()
@@ -875,12 +482,15 @@ void Tree::slotNthMove(int n)
 
 void Tree::slotNavNextVar()
 {
-    nextVariation();
+    if (current && current->brother)
+        setCurrent(current->brother);
 }
 
 void Tree::slotNavPrevVar()
 {
-    Move *m = previousVariation();
+    if (current == NULL)
+        return;
+    Move *m = current->getPrevBrother();
     if (m != NULL)
         setCurrent(m);
 }
@@ -924,7 +534,7 @@ void Tree::slotNavMainBranch()
 
     while ((m = m->parent) != NULL)
     {
-        if (getNumSons(m) > 1 && old != m->son)
+        if (m->getNumSons() > 1 && old != m->son)
             // Remember a node when we came from a branch
             lastOddNode = m;
 

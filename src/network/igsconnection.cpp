@@ -3440,7 +3440,7 @@ void IGSConnection::handle_status(QString line)
 	else
 	{
 		if(!statusDispatch)
-			return;
+            return;
 		int row = element(line, 0, ":").toInt();
         QString results = element(line, 1, " ");
 		/* X and Y are swapped below */

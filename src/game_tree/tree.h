@@ -40,10 +40,7 @@ public:
     Tree(int board_size, float komi);
 	~Tree();
     void init();
-    int getNumSons(Move *m=0);
-	int getBranchLength(Move *node=0);
-    Move* nextVariation();
-	Move* previousVariation();
+    int getBranchLength(Move *node=0);
     Move* getCurrent() const { return current; }
 	void setCurrent(Move *m);
     Move* getRoot() const { return root; }
@@ -52,7 +49,6 @@ public:
     Move * findLastMoveInMainBranch();
 	Move * findLastMoveInCurrentBranch();
 	Move * findNode(Move *m, int node);
-    bool isInMainBranch(Move * m) const;
 /*
  * Former Boardhandler functions called by SGF parser
  */
@@ -67,9 +63,6 @@ public:
  * Former Stonehandler functions called by addStoneSGF
  * Those functions are used when adding a stone, and check all Go issues : libertes, death, ...
  */
-    void undoMove(void);
-
-	bool insertStone(Move *node);
     void setLoadingSGF(bool b) { loadingSGF = b; }
 
     void findMoveByPos(int x,int  y);
@@ -116,15 +109,7 @@ private:
     bool hasSon(Move *m);
     bool hasPrevBrother(Move *m=0);
     bool hasNextBrother();
-    void clear();
-    void traverseClear(Move *m);
-    int count();
     void setRoot(Move *m) { root = m; }
-    int mainBranchSize();
-    void traverseFind(Move *m, int x, int y, QStack<Move*> &result);
-
-	int getLastCaptures(Move * m);
-    void updateCurrentMatrix(StoneColor c, int x, int y);
 
     const int boardSize;
 

@@ -27,7 +27,7 @@
 #include "qgoboardlocalinterface.h"
 #include "move.h"
 #include "tree.h"
-#include "../network/boarddispatch.h"
+#include "boarddispatch.h"
 #include "gameinfo.h"
 #include "matrix.h"
 #include "ui_boardwindow.h"
@@ -132,18 +132,16 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
     }
 
     // Connects the nav buttons to the slots
-    connect(ui->navForward,SIGNAL(pressed()), tree, SLOT(slotNavForward()));
-    connect(ui->navBackward,SIGNAL(pressed()), tree, SLOT(slotNavBackward()));
-    connect(ui->navNextVar, SIGNAL(pressed()), tree, SLOT(slotNavNextVar()));
-    connect(ui->navPrevVar, SIGNAL(pressed()), tree, SLOT(slotNavPrevVar()));
-    connect(ui->navFirst, SIGNAL(pressed()), tree, SLOT(slotNavFirst()));
-    connect(ui->navLast, SIGNAL(pressed()), tree, SLOT(slotNavLast()));
-    connect(ui->navMainBranch, SIGNAL(pressed()), tree, SLOT(slotNavMainBranch()));
-    connect(ui->navStartVar, SIGNAL(pressed()), tree, SLOT(slotNavStartVar()));
-    connect(ui->navNextBranch, SIGNAL(pressed()), tree, SLOT(slotNavNextBranch()));
-    connect(ui->navIntersection, SIGNAL(pressed()), this, SLOT(slotNavIntersection()));
-    connect(ui->navPrevComment, SIGNAL(pressed()), tree, SLOT(slotNavPrevComment()));
-    connect(ui->navNextComment, SIGNAL(pressed()), tree, SLOT(slotNavNextComment()));
+    connect(ui->actionNext_move,&QAction::triggered,tree,&Tree::slotNavForward);
+    connect(ui->actionPrevious_move,&QAction::triggered,tree,&Tree::slotNavBackward);
+    connect(ui->actionFirst_move,&QAction::triggered,tree,&Tree::slotNavFirst);
+    connect(ui->actionLast_move,&QAction::triggered,tree,&Tree::slotNavLast);
+    connect(ui->actionPrevious_variation,&QAction::triggered,tree,&Tree::slotNavPrevVar);
+    connect(ui->actionNext_variation,&QAction::triggered,tree,&Tree::slotNavNextVar);
+    connect(ui->actionFind_move,&QAction::triggered,this,&BoardWindow::slotNavIntersection);
+    connect(ui->actionMain_branch,&QAction::triggered,tree,&Tree::slotNavMainBranch);
+    connect(ui->actionPrevious_comment,&QAction::triggered,tree,&Tree::slotNavPrevComment);
+    connect(ui->actionNext_comment,&QAction::triggered,tree,&Tree::slotNavNextComment);
     connect(ui->slider, SIGNAL(sliderMoved ( int)), tree , SLOT(slotNthMove(int)));
 
     wheelTime = QTime::currentTime();
@@ -785,61 +783,6 @@ void BoardWindow::slotEditDelete()
     tree->deleteNode();
 }
 
-/* FIXME this comes up with unrelated keys, which is okay I guess, little
- * annoying. */
-void BoardWindow::keyPressEvent(QKeyEvent *e)
-{
-    // don't view last moves while playing
-    if (gameData->gameMode == modeMatch ||
-            gameData->gameMode == modeTeach)
-	{
-		qDebug("Not local game.\n");
-        e->ignore();
-		return;
-	}
-	
-	switch (e->key())
-	{
-		/*
-		// TODO: DEBUG
-#ifndef NO_DEBUG
-case Key_W:
-board->debug();
-break;
-#endif
-*/
-
-		case Qt::Key_Left:
-            tree->slotNavBackward();
-			break;
-
-		case Qt::Key_Right:
-            tree->slotNavForward();
-			break;
-
-		case Qt::Key_Up:
-            tree->slotNavPrevVar();
-			break;
-
-		case Qt::Key_Down:
-            tree->slotNavNextVar();
-			break;
-
-		case Qt::Key_Home:
-            tree->slotNavFirst();
-			break;
-
-		case Qt::Key_End:
-            tree->slotNavLast();
-			break;
-
-		default:
-			e->ignore();
-	}
-
-	e->accept();
-}
-
 void BoardWindow::setBoardDispatch(BoardDispatch * d)
 {
 	dispatch = d;
@@ -1309,7 +1252,6 @@ void BoardWindow::setMode(GameMode mode)
         ui->commentEdit->setReadOnly(true);
         ui->commentEdit2->setEnabled(true);
         ui->commentEdit2->setReadOnly(false);
-        ui->navButtonsFrame->setEnabled(false);
         return ;
 
     case   modeLocal :
@@ -1322,7 +1264,6 @@ void BoardWindow::setMode(GameMode mode)
         ui->adjournButton->setEnabled(false);
         ui->doneButton->setEnabled(false);
         ui->commentEdit->setReadOnly(true);
-        ui->navButtonsFrame->setEnabled(false);
         ui->commentEdit2->setDisabled(true);
         ui->reviewButton->setDisabled(true);
         return ;
@@ -1337,7 +1278,6 @@ void BoardWindow::setMode(GameMode mode)
         ui->adjournButton->setEnabled(true);
         ui->doneButton->setEnabled(false);
         ui->commentEdit->setReadOnly(true);
-        ui->navButtonsFrame->setEnabled(false);
         ui->commentEdit2->setReadOnly(false);
         ui->commentEdit2->setEnabled(true);
         return ;
@@ -1434,39 +1374,13 @@ void BoardWindow::setMoveData(int n, bool black, int brothers, int sons, bool ha
     {
         /* For now, just disable navigation if its in the review mode, they can always duplicate
          * the board and a lot more is necessary for qgo to do reviews. */
-        ui->navPrevVar->setEnabled(false);
-        ui->navNextVar->setEnabled(false);
-        ui->navBackward->setEnabled(false);
-        ui->navForward->setEnabled(false);
-        ui->navFirst->setEnabled(false);
-        ui->navStartVar->setEnabled(false);
-        ui->navMainBranch->setEnabled(false);
-        ui->navLast->setEnabled(false);
-        ui->navNextBranch->setEnabled(false);
-        ui->swapVarButton->setEnabled(false);
-        ui->navPrevComment->setEnabled(false);
-        ui->navNextComment->setEnabled(false);
-        ui->navIntersection->setEnabled(false);
-
+        ui->toolBar_Navigation->setEnabled(false);
         ui->slider->setEnabled(false);
     }
     else if (getGameMode() == modeEdit || getGameMode() == modeObserve )//|| board->getGameMode() == modeEdit)
     {
         // Update the toolbar buttons
-        ui->navPrevVar->setEnabled(hasPrev);
-        ui->navNextVar->setEnabled(hasNext);
-        ui->navBackward->setEnabled(hasParent);
-        ui->navForward->setEnabled(sons);
-        ui->navFirst->setEnabled(hasParent);
-        ui->navStartVar->setEnabled(hasParent);
-        ui->navMainBranch->setEnabled(hasParent);
-        ui->navLast->setEnabled(sons);
-        ui->navNextBranch->setEnabled(sons);
-        ui->swapVarButton->setEnabled(hasPrev);
-        ui->navPrevComment->setEnabled(hasParent);
-        ui->navNextComment->setEnabled(sons);
-        ui->navIntersection->setEnabled(true);
-
+        ui->toolBar_Navigation->setEnabled(true);
         ui->slider->setEnabled(true);
     }
 

@@ -96,7 +96,6 @@ public:
 protected:
 	void closeEvent(QCloseEvent *e);
 	void resizeEvent(QResizeEvent *e);
-    void keyPressEvent(QKeyEvent *e);
 
 signals:
 	void signal_boardClosed(int);

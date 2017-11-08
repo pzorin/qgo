@@ -97,8 +97,10 @@ public:
 	bool hasPrevBrother(); 
 	bool hasNextBrother();
     bool checkMoveIsValid(StoneColor c, int x, int y);
+    bool isInMainBranch() const;
 
     Move *hasSon(StoneColor c, int x, int y);
+    Move *getPrevBrother();
     Move *makeMove(StoneColor c, int x, int y, bool force = false);
     Move *makePass();
 
