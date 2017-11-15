@@ -196,16 +196,8 @@ void qGoBoardMatchInterface::slotReviewPressed()
 
 void qGoBoardMatchInterface::slotDrawPressed()
 {
-	QMessageBox mb(tr("Request Draw?"),
-            QString(tr("Ask %1 to end game in draw?\n")).arg(dispatch->getOpponentName()),
-			QMessageBox::Question,
-	  		QMessageBox::Yes | QMessageBox::Default,
-   			QMessageBox::No | QMessageBox::Escape,
-   			QMessageBox::NoButton);
-	mb.raise();
-//	qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(boardwindow,tr("Request Draw?"),QString(tr("Ask %1 to end game in draw?\n")).arg(dispatch->getOpponentName()))
+            == QMessageBox::Yes)
     {
         if(connection)
         {
@@ -218,16 +210,8 @@ void qGoBoardMatchInterface::slotDrawPressed()
 
 void qGoBoardMatchInterface::slotCountPressed()
 {
-	QMessageBox mb(tr("Request Count?"),
-            QString(tr("Ask %1 to end game?\n")).arg(dispatch->getOpponentName()),
-			QMessageBox::Question,
-	  		QMessageBox::Yes | QMessageBox::Default,
-   			QMessageBox::No | QMessageBox::Escape,
-   			QMessageBox::NoButton);
-	mb.raise();
-//	qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(boardwindow, tr("Request Count?"),
+            QString(tr("Ask %1 to end game?\n")).arg(dispatch->getOpponentName())) == QMessageBox::Yes)
         dispatch->sendRequestCount();
 }
 
@@ -242,16 +226,8 @@ void qGoBoardMatchInterface::slotAdjournPressed()
 	 * that can be denied although that's weird to me... since
 	 * they can always close the window.*/
 	/* But I have to figure out the IGS command first, at least...*/
-	QMessageBox mb(tr("Adjourn?"),
-               QString(tr("Ask %1 to adjourn?\n")).arg(dispatch->getOpponentName()),
-		       QMessageBox::Question,
-		       QMessageBox::Yes | QMessageBox::Default,
-		       QMessageBox::No | QMessageBox::Escape,
-		       QMessageBox::NoButton);
-	mb.raise();
-//		qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(boardwindow, tr("Adjourn?"),
+               QString(tr("Ask %1 to adjourn?\n")).arg(dispatch->getOpponentName())) == QMessageBox::Yes)
 	{
         dispatch->sendAdjournRequest();
 	}
@@ -264,16 +240,8 @@ void qGoBoardMatchInterface::recvRefuseAdjourn(void)
 
 void qGoBoardMatchInterface::requestAdjournDialog(void)
 {
-	QMessageBox mb(tr("Adjourn?"),
-           QString(tr("%1 wants to adjourn\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
-	       QMessageBox::Question,
-	       QMessageBox::Yes | QMessageBox::Default,
-	       QMessageBox::No | QMessageBox::Escape,
-	       QMessageBox::NoButton);
-		mb.raise();
-//		qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(boardwindow,tr("Adjourn?"),
+           QString(tr("%1 wants to adjourn\n\nDo you accept ? \n")).arg(dispatch->getOpponentName())) == QMessageBox::Yes)
 	{
         dispatch->sendAdjourn();
 		/* FIXME
@@ -291,16 +259,9 @@ void qGoBoardMatchInterface::requestAdjournDialog(void)
 
 void qGoBoardMatchInterface::requestCountDialog(void)
 {
-	QMessageBox mb(tr("End game?"),
-            QString(tr("%1 requests count\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
-			QMessageBox::Question,
-   			QMessageBox::Yes | QMessageBox::Default,
-   			QMessageBox::No | QMessageBox::Escape,
-   			QMessageBox::NoButton);
-	mb.raise();
-//	qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(boardwindow,tr("End game?"),
+                              QString(tr("%1 requests count\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()))
+            == QMessageBox::Yes)
 	{
         dispatch->sendAcceptCountRequest();
 		enterScoreMode();
@@ -318,16 +279,9 @@ void qGoBoardMatchInterface::recvRefuseCount(void)
 
 void qGoBoardMatchInterface::requestMatchModeDialog(void)
 {
-	QMessageBox mb(tr("Return to game?"),
-            QString(tr("%1 requests return to match mode\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
-			QMessageBox::Question,
-   			QMessageBox::Yes | QMessageBox::Default,
-   			QMessageBox::No | QMessageBox::Escape,
-   			QMessageBox::NoButton);
-	mb.raise();
-//	qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(0,tr("Return to game?"),
+                              QString(tr("%1 requests return to match mode\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()))
+            == QMessageBox::Yes)
 	{
         dispatch->sendAcceptMatchModeRequest();
 		leaveScoreMode();
@@ -345,16 +299,9 @@ void qGoBoardMatchInterface::recvRefuseMatchMode(void)
 
 void qGoBoardMatchInterface::requestDrawDialog(void)
 {
-	QMessageBox mb(tr("End game?"),
-            QString(tr("%1 requests draw\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()),
-			QMessageBox::Question,
-	  		QMessageBox::Yes | QMessageBox::Default,
-   			QMessageBox::No | QMessageBox::Escape,
-   			QMessageBox::NoButton);
-	mb.raise();
-//	qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(boardwindow,tr("End game?"),
+                              QString(tr("%1 requests draw\n\nDo you accept ? \n")).arg(dispatch->getOpponentName()))
+            == QMessageBox::Yes)
 	{
         dispatch->sendAcceptDrawRequest();
 		//FIXME

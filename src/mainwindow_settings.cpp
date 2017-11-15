@@ -212,14 +212,9 @@ void MainWindow::slot_cancelPressed()
 
 void MainWindow::slot_languageChanged(int)
 {
-	QMessageBox mb(tr("Change Language?"),
-			QString(tr("Changing the language requires restarting qGo.  Go ahead?\n")),
-			QMessageBox::Question,
-	  		QMessageBox::Yes | QMessageBox::Default,
-   			QMessageBox::No | QMessageBox::Escape,
-   			QMessageBox::NoButton);
-
-	if (mb.exec() == QMessageBox::Yes)
+    if (QMessageBox::question(this,tr("Change Language?"),
+            QString(tr("Changing the language requires restarting qGo.  Go ahead?\n")))
+            == QMessageBox::Yes)
 	{
         if(ui->connectionWidget->closeConnection() < 0)
 			goto lc_no_close;

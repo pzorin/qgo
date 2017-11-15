@@ -67,11 +67,8 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
                 gameData->komi,
                 gameData->handicap)==FAIL)
     {
-        QMessageBox msg(QMessageBox::Warning,
-                        QObject::tr("Error"),
-                        QObject::tr("Error opening program: %1").arg(gtp->getLastMessage()),
-                        QMessageBox::Ok);
-        msg.exec();
+        QMessageBox::warning(0,QObject::tr("Error"),
+                             QObject::tr("Error opening program: %1").arg(gtp->getLastMessage()));
         delete gtp;
         gtp = NULL;
     }

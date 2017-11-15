@@ -70,7 +70,7 @@ void qGoBoard::setHandicap(int handicap)
         tree->getCurrent()->setColor(stoneBlack);
         gameData->handicap = handicap;
     }
-    tree->setCurrent(tree->getCurrent()); // Toggles window refresh
+    boardwindow->updateMove(tree->getCurrent()); // Toggles window refresh
 
     boardwindow->setGamePhase(store);
 }
@@ -142,8 +142,6 @@ int qGoBoard::getMoveNumber(void)
  */
 void qGoBoard::passRequest()
 {
-	StoneColor c = (getBlackTurn() ? stoneBlack : stoneWhite );
-
 	if((getBlackTurn() && boardwindow->getMyColorIsBlack()) ||
        (!getBlackTurn() && boardwindow->getMyColorIsWhite()))
         doPass();

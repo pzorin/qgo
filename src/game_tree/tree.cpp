@@ -35,7 +35,6 @@
 Tree::Tree(int board_size, float komi)
     : boardSize(board_size), root(NULL), komi(komi)
 {
-    checkPositionTags = NULL;
     init();
     loadingSGF = false;
 }
@@ -47,126 +46,12 @@ void Tree::init()
     lastMoveInMainBranch = current = root = new Move(boardSize);
 	// node index used for IGS review
 	root->setNodeIndex(1);
-	
-	if(checkPositionTags)
-		delete checkPositionTags;
-    checkPositionTags = new Matrix(boardSize);
 }
 
 Tree::~Tree()
 {
-	delete checkPositionTags;
     if (root)
         delete root;
-}
-
-/*
- *  Adds a brother at the end of the brother chain of current()
- */
-// may be kind of silly if we move it to the Move class FIXME
-bool Tree::addBrother(Move *node)
-{
-	if (root == NULL)
-	{
-		qFatal("Error: No root!");
-	}
-	else
-	{
-		if (current == NULL)
-		{
-			qFatal("Error: No current node!");
-			return false;
-		}
-		
-		current->addBrother(node);
-	}
-	
-	current = node;
-	
-	return true;
-}
-
-/*
- * Returns: true  - A son found, added as brother
- *          false - No son found, added as first son
- */
-bool Tree::addSon(Move *node)
-{
-	if (root == NULL)
-	{
-		qFatal("Error: No root!");
-		return false;
-	}
-    if (current == NULL)
-    {
-        qFatal("Error: No current node!");
-        return false;
-    }
-
-    // current node has no son?
-    if (current->son == NULL)
-    {
-        if(current == node)
-        {
-            qDebug("Attempting to add move as its own son!");
-            return false;
-        }
-        current->son = node;
-
-        node->parent = current;
-        node->setTimeinfo(false);
-        current = node;
-        if(current->isInMainBranch())
-            lastMoveInMainBranch = current;
-        return false;
-    }
-    // A son found. Add the new node as farest right brother of that son
-    else
-    {
-        current = current->son;
-        if (!addBrother(node))
-        {
-            qFatal("Failed to add a brother.");
-            return false;
-        }
-        if(!loadingSGF)		//since this would put every branch on the last brother
-            current->parent->marker = node;
-
-        current = node;
-        return true;
-    }
-
-}
-
-bool Tree::hasNextBrother()
-{
-	if (current == NULL || current->brother == NULL)
-		return false;
-	
-	return current->brother != NULL;
-}
-
-bool Tree::hasPrevBrother(Move *m)
-{
-	if (m == NULL)
-		m = current;
-	
-	if (root == NULL || m == NULL)
-		return false;
-	
-	Move *tmp;
-	
-	if (m->parent == NULL)
-	{
-		if (m == root)
-			return false;
-		else
-			tmp = root;
-	}
-	else
-		tmp = m->parent->son;
-	
-	return tmp != m;
 }
 
 int Tree::getBranchLength(Move *node)
@@ -190,13 +75,6 @@ int Tree::getBranchLength(Move *node)
 		counter ++;
 	
 	return counter;
-}
-
-bool Tree::hasSon(Move *m)
-{
-    if (root == NULL || m == NULL || current == NULL)
-		return false;
-    return (current->hasSon(m->getColor(), m->getX(), m->getY()) != NULL);
 }
 
 /*
@@ -243,6 +121,9 @@ Move* Tree::findNode(Move *m, int node)
 
 void Tree::setCurrent(Move *m)
 {
+    if (!m || (current == m))
+        return;
+
     current = m;
     emit currentMoveChanged(current);
 }
@@ -283,39 +164,13 @@ Move *Tree::findLastMoveInCurrentBranch()
 	return m;
 }
 
-void Tree::addEmptyMove( bool /*brother*/)
+void Tree::addEmptyMove()
 {
-	// qDebug("BoardHandler::createMoveSGF() - %d", mode);
-	
-	Move *m;
-	
-	Matrix *mat = current->getMatrix();
-	m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing, *mat, true);
-	/*else	//fastload
-	{
-		m = new Move(stoneBlack, -1, -1, current->getMoveNumber()+1, phaseOngoing);
-	}*/
-#ifdef FIXME
-	if (!brother && hasSon(m))
-	{
-		/* FIXME in loading that Kogo's joseki dictionary we get
-		 * about 20 of these, probably sources to a sgfparser issue */
-		/* Okay, as far as I know, this function is never called with
-		 * "brother", so it just always does addSon.
-		 * Then addSon will add a brother if it should be a brother.
-		 * Obviously this needs clarification */
-		qDebug("*** HAVE THIS SON ALREADY! ***");
-		delete m;
-		return;
-	}
-#endif //FIXME	
-	
-	/* Below removed since brother never used */
-	//if (!brother)
-		addSon(m);
-	//else
-	//	addBrother(m);
-
+    Move * node = new Move(current,stoneBlack, -1, -1);
+    node->setTimeinfo(false);
+    current = node;
+    if(current->isInMainBranch())
+        lastMoveInMainBranch = current;
 }
 
 /* FIXME double check and remove editMove, unnecessary */
@@ -324,8 +179,7 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 /////////////////FIXME We may have a problem at first move with handicap games ...
 	StoneColor c = (current->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
     Move *result = current->makeMove(c, PASS_XY, PASS_XY);
-    if (result)
-        setCurrent(result);
+    setCurrent(result);
 }
 
 void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
@@ -410,38 +264,26 @@ void Tree::slotNavPrevComment()
 {
     Move  *m = current->parent;
 
-    while (m != NULL)
+    while (m)
     {
-        if (m->getComment() != "")
-            break;
-        if (m->parent == NULL)
+        if (!(m->getComment().isEmpty()))
             break;
         m = m->parent;
     }
-
-    if (m != NULL)
-    {
-        setCurrent(m);
-    }
+    setCurrent(m);
 }
 
 void Tree::slotNavNextComment()
 {
     Move  *m = current->son;
 
-    while (m != NULL)
+    while (m)
     {
-        if (m->getComment() != "")
-            break;
-        if (m->son == NULL)
+        if (!(m->getComment().isEmpty()))
             break;
         m = m->son;
     }
-
-    if (m != NULL)
-    {
-        setCurrent(m);
-    }
+    setCurrent(m);
 }
 
 void Tree::slotNthMove(int n)
@@ -454,30 +296,20 @@ void Tree::slotNthMove(int n)
 
     int currentMove = m->getMoveNumber();
 
-    while (m != NULL)
+    while (m && ((currentMove = m->getMoveNumber()) != n))
     {
-        if (m->getMoveNumber() == n)
-            break;
-        if ((n >= currentMove && m->son == NULL && m->marker == NULL) ||
-            (n < currentMove && m->parent == NULL))
-            break;
+        m->parent->marker = m;
         if (n > currentMove)
         {
-            if (m->marker == NULL)
-                m = m->son;
-            else
-                m = m->marker;
-            m->parent->marker = m;
+            m = (m->marker ? m->marker : m->son);
         }
         else
         {
-            m->parent->marker = m;
             m = m->parent;
         }
     }
 
-    if (m != NULL && m != old)
-        setCurrent(m);
+    setCurrent(m);
 }
 
 void Tree::slotNavNextVar()
@@ -490,15 +322,13 @@ void Tree::slotNavPrevVar()
 {
     if (current == NULL)
         return;
-    Move *m = current->getPrevBrother();
-    if (m != NULL)
-        setCurrent(m);
+    setCurrent(current->getPrevBrother());
 }
 
 void Tree::slotNavStartVar()
 {
     Move *m = current->parent;
-    while ((m != NULL) && (m->getNumSons() <= 1))
+    while (m && !(m->brother))
         m = m->parent;
     setCurrent(m ? m : root);
 }
@@ -510,11 +340,10 @@ void Tree::slotNavNextBranch()
         return;
 
     // Descend to the next branching point
-    while (m->getNumSons() == 1)
+    while (m->son && !(m->brother))
         m = m->son;
 
-    if (m->son != NULL)
-        setCurrent(m->son);
+    setCurrent(m);
 }
 
 /*
@@ -522,35 +351,20 @@ void Tree::slotNavNextBranch()
  */
 void Tree::slotNavMainBranch()
 {
-    if (current->parent == NULL)
-        return;
-
-    Move *m = current,
-        *old = m,
-        *lastOddNode = NULL;
-
-    if (m == NULL)
-        return;
-
-    while ((m = m->parent) != NULL)
+    Move *m = current;
+    Move *n = current;
+    while (m->parent)
     {
-        if (m->getNumSons() > 1 && old != m->son)
-            // Remember a node when we came from a branch
-            lastOddNode = m;
-
-        m->marker = old;
-        old = m;
+        if (m->parent->son != m)
+            n = m->parent;
+        m = m->parent;
     }
 
-    if (lastOddNode == NULL)
+    if (n == m)
         return;
 
-    Q_CHECK_PTR(lastOddNode);
-
-    // Clear the marker, so we can proceed in the main branch
-    lastOddNode->marker = NULL;
-
-    setCurrent(lastOddNode);
+    n->marker = NULL;
+    setCurrent(n);
 }
 
 /*
@@ -561,12 +375,10 @@ void Tree::findMoveByPos(int x, int y)
 {
     Move *m = findMoveInMainBranch(x, y);
     if(!m)
-        findMoveInCurrentBranch(x, y);
+        m=findMoveInCurrentBranch(x, y);
 
-    if (m != NULL)
-    {
+    if (m)
         setCurrent(m);
-    }
 }
 
 /*

@@ -236,12 +236,7 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 			}
 			catch(QString err)
 			{
-				QMessageBox msg(QObject::tr("Error"),
-						err,
-						QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default, QMessageBox::NoButton, QMessageBox::NoButton);
-				//msg.setActiveWindow();
-				msg.raise();
-				msg.exec();
+                QMessageBox::warning(this,QObject::tr("Error"),	err);
 				return;
 			}
 			break;	
@@ -325,32 +320,19 @@ bool BoardWindow::okayToQuit(void)
 	if (!qgoboard->getModified())
 		return true;
 
-	QSettings settings;
-#ifdef UNNECESSARY
-	if(getGameMode() == modeComputer && !settings.value("WARNONCLOSEENGINE").toBool())
-		return true;
-	if(getGameMode() == modeNormal && !settings.value("WARNONCLOSEEDITED").toBool())
-		return true;
-#endif //UNNECESSARY
-	switch (QMessageBox::warning(this, PACKAGE,
-		tr("You modified the game.\nDo you want to save your changes?"),
-		tr("Yes"), tr("No"), tr("Cancel"),
-		0, 2))
-	{
-		case 0:
-			return slotFileSave() && !qgoboard->getModified();
-			
-		case 1:
-			return true;
-			
-		case 2:
-			return false;
-			
-		default:
-			qWarning("Unknown messagebox input.");
-			return false;
-	}
-	return true;
+    switch (QMessageBox::warning(this, PACKAGE,
+                                 tr("You modified the game.\nDo you want to save your changes?"),
+                                 QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel , QMessageBox::Cancel))
+    {
+    case QMessageBox::Save:
+        return slotFileSave() && !qgoboard->getModified();
+    case QMessageBox::Discard:
+        return true;
+    case QMessageBox::Cancel:
+        return false;
+    default:
+        return true;
+    }
 }
 
 /* FIXME make sure closeEvent doesn't get called on delete */
@@ -625,7 +607,7 @@ bool BoardWindow::doSave(QString fileName, bool force)
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly))
     {
-        QMessageBox::warning(0, PACKAGE, QObject::tr("Could not open file:") + " " + fileName);
+        QMessageBox::warning(this, PACKAGE, QObject::tr("Could not open file:") + " " + fileName);
         return false;
     }
     file.write(SGF.toLatin1());

@@ -53,7 +53,7 @@ public:
  * Former Boardhandler functions called by SGF parser
  */
 
-	void addEmptyMove(bool brother =false);
+    void addEmptyMove();
 	void doPass(bool sgf, bool fastLoad = false);
 	
     void addStoneToCurrentMove(StoneColor c, int x, int y);
@@ -104,17 +104,9 @@ public:
     Move *lastMoveInMainBranch;
 
 private:
-    bool addBrother(Move *node);
-    bool addSon(Move *node);
-    bool hasSon(Move *m);
-    bool hasPrevBrother(Move *m=0);
-    bool hasNextBrother();
-    void setRoot(Move *m) { root = m; }
-
     const int boardSize;
 
     Move *root, *current;
-	Matrix * checkPositionTags;
 
     bool loadingSGF;
     int deadWhite, deadBlack;

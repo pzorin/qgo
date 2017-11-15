@@ -5764,9 +5764,7 @@ void CyberOroConnection::handleMatchDecline(unsigned char * msg, unsigned int si
 	}
 	else
 	{
-		QMessageBox mb(tr("Rematch declined"), tr("%1 has declined rematch").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
-			QMessageBox::NoButton, QMessageBox::NoButton);
-		mb.exec();
+        QMessageBox::information(0, tr("Rematch declined"), tr("%1 has declined rematch").arg(player->name));
 	}
 	match_negotiation_state->reset();
 #ifdef RE_DEBUG
@@ -7759,9 +7757,7 @@ void CyberOroConnection::handleDeclineMatchInvite(unsigned char * msg, unsigned 
 	if(!match_negotiation_state->verifyPlayer(player))
 		return;
 	match_negotiation_state->reset();
-	QMessageBox mb(tr("Invite declined"), tr("%1 has declined invitation").arg(player->name), QMessageBox::Information, QMessageBox::Ok | QMessageBox::Default,
-			QMessageBox::NoButton, QMessageBox::NoButton);
-	mb.exec();
+    QMessageBox::information(0, tr("Invite declined"), tr("%1 has declined invitation").arg(player->name));
 	
 #ifdef RE_DEBUG
 	printf("0xa479: ");

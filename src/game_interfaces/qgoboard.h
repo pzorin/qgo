@@ -96,72 +96,8 @@ public:
     virtual void recvRefuseCount(void) {}
     virtual void recvRefuseMatchMode(void) {}
     virtual void recvRefuseDraw(void) {}
-//	int get_id() const { return id; }
-//	void set_id(int i) { id = i; /*gd.gameNumber = i;*/ }
-//	GameData get_gameData() { return gd; }
 
-//	void set_title(const QString&);
-//	bool get_haveTitle() { return haveTitle; }
-//	void set_komi(const QString&);
-//	void set_freegame(bool);
-//	bool get_havegd() { return have_gameData; }
-//	bool get_sentmovescmd() { return sent_movescmd; }
-//	void set_sentmovescmd(bool m) { sent_movescmd = m; }
-//	bool get_adj() { return adjourned; }
-//	QString get_bplayer() { return gd.playerBlack; }
-//	QString get_wplayer() { return gd.playerWhite; }
-//	void set_adj(bool a) { adjourned = a; }
-//	void set_game(Game *g);
-
-//	void set_Mode(int);
-//	GameMode get_Mode() { return gameMode; }
-//	void set_move(StoneColor, QString, QString);
-//	void send_kibitz(const QString);
-//	MainWindow *get_win() { return win; }
-//	void initGame() { win->getBoard()->initGame(&gd); }
-//	void setMode() { win->getBoard()->setMode(gameMode); }
-
-//	QString secToTime(int);
-/*	void set_stopTimer();
-	void set_runTimer();
-	void set_gamePaused(bool p) { game_paused = p; }
-	int get_boardsize() { return gd.size; }
-	int get_mvcount() { return mv_counter; }
-	void set_myColorIsBlack(bool b);
-	bool get_myColorIsBlack() { return myColorIsBlack; }
-	void set_requests(const QString &handicap, const QString &komi, assessType);
-	void check_requests();
-	QString get_reqKomi() { return req_komi; }
-	QString get_currentKomi() { return QString::number(gd.komi); }
-	void dec_mv_counter() { mv_counter--; }
-	int get_mv_counter() { return mv_counter; }
-	bool get_requests_set() { return requests_set; }
-	qGo* get_qgo() { return qgo; }
-	void set_gsName(GSName g) { gsName = g; }
-	void addtime_b(int m);
-	void addtime_w(int m);
-	void set_myName(const QString &n) { myName = n; }
-
-	// teaching features
-	bool        ExtendedTeachingGame;
-	bool        IamTeacher;
-	bool        IamPupil;
-	bool        havePupil;
-	bool        haveControls;
-	QString     ttOpponent;
-	bool        mark_set;
-	int         mark_counter;
-	GameData    gd;
-
-signals:
-	// to qGoIF
-//	void signal_closeevent(int);
-	void signal_sendcommand(const QString&, bool);
-	void signal_2passes(const QString&, const QString&);
-*/
 public slots:
-
-
 	// Board
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
     virtual void passRequest();
@@ -172,7 +108,6 @@ public slots:
     virtual void slotCountPressed() {}
 	virtual void slotUndoPressed();
     virtual void slotScoreToggled(bool);
-//	virtual void slot_remoteMove(bool ok, const QString &answer);
     virtual void setPlaySound(bool b) 		{ playSound = b; }
 
 protected:
@@ -182,37 +117,11 @@ protected:
 	Sound *clickSound;
 	int boardTimerId;
 
-//	bool        timer_running;
-//	bool        game_paused;
-//	bool	have_gameData;
-	bool	isModified;
-//	bool        sent_movescmd;
-//	bool        adjourned;
-//	bool        myColorIsBlack;
-//	bool        myColorIsWhite;
-//	bool        haveTitle;
-//	GameMode    gameMode;
-	//GameData    gd;
-	int         id;
-//	MainWindow  *win;
-//	qGo         *qgo;
-//	int         mv_counter;
+    bool	isModified;
+    int         id;
 	int	stated_mv_count;
 	Move * lastMoveInGame;
-	bool	playSound;
-//	int         bt_i, wt_i;
-//	QString     bt, wt;
-//	QString     b_stones, w_stones;
-//	QString     req_handicap;
-//	QString     req_komi;
-//	assessType  req_free;
-//	bool		    requests_set;
-//	QString     myName;
-//	int         BY_timer;
-
-//#ifdef SHOW_INTERNAL_TIME
-//	int chk_b, chk_w;
-//#endif
+    bool	playSound;
 
     /*
      * This functions gets the move request (from a board click)

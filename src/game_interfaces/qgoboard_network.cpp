@@ -47,8 +47,7 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
 	
 	if (gd->handicap)
 	{
-		setHandicap(gd->handicap);
-        tree->slotNavLast();
+        setHandicap(gd->handicap);
 	}
 	dontsend = false;
 	boardTimerId = 0;
@@ -126,28 +125,21 @@ void qGoBoardNetworkInterface::sendMoveToInterface(StoneColor c, int x, int y)
 			dontsend = false;	//ready to send again
 			return;
 		}
-		MoveRecord * m = new MoveRecord();
-		if(tree->getCurrent()->getMatrix()->isStoneDead(x, y))
-		{
+        MoveRecord * m = new MoveRecord();
+        if(tree->getCurrent()->getMatrix()->isStoneDead(x, y))
+        {
             if(connection->unmarkUnmarksAllDeadStones())
-			{
-					QMessageBox mb(tr("Unmark All?"),
-		      			QString(tr("Unmark all your dead stones?\n")),
-		      			QMessageBox::Question,
-		      			QMessageBox::Yes,
-		      			QMessageBox::No | QMessageBox::Escape | QMessageBox::Default,
-		      			QMessageBox::NoButton);
-						mb.raise();
-						//qgo->playPassSound();	//FIXME sound here? chime?
-
-					if (mb.exec() == QMessageBox::No)
-					{
-						dontsend = false;	//ready to send again
-						delete m;
-						return;
-					}
-			}
-			m->flags = MoveRecord::UNREMOVE;
+            {
+                if (QMessageBox::question(boardwindow,tr("Unmark All?"),
+                                          QString(tr("Unmark all your dead stones?\n")))
+                        == QMessageBox::No)
+                {
+                    dontsend = false;	//ready to send again
+                    delete m;
+                    return;
+                }
+            }
+            m->flags = MoveRecord::UNREMOVE;
 		}
 		else
 			m->flags = MoveRecord::REMOVE;
@@ -193,7 +185,7 @@ void qGoBoardNetworkInterface::handleMove(MoveRecord * m)
     } else if (m->flags == MoveRecord::DONE_SCORING)
     {
         tree->countMarked(last);
-        tree->setCurrent(tree->getCurrent()); // Updates GUI
+        boardwindow->updateMove(tree->getCurrent()); // Updates GUI
         return;
     }
 
@@ -520,19 +512,12 @@ void qGoBoardNetworkInterface::slotUndoPressed()
 	if(boardwindow->getGamePhase() == phaseScore)
 	{
         if(connection->supportsRequestMatchMode())
-		{
-			QMessageBox mb(tr("Return to game?"),
-		      		QString(tr("Ask opponent to return to game?\n")),
-		      		QMessageBox::Question,
-		      		QMessageBox::Yes | QMessageBox::Default,
-		      		QMessageBox::No | QMessageBox::Escape,
-		      		QMessageBox::NoButton);
-			mb.raise();
-//			qgo->playPassSound();
-
-			if (mb.exec() == QMessageBox::Yes)
+        {
+            if (QMessageBox::question(0,tr("Return to game?"),
+                                      QString(tr("Ask opponent to return to game?\n")))
+                    == QMessageBox::Yes)
                 dispatch->sendRequestMatchMode();
-			return;
+            return;
 		}
         else if(dispatch->undoResetsScore())
 		{
@@ -575,17 +560,10 @@ void qGoBoardNetworkInterface::slotResignPressed()
 	{
 		boardwindow->getGameData()->fullresult = new GameResult();		//temporary for bugs FIXME
 		return;
-	}
-	QMessageBox mb(tr("Resign?"),
-              QString(tr("Resign game with %1\n")).arg(dispatch->getOpponentName()),
-		      QMessageBox::Question,
-		      QMessageBox::Yes | QMessageBox::Default,
-		      QMessageBox::No | QMessageBox::Escape,
-		      QMessageBox::NoButton);
-	mb.raise();
-//	qgo->playPassSound();
-
-	if (mb.exec() == QMessageBox::Yes)
+    }
+    if (QMessageBox::question(boardwindow,tr("Resign?"),
+                              QString(tr("Resign game with %1\n")).arg(dispatch->getOpponentName()))
+            == QMessageBox::Yes)
 	{
         dispatch->sendMove(new MoveRecord(tree->getCurrent()->getMoveNumber(), MoveRecord::RESIGN));
         boardwindow->setResignEnabled(false);		//FIXME okay? don't want to send resign twice
