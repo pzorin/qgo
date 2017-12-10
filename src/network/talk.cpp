@@ -52,9 +52,9 @@ Talk::Talk(NetworkConnection * conn, PlayerListing *player, Room * r) : TalkGui(
 		delete stats_layout;
 	}
 */
-	connect (ui.pb_releaseTalkTab, SIGNAL(pressed()),SLOT(slot_pbRelTab()));
-	connect (ui.pb_match, SIGNAL(pressed()),SLOT(slot_match()));
-    connect(ui.LineEdit1, SIGNAL(returnPressed()), SLOT(slot_returnPressed()));
+    connect(ui.pb_releaseTalkTab, &QPushButton::pressed, this, &Talk::slot_pbRelTab);
+    connect(ui.pb_match, &QPushButton::pressed, this, &Talk::slot_match);
+    connect(ui.LineEdit1, &QLineEdit::returnPressed, this, &Talk::slot_returnPressed);
 }
 
 Talk::~Talk()

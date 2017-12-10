@@ -41,8 +41,8 @@ class ServerListDialog : public QDialog
 	public:
 		ServerListDialog(std::vector <ServerItem *> serverlist, int current = -1);
 		~ServerListDialog();
-	public slots:
-		void slot_listDoubleClicked(QTreeWidgetItem *, int);
+
+        void slot_listDoubleClicked(QTreeWidgetItem *, int);
 		void slot_connect();
 		void slot_cancel();
 	private:

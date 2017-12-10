@@ -792,7 +792,7 @@ bool SGFParser::doParse(const QString &toParseStr)
                             {
                                 if (prop == editErase)
 								{
-									tree->addStoneToCurrentMove(stoneErase, i, j);
+                                    tree->getCurrent()->addStone(stoneErase, i, j);
 								}
 								else
 								{
@@ -801,7 +801,7 @@ bool SGFParser::doParse(const QString &toParseStr)
                                         if ((!remember_root) && (stack.top() == tree->getCurrent()))
                                             tree->addEmptyMove(); //if this is first in branch we need to add an empty move
 
-										tree->addStoneToCurrentMove(black ? stoneBlack : stoneWhite, i, j);
+                                        tree->getCurrent()->addStone(black ? stoneBlack : stoneWhite, i, j);
 									}
 									else
                                     {

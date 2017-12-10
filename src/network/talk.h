@@ -41,8 +41,8 @@ public:
     bool getConversationOpened(void) const { return conversationOpened; }
     void setConversationOpened(bool c) { conversationOpened = c; }
     void recvTalk(QString text);
-public slots:
-	void slot_returnPressed();
+
+    void slot_returnPressed();
 	void slot_pbRelTab();
 	void slot_match();
     void updatePlayerListing();

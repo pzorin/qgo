@@ -44,16 +44,16 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui->gamesView->setModel(gamesListProxyModel);
     playerListProxyModel = new PlayerListSortFilterProxyModel(this);
     ui->playerView->setModel(playerListProxyModel);
-    connect(ui->filterOpenCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterOpen(bool)));
-    connect(ui->filterFriendsCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterFriends(bool)));
-    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), playerListProxyModel, SLOT(setFilterFans(bool)));
-    connect(ui->filterWatchesCheckBox, SIGNAL(toggled(bool)), gamesListProxyModel, SLOT(setFilterWatch(bool)));
-    connect(ui->playerListFilterLineEdit, SIGNAL(textChanged(QString)), playerListProxyModel, SLOT(setFilterWildcard(QString)));
+    connect(ui->filterOpenCheckBox, &QCheckBox::toggled, playerListProxyModel, &PlayerListSortFilterProxyModel::setFilterOpen);
+    connect(ui->filterFriendsCheckBox, &QCheckBox::toggled, playerListProxyModel, &PlayerListSortFilterProxyModel::setFilterFriends);
+    connect(ui->filterWatchesCheckBox, &QCheckBox::toggled, playerListProxyModel, &PlayerListSortFilterProxyModel::setFilterFans);
+    connect(ui->filterWatchesCheckBox, &QCheckBox::toggled, gamesListProxyModel, &GamesListSortFilterProxyModel::setFilterWatch);
+    connect(ui->playerListFilterLineEdit, &QLineEdit::textChanged, playerListProxyModel, &PlayerListSortFilterProxyModel::setFilterWildcard);
 
     QSettings settings;
     QVariant var = settings.value("LOWRANKFILTER");
-    connect(ui->filterRank1ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setRankSpreadView()));
-    connect(ui->filterRank2ComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setRankSpreadView()));
+    connect(ui->filterRank1ComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConnectionWidget::setRankSpreadView);
+    connect(ui->filterRank2ComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConnectionWidget::setRankSpreadView);
     if(var != QVariant())
     {
         ui->filterRank1ComboBox->setCurrentIndex(var.toInt());
@@ -68,31 +68,31 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui->filterWatchesCheckBox->setChecked(settings.value("WATCHESFILTER").toBool());
 
     ui->changeServerButton->hide();
-    connect(ui->changeServerButton, SIGNAL(clicked()), SLOT(slot_changeServer()));
+    connect(ui->changeServerButton, &QPushButton::clicked, this, &ConnectionWidget::slot_changeServer);
 
     ui->createRoomButton->hide();
-    connect(ui->createRoomButton, SIGNAL(clicked()), SLOT(slot_createRoom()));
+    connect(ui->createRoomButton, &QPushButton::clicked, this, &ConnectionWidget::slot_createRoom);
 
-    connect( ui->connectButton, SIGNAL(clicked()), SLOT( disconnectFromServer(void) ) );
+    connect(ui->connectButton, &QPushButton::clicked, this, &ConnectionWidget::disconnectFromServer);
 
     /* We need to integrate this room list with the new room code FIXME */
-    connect(ui->roomComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_roomListClicked(const QString &)));
-    connect(ui->channelComboBox,SIGNAL(currentIndexChanged( const QString &)), SLOT(slot_channelListClicked(const QString &)));
+    connect(ui->roomComboBox, QOverload<const QString&>::of(&QComboBox::currentIndexChanged), this, &ConnectionWidget::slot_roomListClicked);
+    connect(ui->channelComboBox, QOverload<const QString&>::of(&QComboBox::currentIndexChanged), this, &ConnectionWidget::slot_channelListClicked);
 
     //creates the connection code
     seekMenu = new QMenu();
     ui->seekToolButton->setMenu(seekMenu);
 
-    connect(seekMenu,SIGNAL(triggered(QAction*)), SLOT(slot_seek(QAction*)));
-    connect(ui->seekToolButton, SIGNAL( toggled(bool) ), SLOT( slot_seek(bool) ) );
+    connect(seekMenu, &QMenu::triggered, this, QOverload<QAction*>::of(&ConnectionWidget::slot_seek));
+    connect(ui->seekToolButton, &QToolButton::toggled, this, QOverload<bool>::of(&ConnectionWidget::slot_seek));
 
-    connect( ui->commandLineComboBox, SIGNAL( activated(const QString&) ), this, SLOT( slot_cmdactivated(const QString&) ) );
+    connect(ui->commandLineComboBox, QOverload<const QString&>::of(&QComboBox::activated), this, &ConnectionWidget::slot_cmdactivated);
 
     // connecting the server tab buttons
-    connect( ui->quietCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbquiet() ) );
-    connect( ui->openCheckBox, SIGNAL( clicked(bool) ), this, SLOT( slot_cbopen() ) );
-    connect( ui->lookingCheckBox, SIGNAL( clicked(bool) ), this, SLOT( setLooking(bool) ) );
-    connect( ui->editFriendsWatchesButton, SIGNAL(pressed()), SLOT(slot_editFriendsWatchesList()));
+    connect(ui->quietCheckBox, &QCheckBox::clicked, this, &ConnectionWidget::slot_cbquiet);
+    connect(ui->openCheckBox, &QCheckBox::clicked, this, &ConnectionWidget::slot_cbopen);
+    connect(ui->lookingCheckBox, &QCheckBox::clicked, this, &ConnectionWidget::setLooking);
+    connect(ui->editFriendsWatchesButton, &QPushButton::pressed, this, &ConnectionWidget::slot_editFriendsWatchesList);
 
     bool ok;
     int sort_column, sort_order_int;
@@ -193,7 +193,7 @@ void ConnectionWidget::setNetworkConnection(NetworkConnection * conn)
     connectionEstablished = QDateTime::currentDateTime();
     if (connection != NULL)
     {
-        connect(connection,SIGNAL(ready()),SLOT(loadConnectionSettings()));
+        connect(connection, &NetworkConnection::ready, this, &ConnectionWidget::loadConnectionSettings);
         unsigned long flags = connection->getPlayerListColumns();
         if(flags & PL_NOWINSLOSSES)
         {
@@ -638,7 +638,7 @@ void ConnectionWidget::recvSeekCondition(class SeekCondition * s)
 
         time_condition = QString::number((s->maintime / 60)) + " min + " + QString::number(int(s->periodtime / 60)) + " min / " + QString::number(s->periods) + " stones";
 
-        QAction *act = seekMenu->addAction(time_condition);// , this, SLOT(slot_seek(QAction*)));//, 0, a.toInt());
+        QAction *act = seekMenu->addAction(time_condition);// , this, slot_seek(QAction*)));//, 0, a.toInt());
         act->setData(s->number);
         delete s;
     }

@@ -12,7 +12,6 @@ class qGoBoardNetworkInterface : public qGoBoard
     Q_OBJECT
 public:
     virtual ~qGoBoardNetworkInterface() {}
-public slots:
     virtual void slotUndoPressed();
     virtual void slotDonePressed();
     virtual void slotResignPressed();
@@ -47,8 +46,6 @@ public:
     ~qGoBoardObserveInterface() {}
 
     void setModified(bool)	{} //we don't modify an observed game
-
-public slots:
     void slotUpdateComment() {}		//what is this ?!?!?
     virtual void slotUndoPressed(void){}
     virtual void slotDonePressed(void){}
@@ -87,7 +84,6 @@ public:
     virtual void recvRefuseCount(void);
     virtual void recvRefuseMatchMode(void);
     virtual void recvRefuseDraw(void);
-public slots:
     void slotUpdateComment() {}
     virtual void slotReviewPressed();
     virtual void slotDrawPressed();
@@ -120,8 +116,6 @@ public:
 //	void setTimerInfo(const QString&, const QString&, const QString&, const QString&);
     //void set_move(StoneColor sc, QString pt, QString mv_nr);
     void setNode(int move_nr, StoneColor c, int x, int y);
-
-public slots:
     void slotUpdateComment() {}
 //	void slotDonePressed();
     void slotUndoPressed() ;

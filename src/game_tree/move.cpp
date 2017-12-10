@@ -130,6 +130,15 @@ Move::~Move()
     delete matrix;
 }
 
+Move *Move::getLastMove(bool followMarker)
+{
+    Move * tmp = this;
+    // Go down the current branch, use the marker if possible to remember a previously used path
+    while (tmp->son)
+        tmp = ( (followMarker && (tmp->marker != NULL)) ? tmp->marker : tmp->son);
+    return tmp;
+}
+
 Move *Move::getPrevBrother()
 {
     if (parent == NULL || parent->son == this)
@@ -305,7 +314,24 @@ void Move::addBrother(Move * b)
 		
 	tmp->brother = b;
 	b->parent = tmp->parent;
-	b->setTimeinfo(false);			//whats this for FIXME?
+    b->setTimeinfo(false);			//whats this for FIXME?
+}
+
+void Move::addStone(StoneColor c, int x, int y)
+{
+    if ((x < 1) || (x > matrix->getSize()) || (y < 1) || (y > matrix->getSize()))
+        return;
+
+    if (! parent)
+    {
+        setHandicapMove(true);
+        setMoveNumber(0); //TODO : make sure this is the proper way
+        setX(-1);
+        setY(-1);
+        setColor(stoneBlack); // So that it is white's turn
+    }
+
+    matrix->insertStone(x, y, c, getGamePhase() == phaseEdit);
 }
 
 bool Move::checkMoveIsValid(StoneColor c, int x, int y)

@@ -67,7 +67,7 @@ class Room : public QObject
         // This function returns NULL if no Talk exists
         Talk * getIfTalk(const PlayerListing *opponent);
         void closeTalk(const PlayerListing *opponent);
-public slots:
+
         void slot_refreshGames(void);
         void slot_refreshPlayers(void);
         void recvPlayerListing(PlayerListing *g);
@@ -90,8 +90,8 @@ public slots:
         QAction *joinObserveAct, *observeOutsideAct;
 
         QMap <const PlayerListing *, Talk *> talkMap;
-	private slots:
-        // These slots expect QModelIndex from the proxy models
+
+        // These functions expect QModelIndex from the proxy models
         void slot_playerOpenTalk(const QModelIndex &);
         void slot_gamesDoubleClicked(const QModelIndex &);
 		void slot_showPopup(const QPoint & iPoint);

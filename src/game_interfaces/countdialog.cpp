@@ -70,8 +70,8 @@ CountDialog::CountDialog(BoardWindow * parent, BoardDispatch * dis, unsigned int
 	buttonBox->addButton(acceptButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(rejectButton, QDialogButtonBox::ActionRole);
 	
-	connect(acceptButton, SIGNAL(clicked()), this, SLOT(slot_accept()));
-	connect(rejectButton, SIGNAL(clicked()), this, SLOT(slot_reject()));
+    connect(acceptButton, &QPushButton::clicked, this, &CountDialog::slot_accept);
+    connect(rejectButton, &QPushButton::clicked, this, &CountDialog::slot_reject);
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	/*mainLayout->setSizeConstraint(QLayout::SetFixedSize);*/

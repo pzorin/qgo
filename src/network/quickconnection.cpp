@@ -33,9 +33,9 @@ msginfo(m), connection(c), type(t)
 		return;
 	}
 	
-	connect(qsocket, SIGNAL(connected()), SLOT(OnConnected()));
-	connect(qsocket, SIGNAL(readyRead()), SLOT(OnReadyRead()));
-	connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
+    connect(qsocket, &QTcpSocket::connected, this, &QuickConnection::OnConnected);
+    connect(qsocket, &QTcpSocket::readyRead, this, &QuickConnection::OnReadyRead);
+    connect(qsocket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &QuickConnection::OnError);
 	
     qDebug() << QString("QuickConnection::QuickConnection : Connecting to") << hostname << ":" << port;
 	
@@ -47,17 +47,11 @@ msginfo(m), connection(c), type(t)
 QuickConnection::QuickConnection(QTcpSocket * q, void * m, NetworkConnection * c, QuickConnectionType t) :
 qsocket(q), msginfo(m), connection(c), type(t)
 {
-	/* FIXME Can we even do this?  Switch signals while
-	 * they're running? */
-	disconnect(qsocket, SIGNAL(hostFound()), connection, 0);
-	disconnect(qsocket, SIGNAL(connected()), connection, 0);
-	disconnect(qsocket, SIGNAL(readyRead()), connection, 0);
-	disconnect(qsocket, SIGNAL(disconnected ()), connection, 0);
-	disconnect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), connection, 0);
+    disconnect(qsocket, 0, connection, 0);
 
-	connect(qsocket, SIGNAL(connected()), SLOT(OnConnected()));
-	connect(qsocket, SIGNAL(readyRead()), SLOT(OnReadyRead()));
-	connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
+    connect(qsocket, &QTcpSocket::connected, this, &QuickConnection::OnConnected);
+    connect(qsocket, &QTcpSocket::readyRead, this, &QuickConnection::OnReadyRead);
+    connect(qsocket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &QuickConnection::OnError);
 	
 	success = !(qsocket->state() != QTcpSocket::UnconnectedState);
 	if(success != 0)

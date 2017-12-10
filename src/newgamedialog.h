@@ -16,7 +16,6 @@ public:
     explicit NewGameDialog(MainWindow *parent);
     ~NewGameDialog();
 
-public slots:
     void slot_newFile_HandicapChange(int);
     virtual void accept();
 

@@ -74,10 +74,8 @@ int QGtp::openGtpSession(QString path, QString args, int size, float komi, int h
     if (path.contains(QRegExp("gnugo$", Qt::CaseInsensitive)))
         issueCmdNb = true; // FIXME: are command numbers really gnugo-specific?
 
-	connect(programProcess, SIGNAL(readyRead()),
-		this, SLOT(slot_readFromStdout()) );
-	connect(programProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
-		this, SLOT(slot_processExited(int , QProcess::ExitStatus )) );
+    connect(programProcess, &QProcess::readyRead, this, &QGtp::slot_readFromStdout);
+    connect(programProcess, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished), this, &QGtp::slot_processExited);
 	
     qDebug() << "QGtp::openGtpSession(" << path << "," << args << ")";
 

@@ -84,14 +84,13 @@ public:
 	void addBoardWindow(BoardWindow *);
 	int checkForOpenBoards(void);
 
-public slots:
     void removeBoardWindow(QObject *);
 
     void slot_fileNew();
     void slot_fileOpen();
     void openSGF(QString path);
 
-    //preferences tabs slots
+    //preferences tabs
 	void slot_cancelPressed();
 	void slot_currentChanged(int );
 	void slot_getGobanPath();

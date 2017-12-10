@@ -19,7 +19,6 @@ public:
     ~SGFPreview();
     void clearData();
 
-public slots:
     void setPath(QString path);
 
 signals:

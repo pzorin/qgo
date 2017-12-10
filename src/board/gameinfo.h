@@ -33,7 +33,7 @@ public:
 	GameInfo(BoardWindow * bw);
 	virtual ~GameInfo();
 
-public slots:
+public:
 	void slotGameInfoButton(QAbstractButton *);
 	void slotGameInfoTextEdited(const QString &);
 

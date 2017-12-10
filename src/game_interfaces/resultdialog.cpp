@@ -61,7 +61,7 @@ ResultDialog::ResultDialog(QWidget * parent, BoardDispatch * dis, unsigned int g
 		}
 		mainlabel = new QLabel(gr->longMessage());
 	}
-	connect(okayButton, SIGNAL(clicked()), this, SLOT(slot_okay()));
+    connect(okayButton, &QPushButton::clicked, this, &ResultDialog::slot_okay);
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	/*mainLayout->setSizeConstraint(QLayout::SetFixedSize);*/

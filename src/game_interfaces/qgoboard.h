@@ -97,7 +97,6 @@ public:
     virtual void recvRefuseMatchMode(void) {}
     virtual void recvRefuseDraw(void) {}
 
-public slots:
 	// Board
 	virtual void slotBoardClicked(bool, int, int , Qt::MouseButton );
     virtual void passRequest();

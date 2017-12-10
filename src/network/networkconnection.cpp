@@ -62,13 +62,11 @@ bool NetworkConnection::openConnection(const QString & host, const unsigned shor
 		return 0;
 	//connect signals
 	
-	//connect(qsocket, SIGNAL(hostFound()), SLOT(OnHostFound()));
-	connect(qsocket, SIGNAL(connected()), SLOT(OnConnected()));
-	connect(qsocket, SIGNAL(readyRead()), SLOT(OnReadyRead()));
-	connect(qsocket, SIGNAL(disconnected ()), SLOT(OnConnectionClosed()));
-//	connect(qsocket, SIGNAL(delayedCloseFinished()), SLOT(OnDelayedCloseFinish()));
-//	connect(qsocket, SIGNAL(bytesWritten(qint64)), SLOT(OnBytesWritten(qint64)));
-    connect(qsocket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(OnError(QAbstractSocket::SocketError)));
+	//connect(qsocket, hostFound()), OnHostFound()));
+    connect(qsocket, &QTcpSocket::connected, this, &NetworkConnection::OnConnected);
+    connect(qsocket, &QTcpSocket::readyRead, this, &NetworkConnection::OnReadyRead);
+    connect(qsocket, &QTcpSocket::disconnected, this, &NetworkConnection::OnConnectionClosed);
+    connect(qsocket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &NetworkConnection::OnError);
 
 	if(qsocket->state() != QTcpSocket::UnconnectedState)
 	{
@@ -413,12 +411,11 @@ void NetworkConnection::drawPleaseWait(void)
     //connectingDialog->setWindowTitle();
     //connectingDialog->setText();
     cancelConnecting = connectingDialog->addButton(QMessageBox::Cancel);
-    connect(cancelConnecting, SIGNAL(clicked()), this, SLOT(slot_cancelConnecting()));
+    connect(cancelConnecting, &QPushButton::clicked, this, &NetworkConnection::slot_cancelConnecting);
     connectingDialog->show();
     connectingDialog->setMinimumSize(180, 100);
 }
 
-/* Slots */
 void NetworkConnection::slot_cancelConnecting(void)
 {
 	userCanceled();

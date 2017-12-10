@@ -52,9 +52,9 @@ qGoBoardLocalInterface::qGoBoardLocalInterface(BoardWindow *bw, Tree * t, GameDa
     gtp = new QGtp();
     currentEngine = NULL;
 
-    connect (gtp, SIGNAL(signal_computerPlayed(int, int)), SLOT(slot_playComputer(int, int)));
-    connect (gtp, SIGNAL(computerResigned()), SLOT(slot_resignComputer()));
-    connect (gtp, SIGNAL(computerPassed()), SLOT(slot_passComputer()));
+    connect (gtp, &QGtp::signal_computerPlayed, this, &qGoBoardLocalInterface::slot_playComputer);
+    connect (gtp, &QGtp::computerResigned, this, &qGoBoardLocalInterface::slot_resignComputer);
+    connect (gtp, &QGtp::computerPassed, this, &qGoBoardLocalInterface::slot_passComputer);
 
 
     settings.beginReadArray("ENGINES");

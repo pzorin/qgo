@@ -42,9 +42,6 @@ public:
     void checkComputersTurn(bool force = false);
     void feedPositionThroughGtp();
 
-signals:
-
-public slots:
     virtual void localMoveRequest(StoneColor c, int x, int y);
     void slot_playComputer(int x, int y);
     void slot_resignComputer();

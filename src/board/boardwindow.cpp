@@ -142,29 +142,29 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
     connect(ui->actionMain_branch,&QAction::triggered,tree,&Tree::slotNavMainBranch);
     connect(ui->actionPrevious_comment,&QAction::triggered,tree,&Tree::slotNavPrevComment);
     connect(ui->actionNext_comment,&QAction::triggered,tree,&Tree::slotNavNextComment);
-    connect(ui->slider, SIGNAL(sliderMoved ( int)), tree , SLOT(slotNthMove(int)));
+    connect(ui->slider, &QSlider::sliderMoved, tree , &Tree::slotNthMove);
 
     wheelTime = QTime::currentTime();
-    connect(ui->board, SIGNAL(signalWheelEvent(QWheelEvent*)), this, SLOT(slotWheelEvent(QWheelEvent*)));
+    connect(ui->board, &Board::signalWheelEvent, this, &BoardWindow::slotWheelEvent);
 
 
     //Connects the 'edit' buttons to the slots
-    connect(editButtons, SIGNAL(buttonPressed ( int )), this, SLOT(slotEditButtonPressed( int )));
-    connect(ui->deleteButton,SIGNAL(pressed()), this, SLOT(slotEditDelete()));
-    connect(ui->actionCoordinates, SIGNAL(toggled(bool)), ui->board, SLOT(setShowCoords(bool)));
-    connect(ui->actionFileSave, SIGNAL(triggered(bool)), SLOT(slotFileSave()));
-    connect(ui->actionFileSaveAs, SIGNAL(triggered(bool)), SLOT(slotFileSaveAs()));
-    connect(ui->actionExportSgfClipB, SIGNAL(triggered(bool)), SLOT(slotExportSGFtoClipB()));
-    connect(ui->actionExportPicClipB, SIGNAL(triggered(bool)), SLOT(slotExportPicClipB()));
-    connect(ui->actionExportPic, SIGNAL(triggered(bool)), SLOT(slotExportPic()));
-    connect(ui->actionDuplicate, SIGNAL(triggered(bool)), SLOT(slotDuplicate()));
-    connect(ui->actionGameInfo, SIGNAL(triggered(bool)), SLOT(slotGameInfo(bool)));
+    connect(editButtons, QOverload<int>::of(&QButtonGroup::buttonPressed), this, &BoardWindow::slotEditButtonPressed);
+    connect(ui->deleteButton, &QPushButton::pressed, this, &BoardWindow::slotEditDelete);
+    connect(ui->actionCoordinates, &QAction::toggled, ui->board, &Board::setShowCoords);
+    connect(ui->actionFileSave, &QAction::triggered, this, &BoardWindow::slotFileSave);
+    connect(ui->actionFileSaveAs, &QAction::triggered, this, &BoardWindow::slotFileSaveAs);
+    connect(ui->actionExportSgfClipB, &QAction::triggered, this, &BoardWindow::slotExportSGFtoClipB);
+    connect(ui->actionExportPicClipB, &QAction::triggered, this, &BoardWindow::slotExportPicClipB);
+    connect(ui->actionExportPic, &QAction::triggered, this, &BoardWindow::slotExportPic);
+    connect(ui->actionDuplicate, &QAction::triggered, this, &BoardWindow::slotDuplicate);
+    connect(ui->actionGameInfo, &QAction::triggered, this, &BoardWindow::slotGameInfo);
 
-    connect(tree, SIGNAL(currentMoveChanged(Move*)), this, SLOT(updateMove(Move*)));
-    connect(tree, SIGNAL(scoreChanged(int,int,int,int,int,int)), this, SLOT(slotGetScore(int,int,int,int,int,int)));
+    connect(tree, &Tree::currentMoveChanged, this, &BoardWindow::updateMove);
+    connect(tree, &Tree::scoreChanged, this, &BoardWindow::slotGetScore);
 
-    connect(ui->buttonModeEdit,SIGNAL(clicked()),SLOT(switchToEditMode()));
-    connect(ui->buttonModeLocal,SIGNAL(clicked()),SLOT(switchToLocalMode()));
+    connect(ui->buttonModeEdit, &QPushButton::clicked, this, &BoardWindow::switchToEditMode);
+    connect(ui->buttonModeLocal, &QPushButton::clicked, this, &BoardWindow::switchToLocalMode);
 
     ui->insertMoveButton->setChecked(false);
     ui->insertMoveButton->setEnabled(gameData->gameMode == modeEdit);
@@ -196,23 +196,23 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
             }
             else
                 qDebug("Warning: Nigiri settled in match mode but player has no color");
-            connect(addtime_menu, SIGNAL(triggered(QAction*)), SLOT(slot_addtime_menu(QAction*)));
+            connect(addtime_menu, &QMenu::triggered, this, &BoardWindow::slot_addtime_menu);
         }
     }
 
     //connects the comments and edit line to the slots
-    connect(ui->commentEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateComment()));
-    connect(ui->commentEdit2, SIGNAL(returnPressed()), this, SLOT(slotSendComment()));
+    connect(ui->commentEdit, &QTextEdit::textChanged, this, &BoardWindow::slotUpdateComment);
+    connect(ui->commentEdit2, &QLineEdit::returnPressed, this, &BoardWindow::slotSendComment);
 
-    connect(ui->computerBlack,SIGNAL(toggled(bool)),this,SLOT(setComputerBlack(bool)));
-    connect(ui->computerWhite,SIGNAL(toggled(bool)),this,SLOT(setComputerWhite(bool)));
-    connect(ui->computerMakeMove,SIGNAL(clicked()),this,SLOT(requestComputerMove()));
+    connect(ui->computerBlack, &QCheckBox::toggled,this,&BoardWindow::setComputerBlack);
+    connect(ui->computerWhite, &QCheckBox::toggled, this, &BoardWindow::setComputerWhite);
+    connect(ui->computerMakeMove, &QPushButton::clicked, this, &BoardWindow::requestComputerMove);
     ui->computerControlsWidget->setVisible(gameData->gameMode == modeLocal);
 
     if ((gameData->gameMode == modeLocal) || (gameData->gameMode == modeEdit))
     {
-        connect(ui->blackName,SIGNAL(textChanged(QString)),SLOT(setBlackName(QString)));
-        connect(ui->whiteName,SIGNAL(textChanged(QString)),SLOT(setWhiteName(QString)));
+        connect(ui->blackName, &QLineEdit::textChanged, this, &BoardWindow::setBlackName);
+        connect(ui->whiteName, &QLineEdit::textChanged, this, &BoardWindow::setWhiteName);
         ui->blackName->setReadOnly(false);
         ui->whiteName->setReadOnly(false);
     }
@@ -249,33 +249,33 @@ BoardWindow::BoardWindow(GameData *gd, bool iAmBlack , bool iAmWhite, class Boar
 			break;
 	}
     if (gameData->gameMode == modeLocal)
-        connect(ui->insertMoveButton, SIGNAL(toggled(bool)), static_cast<qGoBoardLocalInterface*>(qgoboard), SLOT(slotToggleInsertStones(bool)));
+        connect(ui->insertMoveButton, &QPushButton::toggled, static_cast<qGoBoardLocalInterface*>(qgoboard), &qGoBoardLocalInterface::slotToggleInsertStones);
     //make sure to set the sound button to the proper state before anything
     ui->actionSound->setChecked(qgoboard->getPlaySound());
-    connect(ui->actionSound, SIGNAL(toggled(bool)), qgoboard, SLOT(setPlaySound(bool)));
+    connect(ui->actionSound, &QAction::toggled, qgoboard, &qGoBoard::setPlaySound);
 
     //Connects the board to the interface and boardhandler
-    connect(ui->board, SIGNAL(signalClicked(bool , int, int, Qt::MouseButton )), qgoboard, SLOT( slotBoardClicked(bool, int, int , Qt::MouseButton )));
+    connect(ui->board, &Board::signalClicked, qgoboard, &qGoBoard::slotBoardClicked);
 
     //Connects the game buttons to the slots
     connect(ui->passButton, &QPushButton::pressed, qgoboard, &qGoBoard::passRequest);
     connect(ui->passButton_2, &QPushButton::pressed, qgoboard, &qGoBoard::passRequest);
-        connect(ui->scoreButton,SIGNAL(toggled(bool)), qgoboard, SLOT(slotScoreToggled(bool)));
+    connect(ui->scoreButton, &QPushButton::toggled, qgoboard, &qGoBoard::slotScoreToggled);
 
 
-    connect(ui->doneButton,SIGNAL(pressed()), qgoboard, SLOT(slotDonePressed()));
-    connect(ui->reviewButton,SIGNAL(pressed()), qgoboard, SLOT(slotReviewPressed()));
-    connect(ui->undoButton,SIGNAL(pressed()), qgoboard, SLOT(slotUndoPressed()));
+    connect(ui->doneButton, &QPushButton::pressed, qgoboard, &qGoBoard::slotDonePressed);
+    connect(ui->reviewButton, &QPushButton::pressed, qgoboard, &qGoBoard::slotReviewPressed);
+    connect(ui->undoButton, &QPushButton::pressed, qgoboard, &qGoBoard::slotUndoPressed);
 
     // Why is this conditional? FIXME
     if (gameData->gameMode == modeMatch || gameData->gameMode == modeLocal || gameData->gameMode == modeEdit)
-        connect(ui->resignButton,SIGNAL(pressed()), qgoboard, SLOT(slotResignPressed()));
+        connect(ui->resignButton, &QPushButton::pressed, qgoboard, &qGoBoard::slotResignPressed);
 
     if(gameData->gameMode == modeMatch)
     {
-        connect(ui->adjournButton,SIGNAL(pressed()), qgoboard, SLOT(slotAdjournPressed()));
-        connect(ui->countButton,SIGNAL(pressed()), qgoboard, SLOT(slotCountPressed()));
-        connect(ui->drawButton,SIGNAL(pressed()), qgoboard, SLOT(slotDrawPressed()));
+        connect(ui->adjournButton, &QPushButton::pressed, static_cast<qGoBoardNetworkInterface*>(qgoboard), &qGoBoardNetworkInterface::slotAdjournPressed);
+        connect(ui->countButton, &QPushButton::pressed, qgoboard, &qGoBoard::slotCountPressed);
+        connect(ui->drawButton, &QPushButton::pressed, qgoboard, &qGoBoard::slotDrawPressed);
     } else {
         ui->adjournButton->hide();
         ui->countButton->hide();
@@ -952,7 +952,7 @@ void BoardWindow::updateMove(Move *m)
     }
 
     // Update slider branch length
-    setSliderMax(m->getMoveNumber() + tree->getBranchLength());
+    setSliderMax(m->getLastMove(true)->getMoveNumber());
     setMoveData(
             m->getMoveNumber(),
             (m->getColor() != stoneBlack),

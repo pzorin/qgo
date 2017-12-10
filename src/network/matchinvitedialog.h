@@ -33,8 +33,8 @@ class MatchInviteDialog : public QDialog
 		MatchInviteDialog(QString name, QString rank, bool canRefuseFuture = false);
 		~MatchInviteDialog();
 		virtual void timerEvent(QTimerEvent*);
-	public slots:
-		void slot_accept(void);
+
+        void slot_accept(void);
 		void slot_decline(void);
 		void slot_refuseFutureCB(bool b);
 	private:

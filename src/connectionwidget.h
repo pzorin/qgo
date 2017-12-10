@@ -73,7 +73,7 @@ protected:
     PlayerListSortFilterProxyModel * playerListProxyModel;
     GamesListSortFilterProxyModel * gamesListProxyModel;
 
-public slots:
+public:
     void loadConnectionSettings(void);
     void disconnectFromServer(void);
     //void slot_textReceived(const QString &txt);
@@ -100,7 +100,7 @@ public slots:
     void slot_msgBox(const QString&);
     void slot_connexionClosed();
 
-private slots:
+private:
     void setRankSpreadView(void);
     void slot_editFriendsWatchesList(void);
     

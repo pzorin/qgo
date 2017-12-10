@@ -127,7 +127,7 @@ void qGoBoard::removeMark( int x, int y)
  */
 void qGoBoard::addStone(StoneColor c, int x, int y)
 {
-	tree->addStoneToCurrentMove(c, x, y);
+    tree->getCurrent()->addStone(c, x, y);
     boardwindow->updateMove(tree->getCurrent());
 	setModified();
 }

@@ -33,8 +33,7 @@ class CreateRoomDialog : public QDialog, public Ui::CreateRoomDialog
 	public:
 		CreateRoomDialog(NetworkConnection * conn);
 		~CreateRoomDialog();
-	public slots:
-		void slot_create(void);
+        void slot_create(void);
 		void slot_cancel(void);
 		
 		void slot_privateCB(bool);

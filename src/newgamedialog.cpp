@@ -27,7 +27,7 @@ NewGameDialog::NewGameDialog(MainWindow *parent) :
     ui->computerPlaysWhite->setChecked(settings.value("COMPUTER_PLAYS_WHITE").toBool());
     ui->computerPlaysBlack->setChecked(settings.value("COMPUTER_PLAYS_BLACK").toBool());
 
-    connect(ui->newFile_Handicap, SIGNAL(valueChanged(int)), this, SLOT(slot_newFile_HandicapChange(int)));
+    connect(ui->newFile_Handicap, QOverload<int>::of(&QSpinBox::valueChanged), this, &NewGameDialog::slot_newFile_HandicapChange);
 }
 
 NewGameDialog::~NewGameDialog()

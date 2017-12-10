@@ -276,11 +276,11 @@ LoginDialog::LoginDialog(QWidget *parent)
     ui.credentialView->setItemDelegateForColumn(0,new ComboBoxDelegate(this));
     ui.credentialView->setColumnWidth(CRED_PROTOCOL,80);
     ui.credentialView->setColumnWidth(CRED_PORT,50);
-    connect(ui.editButton, SIGNAL(clicked()), this, SLOT(slot_toggleEditable()));
-    connect(ui.credentialView, SIGNAL(activated(QModelIndex)), this, SLOT(slot_connect(QModelIndex)));
-    connect(newCredMenu, SIGNAL(triggered(QAction *)), this, SLOT(slot_newCredential(QAction *)));
+    connect(ui.editButton, &QPushButton::clicked, this, &LoginDialog::slot_toggleEditable);
+    connect(ui.credentialView, &QTableView::activated, this, &LoginDialog::slot_connect);
+    connect(newCredMenu, &QMenu::triggered, this, &LoginDialog::slot_newCredential);
     ui.credentialView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui.credentialView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
+    connect(ui.credentialView, &QTableView::customContextMenuRequested, this, &LoginDialog::slot_showPopup);
 }
 
 LoginDialog::~LoginDialog()
@@ -309,7 +309,7 @@ void LoginDialog::slot_connect(QModelIndex index)
 	//if(ui.connectPB->isDown())	//wth?  unreliable?
 
     connection = newConnection(credModel->credentials.at(row));
-    connect(connection,SIGNAL(stateChanged(ConnectionState)),this,SLOT(slot_receiveConnectionState(ConnectionState)));
+    connect(connection, &NetworkConnection::stateChanged, this, &LoginDialog::slot_receiveConnectionState);
     connectionWidget->setNetworkConnection(connection);
 }
 
@@ -351,7 +351,7 @@ void LoginDialog::slot_showPopup(const QPoint & iPoint)
     menu.addMenu(newCredMenu);
     if (popup_item != QModelIndex())
     {
-        connect(deleteAction,SIGNAL(triggered()),this,SLOT(slot_deleteCredential()));
+        connect(deleteAction, &QAction::triggered, this, &LoginDialog::slot_deleteCredential);
         menu.addSeparator();
         menu.addAction(deleteAction);
     }
@@ -401,7 +401,7 @@ void LoginDialog::slot_receiveConnectionState(ConnectionState newState)
         return; // waiting
     }
     // Arrive here only in case of connection error
-    disconnect(connection,SIGNAL(stateChanged(ConnectionState)),this,SLOT(slot_receiveConnectionState(ConnectionState)));
+    disconnect(connection, &NetworkConnection::stateChanged, this, &LoginDialog::slot_receiveConnectionState);
     connectionWidget->setNetworkConnection(0);
     connection->deleteLater();
     connection = 0;

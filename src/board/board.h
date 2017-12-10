@@ -64,7 +64,7 @@ public:
     bool updateAll(Move *move);
     void updateVariationGhosts(Move *m);
 
-public slots:
+public:
     void setShowCoords(bool b);
 
 signals:

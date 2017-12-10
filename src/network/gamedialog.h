@@ -53,7 +53,7 @@ signals:
 	void signal_matchSettings(const QString&, const QString&, const QString&, assessType);
 	void signal_removeDialog(GameDialog *);//const QString&);
 
-public slots:
+public:
 	void slot_play_black_button(void);
 	void slot_play_white_button(void);
 	void slot_play_nigiri_button(void);

@@ -85,8 +85,7 @@ public:
 #define GD_OPP_NO_NMATCH		6
 #define GD_RESET			7
 
-/* Some of these methods should be converted to slots.
- * Also, NetworkConnection should emit signals for many events */
+/* NetworkConnection should emit signals for many events */
 class NetworkConnection : public QObject
 {
 	Q_OBJECT
@@ -96,9 +95,7 @@ class NetworkConnection : public QObject
 		~NetworkConnection();
         void userCanceled(void) { setState(Canceled); /* anything else? */}
 		int checkForOpenBoards(void);
-public slots:
         virtual void sendPlayersRequest(void) = 0;
-public:
 		void onClose(void);	//so far private? we're going to have tygem use it...
 		virtual void sendText(QString text) = 0;
 		virtual void sendText(const char * text) = 0;
@@ -315,9 +312,9 @@ protected:
 private:
         QMap <const PlayerListing *, GameDialog *> gameDialogMap;
 
-	protected slots:
+    protected:
 		virtual void OnConnected();
-	private slots:
+    private:
 		//void OnHostFound();
 		void OnReadyRead();
 		void OnConnectionClosed();

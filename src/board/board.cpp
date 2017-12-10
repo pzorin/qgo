@@ -322,7 +322,7 @@ void Board::resizeEvent(QResizeEvent*)
     {
 		resizeDelayFlag = true;
 		// not necessary?
-        QTimer::singleShot(50, this, SLOT(resizeBoard()));
+        QTimer::singleShot(50, this, resizeBoard()));
     }
 #else
 	if (!lockResize)

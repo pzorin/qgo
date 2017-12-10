@@ -87,7 +87,7 @@ class LoginDialog : public QDialog, Ui::LoginDialog
 	public:
         LoginDialog(QWidget *parent = 0);
         ~LoginDialog();
-	private slots:		//or can these be private?
+    private:
 		void slot_cancel(void);
         void slot_connect(QModelIndex);
         void slot_newCredential(QAction *action);
@@ -95,7 +95,7 @@ class LoginDialog : public QDialog, Ui::LoginDialog
         void slot_receiveConnectionState(ConnectionState newState);
         void slot_showPopup(const QPoint & iPoint);
         void slot_toggleEditable(void);
-    private:
+
 		ConnectionType serverStringToConnectionType(const QString & s);
         NetworkConnection * newConnection(ConnectionCredentials cred);
         Ui::LoginDialog ui;

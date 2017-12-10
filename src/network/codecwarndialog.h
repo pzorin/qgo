@@ -31,9 +31,9 @@ class CodecWarnDialog : public QDialog
 	public:
 		CodecWarnDialog(const char * encoding);
 		~CodecWarnDialog();
-	private slots:
+    private:
 		void slot_okay();
-	private:
+
 		QLabel * textLabel;
 		QPushButton * okayButton;
 		QCheckBox * dontwarnCB;	

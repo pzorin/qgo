@@ -38,10 +38,10 @@ ServerListDialog::ServerListDialog(std::vector <ServerItem *> serverlist, int cu
 	buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(connectButton, QDialogButtonBox::ActionRole);
 	
-	connect(serverListView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(slot_listDoubleClicked(QTreeWidgetItem *, int)));
+    connect(serverListView, &QTreeWidget::itemDoubleClicked, this, &ServerListDialog::slot_listDoubleClicked);
 	
-	connect(connectButton, SIGNAL(clicked()), this, SLOT(slot_connect()));
-	connect(cancelButton, SIGNAL(clicked()), this, SLOT(slot_cancel()));
+    connect(connectButton, &QPushButton::clicked, this, &ServerListDialog::slot_connect);
+    connect(cancelButton, &QPushButton::clicked, this, &ServerListDialog::slot_cancel);
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);

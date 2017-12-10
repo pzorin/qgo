@@ -54,29 +54,6 @@ Tree::~Tree()
         delete root;
 }
 
-int Tree::getBranchLength(Move *node)
-{
-	Move *tmp;
-	
-	if (node == NULL)
-	{
-		if (current == NULL)
-			return -1;
-		tmp = current;
-	}
-	else
-		tmp = node;
-	
-	Q_CHECK_PTR(tmp);
-	
-	int counter=0;
-	// Go down the current branch, use the marker if possible to remember a previously used path
-	while ((tmp = (tmp->marker != NULL ? tmp->marker : tmp->son)) != NULL)
-		counter ++;
-	
-	return counter;
-}
-
 /*
  * Find a move starting from the given in the argument in the main branch, or at marked move.
  */
@@ -130,38 +107,16 @@ void Tree::setCurrent(Move *m)
 
 Move *Tree::findLastMoveInMainBranch()
 {
-#ifdef OLD
-	Move *m = root;
-	Q_CHECK_PTR(m);
-
-	if (m==NULL)
-	return NULL;
-  
-	// Descend tree until root reached
-	while (m->son != NULL)
-		m = m->son;
-
-	return m;
-#endif //OLD
 	return lastMoveInMainBranch;
 }
 
 Move *Tree::findLastMoveInCurrentBranch()
 {
-	Move *m = getCurrent();
-	Q_CHECK_PTR(m);
-
-	if (m==NULL)
-	return NULL;
-  
-	while (m->son != NULL)
-	{
-		if(m->marker)
-			m = m->marker;
-		else
-			m = m->son;
-	}
-	return m;
+    Move *m = getCurrent();
+    if (m)
+        return m->getLastMove(true);
+    else
+        return NULL;
 }
 
 void Tree::addEmptyMove()
@@ -180,29 +135,6 @@ void Tree::doPass(bool /*sgf*/, bool /*fastLoad*/)
 	StoneColor c = (current->getColor() == stoneWhite) ? stoneBlack : stoneWhite;
     Move *result = current->makeMove(c, PASS_XY, PASS_XY);
     setCurrent(result);
-}
-
-void Tree::addStoneToCurrentMove(StoneColor c, int x, int y)
-{
-    if (x == PASS_XY && y == PASS_XY)
-        return;
-
-    if ((x < 1) || (x > boardSize) || (y < 1) || (y > boardSize))
-        return;
-
-    if (current == root)
-    {
-        current->setHandicapMove(true);
-		current->setMoveNumber(0); //TODO : make sure this is the proper way
-        current->setX(-1);
-        current->setY(-1);
-        current->setColor(stoneBlack); // So that it is white's turn
-	}
-
-    if(current->getGamePhase() == phaseEdit)
-        current->getMatrix()->insertStone(x, y, c, true);
-    else
-        current->getMatrix()->insertStone(x, y, c);
 }
 
 /*

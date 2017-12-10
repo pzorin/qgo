@@ -36,8 +36,8 @@ class QuickConnection : public QObject
 		QuickConnection(QTcpSocket * q, void * m, NetworkConnection * c, QuickConnectionType t);
 		int checkSuccess(void);
 		~QuickConnection();
-	public slots:
-		void OnConnected(void);
+
+        void OnConnected(void);
 		void OnReadyRead(void);
 		void OnError(QAbstractSocket::SocketError err);
 		

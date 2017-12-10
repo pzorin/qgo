@@ -35,8 +35,7 @@ class ResultDialog : public QDialog
 		void recvRematchRequest(void);
 		virtual void timerEvent(QTimerEvent*);
 		//virtual QSize minimumSize(void) const { return QSize(300, 150); };
-	public slots:
-		void slot_okay(void);
+        void slot_okay(void);
 	private:
 		void closeEvent(QCloseEvent *);
 

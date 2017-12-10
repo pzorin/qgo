@@ -44,8 +44,8 @@ CreateRoomDialog::CreateRoomDialog(NetworkConnection * conn) : connection(conn)
 	buttonBox->addButton(createButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(cancelButton, QDialogButtonBox::ActionRole);
 	
-	connect(createButton, SIGNAL(clicked()), this, SLOT(slot_create()));
-	connect(cancelButton, SIGNAL(clicked()), this, SLOT(slot_cancel()));
+	connect(createButton, clicked()), this, slot_create()));
+	connect(cancelButton, clicked()), this, slot_cancel()));
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -57,30 +57,29 @@ CreateRoomDialog::CreateRoomDialog(NetworkConnection * conn) : connection(conn)
 	
 	setWindowTitle(tr("Create Room"));*/
 	
-    connect(createButton, SIGNAL(clicked()), this, SLOT(slot_create()));
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(slot_cancel()));
+    connect(createButton, &QPushButton::clicked, this, &CreateRoomDialog::slot_create);
+    connect(cancelButton, &QPushButton::clicked, this, &CreateRoomDialog::slot_cancel);
 	
-    connect(privateCB, SIGNAL(clicked(bool)), this, SLOT(slot_privateCB(bool)));
+    connect(privateCB, &QCheckBox::clicked, this, &CreateRoomDialog::slot_privateCB);
 	
-    connect(roomTypeTab, SIGNAL(currentChanged(int)), SLOT(slot_roomTypeTab(int)));
+    connect(roomTypeTab, &QTabWidget::currentChanged, this, &CreateRoomDialog::slot_roomTypeTab);
 	
-    connect(opponentStrongerRB, SIGNAL(clicked()), this, SLOT(slot_opponentStrongerRB()));
-    connect(opponentEvenRB, SIGNAL(clicked()), this, SLOT(slot_opponentEvenRB()));
-    connect(opponentWeakerRB, SIGNAL(clicked()), this, SLOT(slot_opponentWeakerRB()));
-    connect(opponentAnyRB, SIGNAL(clicked()), this, SLOT(slot_opponentAnyRB()));
+    connect(opponentStrongerRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_opponentStrongerRB);
+    connect(opponentEvenRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_opponentEvenRB);
+    connect(opponentWeakerRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_opponentWeakerRB);
+    connect(opponentAnyRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_opponentAnyRB);
 	
-    connect(timeQuickRB, SIGNAL(clicked()), this, SLOT(slot_timeQuickRB()));
-    connect(timeNormalRB, SIGNAL(clicked()), this, SLOT(slot_timeNormalRB()));
-    connect(timePonderousRB, SIGNAL(clicked()), this, SLOT(slot_timePonderousRB()));
-    connect(timeAnyRB, SIGNAL(clicked()), this, SLOT(slot_timeAnyRB()));
+    connect(timeQuickRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_timeQuickRB);
+    connect(timeNormalRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_timeNormalRB);
+    connect(timePonderousRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_timePonderousRB);
+    connect(timeAnyRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_timeAnyRB);
 	
-    connect(oneOnOneRB, SIGNAL(clicked()), this, SLOT(slot_oneOnOneRB()));
-    connect(pairRB, SIGNAL(clicked()), this, SLOT(slot_pairRB()));
+    connect(oneOnOneRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_oneOnOneRB);
+    connect(pairRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_pairRB);
     pairRB->setEnabled(false);
-	
-	
-    connect(teachingRB, SIGNAL(clicked()), this, SLOT(slot_teachingRB()));
-    connect(liveRB, SIGNAL(clicked()), this, SLOT(slot_liveRB()));
+		
+    connect(teachingRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_teachingRB);
+    connect(liveRB, &QRadioButton::clicked, this, &CreateRoomDialog::slot_liveRB);
 }
 
 void CreateRoomDialog::slot_privateCB(bool checked)

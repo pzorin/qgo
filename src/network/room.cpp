@@ -69,18 +69,18 @@ Room::Room(NetworkConnection * c)
     playerView->horizontalHeader()->setStretchLastSection(true);
     //playerView->setColumnWidth ( PC_MATCHPREFS, 200 );
 
-    connect(playerView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playerOpenTalk(const QModelIndex &)));
-    connect(playerView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopup(const QPoint &)));
-    connect(gamesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_gamesDoubleClicked(const QModelIndex &)));
-    connect(gamesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showGamesPopup(const QPoint &)));
-    connect(connectionWidget->ui->refreshPlayersButton, SIGNAL(pressed()), SLOT(slot_refreshPlayers()));
-    connect(connectionWidget->ui->refreshGamesButton, SIGNAL(pressed()), SLOT(slot_refreshGames()));
+    connect(playerView, &QTableView::doubleClicked, this, &Room::slot_playerOpenTalk);
+    connect(playerView, &QTableView::customContextMenuRequested, this, &Room::slot_showPopup);
+    connect(gamesView, &QTableView::doubleClicked, this, &Room::slot_gamesDoubleClicked);
+    connect(gamesView, &QTableView::customContextMenuRequested, this, &Room::slot_showGamesPopup);
+    connect(connectionWidget->ui->refreshPlayersButton, &QPushButton::pressed, this, &Room::slot_refreshPlayers);
+    connect(connectionWidget->ui->refreshGamesButton, &QPushButton::pressed, this, &Room::slot_refreshGames);
 
     playerView->blockSignals(false);
     gamesView->blockSignals(false);
 
-    connect(connection,SIGNAL(playerListingReceived(PlayerListing*)),this,SLOT(recvPlayerListing(PlayerListing*)));
-    connect(connection,SIGNAL(gameListingReceived(GameListing*)),this,SLOT(recvGameListing(GameListing*)));
+    connect(connection,&NetworkConnection::playerListingReceived, this, &Room::recvPlayerListing);
+    connect(connection,&NetworkConnection::gameListingReceived, this, &Room::recvGameListing);
 
 	players = 0;
 	games = 0;

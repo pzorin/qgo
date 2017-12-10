@@ -80,32 +80,32 @@ GameDialog::GameDialog(NetworkConnection * conn, const PlayerListing * opp)
 	
 //	cb_free->setChecked(true);
 
-	connect(ui.buttonCancel,SIGNAL(pressed()), SLOT(slot_cancel()));
-	connect(ui.buttonDecline,SIGNAL(pressed()), SLOT(slot_decline()));
-	connect(ui.buttonOffer,SIGNAL(clicked(bool)),SLOT( slot_offer(bool)));
-	//connect(ui.buttonStats,SIGNAL(pressed()), SLOT(slot_statsOpponent()));
+    connect(ui.buttonCancel, &QPushButton::pressed, this, &GameDialog::slot_cancel);
+    connect(ui.buttonDecline, &QPushButton::pressed, this, &GameDialog::slot_decline);
+    connect(ui.buttonOffer, &QPushButton::clicked, this, &GameDialog::slot_offer);
+	//connect(ui.buttonStats,pressed()), slot_statsOpponent()));
 
 	// in order to check if anything changes
-	connect(ui.play_black_button, SIGNAL(clicked(bool)), SLOT(slot_play_black_button()));
-	connect(ui.play_white_button, SIGNAL(clicked(bool)), SLOT(slot_play_white_button()));
-	connect(ui.play_nigiri_button, SIGNAL(clicked(bool)), SLOT(slot_play_nigiri_button()));
+    connect(ui.play_black_button, &QRadioButton::clicked, this, &GameDialog::slot_play_black_button);
+    connect(ui.play_white_button, &QRadioButton::clicked, this, &GameDialog::slot_play_white_button);
+    connect(ui.play_nigiri_button, &QRadioButton::clicked, this, &GameDialog::slot_play_nigiri_button);
 	
-	connect(ui.ratedCB, SIGNAL(clicked(bool)), SLOT(ratedCB_changed(bool)));
-	connect(ui.boardSizeSpin, SIGNAL(valueChanged(int)), SLOT(slot_boardSizeSpin(int)));
-	connect(ui.handicapSpin, SIGNAL(valueChanged(int)), SLOT(slot_handicapSpin(int)));
-	connect(ui.komiSpin, SIGNAL(valueChanged(int)), SLOT(slot_komiSpin(int)));
+    connect(ui.ratedCB, &QCheckBox::clicked, this, &GameDialog::ratedCB_changed);
+    connect(ui.boardSizeSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &GameDialog::slot_boardSizeSpin);
+    connect(ui.handicapSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &GameDialog::slot_handicapSpin);
+    connect(ui.komiSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &GameDialog::slot_komiSpin);
 	
-	connect(ui.timeTab, SIGNAL(currentChanged(int)), SLOT(slot_timeTab(int)));
+    connect(ui.timeTab, &QTabWidget::currentChanged, this, &GameDialog::slot_timeTab);
 	// Does below need seconds or really only minutes??!?!? FIXME
-	connect(ui.timeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_timeSpin(const QTime &)));	//weird that this isn't QTimeEdit!!!
-	connect(ui.stonesTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_stonesTimeSpin(const QTime &)));
-	connect(ui.stonesSpin, SIGNAL(valueChanged(int)), SLOT(slot_stonesSpin(int)));
-	connect(ui.BYTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_BYTimeSpin(const QTime &)));
-	connect(ui.BYPeriodTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_BYPeriodTimeSpin(const QTime &)));
-	connect(ui.BYPeriodsSpin, SIGNAL(valueChanged(int)), SLOT(slot_BYPeriodsSpin(int)));
-	connect(ui.ASIATimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIATimeSpin(const QTime &)));
-	connect(ui.ASIAPeriodTimeSpin, SIGNAL(timeChanged(const QTime &)), SLOT(slot_ASIAPeriodTimeSpin(const QTime &)));
-	connect(ui.ASIAPeriodsSpin, SIGNAL(valueChanged(int)), SLOT(slot_ASIAPeriodsSpin(int)));
+    connect(ui.timeSpin, &QTimeEdit::timeChanged, this, &GameDialog::slot_timeSpin);
+    connect(ui.stonesTimeSpin, &QTimeEdit::timeChanged, this, &GameDialog::slot_stonesTimeSpin);
+    connect(ui.stonesSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &GameDialog::slot_stonesSpin);
+    connect(ui.BYTimeSpin, &QTimeEdit::timeChanged, this, &GameDialog::slot_BYTimeSpin);
+    connect(ui.BYPeriodTimeSpin, &QTimeEdit::timeChanged, this, &GameDialog::slot_BYPeriodTimeSpin);
+    connect(ui.BYPeriodsSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &GameDialog::slot_BYPeriodsSpin);
+    connect(ui.ASIATimeSpin, &QTimeEdit::timeChanged, this, &GameDialog::slot_ASIATimeSpin);
+    connect(ui.ASIAPeriodTimeSpin, &QTimeEdit::timeChanged, this, &GameDialog::slot_ASIAPeriodTimeSpin);
+    connect(ui.ASIAPeriodsSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &GameDialog::slot_ASIAPeriodsSpin);
 }
 
 void GameDialog::slot_play_black_button(void)

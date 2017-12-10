@@ -47,24 +47,24 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
 	// connecting the Go server tab buttons and signals
 
 	// connecting the new game button
-    connect( ui->actionOpen, SIGNAL(triggered()), SLOT(slot_fileOpen()) );
-    connect(ui->actionNew,SIGNAL(triggered()),SLOT(slot_fileNew()));
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::slot_fileOpen);
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::slot_fileNew);
 
-    connect(ui->cancelButtonPrefs,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
-    connect(ui->cancelButtonServer,SIGNAL(pressed()),SLOT(slot_cancelPressed()));
-    connect(ui->stackedWidget, SIGNAL(currentChanged ( int )), SLOT(slot_currentChanged(int )));
+    connect(ui->cancelButtonPrefs, &QPushButton::pressed, this, &MainWindow::slot_cancelPressed);
+    connect(ui->cancelButtonServer, &QPushButton::pressed, this, &MainWindow::slot_cancelPressed);
+    connect(ui->stackedWidget, &QStackedWidget::currentChanged, this, &MainWindow::slot_currentChanged);
 
 	//coneects the preference buttons
-    connect( ui->gobanPathButton, SIGNAL( clicked() ), this, SLOT( slot_getGobanPath() ) );
-    connect( ui->tablePathButton, SIGNAL( clicked() ), this, SLOT( slot_getTablePath() ) );
-    connect(ui->comboBox_language, SIGNAL(currentIndexChanged ( int )), SLOT(slot_languageChanged(int )));
+    connect( ui->gobanPathButton,  &QPushButton::clicked, this,  &MainWindow::slot_getGobanPath);
+    connect( ui->tablePathButton,  &QPushButton::clicked, this,  &MainWindow::slot_getTablePath);
+    connect( ui->comboBox_language, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::slot_languageChanged);
 
 	//sound
     connectSound = 	new Sound("static.wav");
 
     logindialog = new LoginDialog(this);
 
-    connect( ui->actionConnect, SIGNAL(triggered()), SLOT(openConnectDialog()) );
+    connect( ui->actionConnect, &QAction::triggered, this, &MainWindow::openConnectDialog);
 
     engineTableModel = new EngineTableModel(this);
     ui->engineTableView->setModel(engineTableModel);
@@ -102,8 +102,8 @@ void MainWindow::slot_fileOpen()
     SGFPreview *previewWidget = new SGFPreview(dialog);
     QGridLayout *layout = (QGridLayout*)dialog->layout();
     layout->addWidget(previewWidget, 1, 3);
-    connect(dialog,SIGNAL(currentChanged(QString)),previewWidget,SLOT(setPath(QString)));
-    connect(dialog,SIGNAL(fileSelected(QString)),this,SLOT(openSGF(QString)));
+    connect(dialog, &QFileDialog::currentChanged,previewWidget,&SGFPreview::setPath);
+    connect(dialog, &QFileDialog::fileSelected,this,&MainWindow::openSGF);
     dialog->setNameFilter("Smart Game Format (*.sgf *.SGF)");
     dialog->setFileMode(QFileDialog::ExistingFile);
     dialog->exec();
@@ -138,7 +138,7 @@ void MainWindow::slot_fileNew()
 void MainWindow::addBoardWindow(BoardWindow * bw)
 {
     boardWindowList.append(bw);
-    connect(bw,SIGNAL(destroyed(QObject*)),SLOT(removeBoardWindow(QObject*)));
+    connect(bw, &BoardWindow::destroyed, this, &MainWindow::removeBoardWindow);
 }
 
 void MainWindow::removeBoardWindow(QObject *bw)

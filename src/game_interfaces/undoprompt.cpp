@@ -65,8 +65,8 @@ UndoPrompt::UndoPrompt(const QString * _name, bool multiple, int _moves) : name(
 	buttonBox->addButton(acceptButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(declineButton, QDialogButtonBox::ActionRole);
 	
-	connect(acceptButton, SIGNAL(clicked()), this, SLOT(slot_accept()));
-	connect(declineButton, SIGNAL(clicked()), this, SLOT(slot_decline()));
+    connect(acceptButton, &QPushButton::clicked, this, &UndoPrompt::slot_accept);
+    connect(declineButton, &QPushButton::clicked, this, &UndoPrompt::slot_decline);
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);

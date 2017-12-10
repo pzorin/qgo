@@ -37,7 +37,7 @@ class CountDialog : public QDialog
 		//virtual QSize minimumSize(void) const { return QSize(300, 150); };
 		void recvRejectCount(void);
 		void recvAcceptCount(void);
-	public slots:
+    public:
 		void slot_accept(void);
 		void slot_reject(void);
 	private:

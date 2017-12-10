@@ -44,11 +44,10 @@ signals:
     void computerResigned();
     void computerPassed();
 
-public slots:
+public:
 	void slot_readFromStdout();
 	void slot_processExited(int , QProcess::ExitStatus );
 
-public:
 	QGtp();
 	~QGtp();
 

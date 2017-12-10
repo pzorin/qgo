@@ -40,7 +40,6 @@ public:
     Tree(int board_size, float komi);
 	~Tree();
     void init();
-    int getBranchLength(Move *node=0);
     Move* getCurrent() const { return current; }
 	void setCurrent(Move *m);
     Move* getRoot() const { return root; }
@@ -56,8 +55,7 @@ public:
     void addEmptyMove();
 	void doPass(bool sgf, bool fastLoad = false);
 	
-    void addStoneToCurrentMove(StoneColor c, int x, int y);
-	void deleteNode();
+    void deleteNode();
 
 /*
  * Former Stonehandler functions called by addStoneSGF
@@ -79,7 +77,6 @@ public:
     bool importSGFString(QString SGF);
     QString exportSGFString(GameData * gameData);
 
-public slots:
     void slotNavBackward();
     void slotNavForward();
     void slotNavFirst();

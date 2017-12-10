@@ -42,7 +42,7 @@ CodecWarnDialog::CodecWarnDialog(const char * encoding)
 	
 	textLabel = new QLabel(tr("Can't find font codec \"%1\"\nUsing default").arg(encoding));
 	
-	connect(okayButton, SIGNAL(clicked()), this, SLOT(slot_okay()));
+    connect(okayButton, &QPushButton::clicked, this, &CodecWarnDialog::slot_okay);
 	
 	QGridLayout * mainLayout = new QGridLayout;
 	//mainLayout->setSizeConstraint(QLayout::SetFixedSize);

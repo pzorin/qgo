@@ -46,8 +46,8 @@ class FriendsListDialog : public QDialog, Ui::FriendsListDialog
 		class SimplePlayerListModel * friendsListModel;
 		class SimplePlayerListModel * watchesListModel;
 		class SimplePlayerListModel * blockedListModel;
-	private slots:
-		void slot_showPopupFriends(const QPoint & iPoint);
+
+        void slot_showPopupFriends(const QPoint & iPoint);
 		void slot_showPopupWatches(const QPoint & iPoint);
 		void slot_showPopupBlocked(const QPoint & iPoint);
 		void slot_addFriend(void);

@@ -32,8 +32,8 @@ class SetPhrasePalette : public QToolBar
 	public:
 		SetPhrasePalette(CyberOroConnection *);
 		~SetPhrasePalette();
-	public slots:
-		void slot_triggered(QAction *);
+
+        void slot_triggered(QAction *);
 	private:
 		QPushButton * button0;
 		QPushButton * button1;

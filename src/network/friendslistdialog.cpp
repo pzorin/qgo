@@ -49,12 +49,12 @@ FriendsListDialog::FriendsListDialog(NetworkConnection * c, Room * r) : QDialog(
 	blockedListModel = new SimplePlayerListModel(true);
 	blockedView->setModel(blockedListModel);
 	
-	connect(friendsView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupFriends(const QPoint &)));
-	connect(watchesView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupWatches(const QPoint &)));
-	connect(blockedView, SIGNAL(customContextMenuRequested (const QPoint &)), SLOT(slot_showPopupBlocked(const QPoint &)));
+    connect(friendsView, &QTableView::customContextMenuRequested, this, &FriendsListDialog::slot_showPopupFriends);
+    connect(watchesView, &QTableView::customContextMenuRequested, this, &FriendsListDialog::slot_showPopupWatches);
+    connect(blockedView, &QTableView::customContextMenuRequested, this, &FriendsListDialog::slot_showPopupBlocked);
 	
-	connect(friendsView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClickedFriends(const QModelIndex &)));
-	connect(watchesView, SIGNAL(doubleClicked(const QModelIndex &)), SLOT(slot_playersDoubleClickedWatches(const QModelIndex &)));
+    connect(friendsView, &QTableView::doubleClicked, this, &FriendsListDialog::slot_playersDoubleClickedFriends);
+    connect(watchesView, &QTableView::doubleClicked, this, &FriendsListDialog::slot_playersDoubleClickedWatches);
 	
 	
 	/* We need basically the same popup options as from room.cpp */
@@ -130,12 +130,12 @@ void FriendsListDialog::slot_showPopupFriends(const QPoint & iPoint)
 			return;
 			
 		QMenu menu(friendsView);
-		menu.addAction(tr("Match"), this, SLOT(slot_popupMatch()));
-		menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
+        menu.addAction(tr("Match"), this, &FriendsListDialog::slot_popupMatch);
+        menu.addAction(tr("Talk"), this, &FriendsListDialog::slot_popupTalk);
 		menu.addSeparator();
-		menu.addAction(tr("Remove from Friends"), this, SLOT(slot_removeFriend()));
-		menu.addAction(tr("Add to Watches"), this, SLOT(slot_addWatch()));
-		menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
+        menu.addAction(tr("Remove from Friends"), this, &FriendsListDialog::slot_removeFriend);
+        menu.addAction(tr("Add to Watches"), this, &FriendsListDialog::slot_addWatch);
+        menu.addAction(tr("Block"), this, &FriendsListDialog::slot_addBlock);
 		menu.exec(friendsView->mapToGlobal(iPoint));
 	}
 }
@@ -150,13 +150,13 @@ void FriendsListDialog::slot_showPopupWatches(const QPoint & iPoint)
 			return;
 			
 		QMenu menu(watchesView);
-		menu.addAction(tr("Match"), this, SLOT(slot_popupMatch()));
-		menu.addAction(tr("Talk"), this, SLOT(slot_popupTalk()));
+        menu.addAction(tr("Match"), this, &FriendsListDialog::slot_popupMatch);
+        menu.addAction(tr("Talk"), this, &FriendsListDialog::slot_popupTalk);
 		menu.addSeparator();
-		menu.addAction(tr("Add to Friends"), this, SLOT(slot_addFriend()));
+        menu.addAction(tr("Add to Friends"), this, &FriendsListDialog::slot_addFriend);
 		//Maybe we don't want to have match and talk as fan options?
-		menu.addAction(tr("Remove from Watches"), this, SLOT(slot_removeWatch()));
-		menu.addAction(tr("Block"), this, SLOT(slot_addBlock()));
+        menu.addAction(tr("Remove from Watches"), this, &FriendsListDialog::slot_removeWatch);
+        menu.addAction(tr("Block"), this, &FriendsListDialog::slot_addBlock);
 		menu.exec(watchesView->mapToGlobal(iPoint));
 	}
 }
@@ -171,7 +171,7 @@ void FriendsListDialog::slot_showPopupBlocked(const QPoint & iPoint)
 			return;
 			
 		QMenu menu(blockedView);
-		menu.addAction(tr("Remove from Blocked"), this, SLOT(slot_removeBlock()));
+        menu.addAction(tr("Remove from Blocked"), this, &FriendsListDialog::slot_removeBlock);
 		menu.exec(blockedView->mapToGlobal(iPoint));
 	}
 }

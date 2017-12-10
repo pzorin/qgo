@@ -47,7 +47,6 @@ class PlayerListSortFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 public:
     PlayerListSortFilterProxyModel(QObject * parent = NULL);
-public slots:
     void setFilterOpen(bool state);
     void setFilterFriends(bool state);
     void setFilterFans(bool state);
@@ -66,7 +65,6 @@ class GamesListSortFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 public:
     GamesListSortFilterProxyModel(QObject * parent = NULL);
-public slots:
     void setFilterWatch(bool state);
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
@@ -96,7 +94,6 @@ public:
     PlayerListing * getEntry(const QString & name);
     PlayerListing * getEntry(unsigned int id);
     PlayerListing * getPlayerFromNotNickName(const QString & notnickname);
-public slots:
     PlayerListing * updateEntry(PlayerListing * listing);
 protected:
     friend class PlayerListSortFilterProxyModel;

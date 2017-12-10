@@ -258,7 +258,6 @@ class TygemConnection : public NetworkConnection
 		bool initial_connect;
 		bool dont_validate_maintime, dont_validate_periodtime, dont_validate_periods;
 		
-	private slots:
-		virtual void OnConnected();
+        virtual void OnConnected();
 };
 #endif //TYGEMCONNECTION_H

@@ -147,16 +147,16 @@ QToolBar(tr("Chat Phrases"), /*Qt::Tool | Qt::WindowStaysOnTopHint | Qt::WindowS
 	 * should have stuck with the normal dialog FIXME */
 	resize(825, 30);
 
-	connect(menu0, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu1, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu2, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu3, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu4, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu5, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu6, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu7, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu8, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
-	connect(menu9, SIGNAL(triggered(QAction *)), this, SLOT(slot_triggered(QAction *)));
+    connect(menu0, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu1, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu2, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu3, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu4, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu5, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu6, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu7, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu8, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
+    connect(menu9, &QMenu::triggered, this, &SetPhrasePalette::slot_triggered);
 	
 	/*QGridLayout * mainLayout = new QGridLayout;
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);

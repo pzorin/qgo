@@ -101,7 +101,7 @@ signals:
 	void signal_boardClosed(int);
 	void signal_duplicate( GameData *, const QString&, int);
 
-public slots:
+public:
 	void slotEditButtonPressed( int id );
     void slotGameInfo(bool toggle);
 	bool slotFileSave();

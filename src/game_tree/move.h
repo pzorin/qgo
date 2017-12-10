@@ -49,7 +49,8 @@ public:
     Matrix* getMatrix() 		{ return matrix; }
     void setMoveNumber(int n) 	{ moveNum = n; }
 	int getMoveNumber() const 	{ return moveNum; }
-	GamePhase getGamePhase() const 	{ return gamePhase; }
+    Move * getLastMove(bool followMarker = false);
+    GamePhase getGamePhase() const 	{ return gamePhase; }
 	void setGamePhase(GamePhase p) 	{ gamePhase = p; }
 	QString &getNodeName() 		{ return nodeName; }
 	void setNodeName(const QString &s) { nodeName = s; }
@@ -84,7 +85,8 @@ public:
 	bool isHandicapMove()			{return handicapMove ;}
 	void setNodeIndex(int i)		{nodeIndex = i;}
 	int getNodeIndex()			{return nodeIndex;}
-	void addBrother(Move * b); 
+    void addBrother(Move * b);
+    void addStone(StoneColor c, int x, int y);
 	
 	Move *brother, *son, *parent, *marker;
 	bool checked;

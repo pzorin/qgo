@@ -56,20 +56,20 @@ GameInfo::GameInfo(BoardWindow * bw) : GameinfoDialog(), boardwindow(bw)
 	}
 	else
 	{
-		connect(ui.whiteName, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.blackName, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.whiteRank, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.blackRank, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.komi, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.handicap, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.result, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.gameName, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.date, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.playedAt, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
-		connect(ui.copyright, SIGNAL(textEdited(const QString &)), this, SLOT(slotGameInfoTextEdited(const QString &)));
+        connect(ui.whiteName, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.blackName, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.whiteRank, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.blackRank, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.komi, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.handicap, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.result, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.gameName, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.date, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.playedAt, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
+        connect(ui.copyright, &QLineEdit::textEdited, this, &GameInfo::slotGameInfoTextEdited);
 	}
 	
-	connect(ui.buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotGameInfoButton(QAbstractButton *)));
+    connect(ui.buttonBox, &QDialogButtonBox::clicked, this, &GameInfo::slotGameInfoButton);
 	show();
 }
 

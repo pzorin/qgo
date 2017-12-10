@@ -33,8 +33,7 @@ class UndoPrompt : public QDialog
 		UndoPrompt(const QString * _name, bool multiple, int _moves);
 		~UndoPrompt();
 		virtual void timerEvent(QTimerEvent*);
-	public slots:
-		void slot_accept(void);
+        void slot_accept(void);
 		void slot_decline(void);
 	private:
 		QLabel * mainlabel;

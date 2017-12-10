@@ -265,6 +265,5 @@ class CyberOroConnection : public NetworkConnection
 		int matchKeepAliveTimerID, matchRequestKeepAliveTimerID;
 		std::vector <MoveRecord> deadStonesList;
 		
-	private slots:
-		virtual void OnConnected();
+        virtual void OnConnected();
 };
