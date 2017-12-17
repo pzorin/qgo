@@ -23,7 +23,8 @@
 #ifndef _AUDIO_H_
 #define _AUDIO_H_
 
-#include<QObject>
+#include <QObject>
+#include <QTime>
 
 class QMediaPlayer;
 
@@ -32,12 +33,14 @@ class Sound : public QObject
 Q_OBJECT
 
 public:
-    Sound(const QString& filename, QObject* parent=0);
+    Sound(const QString& filename, QObject* parent=0, int delay_msec=250);
     ~Sound();
 
     void play(void);
 private:
     QMediaPlayer *player;
+    QTime nextSound;
+    int delay;
 };
 
 #endif // _AUDIO_H_

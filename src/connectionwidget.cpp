@@ -52,6 +52,8 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
 
     QSettings settings;
     QVariant var = settings.value("LOWRANKFILTER");
+    ui->playerView->setAlternatingRowColors(settings.value("ALTERNATELISTCOLORS",QVariant(false)).toBool());
+    ui->gamesView->setAlternatingRowColors(settings.value("ALTERNATELISTCOLORS",QVariant(false)).toBool());
     connect(ui->filterRank1ComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConnectionWidget::setRankSpreadView);
     connect(ui->filterRank2ComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConnectionWidget::setRankSpreadView);
     if(var != QVariant())
@@ -922,12 +924,6 @@ void ConnectionWidget::slot_cbquiet()
         if(connection)
             connection->periodicListRefreshes(true);
     }*/
-}
-
-void ConnectionWidget::slot_alternateListColorsCB(bool b)
-{
-    ui->playerView->setAlternatingRowColors(b);
-    ui->gamesView->setAlternatingRowColors(b);
 }
 
 void ConnectionWidget::timerEvent(QTimerEvent* e)

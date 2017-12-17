@@ -47,8 +47,12 @@ qGoBoard::qGoBoard(BoardWindow *bw, Tree * t, GameData *gd) : QObject(bw)
 
     clickSound = new Sound("stone.wav");
 
-	dontCheckValidity = false;
-	lastSound = QTime(0,0,0);
+    dontCheckValidity = false;
+}
+
+qGoBoard::~qGoBoard()
+{
+    delete clickSound;
 }
 
 /* FIXME: Make sure this isn't called from places it shouldn't be. Like

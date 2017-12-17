@@ -25,12 +25,13 @@
 #include <defines.h>
 #include <QtMultimedia/QMediaPlayer>
 
-Sound::Sound(const QString &filename, QObject *parent)
-    : QObject(parent)
+Sound::Sound(const QString &filename, QObject *parent, int delay_msec)
+    : QObject(parent), delay(delay_msec)
 {
     player = new QMediaPlayer;
     if (QDir().exists(SOUND_PATH_PREFIX + filename))
         player->setMedia(QMediaContent(QUrl::fromLocalFile(QDir().absoluteFilePath(SOUND_PATH_PREFIX + filename))));
+    nextSound = QTime::currentTime();
 }
 
 Sound::~Sound()
@@ -40,5 +41,11 @@ Sound::~Sound()
 
 void Sound::play(void)
 {
+    // Do not play the same sound too often (by default every 250 ms)
+    if (QTime::currentTime() < nextSound)
+        return;
+
+    nextSound = QTime::currentTime();
+    nextSound = nextSound.addMSecs(delay);
     player->play();
 }

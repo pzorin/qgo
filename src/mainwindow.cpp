@@ -30,6 +30,7 @@
 #include "sgfparser.h"
 #include "newgamedialog.h"
 #include "ui_mainwindow.h"
+#include "preferences.h"
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
     : QMainWindow( parent,  flags ), ui(new Ui::MainWindow)
@@ -41,23 +42,12 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
     this->setAttribute( Qt::WA_DeleteOnClose );
     //hide by default
 	setWindowTitle(QString(PACKAGE) + " " + QString(VERSION));
-
-	// loads the settings
-    loadSettings();
-	// connecting the Go server tab buttons and signals
+    preferences.fill();
 
 	// connecting the new game button
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::slot_fileOpen);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::slot_fileNew);
 
-    connect(ui->cancelButtonPrefs, &QPushButton::pressed, this, &MainWindow::slot_cancelPressed);
-    connect(ui->cancelButtonServer, &QPushButton::pressed, this, &MainWindow::slot_cancelPressed);
-    connect(ui->stackedWidget, &QStackedWidget::currentChanged, this, &MainWindow::slot_currentChanged);
-
-	//coneects the preference buttons
-    connect( ui->gobanPathButton,  &QPushButton::clicked, this,  &MainWindow::slot_getGobanPath);
-    connect( ui->tablePathButton,  &QPushButton::clicked, this,  &MainWindow::slot_getTablePath);
-    connect( ui->comboBox_language, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::slot_languageChanged);
 
 	//sound
     connectSound = 	new Sound("static.wav");
@@ -65,13 +55,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags )
     logindialog = new LoginDialog(this);
 
     connect( ui->actionConnect, &QAction::triggered, this, &MainWindow::openConnectDialog);
-
-    engineTableModel = new EngineTableModel(this);
-    ui->engineTableView->setModel(engineTableModel);
-    ui->engineTableView->setColumnWidth ( EngineTableModel::ENGINE_DEFAULT, 60 );
-    ui->engineTableView->setColumnWidth ( EngineTableModel::ENGINE_PATH, 300 );
-    connect(ui->engineAddButton, &QPushButton::pressed, this, &MainWindow::addEngine);
-    connect(ui->engineRemoveButton, &QPushButton::pressed, this, &MainWindow::removeEngine);
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindow::openPreferences);
 }
 
 MainWindow::~MainWindow()
@@ -91,7 +75,7 @@ void MainWindow::closeEvent(QCloseEvent * e)
 		e->ignore();
 		return;
 	}
-	saveSettings();
+    preferences.save();
 }
 
 
@@ -108,6 +92,12 @@ void MainWindow::slot_fileOpen()
     dialog->setFileMode(QFileDialog::ExistingFile);
     dialog->exec();
     delete dialog;
+}
+
+void MainWindow::openPreferences()
+{
+    Preferences preferencesDialog(this);
+    preferencesDialog.exec();
 }
 
 void MainWindow::openSGF(QString path)

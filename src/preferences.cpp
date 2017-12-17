@@ -1,28 +1,40 @@
-/***************************************************************************
- *   Copyright (C) 2009 by The qGo Project                                 *
- *                                                                         *
- *   This file is part of qGo.   					   *
- *                                                                         *
- *   qGo is free software: you can redistribute it and/or modify           *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, see <http://www.gnu.org/licenses/>   *
- *   or write to the Free Software Foundation, Inc.,                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
+#include "preferences.h"
+#include "ui_preferences.h"
+#include "defines.h"
+#include <QMessageBox>
+#include <QFileDialog>
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+Preferences::Preferences(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Preferences)
+{
+    ui->setupUi(this);
+    loadSettings();
 
-void startqGo(void);
+    QPushButton * button;
+    button =  ui->buttonBox->button(QDialogButtonBox::Reset);
+    if (button)
+        connect(button, &QPushButton::clicked, this, &Preferences::loadSettings);
+    button = ui->buttonBox->button(QDialogButtonBox::Ok);
+    if (button)
+        connect(button, &QPushButton::clicked, this, &Preferences::saveSettings);
+
+    connect( ui->gobanPathButton,  &QPushButton::clicked, this,  &Preferences::slot_getGobanPath);
+    connect( ui->tablePathButton,  &QPushButton::clicked, this,  &Preferences::slot_getTablePath);
+
+    engineTableModel = new EngineTableModel(this);
+    ui->engineTableView->setModel(engineTableModel);
+    ui->engineTableView->setColumnWidth ( EngineTableModel::ENGINE_DEFAULT, 60 );
+    ui->engineTableView->setColumnWidth ( EngineTableModel::ENGINE_PATH, 300 );
+    connect(ui->engineAddButton, &QPushButton::pressed, this, &Preferences::addEngine);
+    connect(ui->engineRemoveButton, &QPushButton::pressed, this, &Preferences::removeEngine);
+}
+
+Preferences::~Preferences()
+{
+    delete ui;
+}
+
 
 EngineTableModel::EngineTableModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -183,7 +195,7 @@ void EngineTableModel::saveEngines(void)
     settings.setValue("DEFAULT_ENGINE", selected_engine);
 }
 
-void MainWindow::addEngine(void)
+void Preferences::addEngine()
 {
     QString fileName(QFileDialog::getOpenFileName(this, tr("Go engine"),
                                                   QString(DEFAULT_ENGINE_PATH)+QString(DEFAULT_ENGINE)));
@@ -195,155 +207,85 @@ void MainWindow::addEngine(void)
         engineTableModel->addEngine(Engine(fileName,""));
 }
 
-void MainWindow::removeEngine(void)
+void Preferences::removeEngine()
 {
     QModelIndex index = ui->engineTableView->selectionModel()->currentIndex();
     if (index.isValid())
         engineTableModel->removeRow(index.row());
 }
 
-/*
- * a cancel button has been pressed on the preference pages  
- */
-void MainWindow::slot_cancelPressed()
+void Preferences::saveSettings()
 {
-	loadSettings();
-}
+    settings.setValue("MAIN_WINDOW_SIZE_X", width());
+    settings.setValue("MAIN_WINDOW_SIZE_Y", height());
+    settings.setValue("MAIN_WINDOW_POS_X", pos().x());
+    settings.setValue("MAIN_WINDOW_POS_Y", pos().y());
 
-void MainWindow::slot_languageChanged(int)
-{
-    if (QMessageBox::question(this,tr("Change Language?"),
-            QString(tr("Changing the language requires restarting qGo.  Go ahead?\n")))
-            == QMessageBox::Yes)
-	{
-        if(ui->connectionWidget->closeConnection() < 0)
-			goto lc_no_close;
-		if(checkForOpenBoards() < 0)
-			goto lc_no_close;
-		saveSettings();
-		startqGo();
-	}
-	else
-	{
-lc_no_close:
-		QSettings settings;
-        ui->comboBox_language->blockSignals(true);
-        ui->comboBox_language->setCurrentIndex(settings.value("LANGUAGE").toInt());
-        ui->comboBox_language->blockSignals(false);
-	}
-}
-
-/*
- * a page has been left. If it's a preference or server stting page, we check the settings
- */
-void MainWindow::slot_currentChanged(int i)
-{
-	static int former=-1;
-	if ((former == 3) || (former == 4))
-	{
-		//Checks wether the nmatch parameters have been modified, in order to send a new nmatchrange command
-        /* QSettings settings;
-         * bool resend=((settings.value("NMATCH_BLACK").toBool() != ui->checkBox_Nmatch_Black->isChecked()) ||
-            (settings.value("NMATCH_WHITE").toBool() != ui->checkBox_Nmatch_White->isChecked()) ||
-            (settings.value("NMATCH_NIGIRI").toBool() != ui->checkBox_Nmatch_Nigiri->isChecked()) ||
-            (settings.value("NMATCH_MAIN_TIME").toInt() != ui->timeSpin_Nmatch->value()) ||
-            (settings.value("NMATCH_BYO_TIME").toInt() != ui->BYSpin_Nmatch->value()) ||
-            (settings.value("NMATCH_HANDICAP").toInt() != ui->HandicapSpin_Nmatch->value()) ||
-            (settings.value("DEFAULT_SIZE").toInt() != ui->boardSizeSpin->value()) ||
-            (settings.value("DEFAULT_TIME").toInt() != ui->timeSpin->value()) ||
-            (settings.value("DEFAULT_BY").toInt() != ui->BYSpin->value()) );*/
-
-		saveSettings();
-#ifdef FIXME
-		if (resend)
-			sendNmatchParameters();
-#endif //FIXME
-    }
-    former = i;
-}
-
-/*
- * saves the parameters on the 2 last tabs into the QSettings 
- */
-void MainWindow::saveSettings()
-{
-	QSettings settings;
-
-	settings.setValue("MAIN_WINDOW_SIZE_X", width());
-	settings.setValue("MAIN_WINDOW_SIZE_Y", height());
-	settings.setValue("MAIN_WINDOW_POS_X", pos().x());
-	settings.setValue("MAIN_WINDOW_POS_Y", pos().y());
-
-    settings.setValue("LANGUAGE",ui->comboBox_language->currentIndex ());
-	settings.setValue("LAST_PATH", currentWorkingDir);
+    settings.setValue("LAST_PATH", currentWorkingDir);
 //	settings.setValue("COMPUTER_PATH", ui->LineEdit_computer->text());
     settings.setValue("SKIN", ui->LineEdit_goban->text());
     settings.setValue("SKIN_TABLE", ui->LineEdit_table->text());
 
     settings.setValue("TIMER_INTERVAL", ui->timerComboBox->currentIndex());
 
-	int i = 0;
+    int i = 0;
     if ( ui->radioButtonStones_2D->isChecked())
-		i=1;
+        i=1;
     else if ( ui->radioButtonStones_3D->isChecked())
-		i=2;
-	settings.setValue("STONES_LOOK", i);
-	
+        i=2;
+    settings.setValue("STONES_LOOK", i);
+
     if ( ui->terrCrossRB->isChecked())
-		i=0;
-	else
-		i=1;
-	settings.setValue("TERR_STONE_MARK", i);
-	
-	i = 0;
-    if ( ui->radioButton_noSound->isChecked())
-		i=1;
-    else if ( ui->radioButton_myGamesSound->isChecked())
-		i=2;
-	settings.setValue("SOUND", i);
-	
+        i=0;
+    else
+        i=1;
+    settings.setValue("TERR_STONE_MARK", i);
+
+    settings.setValue("SOUND_MYGAMES", ui->checkBox_myGamesSound->isChecked());
+    settings.setValue("SOUND_OTHERGAMES", ui->checkBox_otherGamesSound->isChecked());
+
     if ( ui->komarkerCB->isChecked())
-		i=1;
-	else
-		i=0;
-	settings.setValue("KOMARKER", i);
+        i=1;
+    else
+        i=0;
+    settings.setValue("KOMARKER", i);
     if ( ui->numberCurrentMoveCB->isChecked())
-		i=1;
-	else
-		i=0;
-	settings.setValue("NUMBER_CURRENT_MOVE", i);
+        i=1;
+    else
+        i=0;
+    settings.setValue("NUMBER_CURRENT_MOVE", i);
 #ifdef UNNECESSARY
     if ( ui->warnOnCloseEditedCB->isChecked())
-		i=1;
-	else
-		i=0;
+        i=1;
+    else
+        i=0;
 
-	settings.setValue("WARNONCLOSEEDITED", i);
+    settings.setValue("WARNONCLOSEEDITED", i);
     if ( ui->warnOnCloseEngineCB->isChecked())
-		i=1;
-	else
-		i=0;
-	settings.setValue("WARNONCLOSEENGINE", i);
+        i=1;
+    else
+        i=0;
+    settings.setValue("WARNONCLOSEENGINE", i);
 #endif //UNNECESSARY
     if ( ui->simplePlayerNamesCB->isChecked())
-		i=1;
-	else
-		i=0;
-	settings.setValue("SIMPLEPLAYERNAMES", i);
+        i=1;
+    else
+        i=0;
+    settings.setValue("SIMPLEPLAYERNAMES", i);
     if ( ui->observeOutsideCB->isChecked())
-		i=1;
-	else
-		i=0;
-	settings.setValue("OBSERVEOUTSIDE", i);
+        i=1;
+    else
+        i=0;
+    settings.setValue("OBSERVEOUTSIDE", i);
     if ( ui->alternateListColorsCB->isChecked())
-		i=1;
-	else
-		i=0;
-	settings.setValue("ALTERNATELISTCOLORS", i);
+        i=1;
+    else
+        i=0;
+    settings.setValue("ALTERNATELISTCOLORS", i);
 
     //settings.setValue("ACCOUNT", ui->connectionWidget->ui->serverComboBox->currentIndex());
 
-	//server games default values
+    //server games default values
     settings.setValue("DEFAULT_KOMI",ui->komiSpinDefault->value() );
     settings.setValue("DEFAULT_SIZE",ui->boardSizeSpin->value() );
     settings.setValue("DEFAULT_TIME",ui->timeSpin->value() );
@@ -360,70 +302,50 @@ void MainWindow::saveSettings()
     settings.setValue("AUTOSAVE_PLAYED", ui->CheckBox_autoSave_Played->isChecked());
 
 
-	//server byo yomi warning
+    //server byo yomi warning
     settings.setValue("BYO_SOUND_WARNING", ui->ByoSoundWarning->isChecked());
     settings.setValue("BYO_SEC_WARNING",ui->ByoSecWarning->value());
 
-	//qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());	
-
-	preferences.fill();
-	preferences.save();	//FIXME, save is only for match setting defaults right?
+    //qDebug("password: %s\n", hostlist.at(0)->password().toLatin1().constData());
 }
 
 /*
  * loads the parameters from the QSettings into the 2 lats tabs
  */
-void MainWindow::loadSettings()
+void Preferences::loadSettings()
 {
-	QSettings settings;
-	QVariant var;
-	
-    ui->comboBox_language->setCurrentIndex (settings.value("LANGUAGE").toInt());
+    QSettings settings;
+    QVariant var;
 
-	if((var = settings.value("LAST_PATH")) == QVariant())
-		currentWorkingDir = QString();
-	else
-		currentWorkingDir = var.toString();
-	
+    if((var = settings.value("LAST_PATH")) == QVariant())
+        currentWorkingDir = QString();
+    else
+        currentWorkingDir = var.toString();
+
     ui->radioButtonStones_real->setChecked(true);
     ui->radioButtonStones_2D->setChecked((settings.value("STONES_LOOK")==1));
     ui->radioButtonStones_3D->setChecked((settings.value("STONES_LOOK")==2));
 
-    ui->radioButton_allGameSound->setChecked(true);
-    ui->radioButton_noSound->setChecked((settings.value("SOUND")==1));
-    ui->radioButton_myGamesSound->setChecked((settings.value("SOUND")==2));
+    ui->checkBox_myGamesSound->setChecked(settings.value("SOUND_MYGAMES", QVariant(true)).toBool());
+    ui->checkBox_otherGamesSound->setChecked(settings.value("SOUND_OTHERGAMES", QVariant(true)).toBool());
 
     ui->LineEdit_goban->setText(settings.value("SKIN").toString());
     ui->LineEdit_table->setText(settings.value("SKIN_TABLE").toString());
 
     ui->timerComboBox->setCurrentIndex(settings.value("TIMER_INTERVAL").toInt());
-    ui->komarkerCB->setChecked((settings.value("KOMARKER") == 1));
-    ui->numberCurrentMoveCB->setChecked((settings.value("NUMBER_CURRENT_MOVE") == 1));
-#ifdef UNNECESSARY
-    ui->warnOnCloseEditedCB->setChecked((settings.value("WARNONCLOSEEDITED") == 1));
-    ui->warnOnCloseEngineCB->setChecked((settings.value("WARNONCLOSENGINE") == 1));
-#endif //UNNECESSARY
-	if(settings.value("TERR_STONE_MARK").toBool())
+    ui->komarkerCB->setChecked(settings.value("KOMARKER", QVariant(true)).toBool());
+    ui->numberCurrentMoveCB->setChecked(settings.value("NUMBER_CURRENT_MOVE", QVariant(false)).toBool());
+    if(settings.value("TERR_STONE_MARK").toBool())
         ui->terrStoneRB->setChecked(true);
-	else
+    else
         ui->terrCrossRB->setChecked(true);
 
     ui->simplePlayerNamesCB->setChecked((settings.value("SIMPLEPLAYERNAMES") == 1));
     ui->observeOutsideCB->setChecked((settings.value("OBSERVEOUTSIDE") == 1));
-	bool b = (settings.value("ALTERNATELISTCOLORS") == 1);
-    ui->alternateListColorsCB->setChecked(b);
-    ui->connectionWidget->slot_alternateListColorsCB(b);
-	
-    //ui->connectionWidget->ui->serverComboBox->setCurrentIndex(settings.value("ACCOUNT").toInt());
+    ui->alternateListColorsCB->setChecked(settings.value("ALTERNATELISTCOLORS",QVariant(false)).toBool());
 
-
-	//server games default values
-	if((var = settings.value("DEFAULT_KOMI")) == QVariant())
-		var = 5.5;
-    ui->komiSpinDefault->setValue(var.toInt());
-	if((var = settings.value("DEFAULT_SIZE")) == QVariant())
-		var = 19;
-    ui->boardSizeSpin->setValue(var.toInt());
+    ui->komiSpinDefault->setValue(settings.value("DEFAULT_KOMI", QVariant(5.5)).toInt());
+    ui->boardSizeSpin->setValue(settings.value("DEFAULT_SIZE", QVariant(19)).toInt());
     ui->timeSpin->setValue(settings.value("DEFAULT_TIME").toInt());
     ui->BYSpin->setValue(settings.value("DEFAULT_BY").toInt());
 
@@ -437,35 +359,29 @@ void MainWindow::loadSettings()
     ui->CheckBox_autoSave->setChecked(settings.value("AUTOSAVE").toBool());
     ui->CheckBox_autoSave_Played->setChecked(settings.value("AUTOSAVE_PLAYED").toBool());
 
-	//server byo yomi warning
+    //server byo yomi warning
     ui->ByoSoundWarning->setChecked(settings.value("BYO_SOUND_WARNING").toBool());
     ui->ByoSecWarning->setValue(settings.value("BYO_SEC_WARNING").toInt());
 
-	preferences.fill();
+    preferences.fill();
 }
 
-/*
- * The 'get goban path' button has been pressed on the preferences tab
- */
-void MainWindow::slot_getGobanPath()
+void Preferences::slot_getGobanPath()
 {
-	QString fileName(QFileDialog::getOpenFileName(this, tr("Goban picture"), "",
+    QString fileName(QFileDialog::getOpenFileName(this, tr("Goban picture"), "",
         tr("All Files (*)"), new QString(""), QFileDialog::DontUseNativeDialog));
-	if (fileName.isEmpty())
-		return;
+    if (fileName.isEmpty())
+        return;
 
     ui->LineEdit_goban->setText(fileName);
 }
 
-/*
- * The 'get table path' button has been pressed on the preferences tab
- */
-void MainWindow::slot_getTablePath()
+void Preferences::slot_getTablePath()
 {
-	QString fileName(QFileDialog::getOpenFileName(this, tr("Table picture"), "",
+    QString fileName(QFileDialog::getOpenFileName(this, tr("Table picture"), "",
         tr("All Files (*)"), new QString(""), QFileDialog::DontUseNativeDialog));
-	if (fileName.isEmpty())
-		return;
+    if (fileName.isEmpty())
+        return;
 
     ui->LineEdit_table->setText(fileName);
 }

@@ -108,12 +108,9 @@ void qGoBoardLocalInterface::localMoveRequest(StoneColor c, int x, int y)
      * to tell when the board has stopped loading, particularly for IGS.
      * so we only play a sound every 250 msecs...
      * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
-    if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
+    if(boardwindow->getGamePhase() == phaseOngoing && playSound)
     {
-        if (playSound)
-            clickSound->play();
-        lastSound = QTime::currentTime();
-        lastSound = lastSound.addMSecs(250);
+        clickSound->play();
     }
 
     if (engineUpToDate)

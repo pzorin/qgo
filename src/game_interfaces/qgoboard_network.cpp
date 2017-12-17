@@ -41,9 +41,8 @@ qGoBoardNetworkInterface::qGoBoardNetworkInterface(BoardWindow *bw, Tree * t, Ga
     dispatch = boardwindow->getBoardDispatch();
     connection = dispatch->connection;
 
-	QSettings settings;
-	// value 1 = no sound, 0 all games, 2 my games
-	playSound = (settings.value("SOUND") != 1);
+    QSettings settings;
+    playSound = (settings.value("SOUND_MYGAMES").toBool() || settings.value("SOUND_OTHERGAMES").toBool());
 	
 	if (gd->handicap)
 	{
@@ -86,12 +85,9 @@ Move *qGoBoardNetworkInterface::doMove(StoneColor c, int x, int y)
      * to tell when the board has stopped loading, particularly for IGS.
      * so we only play a sound every 250 msecs...
      * Also, maybe it should play even if we aren't looking at last move, yeah not sure on that FIXME */
-    if(boardwindow->getGamePhase() == phaseOngoing && QTime::currentTime() > lastSound)
+    if(boardwindow->getGamePhase() == phaseOngoing && playSound)
     {
-        if (playSound)
-            clickSound->play();
-        lastSound = QTime::currentTime();
-        lastSound = lastSound.addMSecs(250);
+        clickSound->play();
     }
 
     return result;
@@ -499,7 +495,9 @@ void qGoBoardNetworkInterface::passRequest()
 	 * but without playing it since we get that from server. */
     if((getBlackTurn() && !(boardwindow->getMyColorIsBlack())) ||
        (!getBlackTurn() && !(boardwindow->getMyColorIsWhite())))
+    {
         return; // It is not our move
+    }
 
 	/* Rerack time before sending our move 
 	 * Is this okay here?  Do we need to rerack for passes or what ? FIXME*/

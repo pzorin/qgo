@@ -33,6 +33,9 @@ qGoBoardObserveInterface::qGoBoardObserveInterface(BoardWindow *bw, Tree * t, Ga
     if(connection->startTimerOnOpen() && connection->clientCountsTime())
 		boardTimerId = startTimer(1000);
     dispatch->requestGameInfo();
+
+    QSettings settings;
+    playSound = (settings.value("SOUND_OTHERGAMES").toBool());
 }
 
 void qGoBoardObserveInterface::onFirstMove(void)

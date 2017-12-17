@@ -95,7 +95,6 @@ public:
     void setLooking(bool val);
     void slot_cbopen();
     void slot_cbquiet();
-    void slot_alternateListColorsCB(bool);
 
     void slot_msgBox(const QString&);
     void slot_connexionClosed();

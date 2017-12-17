@@ -52,8 +52,7 @@ class qGoBoard : public QObject //, public Misc<QString>
 
 public:
 	qGoBoard(BoardWindow *bw, Tree * t, GameData *gd);
-//	qGoBoard(qGoBoard &qgoboard );
-    virtual ~qGoBoard() {}
+    ~qGoBoard();
 	virtual void setHandicap(int handicap);
 	virtual void addStone(StoneColor c, int x, int y);
 
@@ -134,6 +133,5 @@ protected:
     virtual void doPass(StoneColor c = stoneNone); // By default the player who is on turn will pass
 protected:
 	bool dontCheckValidity;
-	QTime lastSound;
 };
 #endif

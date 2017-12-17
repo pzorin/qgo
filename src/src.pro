@@ -46,7 +46,8 @@ FORMS += mainwindow.ui \
 	 network/talk_gui.ui \
     connectionwidget.ui \
     sgfpreview.ui \
-    newgamedialog.ui
+    newgamedialog.ui \
+    preferences.ui
 
 HEADERS += defines.h \
 displayboard.h \
@@ -106,13 +107,13 @@ sgf/sgfparser.h \
     sgfpreview.h \
     game_interfaces/qgoboardlocalinterface.h \
     newgamedialog.h \
-    game_interfaces/qgoboard_net.h
+    game_interfaces/qgoboard_net.h \
+    preferences.h
 
 SOURCES += displayboard.cpp \
            listviews.cpp \
  	   main.cpp \
            mainwindow.cpp \
-           mainwindow_settings.cpp \
            audio/audio.cpp \
            board/board.cpp \
            board/boardwindow.cpp \
@@ -163,7 +164,8 @@ SOURCES += displayboard.cpp \
     host.cpp \
     sgfpreview.cpp \
     game_interfaces/qgoboardlocalinterface.cpp \
-    newgamedialog.cpp
+    newgamedialog.cpp \
+    preferences.cpp
 
 unix*:!macx-* {
     QGO_INSTALL_PATH = /usr/share/qgo
