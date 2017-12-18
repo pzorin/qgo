@@ -30,60 +30,11 @@ struct _preferences preferences;
 MainWindow * mainwindow = 0;
 ConnectionWidget * connectionWidget = 0;
 
-QTranslator * translatorPtr;
-
-void installTranslator(enum Language l)
-{
-    switch(l)
-    {
-        case German:
-            translatorPtr->load("qgo_de",TRANSLATIONS_PATH);
-            return;
-        case French:
-            translatorPtr->load("qgo_fr",TRANSLATIONS_PATH);
-            break;
-        case Italian:
-            translatorPtr->load("qgo_it",TRANSLATIONS_PATH);
-            break;
-        case Danish:
-            translatorPtr->load("qgo_dk",TRANSLATIONS_PATH);
-            break;
-        case Dutch:
-            translatorPtr->load("qgo_nl",TRANSLATIONS_PATH);
-            break;
-        case Czech:
-            translatorPtr->load("qgo_cz",TRANSLATIONS_PATH);
-            break;
-        case Chinese:
-            translatorPtr->load("qgo_zh",TRANSLATIONS_PATH);
-            break;
-        case Portugese:
-            translatorPtr->load("qgo_pt",TRANSLATIONS_PATH);
-            break;
-        case Polish:
-            translatorPtr->load("qgo_it",TRANSLATIONS_PATH);
-            break;
-        case Russian:
-            translatorPtr->load("qgo_ru",TRANSLATIONS_PATH);
-            break;
-        case Turkish:
-            translatorPtr->load("qgo_tr",TRANSLATIONS_PATH);
-            break;
-        case None:
-        default:
-            QString locale = QLocale::system().name();
-                translatorPtr->load(QString("qgo_") + locale,TRANSLATIONS_PATH);
-            return;
-    }
-    QCoreApplication::instance()->installTranslator(translatorPtr);
-}
-
 void startqGo(void)
 {
     QSettings settings;
     bool restarting = false;
 
-    installTranslator((enum Language)settings.value("LANGUAGE").toInt());		//temporary place for this
     if(mainwindow)
     {
         restarting = true;
@@ -105,7 +56,20 @@ int main(int argc, char *argv[])
 {
 	Q_INIT_RESOURCE(application);
     QApplication * app = new QApplication(argc, argv);
-	QTranslator translator;
+
+    QTranslator qtTranslator;
+    if (qtTranslator.load(QLocale(), "qt", "_",
+                      QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+        app->installTranslator(&qtTranslator);
+    else
+        qDebug() << "qgo translation file for locale " << QLocale() << " not found in " << QLibraryInfo::location(QLibraryInfo::TranslationsPath)+"/translations";
+
+    QTranslator qgoTranslator;
+    if (qgoTranslator.load(QLocale(), "qgo", "_",
+                       QCoreApplication::applicationDirPath()+"/translations"))
+        app->installTranslator(&qgoTranslator);
+    else
+        qDebug() << "qgo translation file for locale " << QLocale() << " not found in " << QCoreApplication::applicationDirPath()+"/translations";
 
     app->setOrganizationName("qGo");
     app->setApplicationName("qGo");
@@ -113,8 +77,7 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     parser.process(*app);
     const QStringList args = parser.positionalArguments();
-    translatorPtr = &translator;
-	
+
 	startqGo();
     mainwindow->show();
 

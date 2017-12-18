@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Preferences</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -66,15 +66,18 @@
           </item>
           <item row="3" column="2">
            <widget class="QPushButton" name="tablePathButton">
-            <property name="text">
-             <string>...</string>
+            <property name="icon">
+             <iconset theme="document-open"/>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
            <widget class="QPushButton" name="gobanPathButton">
             <property name="text">
-             <string>...</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="document-open"/>
             </property>
            </widget>
           </item>
@@ -820,6 +823,9 @@ Be careful: it may be annoying if opponent does not want to accept your defaults
              <string>Time interval for autoplay n
 Delay between the moves in autoplay mode in seconds.</string>
             </property>
+            <property name="currentText">
+             <string notr="true">0.1</string>
+            </property>
             <item>
              <property name="text">
               <string>0.1</string>
@@ -827,32 +833,32 @@ Delay between the moves in autoplay mode in seconds.</string>
             </item>
             <item>
              <property name="text">
-              <string>0.5</string>
+              <string notr="true">0.5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1</string>
+              <string notr="true">1</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2.5</string>
+              <string notr="true">2.5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>5</string>
+              <string notr="true">5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>7.5</string>
+              <string notr="true">7.5</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>10</string>
+              <string notr="true">10</string>
              </property>
             </item>
            </widget>

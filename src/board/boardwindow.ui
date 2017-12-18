@@ -113,7 +113,7 @@ When in score mode, left click to mark a group as dead, right click to mark it a
 Maximum game move the slider can currently show.</string>
          </property>
          <property name="text">
-          <string>000</string>
+          <string notr="true">000</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1789,7 +1789,7 @@ Click on
                <item>
                 <widget class="QLabel" name="capturesWhite">
                  <property name="text">
-                  <string>0</string>
+                  <string notr="true">0</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2361,7 +2361,7 @@ Click on
                <item>
                 <widget class="QLabel" name="capturesBlack">
                  <property name="text">
-                  <string>0</string>
+                  <string notr="true">0</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
