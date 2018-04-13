@@ -9,10 +9,12 @@ Go is an ancient Chinese board game. It's called "圍棋(Wei Qi)" in Chinese, "�
 
 Installation
 ------------
+Qt 5.7 is or newer is required to build qgo.
+
 ```sh
 git clone https://github.com/pzorin/qgo.git
 cd qgo
-qmake
+qmake -qt=5 src
 make
 sudo make install
 ```
