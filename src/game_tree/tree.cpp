@@ -164,10 +164,10 @@ void Tree::slotNavForward()
     if (root == NULL || current == NULL || current->son == NULL)
         return;
 
-    if (current->marker == NULL)  // No marker, simply take the main son
-        setCurrent(current->son);
+    if (current->marker)
+        setCurrent(current->marker);
     else
-        setCurrent(current->marker);  // Marker set, use this to go the remembered path in the tree
+        setCurrent(current->son);
 
     current->parent->marker = current;  // Parents remembers this move we went to
 }
@@ -183,8 +183,7 @@ void Tree::slotNavBackward()
 
 void Tree::slotNavFirst()
 {
-    if (root)
-        setCurrent(root);
+    setCurrent(root);
 }
 
 void Tree::slotNavLast()
@@ -223,14 +222,14 @@ void Tree::slotNthMove(int n)
     if (n < 0)
         return;
 
-    Move *m = current,
-        *old = m;
+    Move *m = current;
 
     int currentMove = m->getMoveNumber();
 
     while (m && ((currentMove = m->getMoveNumber()) != n))
     {
-        m->parent->marker = m;
+        if (m->parent)
+            m->parent->marker = m;
         if (n > currentMove)
         {
             m = (m->marker ? m->marker : m->son);
